@@ -1,0 +1,440 @@
+# StrategyMap - diagram conventions
+#
+# THE ID IS `StrategyMap`, read from `tools/measure_binding.py --list`, and it is
+# the technology behind five corpus rows the audit reports as `Custom` with the
+# reason "Custom has no MDG technology, so there is nothing to bind". That reason
+# is false for them. EA registers a real MDG technology here and it declares SIX
+# diagram types, with these diagram counts in the reference model:
+#
+#   StrategyMap (6), DecisionTree (4), FlowChart (3), OrgChart (3),
+#   ValueChain (2), BalancedScorecard (1)
+#
+# FOUR ARE BOUND BELOW. `BalancedScorecard` and `FlowChart` are left out for want
+# of a `sizing.default` that survives the two rules - said at each, under `notes`.
+#
+# THE PREMISE WAS CHECKED AGAINST THE MODEL, NOT TAKEN FROM THE NAMES. Each bound
+# diagram type's stereotype vocabulary was read from `t_object.Stereotype` over
+# the diagrams whose `t_diagram.StyleEx` carries `MDGDgm=StrategyMap::<Type>`, and
+# each one is the notation the corpus row describes rather than something that
+# merely shares its name:
+#
+#   StrategyMap        four `ActivityPartition` perspective BANDS
+#                      (SM_FinancialPerspective, SM_CustomerPerspective,
+#                      SM_InternalPerspective, SM_LearningAndGrowthPerspective)
+#                      holding SM_Objective / SM_Attribute / SM_Process classes.
+#                      The corpus row's color encoding is "perspective" and its
+#                      grammar is `layered-bands`; the bands ARE the perspectives.
+#   DecisionTree       DT_Test and DT_Decision against DT_OutcomeActivity /
+#                      DT_OutcomeObject, joined by ControlFlow connectors
+#                      stereotyped DT_True, DT_False and DT_Evaluate. The corpus
+#                      row reads "yellow=test orange=outcome", which is that
+#                      vocabulary.
+#   OrgChart           OC_Role only, joined by `Generalization` connectors
+#                      stereotyped OC_ReportsToV / OC_ReportsToLV. The corpus row
+#                      is a reporting tree with a shared trunk.
+#   ValueChain         VC_PrimaryActivity, VC_SupportActivity, VC_GrossSales, with
+#                      ZERO connectors on both diagrams. The corpus row is a
+#                      value chain with no connectors and overlapping chevrons.
+#
+# SIX PREFIXES, ONE PER DIAGRAM TYPE. The schema now has a slot at each scope, so
+# each bound diagram type states its own below and the technology states the `""`
+# that is true of it. See the note on the technology-scope key, and read it before
+# adding a per-concept size: `sizing` keys here are CONCEPT names now.
+#
+# MEASURED WITH `tools/measure_binding.py` (strict rule) AGAINST THE REFERENCE
+# MODEL, per diagram type. Grammar, title, routing and the color encoding come
+# from the reference corpus rows, as in the SysML binding. Every stated number
+# carries its n; the two rules that govern them are UML's, restated because they
+# rejected most of what the arithmetic offered here:
+#
+#   1. Nothing with fewer than 10 observations is stated, and neither is a modal
+#      size that is a tie.
+#   2. No gap is stated when ONE diagram supplies more than half the population.
+#
+# Rule 2 removed five of the eight gap figures this technology can produce.
+
+technology: StrategyMap
+
+# UML IS UNDERNEATH THIS NOTATION, on TWO bases. Read from the model and
+# unanimous on each type: StrategyMap, OrgChart, ValueChain (and the unbound
+# BalancedScorecard and FlowChart) are `Logical`; DecisionTree is `Analysis`.
+#
+# `extends` names the ROOT, not a sibling technology, and that is load-bearing
+# rather than stylistic. `_merge` does not union the parent's diagram types into
+# the child's catalog, and `_on_substrate` looks `base` up in the IMMEDIATE
+# parent's catalog - so a binding two levels down finds no substrate at all and
+# silently inherits nothing. Verified here by loading a three-level chain: the
+# grandchild's `substrate` came back empty and its `spacing` stayed `{}`.
+extends: UML
+
+# EMPTY AT TECHNOLOGY SCOPE, AND NOT BECAUSE THE STEREOTYPES ARE BARE - THEY ARE
+# NOT. Every one of this technology's stereotypes carries a prefix, and the prefix
+# is per DIAGRAM TYPE. Measured share of the stereotyped elements on each type's
+# diagrams, re-measured 2026-09-30:
+#
+#   StrategyMap       SM_   83 of 86        OrgChart      OC_   29 of 29
+#   DecisionTree      DT_   30 of 30        ValueChain    VC_   20 of 20
+#   BalancedScorecard BS_    4 of 4         FlowChart     FC_   28 of 28
+#
+# Pooled over the technology the shared prefix is 0 of 204, which is what this
+# line records: there is no technology-wide prefix, so any single value stated
+# here would make every lookup on five of the six diagram types miss - silently,
+# which is the failure mode the slot exists to prevent.
+#
+# THIS IS A STATEMENT, NOT AN ABSENCE, and it is also the FALLBACK for a diagram
+# type that says nothing. All four bound types below state their own, so nothing
+# here reaches them today; a fifth added without one would resolve to `""`, which
+# is wrong for every diagram type this technology declares. Whoever binds
+# BalancedScorecard or FlowChart must state `BS_` or `FC_` on it.
+#
+# THE `sizing` KEYS BELOW ARE CONCEPT NAMES. They used to be spelled as EA stores
+# them - `VC_PrimaryActivity` - because an empty prefix made that the only
+# combination that round trips. With `stereotype_prefix: VC_` on ValueChain the
+# concept name is the key, `stereotype_for("PrimaryActivity", "ValueChain")`
+# returns `VC_PrimaryActivity`, and `concept_for` takes the stored form back to
+# the key. Leaving a key prefixed would now double the prefix on the way out.
+stereotype_prefix: ""
+
+notes: >
+  BOUND: StrategyMap, DecisionTree, OrgChart, ValueChain.
+
+
+  NOT BOUND - BalancedScorecard. One diagram carrying four BS_Perspective
+  classes, all 150x150, joined by eight SM_Effect dependencies. The size is
+  unanimous and it is n=4, which rule 1 refuses: MIN_SAMPLE is 10. There is no
+  second figure to fall back on either, since both gap populations are n=0, so
+  the type has no `sizing.default` that could be stated and `sizing.default` is
+  mandatory. This is the same omission UML records for Collaboration and
+  InteractionOverview, and it needs data rather than design. The corpus row is a
+  four-perspective cycle with curved arcs, so `radial` is very likely its
+  grammar; that is an expectation, not a measurement, and it is not recorded as
+  one.
+
+
+  NOT BOUND - FlowChart. 28 elements over 3 diagrams and NO unique pooled modal
+  size: 74x45 and 100x70 each occur 6 times, so rule 1 refuses the default on the
+  tie rather than on n. FC_Process alone does reach a dominant mode (100x70, 6 of
+  n=11, 55%), but a per-concept size cannot stand in for the mandatory default.
+  It is also the one declared diagram type with NO corpus row, so its title
+  convention and its route would have to be invented rather than read - two
+  independent reasons, and either would be enough.
+
+
+  ROUTE NAMES ARE CONVENTIONAL, AND HERE THERE IS MEASURED EVIDENCE THAT THEY
+  DIFFER BY DIAGRAM TYPE. `t_diagramlinks.Style` carries a per-connector route
+  integer, and across this technology it splits cleanly and unanimously:
+  Mode=8 on StrategyMap (32 of 32) and BalancedScorecard (8 of 8), Mode=3 on
+  DecisionTree (29 of 29), OrgChart (26 of 26) and FlowChart (29 of 30). The
+  split tracks the corpus's own curved-against-straight distinction - the two
+  Mode=8 types are the two the corpus calls CURVED-ARC or arc-routed. What is
+  missing is the mapping from that integer to a route NAME, which lives in the
+  server's `_ROUTE_STYLES` and is deliberately not imported here, so every
+  `routing.default` below is this file's convention taken from the corpus row.
+  Confirming the mapping would settle all five in one step, and would be worth
+  doing before anyone trusts a route from this file.
+
+
+  GRAMMARS. `layered-bands` and `chevron-stack` are the notation's own figures and
+  both are implemented. OrgChart and DecisionTree are recorded as `graph`, which
+  is the honest producible answer for a tree EA's own layout places: the corpus
+  calls them `tree-td` and `tree-lr`, and neither name is in the vocabulary. They
+  are named as a finding rather than added here.
+
+diagram_types:
+
+  # -------------------------------------------------------------------------
+  # The strategy map proper: perspective bands with objectives inside them.
+  # -------------------------------------------------------------------------
+  StrategyMap:
+    # 6 of 6 diagrams tagged StrategyMap::StrategyMap are based on Logical.
+    base: Logical
+    # 83 of the 86 stereotyped elements on these 6 diagrams carry `SM_`; the other
+    # 3 are EA's own NavigationCell tiles, which belong to no notation. This
+    # overrides the technology's `""` - see the note on that key for why the
+    # technology cannot state a prefix at all.
+    stereotype_prefix: SM_
+    # The notation genuinely imposes this. Four ActivityPartition bands, one per
+    # perspective, and which band an objective sits in is what the diagram says
+    # about it - so `layered-bands` passes its own test ("can you name what
+    # moving an item between bands would mean") where a class diagram fails it.
+    # The corpus row records `layered-bands` independently.
+    grammar: layered-bands
+    # The corpus row is `frame-only`, which is this schema's `frame-header`.
+    title: frame-header
+    sizing:
+      # 90x60 over a STATED SELECTION, and the selection is the whole reason this
+      # diagram type is bindable at all.
+      #
+      # Pooled over all 86 elements the mode is a TIE and rule 1 refuses it:
+      # 650x200 occurs 14 times and 90x60 occurs 14 times. Those are two
+      # populations in one pool. 650x200 is the four perspective BANDS, which in
+      # a bands composition are the bands themselves rather than items the engine
+      # sizes; 90x60 is SM_Attribute, a content box.
+      #
+      # Excluding the four *Perspective stereotypes and EA's NavigationCell tiles
+      # leaves 63 content elements with a UNIQUE mode: 90x60, 14 of n=63 (22%),
+      # 18 distinct sizes, median 120x70. Weak on its share and stated as the
+      # best single answer for the mandatory default, not as a convention - three
+      # content boxes in four are some other size. Produced by
+      # `measure_binding.py`'s own `size_stat` over that selection, the same way
+      # the UML file's figures were produced over its own.
+      default: {w: 90, h: 60}
+      # THE BANDS ARE MEASURED AND DELIBERATELY NOT STATED. Pooled over the four
+      # perspective stereotypes they are 650x200 in 14 of n=20 (70%), 6 distinct
+      # sizes - the strongest figure on this diagram type. Each stereotype on its
+      # own is n=5, and rule 1 applies per concept, so stating any of the four
+      # would publish a pooled figure under a name whose own sample is four short
+      # of the threshold. Band rectangles are also geometry the caller may leave
+      # unplaced. State them the day there are ten of each; 650x200 is the value.
+      #
+      # NO per-concept sizes are stated. Measured, and left out:
+      #   SM_Attribute           90x60, 14 of n=18 (78%) - EQUALS the default, so
+      #                          stating it would add a line and no information.
+      #   SM_Objective           120x70, 7 of n=9 (78%) - LOW-N by one.
+      #   SM_Process             n=14, NO unique mode, 6 distinct sizes.
+      #   SM_Family              n=6, SM_LearningAndGrowthPerspective n=5 with no
+      #                          unique mode, SM_IntangibleAsset n=4,
+      #                          SM_HumanCapital / SM_InformationCapital /
+      #                          SM_OrganizationCapital n=3 each (500x39, a
+      #                          full-width strip), SM_Strategy n=2,
+      #                          SM_Proposition n=1. All LOW-N.
+    # NEITHER GAP IS STATED, for a different reason on each axis, and both fall
+    # back to the measured values of the Logical diagram type this sits on.
+    #   item_gap_x  rule 2. n=26 from 3 diagrams, but "Style 3" supplies 15 of
+    #               the 26 (58%), so the pooled median 26 measures that diagram
+    #               and not the notation.
+    #   item_gap_y  LOW-N. n=7, median 27, with three tied modes (24, 27, 72).
+    # A bands composition sets level-to-level distance with band_gap and the band
+    # padding in any case, and band_gap is likewise not stated.
+    spacing: {}
+    routing:
+      # Conventional, from the corpus row's `direct-diagonal`. The measured
+      # corroboration and its limit are in `notes`: Mode=8 on 32 of 32
+      # connectors, unanimous, and unmappable to a name from inside this skill.
+      default: Direct
+      notes: >
+        Every connector on every one of these diagrams is a Dependency
+        stereotyped SM_Effect - 32 of 32. One kind, so there is no second kind to
+        give a trunk to and `trunk_for` would name nothing.
+    channels:
+      fill: >
+        Perspective. The corpus row encodes perspective in fill across five
+        colors, and the four ActivityPartition bands carry the perspective
+        vocabulary, so recoloring a strategy map breaks what it says.
+      claimed:
+        position: >
+          Perspective, again and independently. Which band an objective sits in
+          is which perspective it belongs to, so its vertical position is not
+          available to carry anything else.
+        size: >
+          Content, and the spread says so: 18 distinct sizes across 63 content
+          elements, from a 90x60 attribute box to a 780x121 value-proposition
+          banner and a 500x39 full-width capital strip. Size here is the role the
+          element plays, not a free channel.
+        line_style: >
+          Normative in UML and inherited unchanged: every connector here is a
+          Dependency, which UML draws dashed. Overwriting the dash pattern
+          changes what the connector means.
+      free: [border, border_width, line_color, font_color, opacity, icon]
+
+  # -------------------------------------------------------------------------
+  # The decision tree: tests and outcomes.
+  # -------------------------------------------------------------------------
+  DecisionTree:
+    # 4 of 4 diagrams tagged StrategyMap::DecisionTree are based on Analysis -
+    # NOT Logical, unlike the rest of this technology. This is why `base` is per
+    # diagram type and a single `extends` cannot carry it.
+    base: Analysis
+    # 30 of 30 stereotyped elements on these 4 diagrams carry `DT_`: DT_Test,
+    # DT_Decision, DT_OutcomeActivity, DT_OutcomeObject. Unanimous.
+    stereotype_prefix: DT_
+    # `graph`. The corpus row calls this `tree-lr` and that name is not in the
+    # vocabulary; a left-to-right tree is a shape EA's own layout places and we
+    # tidy, so `graph` is producible and honest. `layered-bands` was considered
+    # and rejected: a band per tree level would add a label strip per level that
+    # a decision tree does not have, and unlike a SysML hierarchy there is
+    # nothing a reader could name about "the set of things at depth 3".
+    grammar: graph
+    # The corpus row is `drawn+prose`: a drawn title, with a prose block beside
+    # it that a caller adds as furniture.
+    title: drawn
+    sizing:
+      # 90x50, 27 of n=30 (90%), 2 distinct sizes. THE STRONGEST SIZE FIGURE IN
+      # THIS FILE, and the only one that is a convention ACROSS concepts rather
+      # than one concept's size wearing the default's name: DT_Test,
+      # DT_OutcomeActivity and DT_OutcomeObject each supply 9 of the 27.
+      default: {w: 90, h: 50}
+      # NO per-concept sizes are stated, and here that costs nothing:
+      #   DT_Test / DT_OutcomeActivity / DT_OutcomeObject   90x50, 9 of n=9 each.
+      #     LOW-N individually, and each EQUALS the default anyway.
+      #   DT_Decision                                       40x40, 3 of n=3.
+      #     LOW-N. It is the diamond, so the default is the wrong shape for it -
+      #     the omission worth knowing about. State it the day there are ten.
+    # NEITHER GAP IS STATED. Both fall back to the Analysis diagram type.
+    #   item_gap_x  LOW-N and rule 2 together: n=7, and "Activity Based Decision
+    #               Tree" supplies 4 of the 7 (57%).
+    #   item_gap_y  rule 2: n=19, and that same diagram supplies 10 of the 19
+    #               (53%), so the pooled median 58 measures it and not the
+    #               notation.
+    spacing: {}
+    routing:
+      # Conventional, from the corpus row's `direct-diagonal`. Mode=3 on 29 of 29
+      # connectors, unanimous - see `notes` for why that does not give a name.
+      default: Direct
+      notes: >
+        28 of the 29 connectors are ControlFlow, stereotyped DT_Evaluate (12),
+        DT_True (8) and DT_False (8); the twenty-ninth is a NoteLink. The true
+        and false branches are a kind distinction the notation makes in the
+        connector's stereotype, not in its route, so `trunk_for` would misplace
+        it.
+    channels:
+      fill: >
+        Node kind. The corpus row reads "yellow=test orange=outcome", and that is
+        the DT_Test / DT_Outcome* split, so fill is the notation's own.
+      claimed:
+        position: >
+          Depth is the order decisions are taken in, and for a `graph` type the
+          coordinates are EA's to compute in any case, so position is not
+          available either way.
+        line_style: >
+          Normative in UML: a dashed line here is a dependency and not a control
+          flow.
+      free: [border, border_width, line_color, font_color, opacity, icon, size]
+
+  # -------------------------------------------------------------------------
+  # The org chart: a reporting tree of roles.
+  # -------------------------------------------------------------------------
+  OrgChart:
+    # 3 of 3 diagrams tagged StrategyMap::OrgChart are based on Logical.
+    base: Logical
+    # 29 of 29 stereotyped elements carry `OC_`, and all 29 are OC_Role - the only
+    # concept on these diagrams. Unanimous, on one concept.
+    stereotype_prefix: OC_
+    # `graph`. The corpus row calls this `tree-td`, which is not in the
+    # vocabulary; a top-down tree is placed acceptably by EA's own layout.
+    grammar: graph
+    title: drawn
+    sizing:
+      # 90x54, 11 of n=29 (38%), 3 distinct sizes, median 90x70. The unique mode,
+      # and weak on its share, so it is the best single answer rather than a
+      # convention. OC_Role is the ONLY concept on these diagrams, so the default
+      # is its size: with a 38% mode it has no dominant size of its own, which is
+      # why there is no per-concept line below repeating the same figure.
+      default: {w: 90, h: 54}
+    spacing:
+      # 47: median 47 across n=15 nearest-neighbor pairs, and the mode too (6 of
+      # 15). Three diagrams contribute and the densest supplies 40%, inside rule
+      # 2. The mode and the median agreeing is rare in this file.
+      item_gap_x: 47
+      # 59: the median of n=14 from the same three diagrams, densest 43%. There is
+      # NO unique mode - 26 and 62 tie at 3 each - so this is the median only,
+      # which is a fact about the population rather than a convention. Stated
+      # because a `graph` layout reads both axes as its column and layer spacing.
+      item_gap_y: 59
+    routing:
+      # Conventional, from the corpus row's `orthogonal-trunk`. Mode=3 on 26 of
+      # 26 connectors, unanimous.
+      default: OrthogonalSquare
+      # The trunk IS the notation's figure here - the corpus row is a shared
+      # horizontal trunk with drops to each report - and unlike the SysML
+      # binding, which declined `trunk_for` because the connector type name was
+      # unverified, the name is measured: all 26 connectors are `Generalization`,
+      # stereotyped OC_ReportsToV (18) and OC_ReportsToLV (8). `trunk_route` is
+      # left to its default, which is OrthogonalSquare and so equals
+      # `default` - listing the connector kind still records which connectors
+      # form the trunk, which is the fact a composer needs.
+      trunk_for: [Generalization]
+    channels:
+      fill: >
+        Reporting level. The corpus row uses two fills by level, so fill is
+        spoken for - lightly, on one row, and treated as claimed because
+        recoloring a chart whose fill already encodes level breaks it while
+        leaving a channel unused costs nothing.
+      claimed:
+        position: >
+          Reporting level. Depth in the tree is who reports to whom, and for a
+          `graph` type EA computes the coordinates regardless.
+        line_style: >
+          Normative in UML. Every connector here is a Generalization, drawn
+          solid with a hollow arrowhead; a dashed one would read as a
+          dependency.
+      free: [border, border_width, line_color, font_color, opacity, icon, size]
+      notes: >
+        `size` is FREE here and claimed on the other three diagram types, which is
+        the one place this file differs from itself deliberately. The corpus row
+        describes uniform boxes and the measurement agrees - 29 roles over just 3
+        distinct sizes - so size carries nothing on an org chart and is available.
+
+  # -------------------------------------------------------------------------
+  # The value chain: primary stages as chevrons, support activities as bands.
+  # -------------------------------------------------------------------------
+  ValueChain:
+    # 2 of 2 diagrams tagged StrategyMap::ValueChain are based on Logical.
+    base: Logical
+    # 20 of 20 stereotyped elements carry `VC_`: VC_PrimaryActivity,
+    # VC_SupportActivity, VC_GrossSales. Unanimous. This is the one diagram type
+    # in the file with a per-concept `sizing` key, so it is the one where the
+    # prefix is load-bearing rather than merely true - the key below is
+    # `PrimaryActivity` and `stereotype_for` puts the `VC_` back.
+    stereotype_prefix: VC_
+    # The notation imposes this one and the grammar exists for it. A value chain
+    # is a row of interlocking arrow stages with full-width support strips, which
+    # is what `compose_chevron_stack` draws; EA's own layout would scatter the
+    # stages, and there are no connectors for it to lay out.
+    grammar: chevron-stack
+    title: drawn
+    sizing:
+      # KEYS ARE CONCEPT NAMES UNDER `stereotype_prefix: VC_` ABOVE. `PrimaryActivity`,
+      # not `VC_PrimaryActivity`; the stored form is what `stereotype_for` returns.
+      #
+      # 400x50, 8 of n=10 (80%), 2 distinct sizes. IT IS VC_SupportActivity'S
+      # SIZE, not a convention across concepts: that stereotype supplies 8 of the
+      # 8 elements at this size. Stated because the default is mandatory and this
+      # is the pool's unique mode; read it as "the support strip", and note that
+      # a strip is 400 wide against a stage's 80, so the default is the wrong
+      # shape for a primary stage. The stage has its own line below.
+      default: {w: 400, h: 50}
+      # 80x100, 10 of n=10 (100%), ONE distinct size. The tool classifies this as
+      # a shape FIXED by the notation rather than chosen by the author - which is
+      # what a chevron is - and therefore excludes it from the default pool. The
+      # strongest per-concept figure in this file.
+      PrimaryActivity: {w: 80, h: 100}
+      # Left out:
+      #   VC_SupportActivity  400x50, 8 of n=8 (100%) - LOW-N, and EQUALS the
+      #                       default it supplied.
+      #   VC_GrossSales       400x300, 2 of n=2 - LOW-N. It is the outer arrow
+      #                       outline the corpus row describes, so the omission
+      #                       matters: the default is nothing like it.
+    # NEITHER GAP IS STATED, AND HERE THE REASON IS STRUCTURAL RATHER THAN
+    # STATISTICAL. Both populations are n=0 - not thin, empty. 8 horizontal and 8
+    # vertical pairs were found and every one was excluded as touching or
+    # overlapping, because the stages ABUT: `compose_chevron.py` derives that the
+    # stage pitch equals the stage width exactly, with the interlock drawn
+    # outside the stored rectangle by the element's own renderer. So the gap
+    # between two stages is zero by construction and there was never a figure to
+    # measure. The inherited Logical values stand in the slots and the chevron
+    # composer does not read them for stage pitch.
+    spacing: {}
+    routing:
+      # ZERO connectors on 2 of 2 diagrams, and the corpus row's routing is
+      # `none`. `routing.default` is mandatory, so a value is stated; it is this
+      # file's convention and it never applies. Do not read it as evidence.
+      default: Direct
+    channels:
+      fill: >
+        Activity kind. The corpus row encodes kind in fill, and the vocabulary is
+        the kind: a primary stage against a support activity.
+      claimed:
+        position: >
+          Order along the chain. A stage's place in the row is its place in the
+          value chain, and the chevron composer owns the coordinates.
+        size: >
+          Role. An 80x100 chevron is a primary stage and a 400x50 strip is a
+          support activity - measured at 100% of each - so size distinguishes the
+          two rather than being free to carry something else.
+      free: [border, border_width, font_color, opacity, icon]
+      notes: >
+        `line_color` and `line_style` are listed neither as claimed nor as free.
+        This diagram type carries no connectors at all, so neither question has
+        an answer, and putting them in `free` would invite a consumer to encode a
+        variable in a channel nothing on the diagram has.

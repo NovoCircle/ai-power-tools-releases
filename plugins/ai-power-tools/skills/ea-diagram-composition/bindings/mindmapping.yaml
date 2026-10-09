@@ -1,0 +1,165 @@
+# MindMapping - diagram conventions
+#
+# THE ID IS `MindMapping` and it declares exactly ONE diagram type, also called
+# `MindMapping`, on 4 diagrams in the reference model. Read from
+# `tools/measure_binding.py --list`, not guessed - the id carries no version and
+# no space, which is unusual enough in this directory to be worth saying.
+#
+# THE CORPUS ROW THIS ANSWERS is classified `Custom` with the reason "Custom has
+# no MDG technology, so there is nothing to bind". That reason is false for it.
+# EA ships a mind-mapping MDG and this is it.
+#
+# THE PREMISE WAS CHECKED AGAINST THE MODEL RATHER THAN AGAINST THE NAME. The
+# stereotype vocabulary on the four diagrams tagged `MDGDgm=MindMapping::MindMapping`
+# is `CentralTopic`, `MainTopic`, `Topic` and `SubTopic`, all on `Class` elements,
+# with exactly ONE CentralTopic on each diagram. The corpus row describes "colored
+# rounded nodes" around a "central spine" with the color encoding "kind". The
+# central spine IS CentralTopic and the kind IS that four-level vocabulary, so this
+# is the notation the row is drawn in and not a resemblance.
+#
+# MEASURED WITH `tools/measure_binding.py` (strict rule) against the reference
+# model. Grammar, title and routing come from the corpus row, as in the SysML
+# binding, and the corpus supplies ONE row here - said again at each value that
+# rests on it. Every stated number carries its n, under UML's two rules:
+#
+#   1. Nothing with fewer than 10 observations is stated, and neither is a modal
+#      size that is a tie.
+#   2. No gap is stated when ONE diagram supplies more than half the population.
+#
+# Both gaps pass rule 2 comfortably, which makes them the better half of this
+# file; the sizes are where it is thin.
+
+technology: MindMapping
+
+# UML IS UNDERNEATH THIS NOTATION, on `Analysis`: 4 of 4 diagrams tagged
+# MindMapping::MindMapping are based on Analysis, read from
+# `t_diagram.Diagram_Type` and unanimous. A mind map IS one of EA's analysis
+# canvases with a stereotype layer on it.
+#
+# `extends` names the ROOT and not a sibling technology, which is load-bearing:
+# `_merge` does not union a parent's diagram types into the child's catalog and
+# `_on_substrate` resolves `base` against the IMMEDIATE parent's catalog only, so
+# a binding two levels down silently inherits NOTHING. Verified by loading a
+# three-level chain - the grandchild's substrate came back empty and its spacing
+# stayed `{}`.
+extends: UML
+
+# MEASURED, AND A REAL STATEMENT RATHER THAN A DEFAULT. Zero of the 48
+# stereotyped elements on these diagrams carry an `Xxx_` prefix: EA stores
+# `CentralTopic`, `MainTopic`, `Topic`, `SubTopic` bare. That is the opposite of
+# the sibling StrategyMap technology, which prefixes per diagram type, so it is
+# not a family habit and is stated explicitly.
+stereotype_prefix: ""
+
+notes: >
+  ONE DIAGRAM TYPE, AND IT IS BOUND. There is nothing left out at the diagram-type
+  level, which makes this the only binding in the directory with complete
+  coverage of its technology.
+
+
+  THE OMISSION THAT MATTERS IS `CentralTopic`. It is the hub the radial-tree
+  grammar places at the middle of the diagram and the one element whose size a
+  composer most wants, and it cannot be stated: n=4, one per diagram, which rule 1
+  refuses on sample size. Its modal size is 120x60 (2 of 4, over 3 distinct sizes)
+  and its median is 120x60 too, so the figure is probably right and it is four
+  diagrams short of being sayable. It falls back to the 90x40 default, which is
+  a main-topic box - visibly too small for a central topic. State it the day there
+  are ten mind maps. This is the highest-value single measurement missing from
+  this file.
+
+
+  ROUTE NAME IS CONVENTIONAL, WITH MEASURED CORROBORATION THAT IT IS NOT THE UML
+  DEFAULT. `t_diagramlinks.Style` carries Mode=8 on 49 of 49 connectors here -
+  unanimous, and distinct from the Mode=3 that dominates plain UML (346 of 347 on
+  Logical) and every straight-routed StrategyMap diagram type. So the measurement
+  says confidently that this notation routes differently; what it cannot say is
+  the route's NAME, because the integer-to-name mapping lives in the server's
+  `_ROUTE_STYLES` and the skills bundle deliberately does not import the server.
+  `Bezier` is stated because the corpus row's routing is CURVED-ARC and Bezier is
+  the only curved route in EA's own Line Style list. That is an inference from two
+  sides rather than a measurement, and it is the one value in this file to confirm
+  first.
+
+
+  GRAMMAR. `radial-tree` is the notation's own figure and it is implemented -
+  `compose_radial_tree.py` opens by describing itself as a mind map, and its
+  reasons for not being `compose_radial` are this diagram type's reasons: depth
+  below the central topic is ordinary and branches carry unequal numbers of
+  children. The corpus row independently calls the grammar `radial-tree`. Nothing
+  here is an approximation of a grammar we do not have.
+
+diagram_types:
+
+  MindMapping:
+    # 4 of 4 diagrams tagged MindMapping::MindMapping are based on Analysis.
+    base: Analysis
+    # The notation imposes this: one central topic with branches radiating from
+    # it and sub-branches hanging off those. Not `radial` - see `notes` and that
+    # composer's own docstring, which explains why an even angular split is wrong
+    # for a tree whose branches carry unequal numbers of children.
+    grammar: radial-tree
+    # The corpus row is `drawn`. n=1 row, so this is the weakest kind of evidence
+    # this schema accepts, and the model does not corroborate it: of the four
+    # diagrams only one carries Text elements that could be a title. It is stated
+    # from the corpus because the corpus is the reference this library generates
+    # against, and it is flagged here so nobody reads it as measured.
+    title: drawn
+    sizing:
+      # 90x40, 22 of n=48 (46%), 18 distinct sizes, and the median is 90x40 too.
+      # The unique pooled mode, and a genuine convention ACROSS concepts rather
+      # than one concept's size wearing the default's name: MainTopic supplies 10
+      # of the 22 and Topic supplies 12. Those two are 32 of the 48 elements, so
+      # the default is "the topic box", which is the box a mind map is made of.
+      default: {w: 90, h: 40}
+      # NO per-concept sizes are stated. Measured, and left out:
+      #   MainTopic     90x40, 10 of n=14 (71%). Passes both rules, and EQUALS
+      #                 the default it helped set, so a line would add nothing.
+      #   Topic         90x40, 12 of n=18 (67%). Same - passes, and equals it.
+      #   SubTopic      n=12, mode 79x28 at only 3 of 12 (25%), 10 distinct
+      #                 sizes, median 107x39. No dominant size: a sub-topic is
+      #                 sized by the text it carries, so there is nothing to
+      #                 state. It falls back to 90x40.
+      #   CentralTopic  n=4. LOW-N, and the omission that matters - see `notes`.
+    spacing:
+      # 70: the median of n=25 nearest-neighbor pairs. There is NO unique mode -
+      # 30, 50, 110 and 115 all tie at 2 - so this is the median only, a fact
+      # about the population rather than a convention. All four diagrams
+      # contribute and the densest supplies 11 of the 25 (44%), inside rule 2.
+      item_gap_x: 70
+      # 59: the median of n=31, modal 45 at 4 of 31. All four diagrams contribute
+      # and the densest supplies 11 of the 31 (35%) - the best-distributed gap
+      # figure in this file. Both axes are stated because the radial-tree
+      # composer reads them as the clearance it keeps between siblings and
+      # between rings.
+      item_gap_y: 59
+    routing:
+      # Conventional, from the corpus row's CURVED-ARC, with Mode=8 on 49 of 49
+      # connectors as corroboration that the route is not UML's. See `notes` -
+      # this is the value in this file most worth confirming.
+      default: Bezier
+      notes: >
+        44 of the 49 connectors are Associations stereotyped `Relationship`; the
+        other 5 are plain Dependencies. `trunk_for` is absent: a mind map's
+        branches fan out from the central topic rather than merging into a shared
+        trunk, so a trunk route would contradict the figure.
+    channels:
+      fill: >
+        Topic level. The corpus row's color encoding is "kind", and the kind is
+        the four-stereotype vocabulary - CentralTopic, MainTopic, Topic,
+        SubTopic. Recoloring a mind map overwrites the one thing its colors say.
+      claimed:
+        position: >
+          Depth and branch. How far a node sits from the central topic is its
+          depth, and the bearing it sits on is which branch it belongs to, so
+          both polar coordinates are spoken for - and the radial-tree composer
+          computes them, so they are not available in any case.
+        size: >
+          Content. 18 distinct sizes across 48 nodes, and SubTopic alone has 10
+          distinct sizes over 12 elements, because a topic box is sized by the
+          text it carries. The corpus row records free multi-line text as leaf
+          labels, which is the same fact from the other side.
+        line_style: >
+          Normative in UML and used here: 44 of the 49 connectors are solid
+          Associations and 5 are dashed Dependencies, so the dash pattern already
+          separates a branch from a cross-reference.
+      free: [border, border_width, line_color, font_color, opacity, icon]

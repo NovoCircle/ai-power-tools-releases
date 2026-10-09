@@ -1,0 +1,4444 @@
+{
+ "technology": {
+  "id": "WBA",
+  "version": "1.1.1",
+  "namespace": "WestbrookBankArchitecture"
+ },
+ "source": {
+  "server": "sql-host",
+  "database": "EAWestbrook",
+  "schema": "p5test",
+  "physical_schema": "dbo"
+ },
+ "entities": [
+  {
+   "name": "AI Gateway",
+   "in_mdg": true,
+   "stereotype": "WestbrookBankArchitecture::WBAAIGateway",
+   "metaclass": "Component",
+   "bound": true,
+   "alias": "AI Gateway",
+   "description": "",
+   "columns": [
+    {
+     "name": "auditLoggingEnabled",
+     "source_tag": "auditLoggingEnabled",
+     "sql_type": "TEXT"
+    },
+    {
+     "name": "businessOwner",
+     "source_tag": "businessOwner",
+     "sql_type": "TEXT"
+    },
+    {
+     "name": "criticality",
+     "source_tag": "criticality",
+     "sql_type": "TEXT"
+    },
+    {
+     "name": "dataClassification",
+     "source_tag": "dataClassification",
+     "sql_type": "TEXT"
+    },
+    {
+     "name": "dataResidency",
+     "source_tag": "dataResidency",
+     "sql_type": "TEXT"
+    },
+    {
+     "name": "humanInLoopRequired",
+     "source_tag": "humanInLoopRequired",
+     "sql_type": "TEXT"
+    },
+    {
+     "name": "lifecycle",
+     "source_tag": "lifecycle",
+     "sql_type": "TEXT"
+    },
+    {
+     "name": "modelGovernanceClass",
+     "source_tag": "modelGovernanceClass",
+     "sql_type": "TEXT"
+    },
+    {
+     "name": "regulatoryScope",
+     "source_tag": "regulatoryScope",
+     "sql_type": "TEXT"
+    },
+    {
+     "name": "technicalOwner",
+     "source_tag": "technicalOwner",
+     "sql_type": "TEXT"
+    }
+   ],
+   "row_tags": [],
+   "rows": 1,
+   "all_columns": [
+    {
+     "name": "ea_guid",
+     "type": "TEXT"
+    },
+    {
+     "name": "name",
+     "type": "TEXT"
+    },
+    {
+     "name": "metaclass",
+     "type": "TEXT"
+    },
+    {
+     "name": "package_path",
+     "type": "TEXT"
+    },
+    {
+     "name": "auditLoggingEnabled",
+     "type": "TEXT"
+    },
+    {
+     "name": "businessOwner",
+     "type": "TEXT"
+    },
+    {
+     "name": "criticality",
+     "type": "TEXT"
+    },
+    {
+     "name": "dataClassification",
+     "type": "TEXT"
+    },
+    {
+     "name": "dataResidency",
+     "type": "TEXT"
+    },
+    {
+     "name": "humanInLoopRequired",
+     "type": "TEXT"
+    },
+    {
+     "name": "lifecycle",
+     "type": "TEXT"
+    },
+    {
+     "name": "modelGovernanceClass",
+     "type": "TEXT"
+    },
+    {
+     "name": "regulatoryScope",
+     "type": "TEXT"
+    },
+    {
+     "name": "technicalOwner",
+     "type": "TEXT"
+    }
+   ]
+  },
+  {
+   "name": "AI Model",
+   "in_mdg": true,
+   "stereotype": "WestbrookBankArchitecture::WBAAIModel",
+   "metaclass": "Class",
+   "bound": true,
+   "alias": "AI Model",
+   "description": "",
+   "columns": [
+    {
+     "name": "auditLoggingEnabled",
+     "source_tag": "auditLoggingEnabled",
+     "sql_type": "TEXT"
+    },
+    {
+     "name": "businessOwner",
+     "source_tag": "businessOwner",
+     "sql_type": "TEXT"
+    },
+    {
+     "name": "criticality",
+     "source_tag": "criticality",
+     "sql_type": "TEXT"
+    },
+    {
+     "name": "dataClassification",
+     "source_tag": "dataClassification",
+     "sql_type": "TEXT"
+    },
+    {
+     "name": "dataResidency",
+     "source_tag": "dataResidency",
+     "sql_type": "TEXT"
+    },
+    {
+     "name": "humanInLoopRequired",
+     "source_tag": "humanInLoopRequired",
+     "sql_type": "TEXT"
+    },
+    {
+     "name": "lifecycle",
+     "source_tag": "lifecycle",
+     "sql_type": "TEXT"
+    },
+    {
+     "name": "modelGovernanceClass",
+     "source_tag": "modelGovernanceClass",
+     "sql_type": "TEXT"
+    },
+    {
+     "name": "regulatoryScope",
+     "source_tag": "regulatoryScope",
+     "sql_type": "TEXT"
+    },
+    {
+     "name": "technicalOwner",
+     "source_tag": "technicalOwner",
+     "sql_type": "TEXT"
+    }
+   ],
+   "row_tags": [],
+   "rows": 3,
+   "all_columns": [
+    {
+     "name": "ea_guid",
+     "type": "TEXT"
+    },
+    {
+     "name": "name",
+     "type": "TEXT"
+    },
+    {
+     "name": "metaclass",
+     "type": "TEXT"
+    },
+    {
+     "name": "package_path",
+     "type": "TEXT"
+    },
+    {
+     "name": "auditLoggingEnabled",
+     "type": "TEXT"
+    },
+    {
+     "name": "businessOwner",
+     "type": "TEXT"
+    },
+    {
+     "name": "criticality",
+     "type": "TEXT"
+    },
+    {
+     "name": "dataClassification",
+     "type": "TEXT"
+    },
+    {
+     "name": "dataResidency",
+     "type": "TEXT"
+    },
+    {
+     "name": "humanInLoopRequired",
+     "type": "TEXT"
+    },
+    {
+     "name": "lifecycle",
+     "type": "TEXT"
+    },
+    {
+     "name": "modelGovernanceClass",
+     "type": "TEXT"
+    },
+    {
+     "name": "regulatoryScope",
+     "type": "TEXT"
+    },
+    {
+     "name": "technicalOwner",
+     "type": "TEXT"
+    }
+   ]
+  },
+  {
+   "name": "AI Service",
+   "in_mdg": true,
+   "stereotype": "WestbrookBankArchitecture::WBAAIService",
+   "metaclass": "Component",
+   "bound": true,
+   "alias": "AI Service",
+   "description": "",
+   "columns": [
+    {
+     "name": "auditLoggingEnabled",
+     "source_tag": "auditLoggingEnabled",
+     "sql_type": "TEXT"
+    },
+    {
+     "name": "businessOwner",
+     "source_tag": "businessOwner",
+     "sql_type": "TEXT"
+    },
+    {
+     "name": "criticality",
+     "source_tag": "criticality",
+     "sql_type": "TEXT"
+    },
+    {
+     "name": "dataClassification",
+     "source_tag": "dataClassification",
+     "sql_type": "TEXT"
+    },
+    {
+     "name": "dataResidency",
+     "source_tag": "dataResidency",
+     "sql_type": "TEXT"
+    },
+    {
+     "name": "humanInLoopRequired",
+     "source_tag": "humanInLoopRequired",
+     "sql_type": "TEXT"
+    },
+    {
+     "name": "lifecycle",
+     "source_tag": "lifecycle",
+     "sql_type": "TEXT"
+    },
+    {
+     "name": "modelGovernanceClass",
+     "source_tag": "modelGovernanceClass",
+     "sql_type": "TEXT"
+    },
+    {
+     "name": "regulatoryScope",
+     "source_tag": "regulatoryScope",
+     "sql_type": "TEXT"
+    },
+    {
+     "name": "technicalOwner",
+     "source_tag": "technicalOwner",
+     "sql_type": "TEXT"
+    }
+   ],
+   "row_tags": [],
+   "rows": 3,
+   "all_columns": [
+    {
+     "name": "ea_guid",
+     "type": "TEXT"
+    },
+    {
+     "name": "name",
+     "type": "TEXT"
+    },
+    {
+     "name": "metaclass",
+     "type": "TEXT"
+    },
+    {
+     "name": "package_path",
+     "type": "TEXT"
+    },
+    {
+     "name": "auditLoggingEnabled",
+     "type": "TEXT"
+    },
+    {
+     "name": "businessOwner",
+     "type": "TEXT"
+    },
+    {
+     "name": "criticality",
+     "type": "TEXT"
+    },
+    {
+     "name": "dataClassification",
+     "type": "TEXT"
+    },
+    {
+     "name": "dataResidency",
+     "type": "TEXT"
+    },
+    {
+     "name": "humanInLoopRequired",
+     "type": "TEXT"
+    },
+    {
+     "name": "lifecycle",
+     "type": "TEXT"
+    },
+    {
+     "name": "modelGovernanceClass",
+     "type": "TEXT"
+    },
+    {
+     "name": "regulatoryScope",
+     "type": "TEXT"
+    },
+    {
+     "name": "technicalOwner",
+     "type": "TEXT"
+    }
+   ]
+  },
+  {
+   "name": "Business Application",
+   "in_mdg": true,
+   "stereotype": "WestbrookBankArchitecture::WBABusinessApplication",
+   "metaclass": "Component",
+   "bound": true,
+   "alias": "Business Application",
+   "description": "",
+   "columns": [
+    {
+     "name": "businessOwner",
+     "source_tag": "businessOwner",
+     "sql_type": "TEXT"
+    },
+    {
+     "name": "criticality",
+     "source_tag": "criticality",
+     "sql_type": "TEXT"
+    },
+    {
+     "name": "dataClassification",
+     "source_tag": "dataClassification",
+     "sql_type": "TEXT"
+    },
+    {
+     "name": "lifecycle",
+     "source_tag": "lifecycle",
+     "sql_type": "TEXT"
+    },
+    {
+     "name": "pciScopeJustification",
+     "source_tag": "pciScopeJustification",
+     "sql_type": "TEXT"
+    },
+    {
+     "name": "regulatoryScope",
+     "source_tag": "regulatoryScope",
+     "sql_type": "TEXT"
+    },
+    {
+     "name": "technicalOwner",
+     "source_tag": "technicalOwner",
+     "sql_type": "TEXT"
+    }
+   ],
+   "row_tags": [],
+   "rows": 47,
+   "all_columns": [
+    {
+     "name": "ea_guid",
+     "type": "TEXT"
+    },
+    {
+     "name": "name",
+     "type": "TEXT"
+    },
+    {
+     "name": "metaclass",
+     "type": "TEXT"
+    },
+    {
+     "name": "package_path",
+     "type": "TEXT"
+    },
+    {
+     "name": "businessOwner",
+     "type": "TEXT"
+    },
+    {
+     "name": "criticality",
+     "type": "TEXT"
+    },
+    {
+     "name": "dataClassification",
+     "type": "TEXT"
+    },
+    {
+     "name": "lifecycle",
+     "type": "TEXT"
+    },
+    {
+     "name": "pciScopeJustification",
+     "type": "TEXT"
+    },
+    {
+     "name": "regulatoryScope",
+     "type": "TEXT"
+    },
+    {
+     "name": "technicalOwner",
+     "type": "TEXT"
+    }
+   ]
+  },
+  {
+   "name": "Business Service",
+   "in_mdg": true,
+   "stereotype": "WestbrookBankArchitecture::WBABusinessService",
+   "metaclass": "Component",
+   "bound": true,
+   "alias": "Business Service",
+   "description": "",
+   "columns": [
+    {
+     "name": "businessOwner",
+     "source_tag": "businessOwner",
+     "sql_type": "TEXT"
+    },
+    {
+     "name": "criticality",
+     "source_tag": "criticality",
+     "sql_type": "TEXT"
+    },
+    {
+     "name": "dataClassification",
+     "source_tag": "dataClassification",
+     "sql_type": "TEXT"
+    },
+    {
+     "name": "lifecycle",
+     "source_tag": "lifecycle",
+     "sql_type": "TEXT"
+    },
+    {
+     "name": "regulatoryScope",
+     "source_tag": "regulatoryScope",
+     "sql_type": "TEXT"
+    },
+    {
+     "name": "technicalOwner",
+     "source_tag": "technicalOwner",
+     "sql_type": "TEXT"
+    }
+   ],
+   "row_tags": [],
+   "rows": 8,
+   "all_columns": [
+    {
+     "name": "ea_guid",
+     "type": "TEXT"
+    },
+    {
+     "name": "name",
+     "type": "TEXT"
+    },
+    {
+     "name": "metaclass",
+     "type": "TEXT"
+    },
+    {
+     "name": "package_path",
+     "type": "TEXT"
+    },
+    {
+     "name": "businessOwner",
+     "type": "TEXT"
+    },
+    {
+     "name": "criticality",
+     "type": "TEXT"
+    },
+    {
+     "name": "dataClassification",
+     "type": "TEXT"
+    },
+    {
+     "name": "lifecycle",
+     "type": "TEXT"
+    },
+    {
+     "name": "regulatoryScope",
+     "type": "TEXT"
+    },
+    {
+     "name": "technicalOwner",
+     "type": "TEXT"
+    }
+   ]
+  },
+  {
+   "name": "Customer Touchpoint",
+   "in_mdg": true,
+   "stereotype": "WestbrookBankArchitecture::WBACustomerTouchpoint",
+   "metaclass": "Activity",
+   "bound": true,
+   "alias": "Customer Touchpoint",
+   "description": "",
+   "columns": [
+    {
+     "name": "businessOwner",
+     "source_tag": "businessOwner",
+     "sql_type": "TEXT"
+    },
+    {
+     "name": "criticality",
+     "source_tag": "criticality",
+     "sql_type": "TEXT"
+    },
+    {
+     "name": "dataClassification",
+     "source_tag": "dataClassification",
+     "sql_type": "TEXT"
+    },
+    {
+     "name": "lifecycle",
+     "source_tag": "lifecycle",
+     "sql_type": "TEXT"
+    },
+    {
+     "name": "regulatoryScope",
+     "source_tag": "regulatoryScope",
+     "sql_type": "TEXT"
+    },
+    {
+     "name": "technicalOwner",
+     "source_tag": "technicalOwner",
+     "sql_type": "TEXT"
+    }
+   ],
+   "row_tags": [],
+   "rows": 2,
+   "all_columns": [
+    {
+     "name": "ea_guid",
+     "type": "TEXT"
+    },
+    {
+     "name": "name",
+     "type": "TEXT"
+    },
+    {
+     "name": "metaclass",
+     "type": "TEXT"
+    },
+    {
+     "name": "package_path",
+     "type": "TEXT"
+    },
+    {
+     "name": "businessOwner",
+     "type": "TEXT"
+    },
+    {
+     "name": "criticality",
+     "type": "TEXT"
+    },
+    {
+     "name": "dataClassification",
+     "type": "TEXT"
+    },
+    {
+     "name": "lifecycle",
+     "type": "TEXT"
+    },
+    {
+     "name": "regulatoryScope",
+     "type": "TEXT"
+    },
+    {
+     "name": "technicalOwner",
+     "type": "TEXT"
+    }
+   ]
+  },
+  {
+   "name": "Data Asset",
+   "in_mdg": true,
+   "stereotype": "WestbrookBankArchitecture::WBADataAsset",
+   "metaclass": "Class",
+   "bound": true,
+   "alias": "Data Asset",
+   "description": "",
+   "columns": [
+    {
+     "name": "businessOwner",
+     "source_tag": "businessOwner",
+     "sql_type": "TEXT"
+    },
+    {
+     "name": "criticality",
+     "source_tag": "criticality",
+     "sql_type": "TEXT"
+    },
+    {
+     "name": "dataClassification",
+     "source_tag": "dataClassification",
+     "sql_type": "TEXT"
+    },
+    {
+     "name": "lifecycle",
+     "source_tag": "lifecycle",
+     "sql_type": "TEXT"
+    },
+    {
+     "name": "regulatoryScope",
+     "source_tag": "regulatoryScope",
+     "sql_type": "TEXT"
+    },
+    {
+     "name": "technicalOwner",
+     "source_tag": "technicalOwner",
+     "sql_type": "TEXT"
+    }
+   ],
+   "row_tags": [],
+   "rows": 11,
+   "all_columns": [
+    {
+     "name": "ea_guid",
+     "type": "TEXT"
+    },
+    {
+     "name": "name",
+     "type": "TEXT"
+    },
+    {
+     "name": "metaclass",
+     "type": "TEXT"
+    },
+    {
+     "name": "package_path",
+     "type": "TEXT"
+    },
+    {
+     "name": "businessOwner",
+     "type": "TEXT"
+    },
+    {
+     "name": "criticality",
+     "type": "TEXT"
+    },
+    {
+     "name": "dataClassification",
+     "type": "TEXT"
+    },
+    {
+     "name": "lifecycle",
+     "type": "TEXT"
+    },
+    {
+     "name": "regulatoryScope",
+     "type": "TEXT"
+    },
+    {
+     "name": "technicalOwner",
+     "type": "TEXT"
+    }
+   ]
+  },
+  {
+   "name": "Data Entity",
+   "in_mdg": true,
+   "stereotype": "WestbrookBankArchitecture::WBADataEntity",
+   "metaclass": "Class",
+   "bound": true,
+   "alias": "Data Entity",
+   "description": "",
+   "columns": [
+    {
+     "name": "businessOwner",
+     "source_tag": "businessOwner",
+     "sql_type": "TEXT"
+    },
+    {
+     "name": "criticality",
+     "source_tag": "criticality",
+     "sql_type": "TEXT"
+    },
+    {
+     "name": "dataClassification",
+     "source_tag": "dataClassification",
+     "sql_type": "TEXT"
+    },
+    {
+     "name": "lifecycle",
+     "source_tag": "lifecycle",
+     "sql_type": "TEXT"
+    },
+    {
+     "name": "regulatoryScope",
+     "source_tag": "regulatoryScope",
+     "sql_type": "TEXT"
+    },
+    {
+     "name": "technicalOwner",
+     "source_tag": "technicalOwner",
+     "sql_type": "TEXT"
+    }
+   ],
+   "row_tags": [],
+   "rows": 5,
+   "all_columns": [
+    {
+     "name": "ea_guid",
+     "type": "TEXT"
+    },
+    {
+     "name": "name",
+     "type": "TEXT"
+    },
+    {
+     "name": "metaclass",
+     "type": "TEXT"
+    },
+    {
+     "name": "package_path",
+     "type": "TEXT"
+    },
+    {
+     "name": "businessOwner",
+     "type": "TEXT"
+    },
+    {
+     "name": "criticality",
+     "type": "TEXT"
+    },
+    {
+     "name": "dataClassification",
+     "type": "TEXT"
+    },
+    {
+     "name": "lifecycle",
+     "type": "TEXT"
+    },
+    {
+     "name": "regulatoryScope",
+     "type": "TEXT"
+    },
+    {
+     "name": "technicalOwner",
+     "type": "TEXT"
+    }
+   ]
+  },
+  {
+   "name": "External Call",
+   "in_mdg": true,
+   "stereotype": "WestbrookBankArchitecture::WBAExternalCall",
+   "metaclass": "Activity",
+   "bound": true,
+   "alias": "External Call",
+   "description": "",
+   "columns": [
+    {
+     "name": "businessOwner",
+     "source_tag": "businessOwner",
+     "sql_type": "TEXT"
+    },
+    {
+     "name": "criticality",
+     "source_tag": "criticality",
+     "sql_type": "TEXT"
+    },
+    {
+     "name": "dataClassification",
+     "source_tag": "dataClassification",
+     "sql_type": "TEXT"
+    },
+    {
+     "name": "lifecycle",
+     "source_tag": "lifecycle",
+     "sql_type": "TEXT"
+    },
+    {
+     "name": "regulatoryScope",
+     "source_tag": "regulatoryScope",
+     "sql_type": "TEXT"
+    },
+    {
+     "name": "technicalOwner",
+     "source_tag": "technicalOwner",
+     "sql_type": "TEXT"
+    }
+   ],
+   "row_tags": [],
+   "rows": 2,
+   "all_columns": [
+    {
+     "name": "ea_guid",
+     "type": "TEXT"
+    },
+    {
+     "name": "name",
+     "type": "TEXT"
+    },
+    {
+     "name": "metaclass",
+     "type": "TEXT"
+    },
+    {
+     "name": "package_path",
+     "type": "TEXT"
+    },
+    {
+     "name": "businessOwner",
+     "type": "TEXT"
+    },
+    {
+     "name": "criticality",
+     "type": "TEXT"
+    },
+    {
+     "name": "dataClassification",
+     "type": "TEXT"
+    },
+    {
+     "name": "lifecycle",
+     "type": "TEXT"
+    },
+    {
+     "name": "regulatoryScope",
+     "type": "TEXT"
+    },
+    {
+     "name": "technicalOwner",
+     "type": "TEXT"
+    }
+   ]
+  },
+  {
+   "name": "Governed Element",
+   "in_mdg": true,
+   "stereotype": "WestbrookBankArchitecture::WBAGovernedElement",
+   "metaclass": "Class",
+   "bound": true,
+   "alias": "Governed Element",
+   "description": "",
+   "columns": [
+    {
+     "name": "businessOwner",
+     "source_tag": "businessOwner",
+     "sql_type": "TEXT"
+    },
+    {
+     "name": "criticality",
+     "source_tag": "criticality",
+     "sql_type": "TEXT"
+    },
+    {
+     "name": "dataClassification",
+     "source_tag": "dataClassification",
+     "sql_type": "TEXT"
+    },
+    {
+     "name": "lifecycle",
+     "source_tag": "lifecycle",
+     "sql_type": "TEXT"
+    },
+    {
+     "name": "regulatoryScope",
+     "source_tag": "regulatoryScope",
+     "sql_type": "TEXT"
+    },
+    {
+     "name": "technicalOwner",
+     "source_tag": "technicalOwner",
+     "sql_type": "TEXT"
+    }
+   ],
+   "row_tags": [],
+   "rows": 0,
+   "all_columns": [
+    {
+     "name": "ea_guid",
+     "type": "TEXT"
+    },
+    {
+     "name": "name",
+     "type": "TEXT"
+    },
+    {
+     "name": "metaclass",
+     "type": "TEXT"
+    },
+    {
+     "name": "package_path",
+     "type": "TEXT"
+    },
+    {
+     "name": "businessOwner",
+     "type": "TEXT"
+    },
+    {
+     "name": "criticality",
+     "type": "TEXT"
+    },
+    {
+     "name": "dataClassification",
+     "type": "TEXT"
+    },
+    {
+     "name": "lifecycle",
+     "type": "TEXT"
+    },
+    {
+     "name": "regulatoryScope",
+     "type": "TEXT"
+    },
+    {
+     "name": "technicalOwner",
+     "type": "TEXT"
+    }
+   ]
+  },
+  {
+   "name": "Regulated Activity",
+   "in_mdg": true,
+   "stereotype": "WestbrookBankArchitecture::WBARegulatedActivity",
+   "metaclass": "Activity",
+   "bound": true,
+   "alias": "Regulated Activity",
+   "description": "",
+   "columns": [
+    {
+     "name": "businessOwner",
+     "source_tag": "businessOwner",
+     "sql_type": "TEXT"
+    },
+    {
+     "name": "criticality",
+     "source_tag": "criticality",
+     "sql_type": "TEXT"
+    },
+    {
+     "name": "dataClassification",
+     "source_tag": "dataClassification",
+     "sql_type": "TEXT"
+    },
+    {
+     "name": "lifecycle",
+     "source_tag": "lifecycle",
+     "sql_type": "TEXT"
+    },
+    {
+     "name": "regulatoryScope",
+     "source_tag": "regulatoryScope",
+     "sql_type": "TEXT"
+    },
+    {
+     "name": "technicalOwner",
+     "source_tag": "technicalOwner",
+     "sql_type": "TEXT"
+    }
+   ],
+   "row_tags": [],
+   "rows": 3,
+   "all_columns": [
+    {
+     "name": "ea_guid",
+     "type": "TEXT"
+    },
+    {
+     "name": "name",
+     "type": "TEXT"
+    },
+    {
+     "name": "metaclass",
+     "type": "TEXT"
+    },
+    {
+     "name": "package_path",
+     "type": "TEXT"
+    },
+    {
+     "name": "businessOwner",
+     "type": "TEXT"
+    },
+    {
+     "name": "criticality",
+     "type": "TEXT"
+    },
+    {
+     "name": "dataClassification",
+     "type": "TEXT"
+    },
+    {
+     "name": "lifecycle",
+     "type": "TEXT"
+    },
+    {
+     "name": "regulatoryScope",
+     "type": "TEXT"
+    },
+    {
+     "name": "technicalOwner",
+     "type": "TEXT"
+    }
+   ]
+  },
+  {
+   "name": "Regulated Function",
+   "in_mdg": true,
+   "stereotype": "WestbrookBankArchitecture::WBARegulatedFunction",
+   "metaclass": "Component",
+   "bound": true,
+   "alias": "Regulated Function",
+   "description": "",
+   "columns": [
+    {
+     "name": "businessOwner",
+     "source_tag": "businessOwner",
+     "sql_type": "TEXT"
+    },
+    {
+     "name": "criticality",
+     "source_tag": "criticality",
+     "sql_type": "TEXT"
+    },
+    {
+     "name": "dataClassification",
+     "source_tag": "dataClassification",
+     "sql_type": "TEXT"
+    },
+    {
+     "name": "lifecycle",
+     "source_tag": "lifecycle",
+     "sql_type": "TEXT"
+    },
+    {
+     "name": "regulatoryScope",
+     "source_tag": "regulatoryScope",
+     "sql_type": "TEXT"
+    },
+    {
+     "name": "technicalOwner",
+     "source_tag": "technicalOwner",
+     "sql_type": "TEXT"
+    }
+   ],
+   "row_tags": [],
+   "rows": 2,
+   "all_columns": [
+    {
+     "name": "ea_guid",
+     "type": "TEXT"
+    },
+    {
+     "name": "name",
+     "type": "TEXT"
+    },
+    {
+     "name": "metaclass",
+     "type": "TEXT"
+    },
+    {
+     "name": "package_path",
+     "type": "TEXT"
+    },
+    {
+     "name": "businessOwner",
+     "type": "TEXT"
+    },
+    {
+     "name": "criticality",
+     "type": "TEXT"
+    },
+    {
+     "name": "dataClassification",
+     "type": "TEXT"
+    },
+    {
+     "name": "lifecycle",
+     "type": "TEXT"
+    },
+    {
+     "name": "regulatoryScope",
+     "type": "TEXT"
+    },
+    {
+     "name": "technicalOwner",
+     "type": "TEXT"
+    }
+   ]
+  },
+  {
+   "name": "System of Record",
+   "in_mdg": true,
+   "stereotype": "WestbrookBankArchitecture::WBASystemOfRecord",
+   "metaclass": "Component",
+   "bound": true,
+   "alias": "System of Record",
+   "description": "",
+   "columns": [
+    {
+     "name": "businessOwner",
+     "source_tag": "businessOwner",
+     "sql_type": "TEXT"
+    },
+    {
+     "name": "criticality",
+     "source_tag": "criticality",
+     "sql_type": "TEXT"
+    },
+    {
+     "name": "dataClassification",
+     "source_tag": "dataClassification",
+     "sql_type": "TEXT"
+    },
+    {
+     "name": "lifecycle",
+     "source_tag": "lifecycle",
+     "sql_type": "TEXT"
+    },
+    {
+     "name": "regulatoryScope",
+     "source_tag": "regulatoryScope",
+     "sql_type": "TEXT"
+    },
+    {
+     "name": "technicalOwner",
+     "source_tag": "technicalOwner",
+     "sql_type": "TEXT"
+    }
+   ],
+   "row_tags": [],
+   "rows": 5,
+   "all_columns": [
+    {
+     "name": "ea_guid",
+     "type": "TEXT"
+    },
+    {
+     "name": "name",
+     "type": "TEXT"
+    },
+    {
+     "name": "metaclass",
+     "type": "TEXT"
+    },
+    {
+     "name": "package_path",
+     "type": "TEXT"
+    },
+    {
+     "name": "businessOwner",
+     "type": "TEXT"
+    },
+    {
+     "name": "criticality",
+     "type": "TEXT"
+    },
+    {
+     "name": "dataClassification",
+     "type": "TEXT"
+    },
+    {
+     "name": "lifecycle",
+     "type": "TEXT"
+    },
+    {
+     "name": "regulatoryScope",
+     "type": "TEXT"
+    },
+    {
+     "name": "technicalOwner",
+     "type": "TEXT"
+    }
+   ]
+  },
+  {
+   "name": "Technology Node",
+   "in_mdg": true,
+   "stereotype": "WestbrookBankArchitecture::WBATechnologyNode",
+   "metaclass": "Node",
+   "bound": true,
+   "alias": "Technology Node",
+   "description": "",
+   "columns": [
+    {
+     "name": "businessOwner",
+     "source_tag": "businessOwner",
+     "sql_type": "TEXT"
+    },
+    {
+     "name": "criticality",
+     "source_tag": "criticality",
+     "sql_type": "TEXT"
+    },
+    {
+     "name": "dataClassification",
+     "source_tag": "dataClassification",
+     "sql_type": "TEXT"
+    },
+    {
+     "name": "lifecycle",
+     "source_tag": "lifecycle",
+     "sql_type": "TEXT"
+    },
+    {
+     "name": "regulatoryScope",
+     "source_tag": "regulatoryScope",
+     "sql_type": "TEXT"
+    },
+    {
+     "name": "technicalOwner",
+     "source_tag": "technicalOwner",
+     "sql_type": "TEXT"
+    }
+   ],
+   "row_tags": [],
+   "rows": 0,
+   "all_columns": [
+    {
+     "name": "ea_guid",
+     "type": "TEXT"
+    },
+    {
+     "name": "name",
+     "type": "TEXT"
+    },
+    {
+     "name": "metaclass",
+     "type": "TEXT"
+    },
+    {
+     "name": "package_path",
+     "type": "TEXT"
+    },
+    {
+     "name": "businessOwner",
+     "type": "TEXT"
+    },
+    {
+     "name": "criticality",
+     "type": "TEXT"
+    },
+    {
+     "name": "dataClassification",
+     "type": "TEXT"
+    },
+    {
+     "name": "lifecycle",
+     "type": "TEXT"
+    },
+    {
+     "name": "regulatoryScope",
+     "type": "TEXT"
+    },
+    {
+     "name": "technicalOwner",
+     "type": "TEXT"
+    }
+   ]
+  },
+  {
+   "name": "Vendor System",
+   "in_mdg": true,
+   "stereotype": "WestbrookBankArchitecture::WBAVendorSystem",
+   "metaclass": "Component",
+   "bound": true,
+   "alias": "Vendor System",
+   "description": "",
+   "columns": [
+    {
+     "name": "businessOwner",
+     "source_tag": "businessOwner",
+     "sql_type": "TEXT"
+    },
+    {
+     "name": "criticality",
+     "source_tag": "criticality",
+     "sql_type": "TEXT"
+    },
+    {
+     "name": "dataClassification",
+     "source_tag": "dataClassification",
+     "sql_type": "TEXT"
+    },
+    {
+     "name": "lifecycle",
+     "source_tag": "lifecycle",
+     "sql_type": "TEXT"
+    },
+    {
+     "name": "pciScopeJustification",
+     "source_tag": "pciScopeJustification",
+     "sql_type": "TEXT"
+    },
+    {
+     "name": "product",
+     "source_tag": "product",
+     "sql_type": "TEXT"
+    },
+    {
+     "name": "regulatoryScope",
+     "source_tag": "regulatoryScope",
+     "sql_type": "TEXT"
+    },
+    {
+     "name": "technicalOwner",
+     "source_tag": "technicalOwner",
+     "sql_type": "TEXT"
+    },
+    {
+     "name": "vendor",
+     "source_tag": "vendor",
+     "sql_type": "TEXT"
+    }
+   ],
+   "row_tags": [],
+   "rows": 35,
+   "all_columns": [
+    {
+     "name": "ea_guid",
+     "type": "TEXT"
+    },
+    {
+     "name": "name",
+     "type": "TEXT"
+    },
+    {
+     "name": "metaclass",
+     "type": "TEXT"
+    },
+    {
+     "name": "package_path",
+     "type": "TEXT"
+    },
+    {
+     "name": "businessOwner",
+     "type": "TEXT"
+    },
+    {
+     "name": "criticality",
+     "type": "TEXT"
+    },
+    {
+     "name": "dataClassification",
+     "type": "TEXT"
+    },
+    {
+     "name": "lifecycle",
+     "type": "TEXT"
+    },
+    {
+     "name": "pciScopeJustification",
+     "type": "TEXT"
+    },
+    {
+     "name": "product",
+     "type": "TEXT"
+    },
+    {
+     "name": "regulatoryScope",
+     "type": "TEXT"
+    },
+    {
+     "name": "technicalOwner",
+     "type": "TEXT"
+    },
+    {
+     "name": "vendor",
+     "type": "TEXT"
+    }
+   ]
+  },
+  {
+   "name": "VendorApplication (not in MDG)",
+   "in_mdg": false,
+   "stereotype": "VendorApplication",
+   "metaclass": "Component",
+   "bound": false,
+   "alias": "",
+   "description": "Included as observed: outside the MDG.",
+   "columns": [
+    {
+     "name": "businessOwner",
+     "source_tag": "businessOwner",
+     "sql_type": "TEXT"
+    },
+    {
+     "name": "criticality",
+     "source_tag": "criticality",
+     "sql_type": "TEXT"
+    },
+    {
+     "name": "dataClassification",
+     "source_tag": "dataClassification",
+     "sql_type": "TEXT"
+    },
+    {
+     "name": "lifecycle",
+     "source_tag": "lifecycle",
+     "sql_type": "TEXT"
+    },
+    {
+     "name": "product",
+     "source_tag": "product",
+     "sql_type": "TEXT"
+    },
+    {
+     "name": "regulatoryScope",
+     "source_tag": "regulatoryScope",
+     "sql_type": "TEXT"
+    },
+    {
+     "name": "technicalOwner",
+     "source_tag": "technicalOwner",
+     "sql_type": "TEXT"
+    },
+    {
+     "name": "vendor",
+     "source_tag": "vendor",
+     "sql_type": "TEXT"
+    }
+   ],
+   "row_tags": [],
+   "rows": 1,
+   "all_columns": [
+    {
+     "name": "ea_guid",
+     "type": "TEXT"
+    },
+    {
+     "name": "name",
+     "type": "TEXT"
+    },
+    {
+     "name": "metaclass",
+     "type": "TEXT"
+    },
+    {
+     "name": "package_path",
+     "type": "TEXT"
+    },
+    {
+     "name": "businessOwner",
+     "type": "TEXT"
+    },
+    {
+     "name": "criticality",
+     "type": "TEXT"
+    },
+    {
+     "name": "dataClassification",
+     "type": "TEXT"
+    },
+    {
+     "name": "lifecycle",
+     "type": "TEXT"
+    },
+    {
+     "name": "product",
+     "type": "TEXT"
+    },
+    {
+     "name": "regulatoryScope",
+     "type": "TEXT"
+    },
+    {
+     "name": "technicalOwner",
+     "type": "TEXT"
+    },
+    {
+     "name": "vendor",
+     "type": "TEXT"
+    }
+   ]
+  },
+  {
+   "name": "WBADataAsset (not in MDG)",
+   "in_mdg": false,
+   "stereotype": "WBADataAsset",
+   "metaclass": "Object",
+   "bound": false,
+   "alias": "",
+   "description": "Included as observed: outside the MDG.",
+   "columns": [
+    {
+     "name": "dataClassification",
+     "source_tag": "dataClassification",
+     "sql_type": "TEXT"
+    },
+    {
+     "name": "regulatoryScope",
+     "source_tag": "regulatoryScope",
+     "sql_type": "TEXT"
+    }
+   ],
+   "row_tags": [],
+   "rows": 1,
+   "all_columns": [
+    {
+     "name": "ea_guid",
+     "type": "TEXT"
+    },
+    {
+     "name": "name",
+     "type": "TEXT"
+    },
+    {
+     "name": "metaclass",
+     "type": "TEXT"
+    },
+    {
+     "name": "package_path",
+     "type": "TEXT"
+    },
+    {
+     "name": "dataClassification",
+     "type": "TEXT"
+    },
+    {
+     "name": "regulatoryScope",
+     "type": "TEXT"
+    }
+   ]
+  },
+  {
+   "name": "Node (not in MDG)",
+   "in_mdg": false,
+   "stereotype": "",
+   "metaclass": "Node",
+   "bound": false,
+   "alias": "",
+   "description": "Included as observed: outside the MDG.",
+   "columns": [],
+   "row_tags": [],
+   "rows": 15,
+   "all_columns": [
+    {
+     "name": "ea_guid",
+     "type": "TEXT"
+    },
+    {
+     "name": "name",
+     "type": "TEXT"
+    },
+    {
+     "name": "metaclass",
+     "type": "TEXT"
+    },
+    {
+     "name": "package_path",
+     "type": "TEXT"
+    }
+   ]
+  }
+ ],
+ "connectors": [
+  {
+   "name": "Con_AI Gateway Uses AI Service",
+   "in_mdg": true,
+   "key": "WestbrookBankArchitecture::Uses",
+   "bound": true,
+   "source": "AI Gateway",
+   "target": "AI Service",
+   "description": "",
+   "tags": [
+    "dataFlowClassification",
+    "integrationPattern",
+    "slaTier"
+   ],
+   "row_tags": [],
+   "rows": 3,
+   "all_columns": [
+    {
+     "name": "connector_guid",
+     "type": "TEXT"
+    },
+    {
+     "name": "connector_id",
+     "type": "INTEGER"
+    },
+    {
+     "name": "name",
+     "type": "TEXT"
+    },
+    {
+     "name": "source_guid",
+     "type": "TEXT"
+    },
+    {
+     "name": "target_guid",
+     "type": "TEXT"
+    },
+    {
+     "name": "direction",
+     "type": "TEXT"
+    },
+    {
+     "name": "base_type",
+     "type": "TEXT"
+    },
+    {
+     "name": "dataFlowClassification",
+     "type": "TEXT"
+    },
+    {
+     "name": "integrationPattern",
+     "type": "TEXT"
+    },
+    {
+     "name": "slaTier",
+     "type": "TEXT"
+    }
+   ]
+  },
+  {
+   "name": "Con_AI Service Uses AI Model",
+   "in_mdg": true,
+   "key": "WestbrookBankArchitecture::Uses",
+   "bound": true,
+   "source": "AI Service",
+   "target": "AI Model",
+   "description": "",
+   "tags": [
+    "dataFlowClassification",
+    "integrationPattern",
+    "slaTier"
+   ],
+   "row_tags": [],
+   "rows": 3,
+   "all_columns": [
+    {
+     "name": "connector_guid",
+     "type": "TEXT"
+    },
+    {
+     "name": "connector_id",
+     "type": "INTEGER"
+    },
+    {
+     "name": "name",
+     "type": "TEXT"
+    },
+    {
+     "name": "source_guid",
+     "type": "TEXT"
+    },
+    {
+     "name": "target_guid",
+     "type": "TEXT"
+    },
+    {
+     "name": "direction",
+     "type": "TEXT"
+    },
+    {
+     "name": "base_type",
+     "type": "TEXT"
+    },
+    {
+     "name": "dataFlowClassification",
+     "type": "TEXT"
+    },
+    {
+     "name": "integrationPattern",
+     "type": "TEXT"
+    },
+    {
+     "name": "slaTier",
+     "type": "TEXT"
+    }
+   ]
+  },
+  {
+   "name": "Con_Business Application Flows Business Application",
+   "in_mdg": true,
+   "key": "WestbrookBankArchitecture::Flows",
+   "bound": true,
+   "source": "Business Application",
+   "target": "Business Application",
+   "description": "",
+   "tags": [
+    "dataFlowClassification",
+    "integrationPattern",
+    "slaTier"
+   ],
+   "row_tags": [],
+   "rows": 1,
+   "all_columns": [
+    {
+     "name": "connector_guid",
+     "type": "TEXT"
+    },
+    {
+     "name": "connector_id",
+     "type": "INTEGER"
+    },
+    {
+     "name": "name",
+     "type": "TEXT"
+    },
+    {
+     "name": "source_guid",
+     "type": "TEXT"
+    },
+    {
+     "name": "target_guid",
+     "type": "TEXT"
+    },
+    {
+     "name": "direction",
+     "type": "TEXT"
+    },
+    {
+     "name": "base_type",
+     "type": "TEXT"
+    },
+    {
+     "name": "dataFlowClassification",
+     "type": "TEXT"
+    },
+    {
+     "name": "integrationPattern",
+     "type": "TEXT"
+    },
+    {
+     "name": "slaTier",
+     "type": "TEXT"
+    }
+   ]
+  },
+  {
+   "name": "Con_Business Application Uses Business Application",
+   "in_mdg": true,
+   "key": "WestbrookBankArchitecture::Uses",
+   "bound": true,
+   "source": "Business Application",
+   "target": "Business Application",
+   "description": "",
+   "tags": [
+    "dataFlowClassification",
+    "integrationPattern",
+    "slaTier"
+   ],
+   "row_tags": [],
+   "rows": 2,
+   "all_columns": [
+    {
+     "name": "connector_guid",
+     "type": "TEXT"
+    },
+    {
+     "name": "connector_id",
+     "type": "INTEGER"
+    },
+    {
+     "name": "name",
+     "type": "TEXT"
+    },
+    {
+     "name": "source_guid",
+     "type": "TEXT"
+    },
+    {
+     "name": "target_guid",
+     "type": "TEXT"
+    },
+    {
+     "name": "direction",
+     "type": "TEXT"
+    },
+    {
+     "name": "base_type",
+     "type": "TEXT"
+    },
+    {
+     "name": "dataFlowClassification",
+     "type": "TEXT"
+    },
+    {
+     "name": "integrationPattern",
+     "type": "TEXT"
+    },
+    {
+     "name": "slaTier",
+     "type": "TEXT"
+    }
+   ]
+  },
+  {
+   "name": "Con_Business Application Uses Business Service",
+   "in_mdg": true,
+   "key": "WestbrookBankArchitecture::Uses",
+   "bound": true,
+   "source": "Business Application",
+   "target": "Business Service",
+   "description": "",
+   "tags": [
+    "dataFlowClassification",
+    "integrationPattern",
+    "slaTier"
+   ],
+   "row_tags": [],
+   "rows": 5,
+   "all_columns": [
+    {
+     "name": "connector_guid",
+     "type": "TEXT"
+    },
+    {
+     "name": "connector_id",
+     "type": "INTEGER"
+    },
+    {
+     "name": "name",
+     "type": "TEXT"
+    },
+    {
+     "name": "source_guid",
+     "type": "TEXT"
+    },
+    {
+     "name": "target_guid",
+     "type": "TEXT"
+    },
+    {
+     "name": "direction",
+     "type": "TEXT"
+    },
+    {
+     "name": "base_type",
+     "type": "TEXT"
+    },
+    {
+     "name": "dataFlowClassification",
+     "type": "TEXT"
+    },
+    {
+     "name": "integrationPattern",
+     "type": "TEXT"
+    },
+    {
+     "name": "slaTier",
+     "type": "TEXT"
+    }
+   ]
+  },
+  {
+   "name": "Con_Business Application Uses System of Record",
+   "in_mdg": true,
+   "key": "WestbrookBankArchitecture::Uses",
+   "bound": true,
+   "source": "Business Application",
+   "target": "System of Record",
+   "description": "",
+   "tags": [
+    "dataFlowClassification",
+    "integrationPattern",
+    "slaTier"
+   ],
+   "row_tags": [],
+   "rows": 1,
+   "all_columns": [
+    {
+     "name": "connector_guid",
+     "type": "TEXT"
+    },
+    {
+     "name": "connector_id",
+     "type": "INTEGER"
+    },
+    {
+     "name": "name",
+     "type": "TEXT"
+    },
+    {
+     "name": "source_guid",
+     "type": "TEXT"
+    },
+    {
+     "name": "target_guid",
+     "type": "TEXT"
+    },
+    {
+     "name": "direction",
+     "type": "TEXT"
+    },
+    {
+     "name": "base_type",
+     "type": "TEXT"
+    },
+    {
+     "name": "dataFlowClassification",
+     "type": "TEXT"
+    },
+    {
+     "name": "integrationPattern",
+     "type": "TEXT"
+    },
+    {
+     "name": "slaTier",
+     "type": "TEXT"
+    }
+   ]
+  },
+  {
+   "name": "Con_Business Application Uses Technology Node",
+   "in_mdg": true,
+   "key": "WestbrookBankArchitecture::Uses",
+   "bound": true,
+   "source": "Business Application",
+   "target": "Technology Node",
+   "description": "",
+   "tags": [
+    "dataFlowClassification",
+    "integrationPattern",
+    "slaTier"
+   ],
+   "row_tags": [],
+   "rows": 0,
+   "all_columns": [
+    {
+     "name": "connector_guid",
+     "type": "TEXT"
+    },
+    {
+     "name": "connector_id",
+     "type": "INTEGER"
+    },
+    {
+     "name": "name",
+     "type": "TEXT"
+    },
+    {
+     "name": "source_guid",
+     "type": "TEXT"
+    },
+    {
+     "name": "target_guid",
+     "type": "TEXT"
+    },
+    {
+     "name": "direction",
+     "type": "TEXT"
+    },
+    {
+     "name": "base_type",
+     "type": "TEXT"
+    },
+    {
+     "name": "dataFlowClassification",
+     "type": "TEXT"
+    },
+    {
+     "name": "integrationPattern",
+     "type": "TEXT"
+    },
+    {
+     "name": "slaTier",
+     "type": "TEXT"
+    }
+   ]
+  },
+  {
+   "name": "Con_Business Application Uses Vendor System",
+   "in_mdg": true,
+   "key": "WestbrookBankArchitecture::Uses",
+   "bound": true,
+   "source": "Business Application",
+   "target": "Vendor System",
+   "description": "",
+   "tags": [
+    "dataFlowClassification",
+    "integrationPattern",
+    "slaTier"
+   ],
+   "row_tags": [],
+   "rows": 3,
+   "all_columns": [
+    {
+     "name": "connector_guid",
+     "type": "TEXT"
+    },
+    {
+     "name": "connector_id",
+     "type": "INTEGER"
+    },
+    {
+     "name": "name",
+     "type": "TEXT"
+    },
+    {
+     "name": "source_guid",
+     "type": "TEXT"
+    },
+    {
+     "name": "target_guid",
+     "type": "TEXT"
+    },
+    {
+     "name": "direction",
+     "type": "TEXT"
+    },
+    {
+     "name": "base_type",
+     "type": "TEXT"
+    },
+    {
+     "name": "dataFlowClassification",
+     "type": "TEXT"
+    },
+    {
+     "name": "integrationPattern",
+     "type": "TEXT"
+    },
+    {
+     "name": "slaTier",
+     "type": "TEXT"
+    }
+   ]
+  },
+  {
+   "name": "Con_Business Application realizes Business Service",
+   "in_mdg": true,
+   "key": "WestbrookBankArchitecture::realizes",
+   "bound": true,
+   "source": "Business Application",
+   "target": "Business Service",
+   "description": "",
+   "tags": [
+    "dataFlowClassification",
+    "integrationPattern",
+    "slaTier"
+   ],
+   "row_tags": [],
+   "rows": 1,
+   "all_columns": [
+    {
+     "name": "connector_guid",
+     "type": "TEXT"
+    },
+    {
+     "name": "connector_id",
+     "type": "INTEGER"
+    },
+    {
+     "name": "name",
+     "type": "TEXT"
+    },
+    {
+     "name": "source_guid",
+     "type": "TEXT"
+    },
+    {
+     "name": "target_guid",
+     "type": "TEXT"
+    },
+    {
+     "name": "direction",
+     "type": "TEXT"
+    },
+    {
+     "name": "base_type",
+     "type": "TEXT"
+    },
+    {
+     "name": "dataFlowClassification",
+     "type": "TEXT"
+    },
+    {
+     "name": "integrationPattern",
+     "type": "TEXT"
+    },
+    {
+     "name": "slaTier",
+     "type": "TEXT"
+    }
+   ]
+  },
+  {
+   "name": "Con_Customer Touchpoint Flows Regulated Activity",
+   "in_mdg": true,
+   "key": "WestbrookBankArchitecture::Flows",
+   "bound": true,
+   "source": "Customer Touchpoint",
+   "target": "Regulated Activity",
+   "description": "",
+   "tags": [
+    "dataFlowClassification",
+    "integrationPattern",
+    "slaTier"
+   ],
+   "row_tags": [],
+   "rows": 1,
+   "all_columns": [
+    {
+     "name": "connector_guid",
+     "type": "TEXT"
+    },
+    {
+     "name": "connector_id",
+     "type": "INTEGER"
+    },
+    {
+     "name": "name",
+     "type": "TEXT"
+    },
+    {
+     "name": "source_guid",
+     "type": "TEXT"
+    },
+    {
+     "name": "target_guid",
+     "type": "TEXT"
+    },
+    {
+     "name": "direction",
+     "type": "TEXT"
+    },
+    {
+     "name": "base_type",
+     "type": "TEXT"
+    },
+    {
+     "name": "dataFlowClassification",
+     "type": "TEXT"
+    },
+    {
+     "name": "integrationPattern",
+     "type": "TEXT"
+    },
+    {
+     "name": "slaTier",
+     "type": "TEXT"
+    }
+   ]
+  },
+  {
+   "name": "Con_Regulated Activity Flows External Call",
+   "in_mdg": true,
+   "key": "WestbrookBankArchitecture::Flows",
+   "bound": true,
+   "source": "Regulated Activity",
+   "target": "External Call",
+   "description": "",
+   "tags": [
+    "dataFlowClassification",
+    "integrationPattern",
+    "slaTier"
+   ],
+   "row_tags": [],
+   "rows": 3,
+   "all_columns": [
+    {
+     "name": "connector_guid",
+     "type": "TEXT"
+    },
+    {
+     "name": "connector_id",
+     "type": "INTEGER"
+    },
+    {
+     "name": "name",
+     "type": "TEXT"
+    },
+    {
+     "name": "source_guid",
+     "type": "TEXT"
+    },
+    {
+     "name": "target_guid",
+     "type": "TEXT"
+    },
+    {
+     "name": "direction",
+     "type": "TEXT"
+    },
+    {
+     "name": "base_type",
+     "type": "TEXT"
+    },
+    {
+     "name": "dataFlowClassification",
+     "type": "TEXT"
+    },
+    {
+     "name": "integrationPattern",
+     "type": "TEXT"
+    },
+    {
+     "name": "slaTier",
+     "type": "TEXT"
+    }
+   ]
+  },
+  {
+   "name": "Con_Regulated Function Uses External Call",
+   "in_mdg": true,
+   "key": "WestbrookBankArchitecture::Uses",
+   "bound": true,
+   "source": "Regulated Function",
+   "target": "External Call",
+   "description": "",
+   "tags": [
+    "dataFlowClassification",
+    "integrationPattern",
+    "slaTier"
+   ],
+   "row_tags": [],
+   "rows": 1,
+   "all_columns": [
+    {
+     "name": "connector_guid",
+     "type": "TEXT"
+    },
+    {
+     "name": "connector_id",
+     "type": "INTEGER"
+    },
+    {
+     "name": "name",
+     "type": "TEXT"
+    },
+    {
+     "name": "source_guid",
+     "type": "TEXT"
+    },
+    {
+     "name": "target_guid",
+     "type": "TEXT"
+    },
+    {
+     "name": "direction",
+     "type": "TEXT"
+    },
+    {
+     "name": "base_type",
+     "type": "TEXT"
+    },
+    {
+     "name": "dataFlowClassification",
+     "type": "TEXT"
+    },
+    {
+     "name": "integrationPattern",
+     "type": "TEXT"
+    },
+    {
+     "name": "slaTier",
+     "type": "TEXT"
+    }
+   ]
+  },
+  {
+   "name": "Con_Regulated Function Uses Regulated Activity",
+   "in_mdg": true,
+   "key": "WestbrookBankArchitecture::Uses",
+   "bound": true,
+   "source": "Regulated Function",
+   "target": "Regulated Activity",
+   "description": "",
+   "tags": [
+    "dataFlowClassification",
+    "integrationPattern",
+    "slaTier"
+   ],
+   "row_tags": [],
+   "rows": 1,
+   "all_columns": [
+    {
+     "name": "connector_guid",
+     "type": "TEXT"
+    },
+    {
+     "name": "connector_id",
+     "type": "INTEGER"
+    },
+    {
+     "name": "name",
+     "type": "TEXT"
+    },
+    {
+     "name": "source_guid",
+     "type": "TEXT"
+    },
+    {
+     "name": "target_guid",
+     "type": "TEXT"
+    },
+    {
+     "name": "direction",
+     "type": "TEXT"
+    },
+    {
+     "name": "base_type",
+     "type": "TEXT"
+    },
+    {
+     "name": "dataFlowClassification",
+     "type": "TEXT"
+    },
+    {
+     "name": "integrationPattern",
+     "type": "TEXT"
+    },
+    {
+     "name": "slaTier",
+     "type": "TEXT"
+    }
+   ]
+  },
+  {
+   "name": "Con_System of Record realizes Data Entity",
+   "in_mdg": true,
+   "key": "WestbrookBankArchitecture::realizes",
+   "bound": true,
+   "source": "System of Record",
+   "target": "Data Entity",
+   "description": "",
+   "tags": [
+    "dataFlowClassification",
+    "integrationPattern",
+    "slaTier"
+   ],
+   "row_tags": [],
+   "rows": 3,
+   "all_columns": [
+    {
+     "name": "connector_guid",
+     "type": "TEXT"
+    },
+    {
+     "name": "connector_id",
+     "type": "INTEGER"
+    },
+    {
+     "name": "name",
+     "type": "TEXT"
+    },
+    {
+     "name": "source_guid",
+     "type": "TEXT"
+    },
+    {
+     "name": "target_guid",
+     "type": "TEXT"
+    },
+    {
+     "name": "direction",
+     "type": "TEXT"
+    },
+    {
+     "name": "base_type",
+     "type": "TEXT"
+    },
+    {
+     "name": "dataFlowClassification",
+     "type": "TEXT"
+    },
+    {
+     "name": "integrationPattern",
+     "type": "TEXT"
+    },
+    {
+     "name": "slaTier",
+     "type": "TEXT"
+    }
+   ]
+  },
+  {
+   "name": "Con_Vendor System Uses Technology Node",
+   "in_mdg": true,
+   "key": "WestbrookBankArchitecture::Uses",
+   "bound": true,
+   "source": "Vendor System",
+   "target": "Technology Node",
+   "description": "",
+   "tags": [
+    "dataFlowClassification",
+    "integrationPattern",
+    "slaTier"
+   ],
+   "row_tags": [],
+   "rows": 0,
+   "all_columns": [
+    {
+     "name": "connector_guid",
+     "type": "TEXT"
+    },
+    {
+     "name": "connector_id",
+     "type": "INTEGER"
+    },
+    {
+     "name": "name",
+     "type": "TEXT"
+    },
+    {
+     "name": "source_guid",
+     "type": "TEXT"
+    },
+    {
+     "name": "target_guid",
+     "type": "TEXT"
+    },
+    {
+     "name": "direction",
+     "type": "TEXT"
+    },
+    {
+     "name": "base_type",
+     "type": "TEXT"
+    },
+    {
+     "name": "dataFlowClassification",
+     "type": "TEXT"
+    },
+    {
+     "name": "integrationPattern",
+     "type": "TEXT"
+    },
+    {
+     "name": "slaTier",
+     "type": "TEXT"
+    }
+   ]
+  },
+  {
+   "name": "Con_Business Application BMM Uses Node (not in MDG)",
+   "in_mdg": false,
+   "key": "BMM::Uses",
+   "bound": true,
+   "source": "Business Application",
+   "target": "Node (not in MDG)",
+   "description": "Included as observed: both ends are included elements.",
+   "tags": [],
+   "row_tags": [],
+   "rows": 1,
+   "all_columns": [
+    {
+     "name": "connector_guid",
+     "type": "TEXT"
+    },
+    {
+     "name": "connector_id",
+     "type": "INTEGER"
+    },
+    {
+     "name": "name",
+     "type": "TEXT"
+    },
+    {
+     "name": "source_guid",
+     "type": "TEXT"
+    },
+    {
+     "name": "target_guid",
+     "type": "TEXT"
+    },
+    {
+     "name": "direction",
+     "type": "TEXT"
+    },
+    {
+     "name": "base_type",
+     "type": "TEXT"
+    }
+   ]
+  },
+  {
+   "name": "Con_Business Application Dependency Business Application (not in MDG)",
+   "in_mdg": false,
+   "key": "Dependency",
+   "bound": false,
+   "source": "Business Application",
+   "target": "Business Application",
+   "description": "Included as observed: both ends are included elements.",
+   "tags": [],
+   "row_tags": [],
+   "rows": 1,
+   "all_columns": [
+    {
+     "name": "connector_guid",
+     "type": "TEXT"
+    },
+    {
+     "name": "connector_id",
+     "type": "INTEGER"
+    },
+    {
+     "name": "name",
+     "type": "TEXT"
+    },
+    {
+     "name": "source_guid",
+     "type": "TEXT"
+    },
+    {
+     "name": "target_guid",
+     "type": "TEXT"
+    },
+    {
+     "name": "direction",
+     "type": "TEXT"
+    },
+    {
+     "name": "base_type",
+     "type": "TEXT"
+    }
+   ]
+  },
+  {
+   "name": "Con_Business Application Dependency Vendor System (not in MDG)",
+   "in_mdg": false,
+   "key": "Dependency",
+   "bound": false,
+   "source": "Business Application",
+   "target": "Vendor System",
+   "description": "Included as observed: both ends are included elements.",
+   "tags": [],
+   "row_tags": [],
+   "rows": 3,
+   "all_columns": [
+    {
+     "name": "connector_guid",
+     "type": "TEXT"
+    },
+    {
+     "name": "connector_id",
+     "type": "INTEGER"
+    },
+    {
+     "name": "name",
+     "type": "TEXT"
+    },
+    {
+     "name": "source_guid",
+     "type": "TEXT"
+    },
+    {
+     "name": "target_guid",
+     "type": "TEXT"
+    },
+    {
+     "name": "direction",
+     "type": "TEXT"
+    },
+    {
+     "name": "base_type",
+     "type": "TEXT"
+    }
+   ]
+  },
+  {
+   "name": "Con_Business Service Dependency Vendor System (not in MDG)",
+   "in_mdg": false,
+   "key": "Dependency",
+   "bound": false,
+   "source": "Business Service",
+   "target": "Vendor System",
+   "description": "Included as observed: both ends are included elements.",
+   "tags": [],
+   "row_tags": [],
+   "rows": 1,
+   "all_columns": [
+    {
+     "name": "connector_guid",
+     "type": "TEXT"
+    },
+    {
+     "name": "connector_id",
+     "type": "INTEGER"
+    },
+    {
+     "name": "name",
+     "type": "TEXT"
+    },
+    {
+     "name": "source_guid",
+     "type": "TEXT"
+    },
+    {
+     "name": "target_guid",
+     "type": "TEXT"
+    },
+    {
+     "name": "direction",
+     "type": "TEXT"
+    },
+    {
+     "name": "base_type",
+     "type": "TEXT"
+    }
+   ]
+  },
+  {
+   "name": "Con_Data Entity Association Data Entity (not in MDG)",
+   "in_mdg": false,
+   "key": "Association",
+   "bound": false,
+   "source": "Data Entity",
+   "target": "Data Entity",
+   "description": "Included as observed: both ends are included elements.",
+   "tags": [
+    "dataFlowClassification",
+    "integrationPattern",
+    "slaTier"
+   ],
+   "row_tags": [],
+   "rows": 3,
+   "all_columns": [
+    {
+     "name": "connector_guid",
+     "type": "TEXT"
+    },
+    {
+     "name": "connector_id",
+     "type": "INTEGER"
+    },
+    {
+     "name": "name",
+     "type": "TEXT"
+    },
+    {
+     "name": "source_guid",
+     "type": "TEXT"
+    },
+    {
+     "name": "target_guid",
+     "type": "TEXT"
+    },
+    {
+     "name": "direction",
+     "type": "TEXT"
+    },
+    {
+     "name": "base_type",
+     "type": "TEXT"
+    },
+    {
+     "name": "dataFlowClassification",
+     "type": "TEXT"
+    },
+    {
+     "name": "integrationPattern",
+     "type": "TEXT"
+    },
+    {
+     "name": "slaTier",
+     "type": "TEXT"
+    }
+   ]
+  },
+  {
+   "name": "Con_Vendor System BMM Uses Node (not in MDG)",
+   "in_mdg": false,
+   "key": "BMM::Uses",
+   "bound": true,
+   "source": "Vendor System",
+   "target": "Node (not in MDG)",
+   "description": "Included as observed: both ends are included elements.",
+   "tags": [],
+   "row_tags": [],
+   "rows": 2,
+   "all_columns": [
+    {
+     "name": "connector_guid",
+     "type": "TEXT"
+    },
+    {
+     "name": "connector_id",
+     "type": "INTEGER"
+    },
+    {
+     "name": "name",
+     "type": "TEXT"
+    },
+    {
+     "name": "source_guid",
+     "type": "TEXT"
+    },
+    {
+     "name": "target_guid",
+     "type": "TEXT"
+    },
+    {
+     "name": "direction",
+     "type": "TEXT"
+    },
+    {
+     "name": "base_type",
+     "type": "TEXT"
+    }
+   ]
+  },
+  {
+   "name": "Con_VendorApplication BMM Uses Business Application (not in MDG)",
+   "in_mdg": false,
+   "key": "BMM::Uses",
+   "bound": true,
+   "source": "VendorApplication (not in MDG)",
+   "target": "Business Application",
+   "description": "Included as observed: both ends are included elements.",
+   "tags": [],
+   "row_tags": [],
+   "rows": 1,
+   "all_columns": [
+    {
+     "name": "connector_guid",
+     "type": "TEXT"
+    },
+    {
+     "name": "connector_id",
+     "type": "INTEGER"
+    },
+    {
+     "name": "name",
+     "type": "TEXT"
+    },
+    {
+     "name": "source_guid",
+     "type": "TEXT"
+    },
+    {
+     "name": "target_guid",
+     "type": "TEXT"
+    },
+    {
+     "name": "direction",
+     "type": "TEXT"
+    },
+    {
+     "name": "base_type",
+     "type": "TEXT"
+    }
+   ]
+  },
+  {
+   "name": "Con_VendorApplication Association Business Application (not in MDG)",
+   "in_mdg": false,
+   "key": "Association",
+   "bound": false,
+   "source": "VendorApplication (not in MDG)",
+   "target": "Business Application",
+   "description": "Included as observed: both ends are included elements.",
+   "tags": [],
+   "row_tags": [],
+   "rows": 1,
+   "all_columns": [
+    {
+     "name": "connector_guid",
+     "type": "TEXT"
+    },
+    {
+     "name": "connector_id",
+     "type": "INTEGER"
+    },
+    {
+     "name": "name",
+     "type": "TEXT"
+    },
+    {
+     "name": "source_guid",
+     "type": "TEXT"
+    },
+    {
+     "name": "target_guid",
+     "type": "TEXT"
+    },
+    {
+     "name": "direction",
+     "type": "TEXT"
+    },
+    {
+     "name": "base_type",
+     "type": "TEXT"
+    }
+   ]
+  }
+ ],
+ "tag_row_tables": [],
+ "directory": {
+  "name": "Table Directory",
+  "rows": 41,
+  "all_columns": [
+   {
+    "name": "table_name",
+    "type": "TEXT"
+   },
+   {
+    "name": "kind",
+    "type": "TEXT"
+   },
+   {
+    "name": "stereotype",
+    "type": "TEXT"
+   },
+   {
+    "name": "alias",
+    "type": "TEXT"
+   },
+   {
+    "name": "metaclass",
+    "type": "TEXT"
+   },
+   {
+    "name": "source_table",
+    "type": "TEXT"
+   },
+   {
+    "name": "target_table",
+    "type": "TEXT"
+   },
+   {
+    "name": "in_mdg",
+    "type": "TEXT"
+   },
+   {
+    "name": "description",
+    "type": "TEXT"
+   }
+  ],
+  "entries": [
+   {
+    "table_name": "AI Gateway",
+    "kind": "element",
+    "stereotype": "WestbrookBankArchitecture::WBAAIGateway",
+    "alias": "AI Gateway",
+    "metaclass": "Component",
+    "source_table": null,
+    "target_table": null,
+    "in_mdg": "yes",
+    "description": null
+   },
+   {
+    "table_name": "AI Model",
+    "kind": "element",
+    "stereotype": "WestbrookBankArchitecture::WBAAIModel",
+    "alias": "AI Model",
+    "metaclass": "Class",
+    "source_table": null,
+    "target_table": null,
+    "in_mdg": "yes",
+    "description": null
+   },
+   {
+    "table_name": "AI Service",
+    "kind": "element",
+    "stereotype": "WestbrookBankArchitecture::WBAAIService",
+    "alias": "AI Service",
+    "metaclass": "Component",
+    "source_table": null,
+    "target_table": null,
+    "in_mdg": "yes",
+    "description": null
+   },
+   {
+    "table_name": "Business Application",
+    "kind": "element",
+    "stereotype": "WestbrookBankArchitecture::WBABusinessApplication",
+    "alias": "Business Application",
+    "metaclass": "Component",
+    "source_table": null,
+    "target_table": null,
+    "in_mdg": "yes",
+    "description": null
+   },
+   {
+    "table_name": "Business Service",
+    "kind": "element",
+    "stereotype": "WestbrookBankArchitecture::WBABusinessService",
+    "alias": "Business Service",
+    "metaclass": "Component",
+    "source_table": null,
+    "target_table": null,
+    "in_mdg": "yes",
+    "description": null
+   },
+   {
+    "table_name": "Customer Touchpoint",
+    "kind": "element",
+    "stereotype": "WestbrookBankArchitecture::WBACustomerTouchpoint",
+    "alias": "Customer Touchpoint",
+    "metaclass": "Activity",
+    "source_table": null,
+    "target_table": null,
+    "in_mdg": "yes",
+    "description": null
+   },
+   {
+    "table_name": "Data Asset",
+    "kind": "element",
+    "stereotype": "WestbrookBankArchitecture::WBADataAsset",
+    "alias": "Data Asset",
+    "metaclass": "Class",
+    "source_table": null,
+    "target_table": null,
+    "in_mdg": "yes",
+    "description": null
+   },
+   {
+    "table_name": "Data Entity",
+    "kind": "element",
+    "stereotype": "WestbrookBankArchitecture::WBADataEntity",
+    "alias": "Data Entity",
+    "metaclass": "Class",
+    "source_table": null,
+    "target_table": null,
+    "in_mdg": "yes",
+    "description": null
+   },
+   {
+    "table_name": "External Call",
+    "kind": "element",
+    "stereotype": "WestbrookBankArchitecture::WBAExternalCall",
+    "alias": "External Call",
+    "metaclass": "Activity",
+    "source_table": null,
+    "target_table": null,
+    "in_mdg": "yes",
+    "description": null
+   },
+   {
+    "table_name": "Governed Element",
+    "kind": "element",
+    "stereotype": "WestbrookBankArchitecture::WBAGovernedElement",
+    "alias": "Governed Element",
+    "metaclass": "Class",
+    "source_table": null,
+    "target_table": null,
+    "in_mdg": "yes",
+    "description": null
+   },
+   {
+    "table_name": "Regulated Activity",
+    "kind": "element",
+    "stereotype": "WestbrookBankArchitecture::WBARegulatedActivity",
+    "alias": "Regulated Activity",
+    "metaclass": "Activity",
+    "source_table": null,
+    "target_table": null,
+    "in_mdg": "yes",
+    "description": null
+   },
+   {
+    "table_name": "Regulated Function",
+    "kind": "element",
+    "stereotype": "WestbrookBankArchitecture::WBARegulatedFunction",
+    "alias": "Regulated Function",
+    "metaclass": "Component",
+    "source_table": null,
+    "target_table": null,
+    "in_mdg": "yes",
+    "description": null
+   },
+   {
+    "table_name": "System of Record",
+    "kind": "element",
+    "stereotype": "WestbrookBankArchitecture::WBASystemOfRecord",
+    "alias": "System of Record",
+    "metaclass": "Component",
+    "source_table": null,
+    "target_table": null,
+    "in_mdg": "yes",
+    "description": null
+   },
+   {
+    "table_name": "Technology Node",
+    "kind": "element",
+    "stereotype": "WestbrookBankArchitecture::WBATechnologyNode",
+    "alias": "Technology Node",
+    "metaclass": "Node",
+    "source_table": null,
+    "target_table": null,
+    "in_mdg": "yes",
+    "description": null
+   },
+   {
+    "table_name": "Vendor System",
+    "kind": "element",
+    "stereotype": "WestbrookBankArchitecture::WBAVendorSystem",
+    "alias": "Vendor System",
+    "metaclass": "Component",
+    "source_table": null,
+    "target_table": null,
+    "in_mdg": "yes",
+    "description": null
+   },
+   {
+    "table_name": "VendorApplication (not in MDG)",
+    "kind": "element",
+    "stereotype": "VendorApplication",
+    "alias": null,
+    "metaclass": "Component",
+    "source_table": null,
+    "target_table": null,
+    "in_mdg": "no",
+    "description": "Included as observed: outside the MDG."
+   },
+   {
+    "table_name": "WBADataAsset (not in MDG)",
+    "kind": "element",
+    "stereotype": "WBADataAsset",
+    "alias": null,
+    "metaclass": "Object",
+    "source_table": null,
+    "target_table": null,
+    "in_mdg": "no",
+    "description": "Included as observed: outside the MDG."
+   },
+   {
+    "table_name": "Node (not in MDG)",
+    "kind": "element",
+    "stereotype": null,
+    "alias": null,
+    "metaclass": "Node",
+    "source_table": null,
+    "target_table": null,
+    "in_mdg": "no",
+    "description": "Included as observed: outside the MDG."
+   },
+   {
+    "table_name": "Con_AI Gateway Uses AI Service",
+    "kind": "connector",
+    "stereotype": "WestbrookBankArchitecture::Uses",
+    "alias": null,
+    "metaclass": null,
+    "source_table": "AI Gateway",
+    "target_table": "AI Service",
+    "in_mdg": "yes",
+    "description": null
+   },
+   {
+    "table_name": "Con_AI Service Uses AI Model",
+    "kind": "connector",
+    "stereotype": "WestbrookBankArchitecture::Uses",
+    "alias": null,
+    "metaclass": null,
+    "source_table": "AI Service",
+    "target_table": "AI Model",
+    "in_mdg": "yes",
+    "description": null
+   },
+   {
+    "table_name": "Con_Business Application Flows Business Application",
+    "kind": "connector",
+    "stereotype": "WestbrookBankArchitecture::Flows",
+    "alias": null,
+    "metaclass": null,
+    "source_table": "Business Application",
+    "target_table": "Business Application",
+    "in_mdg": "yes",
+    "description": null
+   },
+   {
+    "table_name": "Con_Business Application Uses Business Application",
+    "kind": "connector",
+    "stereotype": "WestbrookBankArchitecture::Uses",
+    "alias": null,
+    "metaclass": null,
+    "source_table": "Business Application",
+    "target_table": "Business Application",
+    "in_mdg": "yes",
+    "description": null
+   },
+   {
+    "table_name": "Con_Business Application Uses Business Service",
+    "kind": "connector",
+    "stereotype": "WestbrookBankArchitecture::Uses",
+    "alias": null,
+    "metaclass": null,
+    "source_table": "Business Application",
+    "target_table": "Business Service",
+    "in_mdg": "yes",
+    "description": null
+   },
+   {
+    "table_name": "Con_Business Application Uses System of Record",
+    "kind": "connector",
+    "stereotype": "WestbrookBankArchitecture::Uses",
+    "alias": null,
+    "metaclass": null,
+    "source_table": "Business Application",
+    "target_table": "System of Record",
+    "in_mdg": "yes",
+    "description": null
+   },
+   {
+    "table_name": "Con_Business Application Uses Technology Node",
+    "kind": "connector",
+    "stereotype": "WestbrookBankArchitecture::Uses",
+    "alias": null,
+    "metaclass": null,
+    "source_table": "Business Application",
+    "target_table": "Technology Node",
+    "in_mdg": "yes",
+    "description": null
+   },
+   {
+    "table_name": "Con_Business Application Uses Vendor System",
+    "kind": "connector",
+    "stereotype": "WestbrookBankArchitecture::Uses",
+    "alias": null,
+    "metaclass": null,
+    "source_table": "Business Application",
+    "target_table": "Vendor System",
+    "in_mdg": "yes",
+    "description": null
+   },
+   {
+    "table_name": "Con_Business Application realizes Business Service",
+    "kind": "connector",
+    "stereotype": "WestbrookBankArchitecture::realizes",
+    "alias": null,
+    "metaclass": null,
+    "source_table": "Business Application",
+    "target_table": "Business Service",
+    "in_mdg": "yes",
+    "description": null
+   },
+   {
+    "table_name": "Con_Customer Touchpoint Flows Regulated Activity",
+    "kind": "connector",
+    "stereotype": "WestbrookBankArchitecture::Flows",
+    "alias": null,
+    "metaclass": null,
+    "source_table": "Customer Touchpoint",
+    "target_table": "Regulated Activity",
+    "in_mdg": "yes",
+    "description": null
+   },
+   {
+    "table_name": "Con_Regulated Activity Flows External Call",
+    "kind": "connector",
+    "stereotype": "WestbrookBankArchitecture::Flows",
+    "alias": null,
+    "metaclass": null,
+    "source_table": "Regulated Activity",
+    "target_table": "External Call",
+    "in_mdg": "yes",
+    "description": null
+   },
+   {
+    "table_name": "Con_Regulated Function Uses External Call",
+    "kind": "connector",
+    "stereotype": "WestbrookBankArchitecture::Uses",
+    "alias": null,
+    "metaclass": null,
+    "source_table": "Regulated Function",
+    "target_table": "External Call",
+    "in_mdg": "yes",
+    "description": null
+   },
+   {
+    "table_name": "Con_Regulated Function Uses Regulated Activity",
+    "kind": "connector",
+    "stereotype": "WestbrookBankArchitecture::Uses",
+    "alias": null,
+    "metaclass": null,
+    "source_table": "Regulated Function",
+    "target_table": "Regulated Activity",
+    "in_mdg": "yes",
+    "description": null
+   },
+   {
+    "table_name": "Con_System of Record realizes Data Entity",
+    "kind": "connector",
+    "stereotype": "WestbrookBankArchitecture::realizes",
+    "alias": null,
+    "metaclass": null,
+    "source_table": "System of Record",
+    "target_table": "Data Entity",
+    "in_mdg": "yes",
+    "description": null
+   },
+   {
+    "table_name": "Con_Vendor System Uses Technology Node",
+    "kind": "connector",
+    "stereotype": "WestbrookBankArchitecture::Uses",
+    "alias": null,
+    "metaclass": null,
+    "source_table": "Vendor System",
+    "target_table": "Technology Node",
+    "in_mdg": "yes",
+    "description": null
+   },
+   {
+    "table_name": "Con_Business Application BMM Uses Node (not in MDG)",
+    "kind": "connector",
+    "stereotype": "BMM::Uses",
+    "alias": null,
+    "metaclass": null,
+    "source_table": "Business Application",
+    "target_table": "Node (not in MDG)",
+    "in_mdg": "no",
+    "description": "Included as observed: both ends are included elements."
+   },
+   {
+    "table_name": "Con_Business Application Dependency Business Application (not in MDG)",
+    "kind": "connector",
+    "stereotype": "Dependency",
+    "alias": null,
+    "metaclass": null,
+    "source_table": "Business Application",
+    "target_table": "Business Application",
+    "in_mdg": "no",
+    "description": "Included as observed: both ends are included elements."
+   },
+   {
+    "table_name": "Con_Business Application Dependency Vendor System (not in MDG)",
+    "kind": "connector",
+    "stereotype": "Dependency",
+    "alias": null,
+    "metaclass": null,
+    "source_table": "Business Application",
+    "target_table": "Vendor System",
+    "in_mdg": "no",
+    "description": "Included as observed: both ends are included elements."
+   },
+   {
+    "table_name": "Con_Business Service Dependency Vendor System (not in MDG)",
+    "kind": "connector",
+    "stereotype": "Dependency",
+    "alias": null,
+    "metaclass": null,
+    "source_table": "Business Service",
+    "target_table": "Vendor System",
+    "in_mdg": "no",
+    "description": "Included as observed: both ends are included elements."
+   },
+   {
+    "table_name": "Con_Data Entity Association Data Entity (not in MDG)",
+    "kind": "connector",
+    "stereotype": "Association",
+    "alias": null,
+    "metaclass": null,
+    "source_table": "Data Entity",
+    "target_table": "Data Entity",
+    "in_mdg": "no",
+    "description": "Included as observed: both ends are included elements."
+   },
+   {
+    "table_name": "Con_Vendor System BMM Uses Node (not in MDG)",
+    "kind": "connector",
+    "stereotype": "BMM::Uses",
+    "alias": null,
+    "metaclass": null,
+    "source_table": "Vendor System",
+    "target_table": "Node (not in MDG)",
+    "in_mdg": "no",
+    "description": "Included as observed: both ends are included elements."
+   },
+   {
+    "table_name": "Con_VendorApplication BMM Uses Business Application (not in MDG)",
+    "kind": "connector",
+    "stereotype": "BMM::Uses",
+    "alias": null,
+    "metaclass": null,
+    "source_table": "VendorApplication (not in MDG)",
+    "target_table": "Business Application",
+    "in_mdg": "no",
+    "description": "Included as observed: both ends are included elements."
+   },
+   {
+    "table_name": "Con_VendorApplication Association Business Application (not in MDG)",
+    "kind": "connector",
+    "stereotype": "Association",
+    "alias": null,
+    "metaclass": null,
+    "source_table": "VendorApplication (not in MDG)",
+    "target_table": "Business Application",
+    "in_mdg": "no",
+    "description": "Included as observed: both ends are included elements."
+   }
+  ]
+ },
+ "physical": [
+  {
+   "name": "t_package",
+   "rows": null,
+   "columns": [
+    {
+     "name": "Package_ID",
+     "type": "INTEGER"
+    },
+    {
+     "name": "Name",
+     "type": "TEXT"
+    },
+    {
+     "name": "Parent_ID",
+     "type": "INTEGER"
+    },
+    {
+     "name": "CreatedDate",
+     "type": "DATETIME"
+    },
+    {
+     "name": "ModifiedDate",
+     "type": "DATETIME"
+    },
+    {
+     "name": "Notes",
+     "type": "TEXT"
+    },
+    {
+     "name": "ea_guid",
+     "type": "TEXT"
+    },
+    {
+     "name": "XMLPath",
+     "type": "TEXT"
+    },
+    {
+     "name": "IsControlled",
+     "type": "INTEGER"
+    },
+    {
+     "name": "LastLoadDate",
+     "type": "DATETIME"
+    },
+    {
+     "name": "LastSaveDate",
+     "type": "DATETIME"
+    },
+    {
+     "name": "Version",
+     "type": "TEXT"
+    },
+    {
+     "name": "Protected",
+     "type": "INTEGER"
+    },
+    {
+     "name": "PkgOwner",
+     "type": "TEXT"
+    },
+    {
+     "name": "UMLVersion",
+     "type": "TEXT"
+    },
+    {
+     "name": "UseDTD",
+     "type": "INTEGER"
+    },
+    {
+     "name": "LogXML",
+     "type": "INTEGER"
+    },
+    {
+     "name": "CodePath",
+     "type": "TEXT"
+    },
+    {
+     "name": "Namespace",
+     "type": "TEXT"
+    },
+    {
+     "name": "TPos",
+     "type": "INTEGER"
+    },
+    {
+     "name": "PackageFlags",
+     "type": "TEXT"
+    },
+    {
+     "name": "BatchSave",
+     "type": "INTEGER"
+    },
+    {
+     "name": "BatchLoad",
+     "type": "INTEGER"
+    }
+   ]
+  },
+  {
+   "name": "t_object",
+   "rows": null,
+   "columns": [
+    {
+     "name": "Object_ID",
+     "type": "INTEGER"
+    },
+    {
+     "name": "Object_Type",
+     "type": "TEXT"
+    },
+    {
+     "name": "Diagram_ID",
+     "type": "INTEGER"
+    },
+    {
+     "name": "Name",
+     "type": "TEXT"
+    },
+    {
+     "name": "Alias",
+     "type": "TEXT"
+    },
+    {
+     "name": "Author",
+     "type": "TEXT"
+    },
+    {
+     "name": "Version",
+     "type": "TEXT"
+    },
+    {
+     "name": "Note",
+     "type": "TEXT"
+    },
+    {
+     "name": "Package_ID",
+     "type": "INTEGER"
+    },
+    {
+     "name": "Stereotype",
+     "type": "TEXT"
+    },
+    {
+     "name": "NType",
+     "type": "INTEGER"
+    },
+    {
+     "name": "Complexity",
+     "type": "TEXT"
+    },
+    {
+     "name": "Effort",
+     "type": "INTEGER"
+    },
+    {
+     "name": "Style",
+     "type": "TEXT"
+    },
+    {
+     "name": "Backcolor",
+     "type": "INTEGER"
+    },
+    {
+     "name": "BorderStyle",
+     "type": "INTEGER"
+    },
+    {
+     "name": "BorderWidth",
+     "type": "INTEGER"
+    },
+    {
+     "name": "Fontcolor",
+     "type": "INTEGER"
+    },
+    {
+     "name": "Bordercolor",
+     "type": "INTEGER"
+    },
+    {
+     "name": "CreatedDate",
+     "type": "DATETIME"
+    },
+    {
+     "name": "ModifiedDate",
+     "type": "DATETIME"
+    },
+    {
+     "name": "Status",
+     "type": "TEXT"
+    },
+    {
+     "name": "Abstract",
+     "type": "TEXT"
+    },
+    {
+     "name": "Tagged",
+     "type": "INTEGER"
+    },
+    {
+     "name": "PDATA1",
+     "type": "TEXT"
+    },
+    {
+     "name": "PDATA2",
+     "type": "TEXT"
+    },
+    {
+     "name": "PDATA3",
+     "type": "TEXT"
+    },
+    {
+     "name": "PDATA4",
+     "type": "TEXT"
+    },
+    {
+     "name": "PDATA5",
+     "type": "TEXT"
+    },
+    {
+     "name": "Concurrency",
+     "type": "TEXT"
+    },
+    {
+     "name": "Visibility",
+     "type": "TEXT"
+    },
+    {
+     "name": "Persistence",
+     "type": "TEXT"
+    },
+    {
+     "name": "Cardinality",
+     "type": "TEXT"
+    },
+    {
+     "name": "GenType",
+     "type": "TEXT"
+    },
+    {
+     "name": "GenFile",
+     "type": "TEXT"
+    },
+    {
+     "name": "Header1",
+     "type": "TEXT"
+    },
+    {
+     "name": "Header2",
+     "type": "TEXT"
+    },
+    {
+     "name": "Phase",
+     "type": "TEXT"
+    },
+    {
+     "name": "Scope",
+     "type": "TEXT"
+    },
+    {
+     "name": "GenOption",
+     "type": "TEXT"
+    },
+    {
+     "name": "GenLinks",
+     "type": "TEXT"
+    },
+    {
+     "name": "Classifier",
+     "type": "INTEGER"
+    },
+    {
+     "name": "ea_guid",
+     "type": "TEXT"
+    },
+    {
+     "name": "ParentID",
+     "type": "INTEGER"
+    },
+    {
+     "name": "RunState",
+     "type": "TEXT"
+    },
+    {
+     "name": "Classifier_guid",
+     "type": "TEXT"
+    },
+    {
+     "name": "TPos",
+     "type": "INTEGER"
+    },
+    {
+     "name": "IsRoot",
+     "type": "INTEGER"
+    },
+    {
+     "name": "IsLeaf",
+     "type": "INTEGER"
+    },
+    {
+     "name": "IsSpec",
+     "type": "INTEGER"
+    },
+    {
+     "name": "IsActive",
+     "type": "INTEGER"
+    },
+    {
+     "name": "StateFlags",
+     "type": "TEXT"
+    },
+    {
+     "name": "PackageFlags",
+     "type": "TEXT"
+    },
+    {
+     "name": "Multiplicity",
+     "type": "TEXT"
+    },
+    {
+     "name": "StyleEx",
+     "type": "TEXT"
+    },
+    {
+     "name": "EventFlags",
+     "type": "TEXT"
+    },
+    {
+     "name": "ActionFlags",
+     "type": "TEXT"
+    }
+   ]
+  },
+  {
+   "name": "t_objectproperties",
+   "rows": null,
+   "columns": [
+    {
+     "name": "PropertyID",
+     "type": "INTEGER"
+    },
+    {
+     "name": "Object_ID",
+     "type": "INTEGER"
+    },
+    {
+     "name": "Property",
+     "type": "TEXT"
+    },
+    {
+     "name": "Value",
+     "type": "TEXT"
+    },
+    {
+     "name": "Notes",
+     "type": "TEXT"
+    },
+    {
+     "name": "ea_guid",
+     "type": "TEXT"
+    }
+   ]
+  },
+  {
+   "name": "t_connector",
+   "rows": null,
+   "columns": [
+    {
+     "name": "Connector_ID",
+     "type": "INTEGER"
+    },
+    {
+     "name": "Name",
+     "type": "TEXT"
+    },
+    {
+     "name": "Direction",
+     "type": "TEXT"
+    },
+    {
+     "name": "Notes",
+     "type": "TEXT"
+    },
+    {
+     "name": "Connector_Type",
+     "type": "TEXT"
+    },
+    {
+     "name": "SubType",
+     "type": "TEXT"
+    },
+    {
+     "name": "SourceCard",
+     "type": "TEXT"
+    },
+    {
+     "name": "SourceAccess",
+     "type": "TEXT"
+    },
+    {
+     "name": "SourceElement",
+     "type": "TEXT"
+    },
+    {
+     "name": "DestCard",
+     "type": "TEXT"
+    },
+    {
+     "name": "DestAccess",
+     "type": "TEXT"
+    },
+    {
+     "name": "DestElement",
+     "type": "TEXT"
+    },
+    {
+     "name": "SourceRole",
+     "type": "TEXT"
+    },
+    {
+     "name": "SourceRoleType",
+     "type": "TEXT"
+    },
+    {
+     "name": "SourceRoleNote",
+     "type": "TEXT"
+    },
+    {
+     "name": "SourceContainment",
+     "type": "TEXT"
+    },
+    {
+     "name": "SourceIsAggregate",
+     "type": "INTEGER"
+    },
+    {
+     "name": "SourceIsOrdered",
+     "type": "INTEGER"
+    },
+    {
+     "name": "SourceQualifier",
+     "type": "TEXT"
+    },
+    {
+     "name": "DestRole",
+     "type": "TEXT"
+    },
+    {
+     "name": "DestRoleType",
+     "type": "TEXT"
+    },
+    {
+     "name": "DestRoleNote",
+     "type": "TEXT"
+    },
+    {
+     "name": "DestContainment",
+     "type": "TEXT"
+    },
+    {
+     "name": "DestIsAggregate",
+     "type": "INTEGER"
+    },
+    {
+     "name": "DestIsOrdered",
+     "type": "INTEGER"
+    },
+    {
+     "name": "DestQualifier",
+     "type": "TEXT"
+    },
+    {
+     "name": "Start_Object_ID",
+     "type": "INTEGER"
+    },
+    {
+     "name": "End_Object_ID",
+     "type": "INTEGER"
+    },
+    {
+     "name": "Top_Start_Label",
+     "type": "TEXT"
+    },
+    {
+     "name": "Top_Mid_Label",
+     "type": "TEXT"
+    },
+    {
+     "name": "Top_End_Label",
+     "type": "TEXT"
+    },
+    {
+     "name": "Btm_Start_Label",
+     "type": "TEXT"
+    },
+    {
+     "name": "Btm_Mid_Label",
+     "type": "TEXT"
+    },
+    {
+     "name": "Btm_End_Label",
+     "type": "TEXT"
+    },
+    {
+     "name": "Start_Edge",
+     "type": "INTEGER"
+    },
+    {
+     "name": "End_Edge",
+     "type": "INTEGER"
+    },
+    {
+     "name": "PtStartX",
+     "type": "INTEGER"
+    },
+    {
+     "name": "PtStartY",
+     "type": "INTEGER"
+    },
+    {
+     "name": "PtEndX",
+     "type": "INTEGER"
+    },
+    {
+     "name": "PtEndY",
+     "type": "INTEGER"
+    },
+    {
+     "name": "SeqNo",
+     "type": "INTEGER"
+    },
+    {
+     "name": "HeadStyle",
+     "type": "INTEGER"
+    },
+    {
+     "name": "LineStyle",
+     "type": "INTEGER"
+    },
+    {
+     "name": "RouteStyle",
+     "type": "INTEGER"
+    },
+    {
+     "name": "IsBold",
+     "type": "INTEGER"
+    },
+    {
+     "name": "LineColor",
+     "type": "INTEGER"
+    },
+    {
+     "name": "Stereotype",
+     "type": "TEXT"
+    },
+    {
+     "name": "VirtualInheritance",
+     "type": "TEXT"
+    },
+    {
+     "name": "LinkAccess",
+     "type": "TEXT"
+    },
+    {
+     "name": "PDATA1",
+     "type": "TEXT"
+    },
+    {
+     "name": "PDATA2",
+     "type": "TEXT"
+    },
+    {
+     "name": "PDATA3",
+     "type": "TEXT"
+    },
+    {
+     "name": "PDATA4",
+     "type": "TEXT"
+    },
+    {
+     "name": "PDATA5",
+     "type": "TEXT"
+    },
+    {
+     "name": "DiagramID",
+     "type": "INTEGER"
+    },
+    {
+     "name": "ea_guid",
+     "type": "TEXT"
+    },
+    {
+     "name": "SourceConstraint",
+     "type": "TEXT"
+    },
+    {
+     "name": "DestConstraint",
+     "type": "TEXT"
+    },
+    {
+     "name": "SourceIsNavigable",
+     "type": "INTEGER"
+    },
+    {
+     "name": "DestIsNavigable",
+     "type": "INTEGER"
+    },
+    {
+     "name": "IsRoot",
+     "type": "INTEGER"
+    },
+    {
+     "name": "IsLeaf",
+     "type": "INTEGER"
+    },
+    {
+     "name": "IsSpec",
+     "type": "INTEGER"
+    },
+    {
+     "name": "SourceChangeable",
+     "type": "TEXT"
+    },
+    {
+     "name": "DestChangeable",
+     "type": "TEXT"
+    },
+    {
+     "name": "SourceTS",
+     "type": "TEXT"
+    },
+    {
+     "name": "DestTS",
+     "type": "TEXT"
+    },
+    {
+     "name": "StateFlags",
+     "type": "TEXT"
+    },
+    {
+     "name": "ActionFlags",
+     "type": "TEXT"
+    },
+    {
+     "name": "IsSignal",
+     "type": "INTEGER"
+    },
+    {
+     "name": "IsStimulus",
+     "type": "INTEGER"
+    },
+    {
+     "name": "DispatchAction",
+     "type": "TEXT"
+    },
+    {
+     "name": "Target2",
+     "type": "INTEGER"
+    },
+    {
+     "name": "StyleEx",
+     "type": "TEXT"
+    },
+    {
+     "name": "SourceStereotype",
+     "type": "TEXT"
+    },
+    {
+     "name": "DestStereotype",
+     "type": "TEXT"
+    },
+    {
+     "name": "SourceStyle",
+     "type": "TEXT"
+    },
+    {
+     "name": "DestStyle",
+     "type": "TEXT"
+    },
+    {
+     "name": "EventFlags",
+     "type": "TEXT"
+    }
+   ]
+  },
+  {
+   "name": "t_connectortag",
+   "rows": null,
+   "columns": [
+    {
+     "name": "PropertyID",
+     "type": "INTEGER"
+    },
+    {
+     "name": "ElementID",
+     "type": "INTEGER"
+    },
+    {
+     "name": "Property",
+     "type": "TEXT"
+    },
+    {
+     "name": "VALUE",
+     "type": "TEXT"
+    },
+    {
+     "name": "NOTES",
+     "type": "TEXT"
+    },
+    {
+     "name": "ea_guid",
+     "type": "TEXT"
+    }
+   ]
+  },
+  {
+   "name": "t_diagram",
+   "rows": null,
+   "columns": [
+    {
+     "name": "Diagram_ID",
+     "type": "INTEGER"
+    },
+    {
+     "name": "Package_ID",
+     "type": "INTEGER"
+    },
+    {
+     "name": "ParentID",
+     "type": "INTEGER"
+    },
+    {
+     "name": "Diagram_Type",
+     "type": "TEXT"
+    },
+    {
+     "name": "Name",
+     "type": "TEXT"
+    },
+    {
+     "name": "Version",
+     "type": "TEXT"
+    },
+    {
+     "name": "Author",
+     "type": "TEXT"
+    },
+    {
+     "name": "ShowDetails",
+     "type": "INTEGER"
+    },
+    {
+     "name": "Notes",
+     "type": "TEXT"
+    },
+    {
+     "name": "Stereotype",
+     "type": "TEXT"
+    },
+    {
+     "name": "AttPub",
+     "type": "INTEGER"
+    },
+    {
+     "name": "AttPri",
+     "type": "INTEGER"
+    },
+    {
+     "name": "AttPro",
+     "type": "INTEGER"
+    },
+    {
+     "name": "Orientation",
+     "type": "TEXT"
+    },
+    {
+     "name": "cx",
+     "type": "INTEGER"
+    },
+    {
+     "name": "cy",
+     "type": "INTEGER"
+    },
+    {
+     "name": "Scale",
+     "type": "INTEGER"
+    },
+    {
+     "name": "CreatedDate",
+     "type": "DATETIME"
+    },
+    {
+     "name": "ModifiedDate",
+     "type": "DATETIME"
+    },
+    {
+     "name": "HTMLPath",
+     "type": "TEXT"
+    },
+    {
+     "name": "ShowForeign",
+     "type": "INTEGER"
+    },
+    {
+     "name": "ShowBorder",
+     "type": "INTEGER"
+    },
+    {
+     "name": "ShowPackageContents",
+     "type": "INTEGER"
+    },
+    {
+     "name": "PDATA",
+     "type": "TEXT"
+    },
+    {
+     "name": "Locked",
+     "type": "INTEGER"
+    },
+    {
+     "name": "ea_guid",
+     "type": "TEXT"
+    },
+    {
+     "name": "TPos",
+     "type": "INTEGER"
+    },
+    {
+     "name": "Swimlanes",
+     "type": "TEXT"
+    },
+    {
+     "name": "StyleEx",
+     "type": "TEXT"
+    }
+   ]
+  },
+  {
+   "name": "t_diagramobjects",
+   "rows": null,
+   "columns": [
+    {
+     "name": "Diagram_ID",
+     "type": "INTEGER"
+    },
+    {
+     "name": "Object_ID",
+     "type": "INTEGER"
+    },
+    {
+     "name": "RectTop",
+     "type": "INTEGER"
+    },
+    {
+     "name": "RectLeft",
+     "type": "INTEGER"
+    },
+    {
+     "name": "RectRight",
+     "type": "INTEGER"
+    },
+    {
+     "name": "RectBottom",
+     "type": "INTEGER"
+    },
+    {
+     "name": "Sequence",
+     "type": "INTEGER"
+    },
+    {
+     "name": "ObjectStyle",
+     "type": "TEXT"
+    },
+    {
+     "name": "Instance_ID",
+     "type": "INTEGER"
+    }
+   ]
+  },
+  {
+   "name": "t_attribute",
+   "rows": null,
+   "columns": [
+    {
+     "name": "Object_ID",
+     "type": "INTEGER"
+    },
+    {
+     "name": "Name",
+     "type": "TEXT"
+    },
+    {
+     "name": "Scope",
+     "type": "TEXT"
+    },
+    {
+     "name": "Stereotype",
+     "type": "TEXT"
+    },
+    {
+     "name": "Containment",
+     "type": "TEXT"
+    },
+    {
+     "name": "IsStatic",
+     "type": "INTEGER"
+    },
+    {
+     "name": "IsCollection",
+     "type": "INTEGER"
+    },
+    {
+     "name": "IsOrdered",
+     "type": "INTEGER"
+    },
+    {
+     "name": "AllowDuplicates",
+     "type": "INTEGER"
+    },
+    {
+     "name": "LowerBound",
+     "type": "TEXT"
+    },
+    {
+     "name": "UpperBound",
+     "type": "TEXT"
+    },
+    {
+     "name": "Container",
+     "type": "TEXT"
+    },
+    {
+     "name": "Notes",
+     "type": "TEXT"
+    },
+    {
+     "name": "Derived",
+     "type": "TEXT"
+    },
+    {
+     "name": "ID",
+     "type": "INTEGER"
+    },
+    {
+     "name": "Pos",
+     "type": "INTEGER"
+    },
+    {
+     "name": "GenOption",
+     "type": "TEXT"
+    },
+    {
+     "name": "Length",
+     "type": "INTEGER"
+    },
+    {
+     "name": "Precision",
+     "type": "INTEGER"
+    },
+    {
+     "name": "Scale",
+     "type": "INTEGER"
+    },
+    {
+     "name": "Const",
+     "type": "INTEGER"
+    },
+    {
+     "name": "Style",
+     "type": "TEXT"
+    },
+    {
+     "name": "Classifier",
+     "type": "TEXT"
+    },
+    {
+     "name": "Default",
+     "type": "TEXT"
+    },
+    {
+     "name": "Type",
+     "type": "TEXT"
+    },
+    {
+     "name": "ea_guid",
+     "type": "TEXT"
+    },
+    {
+     "name": "StyleEx",
+     "type": "TEXT"
+    }
+   ]
+  },
+  {
+   "name": "t_operation",
+   "rows": null,
+   "columns": [
+    {
+     "name": "OperationID",
+     "type": "INTEGER"
+    },
+    {
+     "name": "Object_ID",
+     "type": "INTEGER"
+    },
+    {
+     "name": "Name",
+     "type": "TEXT"
+    },
+    {
+     "name": "Scope",
+     "type": "TEXT"
+    },
+    {
+     "name": "Type",
+     "type": "TEXT"
+    },
+    {
+     "name": "ReturnArray",
+     "type": "TEXT"
+    },
+    {
+     "name": "Stereotype",
+     "type": "TEXT"
+    },
+    {
+     "name": "IsStatic",
+     "type": "TEXT"
+    },
+    {
+     "name": "Concurrency",
+     "type": "TEXT"
+    },
+    {
+     "name": "Notes",
+     "type": "TEXT"
+    },
+    {
+     "name": "Behaviour",
+     "type": "TEXT"
+    },
+    {
+     "name": "Abstract",
+     "type": "TEXT"
+    },
+    {
+     "name": "GenOption",
+     "type": "TEXT"
+    },
+    {
+     "name": "Synchronized",
+     "type": "TEXT"
+    },
+    {
+     "name": "Pos",
+     "type": "INTEGER"
+    },
+    {
+     "name": "Const",
+     "type": "INTEGER"
+    },
+    {
+     "name": "Style",
+     "type": "TEXT"
+    },
+    {
+     "name": "Pure",
+     "type": "INTEGER"
+    },
+    {
+     "name": "Throws",
+     "type": "TEXT"
+    },
+    {
+     "name": "Classifier",
+     "type": "TEXT"
+    },
+    {
+     "name": "Code",
+     "type": "TEXT"
+    },
+    {
+     "name": "IsRoot",
+     "type": "INTEGER"
+    },
+    {
+     "name": "IsLeaf",
+     "type": "INTEGER"
+    },
+    {
+     "name": "IsQuery",
+     "type": "INTEGER"
+    },
+    {
+     "name": "StateFlags",
+     "type": "TEXT"
+    },
+    {
+     "name": "ea_guid",
+     "type": "TEXT"
+    },
+    {
+     "name": "StyleEx",
+     "type": "TEXT"
+    }
+   ]
+  }
+ ]
+}

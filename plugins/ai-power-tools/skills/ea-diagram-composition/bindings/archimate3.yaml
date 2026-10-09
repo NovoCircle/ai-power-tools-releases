@@ -1,0 +1,428 @@
+# ArchiMate 3 — diagram conventions
+#
+# Technology id, diagram type names and stereotype names were read from the MDG
+# technology Enterprise Architect actually had loaded (EA 17.1 build 1716,
+# `MDGTechnologies/ArchiMate3.xml`), not from the ArchiMate specification and
+# not guessed. That distinction matters: `MDGDgm=<Tech>::<DiagramType>` has to
+# match verbatim or resolution fails silently.
+#
+# Sizes and spacing were measured from the ArchiMate diagrams shipped in
+# EAExample.qea, and grammar / title / routing / color-encoding from the
+# 13 professionally drawn ArchiMate diagrams in the reference corpus.
+#
+# Where a number rests on a single diagram it was LEFT OUT rather than shipped
+# as a convention. A binding that states a convention it has not observed is
+# worse than one that falls back to the engine default.
+#
+# Band gutters are the case in point: the vertical space between one layer band
+# and the next was never separately measured, so `band_gap` is absent from every
+# diagram type below and the engine's own default stands.
+
+technology: ArchiMate3
+display_name: ArchiMate 3
+
+# UML IS UNDERNEATH THIS NOTATION, NOT BESIDE IT. All five diagram types below
+# declare `base: Logical`, which is EA's Class diagram: an ArchiMate view IS a
+# Class diagram with a technology tag on it. So the UML binding is the substrate,
+# and a size or a gap this file does not state resolves to the value measured on
+# plain Logical diagrams instead of to an engine default.
+#
+# What this file states still wins, every time. The 100x70 box below is
+# ArchiMate's, not UML's 90x70; `layered-bands` is ArchiMate's, not UML's
+# `graph`; and `stereotype_prefix` is restated below precisely BECAUSE omitting
+# it would inherit UML's measured `""` and send every stereotype lookup after an
+# unprefixed name.
+extends: UML
+
+# EA 17.1's built-in ArchiMate3 MDG names its stereotypes with this prefix, and
+# the prefixed form is what lands in `t_object.Stereotype`
+# (`ArchiMate_ApplicationComponent`, measured in EAExample.qea). Concepts below
+# are written the way the ArchiMate specification names them; the prefix is
+# applied to get what EA stores.
+#
+# DO NOT SET THIS TO "". It has been challenged once already, by
+# `ruleset-archimate31/archimate31_rules.yaml`, which shipped a header note
+# asserting the opposite -- that EA 16+ dropped the prefix and only EA <=15
+# carried it. That note was wrong, and the ruleset it governed matched zero
+# elements in any model built with EA's own ArchiMate MDG. Re-measured on EA 17.1
+# build 1716 while correcting it:
+#
+#   - All three ArchiMate MDG generations EA ships declare the prefixed form:
+#     `MDGTechnologies/Archimate.xml`, `Archimate2.xml` and `ArchiMate3.xml`.
+#     73 of the 94 distinct `<Stereotype name="...">` values in ArchiMate3.xml
+#     are `ArchiMate_`-prefixed; the other 21 are toolbox page names. There is no
+#     EA generation that shipped the unprefixed form.
+#   - Each stereotype ALSO carries `metatype="<Concept>"` without the prefix.
+#     That attribute is the notation's concept name, not the stored stereotype.
+#     Reading it as the latter is the likeliest way this gets flipped back.
+#   - EAExample.qea stores the prefixed form: 123 elements over 32 distinct
+#     stereotypes, 116 connectors over 10.
+#   - The unprefixed names that DO occur in that model belong to other
+#     notations -- 20 `BusinessProcess` and 34 `DataObject` from BPMN2.0, 1
+#     `BusinessService` from TOGAF, 1 `CourseOfAction` from BMM. So an empty
+#     prefix here would not merely miss ArchiMate elements, it would collide
+#     with three other technologies' stereotype names.
+#
+# `t_object.Stereotype` is unqualified (`ArchiMate_Capability`). The qualified
+# form (`ArchiMate3::ArchiMate_Capability`) lives in `t_xref` rows named
+# `Stereotypes` and surfaces through the API's `StereotypeEx`, which is a
+# property and not a column. This field is the unqualified prefix, matching the
+# column.
+stereotype_prefix: ArchiMate_
+
+notes: >
+  EA's ArchiMate3 MDG declares five diagram types, all based on Logical. There
+  is no Strategy diagram type: strategy concepts (Capability, Resource,
+  CourseOfAction, ValueStream) are stereotypes drawn on a Business diagram.
+
+
+  FILL IS NOT MERELY CLAIMED HERE, IT IS SOMETIMES UNAVAILABLE. Measured on
+  EA 17.1 build 1716: Node and Grouping ignore a per-diagram fill outright.
+  The write succeeds, the property reads back, and EA draws the element in its
+  own colors -- Node's shape script paints the faces of a 3D box, and a
+  Grouping is a dashed container ArchiMate gives no fill. Seven other concepts
+  tested (ApplicationComponent, Device, SystemSoftware, Equipment, Facility,
+  BusinessService, Artifact) honor it. Nine concepts is a sample, not a sweep,
+  so the answer is a note here rather than data a consumer could trust; the
+  full sweep and a per-concept schema field are filed separately. If you need a
+  color-coded technology layer, reach for Device or SystemSoftware rather than
+  Node, or use a free channel.
+
+diagram_types:
+
+  Business:
+    base: Logical
+    grammar: layered-bands
+    title: drawn
+    sizing:
+      default: {w: 100, h: 70}
+      # A junction is a dot, not a box. 3 of 3 measured at 20x20, and the
+      # notation requires it to read as a point.
+      Junction: {w: 20, h: 20}
+    spacing:
+      # Each shipped value is a measured statistic rounded to the nearest 5 —
+      # item_gap_x from the median, item_gap_y from the mode. Spacing is a
+      # convention a person reproduces by hand, so a multiple of 5 is worth more
+      # than the extra unit of accuracy in 76 or 38, and shipping a gap to three
+      # significant figures would claim a precision 61 and 69 pairs do not
+      # carry.
+      #
+      # PROVENANCE, RECORDED AS A DECISION. The figures above come from the
+      # historical population: each element's nearest neighbor with no regard
+      # for containers or intervening objects, which includes pairs that cross
+      # a group boundary (4 horizontal and 11 vertical of the 61 and 68). The
+      # gap an engine should leave between siblings INSIDE one container is
+      # measured by the strict rule (tools/measure_binding.py, the default):
+      # horizontal median 78 and modal 78 across 59 pairs, which rounds to 80;
+      # vertical median 46 and modal 38 across 60 pairs, which still rounds to
+      # 40. item_gap_x stays at 75 for now: 5 units on a 100-wide box is inside
+      # visual noise, and changing it means re-proving the live generation test
+      # against a running EA session. When that session is available, 80 is the
+      # better-supported value.
+      item_gap_x: 75          # measured: median 76, modal 78 across 61 pairs
+      item_gap_y: 40          # measured: median 47, modal 38 across 69 pairs
+    routing:
+      default: OrthogonalSquare
+      trunk_for: [Realization, Aggregation, Composition, Specialization]
+      trunk_route: OrthogonalSquare
+      notes: >
+        7 of 13 corpus diagrams route orthogonally into a shared trunk; 2 use
+        direct lines and 2 are nested grids with no connectors at all.
+    channels:
+      fill: >
+        ArchiMate layer and aspect. Normative — the standard palette IS the
+        notation, and recoloring it by lifecycle or ownership destroys the
+        reader's ability to tell a business service from an application one.
+      claimed:
+        position: >
+          Abstraction level. Y position says which layer an element belongs to,
+          so moving an element between bands changes what the diagram asserts.
+        size: >
+          Role. Uniform to the pixel within a band; varying it reads as varying
+          importance.
+      free: [border, border_width, line_color, font_color, opacity, icon]
+
+  Application:
+    base: Logical
+    grammar: layered-bands
+    title: drawn
+    sizing:
+      default: {w: 100, h: 70}
+      Junction: {w: 20, h: 20}
+    spacing:
+      item_gap_x: 75
+      item_gap_y: 40
+    routing:
+      default: OrthogonalSquare
+      trunk_for: [Realization, Aggregation, Composition, Specialization]
+      trunk_route: OrthogonalSquare
+    channels:
+      fill: >
+        ArchiMate layer and aspect. Normative; see the Business diagram type.
+      claimed:
+        position: Abstraction level — which layer band an element sits in.
+        size: Role. Uniform within a band.
+      free: [border, border_width, line_color, font_color, opacity, icon]
+
+  Technology:
+    base: Logical
+    grammar: layered-bands
+    title: drawn
+    sizing:
+      default: {w: 100, h: 70}
+      Junction: {w: 20, h: 20}
+    spacing:
+      item_gap_x: 75
+      item_gap_y: 40
+    routing:
+      default: OrthogonalSquare
+      trunk_for: [Realization, Aggregation, Composition, Specialization]
+      trunk_route: OrthogonalSquare
+    channels:
+      fill: ArchiMate layer and aspect. Normative.
+      claimed:
+        position: Abstraction level — which layer band an element sits in.
+        size: Role. Uniform within a band.
+      free: [border, border_width, line_color, font_color, opacity, icon]
+
+  Motivation:
+    base: Logical
+    grammar: layered-bands
+    title: drawn
+    sizing:
+      default: {w: 100, h: 70}
+      Junction: {w: 20, h: 20}
+    spacing:
+      item_gap_x: 75
+      item_gap_y: 40
+    routing:
+      default: OrthogonalSquare
+      trunk_for: [Realization, Influence, Specialization]
+      trunk_route: OrthogonalSquare
+      notes: >
+        Motivation diagrams read as trees — drivers above goals above
+        requirements — but they are composed as bands, one register per level,
+        which is what keeps siblings aligned.
+    channels:
+      fill: >
+        ArchiMate aspect. The motivation elements share one layer, so fill
+        distinguishes stakeholder from driver from goal. Still normative.
+      claimed:
+        position: Level of intent — driver, goal, requirement, principle.
+        size: Role. Uniform within a band.
+      free: [border, border_width, line_color, font_color, opacity, icon]
+
+  Implementation:
+    base: Logical
+    grammar: layered-bands
+    title: drawn
+    sizing:
+      default: {w: 100, h: 70}
+      Junction: {w: 20, h: 20}
+    spacing:
+      item_gap_x: 75
+      item_gap_y: 40
+    routing:
+      default: OrthogonalSquare
+      trunk_for: [Realization, Aggregation, Composition]
+      trunk_route: OrthogonalSquare
+    channels:
+      fill: ArchiMate aspect — work package, deliverable, plateau, gap.
+      claimed:
+        position: >
+          Migration sequence. Plateaus read left to right or top to bottom as
+          successive states, so position carries time here.
+        size: Role. Uniform within a band.
+      free: [border, border_width, line_color, font_color, opacity, icon]
+
+# The viewpoint catalog. ArchiMate publishes these; holding them as data is
+# what lets view selection stay generic rather than growing a branch per
+# notation. `admits` names concepts, not stored stereotypes.
+viewpoints:
+
+  ApplicationCooperation:
+    diagram_type: Application
+    intent: [how applications interact, application landscape, integration,
+             which systems talk to which]
+    admits: [ApplicationComponent, ApplicationService, ApplicationInterface,
+             ApplicationCollaboration, DataObject, Location, Grouping]
+
+  ApplicationUsage:
+    diagram_type: Application
+    intent: [which business processes use which applications,
+             application support for the business]
+    admits: [ApplicationComponent, ApplicationService, BusinessProcess,
+             BusinessFunction, BusinessRole, DataObject, BusinessObject]
+
+  ApplicationStructure:
+    diagram_type: Application
+    intent: [internal structure of an application, application composition]
+    admits: [ApplicationComponent, ApplicationCollaboration,
+             ApplicationInterface, DataObject]
+
+  InformationStructure:
+    diagram_type: Application
+    intent: [what information the organization holds, data model,
+             business objects and their representations]
+    admits: [BusinessObject, DataObject, Representation, Artifact, Meaning]
+
+  BusinessProcessCooperation:
+    diagram_type: Business
+    intent: [how processes depend on each other, end-to-end process,
+             process handoffs]
+    admits: [BusinessProcess, BusinessFunction, BusinessInteraction,
+             BusinessEvent, BusinessService, BusinessRole, BusinessActor,
+             ApplicationService, Grouping]
+
+  Organization:
+    diagram_type: Business
+    grammar: nested-grid
+    intent: [org chart, who reports to whom, organizational structure,
+             departments]
+    admits: [BusinessActor, BusinessRole, BusinessCollaboration,
+             BusinessInterface, Location]
+    notes: >
+      Composed as a nested grid rather than bands: containment IS the
+      structure, and the corpus draws it with no connectors at all.
+
+  ServiceRealization:
+    diagram_type: Business
+    intent: [how services are realized, what delivers this service,
+             service to process to application]
+    admits: [BusinessService, BusinessProcess, BusinessFunction,
+             BusinessInteraction, BusinessObject, ApplicationService,
+             ApplicationComponent, BusinessActor, BusinessRole]
+
+  ProductViewpoint:
+    diagram_type: Business
+    intent: [what the organization sells, products and the services in them,
+             contracts]
+    admits: [Product, Contract, BusinessService, BusinessInterface,
+             BusinessActor, BusinessRole, Value, ApplicationService]
+
+  Capability:
+    diagram_type: Business
+    grammar: nested-grid
+    intent: [capability map, what the organization can do,
+             business capabilities]
+    admits: [Capability, Resource, ValueStream, CourseOfAction, Grouping]
+    notes: >
+      A capability map is a nested grid, and its fill encodes NESTING DEPTH
+      rather than layer — so a heat-map overlay wants a different channel.
+
+  StrategyViewpoint:
+    diagram_type: Business
+    intent: [strategy, how capabilities and resources support goals,
+             courses of action]
+    admits: [Resource, Capability, CourseOfAction, ValueStream, Goal, Outcome]
+
+  TechnologyViewpoint:
+    diagram_type: Technology
+    intent: [infrastructure, what runs where, nodes and networks]
+    admits: [Node, Device, SystemSoftware, TechnologyService,
+             TechnologyInterface, CommunicationNetwork, Path, Artifact,
+             TechnologyCollaboration]
+
+  TechnologyUsage:
+    diagram_type: Technology
+    intent: [how applications use infrastructure,
+             which technology supports which application]
+    admits: [Node, Device, SystemSoftware, TechnologyService,
+             ApplicationComponent, ApplicationService, Artifact]
+
+  LayeredViewpoint:
+    diagram_type: Business
+    intent: [the whole architecture, business to application to technology,
+             cross-layer view, end to end]
+    admits: [BusinessActor, BusinessRole, BusinessProcess, BusinessService,
+             BusinessObject, ApplicationComponent, ApplicationService,
+             DataObject, Node, Device, SystemSoftware, TechnologyService,
+             Artifact, Grouping]
+    notes: >
+      The widest viewpoint, so it wins on coverage almost always. Rank it last
+      when a narrower one admits everything the content holds — a layered view
+      of three applications is a layered view with two empty bands.
+
+  MotivationViewpoint:
+    diagram_type: Motivation
+    intent: [why, drivers and goals, what the architecture is for,
+             stakeholder concerns]
+    admits: [Stakeholder, Driver, Assessment, Goal, Outcome, Principle,
+             Requirement, Constraint, Meaning, Value]
+
+  RequirementsRealization:
+    diagram_type: Motivation
+    intent: [how requirements are met, what satisfies this requirement,
+             traceability from requirement to design]
+    admits: [Requirement, Constraint, Goal, Principle, BusinessProcess,
+             BusinessService, ApplicationComponent, ApplicationService, Node]
+
+  Principles:
+    diagram_type: Motivation
+    intent: [architecture principles, what the principles are,
+             principles and the goals behind them]
+    admits: [Principle, Goal, Driver, Requirement, Constraint, Meaning]
+
+  ImplementationAndMigration:
+    diagram_type: Implementation
+    intent: [roadmap, migration plan, what is delivered when,
+             program of work]
+    admits: [WorkPackage, Deliverable, ImplementationEvent, Plateau, Gap,
+             BusinessRole, BusinessActor, Requirement, Goal]
+
+  MigrationViewpoint:
+    diagram_type: Implementation
+    intent: [transition states, from current to target,
+             where the architecture is going]
+    admits: [Plateau, Gap]
+
+  ImplementationAndDeployment:
+    diagram_type: Implementation
+    intent: [how the work lands on the estate,
+             which deliverable produces which component]
+    admits: [WorkPackage, Deliverable, ApplicationComponent, Artifact, Node,
+             SystemSoftware, Device]
+
+# Detail vs executive, applied after composition. A profile says what it SHOWS;
+# the loader inverts that into the hide-flags EA takes.
+#
+# `compartments`, `notes` and `connector_stereotypes` are recorded because they
+# are the notation's intent, but only `connector_labels` and
+# `element_stereotypes` have been VERIFIED to change what EA renders. The
+# loader's `display_settings()` emits only the verified two, so a profile
+# cannot promise a suppression that silently does nothing.
+presentation_profiles:
+
+  detail:
+    description: Everything. The working view, for people building the model.
+    connector_labels: true
+    connector_stereotypes: true
+    element_stereotypes: true
+    compartments: all
+    notes: true
+    collapse_parallel: false
+
+  review:
+    description: >
+      For a design review. Keeps relationship names, drops the notation
+      furniture that a reviewer already knows.
+    connector_labels: true
+    connector_stereotypes: false
+    element_stereotypes: false
+    compartments: [name]
+    notes: true
+    collapse_parallel: false
+
+  executive:
+    description: >
+      For an audience reading the shape, not the detail. Collapsing hides
+      relationships, so this profile REQUIRES an annotation saying what was
+      summarized — an executive view that hides complexity without saying so
+      is misleading.
+    connector_labels: false
+    connector_stereotypes: false
+    element_stereotypes: false
+    compartments: none
+    notes: false
+    collapse_parallel: true
+    direction_only: true

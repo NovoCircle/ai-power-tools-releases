@@ -1,0 +1,153 @@
+# UAF / UPDM Framework — diagram conventions
+#
+# THE ID IS `UAFP_Framework` and the diagram type is `UPDM Framework`, WITH A
+# SPACE. Resolved from `tools/measure_binding.py --list`, not guessed.
+#
+# THE UAF FAMILY IS NOT ONE ID. EA's example model carries eight technology ids
+# for it, one per view category, and one binding binds one id:
+#
+#   UAFP_AV, UAFP_AcV/PV, UAFP_Framework, UAFP_OV, UAFP_SOV, UAFP_SV/SvcV,
+#   UAFP_StV/CV, UAFP_TV/StdV
+#
+# Only `UAFP_Framework` is bound here. Ids containing `/` are looked up by their
+# declared `technology`, not by filename. A diagram tagged with any of the other
+# seven resolves to nothing here and should fall back to a plain graph layout —
+# except the four classified EA-semantic (c) below, where a graph layout is the
+# wrong answer rather than a rough one: it would place the states or the
+# lifelines and discard the order that is the diagram's whole content. Say those
+# are classified and not producible, and stop.
+#
+# The model holds ONE UPDM Framework diagram. Every number below rests on that
+# one diagram and says so. Grammar and title come from the corpus row for it.
+
+technology: UAFP_Framework
+display_name: UAF / UPDM Framework
+
+# UML IS UNDERNEATH THIS NOTATION. The one bound diagram type declares
+# `base: Logical`, so the UML binding's `Logical` entry is the substrate. This is
+# the binding inheritance helps most: `spacing` is deliberately absent below
+# because the measurement tool finds no measurable neighbors on the single model
+# diagram, and that absence used to mean the engine's 20 in both axes. It now
+# means the gaps measured across 312 horizontal and 274 vertical pairs on plain
+# Logical diagrams - still not a measurement of THIS diagram type, but a measured
+# value for the canvas it is drawn on rather than a number chosen to be
+# inoffensive.
+#
+# What this file states still wins: the 130x80 tile is this notation's.
+extends: UML
+
+# None. The stereotype is stored bare (`UPDMPackage`), measured across 47
+# stereotyped elements. Stated explicitly: "no prefix" is a measured fact.
+stereotype_prefix: ""
+
+notes: >
+  CLASSIFICATION OF THE FAMILY. Only the UPDM Framework diagram is bound: it is
+  (a) composed, a stack of labeled bands each holding a uniform grid of view
+  tiles, which is layered bands. It is a one-diagram sample, and the corpus row
+  and the model agree on the arrangement.
+
+
+  NOT BOUND, TIMELINE (c). The corpus holds a programme-timeline row, titled
+  AcV-2 Programme Timelines by its own frame. It is a set of colored column
+  bands, one per quarter, with each milestone placed by its date tag inside its
+  column and dashed sequence links running between them. The diagram type
+  dictates the arrangement: horizontal position is a date, and the columns look
+  like EA swimlanes, so we should not be placing coordinates. It needs a separate
+  design and no grammar is invented for it here. It is arguably the
+  time-phased roadmap that `computed-geometry` names, which is not built. The
+  example model holds NO such diagram (its acquisition-view diagram types are
+  AcV-1 and PV-3), and the MDG data that would declare the type is encrypted,
+  so its technology id and diagram type name cannot be resolved here and are
+  deliberately not recorded as a key.
+
+
+  NOT BOUND, GRAPH (b). Thirty diagram types under the other seven ids are
+  ordinary graphs or trees where EA's own layout is acceptable and we tidy
+  afterwards: UAFP_AV::AV-3, UAFP_AcV/PV::AcV-1, UAFP_AcV/PV::PV-3,
+  UAFP_OV::OV-1, UAFP_OV::OV-2, UAFP_OV::OV-4 Actual, UAFP_OV::OV-4 Typical,
+  UAFP_OV::OV-5, UAFP_OV::OV-6a, UAFP_OV::OV-7, UAFP_SOV::SOV-1,
+  UAFP_SOV::SOV-2, UAFP_SOV::SOV-3, UAFP_SOV::SOV-4a, UAFP_SOV::SOV-5,
+  UAFP_SV/SvcV::SV-1, UAFP_SV/SvcV::SV-10a, UAFP_SV/SvcV::SV-11,
+  UAFP_SV/SvcV::SV-4, UAFP_SV/SvcV::SV-5, UAFP_SV/SvcV::SV-6,
+  UAFP_SV/SvcV::SV-7, UAFP_SV/SvcV::SV-9, UAFP_StV/CV::StV-1,
+  UAFP_StV/CV::StV-2, UAFP_StV/CV::StV-4, UAFP_StV/CV::StV-5,
+  UAFP_StV/CV::StV-6, UAFP_TV/StdV::TV-1, UAFP_TV/StdV::TV-2. The basis is
+  the base diagram type EA records (Logical, Object or Activity) plus what the
+  one or two model diagrams of each type hold: classes, parts and activities
+  joined by associations, dependencies and generalizations, with no activity
+  partitions and almost no containment. Three of them may deserve a composed
+  grammar once someone measures them, each rests on ONE diagram, and none is
+  claimed: UAFP_OV::OV-4 Typical is a generalization tree (9 generalizations
+  among 16 classes, a layered-bands candidate), and UAFP_SV/SvcV::SV-1 and one
+  of the two UAFP_StV/CV::StV-4 diagrams nest their parts (5 of 11 and 7 of 8
+  contained, nested-grid candidates). UAFP_SV/SvcV::SV-4 covers two different
+  shapes, an activity graph and an action flow with pins nested in actions
+  (18 of 24 contained), and should be split before it is bound.
+
+
+  NOT BOUND, EA-SEMANTIC (c). UAFP_OV::OV-6b, UAFP_SOV::SOV-4b and
+  UAFP_SV/SvcV::SV-10b are state machines: transition topology with states
+  nested in composite states (7 of 8, 9 of 10 and 21 of 22 elements contained),
+  which EA owns as containment. UAFP_OV::OV-6c is a sequence diagram: lifeline
+  order and message order, with 7 lifeline parts and no drawn connectors on the
+  model diagram. Each needs a separate design and no grammar is invented for
+  them here.
+
+
+diagram_types:
+
+  UPDM Framework:
+    # 1 of 1 EAExample diagrams tagged UAFP_Framework::UPDM Framework is based
+    # on Logical.
+    base: Logical
+    grammar: layered-bands
+    # 0 of 1 model diagrams draws a title element, and the corpus row (1 of 1)
+    # is frame-only: EA's diagram frame supplies it.
+    title: frame-header
+    sizing:
+      # 130x80 in 47 of n=47 stereotyped elements, on one diagram: 45 UPDMPackage
+      # tiles and 2 `document` artifacts. Unanimous, but a single authored
+      # layout. The tool reports its own `default` for this diagram as LOW-N
+      # (n=2) because it sets the 45 unanimous tiles aside as a fixed shape and
+      # pools only the two artifacts; the figure stated here is the tile size
+      # itself, which is the size of every element on the diagram.
+      default: {w: 130, h: 80}
+    # spacing is deliberately absent, and the REASON CHANGED once the measurement
+    # tool stopped treating this diagram's tiles as furniture. It used to report no
+    # measurable neighbors at all (n=0), because the tiles are stored as `Text`
+    # objects; it now promotes them to content - on this diagram they are what the
+    # diagram is made of - and measures them.
+    #
+    # What it measures is refused by rule 2 rather than missing: horizontal median
+    # 5 across n=38 (mode 5, 37 of 38) and vertical median 28 across n=40 (mode 28,
+    # 16 of 40) - all 78 pairs from the SINGLE diagram this binding
+    # rests on. One diagram supplying 100% of a population measures that diagram,
+    # not the notation. The horizontal figure says so twice over: 5 units between
+    # tiles is a grid of abutting cells, not a gap an engine would leave between
+    # siblings.
+    #
+    # So nothing is stated here, and what an unstated gap now falls back to is the
+    # value measured on the base diagram type this one is drawn on rather than the
+    # engine's own - which is the point of `extends` above.
+    routing:
+      # PLACEHOLDER, NOT A MEASUREMENT. `default` is required by the schema and
+      # the measured diagram has no connectors at all (n=0). The corpus records
+      # the arrangement as having no routing. Nothing routes here.
+      default: Direct
+    channels:
+      fill: >
+        View category. The corpus row shows one color per band (All, Strategic,
+        Operational, Service Oriented, Systems, Acquisition and Technical
+        views). It is not stored per diagram: none of the 47 elements carries a
+        fill override, so EA paints it. Recoloring a tile breaks the category
+        reading, and whether a written fill is honored was not tested.
+      claimed:
+        position: >
+          Which band a tile sits in says which view category it belongs to.
+          Ordering within a band is not measured.
+        icon: >
+          The view-tile glyph in each tile's corner, painted from the stereotype
+          (corpus row, n=1 diagram). Not measured in the model.
+      # Free means the notation assigns the channel no meaning, not that EA was
+      # tested to honor a write to it.
+      free: [border, border_width, font_color, opacity]

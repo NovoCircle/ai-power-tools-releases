@@ -1,0 +1,192 @@
+# SysML 1.4 — diagram conventions
+#
+# THE ID IS `SysML1.4`. EA 17.1's EAExample model carries three SysML ids:
+#
+#   SysML1.4   nine diagram types, 131 diagrams
+#   SysML1.2   BlockDefinition, 1 diagram
+#   SysML1.1   StateMachine, 1 diagram
+#
+# Resolved from `tools/measure_binding.py --list`, not guessed. `SysML1.4` is the
+# only id that carries the notation's full range, so it is the one bound. A
+# diagram tagged with either older id resolves to nothing here and should fall
+# back to a plain graph layout.
+#
+# Sizes and spacing were measured from the SysML1.4 diagrams in EAExample.qea
+# with the strict adjacency rule (nearest neighbor in the same container,
+# positive gap only). Grammar, title and routing come from the 30 SysML rows of
+# the reference corpus. Every stated number carries its n. Where a number
+# rested on fewer than 10 observations, had no unique mode, or was not a
+# convention of the notation, it was LEFT OUT and the engine default stands.
+
+technology: SysML1.4
+display_name: SysML 1.4
+
+# UML IS UNDERNEATH THIS NOTATION, on TWO bases rather than one: BlockDefinition
+# declares `base: Logical` and Requirement declares `base: Custom`, so the two
+# take their substrate from two different UML diagram types. That is why the
+# parent is named once here and the base per diagram type - one binding's types
+# need not sit on one base, so a single `extends` cannot say which.
+#
+# The measured consequence is the vertical gap. Both diagram types state
+# item_gap_x and deliberately state no item_gap_y, and that silence used to mean
+# the engine's 20; it now means the value measured on the base type each one is
+# drawn on. What this file states still wins: 90x70 and 110x44 are SysML's, and
+# `layered-bands` stays SysML's over the substrate's `graph`.
+extends: UML
+
+# None. SysML stereotypes are stored bare and lower-camel (`block`,
+# `requirement`, `constraintBlock`), measured across every stereotyped element
+# on the SysML1.4 diagrams. Stated explicitly: "no prefix" is a measured fact.
+stereotype_prefix: ""
+
+notes: >
+  EA's SysML1.4 MDG declares nine diagram types. Only two are bound here, and
+  the other seven are left out on purpose. Each is classified below as
+  (b) an ordinary graph where EA's own layout is acceptable, or (c)
+  EA-semantic, where the diagram type dictates the arrangement and we should
+  not be placing coordinates at all. A caller resolving an unbound type gets no
+  binding and should fall back to a plain graph layout — EXCEPT for the two
+  classified (c), where it must not. Handing a sequence diagram or a state
+  machine to a graph layout places the participants and ignores the order, which
+  is worse than not drawing it because it looks like the diagram it is not. For
+  those two, say the type is classified and not producible, and stop.
+
+
+  BOUND. BlockDefinition and Requirement are hierarchies: a generalization or
+  composition tree, and a requirement containment tree. They are composed as
+  layered bands with one band per level of the hierarchy, following the
+  ArchiMate Motivation precedent of a tree composed as bands. This is an
+  approximation and the binding says so: a parent is not centered over its
+  children, and each band carries a label strip that a hand-drawn tree does not
+  have, so level-to-level distance runs larger than the corpus shows. Band
+  container rectangles are geometry the caller may leave unplaced.
+
+
+  UNBOUND, GRAPH (b). InternalBlock and UseCase are free graphs. Parametric is
+  constraint blocks nested two deep with binding connectors, so the arrows are
+  the point and a nested grid would contradict it. Package mixes a grid of
+  package tabs, nested containers with dependencies, and a generalization tree
+  across its three corpus rows. Activity is lanes in 2 of its 6 corpus rows
+  (allocation partitions) and fork-join or free graph in the other 4. No single
+  grammar represents every row of any of these five types, and the schema
+  requires a grammar, so recording one would be a lie stored as data.
+
+
+  UNBOUND, EA-SEMANTIC (c). Sequence and StateMachine. A sequence diagram is
+  lifeline order and message order, and a state machine is transition topology
+  with composite states and orthogonal regions that EA owns as containment.
+  Neither is coordinates we compute. Each needs a separate design, and no
+  grammar is invented for them here.
+
+diagram_types:
+
+  BlockDefinition:
+    # 60 of 60 EAExample diagrams tagged SysML1.4::BlockDefinition are based on
+    # Logical.
+    base: Logical
+    grammar: layered-bands
+    # 30 of 30 SysML corpus rows carry no drawn title; EA's diagram frame
+    # supplies it. Drawing one as well gives the reader two titles.
+    title: frame-header
+    sizing:
+      # 90x70 is the tool's POOLED mode: 18 of n=289 stereotyped elements (6%),
+      # 171 distinct sizes. It is a weak figure and it is NOT a block size. The
+      # `block` stereotype itself (n=128, 82 distinct sizes, 31 diagrams) has
+      # no unique mode: 90x70 ties with 90x49 at 9 each. 90x70 is really the
+      # median and modal size of `ValueType` (median 90x70, mode 9 of n=49).
+      # It is stated only because the schema requires a default; a block's
+      # height follows its compartments, so treat it as a placeholder box.
+      default: {w: 90, h: 70}
+      # NO per-concept sizes are stated. Measured, and left out:
+      #   block:            no unique mode (n=128, 82 distinct sizes)
+      #   constraintBlock:  no dominant size (mode 7 of n=47, 15%)
+      #   InterfaceBlock:   no dominant size (mode 11 of n=36, 31%)
+      #   ValueType:        no dominant size (mode 9 of n=49, 18%)
+      #   FlowPort:         LOW-N (n=2)
+      #   external:         LOW-N (n=5)
+      # NavigationCell (170x115, 38 of 38) is deliberately absent even though it
+      # is unanimous: it is an EA navigation tile that appears on 3 diagrams,
+      # not a SysML concept, and 38 tiles on 3 diagrams is not 38 choices.
+    spacing:
+      # Horizontal gap between siblings: median 33 across n=151 nearest-neighbor
+      # pairs. There is NO convention behind it. The mode is 17 (9 of 151), the
+      # interquartile range runs 20 to 74, and 81 of 151 pairs fall in 0 to 39.
+      # It is the median, stated because it is a fact about the population.
+      item_gap_x: 33
+      # item_gap_y is NOT stated. The vertical gaps (n=132) are a tree's
+      # level-to-level distances, which a bands composition sets with band_gap
+      # and the band padding, not item_gap_y, and they carry no convention
+      # either: two tied modes at 30 and 113 (10 each), median 67, spread from
+      # 11 to 187. band_gap is likewise not stated.
+    routing:
+      default: OrthogonalSquare
+      notes: >
+        Corpus split over 9 rows: 4 orthogonal (3 with a shared composition
+        trunk, 1 with line hops), 3 direct (one diagonal), and 2 with almost
+        no connectors. Orthogonal is the plurality, not a majority. `trunk_for`
+        is absent: the trunk route equals the default here, so listing
+        composition would change nothing.
+    channels:
+      fill: ~
+      claimed:
+        position: >
+          Hierarchy level. Which band a block sits in says how deep in the
+          generalization or composition tree it is.
+        line_style: >
+          Relationship kind. Dashed lines are dependencies (import, verify),
+          so a second variable cannot use dash pattern.
+      free: [fill, border, border_width, line_color, font_color, opacity, icon]
+      notes: >
+        Fill is free on 8 of 9 corpus block definition diagrams, which use no
+        fill encoding. The ninth uses it for type (testCase yellow, requirement
+        green), so recoloring is safe but not universal.
+
+  Requirement:
+    # 8 of 8 EAExample diagrams tagged SysML1.4::Requirement are based on
+    # Custom. The type is `Requirement`, singular; the corpus calls it
+    # "Requirements".
+    base: Custom
+    grammar: layered-bands
+    title: frame-header
+    sizing:
+      # 110x44 is the pooled mode: 23 of n=56 (41%), 13 distinct sizes. Nearly
+      # all of the population is `requirement` (n=49), which splits into two
+      # near-equal clusters: 110x44 (23) and 132x43 (20). Height is consistent
+      # at 43 to 44; width is a per-diagram choice, and 110x44 is the modal size
+      # on only 3 of 7 diagrams that carry requirements. The mode is unique but
+      # the share is under half, so this is a best single answer, not a
+      # convention.
+      default: {w: 110, h: 44}
+      # NO per-concept sizes are stated. `requirement` has no dominant size
+      # (23 of n=49, 47%); block, problem, rationale, testCase, view are each
+      # LOW-N (n=1). ModelView (n=2) is LOW-N with two distinct sizes.
+    spacing:
+      # Horizontal gap between siblings: median 48 (48.5 rounded) across n=30
+      # pairs. No unique mode (17 and 43 tie at 4 each), interquartile range 38
+      # to 61. A fact about the population, not a convention.
+      item_gap_x: 48
+      # item_gap_y is NOT stated, for the reason given under BlockDefinition:
+      # the vertical gaps (n=33, median 32, mode 32 at 11 of 33) are
+      # level-to-level distances, and a second cluster at 80 to 119 (12 of 33)
+      # mixes in gaps that skip a level. The 32 is real but is not an item gap.
+    routing:
+      default: OrthogonalSquare
+      notes: >
+        2 of 2 corpus requirement diagrams route orthogonally into a shared
+        containment trunk. n=2, so this is an observation and not a
+        convention. `trunk_for` is absent for the same reason as on
+        BlockDefinition, and because the EA connector type name for containment
+        was not verified.
+    channels:
+      fill: >
+        Requirement kind, in 1 of 2 corpus diagrams (n=2, unsettled). Treated
+        as claimed: recoloring a diagram whose fill already encodes kind breaks
+        it, while leaving a channel unused costs nothing.
+      claimed:
+        position: >
+          Decomposition level. Which band a requirement sits in says how deep
+          in the containment tree it is.
+        line_style: >
+          Relationship kind. Dashed lines are deriveReqt
+          dependencies.
+      free: [border, border_width, line_color, font_color, opacity, icon]

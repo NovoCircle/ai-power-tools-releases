@@ -1,0 +1,197 @@
+# DMN 1.1 — diagram conventions
+#
+# THE ID IS `DMN1.1` and the diagram type is `DMNDiagram`. Resolved from
+# `tools/measure_binding.py --list` (`DMN1.1: DMNDiagram (31)`), not guessed.
+# The family has exactly one diagram type, so the binding has exactly one, and
+# neither `DMN` nor `DMN1.0` is an id anything would resolve.
+#
+# Sizes and spacing were measured from the 31 DMNDiagram diagrams in the Sparx
+# example model with the strict adjacency rule. The grammar and the title
+# convention come from the 2 DMN rows of the reference corpus and were re-checked
+# against all 31 model diagrams. Every stated number carries its n. Where a
+# number rested on fewer than 10 observations, had no unique mode, or was one
+# diagram speaking for the notation, it was LEFT OUT — which here means four
+# per-concept sizes, each named below with what refused it, falling back to the
+# default rather than to a value nobody measured.
+#
+# SAMPLE CAVEAT, MEASURED RATHER THAN ASSUMED. Nine of the 31 diagrams share a
+# name with a diagram in a sibling package, so the model holds 22 distinct
+# examples and not 31. The nine pairs are NOT copies of one layout, which was
+# checked: no pair shares a single model element, and 8 of the 9 differ in
+# geometry as well, so they are the same example re-modeled and re-drawn. Element
+# and link counts (n=272, 311) are counted per diagram and include all of them,
+# and the gap populations below draw on 25 and 23 separate diagrams — so the
+# duplication inflates the counts without making any one layout speak twice.
+
+technology: DMN1.1
+display_name: DMN 1.1
+
+# UML IS UNDERNEATH THIS NOTATION, as it is under every MDG technology: the one
+# diagram type declares `base: Analysis`, EA's analysis canvas, so the UML
+# binding's `Analysis` entry is the substrate.
+#
+# IT SUPPLIES NOTHING TODAY, and saying so is better than implying it does.
+# `Analysis` measures a default and both item gaps, and this diagram type states
+# all three for itself, so every slot the substrate has a figure for is already
+# filled. The value of the declaration is in resolution and in the future: a
+# diagram that
+# names this technology resolves here, and a slot this file later stops stating
+# falls back to a measured figure for the canvas rather than to the engine's 20.
+extends: UML
+
+# None. DMN stereotypes are stored bare (`Decision`, `InputData`,
+# `BusinessKnowledgeModel`, `KnowledgeSource`), measured across 272 stereotyped
+# elements: not one of them carries an `Xxx_` stem. Stated explicitly rather than
+# inherited — "no prefix" is a measured fact here, not an absence.
+stereotype_prefix: ""
+
+notes: >
+  CLASSIFICATION (b). `DMNDiagram` is a decision requirements diagram: a directed
+  acyclic graph of decisions, input data, business knowledge models and knowledge
+  sources, joined by requirement links. It is an ordinary graph where EA's own
+  layout is acceptable and we tidy afterwards. It has a real top-down convention
+  — on 307 requirement links the requiring element is drawn higher than the
+  element it requires in 253, level with it in 21 and lower in 33 — but the
+  corpus describes these diagrams as a DAG with heavy edge crossing, and a
+  layered composition would not minimize crossings or center a parent over its
+  inputs. The largest in the model has 26 elements and 40 links.
+
+
+  CONTAINMENT EXISTS AND IS NOT THE STRUCTURE, which is what refuses nested-grid.
+  36 of the 287 objects across the 31 diagrams sit inside another (12.5%), and
+  every one of the parents is a `DecisionService`. So the enclosure is a real
+  feature on the diagrams that have one, and it is a minority of one concept
+  while the requirement links are the content everywhere — nested-grid's own test
+  asks whether an arrow between two boxes would add anything, and here it always
+  would, because the arrow is which requirement it is.
+
+
+  SPACING IS NOW STATED, REVERSING AN EARLIER DRAFT OF THIS FILE. The draft left
+  both gaps unset on the argument that in a graph these distances follow edge
+  density rather than a convention of the notation. That argument is true and it
+  is equally true of every `graph` diagram type in the parent binding, all of
+  which state both axes — a `graph` layout takes them as its column and layer
+  spacing, so they are read rather than inert, and the alternative is the
+  engine's 20, which nobody measured. What the rules ask of a gap is that it
+  clear ten observations and that no single diagram supply more than half of the
+  population, and these two clear both by a wider margin than any other gap in
+  the tree: 25 and 23 diagrams contribute and the densest supplies 13%. Each
+  figure below is the median of its population, with its spread disclosed, and is
+  a fact about that population rather than a convention.
+
+diagram_types:
+
+  DMNDiagram:
+    # 31 of 31 diagrams tagged with this technology and diagram type are based on
+    # Analysis.
+    base: Analysis
+    grammar: graph
+    # 0 of 31 model diagrams draws a title element: no Text, Note or Boundary on
+    # any of them carries the diagram's name, and only 7 of the 31 carry any such
+    # object at all. So EA's diagram frame supplies the title. The corpus
+    # disagrees at n=2 — one of its two DMN rows draws a large title text and the
+    # other does not — and 0 of 31 outweighs 1 of 2. Drawing one as well gives
+    # the reader two titles.
+    title: frame-header
+    sizing:
+      # 90x45 is the pooled mode: 106 of n=272 stereotyped elements (39%) over 63
+      # distinct sizes. WEAK, and stated because `default` is required and it is
+      # still the best single answer: three elements in five are some other size
+      # and the pooled median is 112.5x50.
+      #
+      # WHOSE SIZE IT IS: no concept's, and every concept's. The 106 elements at
+      # 90x45 are 40 Decisions, 26 InputData, 21 BusinessKnowledgeModels and 19
+      # KnowledgeSources, so no single concept supplies even half of the mode, and
+      # 90x45 is the modal size of all four measured separately — Decision 40 of
+      # n=110 (36%), InputData 26 of n=43 (60%), BusinessKnowledgeModel 21 of
+      # n=61 (34%), KnowledgeSource 19 of n=26 (73%). Four concepts agreeing
+      # independently is what makes this a weak share rather than a coincidence,
+      # and it is why none of the four is sized apart below: a per-concept entry
+      # would restate the default.
+      default: {w: 90, h: 45}
+      # Not stated, and why:
+      #   DecisionService:      no unique mode (n=11, 8 distinct sizes; median
+      #     261x112). Measured, and the reason is structural: a service is sized
+      #     by the decisions it encloses, and all 36 nested objects on these
+      #     diagrams are inside one.
+      #   DMNSimConfiguration:  no dominant size (mode 90x50 in 2 of n=12, 17%,
+      #     11 distinct sizes; median 180.5x50). An EA simulation artifact, not a
+      #     DMN concept.
+      #   ItemDefinition:       n=1, low-n.
+      #   NavigationCell:       170x115 in 8 of n=8 — unanimous but low-n, and an
+      #     EA hyperlink tile on the model's two entry-point diagrams rather than
+      #     a DMN concept, so it would not be stated at n=10 either.
+    spacing:
+      # 111, the median of n=135 horizontal pairs. 25 of the 31 diagrams
+      # contribute and the densest supplies 18 of them (13%), the best-spread gap
+      # population in this tree. THERE IS NO CONVENTION BEHIND IT and the figure
+      # is stated as a fact about the population: the modes tie two ways (24 and
+      # 127, 4 each), the interquartile range runs 50 to 160, and the values span
+      # 13 to 734 because a DAG puts whatever the edges need between two columns.
+      item_gap_x: 111
+      # 47, the median of n=155 vertical pairs, from 23 diagrams with the densest
+      # supplying 21 (14%). Better behaved than the horizontal axis and still not
+      # a convention: the mode of 43 covers 7 of 155 (5%) and the interquartile
+      # range runs 31 to 98, over values from 11 to 350. This is the axis the
+      # top-down reading runs along, so it is the layer spacing a graph layout
+      # should use.
+      #
+      # No pair was excluded for touching or overlapping on either axis.
+      item_gap_y: 47
+    routing:
+      # Direct. Two independent sources agree and both are weak. The corpus draws
+      # straight lines in 2 of 2 DMN rows; and 310 of the 311 connectors on the
+      # model's DMN diagrams carry EA's `Mode=3`, including every one of the 307
+      # requirement links, with the single exception a note link. Nothing in this
+      # skill maps that integer to one of the ten route names the schema
+      # validates against — the mapping lives in the server — and `Mode=3` is
+      # EA's default across the whole model (4,294 of 4,730 connectors), so it
+      # shows what authors left alone rather than what they chose. The name is
+      # this file's convention; the consistency is the measurement.
+      default: Direct
+      notes: >
+        No trunk convention: DMN requirements are drawn one line per requirement,
+        and a shared trunk would hide which decision requires which input.
+        `trunk_for` is absent rather than empty. The three requirement kinds
+        measured are 210 information requirements, 57 knowledge requirements and
+        40 authority requirements.
+    channels:
+      fill: >
+        Element kind, on the conservative reading. What is measured is that the
+        color is not the author's: of the 272 stereotyped elements, 256 store no
+        appearance at all and the other 16 store EA's automatic value, so not one
+        stores a chosen fill. Something else therefore decides it, which is the
+        technology's own rendering, and that rendering was not inspected here.
+        Claimed rather than free because recoloring a diagram whose fill already
+        separates a decision from its input data would break it, while leaving a
+        channel unused costs nothing. Whether EA honors a fill written to one of
+        these elements was not tested either; treat writing one as unavailable
+        until it is.
+      claimed:
+        position: >
+          Dependency direction. The requiring element sits above the element it
+          requires in 253 of 307 requirement links (82%), level with it in 21 and
+          below it in 33. Moving an element up or down to encode something else
+          reverses the reading.
+        size: >
+          Enclosure, for one concept. A `DecisionService` is sized by the
+          decisions inside it — all 36 nested objects on these diagrams sit
+          inside one, and the 11 measured services come in 8 distinct sizes — so
+          resizing one changes what it is drawn as containing.
+        icon: >
+          Decision logic kind: a decision draws a table or a chevron glyph. From
+          one of the two corpus rows, n=1; not measured in the model.
+      # Free means the notation assigns the channel no meaning, not that EA was
+      # tested to honor a write to it. Border is free because nothing uses it:
+      # the 16 elements that store an appearance record at all store EA's
+      # automatic value for the border color exactly as they do for fill, so no
+      # author on any of the 31 diagrams set one.
+      free: [border, border_width, font_color, opacity]
+      notes: >
+        `line_style` and `line_color` are deliberately in neither list. The three
+        requirement kinds coexist on these diagrams (210, 57 and 40 links) and in
+        DMN they are told apart by the line itself, so advertising the channel as
+        free would invite overwriting that; but which visual property EA's own
+        rendering uses was not verified here, so claiming it would state
+        something unmeasured. Neither list is the honest position until it is
+        checked.

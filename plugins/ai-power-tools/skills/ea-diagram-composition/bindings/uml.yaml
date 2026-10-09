@@ -1,0 +1,863 @@
+# UML — diagram conventions for EA's BASE notation
+#
+# THE RESOLVED ID IS `UML`, AND IT IS NOT AN MDG TECHNOLOGY ID.
+#
+# Every other binding names a technology that `measure_binding.py --list`
+# reports, because `--list` reads `MDGDgm=<Tech>::<DiagramType>` out of
+# `t_diagram.StyleEx`. Plain UML never appears there. It is EA's base notation
+# rather than an MDG technology: no UML diagram carries an `MDGDgm` value, so
+# `--list` cannot show it and `--technology UML` is refused outright with
+# "no diagram in this model is tagged 'UML'. Did you mean: GML?".
+#
+# That refusal is correct, and it is why `UML` is declared here as the id a
+# caller uses once it has established from `Diagram_Type` alone that a diagram
+# belongs to no MDG technology. Resolution runs through the `diagram-type` path,
+# never `qualified`: `mdg_diagram_type` would build `UML::Logical`, which
+# matches no diagram's `MDGDgm` in any model. Do not "fix" this by hunting for a
+# real id — there is not one. `UML Behavioral` is a real id but covers two
+# behavioral types only, and its own spelling is another trap: `State Machine`
+# with a space, where plain UML's type is `Statechart`.
+#
+# THIS BINDING IS THE ROOT OF THE TREE, SO IT COVERS EVERY BASE AN MDG SITS ON.
+#
+# It was first authored as "the family of plain-UML diagrams" - the thirteen
+# types where UML is used directly - and that framing was wrong in one specific
+# way: UML's job here is to be the substrate under every other binding, so the
+# set it must cover is not "the UML specification's diagram types" but "every
+# `base` any MDG diagram type declares". Those are the values EA writes into
+# `t_diagram.Diagram_Type` for a tagged diagram, and the shipped MDG bindings
+# name three of them: `Logical`, `Analysis` and `Custom`.
+#
+# `Analysis` and `Custom` are therefore bound below even though neither is a UML
+# diagram type. `Analysis` is EA's own analysis diagram and is where every BPMN
+# diagram type sits; `Custom` is the MDG and extended-profile canvas and is where
+# a SysML requirement diagram sits. Without them a BPMN or requirement diagram
+# inherits nothing, which is the failure this file exists to prevent: the
+# substrate silently absent and the engine's own defaults answering in its place.
+# Both are measured by the same arithmetic and held to the same two rules as the
+# rest of the file, and both are thinner than `Logical` - said at each figure.
+#
+# DIAGRAM TYPE NAMES ARE EA'S `t_diagram.Diagram_Type` STRINGS, read from the
+# data. Four are not what the UML specification calls them, and none would have
+# been guessed:
+#
+#   a Class diagram is         `Logical`
+#   a State Machine diagram is `Statechart`
+#   a Communication diagram is `Collaboration`
+#   a Use Case diagram is      `Use Case`   — WITH A SPACE
+#
+# MEASURED FROM EAExample.qea (EA 17.1), and NOT by the measurement tool, which
+# cannot see this notation: `_attribute` learns a technology's base types from
+# its MDGDgm-tagged diagrams and UML has none, and `nearest_neighbor_gaps`
+# rejects any element whose `Stereotype` is empty — which here is 94% of them.
+# The figures below were produced by that tool's own unmodified arithmetic over
+# a different selection: diagrams claiming no technology whose elements are at
+# least half unstereotyped, with `Object_Type` supplying the concept key that
+# `Stereotype` supplies for an MDG. That selection is 330 diagrams carrying
+# 2,406 non-furniture elements across 15 `Diagram_Type` values, and it splits in
+# two:
+#
+#   301 diagrams, 13 types, 2,266 elements — the UML diagram types proper
+#    29 diagrams,  2 types,   140 elements — EA's `Analysis` and `Custom` canvases
+#
+# AN EARLIER REVISION OF THIS NOTE SAID "330 plain-UML diagrams, 13 diagram
+# types, 2,266 non-furniture elements", which is two populations in one sentence:
+# the diagram count comes from the whole selection and the type and element
+# counts from the 301 that leave the two canvases out. Each number was right
+# about something and the sentence was right about nothing, which is why the
+# split is now written out. Both canvases are bound below, so the 330-diagram
+# selection is the one this file describes.
+#
+# THE TOOL NO LONGER PRODUCES THAT SELECTION (2026-09-30). `measure_binding.py`
+# now drops a diagram whose objects are MORE than half annotation furniture -
+# a documentation page, a property of the diagram's composition and not of its
+# `Diagram_Type`. On the same model that removes 65 of the 330, leaving 265
+# diagrams, 15 types and 2,070 non-furniture elements (1,930 unstereotyped); the
+# 301 subset becomes 249 diagrams, 13 types and 1,969 elements. Every figure in
+# THIS FILE was measured over the pre-filter 330 and is left as it was measured,
+# because rewriting a recorded number without re-running the measurement is the
+# defect this note exists to prevent. Re-measuring this binding is an authoring
+# task of its own; the tool's own docstring carries the movement it caused.
+#
+# TWO RULES GOVERN EVERY FIGURE HERE, and both reject values the arithmetic
+# would otherwise hand over:
+#
+#   1. Nothing with fewer than 10 observations is stated, and neither is a modal
+#      size that is a tie. An unset slot falls back to an engine default, which
+#      is honest; a tie-broken singleton presented as a convention is not.
+#   2. No gap is stated when ONE diagram supplies more than half the population.
+#      That statistic measures the diagram, not the notation. It removed three
+#      otherwise-passing values — see `Component`, `Object` and `Timing`.
+#
+# Every stated figure carries its n in the comment above it.
+
+technology: UML
+display_name: UML 2.5 (EA base notation)
+
+# MEASURED, AND THE STRONGEST STATEMENT IN THIS FILE.
+#
+# 2,251 of the 2,406 non-furniture elements on the 330 selected diagrams (93.6%)
+# carry an EMPTY `t_object.Stereotype` — 2,138 of 2,266 (94.4%) across the 13 UML
+# diagram types, and 113 of 140 (80.7%) on the two EA canvases, which are less
+# bare because `Custom` is where extended profiles live even on the diagrams that
+# pass the half-unstereotyped filter.
+# A plain UML Class is not `UML_Class`; it is a row
+# whose Stereotype column is blank and whose CONCEPT lives in
+# `t_object.Object_Type` instead.
+#
+# So `""` is not "no prefix was measured" and not an omission that should
+# inherit anything — it is the measured fact that this notation stores no prefix
+# because it stores no stereotype at all. `stereotype_for("Class")` returning
+# `Class` unchanged is the correct identity for UML, and every `sizing` key below
+# is an `Object_Type` value, matched against that column rather than Stereotype.
+stereotype_prefix: ""
+
+notes: >
+  Twelve diagram types are bound and three are classified and deliberately not.
+  Eleven of the twelve are `graph`: UML is overwhelmingly a graph notation, and
+  the composed grammars have nothing to say about a class diagram. Each of the
+  eleven fails the composed grammars' own tests — nested-grid asks whether an
+  arrow between two boxes would add anything and here it always would;
+  layered-bands asks whether you can name what moving an item between bands
+  would mean, and outside a grouping the caller supplies, you cannot. `graph` is
+  the honest and producible answer: EA's own layout places them, we tidy
+  afterwards, and the sizes, spacing, routing, title convention and channels
+  below all still earn their place.
+
+
+  NOT BOUND, EA-SEMANTIC (c) — Sequence. The type dictates the arrangement and a
+  caller must NOT write coordinates. Lifeline order across the page and message
+  order down it are EA's, derived from the message sequence, and the measurement
+  says so: across 14 diagrams the horizontal gap is 50 in 11 of n=46 with a
+  median of 49, an even pitch no modeler produces by hand, while NO element type
+  has a unique modal size at all because a lifeline's height is set by how many
+  messages it carries (Object n=21 over 16 distinct sizes, median 90x413). It is
+  classified rather than keyed for two reasons that reinforce each other: there
+  is no supportable `sizing.default` to give it, and `sizing` is mandatory even
+  for a type whose elements we never size or place. Its quality is lifeline order
+  and message sequence, and neither is a coordinate we compute.
+
+
+  NOT BOUND, BELOW THRESHOLD (b) — Collaboration and InteractionOverview. Both
+  are ordinary graphs and both would be `graph`, but neither has a single
+  figure that survives rule 1, so neither has a `sizing.default` that could be
+  stated honestly. Collaboration has 3 plain diagrams and 11 elements;
+  InteractionOverview has 2 diagrams and 15. They are recorded here so that an
+  omission is not mistaken for an oversight, and they need data rather than
+  design. InteractionOverview is structurally an activity diagram whose nodes
+  are interaction occurrences, so it will take Activity's figures once there are
+  enough of it to check that.
+
+
+  A DISAGREEMENT WORTH RESOLVING. Statechart is bound `graph`, not
+  `ea-semantic`, though the vocabulary's own commentary lists "states and
+  transitions" under the latter. EA does not impose a state machine's
+  arrangement: 43 plain statecharts place 62 states at freely chosen positions
+  in 20 distinct sizes, and their gap populations (n=132 horizontal, n=107
+  vertical, no single diagram supplying more than a tenth) look like Logical's
+  and Activity's rather than Sequence's even pitch. Communication diagrams are
+  the same case — the sequence lives in the message numbering, not in
+  coordinates. Sequence and Timing are the two UML types whose geometry is
+  genuinely not ours, and they are the two where the measurement shows it.
+
+
+  TIMING IS `ea-semantic`, NOT `computed-geometry`, and this contradicts
+  grammars.md §7, which names the timing diagram as part of what remains under
+  computed-geometry alongside the treemap. The vocabulary's own commentary
+  contradicts it too, listing "a waveform against a clock" under ea-semantic.
+  The tie-breaker is the landmine that commentary warns about: a type parked
+  under an unbuilt composed grammar starts reporting itself composable the day
+  that composer ships, so recording Timing as computed-geometry would have a
+  treemap composer claim it can compose a timing diagram. Whoever settles this
+  should strike the timing diagram from computed-geometry's remainder.
+
+
+  ROUTING IS CONVENTIONAL HERE, NOT MEASURED, and that is a gap rather than a
+  choice. `t_diagramlinks.Style` does carry a route per connector and plain UML
+  is strikingly consistent - `Mode=3` on 346 of 347 connectors on Logical
+  diagrams, 281 of 282 on Activity, 66 of 66 on Use Case - so a single default
+  is certainly right for this notation. But nothing in this skill maps EA's
+  `Mode=` integer to one of the ten route names the schema validates against;
+  that mapping lives in the server's `_ROUTE_STYLES`. So every route NAME below
+  is conventional and flagged as such, while the evidence that one default is
+  correct is measured. Confirming the mapping would settle it in one step.
+  Deployment is the exception to the consistency, at `Mode=3` on 153 and
+  `Mode=8` on 98 of 268.
+
+
+  TITLES ARE `frame-header` THROUGHOUT, and this is reasoned rather than
+  measured. EA's diagram frame renders the diagram name for every diagram, and
+  UML publishes no drawn-title convention the way an ArchiMate view does. A Text
+  element is present on 25% to 85% of these diagrams depending on the type, but
+  a Text element is a caption, a legend or an annotation, and its presence does
+  not establish that it is a title - so it is not treated as evidence for
+  `drawn`. Declaring `frame-header` avoids the two-title diagram, which is the
+  worse of the two mistakes.
+
+
+  NO VIEWPOINT CATALOG. UML publishes none - a class diagram is chosen because
+  you are modeling structure, not selected from a list of named views. The
+  `viewpoints` block is therefore absent rather than invented, so view selection
+  cannot recommend a UML view that does not exist.
+
+
+  WHAT A BINDING BUILT ON THIS ONE INHERITS. Every MDG technology is a
+  stereotype layer applied to UML, not a notation beside it, so every other
+  shipped binding declares `extends: UML` and each of its diagram types names in
+  `base` which entry below it is drawn on. TOGAF-UML, DataModel-UML and
+  Zachman-ERD belong here for the same reason the four shipped MDGs do, and not a
+  different one.
+
+
+  WHAT CARRIES OVER IS THE UNSTATED SLOT, AND ONLY THAT. Sizes and gaps merge per
+  key: a concept a child sizes for itself keeps its own size, `sizing.default` is
+  always the child's because the schema requires it to state one, and what a child
+  is silent about takes the figure measured here. That silence used to reach the
+  engine's own 20-unit gap instead, which is the whole reason for the
+  arrangement. Nothing else merges. `grammar`, `title`, `routing` and `channels`
+  are each mandatory or a statement in their own right, and a child's
+  `layered-bands` or `lanes` must never be flattened to this file's `graph` -
+  adding structure UML lacks is exactly what an MDG is for. Nor does a child
+  acquire the diagram types below as entries in its own catalog: they are its
+  substrate, and a technology's diagram types are the ones its MDG declares.
+
+
+  THE `stereotype_prefix` TRAP, WHICH IS LIVE. A child that omits the key
+  inherits this file's `""`. That is right for a family drawn in plain UML and
+  WRONG for one whose MDG stereotypes its elements, so a derived family with a
+  real prefix must state it — ArchiMate3's is `ArchiMate_` and it says so. The
+  loader distinguishes an absent key from a declared `""`, which is what makes
+  the second form a statement rather than an absence; do not "simplify" that
+  check away.
+
+diagram_types:
+
+  # ---------------------------------------------------------------------------
+  # Class diagram. EA calls it `Logical`.
+  # ---------------------------------------------------------------------------
+  Logical:
+    # For plain UML the base type and the diagram type are the same string:
+    # there is no MDG layer to distinguish them.
+    base: Logical
+    # A class diagram is a graph and nothing else. Associations, generalizations
+    # and dependencies are the content, so no composed grammar applies: a
+    # nesting that needs arrows to be read is not a nesting, and bands would be
+    # rows we needed rather than a layering that means something.
+    grammar: graph
+    title: frame-header
+    sizing:
+      # Class 90x70: the unique mode, 58 of n=302, 19%, over 181 DISTINCT sizes,
+      # median 150x76. Three classes in four are some other size, so this is the
+      # commonest single size rather than a convention, and it is stated as the
+      # best available answer because `sizing.default` is mandatory. A caller
+      # composing classes with long names or populated compartments should
+      # override `item_width` through `spec()` rather than clip them.
+      #
+      # 90x70 is also EA's size for a newly created Class, which is why it
+      # dominates. It is NOT a universal classifier default: only 1 of 53
+      # Enumerations is 90x70.
+      default: {w: 90, h: 70}
+      # 148x90, 14 of n=47, 30%, and the median is 148x90 too.
+      Package: {w: 148, h: 90}
+      # 87x51, 13 of n=21, 62%, over 3 distinct sizes.
+      Activity: {w: 87, h: 51}
+      # 45x90, 12 of n=14, 86%. An actor is a stick figure and a wider box just
+      # adds white space around it.
+      Actor: {w: 45, h: 90}
+      # DELIBERATELY UNSET, both of them, and both for the tie rule:
+      #   Enumeration - n=46 with NO unique mode, 42 distinct sizes, so its size
+      #                 is set by how many literals it lists.
+      #   Artifact    - n=28 with NO unique mode, 12 distinct sizes.
+      # Both fall back to `default`, which is honest. Stating either would mean
+      # publishing a value the arithmetic refused to produce.
+    spacing:
+      # Sibling gap 56, the median of n=312, no diagram supplying more than 13%.
+      item_gap_x: 56
+      # 50, the median of n=274, no diagram supplying more than 8%. Both axes
+      # are stated because a `graph` layout takes them as its column and layer
+      # spacing, so both are read rather than inert.
+      item_gap_y: 50
+    routing:
+      # Conventional, not measured - see `notes`.
+      default: Direct
+      # This one IS a notation convention rather than a guess: UML draws a
+      # generalization set as a shared trunk with one arrowhead into the parent,
+      # which is a tree and not an orthogonal fan.
+      trunk_for: [Generalization]
+      trunk_route: TreeVertical
+    channels:
+      # UML assigns no meaning to fill. The specification fixes the NOTATION -
+      # a class is a compartmented rectangle, an actor a stick figure, a node a
+      # three-dimensional box - and says nothing about color. So fill is
+      # genuinely unclaimed, which is a real difference from ArchiMate and BPMN
+      # rather than an omission, and `~` is what lets it appear in `free`.
+      fill: ~
+      claimed:
+        position: >
+          Spoken for by EA's layout rather than by the notation. UML gives
+          position no meaning on a class diagram, but for a `graph` type EA
+          computes the coordinates and will overwrite anything set beforehand,
+          so it is not available to carry a second variable either way.
+        size: >
+          Compartment content. A class box is sized by the attributes and
+          operations it shows - 181 distinct sizes across 302 measured classes -
+          so using size to encode something else fights the content.
+        line_style: >
+          Normative in UML, and claimed on every diagram type in this file for
+          that reason: dashed against solid separates a dependency or a
+          realization from an association. Overwriting it changes what a
+          connector means.
+      free: [fill, border, border_width, line_color, font_color, opacity, icon]
+
+  # ---------------------------------------------------------------------------
+  # State Machine diagram. EA calls it `Statechart`.
+  # ---------------------------------------------------------------------------
+  Statechart:
+    base: Statechart
+    # A graph of states and transitions, placed by the modeler - see the
+    # disagreement recorded in `notes`. EA does not impose this arrangement.
+    grammar: graph
+    title: frame-header
+    sizing:
+      # State 120x60, 29 of n=62, 47%, and the median is 120x60 too - mode and
+      # median agreeing over 20 distinct sizes.
+      default: {w: 120, h: 60}
+      # StateNode is EA's type for the pseudostates - initial, final, choice,
+      # junction. 20x20, 15 of n=44, 34%, median 18x20. They are small circles
+      # and a 120x60 pseudostate is not one.
+      StateNode: {w: 20, h: 20}
+      # StateMachine is DELIBERATELY UNSET: n=19 with no unique mode and 19
+      # distinct sizes, because it is a frame sized to whatever it contains.
+    spacing:
+      # 66, the median of n=132 (65.5, rounded), no diagram supplying above 8%.
+      item_gap_x: 66
+      # 50, the median of n=107, the densest diagram supplying 10.3% of it.
+      item_gap_y: 50
+    routing:
+      # Conventional, not measured - see `notes`.
+      default: Direct
+      notes: >
+        No trunk convention. A state machine's transitions each carry their own
+        trigger and guard, so fanning several onto one line would hide exactly
+        the labels the diagram exists to show.
+    channels:
+      fill: ~
+      claimed:
+        position: Spoken for by EA's layout; see the Logical diagram type.
+        size: >
+          Node kind. A pseudostate is 20x20 because it is a pseudostate, and a
+          state is sized by its name and its internal compartments.
+        line_style: Normative in UML; see the Logical diagram type.
+      free: [fill, border, border_width, line_color, font_color, opacity, icon]
+
+  # ---------------------------------------------------------------------------
+  Activity:
+    base: Activity
+    # A flow graph. Ranks could be read as bands, but the bands would be ranks
+    # we computed rather than a layering the notation has, so `graph` is the
+    # honest value and EA's hierarchical layout handles it.
+    grammar: graph
+    title: frame-header
+    sizing:
+      # 106x49 comes from the `Activity` concept: 20 of n=23, 87%, 4 distinct
+      # sizes. It is used as the default rather than `Action`'s own mode, and
+      # that is a judgment worth stating. Action is the commoner concept (n=106)
+      # but its mode of 70x35 covers only 12% over 54 distinct sizes, while its
+      # MEDIAN of 110x48 lands within three pixels of 106x49. So 106x49 is
+      # corroborated by both concepts and 70x35 by neither, and `Action` is left
+      # unset to fall back to it rather than stated at 12%.
+      default: {w: 106, h: 49}
+      # Pseudonodes - initial, final, fork, join. 20x20, 29 of n=56, 52%.
+      StateNode: {w: 20, h: 20}
+      # 16x16 in 30 of n=30. Unanimous.
+      ActionPin: {w: 16, h: 16}
+      # 26x34, 7 of n=13, 54%. A diamond, not a box.
+      Decision: {w: 26, h: 34}
+      # MergeNode measures the same 26x34 but at n=4, below the threshold, so it
+      # is not stated; it falls back to `default`, which is the wrong shape for
+      # it. Worth stating the day there are ten of them.
+      #
+      # Synchronization is DELIBERATELY UNSET despite passing rule 1: mode 6x147
+      # covers 4 of n=14, 29%, over 7 distinct sizes, and the varying axis is the
+      # bar's LENGTH, which is set by how many flows it spans. A fork bar's
+      # length is a function of its content, not a convention.
+    spacing:
+      # 44, the median of n=101, no diagram supplying above 17%.
+      item_gap_x: 44
+      # 42, the median of n=132 (41.5, rounded), no diagram above 10%.
+      item_gap_y: 42
+    routing:
+      default: Direct
+      notes: >
+        Conventional, not measured. A partitioned activity diagram - one
+        ActivityPartition per role - is a genuine `lanes` diagram and would be
+        bindable as one, but only 2 of these 31 diagrams carry a partition, so
+        partitions are the exception here rather than the shape of the type.
+    channels:
+      fill: ~
+      claimed:
+        position: Spoken for by EA's layout; see the Logical diagram type.
+        size: Node kind - a pin is 16x16 and a decision is a 26x34 diamond.
+        line_style: Normative in UML; see the Logical diagram type.
+      free: [fill, border, border_width, line_color, font_color, opacity, icon]
+
+  # ---------------------------------------------------------------------------
+  Package:
+    base: Package
+    # A graph of packages and their dependencies. Nesting would be the obvious
+    # guess and the data refuses it: these 25 diagrams contain ZERO nested
+    # elements, so containment is not the structure and nested-grid would be
+    # wrong.
+    grammar: graph
+    title: frame-header
+    sizing:
+      # 130x80 is the unique mode but a WEAK one: 10 of n=82, 12%, over 57
+      # distinct sizes, median 166.5x80. The height agrees with the median and
+      # the width does not, because a package box is widened to fit its name.
+      # Stated because `sizing.default` is mandatory and this is the best single
+      # answer available; recorded as weak so nobody mistakes it for a
+      # convention. Note the Logical diagram type measures Package at 148x90
+      # instead - two diagram types, two different modal package sizes, which is
+      # itself the evidence that the size is content-driven.
+      default: {w: 130, h: 80}
+    spacing:
+      # 47, the median of n=47, no diagram supplying above 13%.
+      item_gap_x: 47
+      # 36, the median of n=46, no diagram above 13%.
+      item_gap_y: 36
+    routing:
+      default: Direct
+      notes: Conventional, not measured - see `notes`.
+    channels:
+      fill: ~
+      claimed:
+        position: Spoken for by EA's layout; see the Logical diagram type.
+        size: Set by the package name, which is usually the longest thing on it.
+        line_style: Normative in UML; see the Logical diagram type.
+      free: [fill, border, border_width, line_color, font_color, opacity, icon]
+
+  # ---------------------------------------------------------------------------
+  Deployment:
+    base: Deployment
+    # What-runs-where is drawn with arrows on these diagrams, not with
+    # containment: only 23 elements are nested across all 22 diagrams and 13 of
+    # those are ports. So this is a graph of nodes and communication paths.
+    grammar: graph
+    title: frame-header
+    sizing:
+      # Component 92x52, 11 of n=43, 26%, over 21 distinct sizes, median 100x55.
+      default: {w: 92, h: 52}
+      # Node is DELIBERATELY UNSET. Its mode of 54x81 covers 7 of n=32, 22%, and
+      # the median is 100x81 - the heights agree and the widths do not, because a
+      # node is stretched to fit what is deployed on it. Half a measurement
+      # cannot be stated: `{w, h}` is atomic.
+    spacing:
+      # 81, the median of n=109, no diagram supplying above 17%. Deployment
+      # nodes sit further apart than any other UML type, which is what carrying
+      # nested artifacts costs.
+      item_gap_x: 81
+      # 49, the median of n=83, no diagram above 12%.
+      item_gap_y: 49
+    routing:
+      default: Direct
+      notes: >
+        Conventional, not measured, and the least settled of the seven: this is
+        the one UML type whose connectors are NOT consistent, at `Mode=3` on 153
+        and `Mode=8` on 98 of 268. Whatever `Mode=8` turns out to be, a second
+        route convention is in use here.
+    channels:
+      fill: ~
+      claimed:
+        position: Spoken for by EA's layout; see the Logical diagram type.
+        size: >
+          Set by what is deployed inside. A node stretched to hold three
+          artifacts is wider because of them.
+        line_style: Normative in UML; see the Logical diagram type.
+      free: [fill, border, border_width, line_color, font_color, opacity, icon]
+
+  # ---------------------------------------------------------------------------
+  # Use Case diagram. THE KEY HAS A SPACE.
+  # ---------------------------------------------------------------------------
+  Use Case:
+    base: Use Case
+    # Actors, use cases and a boundary, related by associations and includes.
+    # A graph. Bands of actors against bands of use cases would be bands of
+    # element KIND, which EA's layout already separates without being told.
+    grammar: graph
+    title: frame-header
+    sizing:
+      # UseCase 129x86, 4 of n=10, 40%, 5 distinct sizes, median 123x82. n is
+      # exactly at the ten-observation threshold - the thinnest sample stated in
+      # this file - and mode and median are close enough to corroborate.
+      default: {w: 129, h: 86}
+      # Actor 45x90, 8 of n=18, 44%, median 45x91. The same 45x90 the Logical
+      # diagram type measures independently, which is what makes it a
+      # convention rather than a coincidence.
+      Actor: {w: 45, h: 90}
+    spacing:
+      # 64, the median of n=31. One diagram supplies 39% of that population,
+      # which is under the half that rule 2 rejects but high enough to note.
+      item_gap_x: 64
+      # 49, the median of n=50, one diagram supplying 26%.
+      item_gap_y: 49
+    routing:
+      default: Direct
+      notes: Conventional, not measured - `Mode=3` on 66 of 66 connectors.
+    channels:
+      fill: ~
+      claimed:
+        position: Spoken for by EA's layout; see the Logical diagram type.
+        size: Node kind - an actor is 45x90 because it is a stick figure.
+        line_style: Normative in UML; see the Logical diagram type.
+      free: [fill, border, border_width, line_color, font_color, opacity, icon]
+
+  # ---------------------------------------------------------------------------
+  Component:
+    base: Component
+    # Components wired through ports and interfaces. The wiring is the whole
+    # content, so this is a graph by the clearest margin of any type here.
+    grammar: graph
+    title: frame-header
+    sizing:
+      # 115x65: 18 of n=50, 36%, and its MODE AND MEDIAN ARE IDENTICAL. That
+      # makes it the best-supported size in this file.
+      default: {w: 115, h: 65}
+      # 15x15 in 16 of n=16. Unanimous. A port is a small square on a border.
+      Port: {w: 15, h: 15}
+      # 40x13, 9 of n=11, 82%.
+      ProvidedInterface: {w: 40, h: 13}
+      # RequiredInterface measures the same 40x13 at 8 of n=9, 89% - refused by
+      # rule 1 on n alone. It will match ProvidedInterface when there are ten.
+    spacing:
+      # BOTH FIGURES HERE DEPEND ON THE ENDPOINT SET, and one of the two verdicts
+      # FLIPS on it, so the set is stated: a gap is measured between two elements
+      # whose concepts are Component, Package, Class or Object - equivalently,
+      # every concept on these diagrams except the edge-mounted decorations
+      # (Port, ProvidedInterface, RequiredInterface). A port sits ON its parent's
+      # border, so the distance from it to the next element is an attachment
+      # offset and not a layout gap. Admit those as endpoints and the horizontal
+      # population becomes n=57 with a median of 54, and the vertical one n=63
+      # with a median of 23.
+      #
+      # 38, the median of n=27. The thinnest gap sample stated in this file, and
+      # one diagram supplies 48% of it - just inside rule 2's half, so it is
+      # stated with the concentration disclosed rather than quietly.
+      item_gap_x: 38
+      # item_gap_y IS REJECTED by rule 2, and it is the clearest case in the
+      # file. A single generated diagram - `Application Taxonomy` - supplies 28
+      # of the 50 vertical gaps, every one of them exactly 12, while the other
+      # eight diagrams have medians from 25 to 132. The pooled median of 12
+      # describes that one diagram, so the engine's own default applies instead.
+      # The two axes are independent measurements and are judged independently:
+      # one being rejected is not a reason to drop the other.
+      #
+      # THIS REJECTION IS THE ONE THAT DEPENDS ON THE ENDPOINT SET. 28 of 50 is
+      # 56% and concentrated; admitting ports and interfaces as endpoints adds 13
+      # attachment offsets, dilutes the same 28 gaps to 44% of 63, and the same
+      # population then reads as statable at a median of 23. The dilution is an
+      # artifact of measuring offsets as gaps, so the rejection stands - but a
+      # reader who re-measures with different endpoints will get the other
+      # answer, which is why the set is written above. The other two rejected
+      # gaps in this file (Object and Timing, both vertical) are concentrated at
+      # 57% and 65% under EVERY endpoint set and do not turn on this choice.
+    routing:
+      default: Direct
+      notes: Conventional, not measured - see `notes`.
+    channels:
+      fill: ~
+      claimed:
+        position: >
+          Spoken for twice over: EA's layout places the components, and a port
+          or an interface is positioned ON its parent's border, which is
+          containment rather than layout.
+        size: Node kind - a port is 15x15 and an interface lollipop 40x13.
+        line_style: Normative in UML; see the Logical diagram type.
+      free: [fill, border, border_width, line_color, font_color, opacity, icon]
+
+  # ---------------------------------------------------------------------------
+  CompositeStructure:
+    base: CompositeStructure
+    # Parts inside a classifier, wired through ports. Containment is real here,
+    # but the connectors between the parts are the content, so nested-grid's own
+    # test refuses it and this is a graph.
+    grammar: graph
+    title: frame-header
+    sizing:
+      # THE WEAKEST STATED FIGURE IN THIS FILE, and stated only because
+      # `sizing.default` is mandatory. 90x70 is the unique mode at 3 of n=11,
+      # 27%, over 8 distinct sizes, against a median of 185x103. The gap between
+      # the two is structural rather than noisy: the top-level elements of a
+      # composite structure diagram are the OUTER classifiers, which are
+      # containers sized to the parts they hold, so most are far larger than the
+      # 90x70 at which EA creates a class. Treat it as a floor, not a
+      # convention, and override it when the classifier has parts.
+      #
+      # The parts themselves would carry the real convention and cannot be
+      # measured yet: n=9 across all 13 diagrams.
+      default: {w: 90, h: 70}
+    spacing:
+      # 44, the median of n=14, one diagram supplying 29%.
+      item_gap_y: 44
+      # item_gap_x is UNSET: n=9, below the threshold.
+    routing:
+      default: Direct
+      notes: Conventional, not measured - see `notes`.
+    channels:
+      fill: ~
+      claimed:
+        position: >
+          A part is positioned INSIDE its classifier and a port on its border,
+          so position carries containment here as well as being EA's to compute.
+        size: Set by the parts a classifier holds.
+        line_style: Normative in UML; see the Logical diagram type.
+      free: [fill, border, border_width, line_color, font_color, opacity, icon]
+
+  # ---------------------------------------------------------------------------
+  Object:
+    base: Object
+    # Instances and links - a class diagram's graph with instances in it.
+    grammar: graph
+    title: frame-header
+    sizing:
+      # 98x55, 4 of n=12, 33%, 6 distinct sizes, median 122.5x55. The height is
+      # corroborated by the median and the width is not. n passes rule 1 on
+      # ELEMENTS but comes from only TWO diagrams, which is stated here because
+      # the element count alone would overstate how settled this is.
+      default: {w: 98, h: 55}
+    # NO `spacing` BLOCK. The horizontal population is n=9, below the threshold,
+    # and the vertical is 57% one diagram - rejected by rule 2. Two diagrams
+    # cannot establish a spacing convention.
+    routing:
+      default: Direct
+      notes: Conventional, not measured - see `notes`.
+    channels:
+      fill: ~
+      claimed:
+        position: Spoken for by EA's layout; see the Logical diagram type.
+        size: Set by the slots an instance shows.
+        line_style: Normative in UML; see the Logical diagram type.
+      free: [fill, border, border_width, line_color, font_color, opacity, icon]
+
+  # ---------------------------------------------------------------------------
+  Timing:
+    base: Timing
+    # THE DIAGRAM TYPE DICTATES THE ARRANGEMENT. The horizontal axis is time and
+    # the vertical position is which timeline and which state, so writing
+    # coordinates here would restate the measurement wrongly. Not producible,
+    # and recorded rather than omitted so the design work is visible as data.
+    # See `notes` for why this is NOT `computed-geometry`.
+    grammar: ea-semantic
+    # 0 of 12 plain Timing diagrams carry a Text element - the cleanest result
+    # of any UML type here.
+    title: frame-header
+    sizing:
+      # TimeLine 615x75: 13 of n=32, 41%, over 6 distinct sizes, median 615x90.
+      # The WIDTH is the strong half - mode and median agree at 615, because a
+      # timeline spans the canvas to carry the time axis. The height varies with
+      # how many states the waveform steps through. TimeLine is the only concept
+      # measured on these diagrams, so `default` IS the timeline size and a
+      # per-concept entry would only restate it.
+      #
+      # Sizes are recorded even though nothing here places a timing diagram:
+      # they describe the notation, and a later design will need them.
+      default: {w: 615, h: 75}
+    # NO `spacing` BLOCK, and both halves of that are measurements.
+    # item_gap_x: n=0. Not one pair of timelines is a horizontal neighbor,
+    # because every timeline spans the full canvas width against a shared time
+    # axis - a horizontal item gap is not a quantity this diagram type has.
+    # item_gap_y: REJECTED by rule 2. The median of 73 over n=17 looks clean and
+    # 11 of those 17 gaps come from a single diagram, all at 73, so it measures
+    # that diagram's stacking and not the notation's.
+    routing:
+      # Conventional, not measured, and thinner than anywhere else: n=2
+      # connectors across all 12 diagrams, both `Mode=1`, which would be too few
+      # even if the integer could be mapped to a name.
+      default: Direct
+      notes: >
+        Messages between timelines carry their meaning in where they touch the
+        time axis, not in how they route.
+    channels:
+      fill: ~
+      claimed:
+        position: >
+          Entirely, and more completely than on any other UML diagram: the
+          horizontal axis IS time and the vertical position says which timeline
+          and which state. This is the claim that makes the type ea-semantic.
+        size: >
+          Width is duration. A timeline drawn wider covers a longer span, so
+          resizing one restates the measurement.
+        line_style: Normative in UML; see the Logical diagram type.
+      free: [fill, border, border_width, line_color, font_color, opacity, icon]
+
+  # ---------------------------------------------------------------------------
+  # EA'S OWN BASE CANVASES. Neither of the next two is a UML diagram type, and
+  # both are bound because they are what MDG diagram types are drawn ON: every
+  # BPMN diagram type declares `base: Analysis`, and a SysML requirement diagram
+  # declares `base: Custom`. Leaving them out left those technologies with no
+  # substrate, which means every slot they do not state reaching an engine
+  # default - the failure this file exists to prevent.
+  #
+  # A DIAGRAM COUNTS AS PLAIN HERE ON THE SAME TERMS AS EVERY TYPE ABOVE: it
+  # claims no technology and at least half its non-furniture elements carry no
+  # stereotype. That filter is what separates the bare canvas from the tagged
+  # diagrams drawn on it, and on `Custom` it is severe - the model holds 143
+  # untagged `Custom` diagrams and 25 of them survive it. The other 118 are
+  # extended-profile diagrams whose elements are stereotyped, and their sizes
+  # belong to whichever technology stereotyped them, not here.
+  #
+  # BOTH POPULATIONS ARE THINNER THAN `Logical`'s and every figure says so.
+  # `Custom` is the stronger of the two: 25 diagrams, 97 elements, gaps spread
+  # across 17 and 14 diagrams, and a default corroborated by a second population
+  # elsewhere in this file. `Analysis` rests on FOUR diagrams and 43 elements, and
+  # it is bound rather than declined for three reasons worth being able to check:
+  # its figures clear the same two rules every figure above does; it is no thinner
+  # than the `Object` diagram type, whose default rests on n=12 across two
+  # diagrams and which ships; and declining it would leave the base that 94 tagged
+  # diagrams sit on with no entry at all.
+  #
+  # WHAT EACH ONE ACTUALLY SUPPLIES TODAY, so nobody overstates it. `Custom` gives
+  # a SysML requirement diagram the vertical gap it deliberately does not state.
+  # `Analysis` gives BPMN NOTHING: all three BPMN diagram types state their own
+  # default, their own event and gateway sizes and both item gaps, so every slot
+  # this entry could fill is already filled. Its value is in resolution - a plain
+  # `Analysis` diagram now resolves here instead of being ambiguous across BPMN's
+  # three types - and in being the substrate for the next technology drawn on it.
+  # ---------------------------------------------------------------------------
+  Analysis:
+    base: Analysis
+    # A graph. 4 plain diagrams, 43 non-furniture elements, and ZERO of the 43 is
+    # nested inside another - three of the four are process models drawn as
+    # activities and objects joined by flows, so the arrows are the content and no
+    # composed grammar applies.
+    grammar: graph
+    # 1 of 4 carries a Text element, which is not evidence of a title either way;
+    # see `notes`.
+    title: frame-header
+    sizing:
+      # Object 100x58: the unique mode, 4 of n=21, 19%, over 14 distinct sizes,
+      # median 111x48. WEAK, and stated only because `sizing.default` is
+      # mandatory. `Object` is the one concept on these diagrams that reaches the
+      # ten-observation threshold at all, and its median corroborates its mode on
+      # neither axis, so this is the best single answer rather than a convention.
+      # Treat it as a floor and override it through `spec()`.
+      default: {w: 100, h: 58}
+      # Actor is DELIBERATELY UNSET and it is the omission worth knowing about:
+      # 45x90 in 7 of n=9, 78% - the same 45x90 the Logical and Use Case diagram
+      # types measure independently - refused by rule 1 on n alone, one
+      # observation short of the threshold. It falls back to `default`, which is
+      # the wrong shape for a stick figure. State it the day there are ten.
+    spacing:
+      # 77, the median of n=27. Three diagrams supply every measured pair and the
+      # densest supplies 44% of them - inside rule 2's half, and disclosed because
+      # it is close to it.
+      item_gap_x: 77
+      # 62, the median of n=33, the densest diagram supplying 45%.
+      item_gap_y: 62
+    routing:
+      # Conventional, and here the evidence is AGAINST any single convention
+      # rather than merely absent: 40 connectors across the four diagrams split
+      # Mode=2 on 16, Mode=3 on 14 and Mode=1 on 10, with no majority. That makes
+      # this the least settled routing in the file, Deployment included. `Direct`
+      # is stated because `routing.default` is mandatory; it is this file's
+      # convention and not a measurement, and the integer cannot be mapped to a
+      # route name here anyway - see `notes`.
+      default: Direct
+    channels:
+      fill: ~
+      claimed:
+        position: Spoken for by EA's layout; see the Logical diagram type.
+        size: >
+          Content. An object on one of these diagrams is sized by the text it
+          carries - 14 distinct sizes across 21 objects - so using size to encode
+          something else fights the content.
+        line_style: Normative in UML; see the Logical diagram type.
+      free: [fill, border, border_width, line_color, font_color, opacity, icon]
+
+  # ---------------------------------------------------------------------------
+  Custom:
+    base: Custom
+    # A graph, and the measurement is unusually clear about it: 1 of 97
+    # non-furniture elements across 25 diagrams is nested inside another, so
+    # containment is not the structure and nested-grid would be wrong. What these
+    # canvases hold is a handful of elements joined by dependencies.
+    grammar: graph
+    # 19 of 25 carry a Text element. Not treated as evidence of a title - a Text
+    # element is a caption, a legend or an annotation; see `notes`.
+    title: frame-header
+    sizing:
+      # Package 130x80: the unique mode, 3 of n=22, 14%, over 20 distinct sizes,
+      # median 177.5x96. Weak on its own share, and stated for two reasons. It is
+      # the only concept here that both reaches the threshold and has a unique
+      # mode - Class (n=24), Artifact (n=12) and UseCase (n=11) each have a TIE
+      # and are refused by rule 1. And the same 130x80 is measured independently
+      # as the modal package size on the Package diagram type, 10 of n=82. Two
+      # thin populations agreeing is why it is stated rather than guessed at.
+      default: {w: 130, h: 80}
+      # NO per-concept sizes are stated. Beyond the three ties above, everything
+      # measured is below the threshold: Requirement, Actor, Enumeration and
+      # DataType at n=4, Interface and InformationItem at n=3, the rest at n=1.
+      # A Custom canvas holds whatever an extended profile puts on it, which is
+      # why its concepts do not converge on a size.
+    spacing:
+      # 55, the median of n=44, no diagram supplying more than 23% of the
+      # population - 17 of the 25 diagrams contribute, which is what makes these
+      # two the best-distributed figures of the pair.
+      item_gap_x: 55
+      # 56, the median of n=33, no diagram above 21%, across 14 diagrams.
+      item_gap_y: 56
+    routing:
+      # Conventional, not measured - see `notes`. The evidence that ONE default is
+      # right is as strong here as on Logical: Mode=3 on 40 of 43 connectors. What
+      # is missing is the mapping from that integer to a route name, so the name
+      # below is this file's convention and the consistency is the measurement.
+      default: Direct
+    channels:
+      fill: ~
+      claimed:
+        position: Spoken for by EA's layout; see the Logical diagram type.
+        size: >
+          Content, as everywhere else in this file: 20 distinct sizes across 22
+          packages, because a box on an MDG canvas is sized by what it holds.
+        line_style: Normative in UML; see the Logical diagram type.
+      free: [fill, border, border_width, line_color, font_color, opacity, icon]
+
+# Identical in shape to the other bindings: presentation is a view concern,
+# orthogonal to notation. What differs is what UML has to suppress, and
+# compartments matter more here than anywhere else - attributes and operations
+# are the detail that makes a class diagram unreadable to a non-modeler.
+presentation_profiles:
+
+  detail:
+    description: Everything. The working view.
+    connector_labels: true
+    connector_stereotypes: true
+    element_stereotypes: true
+    compartments: all
+    notes: true
+    collapse_parallel: false
+
+  review:
+    description: >
+      For a design walkthrough. Keeps connector labels, which on a UML diagram
+      carry the multiplicities and role names - the part of an association that
+      is actually under review.
+    connector_labels: true
+    connector_stereotypes: false
+    element_stereotypes: false
+    compartments: [name]
+    notes: true
+    collapse_parallel: false
+
+  executive:
+    description: >
+      For an audience following structure rather than detail. Note that
+      `compartments: none` reduces a class to its name but does not remove the
+      compartment - EA offers no verified way to do that - so say "names only"
+      rather than implying the classes have no members.
+    connector_labels: false
+    connector_stereotypes: false
+    element_stereotypes: false
+    compartments: none
+    notes: false
+    collapse_parallel: true
+    direction_only: true

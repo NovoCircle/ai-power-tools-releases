@@ -1,0 +1,243 @@
+# BPMN 2.0 — diagram conventions
+#
+# Chosen as the second pilot because it is maximally unlike ArchiMate: a
+# lanes-and-flow notation rather than a layered typed-element one, with no
+# stereotype prefix, a frame-header title convention rather than a drawn one,
+# and shape rather than layer carrying the element's kind. If the schema
+# survives both, it will survive the rest.
+#
+# Every difference between this file and archimate3.yaml is expressed in data.
+# There is no BPMN branch anywhere in the code.
+#
+# Technology id and diagram type names come from the MDG technology EA had
+# loaded (EA 17.1 build 1716, `MDGTechnologies/BPMN 2.0 Technology.xml`).
+#
+#   THE ID IS `BPMN2.0`, NOT `BPMN2`, and the diagram type is
+#   `Business Process` — WITH A SPACE.
+#
+# Both would have been guessed wrong, and a binding keyed on a guessed id
+# resolves to nothing without complaining, which is this schema's worst failure
+# mode. Sizes and spacing were measured from the 32 BPMN Business Process
+# diagrams in EAExample.qea — 212 activities, 315 measured neighbor gaps.
+
+technology: BPMN2.0
+display_name: BPMN 2.0
+
+# UML IS UNDERNEATH THIS NOTATION TOO, on a different base: all three diagram
+# types below declare `base: Analysis`, EA's own analysis diagram, so the UML
+# binding's `Analysis` entry is the substrate. A gap or a size this file does not
+# state resolves to what was measured on plain Analysis diagrams rather than to
+# an engine default.
+#
+# What this file states still wins. `lanes` is BPMN's grammar and stays BPMN's
+# over the substrate's `graph`; the 30x30 event and the 42x42 gateway are BPMN's;
+# and `stereotype_prefix: ""` below is BPMN's own measured statement, which
+# happens to agree with the substrate and is restated anyway - a prefix that
+# agreed by inheritance would look like a measurement and be none.
+extends: UML
+
+# No prefix. EA's BPMN2.0 MDG stores bare concept names in
+# `t_object.Stereotype` — `Activity`, `Pool`, `StartEvent` — confirmed against
+# 270 activities and 31 pools in EAExample.qea. Stated explicitly rather than
+# omitted, because "no prefix" is a measured fact about this technology and not
+# an absence of information.
+stereotype_prefix: ""
+
+notes: >
+  EA's BPMN2.0 MDG declares five diagram types, all based on Analysis. Two are
+  deliberately NOT bound here: `Conversation`, whose participants-and-hexagons
+  layout is a graph rather than one the engine composes, and `BPEL`, which is
+  an execution-export type rather than a drawn notation. A caller resolving
+  either gets no binding and should fall back to a plain graph layout — which
+  is the honest answer, and better than composing a conversation into lanes.
+
+diagram_types:
+
+  Business Process:
+    base: Analysis
+    grammar: lanes
+    # 10 of 11 corpus BPMN diagrams carry no drawn title: EA's diagram frame
+    # header supplies it. Drawing one as well gives the reader two titles.
+    title: frame-header
+    sizing:
+      # Activity: 110x60, the modal size of 212 measured activities — a WEAK
+      # mode. It covers 54 of 212 (25%), spread over 100 distinct sizes, so
+      # three activities in four are some other size. It is kept because it is
+      # still the best single answer: the median width and height are also
+      # 110 and 60. Compare the gateway below, 42x42 in 61 of 61, which is a
+      # convention and not a plurality.
+      default: {w: 110, h: 60}
+      # Events are circles and gateways are diamonds. These sizes are not
+      # preferences — a 110x60 "circle" is not a BPMN event. All three event
+      # sizes were unanimous or near-unanimous across 173 measured events, and
+      # the gateway was unanimous at 42x42 across 61.
+      StartEvent: {w: 30, h: 30}
+      EndEvent: {w: 30, h: 30}
+      IntermediateEvent: {w: 30, h: 30}
+      Gateway: {w: 42, h: 42}
+      # DataObject: 35x50, the modal size in 28 of 34 measured data objects.
+      DataObject: {w: 35, h: 50}
+      # DataStore was 50x50 in 4 of 4 (low n).
+      DataStore: {w: 50, h: 50}
+      # TextAnnotation has NO stated size. All ten measured annotations are
+      # different sizes (n=10, ten distinct values), so there is no mode; an
+      # annotation is sized by the text inside it. An earlier revision shipped
+      # 100x55 as "the mode", but that was one of ten singletons picked by tie
+      # order, not a measurement. The median (114x75.5) is a fact about those
+      # ten texts and is not a convention either. Annotations fall back to the
+      # default until a real convention is measured.
+    spacing:
+      # BPMN flows are tighter than ArchiMate layouts in both axes. Measured
+      # across 315 horizontal and 175 vertical nearest-neighbor gaps: median
+      # 41 and 63, modal cluster 30-46 in both.
+      #
+      # The horizontal value is that median rounded to the nearest 5. The
+      # vertical value is a round number inside the modal cluster rather than
+      # the vertical median of 63, and the distance between the two statistics
+      # is the reason: in a lanes grammar the vertical distance between items
+      # is set by lane thickness and lane padding, so the vertical population
+      # mixes within-lane neighbors with pairs that have a lane boundary
+      # between them, and its median measures the lanes. The modal cluster is
+      # the within-lane spacing, which is what an item gap means.
+      item_gap_flow: 40       # along the flow, which for lanes is the long axis
+      # RECORDED, NOT CONSUMED. `compose_lanes` reads item_gap_flow,
+      # flow_pitch, lane_pad, lane_gap, min_lane_thickness, label_width,
+      # label_height and the origins; it never reads item_gap_x or item_gap_y.
+      # Both are kept because they are real measurements a nested-grid or
+      # layered-bands rendering of a BPMN diagram would want, and the loader
+      # accepts any spec key regardless of grammar. See
+      # references/bindings.md §4.4.
+      item_gap_x: 40
+      item_gap_y: 40
+      lane_gap: 0             # pools and lanes abut; a gutter between them is wrong
+    routing:
+      default: OrthogonalSquare
+      notes: >
+        Sequence flows route orthogonally in 9 of 11 corpus diagrams. There is
+        no trunk convention: BPMN gateways make the branching explicit as a
+        node, so fanning several flows into one line would hide the gateway's
+        job. `trunk_for` is deliberately absent rather than empty.
+    channels:
+      fill: >
+        Node kind — events, activities, gateways and data each read
+        differently. Conventional rather than normative: the BPMN
+        specification fixes the SHAPE, not the color, and 6 of 11 corpus
+        diagrams use fill for kind while the rest leave everything white.
+      claimed:
+        position: >
+          Two things at once, which is what makes a BPMN diagram readable:
+          which lane an element is in says WHO, and how far along the flow it
+          sits says WHEN. Neither is available for anything else.
+        size: >
+          Node kind. An event is 30x30 because it is an event. Size is not a
+          free channel in this notation at all.
+      free: [border, border_width, line_color, font_color, opacity, icon]
+
+  Collaboration:
+    base: Analysis
+    grammar: lanes
+    title: frame-header
+    sizing:
+      default: {w: 110, h: 60}
+      StartEvent: {w: 30, h: 30}
+      EndEvent: {w: 30, h: 30}
+      IntermediateEvent: {w: 30, h: 30}
+      Gateway: {w: 42, h: 42}
+      DataObject: {w: 35, h: 50}
+    spacing:
+      item_gap_flow: 40
+      # Recorded, not consumed by the lanes grammar; see the Business Process
+      # diagram type.
+      item_gap_x: 40
+      item_gap_y: 40
+      lane_gap: 0
+    routing:
+      default: OrthogonalSquare
+      notes: >
+        Message flows between pools are dashed by convention. That is a line
+        style rather than a route, and it is set per connector; the route
+        itself is orthogonal like everything else.
+    channels:
+      fill: Node kind. Conventional; see the Business Process diagram type.
+      claimed:
+        position: Pool says which participant; flow position says when.
+        size: Node kind.
+      free: [border, border_width, line_color, font_color, opacity, icon]
+
+  Choreography:
+    base: Analysis
+    grammar: lanes
+    title: frame-header
+    sizing:
+      # A choreography task is taller than an activity: it carries a band per
+      # participant inside the box. 130x100, measured, n=2 — the weakest number
+      # in this file, and flagged as such rather than presented as settled.
+      default: {w: 130, h: 100}
+      StartEvent: {w: 30, h: 30}
+      EndEvent: {w: 30, h: 30}
+      IntermediateEvent: {w: 30, h: 30}
+      Gateway: {w: 42, h: 42}
+    spacing:
+      item_gap_flow: 40
+      # Recorded, not consumed by the lanes grammar; see the Business Process
+      # diagram type.
+      item_gap_x: 40
+      item_gap_y: 40
+      lane_gap: 0
+    routing:
+      default: OrthogonalSquare
+    channels:
+      fill: >
+        Initiator. In a choreography the shaded participant band says who
+        starts the exchange, which is the whole point of the notation, so fill
+        is emphatically claimed here.
+      claimed:
+        position: Order of the exchange.
+        size: Node kind.
+      free: [border, border_width, line_color, font_color, opacity, icon]
+
+# BPMN publishes no viewpoint catalog the way ArchiMate does — a business
+# process diagram is chosen because you are modeling a process, not selected
+# from a list of named views. The block is therefore ABSENT rather than
+# populated with invented entries: an empty catalog is a fact about the
+# notation, and inventing one would make view selection recommend views that do
+# not exist.
+
+# Identical in shape to ArchiMate's, deliberately: presentation is a view
+# concern, orthogonal to notation. The differences are in what each notation
+# has to suppress.
+presentation_profiles:
+
+  detail:
+    description: Everything. The working view.
+    connector_labels: true
+    connector_stereotypes: true
+    element_stereotypes: true
+    compartments: all
+    notes: true
+    collapse_parallel: false
+
+  review:
+    description: >
+      For a process walkthrough. Keeps the flow labels, which in BPMN carry the
+      gateway conditions and are not optional furniture.
+    connector_labels: true
+    connector_stereotypes: false
+    element_stereotypes: false
+    compartments: [name]
+    notes: true
+    collapse_parallel: false
+
+  executive:
+    description: >
+      For an audience following the shape of the process. Note that hiding
+      connector labels in BPMN loses the gateway conditions, so an executive
+      BPMN view is a summary of the happy path — say so rather than implying
+      the process has no branches.
+    connector_labels: false
+    connector_stereotypes: false
+    element_stereotypes: false
+    compartments: none
+    notes: false
+    collapse_parallel: true
+    direction_only: true

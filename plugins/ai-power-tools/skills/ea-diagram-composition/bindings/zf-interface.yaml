@@ -1,0 +1,320 @@
+# Zachman Framework — diagram conventions for the framework GRID
+#
+# THE ID IS `ZF Interface` AND THE DIAGRAM TYPE IS `ZF_Interface`, resolved from
+# `tools/measure_binding.py --list` rather than guessed. Nothing about either was
+# predictable from the notation's name.
+#
+# THE ZACHMAN FAMILY IS SEVEN IDS, NOT ONE, AND ONE BINDING BINDS ONE ID. The
+# reference model registers one technology per row of the framework plus the grid
+# that indexes them:
+#
+#   ZF Interface       ZF_Interface — the 6x6 framework grid. Bound here.
+#   ZF Planner         PlannerData, PlannerFunction, PlannerLocation,
+#                      PlannerMotivation, PlannerPeople, PlannerTime
+#   ZF Owner           OwnerData, OwnerFunction, OwnerLocation, OwnerTime,
+#                      StrategyMap
+#   ZF Designer        DesignerData, DesignerFunction, DesignerLocation,
+#                      DesignerMotivation, DesignerPeople, DesignerTime
+#   ZF Builder         BuilderData, BuilderFunction, BuilderLocation,
+#                      BuilderMotivation, BuilderPeople
+#   ZF Subcontractor   SC_Location
+#   ZF                 BuilderTime, SC_Data, SC_Motivation, SC_People, SC_Time
+#
+# The six perspective ids are the framework's own rows, and their diagram names
+# are the grid's own cell names — `PlannerLocation`'s diagram is called Business
+# Location and so is the cell in the grid's Planner row, Where column. So the
+# family is not eight peer notations; it is one index and the diagrams it points
+# at. None of the other six is bound, and `notes` says why for each.
+#
+# THE GRID AND A CELL ARE DIFFERENT KINDS OF DIAGRAM, which is the trap this file
+# exists to keep out of. `ZF_Interface` is a table: 36 navigation cells in six rows
+# and six columns, no connectors, no containment, and it is `matrix`. A CELL's diagram is an
+# ordinary UML diagram drawn on whatever base suits it — `DesignerTime` is a
+# Statechart, `OwnerFunction` an Analysis diagram, `BuilderLocation` a Deployment
+# diagram, `ZF::BuilderTime` a Sequence diagram — and those are graphs and
+# behaviors, not tables. Reading the grid's grammar onto a cell, or the reverse,
+# gets both wrong.
+
+technology: ZF Interface
+display_name: Zachman Framework (framework grid)
+
+# UML IS UNDERNEATH THIS NOTATION, AND THE BASE VALUE CARRIES A QUIRK WORTH
+# KNOWING. `t_diagram.Diagram_Type` for the one ZF_Interface diagram is literally
+# `logical`, in lower case, and it is the ONLY lower-case Diagram_Type in the
+# 1,129 diagrams of the reference model — `Logical` appears 391 times capitalized
+# and `logical` exactly once, here.
+#
+# `base: Logical` is declared below in the capitalized form, deliberately, because
+# that is the entry the UML binding holds and matching it is what makes the
+# substrate resolve. The cost is visible and small: the WEAK `base-type` resolution
+# path compares `Diagram_Type` to a declared base verbatim, so a future
+# ZF_Interface diagram stored with the lower-case value and carrying no MDG tag
+# would not match. It costs nothing for the diagram measured here, which states
+# `MDGDgm=ZF Interface::ZF_Interface` and resolves on the exact `qualified` path
+# without consulting `base` at all. Do not "fix" this by writing `logical`: that
+# would trade a working inheritance for a resolution path the binding does not
+# need.
+extends: UML
+
+# MEASURED: none. The stereotype is stored bare as `ZFCell` on 36 of 36 elements,
+# so `""` is a measured fact rather than an omission, and `stereotype_for("ZFCell")`
+# returning `ZFCell` unchanged is the correct identity here.
+stereotype_prefix: ""
+
+notes: >
+  WHY `matrix`, AND WHY NEITHER OTHER GRID FITS. This is the classification in this
+  file that a reader should be able to check, so the measurement is written out. The 36 cells sit at six distinct left edges — 129, 258, 391, 524, 649, 781 —
+  with exactly six cells at each, and at six distinct top edges with exactly six
+  cells at each. Every cell in a column shares that column's width (120, 126, 124,
+  118, 126, 118 respectively) and every cell in a row shares that row's height
+  (103, 102, 104, 94, 100, 104). A cell's size is therefore its column's width by
+  its row's height, which is why 36 cells come in 21 distinct sizes.
+
+
+  That single measurement refuses the two grids that are NOT `matrix`.
+  `layered-bands` requires a uniform item size within a band, and here six
+  different widths sit inside every band and line up into columns down all six of
+  them: the horizontal axis is not membership, it is the framework's interrogative
+  — What, How, Where, Who, When, Why — and a band layout would both flatten that
+  and be unable to reproduce the geometry. `nested-grid` is refused by its own
+  sizing rule and by the data: it sizes a container by its contents and gives each
+  column the width of its widest member, which is the opposite of a lattice a
+  reader counts along, and 0 of the 36 elements is nested inside another anyway, so
+  composing the six rows as containers would draw six boxes the notation does not
+  have. What is left is a two-axis table addressed by row and column, which is
+  exactly what `matrix` is for.
+
+
+  AND IT IS NOT `ea-semantic`, THOUGH THAT WAS THIS FILE'S FIRST ANSWER. The
+  argument for it is real and worth recording: `t_diagram.StyleEx` for this diagram
+  carries `MatrixActive=1`, with `MatrixLineWidth`, `MatrixLineClr` and
+  `MatrixLocked` beside it — EA's own diagram-matrix overlay is switched on, and it
+  is what draws the grid rules and the row and column header bands, NONE of which
+  exists as an element. `MatrixActive=1` appears on this diagram and on no other of
+  the 1,129 in the reference model. But EA drawing the CHROME is not EA placing the
+  ELEMENTS: all 36 cell rectangles are stored per element in `t_diagramobjects`, a
+  composer can write them, and one now does. `ea-semantic` means coordinates are
+  the wrong output rather than an output nobody has written, and that reading no
+  longer holds. What EA still supplies is the headers, which is a difference a
+  caller should expect — see below.
+
+
+  IT IS NOT `computed-geometry` EITHER, AND THE REASON IS A LANDMINE RATHER THAN
+  TASTE. Cell arithmetic on a 6x6 matrix reads like something nobody has written,
+  which is what would once have parked it there. `computed-geometry` is the treemap
+  alone and unbuilt, so a diagram type parked under it would start reporting itself
+  composable the day a treemap composer shipped — the same argument that moved the
+  UML timing diagram out of it.
+
+
+  WHERE A COMPOSED MATRIX WILL DIFFER FROM THE REFERENCE DIAGRAM, stated because it
+  is a measured disagreement rather than a rounding error. `matrix` draws EVERY CELL
+  AT ONE SIZE, by design: the address is the information, so a wandering column
+  boundary would take away the thing a reader counts along. The Sparx-authored
+  diagram measured here does not do that — it holds one width per column and one
+  height per row, a regular lattice with six widths and six heights rather than one
+  cell size. Both are countable and the composed one is the more regular; what a
+  caller must not expect is a byte-for-byte reproduction of the reference geometry.
+  The headers are the second difference: a composer emits row and column header
+  elements, where this diagram has none and lets EA's matrix overlay paint them.
+  Neither difference is a defect in the grammar or in the measurement, and a reader
+  comparing the two should know which is which.
+
+
+  NO HEADER GEOMETRY IS MEASURABLE, so a header thickness is not stated and could
+  not be: there is no header element in the model to measure, because the bands are
+  EA's chrome. The matrix grammar's own header keys are also unreachable from this
+  schema — `spacing` validates against the engine's spec keys and the matrix
+  grammar's are not among them — so a caller composing one of these passes them
+  itself. That is a finding about the schema rather than about Zachman.
+
+
+  A DISTANT COUSIN, MEASURED DIFFERENTLY. The UAF UPDM Framework diagram is the
+  other framework index in the reference model and it IS bound `layered-bands`,
+  because its 47 tiles are 130x80 in 47 of 47 — one uniform size, which is what a
+  band of tiles looks like. The two diagrams look alike and measure differently,
+  and the measurement is what decides. Do not reconcile them by inspection.
+
+
+  NOT BOUND — THE SIX PERSPECTIVE IDS, EVERY ONE BELOW THRESHOLD (b). Of the 28
+  diagram types under `ZF Planner`, `ZF Owner`, `ZF Designer`, `ZF Builder`,
+  `ZF Subcontractor` and `ZF`, exactly one produces a `sizing.default` the rules
+  admit, and it is refused by judgment — see the next paragraph. Every other one
+  has nothing to key, and `sizing.default` is mandatory. Measured per technology:
+  `ZF Planner` (10 diagrams, 31 stereotyped elements) has no unique modal size in
+  any of its six diagram types, and its pooled default of 139x53 is
+  `BusinessFunction`'s own size supplied entirely by one concept, which the tool
+  itself flags as a concept's size rather than a convention across concepts.
+  `ZF Designer` (8 diagrams, 7 elements), `ZF Builder` (5, 4) and `ZF` (5 tagged
+  diagrams plus 9 the tool attributes to it by fallback, 28 stereotyped elements
+  across all 14) report no unique modal size either. `ZF Subcontractor` is one
+  diagram with one stereotyped element. `ZF Owner::OwnerLocation` reaches n=10 and
+  still has no unique mode — 10 elements in 10 distinct sizes. These need data,
+  not design.
+
+
+  THE ONE THAT CLEARS THE RULES AND IS STILL REFUSED — `ZF Owner::OwnerTime`. It
+  measures a default of 15x15 at n=10, a 50% mode over 3 distinct sizes, and the
+  tool prints it without commenting it out. It is the size of five `EventNode`
+  pseudonodes. The median of the same pool is 74x37 and the concept the diagram is
+  made of is `BusinessEvent` at 133x59 in 4 of 4, so the marker has won a pool it
+  should have been excluded from: the tool's fixed-shape guard — the one that stops
+  173 BPMN events outvoting 212 activities — needs ten instances of the concept
+  before it fires, and there are five. Keying this diagram type would publish a
+  15x15 box as the convention for a master-schedule diagram. It is refused on the
+  same judgment the base notation makes when it takes an activity's 106x49 over an
+  action's 12% mode, and the judgment is written down here so nobody reverses it by
+  re-running the tool and reading the output literally.
+
+
+  THE THREE PERSPECTIVE DIAGRAM TYPES THE CORPUS ASKS FOR, AND EXACTLY WHAT
+  BLOCKS EACH. All three are `ZF Planner`, and the block is `sizing.default` in
+  every case — the schema requires it, validates it before any inheritance
+  happens, and there is no figure to put in it:
+
+
+  * `PlannerData` — n=5 stereotyped elements across its four diagrams, mode
+    174x59 in 3 of 5, refused on n. Its own list-of-things diagram contributes
+    NOTHING to an MDG measurement: all 8 objects on it are unstereotyped Packages
+    and notes on a `Custom` base, so measured as data it is a plain UML Custom
+    canvas and the base notation's entry already governs it.
+  * `PlannerLocation` — n=7, NO unique modal size, 7 elements in 7 distinct
+    sizes, median 178x88. Refused twice.
+  * `PlannerPeople` — n=6, NO unique modal size, 6 elements in 6 distinct sizes,
+    median 117.5x90. Refused twice. Its base is `Use Case`, not `Custom`.
+
+
+  Each would be `graph` and each would want a `base` of its own, which is the
+  cheap half. State one the day any of them has ten elements; until then the
+  honest coverage claim for those rows is UML's, through the `Custom` and
+  `Use Case` entries they are actually drawn on.
+
+
+  WHAT THEY WOULD BE. Every one of the 28 is an ordinary diagram and would be
+  `graph` or a behavior once there is data: they sit on `Custom`, `Logical`,
+  `Deployment`, `Analysis`, `Activity`, `Use Case`, `Component`, `Statechart`,
+  `Sequence` and `Timing` bases, with almost no containment — the exceptions are
+  `ZF Designer::DesignerLocation` (8 of 10 objects contained) and
+  `ZF Owner::StrategyMap` (6 of 11), which are nested-grid candidates if anyone
+  measures them. `ZF::BuilderTime` is a Sequence diagram and `ZF::SC_Time` a Timing
+  diagram, and both of those are ea-semantic in the base notation for reasons that
+  carry over: lifeline and message order in the first, a waveform against a time
+  axis in the second. Three of the four unbound Zachman corpus rows are
+  `ZF Planner` diagram types — Business Location, Data - List of Things and
+  Organization chart — and all three are held back by the same want of a
+  supportable size, not by a grammar question.
+
+
+  NO VIEWPOINT CATALOG, AND THIS ONE IS A SCHEMA LIMIT RATHER THAN A WANT OF DATA.
+  The Zachman framework IS a viewpoint catalog: its 36 cells are 36 named views,
+  and they are right there on the bound diagram. They cannot be recorded here,
+  because a `Viewpoint` must name a `diagram_type` this binding declares, and the
+  diagram type behind each cell belongs to one of the six OTHER technology ids
+  above — `PlannerLocation` is a `ZF Planner` diagram type, not a `ZF Interface`
+  one. Pointing all 36 viewpoints at `ZF_Interface` would be false, and a binding
+  binds one id. Recording a catalog that spans technologies needs a schema that can
+  express one; that is a finding.
+
+diagram_types:
+
+  # ---------------------------------------------------------------------------
+  # The framework grid itself: 6 perspectives down, 6 interrogatives across, 36
+  # cells, no connectors, no containment. Each cell is an EA Package stereotyped
+  # `ZFCell` carrying an embedded image and a hyperlink into one of the six
+  # perspective technologies.
+  # ---------------------------------------------------------------------------
+  ZF_Interface:
+    # 1 of 1 diagrams tagged `ZF Interface::ZF_Interface`. `t_diagram.Diagram_Type`
+    # holds `logical` in lower case for it; the capitalized form is declared here
+    # on purpose — see the comment above `extends`.
+    base: Logical
+    # A two-axis lattice addressed by row and column: six perspectives down, six
+    # interrogatives across. See `notes` for the measurement this rests on, for why
+    # `layered-bands` and `nested-grid` are both refused by it, and for the two
+    # places a composed matrix will differ from the reference diagram.
+    grammar: matrix
+    # 0 of the 36 objects on the one model diagram is a Text element — all 36 are
+    # stereotyped cells — so nothing draws a title, and the corpus row for this
+    # diagram records no title of any kind. `frame-header` is the reasoned value
+    # rather than a measured one: EA's diagram frame renders the diagram's name,
+    # and of the two conventions available it is the one that cannot produce a
+    # diagram with two titles.
+    title: frame-header
+    sizing:
+      # THE WEAKEST KIND OF FIGURE IN THIS LIBRARY, AND STATED ONLY BECAUSE
+      # `sizing.default` IS MANDATORY. 126x104 is the unique mode at 4 of n=36
+      # (11%) over 21 distinct sizes, against a median of 122x102.5. The spread is
+      # structural rather than noisy and the structure is the point: a cell's width
+      # is its COLUMN's and its height is its ROW's, so the mode is just the
+      # intersection of a width two of the six columns share with a height two of
+      # the six rows share. There is no single cell size to state, and reading this
+      # as one would be the mistake.
+      #
+      # THIS FIGURE IS LOAD-BEARING UNDER `matrix`, which is a change from when
+      # this diagram type was first recorded as ea-semantic and its sizes were
+      # descriptive only. A matrix composition draws every cell at
+      # `item_width` x `item_height`, so `default` IS the cell size a caller gets.
+      # Read the paragraph above before relying on it: 126x104 is the commonest
+      # single size in a lattice that has six widths and six heights, not a size
+      # the diagram uses throughout. A caller with a house cell size should
+      # override it through `spec()`.
+      default: {w: 126, h: 104}
+      # NO per-concept entry. `ZFCell` is the only concept on the diagram, all 36
+      # of it, so a per-concept entry would restate `default` and the tool reports
+      # it as having no dominant size for the same reason `default` is weak.
+    # NO `spacing` BLOCK, and the figures were measured before being refused.
+    # Horizontal median 7 across n=30, vertical median 12 across n=30, ALL 60 pairs
+    # from the SINGLE diagram this binding rests on — one diagram supplying 100% of
+    # a population measures that diagram, not the notation. The figures say so
+    # twice over, as the UAF framework grid's 5 and 28 do: 7 units between cells is
+    # a table of abutting cells, not a gap an engine would leave between siblings.
+    #
+    # What an unstated gap falls back to is the value measured on `Logical`, the
+    # base diagram type this one is drawn on, rather than the engine's own — which
+    # is the point of `extends`, and under `matrix` those two gaps are the pitch
+    # between cells, so they are read rather than inert. 56 and 50 from a plain
+    # class diagram are wider than the 7 and 12 this grid uses; that is the price
+    # of refusing a one-diagram population, and it is the right price. A caller
+    # who wants abutting cells passes its own.
+    routing:
+      # PLACEHOLDER, NOT A MEASUREMENT. `default` is required by the schema and the
+      # measured diagram has NO connectors at all, n=0; the corpus row records no
+      # routing either. Nothing routes on a navigation grid, and the cells' links
+      # are hyperlinks rather than connectors.
+      default: Direct
+    channels:
+      fill: >
+        The cell's tone, painted by the `ZFCell` shape script. 36 of 36 elements
+        carry no fill override — `Backcolor` is -1 on every one, and the eight
+        whose `ObjectStyle` mentions `BCol` say `BCol=-1`, which is the absence of
+        an override rather than one — so EA paints all of them. The corpus row
+        records the cell tone and the diagonal gradient corner triangle as the
+        framework's own decoration. Whether a written fill would be honored was not
+        tested, which is a second reason not to offer it.
+      claimed:
+        position: >
+          Both axes, and more completely than on any other diagram type in this
+          library: a cell IS its row and its column. The row is the perspective the
+          view is drawn for — planner, owner, designer, builder, subcontractor, the
+          functioning enterprise — and the column is the interrogative it answers:
+          what, how, where, who, when, why. Moving a cell one column left changes
+          the question it answers. Measured as six columns of exactly six cells and
+          six rows of exactly six.
+        size: >
+          Column and row membership. A cell's width belongs to its column and its
+          height to its row — measured widths 120, 126, 124, 118, 126, 118 and
+          heights 103, 102, 104, 94, 100, 104 — so resizing one cell breaks the
+          alignment of the six it shares a column with or the six it shares a row
+          with.
+        icon: >
+          The cell artwork. 36 of 36 elements carry an `ImageID` in `ObjectStyle`,
+          so every cell holds an embedded image, which is what the corpus row
+          records as an image in every cell. Setting one would replace the
+          framework's own artwork.
+      # `line_color` is deliberately in neither list. The only lines on this
+      # diagram are EA's matrix rules, and their color is a DIAGRAM setting -
+      # `MatrixLineClr` in `StyleEx` - rather than an element channel, so the
+      # notation neither claims it on an element nor offers it. Free means the
+      # notation assigns the channel no meaning, not that EA was tested to honor a
+      # write to it.
+      free: [border, border_width, font_color, opacity]

@@ -1,0 +1,212 @@
+# ERD — diagram conventions for EA's entity-relationship profile
+#
+# THE ID IS `ERD_dp` AND THE DIAGRAM TYPE IS `ERD_DP`. Both were read from
+# `tools/measure_binding.py --list`, which reports `ERD_dp: ERD_DP (2)`: the
+# `MDGDgm` key in `t_diagram.StyleEx` names `ERD_dp` as the technology and
+# `ERD_DP` as the diagram type. Neither would have been guessed — the family is
+# called "ERD" everywhere in EA's own user interface, and a binding keyed on
+# `ERD` resolves to nothing without complaining. The casing differs between the
+# two halves and that is not a typo; it is what the data says.
+#
+# THIS IS NOT THE DATA-MODELING TECHNOLOGY, and the two were checked rather than
+# assumed. EA's data-model diagrams are tagged with a DIFFERENT technology id,
+# whose own diagram type is `Data Modeling`, and one binding binds one id, so
+# they cannot share a file. That family is deliberately NOT bound: its only
+# concept that reaches ten observations is the table, and a table has no
+# convention size at all — 45 of them across the model come in 43 distinct
+# sizes, and the SAME table element is drawn at three different sizes on three
+# different diagrams, because a table box is stretched around the columns it
+# lists. With no supportable `sizing.default`, which the schema requires, its one
+# in-scope diagram type cannot be bound honestly and is left out.
+#
+# THE MODEL HOLDS TWO ERD DIAGRAMS, and that is the ceiling on everything below.
+# Sizes were measured from both with the strict adjacency rule; the grammar and
+# the routing evidence come from the model and from the single ERD row of the
+# reference corpus. Every stated number carries its n. Where a figure rested on
+# fewer than ten observations, or on one diagram supplying more than half the
+# population, it was LEFT OUT — see `spacing`, where both axes are refused.
+
+technology: ERD_dp
+display_name: Entity Relationship Diagram
+
+# UML IS UNDERNEATH THIS NOTATION. The one bound diagram type declares
+# `base: Logical`, so the UML binding's `Logical` entry is the substrate, and
+# this is the binding that inheritance helps most: `spacing` is deliberately
+# absent below because both measured axes are refused, and that absence used to
+# mean the engine's 20 in each. It now means the gaps measured across 312
+# horizontal and 274 vertical pairs on plain `Logical` diagrams — still not a
+# measurement of THIS diagram type, but a measured value for the canvas it is
+# drawn on rather than a number chosen to be inoffensive.
+#
+# What this file states still wins: the 120x60 box and the `ERD_` prefix are
+# this notation's.
+extends: UML
+
+# MEASURED, and the one place this notation differs from the other MDG bindings
+# in the tree: 38 of the 39 stereotyped elements on the two diagrams carry an
+# `ERD_` prefix (97%), which is above the share the tool requires before it
+# reports a prefix at all. The 39th is an EA navigation tile.
+#
+# So EA stores `ERD_Entity` and `ERD_Attribute`, and a `sizing` key or a concept
+# name is written WITHOUT the prefix — `Entity`, `Attribute` — with
+# `stereotype_for` adding it. Stated explicitly rather than inherited: the parent
+# measures `""`, and silently taking that would make every stereotype lookup in
+# this notation miss.
+stereotype_prefix: ERD_
+
+notes: >
+  CLASSIFICATION (b). `ERD_DP` is a graph: entities joined to each other by
+  relationships, each entity carrying a fan of attributes. EA's own layout places
+  it acceptably and we tidy afterwards. The measurement is unusually clear that
+  no composed grammar applies — 0 of the 44 objects across the two diagrams is
+  nested inside another, so containment is not the structure and nested-grid
+  would be wrong.
+
+
+  `radial` WAS CONSIDERED AND REFUSED, because the corpus row for this notation
+  records the arrangement as an organic radial layout and the measurement half
+  agrees with it. Attributes really do fan around their entity: of the 30
+  attribute connectors, 21 join an entity to an attribute and the other 9 join an
+  attribute to a further attribute, and on the second diagram the two entities
+  each carry four attributes in a mirror-symmetric ring at radii of 88 to 153
+  units.
+  But `radial` composes ONE ring around ONE hub, and these diagrams have two and
+  six hubs — on the first one the fans are scattered rather than even, 1 to 3
+  attributes per entity at radii of 99 to 231 and no regular angular step. What
+  the notation has is a forest of small fans embedded in a graph of entities, and
+  composing it as a single ring would place the attributes and discard the
+  entity-to-entity relationships that are the rest of the content. A per-entity
+  radial composition is a design nobody has done; `graph` is the honest and
+  producible answer today, and EA's layout already keeps an attribute next to the
+  entity it is connected to.
+
+
+  TITLES ARE `frame-header`, AND THE CORPUS DISAGREES. Its one ERD row records a
+  drawn title. Against that: neither model diagram carries a Text, Note or
+  Boundary whose content is the diagram's name (0 of 2). Both DO carry a
+  full-canvas-width 24-point text block at the very top, and one of the two reads
+  as the notation's name in the plural — but both sit immediately above a 9-point
+  prose block explaining the notation, which makes them documentation-page
+  headings rather than diagram titles, and the UML binding declines the same
+  evidence on the same reasoning. `frame-header` also avoids the two-title
+  diagram, which is the worse of the two mistakes. Worth revisiting if a model
+  with ERD diagrams that are not tutorial pages turns up.
+
+
+  NO VIEWPOINT CATALOG. This notation publishes none — an ERD is chosen because
+  you are modeling entities and their relationships, not selected from a list of
+  named views. The `viewpoints` block is therefore absent rather than invented.
+  `presentation_profiles` are absent for a different reason: the detail, review
+  and executive scheme the parent publishes is a view concern orthogonal to
+  notation, so it is inherited rather than restated.
+
+
+  WHAT A SECOND MODEL WOULD SETTLE. Three slots are refused here for want of data
+  rather than for want of design: the entity's own size (n=8, two short of the
+  threshold), and both item gaps (one diagram supplies 73% and 78% of the two
+  populations). All three are measurements waiting on more diagrams, and each
+  says below exactly what it is waiting for.
+
+diagram_types:
+
+  ERD_DP:
+    # 2 of 2 diagrams tagged with this technology and diagram type are based on
+    # Logical.
+    base: Logical
+    # A graph — see `notes` for why `radial` was considered and refused.
+    grammar: graph
+    # 0 of 2 model diagrams draws a title; EA's diagram frame supplies it. The
+    # corpus row disagrees at n=1 — see `notes`.
+    title: frame-header
+    sizing:
+      # 120x60: the pooled mode, 22 of n=39 stereotyped elements (56%) over 5
+      # distinct sizes, and the pooled MEDIAN is 120x60 too. Dropping the one EA
+      # navigation tile from the pool leaves 22 of 38 (58%) over 4 distinct sizes
+      # and moves neither the mode nor the median.
+      #
+      # IT IS THE ATTRIBUTE'S SIZE. `ERD_Attribute` is the only concept here that
+      # reaches ten observations (n=30, mode 120x60 in 22, 73%, over 2 distinct
+      # sizes), so `default` IS the attribute box and a per-concept entry would
+      # only restate it.
+      #
+      # AND THE ELEMENT COUNT OVERSTATES HOW SETTLED IT IS, which is worth saying
+      # plainly. Each diagram is internally uniform and the two disagree: one
+      # draws all 22 of its attributes at 120x60 and all 6 of its entities at
+      # 130x60, the other all 8 attributes at 91x59 and both entities at 100x59.
+      # So n=30 is 30 elements but only TWO authored choices, and 120x60 is the
+      # larger diagram's. Both choices land in the same neighborhood — roughly 90
+      # to 130 wide by 59 to 60 high — which is why the figure is stated at all;
+      # treat it as a floor and override `item_width` through `spec()` for a long
+      # attribute name.
+      default: {w: 120, h: 60}
+      # `Entity` is DELIBERATELY UNSET, and it is the omission worth knowing
+      # about: 130x60 in 6 of n=8 (75%) over 2 distinct sizes, refused by the
+      # ten-observation threshold on n alone, two observations short. It falls
+      # back to `default`, which is 10 units narrower. The direction of the
+      # difference is consistent on both diagrams — an entity is drawn wider than
+      # its own attributes, 130 against 120 and 100 against 91 — so state it the
+      # day there are ten entities.
+      #
+      # No other concept is measurable: the only remaining key is an EA
+      # navigation tile at n=1, which is not an ERD concept.
+    # NO `spacing` BLOCK, and both halves of that are measurements rather than
+    # omissions. One diagram supplies 22 of the n=30 horizontal gaps (73%) and
+    # 21 of the n=27 vertical ones (78%), so each pooled figure describes it
+    # and not the notation — the rule refuses any gap where a single diagram
+    # supplies more than half. The pooled medians are 51.5 and 50 and are
+    # recorded here so nobody re-derives them expecting a different answer; they
+    # are inspectable, not statable. Two diagrams cannot establish a spacing
+    # convention.
+    #
+    # What an unstated gap now falls back to is the value measured on the base
+    # diagram type this one is drawn on rather than the engine's own, which is
+    # the point of `extends` above.
+    routing:
+      # Conventional, not measured, on the same terms as every other binding in
+      # this tree. What IS measured is that one default is right for this
+      # notation: 32 of the 37 connectors across the two diagrams carry EA's
+      # `Mode=3` and the other 5 carry `Mode=1`. Nothing in this skill maps EA's
+      # `Mode=` integer to one of the ten route names the schema validates
+      # against — that mapping lives in the server — and `Mode=3` is EA's default
+      # across the whole model (4,294 of 4,730 connectors), so it shows what
+      # authors left alone rather than what they chose. The name below is this
+      # file's convention; the consistency is the measurement.
+      default: Direct
+      notes: >
+        No trunk convention, and `trunk_for` is absent rather than empty. An
+        attribute is joined to its entity by its own line and a shared trunk
+        would hide which attribute belongs to which entity. The connectors
+        measured are 30 attribute associations — 21 from an entity to an
+        attribute, 9 from an attribute to a further attribute — 5 relationship
+        associations and 2 generalizations.
+    channels:
+      # Genuinely unclaimed, and measured: all 44 objects across the two diagrams
+      # carry EA's automatic value for fill (`BCol=-1`), so not one element
+      # stores a chosen color, and the corpus row records no color encoding
+      # either. What this notation fixes is the SHAPES — the same corpus row
+      # records ellipse attributes, diamond relationships and double-ellipse
+      # multivalued attributes — and it says nothing about color, which is a real
+      # difference from ArchiMate and BPMN rather than an omission here. `~` is
+      # what lets fill appear in `free`.
+      fill: ~
+      claimed:
+        position: >
+          Spoken for twice over. For a `graph` type EA computes the coordinates
+          and will overwrite anything set beforehand; and an attribute's position
+          says which entity it belongs to, since it is drawn in the fan around
+          that entity at 88 to 231 units from its center.
+        size: >
+          Node kind. An entity is drawn wider than its own attributes on both
+          measured diagrams (130 against 120, and 100 against 91), so using width
+          to encode something else blurs the one distinction size carries here.
+        line_style: >
+          Normative underneath, and measured: 35 of the 37 connectors on these
+          diagrams are UML associations and the other 2 are generalizations, so
+          dashed against solid already separates one kind of line from another.
+          Overwriting it changes what a connector means.
+      free: [fill, border, border_width, line_color, font_color, opacity, icon]
+      notes: >
+        Free means the notation assigns the channel no meaning, not that EA was
+        tested to honor a write to it. Nothing measured uses any of these: all 44
+        objects carry EA's automatic value for the border color (`LCol=-1`) as
+        well as for fill, so no author on either diagram set one.
