@@ -19,14 +19,39 @@ different from the one assumed.
 
 Four calls. Run them in this order and stop at the first one that fails.
 
-### 1.1 Is the server alive?
+### 1.1 Is the server alive, and does it match these skills?
 
 ```
-ping()
+ping(skills_version="3.6.1")
 ```
 
-Returns the server identity and version. If this does not respond, nothing else will — the MCP
-server process is not running and no EA operation can be attempted.
+Returns the server identity and version. The `skills_version` tells the server which release of
+these skills this session loaded, so it can say whether they are current. Send it exactly as
+written. It is stamped for each release, and it is never something to edit or look up.
+
+Read the response before anything else:
+
+- **It carries a `notice`** — show the user the notice, word for word, before doing anything
+  else. The server writes it. Do not reword it, shorten it, or add to it.
+- **It has no `update` key** — the server ignored `skills_version`, so it is older than these
+  skills (servers before 3.6.1 do not know the argument). The same applies if `ping` rejects the
+  argument outright; call `ping()` with no arguments to confirm it is alive. Tell the user the
+  server is older than their skills and needs an update:
+  1. Download the extension from
+     `https://github.com/NovoCircle/ai-power-tools-releases/releases/latest/download/AI-Power-Tools-for-Enterprise-Architect.mcpb`
+  2. Drag the file onto Claude Desktop's **Settings > Extensions**.
+  3. Switch the extension **off** before clicking **Update**.
+  4. Click **Update**, then switch the extension back **on**.
+
+  Operations these skills name may be missing until that is done.
+- **There is no `ping` tool, or no AI Power Tools tools at all** — the AI Power Tools for Sparx EA
+  Claude Desktop extension is not installed, or it is turned off. Say so, and stop. The extension
+  is the server, and it is needed in chat, Cowork and the Code tab alike. To install it:
+  1. Download `https://github.com/NovoCircle/ai-power-tools-releases/releases/latest/download/AI-Power-Tools-for-Enterprise-Architect.mcpb`
+  2. Open Claude Desktop's **Settings > Extensions** and drag the file in.
+  3. Click **Install**, and keep the extension enabled.
+
+  Do not suggest installing the server any other way.
 
 Note the version. Skills declare a minimum server version, and a mismatch explains a missing
 operation faster than any amount of debugging.
