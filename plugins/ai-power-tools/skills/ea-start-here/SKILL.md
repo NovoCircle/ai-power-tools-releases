@@ -22,7 +22,7 @@ Four calls. Run them in this order and stop at the first one that fails.
 ### 1.1 Is the server alive, and does it match these skills?
 
 ```
-ping(skills_version="3.6.1")
+ping(skills_version="3.6.2")
 ```
 
 Returns the server identity and version. The `skills_version` tells the server which release of
