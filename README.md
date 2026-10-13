@@ -10,7 +10,9 @@ Public installer downloads for **AI Power Tools for Enterprise Architect** — t
   https://github.com/NovoCircle/ai-power-tools-releases/releases/latest/download/ai-power-tools-ea.vsix
   Or install from the VS Code Marketplace: https://marketplace.visualstudio.com/items?itemName=NovoCircle.ai-power-tools-ea
 
-A license key is required. Purchase or manage your subscription at https://store.novocircle.com.
+## License
+
+AI Power Tools for Sparx EA is free to use under NovoCircle's end user license agreement. There is no license key, activation, registration, trial or subscription. The agreement is in [LICENSE](LICENSE) in this repository, inside each download as `LICENSE`, and at https://novocircle.com/ai-power-tools/sparx-ea/license/. Open-source components bundled in the software are listed in `THIRD-PARTY-NOTICES.txt` inside each download and attached to each release.
 
 ## Auto-updates
 
