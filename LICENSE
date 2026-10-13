@@ -1,0 +1,147 @@
+END USER LICENSE AGREEMENT
+AI Power Tools for Sparx EA
+
+Copyright (c) 2026 SFI Ventures, LLC (d/b/a NovoCircle). All rights reserved.
+
+This software is provided free of charge. By installing or using it you agree
+to these terms. If you do not agree, do not install or use it.
+
+1. WHO "YOU" ARE
+
+"NovoCircle" means SFI Ventures, LLC, doing business as NovoCircle. "You"
+means the person installing or using the software. If you install or use the
+software on behalf of an organization, "you" means that organization, and this
+license covers its employees and contractors acting on its behalf.
+
+2. LICENSE GRANT
+
+NovoCircle grants you a no-fee, non-exclusive, non-transferable, revocable,
+worldwide license to install and use the software for your own internal
+business or personal purposes, on any number of machines you own or control,
+including virtual and shared machines used by your own personnel.
+
+No payment, license key, activation, registration or subscription is required.
+The software performs no license check and contacts no licensing service.
+
+3. RESTRICTIONS
+
+You may not:
+
+  (a) redistribute, publish, sell, rent, lease or lend the software, or make
+      it available to any third party, or operate it as a service for anyone
+      other than yourself;
+  (b) sublicense the software or assign this agreement;
+  (c) modify the software or create derivative works from it;
+  (d) reverse engineer, decompile or disassemble the software, or attempt to
+      derive its source code, except to the extent applicable law expressly
+      prohibits this restriction;
+  (e) remove, obscure or alter any copyright, trademark or other proprietary
+      notice.
+
+4. OWNERSHIP; YOUR CONTENT
+
+The software is licensed, not sold. NovoCircle retains all right, title and
+interest in the software, including all intellectual property rights. This
+agreement grants you no rights other than the license in Section 2.
+
+You own the models, diagrams, documents, files and other content you create or
+modify using the software. NovoCircle claims no rights in that content.
+
+5. AI-GENERATED CHANGES
+
+The software acts on instructions from an AI assistant that you choose,
+configure and run. NovoCircle does not provide, control or warrant that
+assistant or its output; the assistant's own terms govern it. You are
+responsible for reviewing the changes the assistant makes through the software
+before relying on them.
+
+6. THIRD-PARTY SOFTWARE AND SERVICES
+
+The software drives Sparx Systems Enterprise Architect, which is licensed
+separately by Sparx Systems Pty Ltd. and is not provided under this agreement.
+You are responsible for holding a valid Enterprise Architect license. Nothing
+here grants any right in Sparx Systems software. Sparx Systems and Enterprise
+Architect are trademarks of Sparx Systems Pty Ltd. NovoCircle is not affiliated
+with Sparx Systems.
+
+The software includes open-source components. Their licenses and notices are
+in the THIRD-PARTY-NOTICES.txt file distributed with the software. Those
+licenses govern those components.
+
+7. DATA
+
+The software does not collect or transmit usage data to NovoCircle. Once a day
+the software may check a public address (GitHub or novocircle.com) for a newer
+release; that request discloses your network address to the host of that
+address and nothing else, and where the software offers a setting to disable
+the check you may turn it off. Diagnostic reports, if you enable them, are
+written to your own machine and reach NovoCircle only if you choose to send
+them.
+
+8. NO SUPPORT OBLIGATION; UPDATES
+
+NovoCircle may, but is not obliged to, provide updates or support. Updates are
+governed by the agreement distributed with them, which may differ from this
+one. NovoCircle may stop distributing or supporting the software at any time.
+
+9. YOUR RESPONSIBILITY; INDEMNITY
+
+You are responsible for your use of the software, for the instructions you
+and your AI assistant give it, for the content it creates, changes or deletes
+on your instruction, and for complying with the laws and third-party rights
+that apply to that use. You will defend, indemnify and hold NovoCircle
+harmless from any third-party claim, loss or expense (including reasonable
+attorneys' fees) arising from your use of the software or your content.
+
+10. NO WARRANTY
+
+THE SOFTWARE IS PROVIDED "AS IS" AND "AS AVAILABLE", WITHOUT WARRANTY OF ANY
+KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF
+MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE, TITLE AND NON-INFRINGEMENT.
+NOVOCIRCLE DOES NOT WARRANT THAT THE SOFTWARE WILL BE UNINTERRUPTED OR
+ERROR-FREE, OR THAT IT WILL NOT ALTER OR DAMAGE YOUR MODELS OR DATA.
+
+THE SOFTWARE CAN CREATE, MODIFY AND DELETE CONTENT IN YOUR ENTERPRISE
+ARCHITECT REPOSITORY. YOU ARE SOLELY RESPONSIBLE FOR MAINTAINING BACKUPS.
+
+11. LIMITATION OF LIABILITY
+
+TO THE MAXIMUM EXTENT PERMITTED BY APPLICABLE LAW, NOVOCIRCLE SHALL NOT BE
+LIABLE FOR ANY INDIRECT, INCIDENTAL, SPECIAL, CONSEQUENTIAL, EXEMPLARY OR
+PUNITIVE DAMAGES, OR FOR ANY LOSS OF PROFITS, REVENUE, DATA, MODELS OR
+BUSINESS, ARISING OUT OF OR RELATED TO THE SOFTWARE OR THIS AGREEMENT, UNDER
+ANY THEORY OF LIABILITY, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGES.
+
+BECAUSE THE SOFTWARE IS PROVIDED WITHOUT CHARGE, NOVOCIRCLE'S TOTAL AGGREGATE
+LIABILITY ARISING OUT OF OR RELATED TO THE SOFTWARE SHALL NOT EXCEED
+FIFTY U.S. DOLLARS (USD $50.00).
+
+Some jurisdictions do not allow the exclusion of implied warranties or the
+limitation of liability for incidental or consequential damages, so some of
+the above may not apply to you.
+
+12. TERM AND TERMINATION
+
+This agreement takes effect when you first install or use the software and
+continues until terminated. It terminates automatically if you breach any
+term. NovoCircle may also revoke this license at any time, with or without
+cause, by providing notice through the product's distribution channel. On
+termination you must stop using the software and delete all copies.
+
+Sections 4, 5, 9, 10, 11 and 13 survive termination.
+
+13. GENERAL
+
+This agreement is governed by the laws of the State of Wyoming, without regard
+to its conflict-of-laws rules. This agreement is the entire agreement between
+you and NovoCircle concerning the software and supersedes any prior agreement
+relating to it. If any provision is held unenforceable, the remaining
+provisions remain in full force. NovoCircle's failure to enforce any right is
+not a waiver of it. You will comply with applicable export control laws in
+using the software.
+
+CONTACT
+
+  SFI Ventures, LLC (d/b/a NovoCircle)
+  help@novocircle.com
+  https://novocircle.com/ai-power-tools/
