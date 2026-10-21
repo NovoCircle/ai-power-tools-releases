@@ -3,7 +3,7 @@
 
 Run from the repository root:
 
-    python -m pytest ea-diagram-composition/tools/test_lint.py -q
+    python -m pytest plugins/ai-power-tools/skills/ea-diagram-composition/tools/test_lint.py -q
 
 Nothing here touches a repository, a COM object or the filesystem.
 
@@ -23,8 +23,12 @@ but that it runs.
 """
 from __future__ import annotations
 
+# No backlog item is pinned: these tests cover designed behavior, not a filed defect.
+PINS = ()
+
 import ast
 import json
+import os
 import sys
 from pathlib import Path
 
@@ -637,16 +641,43 @@ def test_an_empty_diagram_lints_without_crashing():
 # not return any of them. Their tests passed because the fixtures invented what
 # the rules wanted. So every test below that could be written against a real
 # captured payload is written against one - see `real_payload`.
-_REAL_PAYLOAD = (
-    Path(__file__).resolve().parents[3]
-    / "ai-power-tools" / "ea-mcp-server" / "tests" / "fixtures"
-    / "verify_diagram_real_payload.json"
-)
+_SERVER_REPO_ENV = "EA_MCP_SERVER_REPO"
+_PAYLOAD_RELATIVE = Path("tests") / "fixtures" / "verify_diagram_real_payload.json"
+
+
+def _find_server_repo():
+    """The server repository (`ea-mcp-server`), or None when it is not beside this one.
+
+    The captured payload lives in the server repository, not here. Look in
+    `$EA_MCP_SERVER_REPO` first, then walk up from this file for a sibling
+    `ai-power-tools/ea-mcp-server`, so the lookup works from the plugin tree, from
+    an installed copy that sits next to a checkout, and from a git worktree.
+    """
+    override = os.environ.get(_SERVER_REPO_ENV)
+    if override:
+        return Path(override)
+    for parent in Path(__file__).resolve().parents:
+        candidate = parent / "ai-power-tools" / "ea-mcp-server"
+        if candidate.is_dir():
+            return candidate
+    return None
+
+
+_SERVER_REPO = _find_server_repo()
+_REAL_PAYLOAD = (_SERVER_REPO / _PAYLOAD_RELATIVE) if _SERVER_REPO else None
 
 
 def _load_real(name):
+    if _REAL_PAYLOAD is None:
+        pytest.skip(
+            "the server repository (ea-mcp-server) was not found beside this one, "
+            f"so its captured payload tests/fixtures/{_PAYLOAD_RELATIVE.name} is "
+            f"unavailable; check it out next to this repository or set {_SERVER_REPO_ENV}")
     if not _REAL_PAYLOAD.is_file():
-        pytest.skip(f"real payload fixture not present at {_REAL_PAYLOAD}")
+        pytest.skip(
+            f"captured payload {_PAYLOAD_RELATIVE.name} not found at "
+            f"{_REAL_PAYLOAD.as_posix()}; set {_SERVER_REPO_ENV} to the ea-mcp-server "
+            "checkout that holds it")
     return json.loads(_REAL_PAYLOAD.read_text(encoding="utf-8"))[name]
 
 

@@ -204,8 +204,8 @@ Payloads and supporting calls: [references/payloads.md](references/payloads.md).
 Ordered cheapest first.
 
 1. **Did the session expire?** Four minutes. See `prolaborate-session.md`.
-2. **Did the click land?** Element-ref clicks fail silently on this interface where a coordinate
-   click works; the first interaction after a page load is often swallowed. Verify state, retry once.
+2. **Did the click land?** Clicks that target an element by reference can fail silently on this interface where a
+   click at the element's position on screen works; the first interaction after a page load is often swallowed. Verify state, retry once.
 3. **`No results found`?** Suspect the dialect before the data. Compare against `VIEW SAMPLE`.
 4. **Chart renders but looks wrong?** Check §5 — a silent presentation toggle, not the query.
 5. **Numbers disagree with the model?** Check whether the connector stereotype is qualified. Element

@@ -1,0 +1,198 @@
+table t_package
+	isHidden
+	lineageTag: 29fb691f-6ebb-53a4-9a7a-1f8d5f008c3f
+
+	column Package_ID
+		dataType: int64
+		lineageTag: 5827b9bc-8240-5651-bf6f-9db9b67f940d
+		summarizeBy: none
+		sourceColumn: Package_ID
+
+		annotation SummarizationSetBy = Automatic
+
+	column Name
+		dataType: string
+		lineageTag: fedeba30-9b6a-5b55-8df9-aa7879ad9233
+		summarizeBy: none
+		sourceColumn: Name
+
+		annotation SummarizationSetBy = Automatic
+
+	column Parent_ID
+		dataType: int64
+		lineageTag: 62a5a54e-9580-5f64-88b3-46ec10d43d2e
+		summarizeBy: none
+		sourceColumn: Parent_ID
+
+		annotation SummarizationSetBy = Automatic
+
+	column CreatedDate
+		dataType: dateTime
+		lineageTag: e32b2c52-8db4-52ae-b94d-1c34cc6b0bc7
+		summarizeBy: none
+		sourceColumn: CreatedDate
+
+		annotation SummarizationSetBy = Automatic
+
+	column ModifiedDate
+		dataType: dateTime
+		lineageTag: 45007d6d-73ee-5de5-93cb-6bec94bc6cab
+		summarizeBy: none
+		sourceColumn: ModifiedDate
+
+		annotation SummarizationSetBy = Automatic
+
+	column Notes
+		dataType: string
+		lineageTag: 7cf62e51-4c2a-56fa-8690-e032512b38bf
+		summarizeBy: none
+		sourceColumn: Notes
+
+		annotation SummarizationSetBy = Automatic
+
+	column ea_guid
+		dataType: string
+		lineageTag: 1856b784-53a2-5c0b-9ef1-761715494e90
+		summarizeBy: none
+		sourceColumn: ea_guid
+
+		annotation SummarizationSetBy = Automatic
+
+	column XMLPath
+		dataType: string
+		lineageTag: 236f7914-dd42-5be2-afe2-f0f7ec2e5248
+		summarizeBy: none
+		sourceColumn: XMLPath
+
+		annotation SummarizationSetBy = Automatic
+
+	column IsControlled
+		dataType: int64
+		lineageTag: b3596ca5-c5ac-540a-a435-ba37aed2fe1a
+		summarizeBy: none
+		sourceColumn: IsControlled
+
+		annotation SummarizationSetBy = Automatic
+
+	column LastLoadDate
+		dataType: dateTime
+		lineageTag: 9a46d6bc-81af-57f8-8b19-2fa3ea773f04
+		summarizeBy: none
+		sourceColumn: LastLoadDate
+
+		annotation SummarizationSetBy = Automatic
+
+	column LastSaveDate
+		dataType: dateTime
+		lineageTag: b3e0da73-26fd-52f9-b8c8-3a9ed871067c
+		summarizeBy: none
+		sourceColumn: LastSaveDate
+
+		annotation SummarizationSetBy = Automatic
+
+	column Version
+		dataType: string
+		lineageTag: 8a00b60d-b689-5ad1-a162-cc7e1b64e352
+		summarizeBy: none
+		sourceColumn: Version
+
+		annotation SummarizationSetBy = Automatic
+
+	column Protected
+		dataType: int64
+		lineageTag: b52f1949-5526-52bf-b1fb-ef6d6dceedf7
+		summarizeBy: none
+		sourceColumn: Protected
+
+		annotation SummarizationSetBy = Automatic
+
+	column PkgOwner
+		dataType: string
+		lineageTag: 9301c23e-88f3-5921-8e7d-7fa145c2b1d5
+		summarizeBy: none
+		sourceColumn: PkgOwner
+
+		annotation SummarizationSetBy = Automatic
+
+	column UMLVersion
+		dataType: string
+		lineageTag: 033648e0-1e40-594e-b9c6-944161dfa4a0
+		summarizeBy: none
+		sourceColumn: UMLVersion
+
+		annotation SummarizationSetBy = Automatic
+
+	column UseDTD
+		dataType: int64
+		lineageTag: 0c1d5ab0-62fb-5966-901b-59c0e8b1bc73
+		summarizeBy: none
+		sourceColumn: UseDTD
+
+		annotation SummarizationSetBy = Automatic
+
+	column LogXML
+		dataType: int64
+		lineageTag: 2dc6f42a-69a8-5f13-acc8-ba34567cdfa8
+		summarizeBy: none
+		sourceColumn: LogXML
+
+		annotation SummarizationSetBy = Automatic
+
+	column CodePath
+		dataType: string
+		lineageTag: f781a081-c66e-5335-80c2-5c547158591b
+		summarizeBy: none
+		sourceColumn: CodePath
+
+		annotation SummarizationSetBy = Automatic
+
+	column Namespace
+		dataType: string
+		lineageTag: f78d4a0c-2543-57dc-a7d4-681ce4c38a09
+		summarizeBy: none
+		sourceColumn: Namespace
+
+		annotation SummarizationSetBy = Automatic
+
+	column TPos
+		dataType: int64
+		lineageTag: 7f6cc750-a453-5122-ae09-4429b35db2a8
+		summarizeBy: none
+		sourceColumn: TPos
+
+		annotation SummarizationSetBy = Automatic
+
+	column PackageFlags
+		dataType: string
+		lineageTag: facbd768-eabe-5d3a-9c0d-cbf584625c9d
+		summarizeBy: none
+		sourceColumn: PackageFlags
+
+		annotation SummarizationSetBy = Automatic
+
+	column BatchSave
+		dataType: int64
+		lineageTag: 27140721-d308-5ddc-a084-2331ea99986d
+		summarizeBy: none
+		sourceColumn: BatchSave
+
+		annotation SummarizationSetBy = Automatic
+
+	column BatchLoad
+		dataType: int64
+		lineageTag: f8ac1744-69ec-5c9e-9659-6086c417907b
+		summarizeBy: none
+		sourceColumn: BatchLoad
+
+		annotation SummarizationSetBy = Automatic
+
+	partition t_package = m
+		mode: import
+		source =
+				let
+				    Source = Sql.Database("sql-host", "EAWestbrook"),
+				    Data = Source{[Schema="dbo",Item="t_package"]}[Data]
+				in
+				    Data
+
+	annotation PBI_ResultType = Table

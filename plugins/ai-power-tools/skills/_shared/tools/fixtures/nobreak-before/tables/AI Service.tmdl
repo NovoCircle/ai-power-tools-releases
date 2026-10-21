@@ -1,0 +1,125 @@
+table 'AI Service'
+	lineageTag: 91cab5e6-5993-5999-b84c-ded613107bc9
+
+	column ea_guid
+		dataType: string
+		lineageTag: 3fd76f8f-7a05-55cc-bc34-ef2cd49a73b8
+		summarizeBy: none
+		sourceColumn: ea_guid
+
+		annotation SummarizationSetBy = Automatic
+
+	column name
+		dataType: string
+		lineageTag: 550dc300-3803-5129-8d54-0efd446a3fa6
+		summarizeBy: none
+		sourceColumn: name
+
+		annotation SummarizationSetBy = Automatic
+
+	column metaclass
+		dataType: string
+		lineageTag: 2d59221c-17d7-5886-afdd-77af3b80448d
+		summarizeBy: none
+		sourceColumn: metaclass
+
+		annotation SummarizationSetBy = Automatic
+
+	column package_path
+		dataType: string
+		lineageTag: 184053f7-1521-5ec3-8b67-29fd122ad0c0
+		summarizeBy: none
+		sourceColumn: package_path
+
+		annotation SummarizationSetBy = Automatic
+
+	column auditLoggingEnabled
+		dataType: string
+		lineageTag: 7de955b2-8162-508f-a35d-d42bbc020020
+		summarizeBy: none
+		sourceColumn: auditLoggingEnabled
+
+		annotation SummarizationSetBy = Automatic
+
+	column businessOwner
+		dataType: string
+		lineageTag: 4864e658-d64f-50be-b759-3b1f62e83d14
+		summarizeBy: none
+		sourceColumn: businessOwner
+
+		annotation SummarizationSetBy = Automatic
+
+	column criticality
+		dataType: string
+		lineageTag: 1f27274a-5192-56b7-a00b-0cd3fbb7f074
+		summarizeBy: none
+		sourceColumn: criticality
+
+		annotation SummarizationSetBy = Automatic
+
+	column dataClassification
+		dataType: string
+		lineageTag: 8af19063-15ba-5872-a017-0a42fe03574f
+		summarizeBy: none
+		sourceColumn: dataClassification
+
+		annotation SummarizationSetBy = Automatic
+
+	column dataResidency
+		dataType: string
+		lineageTag: 5557e7a4-e5ff-5203-8299-731dea37ab53
+		summarizeBy: none
+		sourceColumn: dataResidency
+
+		annotation SummarizationSetBy = Automatic
+
+	column humanInLoopRequired
+		dataType: string
+		lineageTag: 82523d66-3bbf-55cc-b45a-45785ce0d649
+		summarizeBy: none
+		sourceColumn: humanInLoopRequired
+
+		annotation SummarizationSetBy = Automatic
+
+	column lifecycle
+		dataType: string
+		lineageTag: b3fbce11-731f-56d8-912a-ac10a8493f1d
+		summarizeBy: none
+		sourceColumn: lifecycle
+
+		annotation SummarizationSetBy = Automatic
+
+	column modelGovernanceClass
+		dataType: string
+		lineageTag: 2d65e019-aef0-53b0-9596-16b899e093a7
+		summarizeBy: none
+		sourceColumn: modelGovernanceClass
+
+		annotation SummarizationSetBy = Automatic
+
+	column regulatoryScope
+		dataType: string
+		lineageTag: dbb27571-e662-5231-a8db-36956e8a3081
+		summarizeBy: none
+		sourceColumn: regulatoryScope
+
+		annotation SummarizationSetBy = Automatic
+
+	column technicalOwner
+		dataType: string
+		lineageTag: 3d8975b4-abee-57e2-945e-3a44fb510a38
+		summarizeBy: none
+		sourceColumn: technicalOwner
+
+		annotation SummarizationSetBy = Automatic
+
+	partition 'AI Service' = m
+		mode: import
+		source =
+				let
+				    Source = Sql.Database("sql-host", "EAWestbrook"),
+				    Data = Source{[Schema="p5test",Item="AI Service"]}[Data]
+				in
+				    Data
+
+	annotation PBI_ResultType = Table

@@ -1,0 +1,93 @@
+table 'Con_AI Gateway Uses AI Service'
+	lineageTag: 1107057e-8018-5e49-af64-4212dacf97d2
+
+	column connector_guid
+		dataType: string
+		lineageTag: 384ff95f-a0ad-58d5-b0e9-b3362b832588
+		summarizeBy: none
+		sourceColumn: connector_guid
+
+		annotation SummarizationSetBy = Automatic
+
+	column connector_id
+		dataType: int64
+		lineageTag: dc5ed376-441c-5c75-aff9-0c23c1548728
+		summarizeBy: none
+		sourceColumn: connector_id
+
+		annotation SummarizationSetBy = Automatic
+
+	column name
+		dataType: string
+		lineageTag: b0e353dc-7b54-5f67-87c0-4af79f0d4f30
+		summarizeBy: none
+		sourceColumn: name
+
+		annotation SummarizationSetBy = Automatic
+
+	column source_guid
+		dataType: string
+		lineageTag: 35c6cee1-0233-5b25-84f4-a82b74351e00
+		summarizeBy: none
+		sourceColumn: source_guid
+
+		annotation SummarizationSetBy = Automatic
+
+	column target_guid
+		dataType: string
+		lineageTag: 48134f42-bf54-5e7d-9b25-dded1ab8ad31
+		summarizeBy: none
+		sourceColumn: target_guid
+
+		annotation SummarizationSetBy = Automatic
+
+	column direction
+		dataType: string
+		lineageTag: a526f364-7960-5a93-a74c-817f5dbc494b
+		summarizeBy: none
+		sourceColumn: direction
+
+		annotation SummarizationSetBy = Automatic
+
+	column base_type
+		dataType: string
+		lineageTag: fafdaa24-dec2-5b5b-a26e-bfbe7ae1d9f3
+		summarizeBy: none
+		sourceColumn: base_type
+
+		annotation SummarizationSetBy = Automatic
+
+	column dataFlowClassification
+		dataType: string
+		lineageTag: bf242c54-95a3-5493-83d4-c8d3dc84f728
+		summarizeBy: none
+		sourceColumn: dataFlowClassification
+
+		annotation SummarizationSetBy = Automatic
+
+	column integrationPattern
+		dataType: string
+		lineageTag: 958dde4c-ff5c-5229-973e-201977c54bd0
+		summarizeBy: none
+		sourceColumn: integrationPattern
+
+		annotation SummarizationSetBy = Automatic
+
+	column slaTier
+		dataType: string
+		lineageTag: 23d5b87a-8839-56cc-bbba-c115933646b6
+		summarizeBy: none
+		sourceColumn: slaTier
+
+		annotation SummarizationSetBy = Automatic
+
+	partition 'Con_AI Gateway Uses AI Service' = m
+		mode: import
+		source =
+				let
+				    Source = Sql.Database("sql-host", "EAWestbrook"),
+				    Data = Source{[Schema="p5test",Item="Con_AI Gateway Uses AI Service"]}[Data]
+				in
+				    Data
+
+	annotation PBI_ResultType = Table

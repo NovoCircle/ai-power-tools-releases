@@ -1,12 +1,15 @@
 #!/usr/bin/env python3
 """Tests for the semantic-model data structures.
 
-    python -m pytest _shared/tools/test_semantic_model.py -q
+    python -m pytest plugins/ai-power-tools/skills/_shared/tools/test_semantic_model.py -q
 
 The model is built from the business-layer definition by `powerbi_model.py`
 and tested there; this file covers the structures themselves.
 """
 from __future__ import annotations
+
+# Backlog items this module pins (checked by tools/test_suite_conventions.py).
+PINS = ("APT-2026-0309",)
 
 import json
 

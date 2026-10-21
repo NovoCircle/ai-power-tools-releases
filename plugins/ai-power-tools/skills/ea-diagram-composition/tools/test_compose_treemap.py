@@ -3,7 +3,7 @@
 
 Run from the repository root:
 
-    python -m pytest ea-diagram-composition/tools/test_compose_treemap.py -q
+    python -m pytest plugins/ai-power-tools/skills/ea-diagram-composition/tools/test_compose_treemap.py -q
 
 Nothing here touches a repository, a COM object or the filesystem. If any test
 in this file needs Sparx EA to pass, the layer boundary has been broken.
@@ -30,6 +30,9 @@ Four conventions worth reading before editing:
   happens to close at 1200x800 with three equal weights is not a proof.
 """
 from __future__ import annotations
+
+# No backlog item is pinned: these tests cover designed behavior, not a filed defect.
+PINS = ()
 
 import sys
 from fractions import Fraction

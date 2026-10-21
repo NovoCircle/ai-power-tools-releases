@@ -3,7 +3,7 @@
 
 Run from the repository root:
 
-    python -m pytest ea-diagram-composition/tools/test_bindings_sysphs.py -q
+    python -m pytest plugins/ai-power-tools/skills/ea-diagram-composition/tools/test_bindings_sysphs.py -q
 
 SysPhS - the SysML Extension for Physical Interaction and Signal Flow - was
 brought forward to be bound and came back UNBINDABLE. Not "not done yet":
@@ -48,6 +48,9 @@ are here because they are what the choice of parent turned on: a binding whose
 constraint on every future binding and nothing pinned it before.
 """
 from __future__ import annotations
+
+# No backlog item is pinned: these tests cover designed behavior, not a filed defect.
+PINS = ()
 
 import sys
 from pathlib import Path

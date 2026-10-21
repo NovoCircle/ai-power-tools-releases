@@ -1,0 +1,93 @@
+table 'Con_AI Service Uses AI Model'
+	lineageTag: 9a5500a9-55a1-570d-bd36-8f831d9346f0
+
+	column connector_guid
+		dataType: string
+		lineageTag: 25b33851-f067-5bb7-9a3c-f33beead0a55
+		summarizeBy: none
+		sourceColumn: connector_guid
+
+		annotation SummarizationSetBy = Automatic
+
+	column connector_id
+		dataType: int64
+		lineageTag: ebfbf0eb-6ca8-53e6-96d4-e712fcf7f3ff
+		summarizeBy: none
+		sourceColumn: connector_id
+
+		annotation SummarizationSetBy = Automatic
+
+	column name
+		dataType: string
+		lineageTag: c3923cae-d82d-5e83-883c-b4ffa9e00507
+		summarizeBy: none
+		sourceColumn: name
+
+		annotation SummarizationSetBy = Automatic
+
+	column source_guid
+		dataType: string
+		lineageTag: 97aa3362-a5a2-5c9b-bd42-66693bc72880
+		summarizeBy: none
+		sourceColumn: source_guid
+
+		annotation SummarizationSetBy = Automatic
+
+	column target_guid
+		dataType: string
+		lineageTag: 74fd9c29-da71-58ed-9f10-f50cf3dfdf9c
+		summarizeBy: none
+		sourceColumn: target_guid
+
+		annotation SummarizationSetBy = Automatic
+
+	column direction
+		dataType: string
+		lineageTag: 313d65ac-b59b-535d-9751-0ce00ab22f91
+		summarizeBy: none
+		sourceColumn: direction
+
+		annotation SummarizationSetBy = Automatic
+
+	column base_type
+		dataType: string
+		lineageTag: 1d22e5a5-6091-5d84-ae13-fe454ee1e557
+		summarizeBy: none
+		sourceColumn: base_type
+
+		annotation SummarizationSetBy = Automatic
+
+	column dataFlowClassification
+		dataType: string
+		lineageTag: ee8d51a4-109e-56f6-882f-7a7c54a3f2ba
+		summarizeBy: none
+		sourceColumn: dataFlowClassification
+
+		annotation SummarizationSetBy = Automatic
+
+	column integrationPattern
+		dataType: string
+		lineageTag: 12e04b10-7ce1-54d7-aabc-ef998e637f4d
+		summarizeBy: none
+		sourceColumn: integrationPattern
+
+		annotation SummarizationSetBy = Automatic
+
+	column slaTier
+		dataType: string
+		lineageTag: c38db3e4-a4c9-5728-b8c5-ad62eb3a3763
+		summarizeBy: none
+		sourceColumn: slaTier
+
+		annotation SummarizationSetBy = Automatic
+
+	partition 'Con_AI Service Uses AI Model' = m
+		mode: import
+		source =
+				let
+				    Source = Sql.Database("sql-host", "EAWestbrook"),
+				    Data = Source{[Schema="p5test",Item="Con_AI Service Uses AI Model"]}[Data]
+				in
+				    Data
+
+	annotation PBI_ResultType = Table

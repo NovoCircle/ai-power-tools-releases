@@ -1,0 +1,62 @@
+table t_objectproperties
+	isHidden
+	lineageTag: 36d507fb-1072-5132-bc9b-5d2382cde1fe
+
+	column PropertyID
+		dataType: int64
+		lineageTag: f4ec6402-41e6-5b7b-8bd9-61896603e7d8
+		summarizeBy: none
+		sourceColumn: PropertyID
+
+		annotation SummarizationSetBy = Automatic
+
+	column Object_ID
+		dataType: int64
+		lineageTag: a7157f7d-7e77-587a-888b-b855e249689e
+		summarizeBy: none
+		sourceColumn: Object_ID
+
+		annotation SummarizationSetBy = Automatic
+
+	column Property
+		dataType: string
+		lineageTag: a54d528c-9ffd-5643-bc78-5bd94123a2dc
+		summarizeBy: none
+		sourceColumn: Property
+
+		annotation SummarizationSetBy = Automatic
+
+	column Value
+		dataType: string
+		lineageTag: 9361e50d-3011-5479-8126-9205f9d3e63c
+		summarizeBy: none
+		sourceColumn: Value
+
+		annotation SummarizationSetBy = Automatic
+
+	column Notes
+		dataType: string
+		lineageTag: 804e7694-75c4-516b-b23e-253e50fd3e18
+		summarizeBy: none
+		sourceColumn: Notes
+
+		annotation SummarizationSetBy = Automatic
+
+	column ea_guid
+		dataType: string
+		lineageTag: 1cc4231f-39db-508c-a847-d34a6fe74fef
+		summarizeBy: none
+		sourceColumn: ea_guid
+
+		annotation SummarizationSetBy = Automatic
+
+	partition t_objectproperties = m
+		mode: import
+		source =
+				let
+				    Source = Sql.Database("sql-host", "EAWestbrook"),
+				    Data = Source{[Schema="dbo",Item="t_objectproperties"]}[Data]
+				in
+				    Data
+
+	annotation PBI_ResultType = Table

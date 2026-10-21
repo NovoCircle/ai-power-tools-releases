@@ -3,7 +3,7 @@
 
     definition.json + tables.json  ->  <table name>.parquet per table  (+ the .pbip)
 
-The server's `build_reporting_database` writes the definition (`APT-2026-0301`) and
+The server's `build_reporting_database` writes the definition and
 the typed rows for a profile whose `target.kind` is "parquet". This module is the
 local step: it writes one file per table into `source.folder`, and
 `powerbi_model.write_project` writes the `.pbip` that reads them. No SQL Server is
@@ -14,7 +14,7 @@ TYPES ARE DECLARED, NEVER INFERRED
 TEXT -> string, INTEGER -> int64, REAL -> float64, BOOLEAN -> bool, DATETIME ->
 timestamp (microseconds, no zone). A refresh must not change a column's type
 because of which rows happen to be populated, and pyarrow refuses a value that
-does not fit its column rather than repairing it (`APT-2026-0225`). Every field is
+does not fit its column rather than repairing it. Every field is
 nullable. An empty table is still written, with its schema.
 
 pyarrow is REQUIRED for this step. It is imported here, not in the core, so the
@@ -45,6 +45,7 @@ except ImportError:  # pragma: no cover - environment-dependent
     pa = pq = None
     PYARROW_AVAILABLE = False
 
+import descriptions
 import powerbi_model
 
 COMPRESSION = "snappy"
@@ -52,7 +53,9 @@ FORMAT_VERSION = "2.6"
 
 #: Characters Windows does not allow in a file name, plus control characters.
 _BAD_CHARS = re.compile(r'[<>:"/\\|?*\x00-\x1f]')
-_RESERVED = {"CON", "PRN", "AUX", "NUL"} | {f"{p}{i}" for p in ("COM", "LPT") for i in range(1, 10)}
+#: Windows also reserves COM and LPT followed by a superscript 1, 2 or 3 (U+00B9, U+00B2, U+00B3).
+_RESERVED = ({"CON", "PRN", "AUX", "NUL"}
+             | {f"{p}{i}" for p in ("COM", "LPT") for i in "123456789\u00b9\u00b2\u00b3"})
 
 
 class ParquetTablesError(Exception):
@@ -187,18 +190,24 @@ def main(argv=None) -> int:
                     help="default: the name of source.folder")
     ap.add_argument("--out", default=None,
                     help="where the .pbip goes (default: the parent of source.folder)")
+    ap.add_argument("--descriptions", default=None,
+                    help="a user-approved descriptions file (JSON), as for powerbi_model.py")
     a = ap.parse_args(argv)
     defn = json.loads(Path(a.definition).read_text(encoding="utf-8"))
     tables = json.loads(Path(a.tables).read_text(encoding="utf-8"))
     if not powerbi_model.is_parquet(defn):
         ap.error("the definition's source.kind is not 'parquet'")
+    entries = descriptions.load_file(a.descriptions) if a.descriptions else None
     folder = Path(defn["source"]["folder"])
     counts = write_parquet(defn, tables, folder)
     name = a.project_name or folder.name
     out = Path(a.out) if a.out else folder.parent
-    powerbi_model.write_project(defn, out, name)
+    powerbi_model.write_project(defn, out, name, descriptions=entries)
     print(f"{len(counts)} tables, {sum(counts.values())} rows -> {folder}")
     print(f"{out / (name + '.pbip')}")
+    model = powerbi_model.model_from_definition(defn, descriptions=entries)
+    for line in powerbi_model.size_lines(*powerbi_model.model_size(model)):
+        print(line)
     return 0
 
 

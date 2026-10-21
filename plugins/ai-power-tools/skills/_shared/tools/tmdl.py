@@ -29,8 +29,7 @@ LINEAGE TAGS ARE DERIVED, NEVER MINTED
 Every tag is `uuid5` of the object's path under a fixed namespace, so two runs
 over the same model produce byte-identical files and a report's field bindings
 survive regeneration. Minting fresh GUIDs per run is what would break them.
-Whether a report survives a tag that genuinely CHANGES is still untested - see
-`APT-2026-0211`.
+Whether a report survives a tag that genuinely CHANGES is still untested.
 """
 from __future__ import annotations
 
@@ -59,8 +58,8 @@ def ident(name: str) -> str:
     """A TMDL identifier, quoted unless it is a non-empty run of ASCII letters,
     digits and `_` that does not start with a digit.
 
-    A leading digit is ordinary model content: `ea_census.snake_case` turns a
-    tag named "2024 Target" into `2024_target`. CR, LF or TAB raises
+    A leading digit is ordinary model content (a tag named "2024 Target" is
+    one), so a name that starts with a digit is quoted. CR, LF or TAB raises
     `ValueError` instead of being written into a name.
     """
     if any(c in name for c in "\r\n\t"):
@@ -75,15 +74,17 @@ def ident(name: str) -> str:
 
 
 #: Partition modes this module emits. `mode:` is written bare, so anything else
-#: is refused rather than written. APT-2026-0248.
+#: is refused rather than written.
 PARTITION_MODES = frozenset({"import", "directQuery", "dual"})
 
 #: Characters Windows refuses in a file name, plus `%`, which `table_file_name`
 #: uses as its own escape and so must escape too.
 _FILE_UNSAFE = set('<>:"/\\|?*%')
+#: Windows also reserves `COM` and `LPT` followed by a SUPERSCRIPT 1, 2 or 3
+#: (U+00B9, U+00B2, U+00B3), in every directory and with any extension.
 _RESERVED_DEVICES = frozenset(
     {"CON", "PRN", "AUX", "NUL"}
-    | {f"COM{i}" for i in range(1, 10)} | {f"LPT{i}" for i in range(1, 10)})
+    | {f"{p}{d}" for p in ("COM", "LPT") for d in "123456789\u00b9\u00b2\u00b3"})
 
 
 def property_value(field: str, value: str) -> str:
@@ -92,7 +93,7 @@ def property_value(field: str, value: str) -> str:
     A property value ends at the line break, so CR, LF or TAB would start
     another property; leading or trailing whitespace would be trimmed and no
     longer name the source. Both raise `ValueError` naming the field rather
-    than being written. APT-2026-0248.
+    than being written.
     """
     if any(c in value for c in "\r\n\t"):
         raise ValueError(
@@ -112,11 +113,11 @@ def table_file_name(name: str) -> str:
     projects are byte-identical to before. Otherwise each unsafe character
     (`<>:"/\\|?*%`, control characters, a trailing dot or space) becomes
     `%XX`, and a reserved device name (`CON`, `NUL`, ...) gets its first
-    character encoded, so no table name can resolve outside `tables/`. The
+    character encoded (so do `COM` and `LPT` followed by a superscript 1, 2
+    or 3), so no table name can resolve outside `tables/`. The
     table's name in the model comes from the `table` declaration inside the
     file, not from the file name. Whether Power BI opens a project whose file
     name differs from its table name is untested; no tested name needs it.
-    APT-2026-0248.
     """
     def enc(c: str) -> str:
         return "".join(f"%{b:02X}" for b in c.encode("utf-8"))
@@ -161,7 +162,7 @@ def description_lines(text: str, indent: str) -> list[str]:
 
 @dataclass
 class ParquetSource:
-    """Power BI reads files our toolchain produced. `APT-2026-0211` / `0212`.
+    """Power BI reads files our toolchain produced (path C).
 
     Deliberately bare M: no `Table.PromoteHeaders`, no `TransformColumnTypes`.
     A self-describing format needs neither, and that is measured - the same
@@ -186,9 +187,14 @@ class ParquetSource:
 class SqlSource:
     """Power BI reads the repository itself, through generated views.
 
-    `APT-2026-0230`, where DirectQuery is the primary mode. The traversal
-    measures have NOT been verified under DirectQuery - that verification is
-    part of `0230` and must not be carried over from the Import result.
+    Path A, where DirectQuery is the primary mode. Under DirectQuery
+    the traversal measures were read back against the engine on a
+    Westbrook-sized model on its first read-back (51 tables, 83 relationships):
+    73 of 73 matched the SQL joins, and the read-back took 3 min 10 s
+    (`ea-power-bi/references/measured-power-bi-behavior.md` section 2).
+    Limits of that result: one model of that size, so nothing is known about
+    speed at the scale of a large repository, and the Import and DirectQuery
+    runs were separate read-backs, so one does not stand in for the other.
     """
     server: str
     database: str

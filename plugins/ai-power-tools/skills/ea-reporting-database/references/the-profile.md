@@ -10,7 +10,9 @@ shape. Westbrook Bank's `WBA` technology is an illustration; substitute your own
 | `inclusion` | The answer to the §2b question - paste `resolve_answer(...).inclusion` here. Both lists empty is "only what my MDG defines" |
 | `inclusion_choice` | `answer.record()` from §2b: the option chosen, the gaps excluded, the technology version at the time. Optional, but **save it**: builds and refreshes use it to flag a stereotype or connector key it does not cover (`not_covered_by_inclusion_choice`) and a changed technology version (`mdg_version_changed`) |
 | `target.kind` | `ea_database`, `reporting_database` or `parquet` (§3) |
-| `target.server`, `target.database` | Paths A and B. For A, the EA repository's own database. For B, a separate database: letters, digits, `_` and `-` only, created if it does not exist. A reporting build refuses a database that holds an EA repository's own tables, because it replaces the tables in its target |
+| `target.server`, `target.database` | Paths A and B. For A, the EA repository's own database. For B, a separate database: letters, digits, `_` and `-` only. On SQL Server it is created if it does not exist; a SQL database in Microsoft Fabric is created in the Fabric portal first, and its database name is the one on its connection strings, not the display name ([`the-cloud-database.md`](the-cloud-database.md)). A reporting build refuses a database that holds an EA repository's own tables, because it replaces the tables in its target |
+| `target.authentication` | How the database is signed in to: `windows` (the default: the Windows account running AI Power Tools) or `entra-interactive` (a person signs in with a Microsoft work account; for a SQL database in Fabric or an Azure SQL Database). Direct access (`ea_database`) refuses `entra-interactive` |
+| `target.user` | Optional, with `entra-interactive` only: the account the sign-in window suggests. Refused with `windows` |
 | `target.schema` | The schema the business tables go in. Path B uses `logical` when the profile gives none |
 | `target.folder` | Path C: the folder the Parquet files go in |
 

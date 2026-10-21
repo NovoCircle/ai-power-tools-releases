@@ -1,0 +1,93 @@
+table 'Con_Business Application Uses Vendor System'
+	lineageTag: e6bc58ea-32aa-588d-afc7-77401cdcd385
+
+	column connector_guid
+		dataType: string
+		lineageTag: e9708842-37e1-5637-ad2b-62b5352b493a
+		summarizeBy: none
+		sourceColumn: connector_guid
+
+		annotation SummarizationSetBy = Automatic
+
+	column connector_id
+		dataType: int64
+		lineageTag: d222986a-646c-5062-8aab-ae773af6e51f
+		summarizeBy: none
+		sourceColumn: connector_id
+
+		annotation SummarizationSetBy = Automatic
+
+	column name
+		dataType: string
+		lineageTag: e7623978-f4b1-5a03-ba90-e7f428d12b2d
+		summarizeBy: none
+		sourceColumn: name
+
+		annotation SummarizationSetBy = Automatic
+
+	column source_guid
+		dataType: string
+		lineageTag: eb313703-1839-5aa1-b900-98ec1f5acf76
+		summarizeBy: none
+		sourceColumn: source_guid
+
+		annotation SummarizationSetBy = Automatic
+
+	column target_guid
+		dataType: string
+		lineageTag: 788b4fe8-db80-5b8b-8194-79489359cd83
+		summarizeBy: none
+		sourceColumn: target_guid
+
+		annotation SummarizationSetBy = Automatic
+
+	column direction
+		dataType: string
+		lineageTag: 57c859bb-f2e1-5bbd-8aae-c103b310b7e6
+		summarizeBy: none
+		sourceColumn: direction
+
+		annotation SummarizationSetBy = Automatic
+
+	column base_type
+		dataType: string
+		lineageTag: d5195cde-81e4-5cf4-b1bc-cdfcff29e7fb
+		summarizeBy: none
+		sourceColumn: base_type
+
+		annotation SummarizationSetBy = Automatic
+
+	column dataFlowClassification
+		dataType: string
+		lineageTag: b6e5ee59-21fe-5870-8700-e4889bbf7f2e
+		summarizeBy: none
+		sourceColumn: dataFlowClassification
+
+		annotation SummarizationSetBy = Automatic
+
+	column integrationPattern
+		dataType: string
+		lineageTag: d780f3ee-81af-58a6-a810-77c0efbc30e1
+		summarizeBy: none
+		sourceColumn: integrationPattern
+
+		annotation SummarizationSetBy = Automatic
+
+	column slaTier
+		dataType: string
+		lineageTag: fc816fad-1c30-5f78-9ff5-d3264a538bca
+		summarizeBy: none
+		sourceColumn: slaTier
+
+		annotation SummarizationSetBy = Automatic
+
+	partition 'Con_Business Application Uses Vendor System' = m
+		mode: import
+		source =
+				let
+				    Source = Sql.Database("sql-host", "EAWestbrook"),
+				    Data = Source{[Schema="p5test",Item="Con_Business Application Uses Vendor System"]}[Data]
+				in
+				    Data
+
+	annotation PBI_ResultType = Table

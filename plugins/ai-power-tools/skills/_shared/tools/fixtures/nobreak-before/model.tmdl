@@ -1,0 +1,66 @@
+model Model
+	culture: en-US
+	defaultPowerBIDataSourceVersion: powerBI_V3
+	sourceQueryCulture: en-US
+	valueFilterBehavior: independent
+	dataAccessOptions
+		legacyRedirects
+		returnErrorValuesAsNull
+
+annotation __PBI_TimeIntelligenceEnabled = 0
+
+annotation PBI_QueryOrder = ["AI Gateway","AI Model","AI Service","Business Application","Business Service","Customer Touchpoint","Data Asset","Data Entity","External Call","Governed Element","Regulated Activity","Regulated Function","System of Record","Technology Node","Vendor System","VendorApplication (not in MDG)","WBADataAsset (not in MDG)","Node (not in MDG)","Con_AI Gateway Uses AI Service","Con_AI Service Uses AI Model","Con_Business Application Flows Business Application","Con_Business Application Uses Business Application","Con_Business Application Uses Business Service","Con_Business Application Uses System of Record","Con_Business Application Uses Technology Node","Con_Business Application Uses Vendor System","Con_Business Application realizes Business Service","Con_Customer Touchpoint Flows Regulated Activity","Con_Regulated Activity Flows External Call","Con_Regulated Function Uses External Call","Con_Regulated Function Uses Regulated Activity","Con_System of Record realizes Data Entity","Con_Vendor System Uses Technology Node","Con_Business Application BMM Uses Node (not in MDG)","Con_Business Application Dependency Business Application (not in MDG)","Con_Business Application Dependency Vendor System (not in MDG)","Con_Business Service Dependency Vendor System (not in MDG)","Con_Data Entity Association Data Entity (not in MDG)","Con_Vendor System BMM Uses Node (not in MDG)","Con_VendorApplication BMM Uses Business Application (not in MDG)","Con_VendorApplication Association Business Application (not in MDG)","Table Directory","t_package","t_object","t_objectproperties","t_connector","t_connectortag","t_diagram","t_diagramobjects","t_attribute","t_operation"]
+
+ref table 'AI Gateway'
+ref table 'AI Model'
+ref table 'AI Service'
+ref table 'Business Application'
+ref table 'Business Service'
+ref table 'Customer Touchpoint'
+ref table 'Data Asset'
+ref table 'Data Entity'
+ref table 'External Call'
+ref table 'Governed Element'
+ref table 'Regulated Activity'
+ref table 'Regulated Function'
+ref table 'System of Record'
+ref table 'Technology Node'
+ref table 'Vendor System'
+ref table 'VendorApplication (not in MDG)'
+ref table 'WBADataAsset (not in MDG)'
+ref table 'Node (not in MDG)'
+ref table 'Con_AI Gateway Uses AI Service'
+ref table 'Con_AI Service Uses AI Model'
+ref table 'Con_Business Application Flows Business Application'
+ref table 'Con_Business Application Uses Business Application'
+ref table 'Con_Business Application Uses Business Service'
+ref table 'Con_Business Application Uses System of Record'
+ref table 'Con_Business Application Uses Technology Node'
+ref table 'Con_Business Application Uses Vendor System'
+ref table 'Con_Business Application realizes Business Service'
+ref table 'Con_Customer Touchpoint Flows Regulated Activity'
+ref table 'Con_Regulated Activity Flows External Call'
+ref table 'Con_Regulated Function Uses External Call'
+ref table 'Con_Regulated Function Uses Regulated Activity'
+ref table 'Con_System of Record realizes Data Entity'
+ref table 'Con_Vendor System Uses Technology Node'
+ref table 'Con_Business Application BMM Uses Node (not in MDG)'
+ref table 'Con_Business Application Dependency Business Application (not in MDG)'
+ref table 'Con_Business Application Dependency Vendor System (not in MDG)'
+ref table 'Con_Business Service Dependency Vendor System (not in MDG)'
+ref table 'Con_Data Entity Association Data Entity (not in MDG)'
+ref table 'Con_Vendor System BMM Uses Node (not in MDG)'
+ref table 'Con_VendorApplication BMM Uses Business Application (not in MDG)'
+ref table 'Con_VendorApplication Association Business Application (not in MDG)'
+ref table 'Table Directory'
+ref table t_package
+ref table t_object
+ref table t_objectproperties
+ref table t_connector
+ref table t_connectortag
+ref table t_diagram
+ref table t_diagramobjects
+ref table t_attribute
+ref table t_operation
+
+ref cultureInfo en-US

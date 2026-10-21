@@ -8,7 +8,7 @@ shapes and returns findings; applying anything to a model is the caller's job.
 WHY THIS EXISTS
 ---------------
 An element with no stereotype lands in no entity table. Once the database is
-restricted to logical business objects (APT-2026-0226) it is simply absent, and
+restricted to logical business objects it is simply absent, and
 nothing tells the customer. Measured on the reference model, three Components
 carry the complete governance tag set - criticality Business-Critical,
 regulatoryScope GLBA, both owners, data classification - and no stereotype at
@@ -116,7 +116,7 @@ def find_ungoverned(element_rows, tag_rows, *,
 
     Packages are skipped by default. EA stores every package twice - once in the
     package tree and once as an object so it can sit on a diagram - and the
-    object twin is not something anybody stereotypes (APT-2026-0226).
+    object twin is not something anybody stereotypes.
     """
     names: dict[str, set[str]] = {}
     populated: Counter = Counter()

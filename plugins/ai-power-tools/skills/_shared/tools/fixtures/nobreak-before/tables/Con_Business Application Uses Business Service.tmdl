@@ -1,0 +1,93 @@
+table 'Con_Business Application Uses Business Service'
+	lineageTag: 053428ae-b5bb-5f74-a9be-0bf644d04a36
+
+	column connector_guid
+		dataType: string
+		lineageTag: 47989ce8-8b36-5a2d-bd9b-6956a01878c5
+		summarizeBy: none
+		sourceColumn: connector_guid
+
+		annotation SummarizationSetBy = Automatic
+
+	column connector_id
+		dataType: int64
+		lineageTag: 1549527f-a2ab-56be-a13c-7a414270028a
+		summarizeBy: none
+		sourceColumn: connector_id
+
+		annotation SummarizationSetBy = Automatic
+
+	column name
+		dataType: string
+		lineageTag: 22aa130c-fc63-503e-87a8-551c9f9efbc2
+		summarizeBy: none
+		sourceColumn: name
+
+		annotation SummarizationSetBy = Automatic
+
+	column source_guid
+		dataType: string
+		lineageTag: 65cf2531-5782-5ff1-92db-7aa423a8c6de
+		summarizeBy: none
+		sourceColumn: source_guid
+
+		annotation SummarizationSetBy = Automatic
+
+	column target_guid
+		dataType: string
+		lineageTag: 1a97cffa-e60a-5aa8-a007-0ecce19e8f60
+		summarizeBy: none
+		sourceColumn: target_guid
+
+		annotation SummarizationSetBy = Automatic
+
+	column direction
+		dataType: string
+		lineageTag: 6f53e584-6e09-529f-9f6d-654b45e34574
+		summarizeBy: none
+		sourceColumn: direction
+
+		annotation SummarizationSetBy = Automatic
+
+	column base_type
+		dataType: string
+		lineageTag: e8970f13-9b24-5b55-8e4d-46a3215f915b
+		summarizeBy: none
+		sourceColumn: base_type
+
+		annotation SummarizationSetBy = Automatic
+
+	column dataFlowClassification
+		dataType: string
+		lineageTag: 5dab4cf5-d7e6-59d8-80d2-780cbf0a892e
+		summarizeBy: none
+		sourceColumn: dataFlowClassification
+
+		annotation SummarizationSetBy = Automatic
+
+	column integrationPattern
+		dataType: string
+		lineageTag: 233f8d17-1607-5c74-906f-7c6c7afac0b0
+		summarizeBy: none
+		sourceColumn: integrationPattern
+
+		annotation SummarizationSetBy = Automatic
+
+	column slaTier
+		dataType: string
+		lineageTag: 963c7260-daf3-5c8c-b03e-31ba5e99fa20
+		summarizeBy: none
+		sourceColumn: slaTier
+
+		annotation SummarizationSetBy = Automatic
+
+	partition 'Con_Business Application Uses Business Service' = m
+		mode: import
+		source =
+				let
+				    Source = Sql.Database("sql-host", "EAWestbrook"),
+				    Data = Source{[Schema="p5test",Item="Con_Business Application Uses Business Service"]}[Data]
+				in
+				    Data
+
+	annotation PBI_ResultType = Table

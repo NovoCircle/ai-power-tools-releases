@@ -17,7 +17,7 @@ WHY IT EXISTS AT ALL
 one repository `ApplicationComponent` resolves to `TOGAF::`, `BusinessProcess`
 to `BPMN1.1::`, `Node` to `UPDM2::`, and several ArchiMate-looking names resolve
 to no profile at all. The shipped `summarize_stereotype_usage` reads that column
-and so cannot tell a governed element from an ad-hoc one (APT-2026-0214).
+and so cannot tell a governed element from an ad-hoc one.
 
 Profile binding lives in `t_xref` rows where `Name = 'Stereotypes'`, with a
 `Description` of the form:

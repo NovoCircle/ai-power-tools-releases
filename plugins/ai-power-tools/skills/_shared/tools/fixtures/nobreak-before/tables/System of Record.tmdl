@@ -1,0 +1,93 @@
+table 'System of Record'
+	lineageTag: 35a032d2-206a-5616-8f6b-e9c238566015
+
+	column ea_guid
+		dataType: string
+		lineageTag: 92b75623-2c58-58e5-8dcb-d33b37c8fbda
+		summarizeBy: none
+		sourceColumn: ea_guid
+
+		annotation SummarizationSetBy = Automatic
+
+	column name
+		dataType: string
+		lineageTag: 2c5ed059-a084-5cc3-b87c-5a2649d58b8a
+		summarizeBy: none
+		sourceColumn: name
+
+		annotation SummarizationSetBy = Automatic
+
+	column metaclass
+		dataType: string
+		lineageTag: 3cc71088-a082-5fa4-95b8-ee52139e4105
+		summarizeBy: none
+		sourceColumn: metaclass
+
+		annotation SummarizationSetBy = Automatic
+
+	column package_path
+		dataType: string
+		lineageTag: 7f748db4-04a7-522d-9854-a1901ed089b9
+		summarizeBy: none
+		sourceColumn: package_path
+
+		annotation SummarizationSetBy = Automatic
+
+	column businessOwner
+		dataType: string
+		lineageTag: 0c5a9630-1e1a-58e1-a152-68a4279b8510
+		summarizeBy: none
+		sourceColumn: businessOwner
+
+		annotation SummarizationSetBy = Automatic
+
+	column criticality
+		dataType: string
+		lineageTag: 54a9b9f2-9bbf-5457-b9bb-b97205d4423f
+		summarizeBy: none
+		sourceColumn: criticality
+
+		annotation SummarizationSetBy = Automatic
+
+	column dataClassification
+		dataType: string
+		lineageTag: dea5d3bb-f3dd-58bb-8562-175c83581aab
+		summarizeBy: none
+		sourceColumn: dataClassification
+
+		annotation SummarizationSetBy = Automatic
+
+	column lifecycle
+		dataType: string
+		lineageTag: 593c7b5a-33b0-5d16-bc91-ae63fb7669b9
+		summarizeBy: none
+		sourceColumn: lifecycle
+
+		annotation SummarizationSetBy = Automatic
+
+	column regulatoryScope
+		dataType: string
+		lineageTag: 99433244-88de-5932-8329-c06233f52e95
+		summarizeBy: none
+		sourceColumn: regulatoryScope
+
+		annotation SummarizationSetBy = Automatic
+
+	column technicalOwner
+		dataType: string
+		lineageTag: e375890f-8097-55fa-9910-94434a07414b
+		summarizeBy: none
+		sourceColumn: technicalOwner
+
+		annotation SummarizationSetBy = Automatic
+
+	partition 'System of Record' = m
+		mode: import
+		source =
+				let
+				    Source = Sql.Database("sql-host", "EAWestbrook"),
+				    Data = Source{[Schema="p5test",Item="System of Record"]}[Data]
+				in
+				    Data
+
+	annotation PBI_ResultType = Table

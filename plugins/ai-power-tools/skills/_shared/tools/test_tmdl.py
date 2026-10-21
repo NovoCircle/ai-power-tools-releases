@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """Tests for TMDL rendering, including the cross-path identity guarantee.
 
-    python -m pytest _shared/tools/test_tmdl.py -q
+    python -m pytest plugins/ai-power-tools/skills/_shared/tools/test_tmdl.py -q
 
 Nothing here touches a repository, a COM object, Power BI or the filesystem.
 
@@ -13,11 +13,15 @@ is what makes that claim checkable instead of aspirational.
 """
 from __future__ import annotations
 
+# Backlog items this module pins (checked by tools/test_suite_conventions.py).
+PINS = ("APT-2026-0212", "APT-2026-0230", "APT-2026-0248", "APT-2026-0302", "APT-2026-0405")
+
 import json
 import re
 
 import pytest
 
+import tmdl
 from semantic_model import (Measure, Relationship, SemanticColumn,
                             SemanticModel, SemanticTable)
 from tmdl import (NEWLINE, ParquetSource, SqlSource, ident, lineage_tag,
@@ -25,7 +29,7 @@ from tmdl import (NEWLINE, ParquetSource, SqlSource, ident, lineage_tag,
                   render_culture, render_definition, render_model,
                   render_relationships, render_table)
 
-CON = "Con_entity_0 Uses entity_1"
+CONNECTOR_TABLE = "Con_entity_0 Uses entity_1"
 PHYSICAL = "t_object"
 
 
@@ -42,7 +46,7 @@ def semantic(n_tables=2):
         for i in range(n_tables)
     ]
     tables.append(SemanticTable(
-        name=CON,
+        name=CONNECTOR_TABLE,
         columns=[SemanticColumn("source_guid", "string"), SemanticColumn("target_guid", "string")],
         measures=[Measure(
             name="Uses by target entity_1",
@@ -54,8 +58,8 @@ def semantic(n_tables=2):
         columns=[SemanticColumn("Object_ID", "int64", format_string="0"),
                  SemanticColumn("ea_guid", "string")]))
     rels = [
-        Relationship("gen_con_source", CON, "source_guid", "entity_0", "ea_guid", why="connector source"),
-        Relationship("gen_con_target", CON, "target_guid", "entity_1", "ea_guid", is_active=False,
+        Relationship("gen_con_source", CONNECTOR_TABLE, "source_guid", "entity_0", "ea_guid", why="connector source"),
+        Relationship("gen_con_target", CONNECTOR_TABLE, "target_guid", "entity_1", "ea_guid", is_active=False,
                      why="second relationship between these two tables"),
     ]
     rels += [Relationship(f"gen_phys_{i}", PHYSICAL, "ea_guid", f"entity_{i}", "ea_guid",
@@ -163,14 +167,14 @@ def test_an_int_column_carries_a_format_string():
 
 def test_measures_render_on_their_own_table_and_nowhere_else():
     sm = semantic()
-    host = render_table(sm.table(CON), PARQUET)
+    host = render_table(sm.table(CONNECTOR_TABLE), PARQUET)
     assert "\tmeasure 'Uses by target entity_1' =" in host
     assert "USERELATIONSHIP" in host
     assert "\tmeasure" not in render_table(sm.table(PHYSICAL), PARQUET)
 
 
 def test_a_measure_name_with_a_space_is_quoted():
-    host = render_table(semantic().table(CON), PARQUET)
+    host = render_table(semantic().table(CONNECTOR_TABLE), PARQUET)
     assert "\tmeasure 'Uses by target entity_1' = CALCULATE(" in host
 
 
@@ -258,7 +262,7 @@ def test_the_reason_is_still_carried_on_the_model_even_though_it_is_not_emitted(
 
 def test_endpoints_render_as_table_dot_column():
     text = render_relationships(semantic())
-    assert f"\tfromColumn: {ident(CON)}.target_guid" in text
+    assert f"\tfromColumn: {ident(CONNECTOR_TABLE)}.target_guid" in text
     assert "\ttoColumn: entity_1.ea_guid" in text
 
 
@@ -300,8 +304,8 @@ def test_the_parquet_partition_imports_and_names_the_source_table():
     """A table's model name and its source name can differ. The partition must
     follow the SOURCE name."""
     sm = semantic()
-    sm.table(CON).source_name = "con_source"
-    text = render_table(sm.table(CON), PARQUET)
+    sm.table(CONNECTOR_TABLE).source_name = "con_source"
+    text = render_table(sm.table(CONNECTOR_TABLE), PARQUET)
     assert "\t\tmode: import" in text
     assert r"C:\out\parquet\con_source.parquet" in text
     assert "Parquet.Document(File.Contents(" in text
@@ -551,10 +555,28 @@ def test_a_table_file_cannot_resolve_outside_tables(name):
     assert stem.split(".")[0].upper() not in ("NUL", "CON")
 
 
+@pytest.mark.parametrize("name", ["COM\u00b9", "COM\u00b2", "COM\u00b3", "LPT\u00b9", "LPT\u00b2",
+                                  "LPT\u00b3", "COM\u00b9.txt", "lpt\u00b3.txt", "COM9", "NUL.x"])
+def test_the_superscript_device_names_are_encoded_like_the_ascii_ones(name):
+    from tmdl import table_file_name
+
+    out = table_file_name(name)
+    assert out != name
+    assert out.startswith("%"), "the first character is encoded"
+    assert out.split(".")[0].upper() not in tmdl._RESERVED_DEVICES
+
+
+def test_a_name_that_only_contains_a_device_name_is_not_encoded():
+    from tmdl import table_file_name
+
+    assert table_file_name("COM\u00b9x") == "COM\u00b9x"
+    assert table_file_name("xCOM\u00b9") == "xCOM\u00b9"
+
+
 def test_a_safe_table_name_keeps_its_file_name_and_encodings_do_not_collide():
     from tmdl import table_file_name
 
-    assert table_file_name(CON) == CON, "ordinary names are unchanged"
+    assert table_file_name(CONNECTOR_TABLE) == CONNECTOR_TABLE, "ordinary names are unchanged"
     assert table_file_name("a/b") != table_file_name("a%2Fb")
 
 

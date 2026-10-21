@@ -30,7 +30,7 @@ observed by a second operator on a different dashboard.
 > **Do not retry a drag that appears to do nothing, and do not report a layout as applied.** It is
 > not a timing problem and it will not succeed on the third attempt.
 
-This is a limitation of the available browser tooling, not a gap in knowledge — the grid, its
+This is a limitation of the browser actions available when this was verified, not a gap in knowledge — the grid, its
 geometry, its persistence and its collision behavior are all understood. If a stepped-drag
 capability becomes available, §4 is enough to automate layout immediately.
 
@@ -109,9 +109,9 @@ embedded dashboard loses its titles.
 
 | Symptom | Cause |
 |---|---|
-| A click reports success and nothing happens | Element-ref clicks fail silently here; a coordinate click works |
+| A click reports success and nothing happens | A click that targets an element by reference can fail silently here; a click at its position on screen works |
 | The first interaction after a page load does nothing | Common; budget a throwaway click or verify state |
 | The Add Widget control opens then closes | It is a toggle — verify the menu is open before clicking through it |
-| A coordinate click lands in the wrong place | Screenshot coordinates are a **scaled copy** of page pixels; scale any coordinate derived from the page |
+| A coordinate click lands in the wrong place | A screenshot can be a **scaled copy** of the page; scale any position read from it back to page pixels before clicking |
 | Everything reports success but nothing changes | A minimized window: all dimensions read 0, clicks are swallowed, screenshots fail. **Check the window has a non-zero width before trusting any click.** |
 | A typed value is not what you typed | Browser autofill corrupts name fields. **Read every text field back after typing.** |

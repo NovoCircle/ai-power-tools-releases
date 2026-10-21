@@ -29,8 +29,17 @@ Five checks. Run them in order and stop at the first that fails. All are read-on
 
 ### 1.1 Are we signed in, and to what?
 
-Navigate to the Prolaborate host and read the page. If you land on `/Account/Login`, stop — the
-person must sign in themselves. **Never enter credentials on their behalf.**
+Open the Prolaborate host in the browser and read the page. If you land on `/Account/Login`, stop —
+the person must sign in themselves. **Never enter credentials on their behalf.** How they sign in
+depends on the browser you are driving:
+
+- **Claude Desktop browser pane** — a clean profile with no sign-ins. Ask the person to sign in to
+  Prolaborate inside the pane, then continue.
+- **Claude in Chrome** — uses the person's own Chrome, so their existing Prolaborate sign-in is
+  already there. If they are signed out, they sign in in that tab.
+- **VS Code** — pages the agent opens are an isolated session with no sign-in. Ask the person to
+  open Prolaborate in VS Code's integrated browser, sign in, and choose **Share with Agent**; then
+  drive that shared page.
 
 ### 1.2 Is there a live token?
 
@@ -40,7 +49,7 @@ const user = key ? JSON.parse(sessionStorage.getItem(key)) : null;
 const token = user && user.access_token;   // narrow immediately; never carry the whole object
 ```
 
-No key means the SPA has not been loaded in this tab yet — navigate to the app root first. The
+No key means the SPA has not been loaded in this page yet — open the app root first. The
 key is present but the token is routinely stale; that is normal and recoverable. See the session
 reference.
 
@@ -74,6 +83,22 @@ await fetch('/api/repository/GetAllActiveRepositories',
 Returns the repositories this person has access to, with `id`, `name` and `status`. Confirm the
 intended repository is present and `Active` before going further — an inactive repository produces
 errors throughout Prolaborate that read like permission faults.
+
+These snippets run as JavaScript inside the signed-in Prolaborate page, so the browser control you
+use must be able to run a script in that page and return the result.
+
+---
+
+## Browser control by surface
+
+*As of October 2026.* These skills only say what to do in the browser — open the page, read the
+table, click Save — so any client with browser control can follow them. Claude Desktop (browser pane
+or Claude in Chrome) is where they were written and exercised. VS Code 1.141.2 has built-in browser
+tools (on by default) that can open and read pages, click, type, handle dialogs, take screenshots and
+run Playwright code, and the sign-in route above is how to give them a signed-in page. **VS Code
+support is documented but not yet run end to end for these skills.** If a step behaves differently
+there, say what you observed rather than working around it. Where a flow opens a new tab, make sure
+the browser control can see that tab, which in VS Code may mean sharing it with the agent too.
 
 ---
 
@@ -161,7 +186,7 @@ These hold across every `prol-` skill.
 
 Work through these in order before concluding a capability is missing:
 
-1. **`ID2019` in `WWW-Authenticate`** — the token aged out. Navigate to refresh it, re-read
+1. **`ID2019` in `WWW-Authenticate`** — the token aged out. Reload the page to refresh it, re-read
    `sessionStorage`, retry once.
 2. **`ID2095`** — authenticated but not permitted. Check `rol` and the person's Access Permissions
    on the repository. This is a permissions answer, not a bug.

@@ -3,7 +3,7 @@
 
 Run from the repository root:
 
-    python -m pytest ea-diagram-composition/tools/test_compose_matrix.py -q
+    python -m pytest plugins/ai-power-tools/skills/ea-diagram-composition/tools/test_compose_matrix.py -q
 
 Nothing here touches a repository, a COM object or the filesystem. If any test
 in this file needs Sparx EA to pass, the layer boundary has been broken.
@@ -23,6 +23,9 @@ Three conventions worth reading before editing:
   overlap". A margin that happens to hold for a 140x60 box is not a derivation.
 """
 from __future__ import annotations
+
+# No backlog item is pinned: these tests cover designed behavior, not a filed defect.
+PINS = ()
 
 import sys
 from pathlib import Path

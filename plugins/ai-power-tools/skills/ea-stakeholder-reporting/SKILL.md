@@ -1,13 +1,13 @@
 ---
 name: ea-stakeholder-reporting
-description: Turn a Sparx EA model into an answer a non-modeller can act on -- portfolio roll-ups by tagged value, plain-language element summaries, and business-facing display terms. Use when someone asks "how many X are Y", "what's mission-critical", "what's in scope for [a regulation]", or wants a model fact stated in business language instead of stereotype/tag names, and especially before quoting any count drawn from a tagged value.
+description: Turn a Sparx EA model into an answer a non-modeler can act on -- portfolio roll-ups by tagged value, plain-language element and diagram summaries, and business-facing display terms. Use when someone asks "how many X are Y", "what's mission-critical", "what's in scope for [a regulation]", or wants a model fact stated in business language instead of stereotype/tag names, and especially before quoting any count drawn from a tagged value.
 ---
 
 # Reporting to stakeholders from a Sparx EA model
 
 *Tools: `ea_analyze(operation="get_element_business_view"|"summarize_tagged_value_usage"|"summarize_stereotype_usage", params={...})`,
 `ea_repository(operation="aggregate_portfolio", params={...})`,
-`ea_mdg(operation="resolve_display_term", params={...})` (AI Power Tools for EA, v3.6.0+)*
+`ea_mdg(operation="resolve_display_term", params={...})` (AI Power Tools for EA, v3.6.4+)*
 
 This skill is read-only. None of the calls below create, update, or delete anything, and
 none require a write confirmation. If a task built on this skill ever needs a scratch
@@ -259,6 +259,62 @@ When you need a business term:
   (`WBABusinessApplication` -> "Business Application").
 - Call `resolve_display_term` for terms from a language that ships with EA, or for a
   stereotype of a technology parsed this session, where it does find them.
+
+---
+
+## Diagram descriptions: a diagram in words
+
+*Uses `ea_diagram(operation="get_diagram_manifest"|"audit_diagram_descriptions", params={...})`, which arrive
+with server 3.6.4. On an older server these operations are unknown: say so and do not improvise a
+description from shapes.*
+
+A diagram can carry a **description**: plain text in the diagram's Notes that says what the diagram
+shows, in the organization's business terms, with nothing about how it is drawn. It is written for
+readers who cannot see the picture or do not have EA: a screen reader, a document, an AI assistant,
+a stakeholder who asks "what is on this diagram?". Use it as the plain-language answer to that
+question, instead of reading shapes and stereotype names aloud.
+
+**How to read one.** The first sentence is a one-line summary (at most 150 characters). The body
+follows, grouped by the diagram's groupings, with every element by its business kind and name and
+every relationship as a sentence ("Customer Portal uses Payments Gateway"). Two marker lines
+bracket the generated text; anything a person wrote above or below them is theirs and stays as it
+is. Quote the words, not the marker lines.
+
+```
+ea_diagram(operation="audit_diagram_descriptions", params={"package_id": 10})
+ea_diagram(operation="get_diagram_manifest", params={"diagram_id": 4, "include_svg": False})
+```
+
+(The ids are the Westbrook Bank copy's.) The audit is read-only and says whether the words can be
+trusted; the manifest's `description` holds them, with `description_source` saying whether they are
+the stored words (`notes`) or were generated just now (`generated`).
+
+**Check the status before you quote, as you check coverage before you quote a count.**
+
+| Status | What you can say |
+|---|---|
+| `current`, or `edited` | The description matches the diagram (`edited`: a person adjusted the words). Quote it. |
+| `stale`, `needs_decision` | The diagram has changed since the words were written. Say the description is out of date; do not present it as what the diagram shows now. |
+| `older_generator`, `language_changed` | The generator or the technology version has changed since the words were written. Say the description is out of date and may not match what the diagram shows now. |
+| `human_only` | A person wrote the Notes; no description was generated. Quote it as their text. |
+| `empty` | There is no description; see below. |
+| `broken_markers`, `technology_not_loaded` | The words cannot be checked. Say so; do not quote them as current. |
+
+If the row is `incomplete`, the text leaves out elements or relationships the diagram holds
+(`names_missing`, `relationships_missing`); tell the reader what it omits instead of presenting it
+as the whole picture. That holds for a description a person wrote by hand as much as for a
+generated one.
+
+**A diagram with no description.** Ask for the manifest: with no stored description it generates
+the words from the diagram, and nothing is written. Say that the text was generated for this answer
+and is not stored. Storing it in the diagram's Notes is a model write, so it is not this skill's:
+offer it in one line, and with the person's yes follow `../ea-import-export/SKILL.md` section 3c,
+which previews first.
+
+**An out-of-date description.** Do not refresh it from here. Say it is out of date, and
+`update_diagram_description` (mode `refresh`) previews the new text without writing, because
+`dry_run` is true unless you say otherwise. Writing it, and deciding what happens to a person's
+edits, is `../ea-import-export/SKILL.md` section 3c.
 
 ---
 

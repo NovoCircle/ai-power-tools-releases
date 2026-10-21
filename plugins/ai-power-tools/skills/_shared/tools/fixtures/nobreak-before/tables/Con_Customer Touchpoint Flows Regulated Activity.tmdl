@@ -1,0 +1,93 @@
+table 'Con_Customer Touchpoint Flows Regulated Activity'
+	lineageTag: a83aac43-a27f-53a6-9094-d66a9ba8f633
+
+	column connector_guid
+		dataType: string
+		lineageTag: ce63e88e-7186-51f6-83c6-25cf5b103493
+		summarizeBy: none
+		sourceColumn: connector_guid
+
+		annotation SummarizationSetBy = Automatic
+
+	column connector_id
+		dataType: int64
+		lineageTag: 174af348-0d6e-5439-adbd-52e828dd436e
+		summarizeBy: none
+		sourceColumn: connector_id
+
+		annotation SummarizationSetBy = Automatic
+
+	column name
+		dataType: string
+		lineageTag: 885a3258-c51d-5e3f-993a-97124fe8ea04
+		summarizeBy: none
+		sourceColumn: name
+
+		annotation SummarizationSetBy = Automatic
+
+	column source_guid
+		dataType: string
+		lineageTag: 44af44d7-a884-5090-9828-9d22cc89b971
+		summarizeBy: none
+		sourceColumn: source_guid
+
+		annotation SummarizationSetBy = Automatic
+
+	column target_guid
+		dataType: string
+		lineageTag: ba3e8831-a9dd-59f3-bb61-1ed4da861c8b
+		summarizeBy: none
+		sourceColumn: target_guid
+
+		annotation SummarizationSetBy = Automatic
+
+	column direction
+		dataType: string
+		lineageTag: 103674f6-89b1-5101-a6d0-747659ac8934
+		summarizeBy: none
+		sourceColumn: direction
+
+		annotation SummarizationSetBy = Automatic
+
+	column base_type
+		dataType: string
+		lineageTag: 4bbc683c-1749-5837-8f82-1ebfd23594f7
+		summarizeBy: none
+		sourceColumn: base_type
+
+		annotation SummarizationSetBy = Automatic
+
+	column dataFlowClassification
+		dataType: string
+		lineageTag: a77c8a23-faf2-5e68-a48f-0add993d1991
+		summarizeBy: none
+		sourceColumn: dataFlowClassification
+
+		annotation SummarizationSetBy = Automatic
+
+	column integrationPattern
+		dataType: string
+		lineageTag: 96ce5116-8c89-5331-9cb2-3bb37001b90f
+		summarizeBy: none
+		sourceColumn: integrationPattern
+
+		annotation SummarizationSetBy = Automatic
+
+	column slaTier
+		dataType: string
+		lineageTag: 9c5c4d86-99aa-52ae-9262-075c2c645d83
+		summarizeBy: none
+		sourceColumn: slaTier
+
+		annotation SummarizationSetBy = Automatic
+
+	partition 'Con_Customer Touchpoint Flows Regulated Activity' = m
+		mode: import
+		source =
+				let
+				    Source = Sql.Database("sql-host", "EAWestbrook"),
+				    Data = Source{[Schema="p5test",Item="Con_Customer Touchpoint Flows Regulated Activity"]}[Data]
+				in
+				    Data
+
+	annotation PBI_ResultType = Table

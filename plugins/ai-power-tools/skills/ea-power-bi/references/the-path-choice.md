@@ -15,9 +15,11 @@ Read `SKILL.md` §1 first; this is the long form of it.
    through a cloud connection (Pro Cloud Server) has no direct database access for the person
    asking. Either rules direct access out, and asking first means the customer hears a constraint
    rather than a refusal.
-2. **"If not, can you run a SQL Server for a reporting database?"** AI Power Tools fills it over
-   EA's own interface from the open repository. It needs a Windows account that may create the
-   database.
+2. **"If not, can you run a SQL Server for a reporting database, or do you have a Microsoft Fabric
+   capacity?"** AI Power Tools fills the reporting database over EA's own interface from the open
+   repository. On a local SQL Server it needs a Windows account that may create the database. A SQL
+   database in Microsoft Fabric is created in the Fabric portal first and signed in to with a
+   Microsoft work account (`ea-reporting-database` §3).
 3. **"If neither, are Parquet files on this machine enough?"**
 
 Someone with direct access may still choose a reporting database or Parquet: to keep views out of
@@ -31,8 +33,8 @@ packages the user excludes.
 | If the customer says... | Path | Storage mode | What to state |
 |---|---|---|---|
 | "I can reach the EA database, it is SQL Server, and I may create views" | **A - direct access**: views in their own schema inside the EA database | **DirectQuery** (live), or Import | The views live in the production database and EA's own tables are never altered. DirectQuery queries that database, and its speed at the scale of a large repository is not measured. Regenerate the views when the technology or the inclusion choice changes |
-| "I cannot reach the database, or do not want views in it, but I can run SQL Server" | **B - reporting database**: views in a separate SQL Server database | **Import** | A snapshot, rebuilt in full on every refresh with no history. A failed refresh leaves the previous data live. Queries never touch the production database |
-| "No database access, and no database to run" | **C - Parquet files** | **Import** | A snapshot, rewritten on every refresh, read by Power BI Desktop on this machine. `pyarrow` is needed to write the files. OneLake upload is not yet available (APT-2026-0362) |
+| "I cannot reach the database, or do not want views in it, but I can run SQL Server or have a Fabric capacity" | **B - reporting database**: views in a separate database, on SQL Server or a SQL database in Microsoft Fabric | **Import** | A snapshot, rebuilt in full on every refresh with no history. A failed refresh leaves the previous data live. Queries never touch the production database. A published model refreshes from a SQL database in Fabric with no gateway |
+| "No database access, and no database to run" | **C - Parquet files** | **Import** | A snapshot, rewritten on every refresh, read by Power BI Desktop on this machine. `pyarrow` is needed to write the files. A published model cannot refresh from the files: uploading them to OneLake is not supported |
 | "I want Power BI to read the repository live" | **A in DirectQuery**, and only if they can reach the database | DirectQuery | Say plainly that every query reads the production database. For any other estate there is no live option: B and C are snapshots, and a snapshot is not a substitute for live data |
 
 **Do not quietly build a snapshot when the customer asked for live data.** The report keeps working
@@ -49,7 +51,7 @@ The generator reads one definition file. Everything a customer sees is the same 
 | The tables | the business tables - entity, `Con_`, tag-row and the Table Directory - plus EA's nine tables, hidden |
 | The names, columns and types | exactly as `ea-reporting-database` defines them |
 | The relationships | declared by the generator, the business layer filtering EA's tables, with the same active and inactive states |
-| The measures | one per inactive relationship, on its `Con_` table |
+| The measures | a count measure on each entity table, and a traversal measure for each inactive relationship whose many side is a `Con_` table, on that table |
 | The descriptions, hidden flags and layout | the same |
 
 Only two things vary: **where a table's rows come from** (a view in the EA database, a view in the
@@ -73,13 +75,12 @@ polls for the result and reports it. EA must be running with the repository open
 What Power BI does next depends on the path:
 
 - **A, DirectQuery:** nothing; the views are read live.
-- **B:** Power BI's own scheduled refresh against the SQL Server, through an on-premises data
-  gateway, for a published model; Refresh in Desktop otherwise.
+- **B:** Refresh in Desktop, or, for a published model, Power BI's own scheduled refresh. From a SQL
+  database in Fabric it needs **no gateway** (measured; OAuth2 credentials, `SKILL.md` §6). From a
+  local SQL Server it goes through an on-premises data gateway, which has **not been tested with
+  this model**: do not assert it either way.
 - **C:** rewrite the files (the local step in `SKILL.md` 4.2), then Refresh in Desktop. A published
-  model cannot refresh from files until OneLake upload is available (APT-2026-0362).
-
-Scheduled refresh in the Power BI service and the gateway have **not been tested with this model**.
-Do not assert either way.
+  model cannot refresh from files: uploading them to OneLake is not supported.
 
 **"Can I move the files?"**
 

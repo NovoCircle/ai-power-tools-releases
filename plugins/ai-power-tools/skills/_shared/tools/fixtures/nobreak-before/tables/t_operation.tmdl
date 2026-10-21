@@ -1,0 +1,230 @@
+table t_operation
+	isHidden
+	lineageTag: 4e54e257-2d8d-51ce-8e38-be293e01f8b5
+
+	column OperationID
+		dataType: int64
+		lineageTag: b3546a45-83aa-5218-88cf-9b3d41d8edb8
+		summarizeBy: none
+		sourceColumn: OperationID
+
+		annotation SummarizationSetBy = Automatic
+
+	column Object_ID
+		dataType: int64
+		lineageTag: e114e257-6c48-5360-9d57-f8c2aca29896
+		summarizeBy: none
+		sourceColumn: Object_ID
+
+		annotation SummarizationSetBy = Automatic
+
+	column Name
+		dataType: string
+		lineageTag: 9a2fc9c9-5849-5846-8efe-7c87e9e7af6a
+		summarizeBy: none
+		sourceColumn: Name
+
+		annotation SummarizationSetBy = Automatic
+
+	column Scope
+		dataType: string
+		lineageTag: 49b3ef5a-11d9-5207-a0fe-960577cf79fb
+		summarizeBy: none
+		sourceColumn: Scope
+
+		annotation SummarizationSetBy = Automatic
+
+	column Type
+		dataType: string
+		lineageTag: 06b02c8a-c639-57a5-bbcc-88520f5dc2f5
+		summarizeBy: none
+		sourceColumn: Type
+
+		annotation SummarizationSetBy = Automatic
+
+	column ReturnArray
+		dataType: string
+		lineageTag: 6de48f13-4f6b-5528-b209-d76781009aab
+		summarizeBy: none
+		sourceColumn: ReturnArray
+
+		annotation SummarizationSetBy = Automatic
+
+	column Stereotype
+		dataType: string
+		lineageTag: 4c6c31e9-6e0f-5eb6-af43-381477e72aec
+		summarizeBy: none
+		sourceColumn: Stereotype
+
+		annotation SummarizationSetBy = Automatic
+
+	column IsStatic
+		dataType: string
+		lineageTag: 81894939-6f56-5bee-9047-2a56408fb8ed
+		summarizeBy: none
+		sourceColumn: IsStatic
+
+		annotation SummarizationSetBy = Automatic
+
+	column Concurrency
+		dataType: string
+		lineageTag: 2a23535b-30c3-5c51-a2eb-431d02a65f4e
+		summarizeBy: none
+		sourceColumn: Concurrency
+
+		annotation SummarizationSetBy = Automatic
+
+	column Notes
+		dataType: string
+		lineageTag: 5bfeb877-6b47-5fa7-842d-9dd0d326b97e
+		summarizeBy: none
+		sourceColumn: Notes
+
+		annotation SummarizationSetBy = Automatic
+
+	column Behaviour
+		dataType: string
+		lineageTag: a4924e7a-a715-5d59-88cc-270ca44fc7b9
+		summarizeBy: none
+		sourceColumn: Behaviour
+
+		annotation SummarizationSetBy = Automatic
+
+	column Abstract
+		dataType: string
+		lineageTag: 0aef7c46-6ee0-5131-a58d-01ff4b2c80cc
+		summarizeBy: none
+		sourceColumn: Abstract
+
+		annotation SummarizationSetBy = Automatic
+
+	column GenOption
+		dataType: string
+		lineageTag: f95398f2-9019-5134-8d42-28cf87e05c59
+		summarizeBy: none
+		sourceColumn: GenOption
+
+		annotation SummarizationSetBy = Automatic
+
+	column Synchronized
+		dataType: string
+		lineageTag: 6d8902ac-c530-5986-bb4e-3c40d6494c8d
+		summarizeBy: none
+		sourceColumn: Synchronized
+
+		annotation SummarizationSetBy = Automatic
+
+	column Pos
+		dataType: int64
+		lineageTag: 9c4943a3-1a16-5e39-bff2-3e933e8c87c1
+		summarizeBy: none
+		sourceColumn: Pos
+
+		annotation SummarizationSetBy = Automatic
+
+	column Const
+		dataType: int64
+		lineageTag: 61693bfe-61de-59f7-b246-bc7bb5999b97
+		summarizeBy: none
+		sourceColumn: Const
+
+		annotation SummarizationSetBy = Automatic
+
+	column Style
+		dataType: string
+		lineageTag: 773cb36a-be5a-5894-aa82-ad6b3c5a6bfb
+		summarizeBy: none
+		sourceColumn: Style
+
+		annotation SummarizationSetBy = Automatic
+
+	column Pure
+		dataType: int64
+		lineageTag: c91fefea-1ebe-5817-ad23-bd37e0c34bbd
+		summarizeBy: none
+		sourceColumn: Pure
+
+		annotation SummarizationSetBy = Automatic
+
+	column Throws
+		dataType: string
+		lineageTag: 295cf265-2d89-5294-8b6f-eff5cc7f708e
+		summarizeBy: none
+		sourceColumn: Throws
+
+		annotation SummarizationSetBy = Automatic
+
+	column Classifier
+		dataType: string
+		lineageTag: d69f9f79-1eaa-50d5-9d49-d7b035f783bc
+		summarizeBy: none
+		sourceColumn: Classifier
+
+		annotation SummarizationSetBy = Automatic
+
+	column Code
+		dataType: string
+		lineageTag: af4dc798-21d8-57f1-b780-2b677ad093b9
+		summarizeBy: none
+		sourceColumn: Code
+
+		annotation SummarizationSetBy = Automatic
+
+	column IsRoot
+		dataType: int64
+		lineageTag: 30e7ac89-8123-5d23-b860-9da311ade17f
+		summarizeBy: none
+		sourceColumn: IsRoot
+
+		annotation SummarizationSetBy = Automatic
+
+	column IsLeaf
+		dataType: int64
+		lineageTag: ef04ab2a-fd28-5eb8-9ea8-9fc02f601541
+		summarizeBy: none
+		sourceColumn: IsLeaf
+
+		annotation SummarizationSetBy = Automatic
+
+	column IsQuery
+		dataType: int64
+		lineageTag: 1b020df9-6a74-508c-9b2a-a843deb3b36a
+		summarizeBy: none
+		sourceColumn: IsQuery
+
+		annotation SummarizationSetBy = Automatic
+
+	column StateFlags
+		dataType: string
+		lineageTag: 839c2abd-e1c7-50cd-971c-0207c7628840
+		summarizeBy: none
+		sourceColumn: StateFlags
+
+		annotation SummarizationSetBy = Automatic
+
+	column ea_guid
+		dataType: string
+		lineageTag: a7041bc7-7db0-5405-bf74-fd6e85fdf042
+		summarizeBy: none
+		sourceColumn: ea_guid
+
+		annotation SummarizationSetBy = Automatic
+
+	column StyleEx
+		dataType: string
+		lineageTag: 0afcb604-55de-51b1-bbe5-442829d8461f
+		summarizeBy: none
+		sourceColumn: StyleEx
+
+		annotation SummarizationSetBy = Automatic
+
+	partition t_operation = m
+		mode: import
+		source =
+				let
+				    Source = Sql.Database("sql-host", "EAWestbrook"),
+				    Data = Source{[Schema="dbo",Item="t_operation"]}[Data]
+				in
+				    Data
+
+	annotation PBI_ResultType = Table

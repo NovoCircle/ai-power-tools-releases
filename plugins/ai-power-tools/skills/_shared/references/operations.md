@@ -3,7 +3,7 @@
 **Generated — do not edit by hand.** Produced by `tools/gen-operations.py` from the
 server's dispatch tables. Re-run it after any server change rather than editing here.
 
-Server version: `3.6.0` · 144 operations across 6 meta-tools.
+Server version: `3.6.4` · 149 operations across 6 meta-tools.
 
 Every operation is called the same way:
 
@@ -75,7 +75,7 @@ If an operation is not in this list, it does not exist. Do not infer one from a 
 
 ---
 
-## `ea_diagram` — 41 operations
+## `ea_diagram` — 46 operations
 
 | Operation | What it does |
 |---|---|
@@ -83,9 +83,11 @@ If an operation is not in this list, it does not exist. Do not infer one from a 
 | `add_element_to_diagram` | Place an existing element on a diagram. |
 | `add_elements_to_diagram_bulk` | Place multiple existing elements on a diagram in one call. |
 | `add_image` | Load an image FILE into the model's image library (`t_image`) and return its `image_id`, ready to pass to `set_element_image`. |
+| `audit_diagram_descriptions` | Report, diagram by diagram, which descriptions are current, out of date, missing or edited. |
 | `clear_element_image` | Stop drawing a placed element as a custom image, KEEPING the artwork in the model's image library. |
 | `collapse_parallel_connectors` | Hide duplicate connectors between the same pair of elements. |
 | `create_diagram` | Create a new diagram in a package. |
+| `create_diagram_description` | Write a plain-language description of a diagram into its Notes, for each diagram whose Notes is empty. |
 | `create_diagram_in_language` | Create a diagram using a language-qualified diagram type. |
 | `delete_diagram` | Permanently delete a diagram. |
 | `expand_parallel_connectors` | Un-hide every hidden link on a diagram -- the inverse of collapsing. |
@@ -97,8 +99,10 @@ If an operation is not in this list, it does not exist. Do not infer one from a 
 | `get_diagram` | Fetch a diagram with an inline PNG preview. |
 | `get_diagram_display` | Read a diagram's display settings, decoded across all three surfaces. |
 | `get_diagram_link` | Read one connector's presentation on one diagram, decoded. |
+| `get_diagram_manifest` | Read one diagram completely, in one call: everything another tool needs to redraw it, or to describe it, without a call per element. |
 | `get_diagram_png` | Render a diagram as PNG and return the bytes inline. |
 | `get_diagram_svg` | Render a diagram as SVG and return the markup inline. |
+| `get_package_manifest` | Read every diagram in a package in one call, each element described once. |
 | `layout_diagram` | Apply an auto-layout to a diagram using EA's Project.LayoutDiagramEx(). |
 | `list_diagrams_in_package` | List diagrams in a package, optionally walking children. |
 | `list_images` | List what the model's image library (`t_image`) already holds, with enough detail to pick one for `set_element_image`. |
@@ -119,6 +123,7 @@ If an operation is not in this list, it does not exist. Do not infer one from a 
 | `set_element_icon` | Draw ONE placed element as an icon from EA's own shipped icon libraries, ON ONE DIAGRAM. |
 | `set_element_image` | Draw ONE placed element as a custom image ON ONE DIAGRAM. |
 | `update_diagram` | Update a diagram's properties. |
+| `update_diagram_description` | Bring diagram descriptions up to date. |
 | `verify_diagram` | Reload a diagram, render it, and return the image WITH the full placed geometry -- the one call an automated quality check should use. |
 
 ---

@@ -3,7 +3,7 @@
 
 Run from the repository root:
 
-    python -m pytest ea-diagram-composition/tools/test_compose_radial_tree.py -q
+    python -m pytest plugins/ai-power-tools/skills/ea-diagram-composition/tools/test_compose_radial_tree.py -q
 
 Nothing here touches a repository, a COM object or the filesystem. If any test
 in this file needs Sparx EA to pass, the layer boundary has been broken.
@@ -18,6 +18,9 @@ Two conventions worth reading before editing:
 * Rects are in EA's flipped-y convention, where `top` is greater than `bottom`.
 """
 from __future__ import annotations
+
+# No backlog item is pinned: these tests cover designed behavior, not a filed defect.
+PINS = ()
 
 import math
 import sys

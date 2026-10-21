@@ -1,0 +1,301 @@
+relationship gen_con_ai_gateway_uses_ai_service_source_guid_to_ai_gateway
+	fromColumn: 'Con_AI Gateway Uses AI Service'.source_guid
+	toColumn: 'AI Gateway'.ea_guid
+
+relationship gen_con_ai_gateway_uses_ai_service_target_guid_to_ai_service
+	fromColumn: 'Con_AI Gateway Uses AI Service'.target_guid
+	toColumn: 'AI Service'.ea_guid
+
+relationship gen_con_ai_service_uses_ai_model_source_guid_to_ai_service
+	fromColumn: 'Con_AI Service Uses AI Model'.source_guid
+	toColumn: 'AI Service'.ea_guid
+
+relationship gen_con_ai_service_uses_ai_model_target_guid_to_ai_model
+	fromColumn: 'Con_AI Service Uses AI Model'.target_guid
+	toColumn: 'AI Model'.ea_guid
+
+relationship gen_con_business_application_flows_business_application_source_guid_to_business_application
+	fromColumn: 'Con_Business Application Flows Business Application'.source_guid
+	toColumn: 'Business Application'.ea_guid
+
+relationship gen_con_business_application_flows_business_application_target_guid_to_business_application
+	isActive: false
+	fromColumn: 'Con_Business Application Flows Business Application'.target_guid
+	toColumn: 'Business Application'.ea_guid
+
+relationship gen_con_business_application_uses_business_application_source_guid_to_business_application
+	fromColumn: 'Con_Business Application Uses Business Application'.source_guid
+	toColumn: 'Business Application'.ea_guid
+
+relationship gen_con_business_application_uses_business_application_target_guid_to_business_application
+	isActive: false
+	fromColumn: 'Con_Business Application Uses Business Application'.target_guid
+	toColumn: 'Business Application'.ea_guid
+
+relationship gen_con_business_application_uses_business_service_source_guid_to_business_application
+	fromColumn: 'Con_Business Application Uses Business Service'.source_guid
+	toColumn: 'Business Application'.ea_guid
+
+relationship gen_con_business_application_uses_business_service_target_guid_to_business_service
+	fromColumn: 'Con_Business Application Uses Business Service'.target_guid
+	toColumn: 'Business Service'.ea_guid
+
+relationship gen_con_business_application_uses_system_of_record_source_guid_to_business_application
+	fromColumn: 'Con_Business Application Uses System of Record'.source_guid
+	toColumn: 'Business Application'.ea_guid
+
+relationship gen_con_business_application_uses_system_of_record_target_guid_to_system_of_record
+	fromColumn: 'Con_Business Application Uses System of Record'.target_guid
+	toColumn: 'System of Record'.ea_guid
+
+relationship gen_con_business_application_uses_technology_node_source_guid_to_business_application
+	fromColumn: 'Con_Business Application Uses Technology Node'.source_guid
+	toColumn: 'Business Application'.ea_guid
+
+relationship gen_con_business_application_uses_technology_node_target_guid_to_technology_node
+	fromColumn: 'Con_Business Application Uses Technology Node'.target_guid
+	toColumn: 'Technology Node'.ea_guid
+
+relationship gen_con_business_application_uses_vendor_system_source_guid_to_business_application
+	fromColumn: 'Con_Business Application Uses Vendor System'.source_guid
+	toColumn: 'Business Application'.ea_guid
+
+relationship gen_con_business_application_uses_vendor_system_target_guid_to_vendor_system
+	fromColumn: 'Con_Business Application Uses Vendor System'.target_guid
+	toColumn: 'Vendor System'.ea_guid
+
+relationship gen_con_business_application_realizes_business_service_source_guid_to_business_application
+	fromColumn: 'Con_Business Application realizes Business Service'.source_guid
+	toColumn: 'Business Application'.ea_guid
+
+relationship gen_con_business_application_realizes_business_service_target_guid_to_business_service
+	fromColumn: 'Con_Business Application realizes Business Service'.target_guid
+	toColumn: 'Business Service'.ea_guid
+
+relationship gen_con_customer_touchpoint_flows_regulated_activity_source_guid_to_customer_touchpoint
+	fromColumn: 'Con_Customer Touchpoint Flows Regulated Activity'.source_guid
+	toColumn: 'Customer Touchpoint'.ea_guid
+
+relationship gen_con_customer_touchpoint_flows_regulated_activity_target_guid_to_regulated_activity
+	fromColumn: 'Con_Customer Touchpoint Flows Regulated Activity'.target_guid
+	toColumn: 'Regulated Activity'.ea_guid
+
+relationship gen_con_regulated_activity_flows_external_call_source_guid_to_regulated_activity
+	fromColumn: 'Con_Regulated Activity Flows External Call'.source_guid
+	toColumn: 'Regulated Activity'.ea_guid
+
+relationship gen_con_regulated_activity_flows_external_call_target_guid_to_external_call
+	fromColumn: 'Con_Regulated Activity Flows External Call'.target_guid
+	toColumn: 'External Call'.ea_guid
+
+relationship gen_con_regulated_function_uses_external_call_source_guid_to_regulated_function
+	fromColumn: 'Con_Regulated Function Uses External Call'.source_guid
+	toColumn: 'Regulated Function'.ea_guid
+
+relationship gen_con_regulated_function_uses_external_call_target_guid_to_external_call
+	fromColumn: 'Con_Regulated Function Uses External Call'.target_guid
+	toColumn: 'External Call'.ea_guid
+
+relationship gen_con_regulated_function_uses_regulated_activity_source_guid_to_regulated_function
+	fromColumn: 'Con_Regulated Function Uses Regulated Activity'.source_guid
+	toColumn: 'Regulated Function'.ea_guid
+
+relationship gen_con_regulated_function_uses_regulated_activity_target_guid_to_regulated_activity
+	fromColumn: 'Con_Regulated Function Uses Regulated Activity'.target_guid
+	toColumn: 'Regulated Activity'.ea_guid
+
+relationship gen_con_system_of_record_realizes_data_entity_source_guid_to_system_of_record
+	fromColumn: 'Con_System of Record realizes Data Entity'.source_guid
+	toColumn: 'System of Record'.ea_guid
+
+relationship gen_con_system_of_record_realizes_data_entity_target_guid_to_data_entity
+	fromColumn: 'Con_System of Record realizes Data Entity'.target_guid
+	toColumn: 'Data Entity'.ea_guid
+
+relationship gen_con_vendor_system_uses_technology_node_source_guid_to_vendor_system
+	fromColumn: 'Con_Vendor System Uses Technology Node'.source_guid
+	toColumn: 'Vendor System'.ea_guid
+
+relationship gen_con_vendor_system_uses_technology_node_target_guid_to_technology_node
+	fromColumn: 'Con_Vendor System Uses Technology Node'.target_guid
+	toColumn: 'Technology Node'.ea_guid
+
+relationship gen_con_business_application_bmm_uses_node__not_in_mdg__source_guid_to_business_application
+	fromColumn: 'Con_Business Application BMM Uses Node (not in MDG)'.source_guid
+	toColumn: 'Business Application'.ea_guid
+
+relationship gen_con_business_application_bmm_uses_node__not_in_mdg__target_guid_to_node__not_in_mdg
+	fromColumn: 'Con_Business Application BMM Uses Node (not in MDG)'.target_guid
+	toColumn: 'Node (not in MDG)'.ea_guid
+
+relationship gen_con_business_application_dependency_business_application__not_in_mdg__source_guid_to_business_application
+	fromColumn: 'Con_Business Application Dependency Business Application (not in MDG)'.source_guid
+	toColumn: 'Business Application'.ea_guid
+
+relationship gen_con_business_application_dependency_business_application__not_in_mdg__target_guid_to_business_application
+	isActive: false
+	fromColumn: 'Con_Business Application Dependency Business Application (not in MDG)'.target_guid
+	toColumn: 'Business Application'.ea_guid
+
+relationship gen_con_business_application_dependency_vendor_system__not_in_mdg__source_guid_to_business_application
+	fromColumn: 'Con_Business Application Dependency Vendor System (not in MDG)'.source_guid
+	toColumn: 'Business Application'.ea_guid
+
+relationship gen_con_business_application_dependency_vendor_system__not_in_mdg__target_guid_to_vendor_system
+	fromColumn: 'Con_Business Application Dependency Vendor System (not in MDG)'.target_guid
+	toColumn: 'Vendor System'.ea_guid
+
+relationship gen_con_business_service_dependency_vendor_system__not_in_mdg__source_guid_to_business_service
+	fromColumn: 'Con_Business Service Dependency Vendor System (not in MDG)'.source_guid
+	toColumn: 'Business Service'.ea_guid
+
+relationship gen_con_business_service_dependency_vendor_system__not_in_mdg__target_guid_to_vendor_system
+	fromColumn: 'Con_Business Service Dependency Vendor System (not in MDG)'.target_guid
+	toColumn: 'Vendor System'.ea_guid
+
+relationship gen_con_data_entity_association_data_entity__not_in_mdg__source_guid_to_data_entity
+	fromColumn: 'Con_Data Entity Association Data Entity (not in MDG)'.source_guid
+	toColumn: 'Data Entity'.ea_guid
+
+relationship gen_con_data_entity_association_data_entity__not_in_mdg__target_guid_to_data_entity
+	isActive: false
+	fromColumn: 'Con_Data Entity Association Data Entity (not in MDG)'.target_guid
+	toColumn: 'Data Entity'.ea_guid
+
+relationship gen_con_vendor_system_bmm_uses_node__not_in_mdg__source_guid_to_vendor_system
+	fromColumn: 'Con_Vendor System BMM Uses Node (not in MDG)'.source_guid
+	toColumn: 'Vendor System'.ea_guid
+
+relationship gen_con_vendor_system_bmm_uses_node__not_in_mdg__target_guid_to_node__not_in_mdg
+	fromColumn: 'Con_Vendor System BMM Uses Node (not in MDG)'.target_guid
+	toColumn: 'Node (not in MDG)'.ea_guid
+
+relationship gen_con_vendorapplication_bmm_uses_business_application__not_in_mdg__source_guid_to_vendorapplication__not_in_mdg
+	fromColumn: 'Con_VendorApplication BMM Uses Business Application (not in MDG)'.source_guid
+	toColumn: 'VendorApplication (not in MDG)'.ea_guid
+
+relationship gen_con_vendorapplication_bmm_uses_business_application__not_in_mdg__target_guid_to_business_application
+	fromColumn: 'Con_VendorApplication BMM Uses Business Application (not in MDG)'.target_guid
+	toColumn: 'Business Application'.ea_guid
+
+relationship gen_con_vendorapplication_association_business_application__not_in_mdg__source_guid_to_vendorapplication__not_in_mdg
+	fromColumn: 'Con_VendorApplication Association Business Application (not in MDG)'.source_guid
+	toColumn: 'VendorApplication (not in MDG)'.ea_guid
+
+relationship gen_con_vendorapplication_association_business_application__not_in_mdg__target_guid_to_business_application
+	fromColumn: 'Con_VendorApplication Association Business Application (not in MDG)'.target_guid
+	toColumn: 'Business Application'.ea_guid
+
+relationship gen_t_object_package_id_to_t_package
+	fromColumn: t_object.Package_ID
+	toColumn: t_package.Package_ID
+
+relationship gen_t_objectproperties_object_id_to_t_object
+	fromColumn: t_objectproperties.Object_ID
+	toColumn: t_object.Object_ID
+
+relationship gen_t_attribute_object_id_to_t_object
+	fromColumn: t_attribute.Object_ID
+	toColumn: t_object.Object_ID
+
+relationship gen_t_operation_object_id_to_t_object
+	fromColumn: t_operation.Object_ID
+	toColumn: t_object.Object_ID
+
+relationship gen_t_diagramobjects_object_id_to_t_object
+	fromColumn: t_diagramobjects.Object_ID
+	toColumn: t_object.Object_ID
+
+relationship gen_t_diagramobjects_diagram_id_to_t_diagram
+	fromColumn: t_diagramobjects.Diagram_ID
+	toColumn: t_diagram.Diagram_ID
+
+relationship gen_t_diagram_package_id_to_t_package
+	isActive: false
+	fromColumn: t_diagram.Package_ID
+	toColumn: t_package.Package_ID
+
+relationship gen_t_connector_start_object_id_to_t_object
+	fromColumn: t_connector.Start_Object_ID
+	toColumn: t_object.Object_ID
+
+relationship gen_t_connector_end_object_id_to_t_object
+	isActive: false
+	fromColumn: t_connector.End_Object_ID
+	toColumn: t_object.Object_ID
+
+relationship gen_t_connectortag_elementid_to_t_connector
+	fromColumn: t_connectortag.ElementID
+	toColumn: t_connector.Connector_ID
+
+relationship gen_t_object_ea_guid_to_ai_gateway
+	fromColumn: t_object.ea_guid
+	toColumn: 'AI Gateway'.ea_guid
+
+relationship gen_t_object_ea_guid_to_ai_model
+	fromColumn: t_object.ea_guid
+	toColumn: 'AI Model'.ea_guid
+
+relationship gen_t_object_ea_guid_to_ai_service
+	fromColumn: t_object.ea_guid
+	toColumn: 'AI Service'.ea_guid
+
+relationship gen_t_object_ea_guid_to_business_application
+	fromColumn: t_object.ea_guid
+	toColumn: 'Business Application'.ea_guid
+
+relationship gen_t_object_ea_guid_to_business_service
+	fromColumn: t_object.ea_guid
+	toColumn: 'Business Service'.ea_guid
+
+relationship gen_t_object_ea_guid_to_customer_touchpoint
+	fromColumn: t_object.ea_guid
+	toColumn: 'Customer Touchpoint'.ea_guid
+
+relationship gen_t_object_ea_guid_to_data_asset
+	fromColumn: t_object.ea_guid
+	toColumn: 'Data Asset'.ea_guid
+
+relationship gen_t_object_ea_guid_to_data_entity
+	fromColumn: t_object.ea_guid
+	toColumn: 'Data Entity'.ea_guid
+
+relationship gen_t_object_ea_guid_to_external_call
+	fromColumn: t_object.ea_guid
+	toColumn: 'External Call'.ea_guid
+
+relationship gen_t_object_ea_guid_to_governed_element
+	fromColumn: t_object.ea_guid
+	toColumn: 'Governed Element'.ea_guid
+
+relationship gen_t_object_ea_guid_to_regulated_activity
+	fromColumn: t_object.ea_guid
+	toColumn: 'Regulated Activity'.ea_guid
+
+relationship gen_t_object_ea_guid_to_regulated_function
+	fromColumn: t_object.ea_guid
+	toColumn: 'Regulated Function'.ea_guid
+
+relationship gen_t_object_ea_guid_to_system_of_record
+	fromColumn: t_object.ea_guid
+	toColumn: 'System of Record'.ea_guid
+
+relationship gen_t_object_ea_guid_to_technology_node
+	fromColumn: t_object.ea_guid
+	toColumn: 'Technology Node'.ea_guid
+
+relationship gen_t_object_ea_guid_to_vendor_system
+	fromColumn: t_object.ea_guid
+	toColumn: 'Vendor System'.ea_guid
+
+relationship gen_t_object_ea_guid_to_vendorapplication__not_in_mdg
+	fromColumn: t_object.ea_guid
+	toColumn: 'VendorApplication (not in MDG)'.ea_guid
+
+relationship gen_t_object_ea_guid_to_wbadataasset__not_in_mdg
+	fromColumn: t_object.ea_guid
+	toColumn: 'WBADataAsset (not in MDG)'.ea_guid
+
+relationship gen_t_object_ea_guid_to_node__not_in_mdg
+	fromColumn: t_object.ea_guid
+	toColumn: 'Node (not in MDG)'.ea_guid

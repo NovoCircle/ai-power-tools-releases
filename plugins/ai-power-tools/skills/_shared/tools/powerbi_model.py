@@ -3,14 +3,14 @@
 
 PURE except `write_project` and the CLI. `model_from_definition` and
 `project_files_from_definition` do no I/O: they turn the definition JSON that the
-server's `build_business_layer` writes (`APT-2026-0301`) into a `SemanticModel`
+server's `build_business_layer` writes into a `SemanticModel`
 and a complete `.pbip` project, keyed by relative path.
 
     definition.json  ->  SemanticModel  ->  TMDL + diagramLayout.json  ->  .pbip
 
 One shape on every path. The only things that vary are the partition source and
-the storage mode. A definition whose `source.kind` is "parquet" (path C,
-`APT-2026-0212`) gets a Parquet partition per table, always in Import mode;
+the storage mode. A definition whose `source.kind` is "parquet" (path C)
+gets a Parquet partition per table, always in Import mode;
 anything else gets a SQL partition.
 
 THE MODEL
@@ -28,11 +28,37 @@ two tables or would give a table a second filter path from the same source.
 
 MEASURES
 --------
-Exactly one per inactive relationship whose many side is a `Con_` table, hosted
-on that table with `USERELATIONSHIP`. A combination whose source and target are
-the same entity type has one inactive relationship (the target side); the measure
-is what makes it reachable. Nothing else is a measure, and nothing sits on a
-hidden table (a visible measure keeps a hidden table visible, measured).
+Two kinds, and nothing else is a measure. Nothing sits on a hidden table (a
+visible measure keeps a hidden table visible, measured).
+
+- One `USERELATIONSHIP` measure per inactive relationship whose many side is a
+  `Con_` table, hosted on that table. A combination whose source and target are
+  the same entity type has one inactive relationship (the target side); the
+  measure is what makes it reachable.
+- One count measure per entity table, `'{table} count'` =
+  `COUNTROWS('{table}')`, format `0`, described "Number of {alias} elements."
+  Not on `Con_`, tag-row or Table Directory tables. A name that
+  equals any other measure's name in the model, or a column of its host table, is
+  refused with a ValueError naming both; it is never renamed.
+
+DESCRIPTIONS
+------------
+Every business table, column and measure carries one, from three layers: the
+user's descriptions file, the technology's notes, then templates
+(`descriptions.py`). EA's physical tables carry none.
+
+SIZE
+----
+`model_size` counts tables plus columns, the unit of Copilot's 1,000-entity
+index limit, for the full model and for the visible business layer; the CLI
+prints both and warns past the limit.
+
+KEY COLUMNS
+-----------
+`ea_guid`, `source_guid`, `target_guid`, `connector_guid`, `connector_id` and
+`property_id` are `isHidden` on every business table. They exist
+for relationships and mean nothing to a reader. Nothing else changes visibility;
+EA's physical tables are hidden already.
 """
 from __future__ import annotations
 
@@ -44,6 +70,7 @@ from collections import defaultdict
 from dataclasses import dataclass
 from pathlib import Path
 
+import descriptions as descriptions_mod
 import pbip
 import tmdl
 from semantic_model import (Measure, Relationship, SemanticColumn, SemanticModel,
@@ -105,8 +132,7 @@ class Resolver:
     def __init__(self) -> None:
         self.reach: dict[str, set[str]] = defaultdict(set)
         self.pairs: set[frozenset] = set()
-        self.out: list[Relationship] = []
-        self._names: set[str] = set()
+        self._rels: list[Relationship] = []
 
     def add(self, many: str, mcol: str, one: str, ocol: str, why: str) -> None:
         u, v = one, many
@@ -122,20 +148,41 @@ class Resolver:
             self.pairs.add(pair)
             for a in sources:
                 self.reach[a] |= sinks
-        name = base = _rel_name(many, mcol, one)
-        n = 2
-        while name in self._names:
-            name, n = f"{base}_{n}", n + 1
-        self._names.add(name)
-        self.out.append(Relationship(name=name, from_table=many, from_column=mcol,
-                                     to_table=one, to_column=ocol,
-                                     is_active=active, why=reason))
+        self._rels.append(Relationship(name=_rel_name(many, mcol, one), from_table=many,
+                                       from_column=mcol, to_table=one, to_column=ocol,
+                                       is_active=active, why=reason))
+
+    @property
+    def out(self) -> list[Relationship]:
+        """The relationships, in the order they were added, with unique names.
+
+        A name that no other relationship has is the plain `_rel_name`. When two or
+        more relationships share one (the same many column to the same table, on
+        different columns of that table), EVERY one of them gets the target column
+        appended, so which one is "first" does not decide any name. If that still
+        leaves two with the same name, they are the same declaration twice, and only
+        then does a counter (`_2`, `_3`) keep them apart, in the order added.
+        """
+        base = [_rel_name(r.from_table, r.from_column, r.to_table) for r in self._rels]
+        names = [_rel_name(r.from_table, r.from_column, r.to_table, r.to_column)
+                 if base.count(b) > 1 else b
+                 for r, b in zip(self._rels, base)]
+        seen: dict[str, int] = {}
+        for rel, name in zip(self._rels, names):
+            seen[name] = seen.get(name, 0) + 1
+            rel.name = name if seen[name] == 1 else f"{name}_{seen[name]}"
+        return self._rels
 
 
 # ------------------------------------------------------------------- tables
 
 
-def _columns(spec: dict) -> list[SemanticColumn]:
+#: Key columns hidden on every business table.
+HIDDEN_KEY_COLUMNS = frozenset(
+    {"ea_guid", "source_guid", "target_guid", "connector_guid", "connector_id", "property_id"})
+
+
+def _columns(spec: dict, hide_keys: bool = False) -> list[SemanticColumn]:
     cols = spec.get("all_columns", spec.get("columns"))
     out = []
     for c in cols:
@@ -143,7 +190,8 @@ def _columns(spec: dict) -> list[SemanticColumn]:
             raise ValueError(f"column {c['name']!r} of {spec['name']!r} has the "
                              f"unknown type {c['type']!r}; expected one of {sorted(TYPES)}")
         out.append(SemanticColumn(name=c["name"], data_type=TYPES[c["type"]],
-                                  description=c.get("description") or ""))
+                                  description=_note(c.get("description")),
+                                  is_hidden=hide_keys and c["name"] in HIDDEN_KEY_COLUMNS))
     return out
 
 
@@ -158,9 +206,15 @@ def _business_specs(defn: dict) -> list[dict]:
             + [defn["directory"]])
 
 
+def _note(text) -> str:
+    """A technology note as written, or "" when it is absent, empty or only
+    whitespace, so the template applies instead."""
+    return text if isinstance(text, str) and text.strip() else ""
+
+
 def _descriptions(defn: dict) -> dict[str, str]:
     return {e["table_name"]: e["description"]
-            for e in defn["directory"].get("entries", []) if e.get("description")}
+            for e in defn["directory"].get("entries", []) if _note(e.get("description"))}
 
 
 def _relationships(defn: dict) -> list[Relationship]:
@@ -223,23 +277,68 @@ def _measures(model_tables: dict[str, SemanticTable], rels: list[Relationship],
                         f"Uses the inactive relationship."))
 
 
+def _count_measures(defn: dict, model_tables: dict[str, SemanticTable]) -> None:
+    """One `'{table} count'` measure per entity table; a name clash is an error."""
+    taken: dict[str, str] = {m.name: f"measure {m.name!r} on {t.name!r}"
+                             for t in model_tables.values() for m in t.measures}
+    for e in defn["entities"]:
+        table = model_tables[e["name"]]
+        name = f"{table.name} count"
+        clash = taken.get(name)
+        if clash is None and any(c.name == name for c in table.columns):
+            clash = f"column {name!r} of {table.name!r}"
+        if clash is not None:
+            raise ValueError(f"the count measure {name!r} for table {table.name!r} "
+                             f"collides with {clash}; rename one of them in the "
+                             f"definition (the generator never renames)")
+        taken[name] = f"measure {name!r} on {table.name!r}"
+        table.measures.append(Measure(
+            name=name, expression=f"COUNTROWS({_dax(table.name)})", format_string="0",
+            description=descriptions_mod.count_measure(e)))
+
+
 # -------------------------------------------------------------------- model
+
+
+def _check_connector_ends(defn: dict) -> None:
+    """Every connector table's `source` and `target` must name an entity table.
+
+    The relationships join a connector's `source_guid` and `target_guid` to that
+    entity's `ea_guid`, so an end that is not an entity would fail later, in the
+    ambiguity check or in Power BI, without naming the connector.
+    """
+    entities = {e["name"] for e in defn["entities"]}
+    for c in defn["connectors"]:
+        for end in ("source", "target"):
+            if c.get(end) not in entities:
+                raise ValueError(
+                    f"connector table {c['name']!r} has {end} {c.get(end)!r}, which is not "
+                    f"an entity table in the definition; every connector's source and "
+                    f"target must be an entity")
 
 
 def is_parquet(defn: dict) -> bool:
     return defn["source"].get("kind") == "parquet"
 
 
-def model_from_definition(defn: dict) -> SemanticModel:
+def is_reporting_database(defn: dict) -> bool:
+    return defn["source"].get("kind") == "reporting_database"
+
+
+def model_from_definition(defn: dict, *, descriptions: dict | None = None) -> SemanticModel:
+    """The model. `descriptions` is the parsed descriptions file (layer 1), or
+    None for the technology's notes and the templates only."""
     src = defn["source"]
     parquet = is_parquet(defn)
-    descriptions = _descriptions(defn)
+    _check_connector_ends(defn)
+    notes = _descriptions(defn)
     tables: list[SemanticTable] = []
     for spec in _business_specs(defn):
         tables.append(SemanticTable(
             name=spec["name"],
             source_name=spec["name"] if parquet else f"{src['schema']}.{spec['name']}",
-            description=descriptions.get(spec["name"], ""), columns=_columns(spec)))
+            description=notes.get(spec["name"], ""),
+            columns=_columns(spec, hide_keys=True)))
     for spec in defn["physical"]:
         tables.append(SemanticTable(
             name=spec["name"],
@@ -252,7 +351,10 @@ def model_from_definition(defn: dict) -> SemanticModel:
 
     rels = _relationships(defn)
     keys = {c["name"]: c["key"] for c in defn["connectors"]}
-    _measures({t.name: t for t in tables}, rels, keys)
+    by_name = {t.name: t for t in tables}
+    _measures(by_name, rels, keys)
+    _count_measures(defn, by_name)
+    descriptions_mod.apply(tables, defn, descriptions)
     return SemanticModel(tables=tables, relationships=rels)
 
 
@@ -311,12 +413,18 @@ def check_project_name(name: str) -> str:
     return name
 
 
-def project_files_from_definition(defn: dict, name: str, *, mode: str = "import") -> dict[str, str]:
+def project_files_from_definition(defn: dict, name: str, *, mode: str = "import",
+                                  descriptions: dict | None = None) -> dict[str, str]:
     """Every text file of the `.pbip` project, keyed by relative path."""
     check_project_name(name)
     if mode not in MODES:
         raise ValueError(f"mode must be one of {MODES}, not {mode!r}")
-    model = model_from_definition(defn)
+    if is_reporting_database(defn) and mode != "import":
+        raise ValueError(
+            f"a reporting-database source (path B) is read in import mode, not {mode!r}: "
+            f"the reporting database is rebuilt in full and swapped in on every refresh. "
+            f"DirectQuery is for path A, SQL views inside the EA database.")
+    model = model_from_definition(defn, descriptions=descriptions)
     if is_parquet(defn):
         if mode != "import":
             raise ValueError(f"a Parquet source is read in import mode, not {mode!r}")
@@ -331,12 +439,13 @@ def project_files_from_definition(defn: dict, name: str, *, mode: str = "import"
     return files
 
 
-def write_project(defn: dict, out_dir, name: str, *, mode: str = "import") -> Path:
+def write_project(defn: dict, out_dir, name: str, *, mode: str = "import",
+                  descriptions: dict | None = None) -> Path:
     """Write the project under `out_dir`. The semantic model's `definition/`
     folder is replaced, so a table that left the definition leaves the project.
     An existing `<name>.Report` folder is left untouched, so re-applying never
-    resets visuals a customer has built; a fresh project gets the skeleton report."""
-    files = project_files_from_definition(defn, name, mode=mode)
+    resets visuals a customer has built; a fresh project gets the Overview report."""
+    files = project_files_from_definition(defn, name, mode=mode, descriptions=descriptions)
     root = Path(out_dir)
     if (root / f"{name}.Report").exists():
         files = {k: v for k, v in files.items() if not k.startswith(f"{name}.Report/")}
@@ -356,19 +465,57 @@ def write_project(defn: dict, out_dir, name: str, *, mode: str = "import") -> Pa
     return root
 
 
+#: Copilot's index stops at this many tables plus columns.
+SIZE_LIMIT = 1000
+
+
+def model_size(model: SemanticModel) -> tuple[int, int]:
+    """(full model, business layer), each counted as tables plus columns.
+
+    The full model counts every table and column, hidden or not, EA's physical
+    tables included. The business layer counts the visible tables and their
+    visible columns. Measures are not counted.
+    """
+    full = sum(1 + len(t.columns) for t in model.tables)
+    business = sum(1 + sum(not c.is_hidden for c in t.columns)
+                   for t in model.tables if not t.is_hidden)
+    return full, business
+
+
+def size_lines(full: int, business: int, limit: int = SIZE_LIMIT) -> list[str]:
+    """The size line, then a warning line for each count past `limit`.
+
+    The full model's count includes hidden tables and columns; the business
+    layer's counts only visible ones (see `model_size`).
+    """
+    out = [f"tables + columns: full model {full} (hidden included), "
+           f"business layer {business} (visible only)"]
+    for label, n in (("full model", full), ("business layer", business)):
+        if n > limit:
+            out.append(f"warning: the {label} has {n:,} tables + columns, more than the "
+                       f"{limit:,} that Copilot indexes; Copilot may leave some of it out")
+    return out
+
+
 def main(argv=None) -> int:
     ap = argparse.ArgumentParser(description="Generate a Power BI project from a business-layer definition.")
     ap.add_argument("definition")
     ap.add_argument("out_dir")
     ap.add_argument("--name", required=True)
     ap.add_argument("--mode", default="import", choices=MODES)
+    ap.add_argument("--descriptions", default=None,
+                    help="a user-approved descriptions file (JSON); it wins over the "
+                         "technology's notes and the templates")
     a = ap.parse_args(argv)
     defn = json.loads(Path(a.definition).read_text(encoding="utf-8"))
-    write_project(defn, a.out_dir, a.name, mode=a.mode)
-    model = model_from_definition(defn)
+    entries = descriptions_mod.load_file(a.descriptions) if a.descriptions else None
+    write_project(defn, a.out_dir, a.name, mode=a.mode, descriptions=entries)
+    model = model_from_definition(defn, descriptions=entries)
     print(f"{a.name}: {len(model.tables)} tables ({sum(t.is_hidden for t in model.tables)} hidden), "
           f"{len(model.relationships)} relationships ({len(model.inactive)} inactive), "
           f"{sum(len(t.measures) for t in model.tables)} measures -> {a.out_dir}")
+    for line in size_lines(*model_size(model)):
+        print(line)
     return 0
 
 

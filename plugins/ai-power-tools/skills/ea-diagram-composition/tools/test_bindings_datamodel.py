@@ -3,7 +3,7 @@
 
 Run from the repository root:
 
-    python -m pytest ea-diagram-composition/tools/test_bindings_datamodel.py -q
+    python -m pytest plugins/ai-power-tools/skills/ea-diagram-composition/tools/test_bindings_datamodel.py -q
 
 The DataModel family - three corpus rows, two drawn in IDEF1X notation and one in
 Information Engineering - was brought forward as the last measurable remainder of
@@ -90,6 +90,9 @@ same kind of refusal as SysPhS's first and had nowhere else to live: `FEAF
 Diagrams` is absent from the reference model entirely.
 """
 from __future__ import annotations
+
+# No backlog item is pinned: these tests cover designed behavior, not a filed defect.
+PINS = ()
 
 import re
 import sys

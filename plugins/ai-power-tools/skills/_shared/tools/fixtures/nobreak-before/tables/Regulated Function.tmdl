@@ -1,0 +1,93 @@
+table 'Regulated Function'
+	lineageTag: bd3ce5ad-af73-5193-add1-a7718f6a1901
+
+	column ea_guid
+		dataType: string
+		lineageTag: be921005-0605-50f3-bcfd-fdab688ac49e
+		summarizeBy: none
+		sourceColumn: ea_guid
+
+		annotation SummarizationSetBy = Automatic
+
+	column name
+		dataType: string
+		lineageTag: 32da4a3b-dfc7-5894-b52d-dde2ca460214
+		summarizeBy: none
+		sourceColumn: name
+
+		annotation SummarizationSetBy = Automatic
+
+	column metaclass
+		dataType: string
+		lineageTag: 518b6ba5-f3b2-5cfa-878a-f688d883fe54
+		summarizeBy: none
+		sourceColumn: metaclass
+
+		annotation SummarizationSetBy = Automatic
+
+	column package_path
+		dataType: string
+		lineageTag: 45cb0a09-33a3-5d20-a1a9-73ef19b9166d
+		summarizeBy: none
+		sourceColumn: package_path
+
+		annotation SummarizationSetBy = Automatic
+
+	column businessOwner
+		dataType: string
+		lineageTag: 49c67e23-dc31-59d3-b5e2-bdc87c37a1d8
+		summarizeBy: none
+		sourceColumn: businessOwner
+
+		annotation SummarizationSetBy = Automatic
+
+	column criticality
+		dataType: string
+		lineageTag: 413e1ab0-aa14-54b5-b7c1-058405a31baf
+		summarizeBy: none
+		sourceColumn: criticality
+
+		annotation SummarizationSetBy = Automatic
+
+	column dataClassification
+		dataType: string
+		lineageTag: 13f19aa9-10e9-5ae6-9121-cf552a936855
+		summarizeBy: none
+		sourceColumn: dataClassification
+
+		annotation SummarizationSetBy = Automatic
+
+	column lifecycle
+		dataType: string
+		lineageTag: 1d37a76f-4700-5220-89a8-214674ee7b72
+		summarizeBy: none
+		sourceColumn: lifecycle
+
+		annotation SummarizationSetBy = Automatic
+
+	column regulatoryScope
+		dataType: string
+		lineageTag: f8e1e824-e2f0-51be-bce6-d956c745a603
+		summarizeBy: none
+		sourceColumn: regulatoryScope
+
+		annotation SummarizationSetBy = Automatic
+
+	column technicalOwner
+		dataType: string
+		lineageTag: 3d0f8baa-0d69-5448-98d2-9499070e4500
+		summarizeBy: none
+		sourceColumn: technicalOwner
+
+		annotation SummarizationSetBy = Automatic
+
+	partition 'Regulated Function' = m
+		mode: import
+		source =
+				let
+				    Source = Sql.Database("sql-host", "EAWestbrook"),
+				    Data = Source{[Schema="p5test",Item="Regulated Function"]}[Data]
+				in
+				    Data
+
+	annotation PBI_ResultType = Table

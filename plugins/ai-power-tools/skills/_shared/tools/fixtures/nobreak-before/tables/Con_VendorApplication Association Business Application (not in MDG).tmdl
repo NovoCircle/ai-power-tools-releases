@@ -1,0 +1,70 @@
+/// Included as observed: both ends are included elements.
+table 'Con_VendorApplication Association Business Application (not in MDG)'
+	lineageTag: 483bdfa7-8e13-5868-84f6-7e9c73590b2b
+
+	column connector_guid
+		dataType: string
+		lineageTag: 851ac9d5-d527-5513-8d9c-edabeb998873
+		summarizeBy: none
+		sourceColumn: connector_guid
+
+		annotation SummarizationSetBy = Automatic
+
+	column connector_id
+		dataType: int64
+		lineageTag: 67930595-3fc8-567b-95a1-c06a362fc005
+		summarizeBy: none
+		sourceColumn: connector_id
+
+		annotation SummarizationSetBy = Automatic
+
+	column name
+		dataType: string
+		lineageTag: e56d9f0d-0cd3-57d0-a494-6ed61718569a
+		summarizeBy: none
+		sourceColumn: name
+
+		annotation SummarizationSetBy = Automatic
+
+	column source_guid
+		dataType: string
+		lineageTag: bda55d65-8386-5d55-934a-b7816c4f157b
+		summarizeBy: none
+		sourceColumn: source_guid
+
+		annotation SummarizationSetBy = Automatic
+
+	column target_guid
+		dataType: string
+		lineageTag: f1c056cd-e526-55bb-ab04-24949a46a7b0
+		summarizeBy: none
+		sourceColumn: target_guid
+
+		annotation SummarizationSetBy = Automatic
+
+	column direction
+		dataType: string
+		lineageTag: 4e8f92bc-5d92-5fbd-9180-2eb7fd010d7d
+		summarizeBy: none
+		sourceColumn: direction
+
+		annotation SummarizationSetBy = Automatic
+
+	column base_type
+		dataType: string
+		lineageTag: a6cca1fe-ac8d-52d3-aa91-4e905b6a88fb
+		summarizeBy: none
+		sourceColumn: base_type
+
+		annotation SummarizationSetBy = Automatic
+
+	partition 'Con_VendorApplication Association Business Application (not in MDG)' = m
+		mode: import
+		source =
+				let
+				    Source = Sql.Database("sql-host", "EAWestbrook"),
+				    Data = Source{[Schema="p5test",Item="Con_VendorApplication Association Business Application (not in MDG)"]}[Data]
+				in
+				    Data
+
+	annotation PBI_ResultType = Table

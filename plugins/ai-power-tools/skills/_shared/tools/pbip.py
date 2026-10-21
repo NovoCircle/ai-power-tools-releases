@@ -6,9 +6,8 @@ the project keyed by its relative path; writing them is the caller's job.
 
     SemanticModel + partition source  ->  project_files()  ->  {path: text}
 
-All three Power BI paths use this. `APT-2026-0211` passes a `ParquetSource`
-pointing at the files the reporting database emitted, `APT-2026-0212` one
-pointing at files emitted straight from EA, and `APT-2026-0230` a `SqlSource`.
+All three Power BI paths use this: path C passes a `ParquetSource` pointing at
+the Parquet files, and paths A and B a SQL source.
 The project is otherwise identical, which `test_pbip.py` asserts.
 
 THE CALLER MUST WRITE WITH `newline=""`
@@ -52,6 +51,31 @@ does not load; it exists so the failure can be reproduced, not for ordinary use.
 
 Which PART is strictly required - the `themeCollection`, the `resourcePackages`
 entry, or the file - has not been isolated. All three were added together.
+
+THE OVERVIEW PAGE AND ITS VISUALS
+---------------------------------
+The one page carries a table visual over `Table Directory` (`table_name`, `kind`,
+`description`) and one card per entity count measure (`'{table} count'`). No visual
+uses an entity table's columns, so the blank member that Power BI adds to a table
+on the one side of a relationship never shows. The JSON follows the `visualContainer`
+2.14.0 files Power BI Desktop 2.159.883.0 itself saved (a `tableEx` and a `slicer`
+in a captured PBIR project): `$schema`, `name`, `position`, `visual` with a
+`query.queryState.Values` projection list, and, on the table, the per-column
+`filterConfig` Desktop writes. A card is the same container with `visualType` "card"
+and a `Measure` field. Cards carry no `filterConfig` (the captured project has no
+card to copy it from, so none is guessed). Every `name` is derived from the content,
+as `page_name` is.
+
+Versions pinned, from the captured project: visual container 2.14.0 (the captured
+visuals; `VISUAL_SCHEMA`), page 2.1.0, report 3.3.0, pages metadata 1.1.0, version
+metadata 1.0.0. Only the visual container changed from what was pinned before.
+`REPORT_VERSION_AT_IMPORT` stays {visual 2.13.0, report 3.4.0, page 2.3.1}: Desktop
+2.159.883.0 saved 2.14.0 visuals and left that object as it was, so it is an import
+record, not a pin that tracks the container schema, and Desktop has never written
+2.14.0 there.
+
+The page is 1280 wide and 720 high, and grows taller only when the cards need it
+(more than about 136 entity tables), so every card sits on the page.
 """
 from __future__ import annotations
 
@@ -83,6 +107,10 @@ REPORT_SCHEMA = ("https://developer.microsoft.com/json-schemas/fabric/item/repor
 #: Written into report.json when a base theme is supplied. Version-pinned, read
 #: off a real project alongside the rest.
 REPORT_VERSION_AT_IMPORT = {"visual": "2.13.0", "report": "3.4.0", "page": "2.3.1"}
+
+#: The visual container schema of the visuals this module writes.
+VISUAL_SCHEMA = ("https://developer.microsoft.com/json-schemas/fabric/item/report/"
+                 "definition/visualContainer/2.14.0/schema.json")
 
 
 @dataclass
@@ -149,6 +177,111 @@ def page_name(project: str) -> str:
     without their report being rebuilt.
     """
     return uuid.uuid5(NS, f"page:{project}").hex[:20]
+
+
+def visual_name(project: str, key: str) -> str:
+    """A deterministic 20-character visual (or filter) id, derived from content."""
+    return uuid.uuid5(NS, f"visual:{project}:{key}").hex[:20]
+
+
+#: The Table Directory columns the table visual shows, in order.
+DIRECTORY_TABLE = "Table Directory"
+DIRECTORY_COLUMNS = ("table_name", "kind", "description")
+
+#: Page geometry (the page is 1280 x 720). The table sits on the left and the
+#: cards fill a grid on the right.
+_PAGE_W, _PAGE_H, _MARGIN, _GAP = 1280, 720, 20, 10
+_TABLE_W = 640
+_GRID_X = _MARGIN + _TABLE_W + _MARGIN
+_GRID_W = _PAGE_W - _MARGIN - _GRID_X
+_CARD_H_MAX, _CARD_H_READABLE, _CARD_H_MIN = 100, 60, 30
+
+
+def count_measures(model: SemanticModel) -> list[tuple[str, str]]:
+    """`(table, measure)` for every `'{table} count'` measure on a visible table,
+    in table order. These are the entity counts the page shows as cards."""
+    return [(t.name, m.name) for t in model.tables if not t.is_hidden
+            for m in t.measures if m.name == f"{t.name} count"]
+
+
+def _field(kind: str, entity: str, prop: str) -> dict:
+    return {kind: {"Expression": {"SourceRef": {"Entity": entity}}, "Property": prop}}
+
+
+def _projection(kind: str, entity: str, prop: str, *, active: bool = False) -> dict:
+    proj = {"field": _field(kind, entity, prop),
+            "queryRef": f"{entity}.{prop}", "nativeQueryRef": prop}
+    if active:
+        proj["active"] = True
+    return proj
+
+
+def _visual(project: str, key: str, visual_type: str, position: dict,
+            projections: list[dict], filters: list[dict] | None = None) -> dict:
+    visual = {
+        "$schema": VISUAL_SCHEMA,
+        "name": visual_name(project, key),
+        "position": position,
+        "visual": {
+            "visualType": visual_type,
+            "query": {"queryState": {"Values": {"projections": projections}}},
+            "drillFilterOtherVisuals": True,
+        },
+    }
+    if filters:
+        visual["filterConfig"] = {"filters": filters}
+    return visual
+
+
+def _card_grid(n: int) -> tuple[int, int, int, int]:
+    """(columns, card width, card height, rows) for `n` cards in the right-hand area.
+    Columns grow from 3 until the rows fit at a readable height (60 or more);
+    past 8 columns the height shrinks to a floor of 30 and the page grows instead
+    (see `page_height`)."""
+    usable = _PAGE_H - 2 * _MARGIN
+    cols = 3
+    while cols < 8 and -(-n // cols) * (_CARD_H_READABLE + _GAP) - _GAP > usable:
+        cols += 1
+    rows = max(1, -(-n // cols))
+    width = (_GRID_W - _GAP * (cols - 1)) // cols
+    height = (usable - _GAP * (rows - 1)) // rows
+    return cols, width, max(_CARD_H_MIN, min(_CARD_H_MAX, height)), rows
+
+
+def page_height(model: SemanticModel) -> int:
+    """The Overview page height: 720, or taller when the cards need more room."""
+    _, _, height, rows = _card_grid(len(count_measures(model)))
+    return max(_PAGE_H, 2 * _MARGIN + rows * height + (rows - 1) * _GAP)
+
+
+def overview_visuals(model: SemanticModel, project: str) -> dict[str, dict]:
+    """The Overview page's visuals, keyed by visual name: the Table Directory table
+    and one card per entity count measure. Empty when the model has neither."""
+    out: dict[str, dict] = {}
+    z = 0
+    directory = model.table(DIRECTORY_TABLE)
+    if directory is not None and set(DIRECTORY_COLUMNS) <= {c.name for c in directory.columns}:
+        pos = {"x": _MARGIN, "y": _MARGIN, "z": z, "height": page_height(model) - 2 * _MARGIN,
+               "width": _TABLE_W, "tabOrder": z}
+        filters = [{"name": visual_name(project, f"filter:{DIRECTORY_TABLE}.{c}"),
+                    "field": _field("Column", DIRECTORY_TABLE, c), "type": "Categorical"}
+                   for c in DIRECTORY_COLUMNS]
+        v = _visual(project, f"table:{DIRECTORY_TABLE}", "tableEx", pos,
+                    [_projection("Column", DIRECTORY_TABLE, c) for c in DIRECTORY_COLUMNS],
+                    filters)
+        out[v["name"]] = v
+        z += 1
+    cards = count_measures(model)
+    cols, width, height, _ = _card_grid(len(cards))
+    for i, (table, measure) in enumerate(cards):
+        pos = {"x": _GRID_X + (i % cols) * (width + _GAP),
+               "y": _MARGIN + (i // cols) * (height + _GAP),
+               "z": z, "height": height, "width": width, "tabOrder": z}
+        v = _visual(project, f"card:{table}.{measure}", "card", pos,
+                    [_projection("Measure", table, measure)])
+        out[v["name"]] = v
+        z += 1
+    return out
 
 
 def _platform(kind: str, name: str, path: str) -> str:
@@ -236,11 +369,14 @@ def project_files(model: SemanticModel, source, *,
             "name": page,
             "displayName": page_display_name,
             "displayOption": "FitToPage",
-            "height": 720,
+            "height": page_height(model),
             "width": 1280,
         }),
         f"{rp}/definition/report.json": _report_json(base_theme),
     }
+
+    for vname, visual in overview_visuals(model, name).items():
+        files[f"{rp}/definition/pages/{page}/visuals/{vname}/visual.json"] = _json(visual)
 
     if base_theme is not None and base_theme.content:
         files[f"{rp}/{base_theme.static_resource_path}"] = base_theme.content

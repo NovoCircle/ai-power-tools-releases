@@ -3,7 +3,7 @@
 
 Run from the repository root:
 
-    python -m pytest ea-diagram-composition/tools/test_bindings_frameworks.py -q
+    python -m pytest plugins/ai-power-tools/skills/ea-diagram-composition/tools/test_bindings_frameworks.py -q
 
 Hermetic. The measured tests read a private COPY of the reference model as
 SQLite, which is what `measure_binding.open_model_copy` does; nothing here
@@ -53,6 +53,15 @@ model at all, because a binding keyed on one of those resolves to nothing
 silently, which is the worst failure the schema has.
 """
 from __future__ import annotations
+
+# No backlog item is pinned: these tests cover designed behavior, not a filed defect.
+PINS = ()
+
+# The data asset this module covers for TOGAF (read by tools/register.py). Against EAExample.qea
+# it checks that the technology id and diagram type are registered, and that the `ADM_` prefix
+# the diagram type states is the measured one (10 of 10 stored stereotypes) and round trips every
+# stored stereotype, while the technology-scope lookup leaves the prefix off. APT-2026-0521.
+COVERS = ("asset:ea-diagram-composition/bindings/togaf-diagrams.yaml",)
 
 import math
 import re

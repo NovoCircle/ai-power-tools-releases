@@ -3,7 +3,7 @@
 
 Run from the repository root:
 
-    python -m pytest ea-diagram-composition/tools/test_bindings_strategy.py -q
+    python -m pytest plugins/ai-power-tools/skills/ea-diagram-composition/tools/test_bindings_strategy.py -q
 
 WHY THESE TWO ARE IN ONE FILE. Both were authored from one finding: the corpus
 audit classifies their rows as `Custom` with the reason "Custom has no MDG
@@ -35,6 +35,19 @@ the product. Adding the ids to `FAMILIES` is what makes that test pass; nothing
 here can see it.
 """
 from __future__ import annotations
+
+# Backlog items this module pins (checked by tools/test_suite_conventions.py).
+PINS = ("APT-2026-0183",)
+
+# The data assets this module covers (read by tools/register.py). Against EAExample.qea it checks
+# that each technology id and bound diagram type is registered with diagrams of its own, that the
+# stereotype vocabulary on those diagrams is the notation's, that the stated prefix round trips
+# every stored stereotype while the unprefixed lookup misses, and that the one named concept
+# (VC_PrimaryActivity) is measured. APT-2026-0521.
+COVERS = (
+    "asset:ea-diagram-composition/bindings/strategymap.yaml",
+    "asset:ea-diagram-composition/bindings/mindmapping.yaml",
+)
 
 import sys
 from pathlib import Path
@@ -609,6 +622,7 @@ def test_each_bound_diagram_type_states_the_prefix_that_was_measured_for_it(
         assert dt.stereotype_prefix_provenance == f"{STRATEGY}::{name}", name
 
 
+@needs_model
 def test_the_per_type_prefix_round_trips_every_stored_stereotype(model,
                                                                  strategy):
     """THE ROUND TRIP, ON REAL STORED NAMES, PER DIAGRAM TYPE.

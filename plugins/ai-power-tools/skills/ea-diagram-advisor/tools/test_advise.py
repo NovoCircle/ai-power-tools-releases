@@ -3,7 +3,7 @@
 
 Run from the repository root:
 
-    python -m pytest ea-diagram-advisor/tools/test_advise.py -q
+    python -m pytest plugins/ai-power-tools/skills/ea-diagram-advisor/tools/test_advise.py -q
 
 Nothing here touches a repository. The histograms are fixtures standing in for
 what the repository's summary operations measure, which is the whole point of
@@ -14,6 +14,9 @@ The bindings ARE loaded for real, from `ea-diagram-composition`. A fake binding
 would let the engine pass against a view catalogue nobody ships.
 """
 from __future__ import annotations
+
+# No backlog item is pinned: these tests cover designed behavior, not a filed defect.
+PINS = ()
 
 import ast
 import sys

@@ -3,7 +3,7 @@
 
 Run from the repository root:
 
-    python -m pytest ea-diagram-composition/tools/test_bindings.py -q
+    python -m pytest plugins/ai-power-tools/skills/ea-diagram-composition/tools/test_bindings.py -q
 
 Hermetic. These tests read the shipped binding files from disk, which is the
 point of several of them, but nothing here touches Sparx EA, a repository or a
@@ -30,6 +30,9 @@ Three different things, and it is worth knowing which is which:
    engine would undo the design while every other test still passed.
 """
 from __future__ import annotations
+
+# Backlog items this module pins (checked by tools/test_suite_conventions.py).
+PINS = ("APT-2026-0161", "APT-2026-0176", "APT-2026-0187", "APT-2026-0193")
 
 import ast
 import sys

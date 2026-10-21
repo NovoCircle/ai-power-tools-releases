@@ -4,7 +4,7 @@ resolve.
 
 Run from the repository root:
 
-    python -m pytest ea-diagram-composition/tools/test_type_hints.py -q
+    python -m pytest plugins/ai-power-tools/skills/ea-diagram-composition/tools/test_type_hints.py -q
 
 Hermetic. Imports the modules and evaluates their annotations; nothing
 here touches Sparx EA, a repository or a COM object.
@@ -32,6 +32,9 @@ A failure here is not to be suppressed. If a name is imported only under
 annotation.
 """
 from __future__ import annotations
+
+# No backlog item is pinned: these tests cover designed behavior, not a filed defect.
+PINS = ()
 
 import importlib
 import inspect

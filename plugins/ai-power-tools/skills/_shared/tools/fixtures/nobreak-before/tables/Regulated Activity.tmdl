@@ -1,0 +1,93 @@
+table 'Regulated Activity'
+	lineageTag: eba67822-07f4-5427-921d-63844bc0608f
+
+	column ea_guid
+		dataType: string
+		lineageTag: 5e4b75ee-417f-5e4f-8663-ffa7cbbfc112
+		summarizeBy: none
+		sourceColumn: ea_guid
+
+		annotation SummarizationSetBy = Automatic
+
+	column name
+		dataType: string
+		lineageTag: b99dd55a-e64e-5620-b37d-f6b3c7a294af
+		summarizeBy: none
+		sourceColumn: name
+
+		annotation SummarizationSetBy = Automatic
+
+	column metaclass
+		dataType: string
+		lineageTag: 3386d9d0-e271-5e20-9efa-7882fcbc34b1
+		summarizeBy: none
+		sourceColumn: metaclass
+
+		annotation SummarizationSetBy = Automatic
+
+	column package_path
+		dataType: string
+		lineageTag: f10a127e-1dfd-5bd1-86b6-e7032114dd06
+		summarizeBy: none
+		sourceColumn: package_path
+
+		annotation SummarizationSetBy = Automatic
+
+	column businessOwner
+		dataType: string
+		lineageTag: 5ce5a4ec-987f-5700-a668-384d7e910e13
+		summarizeBy: none
+		sourceColumn: businessOwner
+
+		annotation SummarizationSetBy = Automatic
+
+	column criticality
+		dataType: string
+		lineageTag: 01549ed8-8d9f-5ec1-9bb4-b6d585464b5d
+		summarizeBy: none
+		sourceColumn: criticality
+
+		annotation SummarizationSetBy = Automatic
+
+	column dataClassification
+		dataType: string
+		lineageTag: 86bcff87-adf5-5ec0-92d5-cd1cccde327d
+		summarizeBy: none
+		sourceColumn: dataClassification
+
+		annotation SummarizationSetBy = Automatic
+
+	column lifecycle
+		dataType: string
+		lineageTag: 71443379-9fb1-52de-bf0a-e16e99f80787
+		summarizeBy: none
+		sourceColumn: lifecycle
+
+		annotation SummarizationSetBy = Automatic
+
+	column regulatoryScope
+		dataType: string
+		lineageTag: d8c2078e-3741-5d69-aaee-0a9573310902
+		summarizeBy: none
+		sourceColumn: regulatoryScope
+
+		annotation SummarizationSetBy = Automatic
+
+	column technicalOwner
+		dataType: string
+		lineageTag: bc22cd01-59cb-5a97-9576-366807ba6ccb
+		summarizeBy: none
+		sourceColumn: technicalOwner
+
+		annotation SummarizationSetBy = Automatic
+
+	partition 'Regulated Activity' = m
+		mode: import
+		source =
+				let
+				    Source = Sql.Database("sql-host", "EAWestbrook"),
+				    Data = Source{[Schema="p5test",Item="Regulated Activity"]}[Data]
+				in
+				    Data
+
+	annotation PBI_ResultType = Table

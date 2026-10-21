@@ -1,0 +1,125 @@
+table 'AI Gateway'
+	lineageTag: 2bf95cc6-6312-5674-8063-601dc9e1a324
+
+	column ea_guid
+		dataType: string
+		lineageTag: 2836e82a-41fc-59df-800f-75bea9ab0b6f
+		summarizeBy: none
+		sourceColumn: ea_guid
+
+		annotation SummarizationSetBy = Automatic
+
+	column name
+		dataType: string
+		lineageTag: a46b49c4-9785-5138-9641-37b225587dae
+		summarizeBy: none
+		sourceColumn: name
+
+		annotation SummarizationSetBy = Automatic
+
+	column metaclass
+		dataType: string
+		lineageTag: 85df635d-7151-5e07-a255-f20d245acc9b
+		summarizeBy: none
+		sourceColumn: metaclass
+
+		annotation SummarizationSetBy = Automatic
+
+	column package_path
+		dataType: string
+		lineageTag: 4fc5fc1f-ad91-5e86-a7aa-fd00b729f53c
+		summarizeBy: none
+		sourceColumn: package_path
+
+		annotation SummarizationSetBy = Automatic
+
+	column auditLoggingEnabled
+		dataType: string
+		lineageTag: 30dba544-f385-55ba-a696-f5ecbe623979
+		summarizeBy: none
+		sourceColumn: auditLoggingEnabled
+
+		annotation SummarizationSetBy = Automatic
+
+	column businessOwner
+		dataType: string
+		lineageTag: 9385990e-e7b1-5428-a0bd-ee51e8366b10
+		summarizeBy: none
+		sourceColumn: businessOwner
+
+		annotation SummarizationSetBy = Automatic
+
+	column criticality
+		dataType: string
+		lineageTag: 6f71c536-b829-5e28-9f8d-9262423202bb
+		summarizeBy: none
+		sourceColumn: criticality
+
+		annotation SummarizationSetBy = Automatic
+
+	column dataClassification
+		dataType: string
+		lineageTag: 2f32cca0-a25d-5068-be94-13f2e1d82d7e
+		summarizeBy: none
+		sourceColumn: dataClassification
+
+		annotation SummarizationSetBy = Automatic
+
+	column dataResidency
+		dataType: string
+		lineageTag: b2330c3e-bb55-543b-ad30-f84b9ed8e979
+		summarizeBy: none
+		sourceColumn: dataResidency
+
+		annotation SummarizationSetBy = Automatic
+
+	column humanInLoopRequired
+		dataType: string
+		lineageTag: e017eaf4-9649-5c14-b641-720ee5ee3989
+		summarizeBy: none
+		sourceColumn: humanInLoopRequired
+
+		annotation SummarizationSetBy = Automatic
+
+	column lifecycle
+		dataType: string
+		lineageTag: 7c8c0f68-cc8f-536b-bf39-4c170a871f42
+		summarizeBy: none
+		sourceColumn: lifecycle
+
+		annotation SummarizationSetBy = Automatic
+
+	column modelGovernanceClass
+		dataType: string
+		lineageTag: 58b8fe1e-8180-55da-9e2b-38ae73cbc7c8
+		summarizeBy: none
+		sourceColumn: modelGovernanceClass
+
+		annotation SummarizationSetBy = Automatic
+
+	column regulatoryScope
+		dataType: string
+		lineageTag: 649759fb-4d23-555c-9dd1-45532d66dee0
+		summarizeBy: none
+		sourceColumn: regulatoryScope
+
+		annotation SummarizationSetBy = Automatic
+
+	column technicalOwner
+		dataType: string
+		lineageTag: f084f397-b274-5822-b621-4c334838defa
+		summarizeBy: none
+		sourceColumn: technicalOwner
+
+		annotation SummarizationSetBy = Automatic
+
+	partition 'AI Gateway' = m
+		mode: import
+		source =
+				let
+				    Source = Sql.Database("sql-host", "EAWestbrook"),
+				    Data = Source{[Schema="p5test",Item="AI Gateway"]}[Data]
+				in
+				    Data
+
+	annotation PBI_ResultType = Table

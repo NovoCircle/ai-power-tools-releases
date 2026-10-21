@@ -3,7 +3,7 @@
 
 Run from the repository root:
 
-    python -m pytest ea-diagram-composition/tools/test_compose_chevron.py -q
+    python -m pytest plugins/ai-power-tools/skills/ea-diagram-composition/tools/test_compose_chevron.py -q
 
 Nothing here touches a repository, a COM object or the filesystem. The one test
 that pins this grammar against a real diagram does it with numbers copied into
@@ -22,6 +22,9 @@ Two conventions carried over from `test_compose.py`:
   that and is what every assertion here leans on.
 """
 from __future__ import annotations
+
+# No backlog item is pinned: these tests cover designed behavior, not a filed defect.
+PINS = ()
 
 import sys
 from pathlib import Path

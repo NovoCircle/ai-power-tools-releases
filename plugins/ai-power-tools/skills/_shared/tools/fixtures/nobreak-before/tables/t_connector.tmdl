@@ -1,0 +1,646 @@
+table t_connector
+	isHidden
+	lineageTag: 30c69c35-c253-5a9e-83c2-d94a3b00c71b
+
+	column Connector_ID
+		dataType: int64
+		lineageTag: 847e984c-baaf-5639-8a30-fa0c95c76b9a
+		summarizeBy: none
+		sourceColumn: Connector_ID
+
+		annotation SummarizationSetBy = Automatic
+
+	column Name
+		dataType: string
+		lineageTag: d70b288b-4837-501d-a180-c9078ea07426
+		summarizeBy: none
+		sourceColumn: Name
+
+		annotation SummarizationSetBy = Automatic
+
+	column Direction
+		dataType: string
+		lineageTag: 1f41ea9b-a7ed-5084-b45f-6697fefeff96
+		summarizeBy: none
+		sourceColumn: Direction
+
+		annotation SummarizationSetBy = Automatic
+
+	column Notes
+		dataType: string
+		lineageTag: c04301e9-bbe6-534f-84b0-fdd3388f447d
+		summarizeBy: none
+		sourceColumn: Notes
+
+		annotation SummarizationSetBy = Automatic
+
+	column Connector_Type
+		dataType: string
+		lineageTag: 74d04fb1-b2e2-5147-8518-3fee722853ed
+		summarizeBy: none
+		sourceColumn: Connector_Type
+
+		annotation SummarizationSetBy = Automatic
+
+	column SubType
+		dataType: string
+		lineageTag: d6eaf22b-02be-561f-b7b8-3f47e8c40989
+		summarizeBy: none
+		sourceColumn: SubType
+
+		annotation SummarizationSetBy = Automatic
+
+	column SourceCard
+		dataType: string
+		lineageTag: 4ced15a5-f815-52e3-891f-9f5afc50f888
+		summarizeBy: none
+		sourceColumn: SourceCard
+
+		annotation SummarizationSetBy = Automatic
+
+	column SourceAccess
+		dataType: string
+		lineageTag: 10e18eb0-78c9-5843-8d03-7a53fd93522f
+		summarizeBy: none
+		sourceColumn: SourceAccess
+
+		annotation SummarizationSetBy = Automatic
+
+	column SourceElement
+		dataType: string
+		lineageTag: d3ac50b1-210d-5d33-b31b-e29a1919f03f
+		summarizeBy: none
+		sourceColumn: SourceElement
+
+		annotation SummarizationSetBy = Automatic
+
+	column DestCard
+		dataType: string
+		lineageTag: 203adc67-1a58-528e-8339-1a191de7ccce
+		summarizeBy: none
+		sourceColumn: DestCard
+
+		annotation SummarizationSetBy = Automatic
+
+	column DestAccess
+		dataType: string
+		lineageTag: 55149b70-19a1-5d40-a8bc-4fc3b94ae383
+		summarizeBy: none
+		sourceColumn: DestAccess
+
+		annotation SummarizationSetBy = Automatic
+
+	column DestElement
+		dataType: string
+		lineageTag: c1d12452-b03b-5bf9-badf-bba92ee11766
+		summarizeBy: none
+		sourceColumn: DestElement
+
+		annotation SummarizationSetBy = Automatic
+
+	column SourceRole
+		dataType: string
+		lineageTag: cae8c6cd-7379-5ef3-9648-4cd0d55a28ab
+		summarizeBy: none
+		sourceColumn: SourceRole
+
+		annotation SummarizationSetBy = Automatic
+
+	column SourceRoleType
+		dataType: string
+		lineageTag: a1ca5168-50c4-55f2-89f3-4c49494aa919
+		summarizeBy: none
+		sourceColumn: SourceRoleType
+
+		annotation SummarizationSetBy = Automatic
+
+	column SourceRoleNote
+		dataType: string
+		lineageTag: 2f536055-379d-5fd7-aa2e-5df5eb924132
+		summarizeBy: none
+		sourceColumn: SourceRoleNote
+
+		annotation SummarizationSetBy = Automatic
+
+	column SourceContainment
+		dataType: string
+		lineageTag: ed411259-b9fe-5f07-ad30-4908823c1c5e
+		summarizeBy: none
+		sourceColumn: SourceContainment
+
+		annotation SummarizationSetBy = Automatic
+
+	column SourceIsAggregate
+		dataType: int64
+		lineageTag: 18740a7a-308c-5315-b2c0-1b4036eda3cd
+		summarizeBy: none
+		sourceColumn: SourceIsAggregate
+
+		annotation SummarizationSetBy = Automatic
+
+	column SourceIsOrdered
+		dataType: int64
+		lineageTag: a68dd2cf-1bc6-5ca7-9e55-d110c811f8bc
+		summarizeBy: none
+		sourceColumn: SourceIsOrdered
+
+		annotation SummarizationSetBy = Automatic
+
+	column SourceQualifier
+		dataType: string
+		lineageTag: ccc756c7-b957-54ed-919a-6ea2e55b1f69
+		summarizeBy: none
+		sourceColumn: SourceQualifier
+
+		annotation SummarizationSetBy = Automatic
+
+	column DestRole
+		dataType: string
+		lineageTag: 97cdf602-7b65-59d9-8117-fa53d530f42f
+		summarizeBy: none
+		sourceColumn: DestRole
+
+		annotation SummarizationSetBy = Automatic
+
+	column DestRoleType
+		dataType: string
+		lineageTag: 48ab4b92-5f7b-52e7-8b50-81c73ae7d0cb
+		summarizeBy: none
+		sourceColumn: DestRoleType
+
+		annotation SummarizationSetBy = Automatic
+
+	column DestRoleNote
+		dataType: string
+		lineageTag: b04f4749-0816-5f47-bee2-a4b0f4d4fae6
+		summarizeBy: none
+		sourceColumn: DestRoleNote
+
+		annotation SummarizationSetBy = Automatic
+
+	column DestContainment
+		dataType: string
+		lineageTag: a23a2931-b4d2-5d84-abbd-b0ccf5cffcdf
+		summarizeBy: none
+		sourceColumn: DestContainment
+
+		annotation SummarizationSetBy = Automatic
+
+	column DestIsAggregate
+		dataType: int64
+		lineageTag: 36cb38c9-5eab-5ce6-8cb3-ff00ebd21ab4
+		summarizeBy: none
+		sourceColumn: DestIsAggregate
+
+		annotation SummarizationSetBy = Automatic
+
+	column DestIsOrdered
+		dataType: int64
+		lineageTag: 8dcc11f9-a85b-5293-8c95-5d2e16b6b5c8
+		summarizeBy: none
+		sourceColumn: DestIsOrdered
+
+		annotation SummarizationSetBy = Automatic
+
+	column DestQualifier
+		dataType: string
+		lineageTag: f7b717cb-c21e-5419-8a41-2b6846ac9a0c
+		summarizeBy: none
+		sourceColumn: DestQualifier
+
+		annotation SummarizationSetBy = Automatic
+
+	column Start_Object_ID
+		dataType: int64
+		lineageTag: 8f5f218a-caa1-58df-b4ea-34ff4a7958c0
+		summarizeBy: none
+		sourceColumn: Start_Object_ID
+
+		annotation SummarizationSetBy = Automatic
+
+	column End_Object_ID
+		dataType: int64
+		lineageTag: 83ad2e61-2a41-57e6-b8d0-e210f74d786f
+		summarizeBy: none
+		sourceColumn: End_Object_ID
+
+		annotation SummarizationSetBy = Automatic
+
+	column Top_Start_Label
+		dataType: string
+		lineageTag: 4eaeca79-878c-55bc-9db3-ffbc7bbe1855
+		summarizeBy: none
+		sourceColumn: Top_Start_Label
+
+		annotation SummarizationSetBy = Automatic
+
+	column Top_Mid_Label
+		dataType: string
+		lineageTag: 9934cb3a-6caa-5600-925d-b6835e7ac9b8
+		summarizeBy: none
+		sourceColumn: Top_Mid_Label
+
+		annotation SummarizationSetBy = Automatic
+
+	column Top_End_Label
+		dataType: string
+		lineageTag: 6968a316-3d14-59e4-8386-9fc3c7ce2b19
+		summarizeBy: none
+		sourceColumn: Top_End_Label
+
+		annotation SummarizationSetBy = Automatic
+
+	column Btm_Start_Label
+		dataType: string
+		lineageTag: 1a3d3150-498c-523e-98e1-bb59cb0a2c15
+		summarizeBy: none
+		sourceColumn: Btm_Start_Label
+
+		annotation SummarizationSetBy = Automatic
+
+	column Btm_Mid_Label
+		dataType: string
+		lineageTag: d66685ae-35c4-5661-8290-752eaf656fe6
+		summarizeBy: none
+		sourceColumn: Btm_Mid_Label
+
+		annotation SummarizationSetBy = Automatic
+
+	column Btm_End_Label
+		dataType: string
+		lineageTag: 04f3825f-3e5e-5fe2-a3c5-335c49985b7a
+		summarizeBy: none
+		sourceColumn: Btm_End_Label
+
+		annotation SummarizationSetBy = Automatic
+
+	column Start_Edge
+		dataType: int64
+		lineageTag: 1350e67d-66e0-5281-90a7-b780be797d06
+		summarizeBy: none
+		sourceColumn: Start_Edge
+
+		annotation SummarizationSetBy = Automatic
+
+	column End_Edge
+		dataType: int64
+		lineageTag: fe719f2a-ad88-58cb-9b58-8d063376b440
+		summarizeBy: none
+		sourceColumn: End_Edge
+
+		annotation SummarizationSetBy = Automatic
+
+	column PtStartX
+		dataType: int64
+		lineageTag: 81865725-265f-5b44-9825-f3ab2c3de43d
+		summarizeBy: none
+		sourceColumn: PtStartX
+
+		annotation SummarizationSetBy = Automatic
+
+	column PtStartY
+		dataType: int64
+		lineageTag: 6ba91a66-c2f7-5981-8466-c9d8b993c4c9
+		summarizeBy: none
+		sourceColumn: PtStartY
+
+		annotation SummarizationSetBy = Automatic
+
+	column PtEndX
+		dataType: int64
+		lineageTag: 40cff2e6-7bdd-5e05-8dd1-623375653e33
+		summarizeBy: none
+		sourceColumn: PtEndX
+
+		annotation SummarizationSetBy = Automatic
+
+	column PtEndY
+		dataType: int64
+		lineageTag: 55457ef0-594e-516c-843e-d0fe261f34c9
+		summarizeBy: none
+		sourceColumn: PtEndY
+
+		annotation SummarizationSetBy = Automatic
+
+	column SeqNo
+		dataType: int64
+		lineageTag: 3ea756d1-d689-5a68-a6f7-10158545d25a
+		summarizeBy: none
+		sourceColumn: SeqNo
+
+		annotation SummarizationSetBy = Automatic
+
+	column HeadStyle
+		dataType: int64
+		lineageTag: 81c25b2d-2742-5dab-86a3-f76198e3d44a
+		summarizeBy: none
+		sourceColumn: HeadStyle
+
+		annotation SummarizationSetBy = Automatic
+
+	column LineStyle
+		dataType: int64
+		lineageTag: 09922277-a4da-5599-9370-a5790cca8254
+		summarizeBy: none
+		sourceColumn: LineStyle
+
+		annotation SummarizationSetBy = Automatic
+
+	column RouteStyle
+		dataType: int64
+		lineageTag: abe0dd8f-d558-592f-8c9d-79888c847d8f
+		summarizeBy: none
+		sourceColumn: RouteStyle
+
+		annotation SummarizationSetBy = Automatic
+
+	column IsBold
+		dataType: int64
+		lineageTag: 686098f1-b60d-5327-b091-0d8a3c9cc489
+		summarizeBy: none
+		sourceColumn: IsBold
+
+		annotation SummarizationSetBy = Automatic
+
+	column LineColor
+		dataType: int64
+		lineageTag: ad698449-497b-5c96-9f8e-7997b831d8a5
+		summarizeBy: none
+		sourceColumn: LineColor
+
+		annotation SummarizationSetBy = Automatic
+
+	column Stereotype
+		dataType: string
+		lineageTag: 84fd1f16-8adc-5ca8-9894-c7fe9a064e21
+		summarizeBy: none
+		sourceColumn: Stereotype
+
+		annotation SummarizationSetBy = Automatic
+
+	column VirtualInheritance
+		dataType: string
+		lineageTag: 3482e2ca-3f4c-5f99-a4a5-811da9afdb55
+		summarizeBy: none
+		sourceColumn: VirtualInheritance
+
+		annotation SummarizationSetBy = Automatic
+
+	column LinkAccess
+		dataType: string
+		lineageTag: cb738368-4c1e-57bd-b0dc-c721a2ac4273
+		summarizeBy: none
+		sourceColumn: LinkAccess
+
+		annotation SummarizationSetBy = Automatic
+
+	column PDATA1
+		dataType: string
+		lineageTag: 20579106-967f-50a1-a2f1-b408588cea02
+		summarizeBy: none
+		sourceColumn: PDATA1
+
+		annotation SummarizationSetBy = Automatic
+
+	column PDATA2
+		dataType: string
+		lineageTag: a0a3a879-7d26-55d1-ab95-d3e784efa31f
+		summarizeBy: none
+		sourceColumn: PDATA2
+
+		annotation SummarizationSetBy = Automatic
+
+	column PDATA3
+		dataType: string
+		lineageTag: 3ce34b21-264f-52b6-a064-eeff7990293e
+		summarizeBy: none
+		sourceColumn: PDATA3
+
+		annotation SummarizationSetBy = Automatic
+
+	column PDATA4
+		dataType: string
+		lineageTag: 1000debe-7f61-52df-b603-cd763e50ba7f
+		summarizeBy: none
+		sourceColumn: PDATA4
+
+		annotation SummarizationSetBy = Automatic
+
+	column PDATA5
+		dataType: string
+		lineageTag: 8a6eb15b-0d19-5fda-91cf-130331f14af2
+		summarizeBy: none
+		sourceColumn: PDATA5
+
+		annotation SummarizationSetBy = Automatic
+
+	column DiagramID
+		dataType: int64
+		lineageTag: 22aad172-2d25-5e08-9579-2198d1626ae6
+		summarizeBy: none
+		sourceColumn: DiagramID
+
+		annotation SummarizationSetBy = Automatic
+
+	column ea_guid
+		dataType: string
+		lineageTag: d7f97a96-4ea0-59e1-9f06-053c9159a510
+		summarizeBy: none
+		sourceColumn: ea_guid
+
+		annotation SummarizationSetBy = Automatic
+
+	column SourceConstraint
+		dataType: string
+		lineageTag: ee8981dd-46e4-5b27-ba51-53a51a982230
+		summarizeBy: none
+		sourceColumn: SourceConstraint
+
+		annotation SummarizationSetBy = Automatic
+
+	column DestConstraint
+		dataType: string
+		lineageTag: 1d00b3ed-c1b4-53f2-b01f-c2c37c0913ab
+		summarizeBy: none
+		sourceColumn: DestConstraint
+
+		annotation SummarizationSetBy = Automatic
+
+	column SourceIsNavigable
+		dataType: int64
+		lineageTag: a8edca4e-6737-5169-b633-f4e8b6ad63fc
+		summarizeBy: none
+		sourceColumn: SourceIsNavigable
+
+		annotation SummarizationSetBy = Automatic
+
+	column DestIsNavigable
+		dataType: int64
+		lineageTag: f166cdbe-c2df-5cab-bd64-f52226b50045
+		summarizeBy: none
+		sourceColumn: DestIsNavigable
+
+		annotation SummarizationSetBy = Automatic
+
+	column IsRoot
+		dataType: int64
+		lineageTag: cdcd8850-f779-5d51-9671-6a8ae641a500
+		summarizeBy: none
+		sourceColumn: IsRoot
+
+		annotation SummarizationSetBy = Automatic
+
+	column IsLeaf
+		dataType: int64
+		lineageTag: 6ee75eb6-1320-5392-bf3e-4f6d18e6e26f
+		summarizeBy: none
+		sourceColumn: IsLeaf
+
+		annotation SummarizationSetBy = Automatic
+
+	column IsSpec
+		dataType: int64
+		lineageTag: 52c8e881-89b0-5dd0-a24c-81df1ae22129
+		summarizeBy: none
+		sourceColumn: IsSpec
+
+		annotation SummarizationSetBy = Automatic
+
+	column SourceChangeable
+		dataType: string
+		lineageTag: 099569b4-a903-5ff7-96f3-bb86c23281c3
+		summarizeBy: none
+		sourceColumn: SourceChangeable
+
+		annotation SummarizationSetBy = Automatic
+
+	column DestChangeable
+		dataType: string
+		lineageTag: 2540ede7-7ccc-5bff-b483-daed3012b3be
+		summarizeBy: none
+		sourceColumn: DestChangeable
+
+		annotation SummarizationSetBy = Automatic
+
+	column SourceTS
+		dataType: string
+		lineageTag: 45fa9bd1-cb3d-5122-9585-d0c00be8c2f1
+		summarizeBy: none
+		sourceColumn: SourceTS
+
+		annotation SummarizationSetBy = Automatic
+
+	column DestTS
+		dataType: string
+		lineageTag: 863398ac-5d8c-530c-b6ec-c970ed67d9bf
+		summarizeBy: none
+		sourceColumn: DestTS
+
+		annotation SummarizationSetBy = Automatic
+
+	column StateFlags
+		dataType: string
+		lineageTag: d16d2fbc-bfbe-55f2-8229-57628a41528c
+		summarizeBy: none
+		sourceColumn: StateFlags
+
+		annotation SummarizationSetBy = Automatic
+
+	column ActionFlags
+		dataType: string
+		lineageTag: b37ed289-42ca-50dd-88da-d91dce3522b0
+		summarizeBy: none
+		sourceColumn: ActionFlags
+
+		annotation SummarizationSetBy = Automatic
+
+	column IsSignal
+		dataType: int64
+		lineageTag: 0c278021-2ca4-59bd-8876-f258076af195
+		summarizeBy: none
+		sourceColumn: IsSignal
+
+		annotation SummarizationSetBy = Automatic
+
+	column IsStimulus
+		dataType: int64
+		lineageTag: e1fba27b-f329-5c2b-befe-7527a2cc4387
+		summarizeBy: none
+		sourceColumn: IsStimulus
+
+		annotation SummarizationSetBy = Automatic
+
+	column DispatchAction
+		dataType: string
+		lineageTag: f761329d-612f-5036-9f17-ac8034fd58bb
+		summarizeBy: none
+		sourceColumn: DispatchAction
+
+		annotation SummarizationSetBy = Automatic
+
+	column Target2
+		dataType: int64
+		lineageTag: 49c9beac-b51a-5628-bc95-5be1f9dcdd8f
+		summarizeBy: none
+		sourceColumn: Target2
+
+		annotation SummarizationSetBy = Automatic
+
+	column StyleEx
+		dataType: string
+		lineageTag: e4884147-b8d8-5396-be95-068103d1ffd4
+		summarizeBy: none
+		sourceColumn: StyleEx
+
+		annotation SummarizationSetBy = Automatic
+
+	column SourceStereotype
+		dataType: string
+		lineageTag: 679f71c2-1951-553f-94bc-9a6cad08462d
+		summarizeBy: none
+		sourceColumn: SourceStereotype
+
+		annotation SummarizationSetBy = Automatic
+
+	column DestStereotype
+		dataType: string
+		lineageTag: aabc533b-cf2c-522e-9bd9-9ff0d5321f74
+		summarizeBy: none
+		sourceColumn: DestStereotype
+
+		annotation SummarizationSetBy = Automatic
+
+	column SourceStyle
+		dataType: string
+		lineageTag: f499751a-05f9-5b4b-ac78-d1cf49699900
+		summarizeBy: none
+		sourceColumn: SourceStyle
+
+		annotation SummarizationSetBy = Automatic
+
+	column DestStyle
+		dataType: string
+		lineageTag: f1ee5049-fa3e-5d43-afde-4194500ed1b8
+		summarizeBy: none
+		sourceColumn: DestStyle
+
+		annotation SummarizationSetBy = Automatic
+
+	column EventFlags
+		dataType: string
+		lineageTag: c39216a4-3143-5a5f-8765-17ec0c691ca6
+		summarizeBy: none
+		sourceColumn: EventFlags
+
+		annotation SummarizationSetBy = Automatic
+
+	partition t_connector = m
+		mode: import
+		source =
+				let
+				    Source = Sql.Database("sql-host", "EAWestbrook"),
+				    Data = Source{[Schema="dbo",Item="t_connector"]}[Data]
+				in
+				    Data
+
+	annotation PBI_ResultType = Table

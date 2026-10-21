@@ -1,12 +1,15 @@
 #!/usr/bin/env python3
 """Tests for path C: Parquet files and the .pbip that reads them.
 
-    python -m pytest _shared/tools/test_parquet_tables.py -q
+    python -m pytest plugins/ai-power-tools/skills/_shared/tools/test_parquet_tables.py -q
 
 Hermetic: the Westbrook Bank definition fixture, rows built in the test, a temp
 folder. The three-path comparison needs no pyarrow; the writer tests skip without it.
 """
 from __future__ import annotations
+
+# 0405: the superscript device names. The rest covers designed behavior, not a filed defect.
+PINS = ("APT-2026-0405",)
 
 import copy
 import json
@@ -130,7 +133,8 @@ def test_file_names_keep_spaces_and_parentheses():
 
 
 @pytest.mark.parametrize("name", ['a/b', 'a\\b', 'a:b', 'a*b', 'a?b', 'a"b', 'a<b', 'a>b', 'a|b',
-                                  'a\tb', 'x.', 'x ', '', 'CON', 'nul', 'COM1', 'Lpt9.txt'])
+                                  'a\tb', 'x.', 'x ', '', 'CON', 'nul', 'COM1', 'Lpt9.txt',
+                                  'COM\u00b9', 'LPT\u00b3', 'COM\u00b9.txt', 'lpt\u00b2.parquet'])
 def test_names_windows_cannot_hold_are_refused(name):
     with pytest.raises(ParquetTablesError, match="Windows file name"):
         file_name(name)
@@ -277,5 +281,36 @@ def test_cli_writes_the_files_and_the_project_next_to_them(defn, tmp_path, capsy
     assert len(list(folder.glob("*.parquet"))) == len(rows)
     assert (tmp_path / "out" / "WB.pbip").exists()
     table = (tmp_path / "out" / "WB.SemanticModel" / "definition" / "tables" / "t_object.tmdl").read_text("utf-8")
-    assert str(folder / "t_object.parquet") in table
+    # The product joins with a backslash on every platform, on purpose: Power BI
+    # reads Windows paths (tmdl.py, ParquetSource.expression). str(Path) is "/" on
+    # Linux, so asserting that form failed on the CI runner while passing here.
+    assert str(folder) + "\\t_object.parquet" in table
     assert str(tmp_path / "out" / "WB.pbip") in capsys.readouterr().out
+
+
+@needs_pyarrow
+def test_cli_prints_the_size_line_and_warns_past_the_limit(defn, tmp_path, capsys, monkeypatch):
+    """The Parquet step prints the same size line as powerbi_model.py, and its warning."""
+    import powerbi_model
+    folder = tmp_path / "out" / "parquet"
+    d = parquet_defn(defn, str(folder))
+    rows = {spec["name"]: [] for spec in (list(d["entities"]) + list(d["connectors"])
+                                          + list(d["tag_row_tables"]) + [d["directory"]]
+                                          + list(d["physical"]))}
+    (tmp_path / "d.json").write_text(json.dumps(d), encoding="utf-8")
+    (tmp_path / "t.json").write_text(json.dumps(rows), encoding="utf-8")
+    expected = powerbi_model.size_lines(*powerbi_model.model_size(
+        powerbi_model.model_from_definition(d)))
+
+    assert parquet_tables.main([str(tmp_path / "d.json"), str(tmp_path / "t.json"),
+                                "--project-name", "WB"]) == 0
+    out = capsys.readouterr().out
+    assert expected[0] in out and "warning:" not in out
+
+    monkeypatch.setattr(powerbi_model, "SIZE_LIMIT", 10)
+    monkeypatch.setattr(powerbi_model.size_lines, "__defaults__", (10,))
+    assert parquet_tables.main([str(tmp_path / "d.json"), str(tmp_path / "t.json"),
+                                "--project-name", "WB"]) == 0
+    out = capsys.readouterr().out
+    assert expected[0] in out
+    assert "warning: the full model has" in out and "warning: the business layer has" in out

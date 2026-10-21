@@ -3,7 +3,7 @@
 
 Run from the repository root:
 
-    python -m pytest ea-diagram-composition/tools/test_compose.py -q
+    python -m pytest plugins/ai-power-tools/skills/ea-diagram-composition/tools/test_compose.py -q
 
 Nothing here touches a repository, a COM object or the filesystem. If any test
 in this file needs Sparx EA to pass, the layer boundary has been broken.
@@ -18,6 +18,9 @@ Two conventions worth reading before editing:
   other no-overlap assertion in the file leans on it.
 """
 from __future__ import annotations
+
+# Backlog items this module pins (checked by tools/test_suite_conventions.py).
+PINS = ("APT-2026-0152", "APT-2026-0168", "APT-2026-0187", "APT-2026-0193")
 
 import math
 import sys

@@ -3,7 +3,7 @@
 
 Run from the repository root:
 
-    python -m pytest _shared/tools/test_ea_census.py -q
+    python -m pytest plugins/ai-power-tools/skills/_shared/tools/test_ea_census.py -q
 
 Nothing here touches a repository, a COM object or the filesystem.
 
@@ -29,6 +29,9 @@ produced - because the prototype this replaces passed every check it had on the
 first run, which proved nothing about detection.
 """
 from __future__ import annotations
+
+# Backlog items this module pins (checked by tools/test_suite_conventions.py).
+PINS = ("APT-2026-0223", "APT-2026-0304")
 
 import pytest
 

@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """Tests for `.pbip` project authoring.
 
-    python -m pytest _shared/tools/test_pbip.py -q
+    python -m pytest plugins/ai-power-tools/skills/_shared/tools/test_pbip.py -q
 
 Nothing here touches Power BI or the filesystem. Several assert measured
 failure modes of the REPORT half, which is the part that cost real time:
@@ -9,6 +9,9 @@ failure modes of the REPORT half, which is the part that cost real time:
 loads the model then crashes every save path.
 """
 from __future__ import annotations
+
+# No backlog item is pinned: these tests cover designed behavior, not a filed defect.
+PINS = ()
 
 import json
 import re
@@ -227,3 +230,146 @@ def test_nothing_outside_the_table_files_mentions_the_source():
             continue
         assert "Parquet.Document" not in text, path
         assert "out\\parquet" not in text, path
+
+
+# ------------------------------------------------- the Overview page (0545)
+
+VISUAL_SCHEMA_URL = ("https://developer.microsoft.com/json-schemas/fabric/item/report/"
+                     "definition/visualContainer/2.14.0/schema.json")
+
+
+def overview(name="W"):
+    """(files, {visual name: parsed visual.json}) for the Westbrook model."""
+    files = project_files(semantic(), PARQUET, name=name)
+    prefix = f"{name}.Report/definition/pages/{page_name(name)}/visuals/"
+    visuals = {p[len(prefix):].split("/")[0]: json.loads(t)
+               for p, t in files.items() if p.startswith(prefix)}
+    return files, visuals
+
+
+def field_refs(visual):
+    """Every (kind, entity, property) the visual reads, from projections and filters."""
+    refs = []
+    nodes = [p["field"] for q in visual["visual"]["query"]["queryState"].values()
+             for p in q["projections"]]
+    nodes += [f["field"] for f in visual.get("filterConfig", {}).get("filters", [])]
+    for node in nodes:
+        (kind, body), = node.items()
+        refs.append((kind, body["Expression"]["SourceRef"]["Entity"], body["Property"]))
+    return refs
+
+
+def test_the_page_is_called_overview_and_pins_the_captured_versions():
+    files, _ = overview()
+    page = parsed(files, f"W.Report/definition/pages/{page_name('W')}/page.json")
+    assert page["displayName"] == "Overview"
+    assert page["height"] == 720 and page["width"] == 1280
+    assert page["$schema"].endswith("/page/2.1.0/schema.json")
+    report = parsed(files, "W.Report/definition/report.json")
+    assert report["$schema"].endswith("/report/3.3.0/schema.json")
+    # Desktop keeps the import record at 2.13.0 beside 2.14.0 visuals.
+    assert REPORT_VERSION_AT_IMPORT["visual"] == "2.13.0"
+
+
+def test_there_is_one_table_visual_and_one_card_per_entity_table():
+    _, visuals = overview()
+    kinds = [v["visual"]["visualType"] for v in visuals.values()]
+    assert kinds.count("tableEx") == 1
+    entity_tables = {e["name"] for e in DEFINITION["entities"]}
+    assert kinds.count("card") == len(entity_tables) > 0
+    cards = {field_refs(v)[0][1] for v in visuals.values()
+             if v["visual"]["visualType"] == "card"}
+    assert cards == entity_tables
+
+
+def test_every_visual_has_the_required_keys_and_the_pinned_schema():
+    _, visuals = overview()
+    for name, v in visuals.items():
+        assert v["$schema"] == VISUAL_SCHEMA_URL
+        assert v["name"] == name and re.fullmatch(r"[0-9a-f]{20}", name)
+        assert {"x", "y", "z", "height", "width", "tabOrder"} <= set(v["position"])
+        assert v["visual"]["visualType"] in ("tableEx", "card")
+        assert v["visual"]["query"]["queryState"]["Values"]["projections"]
+
+
+def test_every_field_reference_resolves_to_the_model():
+    model = semantic()
+    refs = [r for _, v in overview()[1].items() for r in field_refs(v)]
+    assert refs
+    for kind, table, prop in refs:
+        t = model.table(table)
+        assert t is not None, table
+        names = {c.name for c in t.columns} if kind == "Column" else {m.name for m in t.measures}
+        assert prop in names, (kind, table, prop)
+
+
+def test_the_table_visual_reads_the_directory_and_cards_read_only_measures():
+    _, visuals = overview()
+    for v in visuals.values():
+        refs = field_refs(v)
+        if v["visual"]["visualType"] == "tableEx":
+            assert [r[1:] for r in refs[:3]] == [("Table Directory", c) for c in
+                                                 ("table_name", "kind", "description")]
+            assert {r[0] for r in refs} == {"Column"}
+        else:
+            # No entity column anywhere, so the blank member never shows.
+            assert len(refs) == 1 and refs[0][0] == "Measure"
+            assert refs[0][2] == f"{refs[0][1]} count"
+
+
+def test_visuals_are_laid_out_inside_the_page_without_overlap():
+    _, visuals = overview()
+    boxes = [(p["x"], p["y"], p["x"] + p["width"], p["y"] + p["height"])
+             for p in (v["position"] for v in visuals.values())]
+    for x0, y0, x1, y1 in boxes:
+        assert x0 >= 0 and y0 >= 0 and x1 <= 1280 and y1 <= 720
+    for i, a in enumerate(boxes):
+        for b in boxes[i + 1:]:
+            assert a[2] <= b[0] or b[2] <= a[0] or a[3] <= b[1] or b[3] <= a[1]
+
+
+def test_visual_names_are_derived_from_content_and_stable():
+    a, b = overview()[1], overview()[1]
+    assert list(a) == list(b)
+    assert len(set(a)) == len(a)
+    assert set(a) != set(overview("Other")[1])
+
+
+def test_visual_files_are_crlf_without_a_bom():
+    files, _ = overview()
+    for path, text in files.items():
+        if path.endswith("/visual.json"):
+            assert text.endswith(NEWLINE) and "\n" not in text.replace(NEWLINE, "")
+            assert not text.startswith("\ufeff")
+
+
+def test_a_model_without_the_directory_or_counts_still_gets_an_empty_page():
+    from semantic_model import SemanticModel, SemanticTable
+    files = project_files(SemanticModel(tables=[SemanticTable("t")]), PARQUET, name="W")
+    assert not any("/visuals/" in p for p in files)
+    assert f"W.Report/definition/pages/{page_name('W')}/page.json" in files
+
+
+def test_many_entity_tables_grow_the_page_so_every_card_sits_on_it():
+    from semantic_model import Measure, SemanticColumn, SemanticModel, SemanticTable
+    directory = SemanticTable("Table Directory", columns=[
+        SemanticColumn(c) for c in ("table_name", "kind", "description")])
+    tables = [SemanticTable(f"Entity {i:03d}", columns=[SemanticColumn("name")],
+                            measures=[Measure(f"Entity {i:03d} count",
+                                              f"COUNTROWS('Entity {i:03d}')")])
+              for i in range(200)]
+    model = SemanticModel(tables=[directory, *tables])
+    files = project_files(model, PARQUET, name="W")
+    base = f"W.Report/definition/pages/{page_name('W')}/"
+    page = parsed(files, base + "page.json")
+    assert page["height"] > 720
+    visuals = [json.loads(t) for p, t in files.items() if p.startswith(base + "visuals/")]
+    assert sum(v["visual"]["visualType"] == "card" for v in visuals) == 200
+    boxes = [(v["position"]["x"], v["position"]["y"],
+              v["position"]["x"] + v["position"]["width"],
+              v["position"]["y"] + v["position"]["height"]) for v in visuals]
+    for x0, y0, x1, y1 in boxes:
+        assert x0 >= 0 and y0 >= 0 and x1 <= page["width"] and y1 <= page["height"]
+    for i, a in enumerate(boxes):
+        for b in boxes[i + 1:]:
+            assert a[2] <= b[0] or b[2] <= a[0] or a[3] <= b[1] or b[3] <= a[1]

@@ -10,7 +10,7 @@ nothing else writes or applies anything.
                                   Parquet.Document(...) | Sql.Database(...)
 
 `powerbi_model.model_from_definition` builds a `SemanticModel` from the
-business-layer definition the server writes (`APT-2026-0301`). The only thing
+business-layer definition the server writes. The only thing
 that varies between the three paths is where a table's rows come from, and that
 is passed to the renderer, not chosen here.
 
@@ -108,13 +108,14 @@ class SemanticModel:
         return [r for r in self.relationships if not r.is_active]
 
 
-def _rel_name(from_table: str, from_column: str, to_table: str) -> str:
+def _rel_name(from_table: str, from_column: str, to_table: str, to_column: str = "") -> str:
     """A deterministic relationship identifier.
 
     Includes the source COLUMN because a table can relate to the same table
     twice (a connector's source and target), and the two differ only by which
-    column they join on.
+    column they join on. `to_column` is added only to tell apart relationships
+    that would otherwise share a name.
     """
-    parts = f"{from_table}_{from_column}_to_{to_table}"
+    parts = f"{from_table}_{from_column}_to_{to_table}" + (f"_{to_column}" if to_column else "")
     safe = "".join(c if c.isalnum() else "_" for c in parts)
     return "gen_" + safe.strip("_").lower()

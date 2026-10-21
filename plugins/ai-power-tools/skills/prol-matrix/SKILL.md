@@ -61,7 +61,7 @@ Three consequences, and they bite in order of how often:
 
 1. **The view URL double-encodes the name.** The route is
    `/repositories/Matrix/View/repId/<repo>/<name>/<type>` where `<name>` is encoded **twice** —
-   a space appears as `%2520`, not `%20`. Navigate from the list rather than building the link by
+   a space appears as `%2520`, not `%20`. Open the matrix from the list rather than building the link by
    hand; if you must build it, apply `encodeURIComponent` to the already-encoded name.
 2. **Renaming the profile in EA breaks every saved link to it.** There is no stable identifier to
    fall back on. Worth warning the user about before they rename anything.
@@ -273,11 +273,11 @@ Say which of these applies rather than letting an action fail.
    not announce itself. Check that every row GUID is in `sourceElements` and every column GUID is
    in `targetElements`; a join that decided the two ends independently will have invented
    coordinates that satisfy neither. Then check what `unplaced` holds.
-3. **`ID2019`** — the token aged out. Navigate to refresh, re-read `sessionStorage`, retry once.
+3. **`ID2019`** — the token aged out. Reload the page to refresh the token, re-read `sessionStorage`, retry once.
 4. **`ID2095`** — authenticated but not permitted. Check `CheckUserHasMatrixAccess` and the
    person's Access Permissions. A permissions answer, not a bug.
 5. **404 on a matrix URL** — almost always the double-encoding (§2) or a profile renamed in EA.
-   Re-read `GetAllMatrixProfiles` and navigate from the list.
+   Re-read `GetAllMatrixProfiles` and open the matrix from the list.
 6. **The request never returns** — check the selector sizes from §3. A 1000-row profile returns
    every element record in one response.
 

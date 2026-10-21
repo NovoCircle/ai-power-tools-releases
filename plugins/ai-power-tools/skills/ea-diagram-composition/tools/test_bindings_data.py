@@ -31,6 +31,9 @@ into it.
 """
 from __future__ import annotations
 
+# No backlog item is pinned: these tests cover designed behavior, not a filed defect.
+PINS = ()
+
 import re
 from pathlib import Path
 

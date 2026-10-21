@@ -1,0 +1,246 @@
+table t_diagram
+	isHidden
+	lineageTag: 7f5160df-3446-5813-b359-0d8292ae51b7
+
+	column Diagram_ID
+		dataType: int64
+		lineageTag: 8296ad34-1795-504f-bdf3-2915432385bf
+		summarizeBy: none
+		sourceColumn: Diagram_ID
+
+		annotation SummarizationSetBy = Automatic
+
+	column Package_ID
+		dataType: int64
+		lineageTag: 7fa618a6-50bf-5a20-adb6-eb462b03bc3e
+		summarizeBy: none
+		sourceColumn: Package_ID
+
+		annotation SummarizationSetBy = Automatic
+
+	column ParentID
+		dataType: int64
+		lineageTag: e16c6819-87ea-5e5f-bd45-3e7bfc78cb1d
+		summarizeBy: none
+		sourceColumn: ParentID
+
+		annotation SummarizationSetBy = Automatic
+
+	column Diagram_Type
+		dataType: string
+		lineageTag: 3fa53ab5-ae57-54f4-9de3-64d5c5d6b673
+		summarizeBy: none
+		sourceColumn: Diagram_Type
+
+		annotation SummarizationSetBy = Automatic
+
+	column Name
+		dataType: string
+		lineageTag: c2ecded9-eef8-55b1-ad58-d0483461dcfb
+		summarizeBy: none
+		sourceColumn: Name
+
+		annotation SummarizationSetBy = Automatic
+
+	column Version
+		dataType: string
+		lineageTag: 97ef2a9d-f954-5d53-aec5-7fd45fe87612
+		summarizeBy: none
+		sourceColumn: Version
+
+		annotation SummarizationSetBy = Automatic
+
+	column Author
+		dataType: string
+		lineageTag: 7e2be016-7812-5bf8-ad96-6d9ee520c712
+		summarizeBy: none
+		sourceColumn: Author
+
+		annotation SummarizationSetBy = Automatic
+
+	column ShowDetails
+		dataType: int64
+		lineageTag: 82e2f1d7-296a-59a6-bfe2-d7018621e57c
+		summarizeBy: none
+		sourceColumn: ShowDetails
+
+		annotation SummarizationSetBy = Automatic
+
+	column Notes
+		dataType: string
+		lineageTag: 8cbec215-90eb-5b22-ad3a-2bca1fe73bf1
+		summarizeBy: none
+		sourceColumn: Notes
+
+		annotation SummarizationSetBy = Automatic
+
+	column Stereotype
+		dataType: string
+		lineageTag: da04334e-f109-51a9-9f3f-84344f15d248
+		summarizeBy: none
+		sourceColumn: Stereotype
+
+		annotation SummarizationSetBy = Automatic
+
+	column AttPub
+		dataType: int64
+		lineageTag: 68f9ae77-a67e-50e2-bad8-8adc6279bf38
+		summarizeBy: none
+		sourceColumn: AttPub
+
+		annotation SummarizationSetBy = Automatic
+
+	column AttPri
+		dataType: int64
+		lineageTag: f9c03ef9-5913-5378-823c-16d9d5c0130e
+		summarizeBy: none
+		sourceColumn: AttPri
+
+		annotation SummarizationSetBy = Automatic
+
+	column AttPro
+		dataType: int64
+		lineageTag: c7b073a4-3077-54d8-b64d-34c430dac7b4
+		summarizeBy: none
+		sourceColumn: AttPro
+
+		annotation SummarizationSetBy = Automatic
+
+	column Orientation
+		dataType: string
+		lineageTag: b9d905f1-b0b8-5fe5-8f70-b0112855371d
+		summarizeBy: none
+		sourceColumn: Orientation
+
+		annotation SummarizationSetBy = Automatic
+
+	column cx
+		dataType: int64
+		lineageTag: 448491d8-0fed-5e3b-9d87-b27896f0fe1e
+		summarizeBy: none
+		sourceColumn: cx
+
+		annotation SummarizationSetBy = Automatic
+
+	column cy
+		dataType: int64
+		lineageTag: c43345e7-2b81-5a2d-9a02-ea244417ecbc
+		summarizeBy: none
+		sourceColumn: cy
+
+		annotation SummarizationSetBy = Automatic
+
+	column Scale
+		dataType: int64
+		lineageTag: 6ed881ef-60d6-526b-ae47-2b542bdeb214
+		summarizeBy: none
+		sourceColumn: Scale
+
+		annotation SummarizationSetBy = Automatic
+
+	column CreatedDate
+		dataType: dateTime
+		lineageTag: 440caf26-998b-592f-9d57-0a82b2a487ce
+		summarizeBy: none
+		sourceColumn: CreatedDate
+
+		annotation SummarizationSetBy = Automatic
+
+	column ModifiedDate
+		dataType: dateTime
+		lineageTag: bca62d8c-20a1-5eeb-85fb-5f7e5e61111c
+		summarizeBy: none
+		sourceColumn: ModifiedDate
+
+		annotation SummarizationSetBy = Automatic
+
+	column HTMLPath
+		dataType: string
+		lineageTag: 4499daed-eb49-5b1a-9e1f-25f067903796
+		summarizeBy: none
+		sourceColumn: HTMLPath
+
+		annotation SummarizationSetBy = Automatic
+
+	column ShowForeign
+		dataType: int64
+		lineageTag: b9615cca-4b4f-5068-8edd-8c5916618d76
+		summarizeBy: none
+		sourceColumn: ShowForeign
+
+		annotation SummarizationSetBy = Automatic
+
+	column ShowBorder
+		dataType: int64
+		lineageTag: 154eaecd-df57-5e25-ae15-d58df680c07c
+		summarizeBy: none
+		sourceColumn: ShowBorder
+
+		annotation SummarizationSetBy = Automatic
+
+	column ShowPackageContents
+		dataType: int64
+		lineageTag: 4ea45033-b211-5ea5-8668-77a4e57ee956
+		summarizeBy: none
+		sourceColumn: ShowPackageContents
+
+		annotation SummarizationSetBy = Automatic
+
+	column PDATA
+		dataType: string
+		lineageTag: 0717ea36-df89-558f-906a-e14ad88873c6
+		summarizeBy: none
+		sourceColumn: PDATA
+
+		annotation SummarizationSetBy = Automatic
+
+	column Locked
+		dataType: int64
+		lineageTag: 4dc6fa24-da1f-5fe7-87ba-b4b7f2900ccb
+		summarizeBy: none
+		sourceColumn: Locked
+
+		annotation SummarizationSetBy = Automatic
+
+	column ea_guid
+		dataType: string
+		lineageTag: 17b9155d-8c60-5889-8742-1a44e1813052
+		summarizeBy: none
+		sourceColumn: ea_guid
+
+		annotation SummarizationSetBy = Automatic
+
+	column TPos
+		dataType: int64
+		lineageTag: 15c515ae-6b10-5f86-b906-ddc9042ebb44
+		summarizeBy: none
+		sourceColumn: TPos
+
+		annotation SummarizationSetBy = Automatic
+
+	column Swimlanes
+		dataType: string
+		lineageTag: 2010ef7d-ecc9-51c2-9b31-ba3f242ddb2a
+		summarizeBy: none
+		sourceColumn: Swimlanes
+
+		annotation SummarizationSetBy = Automatic
+
+	column StyleEx
+		dataType: string
+		lineageTag: d50a765e-4277-551f-a8bf-38d86da3c474
+		summarizeBy: none
+		sourceColumn: StyleEx
+
+		annotation SummarizationSetBy = Automatic
+
+	partition t_diagram = m
+		mode: import
+		source =
+				let
+				    Source = Sql.Database("sql-host", "EAWestbrook"),
+				    Data = Source{[Schema="dbo",Item="t_diagram"]}[Data]
+				in
+				    Data
+
+	annotation PBI_ResultType = Table

@@ -10,6 +10,9 @@ every `@STEREO` string has the form measured against a live repository.
 """
 from __future__ import annotations
 
+# No backlog item is pinned: these tests cover designed behavior, not a filed defect.
+PINS = ()
+
 import json
 
 import pytest

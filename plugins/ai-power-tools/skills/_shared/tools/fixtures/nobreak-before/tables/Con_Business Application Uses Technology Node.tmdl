@@ -1,0 +1,93 @@
+table 'Con_Business Application Uses Technology Node'
+	lineageTag: cff82682-1767-5f70-b9ad-7cab1a29c22a
+
+	column connector_guid
+		dataType: string
+		lineageTag: a38de6e6-d2b7-583c-aebf-e6649d258728
+		summarizeBy: none
+		sourceColumn: connector_guid
+
+		annotation SummarizationSetBy = Automatic
+
+	column connector_id
+		dataType: int64
+		lineageTag: 8238cb4e-1c9f-570e-8b1b-f0a0e4a6f78a
+		summarizeBy: none
+		sourceColumn: connector_id
+
+		annotation SummarizationSetBy = Automatic
+
+	column name
+		dataType: string
+		lineageTag: 6c438ee2-9530-5039-b05e-36c638705387
+		summarizeBy: none
+		sourceColumn: name
+
+		annotation SummarizationSetBy = Automatic
+
+	column source_guid
+		dataType: string
+		lineageTag: 4ad1a445-7ea6-5e8b-8d64-4503ab12494c
+		summarizeBy: none
+		sourceColumn: source_guid
+
+		annotation SummarizationSetBy = Automatic
+
+	column target_guid
+		dataType: string
+		lineageTag: e2dfbe39-416a-5af0-9e74-17c41639280f
+		summarizeBy: none
+		sourceColumn: target_guid
+
+		annotation SummarizationSetBy = Automatic
+
+	column direction
+		dataType: string
+		lineageTag: 68caadab-40cf-5d67-afec-49a80bb64fa3
+		summarizeBy: none
+		sourceColumn: direction
+
+		annotation SummarizationSetBy = Automatic
+
+	column base_type
+		dataType: string
+		lineageTag: 4bf779bb-e404-55bd-a98f-28991ce86546
+		summarizeBy: none
+		sourceColumn: base_type
+
+		annotation SummarizationSetBy = Automatic
+
+	column dataFlowClassification
+		dataType: string
+		lineageTag: 791a8cbe-21d2-572d-af22-d9a45da0c47f
+		summarizeBy: none
+		sourceColumn: dataFlowClassification
+
+		annotation SummarizationSetBy = Automatic
+
+	column integrationPattern
+		dataType: string
+		lineageTag: bc5531c4-5c80-59ef-a511-cee66dcf8730
+		summarizeBy: none
+		sourceColumn: integrationPattern
+
+		annotation SummarizationSetBy = Automatic
+
+	column slaTier
+		dataType: string
+		lineageTag: 96b9ad80-2867-5df2-9bfd-e093dc71eecb
+		summarizeBy: none
+		sourceColumn: slaTier
+
+		annotation SummarizationSetBy = Automatic
+
+	partition 'Con_Business Application Uses Technology Node' = m
+		mode: import
+		source =
+				let
+				    Source = Sql.Database("sql-host", "EAWestbrook"),
+				    Data = Source{[Schema="p5test",Item="Con_Business Application Uses Technology Node"]}[Data]
+				in
+				    Data
+
+	annotation PBI_ResultType = Table

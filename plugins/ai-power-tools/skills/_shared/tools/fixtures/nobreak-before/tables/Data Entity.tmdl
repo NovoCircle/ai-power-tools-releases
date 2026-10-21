@@ -1,0 +1,93 @@
+table 'Data Entity'
+	lineageTag: 17a99ed6-6691-52b2-babc-3bc8b5614027
+
+	column ea_guid
+		dataType: string
+		lineageTag: 32a3806b-6511-5756-aa2f-10f7410f9d2a
+		summarizeBy: none
+		sourceColumn: ea_guid
+
+		annotation SummarizationSetBy = Automatic
+
+	column name
+		dataType: string
+		lineageTag: a7c88a3e-116c-5709-8522-53542fcabc99
+		summarizeBy: none
+		sourceColumn: name
+
+		annotation SummarizationSetBy = Automatic
+
+	column metaclass
+		dataType: string
+		lineageTag: 6fa90aeb-05e0-5e54-ac84-5c45a19202a2
+		summarizeBy: none
+		sourceColumn: metaclass
+
+		annotation SummarizationSetBy = Automatic
+
+	column package_path
+		dataType: string
+		lineageTag: c355e314-1dad-5954-9668-05654df6328a
+		summarizeBy: none
+		sourceColumn: package_path
+
+		annotation SummarizationSetBy = Automatic
+
+	column businessOwner
+		dataType: string
+		lineageTag: 91c7e7a4-1b10-5464-bb19-6c5b6ea55402
+		summarizeBy: none
+		sourceColumn: businessOwner
+
+		annotation SummarizationSetBy = Automatic
+
+	column criticality
+		dataType: string
+		lineageTag: f0905059-194d-5bfa-b486-92478798c03c
+		summarizeBy: none
+		sourceColumn: criticality
+
+		annotation SummarizationSetBy = Automatic
+
+	column dataClassification
+		dataType: string
+		lineageTag: 69798d7d-c1f7-5882-af5f-e299747fa14a
+		summarizeBy: none
+		sourceColumn: dataClassification
+
+		annotation SummarizationSetBy = Automatic
+
+	column lifecycle
+		dataType: string
+		lineageTag: f1202534-409c-518c-9dda-0b9647e30395
+		summarizeBy: none
+		sourceColumn: lifecycle
+
+		annotation SummarizationSetBy = Automatic
+
+	column regulatoryScope
+		dataType: string
+		lineageTag: b6537a4d-023b-55ca-947d-fa4693ec4000
+		summarizeBy: none
+		sourceColumn: regulatoryScope
+
+		annotation SummarizationSetBy = Automatic
+
+	column technicalOwner
+		dataType: string
+		lineageTag: 19b8eba0-1061-5f62-9c52-9205fb2be57a
+		summarizeBy: none
+		sourceColumn: technicalOwner
+
+		annotation SummarizationSetBy = Automatic
+
+	partition 'Data Entity' = m
+		mode: import
+		source =
+				let
+				    Source = Sql.Database("sql-host", "EAWestbrook"),
+				    Data = Source{[Schema="p5test",Item="Data Entity"]}[Data]
+				in
+				    Data
+
+	annotation PBI_ResultType = Table

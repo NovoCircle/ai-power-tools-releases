@@ -206,7 +206,7 @@ A traversal: seed with `GetTraceability`, expand the frontier in batches with
    have ticked anything. Use the group checkbox (§3).
 3. **The view became unreadable** — that is §5, not a rendering fault. Filter a connector type off,
    or switch layout (§6).
-4. **`ID2019`** — the token aged out. Navigate to refresh, re-read `sessionStorage`, retry once.
+4. **`ID2019`** — the token aged out. Reload the page to refresh the token, re-read `sessionStorage`, retry once.
 5. **`ID2095`** — authenticated but not permitted; a permissions answer, not a bug.
 6. **A saved view cannot be found by name** — it may have saved before you renamed it, as
    `Analyzer View` (§1).

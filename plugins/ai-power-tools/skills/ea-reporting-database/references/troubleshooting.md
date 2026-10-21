@@ -21,6 +21,21 @@ profile names a database with no EA tables.
 needs `ea_database` or `reporting_database`; `build_reporting_database` needs `reporting_database`
 or `parquet`.
 
+**A Microsoft Entra sign-in failed or was not completed.** The sign-in window was canceled, refused,
+or not answered within about ten minutes. Nothing was written, and a refresh left the previous data
+live. Look for Microsoft's sign-in window (it is brought to the front, but another window can still
+cover it) and run the operation again with someone there to sign in. A replay reports it as
+`sign_in_failed`, and as `cannot_connect` when the server could not be reached at all.
+
+**"Microsoft Entra sign-in needs the Microsoft OLE DB Driver for SQL Server".** Neither driver 18 nor
+19 is installed. Install it from the page the message names, then run again.
+
+**A cloud database "does not exist ... create the database in the Fabric portal".** A SQL database
+in Fabric cannot be created by AI Power Tools. Create it in the Fabric portal, or check that
+`target.database` is the database name from its connection strings (the display name followed by
+the item id), not the display name alone. Also check that the workspace's Fabric capacity is not
+paused. [`the-cloud-database.md`](the-cloud-database.md).
+
 **Alignment is not `aligned`.** Read `combinations_without_a_table`,
 `outside_every_allowed_combination` and `connector_count_mismatches` before changing anything. A
 connector outside every allowed combination is a connector the technology does not allow between

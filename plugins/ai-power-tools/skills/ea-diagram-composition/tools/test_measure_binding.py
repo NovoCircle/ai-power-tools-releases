@@ -3,7 +3,7 @@
 
 Run from the repository root:
 
-    python -m pytest ea-diagram-composition/tools/test_measure_binding.py -q
+    python -m pytest plugins/ai-power-tools/skills/ea-diagram-composition/tools/test_measure_binding.py -q
 
 Two kinds of test, kept apart on purpose.
 
@@ -32,6 +32,9 @@ tests state the recorded value, the tolerance and the measured value, rather
 than loosening a bound until it passes.
 """
 from __future__ import annotations
+
+# Backlog items this module pins (checked by tools/test_suite_conventions.py).
+PINS = ("APT-2026-0193",)
 
 import collections
 import hashlib

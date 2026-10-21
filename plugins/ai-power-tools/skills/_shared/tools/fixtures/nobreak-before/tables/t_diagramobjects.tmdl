@@ -1,0 +1,86 @@
+table t_diagramobjects
+	isHidden
+	lineageTag: c6aeb9ef-00f4-5edd-b1af-d9458fe10264
+
+	column Diagram_ID
+		dataType: int64
+		lineageTag: c94a853e-6032-5950-80b6-fb8f140c9ac1
+		summarizeBy: none
+		sourceColumn: Diagram_ID
+
+		annotation SummarizationSetBy = Automatic
+
+	column Object_ID
+		dataType: int64
+		lineageTag: e99f9295-9da0-54d5-9eae-69510bd6aa9f
+		summarizeBy: none
+		sourceColumn: Object_ID
+
+		annotation SummarizationSetBy = Automatic
+
+	column RectTop
+		dataType: int64
+		lineageTag: ce98422e-8e7a-55e5-915d-83a819559a71
+		summarizeBy: none
+		sourceColumn: RectTop
+
+		annotation SummarizationSetBy = Automatic
+
+	column RectLeft
+		dataType: int64
+		lineageTag: 87b889a4-f835-53e0-abc0-68e393aad6c0
+		summarizeBy: none
+		sourceColumn: RectLeft
+
+		annotation SummarizationSetBy = Automatic
+
+	column RectRight
+		dataType: int64
+		lineageTag: e91eb524-b426-5de7-ab93-d1052b8520bd
+		summarizeBy: none
+		sourceColumn: RectRight
+
+		annotation SummarizationSetBy = Automatic
+
+	column RectBottom
+		dataType: int64
+		lineageTag: fed27e81-f0ec-579a-89b5-c1f4b6da071e
+		summarizeBy: none
+		sourceColumn: RectBottom
+
+		annotation SummarizationSetBy = Automatic
+
+	column Sequence
+		dataType: int64
+		lineageTag: 418eed61-3790-51ff-932e-7172ac8805dd
+		summarizeBy: none
+		sourceColumn: Sequence
+
+		annotation SummarizationSetBy = Automatic
+
+	column ObjectStyle
+		dataType: string
+		lineageTag: 3a3fda56-5086-5bad-9fef-c3ce85af2685
+		summarizeBy: none
+		sourceColumn: ObjectStyle
+
+		annotation SummarizationSetBy = Automatic
+
+	column Instance_ID
+		dataType: int64
+		lineageTag: 9353e98a-d7b5-5b75-bed4-53afa9ed5e92
+		summarizeBy: none
+		sourceColumn: Instance_ID
+
+		annotation SummarizationSetBy = Automatic
+
+	partition t_diagramobjects = m
+		mode: import
+		source =
+				let
+				    Source = Sql.Database("sql-host", "EAWestbrook"),
+				    Data = Source{[Schema="dbo",Item="t_diagramobjects"]}[Data]
+				in
+				    Data
+
+	annotation PBI_ResultType = Table
