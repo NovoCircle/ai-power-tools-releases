@@ -1,0 +1,33 @@
+{
+  "name": "novocircle",
+  "owner": {
+    "name": "NovoCircle"
+  },
+  "description": "Skills published by NovoCircle for the AI Power Tools product family.",
+  "plugins": [
+    {
+      "name": "ai-power-tools",
+      "source": {
+        "source": "git-subdir",
+        "url": "https://github.com/NovoCircle/ai-power-tools-releases.git",
+        "path": "plugins/ai-power-tools",
+        "ref": "v3.6.4",
+        "sha": "338aaf46d58b04344e7d7a3318ebee19d62af0a7"
+      },
+      "version": "3.6.4",
+      "description": "AI Power Tools for Sparx EA \u2014 the skills: modeling, MDG authoring and deployment, validation rulesets, diagram composition, import/export and stakeholder reporting against a Sparx Enterprise Architect repository. Needs the AI Power Tools for Sparx EA Claude Desktop extension (the MCP server) installed. Requires Enterprise Architect on Windows."
+    },
+    {
+      "name": "modeling-languages",
+      "source": {
+        "source": "git-subdir",
+        "url": "https://github.com/NovoCircle/modeling-languages-releases.git",
+        "path": "plugins/modeling-languages",
+        "ref": "modeling-languages--v1.0.0",
+        "sha": "2dab6d5b979e591548ff750fe5a1675efa365d0f"
+      },
+      "version": "1.0.0",
+      "description": "Modeling Languages: one guide for each modeling language, covering its concepts, relationships, constraints, data types, how the standard draws it, and one shared layout standard for sizes and spacing. The guides describe the languages, not any diagramming tool, so any tool's skills can read them."
+    }
+  ]
+}
