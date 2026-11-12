@@ -1,0 +1,1530 @@
+# ArchiMate® 3.1 Conformance Ruleset
+# Language:     ArchiMate® 3.1 (The Open Group Standard)
+# Enforced by:  AI Power Tools for Sparx EA — validate_model tool
+#
+# STEREOTYPE NAMES ARE PREFIXED, AND THAT IS MEASURED, NOT ASSUMED.
+#
+# Every stereotype name in every rule below is written `ArchiMate_<Concept>`,
+# because that is the string EA's built-in ArchiMate MDG puts in
+# `t_object.Stereotype` and `t_connector.Stereotype`, and those two columns are
+# what `validate_model` matches on -- with `Stereotype IN (...)`, exact, with no
+# normalization and no prefix stripping. A name that is one character off
+# selects nothing, and a rule that selects nothing reports no violations, which
+# reads exactly like a clean model.
+#
+# An earlier revision of this file said the opposite -- that EA 16+ dropped the
+# prefix and only EA <=15 carried it. That was wrong in both directions and it
+# made this ruleset match zero elements against any model built with EA's own
+# ArchiMate MDG. What follows is the measurement that settled it.
+#
+# Measured on EA 17.1 build 1716:
+#
+#   1. THE MDG DECLARATION. All three ArchiMate MDG generations EA ships declare
+#      the prefixed form -- `MDGTechnologies/Archimate.xml` (ArchiMate 1),
+#      `Archimate2.xml` (ArchiMate 2.1.1) and `ArchiMate3.xml` (ArchiMate 3.1,
+#      technology id `ArchiMate3`). In ArchiMate3.xml, 73 of the 94 distinct
+#      `<Stereotype name="...">` values are `ArchiMate_`-prefixed and the other
+#      21 are toolbox page names, not concepts. So the prefix was never dropped:
+#      there is no EA generation that shipped the unprefixed form. Note that each
+#      stereotype also carries `metatype="<Concept>"` WITHOUT the prefix; that
+#      attribute is the notation's concept name, not the stored stereotype, and
+#      reading it as the latter is the likeliest origin of the old note.
+#
+#   2. WHAT ACTUALLY LANDS IN THE MODEL. In EAExample.qea, shipped with 17.1,
+#      123 elements across 32 distinct stereotypes and 116 connectors across 10
+#      carry the prefixed form -- 27 elements stereotyped `ArchiMate_Capability`,
+#      35 connectors `ArchiMate_Realization`. Zero elements carry a bare
+#      unprefixed ArchiMate concept name from the ArchiMate3 profile.
+#
+# WHAT THE BROKEN FORM ACTUALLY DID, counted with this ruleset's own selectors
+# against EAExample.qea. Worth recording, because it was worse than silence:
+#
+#   unprefixed (as shipped in bundle 3.0.0)
+#     ArchiMate elements matched ........  0
+#     connectors matched ...............  0   (all 7 endpoint rules dead)
+#     non-ArchiMate elements matched ...  27  -- 20 `BusinessProcess` from
+#       BPMN2.0, 6 `BusinessFunction` from TOGAF, 1 unrelated `Device`
+#   prefixed (this file)
+#     ArchiMate elements matched ........  23
+#     connectors matched ............... 84
+#     non-ArchiMate elements matched ...  0
+#
+# So the unprefixed ruleset was simultaneously silent about every ArchiMate
+# element in the model and willing to judge 27 elements from three other
+# notations against ArchiMate conformance rules.
+#
+# THE TWO COLUMNS ARE NOT THE SAME QUESTION, AND ONLY ONE OF THEM IS A COLUMN.
+# `t_object.Stereotype` is a real column and holds the UNQUALIFIED applied name,
+# `ArchiMate_Capability`. `StereotypeEx` is not a column at all -- it is an API
+# property resolved from `t_xref` rows whose `Name` is `Stereotypes`, and those
+# carry the PROFILE-QUALIFIED name:
+#   @STEREO;Name=ArchiMate_Capability;FQName=ArchiMate3::ArchiMate_Capability;@ENDSTEREO;
+# So the qualified form exists, but it exists one join away from where
+# `validate_model` looks. Matching `ArchiMate3::ArchiMate_Capability` against
+# `t_object.Stereotype` would select nothing, for the same reason the unprefixed
+# form did.
+#
+# MATCHING IS SINGLE-FORM ON PURPOSE. Prefix-tolerant matching -- stripping a
+# technology prefix, or comparing only the unqualified tail -- was considered and
+# rejected on measured evidence. The SAME EAExample.qea contains 20 elements
+# stereotyped `BusinessProcess` (`FQName=BPMN2.0::BusinessProcess`), 34
+# `DataObject` (BPMN2.0), 7 `Resource` (BPMN2.0), 1 `BusinessService`
+# (`FQName=TOGAF::BusinessService`) and 1 `CourseOfAction` (`FQName=BMM::`).
+# ArchiMate is not the only notation that names a concept `BusinessProcess`, so
+# tail matching would drag BPMN, TOGAF and BMM elements into an ArchiMate
+# conformance run and report violations against elements that were never
+# ArchiMate. The cost of choosing one form is stated plainly: a model whose
+# ArchiMate content came from some OTHER profile -- a hand-built profile, or a
+# third-party ArchiMate technology that names its stereotypes without the prefix
+# -- will not be selected by these rules, and the honest way to serve it is a
+# copy of this file with the prefix removed, not a looser match here. If your
+# validation run reports zero violations, confirm it also matched more than zero
+# elements before concluding the model is clean.
+#
+# Kept in step with `ea-diagram-composition/bindings/archimate3.yaml`, which
+# declares `stereotype_prefix: ArchiMate_` from the same measurement. If you
+# change one, change the other; `ruleset-archimate31/tools/test_ruleset_archimate31.py`
+# fails if they disagree.
+#
+# STILL NOT MEASURED. Only EA 17.1 build 1716 is installed on the machine this
+# was measured on, so "all three ArchiMate MDG generations" is three technology
+# generations inside one EA release, not three EA releases. An EA 16 or early-17
+# install would settle whether any release ever shipped the unprefixed form; on
+# the evidence above, none did.
+#
+# Sources:
+#   [S1] ArchiMate® 3.1 Specification — The Open Group
+#        https://pubs.opengroup.org/architecture/archimate31-doc/
+#   [S2] Archi Tool relationships.xml (normative-compatible, v3.2)
+#        https://github.com/archimatetool/archi/blob/master/com.archimatetool.model/model/relationships.xml
+#   [S3] ea.rna.nl — ArchiMate 3.0 Relations Table Analysis
+#        https://ea.rna.nl/2017/02/07/the-archimate-3-0-relations-table/
+
+meta:
+  version: "1.1"
+  language: ArchiMate 3.1
+  organization: "(your organization)"
+  mdg_family: ArchiMate3
+  description: >
+    Conformance rules for ArchiMate 3.1 models in Sparx Enterprise Architect.
+    Rules enforce the relationship validity constraints, cross-layer interaction
+    rules, structural completeness requirements, and well-formedness conditions
+    defined in the ArchiMate 3.1 specification (The Open Group, 2019).
+    Rules are organized into five categories: Relationship Endpoint Validity (REL),
+    Collaboration Structure (COL), Interaction Assignment (INT), Well-Formedness
+    Completeness (WFR), and Implementation & Migration (IMP).
+  evaluation_modes:
+    - id: full_scan
+      description: Evaluate all rules against all ArchiMate-stereotyped elements and connectors
+      rules_in_scope: all
+    - id: demo_validation
+      description: Evaluate only high-impact rules likely to catch common modeling errors
+      rules_in_scope: demo_trigger_only
+  severity_levels:
+    error:   Element or connector violates a structural rule; model is non-conformant per ArchiMate 3.1
+    warning: Recommended structural pattern is missing; model may be incomplete
+    info:    Advisory note; not a conformance violation
+
+rules:
+
+  # ═══════════════════════════════════════════════════════════════════════════
+  # SECTION 1 — RELATIONSHIP ENDPOINT VALIDITY (REL)
+  #
+  # These rules verify that each ArchiMate relationship type connects the
+  # correct element types at source and target. Each rule corresponds to a
+  # relationship validity constraint from ArchiMate 3.1 Chapters 5 and 12,
+  # and from the normative Appendix B relationship table. [S1, S2]
+  # ═══════════════════════════════════════════════════════════════════════════
+
+  # ── Assignment ──────────────────────────────────────────────────────────────
+
+  - id: AM31-REL-001
+    name: Assignment — Source Must Be Active Structure
+    description: >
+      An Assignment relationship must originate from an Active Structure element
+      and point to a Behavior element, another Active Structure element
+      representing a role (e.g., BusinessActor → BusinessRole), or a WorkPackage.
+      Passive Structure elements (BusinessObject, DataObject, Artifact, Material,
+      Contract, Representation, TechnologyObject, Deliverable) and Motivation
+      elements CANNOT be assignment sources. [S1 §5.2, §12]
+    category: relationship_endpoint
+    severity: error
+    demo_trigger: true
+
+    selector:
+      type: connector
+      connector_stereotype: ArchiMate_Assignment
+
+    condition:
+      type: connector_endpoint_stereotype
+      source_must_be_one_of:
+        # Business layer — Active Structure
+        - ArchiMate_BusinessActor
+        - ArchiMate_BusinessRole
+        - ArchiMate_BusinessCollaboration
+        - ArchiMate_BusinessInterface
+        # Application layer — Active Structure
+        - ArchiMate_ApplicationComponent
+        - ArchiMate_ApplicationCollaboration
+        - ArchiMate_ApplicationInterface
+        # Technology layer — Active Structure
+        - ArchiMate_Node
+        - ArchiMate_Device
+        - ArchiMate_SystemSoftware
+        - ArchiMate_TechnologyCollaboration
+        - ArchiMate_TechnologyInterface
+        - ArchiMate_Path
+        - ArchiMate_CommunicationNetwork
+        # Physical layer — Active Structure
+        - ArchiMate_Equipment
+        - ArchiMate_Facility
+        - ArchiMate_DistributionNetwork
+        # Strategy + cross-layer
+        - ArchiMate_Resource
+        - ArchiMate_Stakeholder
+        - ArchiMate_Location
+        - ArchiMate_Grouping
+      target_must_be_one_of:
+        # Business layer — Behavior + Role (role fulfillment pattern)
+        - ArchiMate_BusinessRole
+        - ArchiMate_BusinessProcess
+        - ArchiMate_BusinessFunction
+        - ArchiMate_BusinessInteraction
+        - ArchiMate_BusinessInterface
+        - ArchiMate_BusinessService
+        - ArchiMate_BusinessEvent
+        # Application layer — Behavior
+        - ArchiMate_ApplicationFunction
+        - ArchiMate_ApplicationProcess
+        - ArchiMate_ApplicationInteraction
+        - ArchiMate_ApplicationInterface
+        - ArchiMate_ApplicationService
+        - ArchiMate_ApplicationEvent
+        # Technology layer — Behavior
+        - ArchiMate_TechnologyFunction
+        - ArchiMate_TechnologyProcess
+        - ArchiMate_TechnologyInteraction
+        - ArchiMate_TechnologyInterface
+        - ArchiMate_TechnologyService
+        - ArchiMate_TechnologyEvent
+        # Strategy
+        - ArchiMate_Capability
+        - ArchiMate_CourseOfAction
+        - ArchiMate_ValueStream
+        # Implementation & Migration
+        - ArchiMate_WorkPackage
+        - ArchiMate_ImplementationEvent
+        # Motivation (actor plays a stakeholder role)
+        - ArchiMate_Stakeholder
+
+    remediation:
+      short: >
+        Reverse the Assignment direction, or replace with Association if the
+        relationship is unspecified. Only Active Structure elements may be sources.
+      auto_fixable: false
+
+  # ── Realization ─────────────────────────────────────────────────────────────
+
+  - id: AM31-REL-002
+    name: Realization — Direction Must Be Concrete-to-Abstract
+    description: >
+      Realization connects a more concrete (lower-layer) element (source) to a
+      more abstract (higher-layer or specification) element (target). The key
+      cross-layer chains are: Artifact → DataObject → BusinessObject;
+      TechnologyProcess/Function → ApplicationProcess/Function/Service →
+      BusinessProcess/Function/Service; and core behavior → Motivation elements
+      (Goal, Requirement, Outcome, etc.).
+      BusinessActor and BusinessRole (people) cannot be Realization targets;
+      systems cannot realize people. [S1 §5.2.4, §12]
+    category: relationship_endpoint
+    severity: error
+    demo_trigger: true
+
+    selector:
+      type: connector
+      connector_stereotype: ArchiMate_Realization
+
+    condition:
+      type: connector_endpoint_stereotype
+      source_must_be_one_of:
+        # Technology passive → Application passive → Business passive chain
+        - ArchiMate_Artifact
+        - ArchiMate_TechnologyObject
+        - ArchiMate_DataObject
+        # Technology behavior → Application behavior chain
+        - ArchiMate_TechnologyProcess
+        - ArchiMate_TechnologyFunction
+        - ArchiMate_TechnologyInteraction
+        - ArchiMate_TechnologyService
+        - ArchiMate_TechnologyEvent
+        # Application behavior → Business behavior chain
+        - ArchiMate_ApplicationProcess
+        - ArchiMate_ApplicationFunction
+        - ArchiMate_ApplicationInteraction
+        - ArchiMate_ApplicationService
+        - ArchiMate_ApplicationEvent
+        # Application active → Application component (artifact realizes component)
+        - ArchiMate_ApplicationComponent
+        # Business behavior → Strategy / Motivation
+        - ArchiMate_BusinessProcess
+        - ArchiMate_BusinessFunction
+        - ArchiMate_BusinessInteraction
+        - ArchiMate_BusinessService
+        - ArchiMate_BusinessEvent
+        # Strategy behavior → Motivation / Strategy targets
+        - ArchiMate_Capability
+        - ArchiMate_CourseOfAction
+        - ArchiMate_ValueStream
+        # Implementation & Migration → Motivation / core
+        - ArchiMate_WorkPackage
+        - ArchiMate_Deliverable
+        # Motivation to Motivation (Requirement/Constraint realize Goals)
+        - ArchiMate_Requirement
+        - ArchiMate_Constraint
+        # Physical passive → Technology passive
+        - ArchiMate_Material
+      target_must_be_one_of:
+        # Business passive (realized by lower-layer passive)
+        - ArchiMate_BusinessObject
+        - ArchiMate_Contract
+        - ArchiMate_Representation
+        # Application passive + Application active component
+        - ArchiMate_DataObject
+        - ArchiMate_ApplicationComponent
+        # Business behavior (realized by Application behavior)
+        - ArchiMate_BusinessProcess
+        - ArchiMate_BusinessFunction
+        - ArchiMate_BusinessInteraction
+        - ArchiMate_BusinessService
+        - ArchiMate_BusinessEvent
+        # Application behavior (realized by Technology behavior)
+        - ArchiMate_ApplicationProcess
+        - ArchiMate_ApplicationFunction
+        - ArchiMate_ApplicationInteraction
+        - ArchiMate_ApplicationService
+        - ArchiMate_ApplicationEvent
+        # Motivation targets (realized by core behavior, I&M, or other motivation)
+        - ArchiMate_Goal
+        - ArchiMate_Outcome
+        - ArchiMate_Requirement
+        - ArchiMate_Principle
+        - ArchiMate_Constraint
+        # Strategy targets (realized by business behavior)
+        - ArchiMate_Capability
+        - ArchiMate_ValueStream
+        - ArchiMate_CourseOfAction
+        # Strategy Resource (realized by business/tech active structure)
+        - ArchiMate_Resource
+
+    remediation:
+      short: >
+        Reverse the Realization arrow (concrete → abstract, lower layer → upper
+        layer). BusinessActor and BusinessRole cannot be Realization targets.
+      auto_fixable: false
+
+  # ── Serving ──────────────────────────────────────────────────────────────────
+
+  - id: AM31-REL-003
+    name: Serving — Cannot Target Passive Structure or Motivation Elements
+    description: >
+      The Serving relationship represents that an element provides its
+      functionality to another element. Passive Structure elements
+      (BusinessObject, DataObject, Artifact, Material, etc.) do not consume
+      services and cannot be Serving targets. Motivation elements (Goal,
+      Requirement, Driver, etc.) also do not participate in Serving.
+      The primary use pattern is lower-layer services serving upper-layer
+      behavior: TechnologyService → ApplicationComponent, ApplicationService →
+      BusinessProcess. [S1 §5.3.1]
+    category: relationship_endpoint
+    severity: error
+    demo_trigger: false
+
+    selector:
+      type: connector
+      connector_stereotype: ArchiMate_Serving
+
+    condition:
+      type: connector_endpoint_stereotype
+      source_must_be_one_of:
+        # Business layer
+        - ArchiMate_BusinessActor
+        - ArchiMate_BusinessRole
+        - ArchiMate_BusinessCollaboration
+        - ArchiMate_BusinessInterface
+        - ArchiMate_BusinessProcess
+        - ArchiMate_BusinessFunction
+        - ArchiMate_BusinessInteraction
+        - ArchiMate_BusinessEvent
+        - ArchiMate_BusinessService
+        # Application layer
+        - ArchiMate_ApplicationComponent
+        - ArchiMate_ApplicationCollaboration
+        - ArchiMate_ApplicationInterface
+        - ArchiMate_ApplicationFunction
+        - ArchiMate_ApplicationProcess
+        - ArchiMate_ApplicationInteraction
+        - ArchiMate_ApplicationEvent
+        - ArchiMate_ApplicationService
+        # Technology layer
+        - ArchiMate_Node
+        - ArchiMate_Device
+        - ArchiMate_SystemSoftware
+        - ArchiMate_TechnologyCollaboration
+        - ArchiMate_TechnologyInterface
+        - ArchiMate_Path
+        - ArchiMate_CommunicationNetwork
+        - ArchiMate_TechnologyFunction
+        - ArchiMate_TechnologyProcess
+        - ArchiMate_TechnologyInteraction
+        - ArchiMate_TechnologyEvent
+        - ArchiMate_TechnologyService
+        # Physical layer
+        - ArchiMate_Equipment
+        - ArchiMate_Facility
+        - ArchiMate_DistributionNetwork
+        # Strategy
+        - ArchiMate_Resource
+        - ArchiMate_Capability
+        - ArchiMate_CourseOfAction
+        - ArchiMate_ValueStream
+        # Composite
+        - ArchiMate_Grouping
+        - ArchiMate_Location
+      target_must_be_one_of:
+        # Business layer (served by Application and lower)
+        - ArchiMate_BusinessActor
+        - ArchiMate_BusinessRole
+        - ArchiMate_BusinessCollaboration
+        - ArchiMate_BusinessInterface
+        - ArchiMate_BusinessProcess
+        - ArchiMate_BusinessFunction
+        - ArchiMate_BusinessInteraction
+        - ArchiMate_BusinessEvent
+        - ArchiMate_BusinessService
+        # Application layer (served by Technology and lower)
+        - ArchiMate_ApplicationComponent
+        - ArchiMate_ApplicationCollaboration
+        - ArchiMate_ApplicationInterface
+        - ArchiMate_ApplicationFunction
+        - ArchiMate_ApplicationProcess
+        - ArchiMate_ApplicationInteraction
+        - ArchiMate_ApplicationEvent
+        - ArchiMate_ApplicationService
+        # Technology layer (served by Physical / other tech)
+        - ArchiMate_Node
+        - ArchiMate_Device
+        - ArchiMate_SystemSoftware
+        - ArchiMate_TechnologyCollaboration
+        - ArchiMate_TechnologyInterface
+        - ArchiMate_Path
+        - ArchiMate_CommunicationNetwork
+        - ArchiMate_TechnologyFunction
+        - ArchiMate_TechnologyProcess
+        - ArchiMate_TechnologyInteraction
+        - ArchiMate_TechnologyEvent
+        - ArchiMate_TechnologyService
+        # Physical
+        - ArchiMate_Equipment
+        - ArchiMate_Facility
+        - ArchiMate_DistributionNetwork
+        # Strategy
+        - ArchiMate_Resource
+        - ArchiMate_Capability
+        - ArchiMate_CourseOfAction
+        - ArchiMate_ValueStream
+        # Composite
+        - ArchiMate_Grouping
+        - ArchiMate_Location
+
+    remediation:
+      short: >
+        Remove the Serving relationship from/to a Passive Structure or Motivation
+        element. Use Access for behavior acting on passive elements; use Influence
+        or Realization to connect to Motivation elements.
+      auto_fixable: false
+
+  # ── Access ───────────────────────────────────────────────────────────────────
+
+  - id: AM31-REL-004
+    name: Access — Source Must Be Active Structure or Behavior; Target Must Be Passive Structure
+    description: >
+      The Access relationship represents the ability of a Behavior or Active
+      Structure element to observe or act upon a Passive Structure element.
+      Source MUST be Active Structure or Behavior (e.g., a Process reads a
+      DataObject). Target MUST be Passive Structure (e.g., BusinessObject,
+      DataObject, Artifact, Material, Contract, Representation, Deliverable).
+      Passive Structure elements cannot initiate Access; Motivation elements
+      do not participate in Access at all. [S1 §5.3.2]
+    category: relationship_endpoint
+    severity: error
+    demo_trigger: true
+
+    selector:
+      type: connector
+      connector_stereotype: ArchiMate_Access
+
+    condition:
+      type: connector_endpoint_stereotype
+      source_must_be_one_of:
+        # Business layer — Active Structure
+        - ArchiMate_BusinessActor
+        - ArchiMate_BusinessRole
+        - ArchiMate_BusinessCollaboration
+        - ArchiMate_BusinessInterface
+        # Business layer — Behavior
+        - ArchiMate_BusinessProcess
+        - ArchiMate_BusinessFunction
+        - ArchiMate_BusinessInteraction
+        - ArchiMate_BusinessEvent
+        - ArchiMate_BusinessService
+        # Application layer — Active Structure
+        - ArchiMate_ApplicationComponent
+        - ArchiMate_ApplicationCollaboration
+        - ArchiMate_ApplicationInterface
+        # Application layer — Behavior
+        - ArchiMate_ApplicationFunction
+        - ArchiMate_ApplicationProcess
+        - ArchiMate_ApplicationInteraction
+        - ArchiMate_ApplicationEvent
+        - ArchiMate_ApplicationService
+        # Technology layer — Active Structure
+        - ArchiMate_Node
+        - ArchiMate_Device
+        - ArchiMate_SystemSoftware
+        - ArchiMate_TechnologyCollaboration
+        - ArchiMate_TechnologyInterface
+        - ArchiMate_Path
+        - ArchiMate_CommunicationNetwork
+        # Technology layer — Behavior
+        - ArchiMate_TechnologyFunction
+        - ArchiMate_TechnologyProcess
+        - ArchiMate_TechnologyInteraction
+        - ArchiMate_TechnologyEvent
+        - ArchiMate_TechnologyService
+        # Physical
+        - ArchiMate_Equipment
+        - ArchiMate_Facility
+        - ArchiMate_DistributionNetwork
+        # Strategy + I&M
+        - ArchiMate_Resource
+        - ArchiMate_Capability
+        - ArchiMate_CourseOfAction
+        - ArchiMate_ValueStream
+        - ArchiMate_WorkPackage
+        - ArchiMate_ImplementationEvent
+        # Composite
+        - ArchiMate_Grouping
+        - ArchiMate_Location
+      target_must_be_one_of:
+        # Business layer — Passive Structure
+        - ArchiMate_BusinessObject
+        - ArchiMate_Contract
+        - ArchiMate_Representation
+        # Application layer — Passive Structure
+        - ArchiMate_DataObject
+        # Technology layer — Passive Structure
+        - ArchiMate_Artifact
+        - ArchiMate_TechnologyObject
+        # Physical layer — Passive Structure
+        - ArchiMate_Material
+        # Implementation & Migration — Passive Structure
+        - ArchiMate_Deliverable
+
+    remediation:
+      short: >
+        Only Active Structure or Behavior elements may be Access sources.
+        Only Passive Structure elements may be Access targets. Replace with
+        Association if the interaction type is unspecified.
+      auto_fixable: false
+
+  # ── Influence ────────────────────────────────────────────────────────────────
+
+  - id: AM31-REL-005
+    name: Influence — Target Must Be a Motivation Element
+    description: >
+      The Influence relationship models that an element affects the implementation
+      or achievement of a Motivation element. The TARGET of Influence MUST be a
+      Motivation element: Goal, Outcome, Principle, Requirement, Constraint,
+      Driver, Assessment, Value, Meaning, or Stakeholder.
+      Influence cannot target Core, Strategy, or Implementation & Migration
+      elements — use Association for unspecified relationships to those elements.
+      Any element may be the Influence source. [S1 §5.3.3]
+    category: relationship_endpoint
+    severity: error
+    demo_trigger: true
+
+    selector:
+      type: connector
+      connector_stereotype: ArchiMate_Influence
+
+    condition:
+      type: connector_endpoint_stereotype
+      source_must_be_one_of:
+        # Any element type may influence a Motivation element
+        # Business layer
+        - ArchiMate_BusinessActor
+        - ArchiMate_BusinessRole
+        - ArchiMate_BusinessCollaboration
+        - ArchiMate_BusinessInterface
+        - ArchiMate_BusinessProcess
+        - ArchiMate_BusinessFunction
+        - ArchiMate_BusinessInteraction
+        - ArchiMate_BusinessEvent
+        - ArchiMate_BusinessService
+        - ArchiMate_BusinessObject
+        - ArchiMate_Contract
+        - ArchiMate_Representation
+        - ArchiMate_Product
+        # Application layer
+        - ArchiMate_ApplicationComponent
+        - ArchiMate_ApplicationCollaboration
+        - ArchiMate_ApplicationInterface
+        - ArchiMate_ApplicationFunction
+        - ArchiMate_ApplicationProcess
+        - ArchiMate_ApplicationInteraction
+        - ArchiMate_ApplicationEvent
+        - ArchiMate_ApplicationService
+        - ArchiMate_DataObject
+        # Technology layer
+        - ArchiMate_Node
+        - ArchiMate_Device
+        - ArchiMate_SystemSoftware
+        - ArchiMate_TechnologyCollaboration
+        - ArchiMate_TechnologyInterface
+        - ArchiMate_Path
+        - ArchiMate_CommunicationNetwork
+        - ArchiMate_TechnologyFunction
+        - ArchiMate_TechnologyProcess
+        - ArchiMate_TechnologyInteraction
+        - ArchiMate_TechnologyEvent
+        - ArchiMate_TechnologyService
+        - ArchiMate_Artifact
+        - ArchiMate_TechnologyObject
+        # Physical
+        - ArchiMate_Equipment
+        - ArchiMate_Facility
+        - ArchiMate_DistributionNetwork
+        - ArchiMate_Material
+        # Strategy
+        - ArchiMate_Resource
+        - ArchiMate_Capability
+        - ArchiMate_CourseOfAction
+        - ArchiMate_ValueStream
+        # Motivation (motivation elements may influence each other)
+        - ArchiMate_Stakeholder
+        - ArchiMate_Driver
+        - ArchiMate_Assessment
+        - ArchiMate_Goal
+        - ArchiMate_Outcome
+        - ArchiMate_Principle
+        - ArchiMate_Requirement
+        - ArchiMate_Constraint
+        - ArchiMate_Meaning
+        - ArchiMate_Value
+        # Implementation & Migration
+        - ArchiMate_WorkPackage
+        - ArchiMate_Deliverable
+        - ArchiMate_ImplementationEvent
+        - ArchiMate_Plateau
+        - ArchiMate_Gap
+        # Composite
+        - ArchiMate_Grouping
+        - ArchiMate_Location
+      target_must_be_one_of:
+        # Influence targets MUST be Motivation elements only
+        - ArchiMate_Stakeholder
+        - ArchiMate_Driver
+        - ArchiMate_Assessment
+        - ArchiMate_Goal
+        - ArchiMate_Outcome
+        - ArchiMate_Principle
+        - ArchiMate_Requirement
+        - ArchiMate_Constraint
+        - ArchiMate_Meaning
+        - ArchiMate_Value
+
+    remediation:
+      short: >
+        Influence must point to a Motivation element (Goal, Requirement,
+        Constraint, Outcome, Principle, Driver, Assessment, Value, Meaning,
+        Stakeholder). Use Association for relationships to non-Motivation elements.
+      auto_fixable: false
+
+  # ── Triggering ───────────────────────────────────────────────────────────────
+
+  - id: AM31-REL-006
+    name: Triggering — Both Endpoints Must Be Behavior Elements
+    description: >
+      The Triggering relationship describes a causal or temporal relationship
+      where one element initiates another. Both source and target MUST be
+      Behavior elements (Process, Function, Interaction, Service, or Event)
+      from any layer, or Implementation & Migration behavior elements
+      (WorkPackage, ImplementationEvent). Active Structure elements and Passive
+      Structure elements cannot be Triggering sources or targets. [S1 §5.4.1]
+    category: relationship_endpoint
+    severity: error
+    demo_trigger: true
+
+    selector:
+      type: connector
+      connector_stereotype: ArchiMate_Triggering
+
+    condition:
+      type: connector_endpoint_stereotype
+      source_must_be_one_of:
+        # Business layer — Behavior
+        - ArchiMate_BusinessProcess
+        - ArchiMate_BusinessFunction
+        - ArchiMate_BusinessInteraction
+        - ArchiMate_BusinessEvent
+        - ArchiMate_BusinessService
+        # Application layer — Behavior
+        - ArchiMate_ApplicationFunction
+        - ArchiMate_ApplicationProcess
+        - ArchiMate_ApplicationInteraction
+        - ArchiMate_ApplicationEvent
+        - ArchiMate_ApplicationService
+        # Technology layer — Behavior
+        - ArchiMate_TechnologyFunction
+        - ArchiMate_TechnologyProcess
+        - ArchiMate_TechnologyInteraction
+        - ArchiMate_TechnologyEvent
+        - ArchiMate_TechnologyService
+        # Strategy — Behavior
+        - ArchiMate_Capability
+        - ArchiMate_CourseOfAction
+        - ArchiMate_ValueStream
+        # Implementation & Migration — Behavior
+        - ArchiMate_WorkPackage
+        - ArchiMate_ImplementationEvent
+      target_must_be_one_of:
+        # Business layer — Behavior
+        - ArchiMate_BusinessProcess
+        - ArchiMate_BusinessFunction
+        - ArchiMate_BusinessInteraction
+        - ArchiMate_BusinessEvent
+        - ArchiMate_BusinessService
+        # Application layer — Behavior
+        - ArchiMate_ApplicationFunction
+        - ArchiMate_ApplicationProcess
+        - ArchiMate_ApplicationInteraction
+        - ArchiMate_ApplicationEvent
+        - ArchiMate_ApplicationService
+        # Technology layer — Behavior
+        - ArchiMate_TechnologyFunction
+        - ArchiMate_TechnologyProcess
+        - ArchiMate_TechnologyInteraction
+        - ArchiMate_TechnologyEvent
+        - ArchiMate_TechnologyService
+        # Strategy — Behavior
+        - ArchiMate_Capability
+        - ArchiMate_CourseOfAction
+        - ArchiMate_ValueStream
+        # Implementation & Migration — Behavior
+        - ArchiMate_WorkPackage
+        - ArchiMate_ImplementationEvent
+
+    remediation:
+      short: >
+        Both endpoints of a Triggering relationship must be Behavior elements
+        (Process, Function, Interaction, Service, or Event). Replace with
+        Association if the causal relationship is informal or unspecified.
+      auto_fixable: false
+
+  # ── Flow ─────────────────────────────────────────────────────────────────────
+
+  - id: AM31-REL-007
+    name: Flow — Endpoints Must Be Active Structure or Behavior Elements
+    description: >
+      The Flow relationship represents the transfer of information, goods, or
+      control. Both endpoints must be Active Structure or Behavior elements.
+      Passive Structure elements (BusinessObject, DataObject, Artifact, Material)
+      and Motivation elements do NOT participate in Flow as sources or targets.
+      To model a process reading a data object, use Access instead of Flow.
+      [S1 §5.4.2]
+    category: relationship_endpoint
+    severity: error
+    demo_trigger: false
+
+    selector:
+      type: connector
+      connector_stereotype: ArchiMate_Flow
+
+    condition:
+      type: connector_endpoint_stereotype
+      source_must_be_one_of:
+        # Business layer — Active Structure + Behavior
+        - ArchiMate_BusinessActor
+        - ArchiMate_BusinessRole
+        - ArchiMate_BusinessCollaboration
+        - ArchiMate_BusinessInterface
+        - ArchiMate_BusinessProcess
+        - ArchiMate_BusinessFunction
+        - ArchiMate_BusinessInteraction
+        - ArchiMate_BusinessEvent
+        - ArchiMate_BusinessService
+        # Application layer — Active Structure + Behavior
+        - ArchiMate_ApplicationComponent
+        - ArchiMate_ApplicationCollaboration
+        - ArchiMate_ApplicationInterface
+        - ArchiMate_ApplicationFunction
+        - ArchiMate_ApplicationProcess
+        - ArchiMate_ApplicationInteraction
+        - ArchiMate_ApplicationEvent
+        - ArchiMate_ApplicationService
+        # Technology layer — Active Structure + Behavior
+        - ArchiMate_Node
+        - ArchiMate_Device
+        - ArchiMate_SystemSoftware
+        - ArchiMate_TechnologyCollaboration
+        - ArchiMate_TechnologyInterface
+        - ArchiMate_Path
+        - ArchiMate_CommunicationNetwork
+        - ArchiMate_TechnologyFunction
+        - ArchiMate_TechnologyProcess
+        - ArchiMate_TechnologyInteraction
+        - ArchiMate_TechnologyEvent
+        - ArchiMate_TechnologyService
+        # Physical — Active Structure
+        - ArchiMate_Equipment
+        - ArchiMate_Facility
+        - ArchiMate_DistributionNetwork
+        # Strategy
+        - ArchiMate_Resource
+        - ArchiMate_Capability
+        - ArchiMate_CourseOfAction
+        - ArchiMate_ValueStream
+        # Implementation & Migration — Behavior
+        - ArchiMate_WorkPackage
+        - ArchiMate_ImplementationEvent
+        # Composite
+        - ArchiMate_Grouping
+        - ArchiMate_Location
+      target_must_be_one_of:
+        # Business layer — Active Structure + Behavior
+        - ArchiMate_BusinessActor
+        - ArchiMate_BusinessRole
+        - ArchiMate_BusinessCollaboration
+        - ArchiMate_BusinessInterface
+        - ArchiMate_BusinessProcess
+        - ArchiMate_BusinessFunction
+        - ArchiMate_BusinessInteraction
+        - ArchiMate_BusinessEvent
+        - ArchiMate_BusinessService
+        # Application layer — Active Structure + Behavior
+        - ArchiMate_ApplicationComponent
+        - ArchiMate_ApplicationCollaboration
+        - ArchiMate_ApplicationInterface
+        - ArchiMate_ApplicationFunction
+        - ArchiMate_ApplicationProcess
+        - ArchiMate_ApplicationInteraction
+        - ArchiMate_ApplicationEvent
+        - ArchiMate_ApplicationService
+        # Technology layer — Active Structure + Behavior
+        - ArchiMate_Node
+        - ArchiMate_Device
+        - ArchiMate_SystemSoftware
+        - ArchiMate_TechnologyCollaboration
+        - ArchiMate_TechnologyInterface
+        - ArchiMate_Path
+        - ArchiMate_CommunicationNetwork
+        - ArchiMate_TechnologyFunction
+        - ArchiMate_TechnologyProcess
+        - ArchiMate_TechnologyInteraction
+        - ArchiMate_TechnologyEvent
+        - ArchiMate_TechnologyService
+        # Physical
+        - ArchiMate_Equipment
+        - ArchiMate_Facility
+        - ArchiMate_DistributionNetwork
+        # Strategy
+        - ArchiMate_Resource
+        - ArchiMate_Capability
+        - ArchiMate_CourseOfAction
+        - ArchiMate_ValueStream
+        # Implementation & Migration — Behavior
+        - ArchiMate_WorkPackage
+        - ArchiMate_ImplementationEvent
+        # Composite
+        - ArchiMate_Grouping
+        - ArchiMate_Location
+
+    remediation:
+      short: >
+        Remove Passive Structure or Motivation elements from Flow endpoints.
+        Use Access to model a process acting on a data object; use Influence
+        or Association for connections to Motivation elements.
+      auto_fixable: false
+
+  # ═══════════════════════════════════════════════════════════════════════════
+  # SECTION 2 — COLLABORATION STRUCTURE (COL)
+  #
+  # Collaboration elements aggregate two or more role/component/node elements.
+  # These rules verify that each Collaboration has the minimum membership
+  # required by the ArchiMate specification. [S1 §8.3.3, §9.3.3, §10.3.3]
+  # ═══════════════════════════════════════════════════════════════════════════
+
+  - id: AM31-COL-001
+    name: BusinessCollaboration — Must Have At Least Two Members
+    description: >
+      A BusinessCollaboration is an aggregate of two or more BusinessRole or
+      BusinessActor elements working together to perform collective behavior.
+      A collaboration with fewer than two incoming Aggregation connectors
+      is structurally incomplete — it represents a single actor, not a
+      collaboration. [S1 §8.3.3]
+    category: collaboration_structure
+    severity: error
+    demo_trigger: true
+
+    selector:
+      type: element
+      stereotypes:
+        any_of: ["ArchiMate_BusinessCollaboration"]
+
+    condition:
+      type: connector_count
+      connector_stereotype: ArchiMate_Aggregation
+      direction: incoming
+      min: 2
+
+    remediation:
+      short: >
+        Add at least two BusinessRole or BusinessActor elements connected to
+        this BusinessCollaboration via Aggregation relationships.
+      auto_fixable: false
+
+  - id: AM31-COL-002
+    name: ApplicationCollaboration — Must Have At Least Two Members
+    description: >
+      An ApplicationCollaboration is an aggregate of two or more
+      ApplicationComponent elements. A collaboration with fewer than two
+      incoming Aggregation connectors is structurally incomplete. [S1 §9.3.3]
+    category: collaboration_structure
+    severity: error
+    demo_trigger: false
+
+    selector:
+      type: element
+      stereotypes:
+        any_of: ["ArchiMate_ApplicationCollaboration"]
+
+    condition:
+      type: connector_count
+      connector_stereotype: ArchiMate_Aggregation
+      direction: incoming
+      min: 2
+
+    remediation:
+      short: >
+        Add at least two ApplicationComponent elements connected to this
+        ApplicationCollaboration via Aggregation relationships.
+      auto_fixable: false
+
+  - id: AM31-COL-003
+    name: TechnologyCollaboration — Must Have At Least Two Members
+    description: >
+      A TechnologyCollaboration is an aggregate of two or more Node, Device,
+      or SystemSoftware elements. A collaboration with fewer than two incoming
+      Aggregation connectors is structurally incomplete. [S1 §10.3.3]
+    category: collaboration_structure
+    severity: error
+    demo_trigger: false
+
+    selector:
+      type: element
+      stereotypes:
+        any_of: ["ArchiMate_TechnologyCollaboration"]
+
+    condition:
+      type: connector_count
+      connector_stereotype: ArchiMate_Aggregation
+      direction: incoming
+      min: 2
+
+    remediation:
+      short: >
+        Add at least two Node, Device, or SystemSoftware elements connected
+        to this TechnologyCollaboration via Aggregation relationships.
+      auto_fixable: false
+
+  # ═══════════════════════════════════════════════════════════════════════════
+  # SECTION 3 — INTERACTION ASSIGNMENT (INT)
+  #
+  # Interaction elements model collective behavior performed by Collaboration
+  # elements. Each Interaction MUST be assigned to the corresponding
+  # Collaboration element. [S1 §8.3.7, §9.3.6, §10.3.6]
+  # ═══════════════════════════════════════════════════════════════════════════
+
+  - id: AM31-INT-001
+    name: BusinessInteraction — Must Be Assigned to a BusinessCollaboration
+    description: >
+      BusinessInteraction represents collective business behavior performed by
+      a BusinessCollaboration. It MUST have at least one incoming Assignment
+      connector from a BusinessCollaboration. A BusinessInteraction with no
+      incoming Assignment is disconnected from any performing collaboration
+      and is structurally invalid. [S1 §8.3.7]
+    category: interaction_assignment
+    severity: error
+    demo_trigger: true
+
+    selector:
+      type: element
+      stereotypes:
+        any_of: ["ArchiMate_BusinessInteraction"]
+
+    condition:
+      type: connector_count
+      connector_stereotype: ArchiMate_Assignment
+      direction: incoming
+      min: 1
+
+    remediation:
+      short: >
+        Connect a BusinessCollaboration to this BusinessInteraction using an
+        Assignment relationship (Collaboration → Interaction).
+      auto_fixable: false
+
+  - id: AM31-INT-002
+    name: ApplicationInteraction — Must Be Assigned to an ApplicationCollaboration
+    description: >
+      ApplicationInteraction represents collective application behavior performed
+      by an ApplicationCollaboration. It MUST have at least one incoming
+      Assignment connector from an ApplicationCollaboration. [S1 §9.3.6]
+    category: interaction_assignment
+    severity: error
+    demo_trigger: false
+
+    selector:
+      type: element
+      stereotypes:
+        any_of: ["ArchiMate_ApplicationInteraction"]
+
+    condition:
+      type: connector_count
+      connector_stereotype: ArchiMate_Assignment
+      direction: incoming
+      min: 1
+
+    remediation:
+      short: >
+        Connect an ApplicationCollaboration to this ApplicationInteraction
+        using an Assignment relationship.
+      auto_fixable: false
+
+  - id: AM31-INT-003
+    name: TechnologyInteraction — Must Be Assigned to a TechnologyCollaboration
+    description: >
+      TechnologyInteraction represents collective technology behavior performed
+      by a TechnologyCollaboration. It MUST have at least one incoming
+      Assignment connector from a TechnologyCollaboration. [S1 §10.3.6]
+    category: interaction_assignment
+    severity: error
+    demo_trigger: false
+
+    selector:
+      type: element
+      stereotypes:
+        any_of: ["ArchiMate_TechnologyInteraction"]
+
+    condition:
+      type: connector_count
+      connector_stereotype: ArchiMate_Assignment
+      direction: incoming
+      min: 1
+
+    remediation:
+      short: >
+        Connect a TechnologyCollaboration to this TechnologyInteraction
+        using an Assignment relationship.
+      auto_fixable: false
+
+  # ═══════════════════════════════════════════════════════════════════════════
+  # SECTION 4 — WELL-FORMEDNESS COMPLETENESS (WFR)
+  #
+  # These rules check that architectural elements are sufficiently connected
+  # to be meaningful. They do not check relationship type validity but rather
+  # structural completeness: "orphan" elements that have been created but not
+  # wired into the model. Severity is warning (advisory) since there are
+  # legitimate cases where an element may be defined before all its
+  # connections are modeled.
+  # ═══════════════════════════════════════════════════════════════════════════
+
+  - id: AM31-WFR-001
+    name: BusinessProcess — Must Be Assigned to a Performer
+    description: >
+      A BusinessProcess should have at least one incoming Assignment connector
+      from a BusinessActor, BusinessRole, or BusinessCollaboration (the entity
+      responsible for performing the process). A BusinessProcess with no
+      performer is an incomplete element — it is unclear who or what executes
+      the process. [S1 §8.3.5]
+    category: well_formedness
+    severity: warning
+    demo_trigger: true
+
+    selector:
+      type: element
+      stereotypes:
+        any_of: ["ArchiMate_BusinessProcess"]
+
+    condition:
+      type: connector_count
+      connector_stereotype: ArchiMate_Assignment
+      direction: incoming
+      min: 1
+
+    remediation:
+      short: >
+        Assign a BusinessActor, BusinessRole, or BusinessCollaboration to this
+        BusinessProcess using an outgoing Assignment relationship.
+      auto_fixable: false
+
+  - id: AM31-WFR-002
+    name: BusinessFunction — Must Be Assigned to a Performer
+    description: >
+      A BusinessFunction should have at least one incoming Assignment connector
+      from a BusinessActor, BusinessRole, or BusinessCollaboration. Functions
+      are tightly aligned to organizational units; an unassigned function is
+      not grounded in the organization. [S1 §8.3.6]
+    category: well_formedness
+    severity: warning
+    demo_trigger: false
+
+    selector:
+      type: element
+      stereotypes:
+        any_of: ["ArchiMate_BusinessFunction"]
+
+    condition:
+      type: connector_count
+      connector_stereotype: ArchiMate_Assignment
+      direction: incoming
+      min: 1
+
+    remediation:
+      short: >
+        Assign a BusinessActor, BusinessRole, or BusinessCollaboration to this
+        BusinessFunction using an outgoing Assignment relationship.
+      auto_fixable: false
+
+  - id: AM31-WFR-003
+    name: ApplicationFunction — Must Be Assigned to an ApplicationComponent
+    description: >
+      An ApplicationFunction should have at least one incoming Assignment
+      connector from an ApplicationComponent. An unassigned function is not
+      grounded in any application and cannot be deployed or tested. [S1 §9.3.4]
+    category: well_formedness
+    severity: warning
+    demo_trigger: false
+
+    selector:
+      type: element
+      stereotypes:
+        any_of: ["ArchiMate_ApplicationFunction"]
+
+    condition:
+      type: connector_count
+      connector_stereotype: ArchiMate_Assignment
+      direction: incoming
+      min: 1
+
+    remediation:
+      short: >
+        Assign an ApplicationComponent to this ApplicationFunction using an
+        outgoing Assignment relationship (Component → Function).
+      auto_fixable: false
+
+  - id: AM31-WFR-004
+    name: ApplicationProcess — Must Be Assigned to an ApplicationComponent
+    description: >
+      An ApplicationProcess should have at least one incoming Assignment
+      connector from an ApplicationComponent. Processes without a hosting
+      component are architecturally incomplete. [S1 §9.3.5]
+    category: well_formedness
+    severity: warning
+    demo_trigger: false
+
+    selector:
+      type: element
+      stereotypes:
+        any_of: ["ArchiMate_ApplicationProcess"]
+
+    condition:
+      type: connector_count
+      connector_stereotype: ArchiMate_Assignment
+      direction: incoming
+      min: 1
+
+    remediation:
+      short: >
+        Assign an ApplicationComponent to this ApplicationProcess using an
+        outgoing Assignment relationship (Component → Process).
+      auto_fixable: false
+
+  - id: AM31-WFR-005
+    name: TechnologyFunction — Must Be Assigned to a Node
+    description: >
+      A TechnologyFunction should have at least one incoming Assignment
+      connector from a Node, Device, or SystemSoftware element. Technology
+      functions that are not assigned to any node have no execution environment.
+      [S1 §10.3.4]
+    category: well_formedness
+    severity: warning
+    demo_trigger: false
+
+    selector:
+      type: element
+      stereotypes:
+        any_of: ["ArchiMate_TechnologyFunction"]
+
+    condition:
+      type: connector_count
+      connector_stereotype: ArchiMate_Assignment
+      direction: incoming
+      min: 1
+
+    remediation:
+      short: >
+        Assign a Node, Device, or SystemSoftware to this TechnologyFunction
+        using an outgoing Assignment relationship.
+      auto_fixable: false
+
+  - id: AM31-WFR-006
+    name: BusinessActor — Should Be Assigned to at Least One Role or Behavior
+    description: >
+      A BusinessActor represents an organizational entity that performs behavior.
+      Every BusinessActor should have at least one outgoing Assignment connector
+      to a BusinessRole (role fulfillment) or directly to a business behavior
+      element. An actor with no assignments performs nothing and is an orphan
+      in the model. [S1 §8.3.1]
+    category: well_formedness
+    severity: warning
+    demo_trigger: false
+
+    selector:
+      type: element
+      stereotypes:
+        any_of: ["ArchiMate_BusinessActor"]
+
+    condition:
+      type: connector_count
+      connector_stereotype: ArchiMate_Assignment
+      direction: outgoing
+      min: 1
+
+    remediation:
+      short: >
+        Connect this BusinessActor to a BusinessRole or directly to a
+        BusinessProcess, BusinessFunction, or BusinessInterface using an
+        outgoing Assignment relationship.
+      auto_fixable: false
+
+  - id: AM31-WFR-007
+    name: ApplicationComponent — Should Have at Least One Assigned Behavior
+    description: >
+      An ApplicationComponent should have at least one outgoing Assignment
+      connector to an ApplicationFunction, ApplicationProcess, or
+      ApplicationInterface. A component with no assigned behaviors provides
+      no functionality and is likely a placeholder that has not been fully
+      modeled. [S1 §9.3.1]
+    category: well_formedness
+    severity: warning
+    demo_trigger: true
+
+    selector:
+      type: element
+      stereotypes:
+        any_of: ["ArchiMate_ApplicationComponent"]
+
+    condition:
+      type: connector_count
+      connector_stereotype: ArchiMate_Assignment
+      direction: outgoing
+      min: 1
+
+    remediation:
+      short: >
+        Assign at least one ApplicationFunction, ApplicationProcess, or
+        ApplicationInterface to this component using outgoing Assignment
+        relationships.
+      auto_fixable: false
+
+  - id: AM31-WFR-008
+    name: Node — Should Have at Least One Assigned Technology Behavior
+    description: >
+      A Node (including Device and SystemSoftware) should have at least one
+      outgoing Assignment connector to a TechnologyFunction, TechnologyProcess,
+      or TechnologyInterface. A node with no assigned behaviors is modeled as
+      an empty infrastructure element. [S1 §10.3.1]
+    category: well_formedness
+    severity: warning
+    demo_trigger: false
+
+    selector:
+      type: element
+      stereotypes:
+        any_of: ["ArchiMate_Node", "ArchiMate_Device", "ArchiMate_SystemSoftware"]
+
+    condition:
+      type: connector_count
+      connector_stereotype: ArchiMate_Assignment
+      direction: outgoing
+      min: 1
+
+    remediation:
+      short: >
+        Assign at least one TechnologyFunction, TechnologyProcess, or
+        TechnologyInterface to this Node using outgoing Assignment relationships.
+      auto_fixable: false
+
+  # ═══════════════════════════════════════════════════════════════════════════
+  # SECTION 5 — IMPLEMENTATION & MIGRATION STRUCTURE (IMP)
+  #
+  # These rules verify structural completeness of Implementation & Migration
+  # elements: Gap, Plateau, and WorkPackage. [S1 §14]
+  # ═══════════════════════════════════════════════════════════════════════════
+
+  - id: AM31-IMP-001
+    name: Gap — Must Be Associated With at Least One Plateau
+    description: >
+      A Gap element represents the differences between two Plateaus (e.g.,
+      Baseline → Target architecture). It should be associated with at least
+      one Plateau via an Association relationship. A Gap with no Plateau
+      connections has no architectural context and is meaningless in a
+      migration plan. [S1 §14.3.5]
+    category: implementation_structure
+    severity: warning
+    demo_trigger: false
+
+    selector:
+      type: element
+      stereotypes:
+        any_of: ["ArchiMate_Gap"]
+
+    condition:
+      type: connector_count
+      connector_stereotype: ArchiMate_Association
+      direction: outgoing
+      min: 1
+
+    remediation:
+      short: >
+        Connect this Gap to at least one Plateau using an Association
+        relationship. A Gap ideally links two Plateaus representing the
+        "from" and "to" architecture states.
+      auto_fixable: false
+
+  - id: AM31-IMP-002
+    name: Plateau — Should Contain at Least One Architecture Element
+    description: >
+      A Plateau represents an architecture state valid for a certain time period
+      (e.g., Baseline, Transition, or Target architecture). It should contain
+      (compose or aggregate) at least one core architecture element. An empty
+      Plateau has no representational content. [S1 §14.3.4]
+    category: implementation_structure
+    severity: warning
+    demo_trigger: false
+
+    selector:
+      type: element
+      stereotypes:
+        any_of: ["ArchiMate_Plateau"]
+
+    condition:
+      type: connector_count
+      connector_stereotype: ArchiMate_Composition
+      direction: outgoing
+      min: 1
+
+    remediation:
+      short: >
+        Add core architecture elements to this Plateau using Composition
+        relationships. The Plateau should contain the elements that constitute
+        the architecture at that point in time.
+      auto_fixable: false
+
+  - id: AM31-IMP-003
+    name: WorkPackage — Should Realize at Least One Goal or Requirement
+    description: >
+      A WorkPackage implements changes to the architecture and should realize
+      at least one Motivation element (Goal, Requirement, Constraint, or
+      Outcome) to justify its existence in the architecture roadmap. A
+      WorkPackage with no realized motivation elements has no stated rationale.
+      [S1 §14.3.1]
+    category: implementation_structure
+    severity: info
+    demo_trigger: false
+
+    selector:
+      type: element
+      stereotypes:
+        any_of: ["ArchiMate_WorkPackage"]
+
+    condition:
+      type: connector_count
+      connector_stereotype: ArchiMate_Realization
+      direction: outgoing
+      min: 1
+
+    remediation:
+      short: >
+        Connect this WorkPackage to at least one Goal, Requirement, Constraint,
+        or Outcome using an outgoing Realization relationship to justify the
+        work in the architecture roadmap.
+      auto_fixable: false
+
+  # ═══════════════════════════════════════════════════════════════════════════
+  # SECTION 6 — CROSS-LAYER CONNECTOR ENDPOINT RULES (CLR)
+  #
+  # These rules enforce the critical cross-layer relationship validity
+  # patterns defined in ArchiMate 3.1 Chapter 12. They check the specific
+  # endpoint constraints for cross-layer serving and realization patterns
+  # that are most commonly modeled incorrectly.
+  # ═══════════════════════════════════════════════════════════════════════════
+
+  - id: AM31-CLR-001
+    name: ApplicationService Serving Target — Must Be a Business or Application Element
+    description: >
+      An ApplicationService exposes application behavior to the Business layer
+      (primary pattern: ApplicationService → BusinessProcess/Function/Interaction)
+      or within the Application layer. It must NOT serve Passive Structure
+      elements or Motivation elements. The serving target must be a Business or
+      Application layer Active Structure or Behavior element, or a Strategy
+      element. [S1 §12.1]
+    category: cross_layer
+    severity: warning
+    demo_trigger: false
+
+    selector:
+      type: connector
+      connector_stereotype: ArchiMate_Serving
+
+    condition:
+      type: connector_endpoint_stereotype
+      source_must_be_one_of:
+        - ArchiMate_ApplicationService
+      target_must_be_one_of:
+        # Business layer consumers (primary cross-layer serving)
+        - ArchiMate_BusinessProcess
+        - ArchiMate_BusinessFunction
+        - ArchiMate_BusinessInteraction
+        - ArchiMate_BusinessEvent
+        - ArchiMate_BusinessService
+        - ArchiMate_BusinessActor
+        - ArchiMate_BusinessRole
+        - ArchiMate_BusinessCollaboration
+        - ArchiMate_BusinessInterface
+        # Application layer consumers (within-layer serving)
+        - ArchiMate_ApplicationComponent
+        - ArchiMate_ApplicationCollaboration
+        - ArchiMate_ApplicationInterface
+        - ArchiMate_ApplicationFunction
+        - ArchiMate_ApplicationProcess
+        - ArchiMate_ApplicationInteraction
+        - ArchiMate_ApplicationEvent
+        - ArchiMate_ApplicationService
+        # Strategy consumers
+        - ArchiMate_Resource
+        - ArchiMate_Capability
+        - ArchiMate_CourseOfAction
+        - ArchiMate_ValueStream
+
+    remediation:
+      short: >
+        ApplicationService should serve Business layer behavior elements
+        (BusinessProcess, BusinessFunction, BusinessInteraction) or Application
+        layer elements. Check that the serving direction is correct (provider → consumer).
+      auto_fixable: false
+
+  - id: AM31-CLR-002
+    name: TechnologyService Serving Target — Must Be an Application or Technology Element
+    description: >
+      A TechnologyService exposes infrastructure behavior to the Application layer
+      (primary pattern: TechnologyService → ApplicationComponent/Function/Process)
+      or within the Technology layer. It must NOT serve Business layer elements
+      directly (that would skip the Application layer), and must NOT serve
+      Passive Structure elements. [S1 §12.2]
+    category: cross_layer
+    severity: warning
+    demo_trigger: false
+
+    selector:
+      type: connector
+      connector_stereotype: ArchiMate_Serving
+
+    condition:
+      type: connector_endpoint_stereotype
+      source_must_be_one_of:
+        - ArchiMate_TechnologyService
+      target_must_be_one_of:
+        # Application layer consumers (primary cross-layer serving)
+        - ArchiMate_ApplicationComponent
+        - ArchiMate_ApplicationCollaboration
+        - ArchiMate_ApplicationInterface
+        - ArchiMate_ApplicationFunction
+        - ArchiMate_ApplicationProcess
+        - ArchiMate_ApplicationInteraction
+        - ArchiMate_ApplicationEvent
+        - ArchiMate_ApplicationService
+        # Technology layer consumers (within-layer serving)
+        - ArchiMate_Node
+        - ArchiMate_Device
+        - ArchiMate_SystemSoftware
+        - ArchiMate_TechnologyCollaboration
+        - ArchiMate_TechnologyInterface
+        - ArchiMate_Path
+        - ArchiMate_CommunicationNetwork
+        - ArchiMate_TechnologyFunction
+        - ArchiMate_TechnologyProcess
+        - ArchiMate_TechnologyInteraction
+        - ArchiMate_TechnologyEvent
+        - ArchiMate_TechnologyService
+        # Physical layer consumers
+        - ArchiMate_Equipment
+        - ArchiMate_Facility
+        - ArchiMate_DistributionNetwork
+
+    remediation:
+      short: >
+        TechnologyService should serve Application layer components/functions
+        or Technology layer elements. Direct serving of Business layer elements
+        by TechnologyService bypasses the Application layer; use a derived
+        relationship or insert an ApplicationService intermediary.
+      auto_fixable: false
+
+  - id: AM31-CLR-003
+    name: Realization Endpoint — Source Is Application Interface, Target Is Business Interface
+    description: >
+      An ApplicationInterface (the point of access for an application service)
+      that maps to a corresponding BusinessInterface should connect via Serving,
+      not Realization. This rule flags Realization connectors where the source
+      is an Interface element and the target is also an Interface element, which
+      is typically a modeling error — interfaces expose services but do not
+      implement (realize) other interfaces; that is the role of the service
+      behind the interface. [S1 §9.3.3, §8.3.4]
+    category: cross_layer
+    severity: warning
+    demo_trigger: false
+
+    selector:
+      type: connector
+      connector_stereotype: ArchiMate_Realization
+
+    condition:
+      type: connector_endpoint_stereotype
+      source_must_be_one_of:
+        - ArchiMate_ApplicationInterface
+        - ArchiMate_TechnologyInterface
+      target_must_be_one_of:
+        # Valid realization targets for interfaces:
+        # ApplicationInterface can realize ApplicationService (it exposes/is assigned to it)
+        - ArchiMate_ApplicationService
+        - ArchiMate_TechnologyService
+        - ArchiMate_BusinessService
+        - ArchiMate_BusinessInterface
+
+    remediation:
+      short: >
+        An Interface element realizes or exposes a Service. If you intend to
+        show that an ApplicationInterface serves a BusinessInterface, use the
+        Serving relationship instead of Realization.
+      auto_fixable: false
