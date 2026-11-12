@@ -88,9 +88,9 @@ file's job. EA's hidden tables and the relationships carry none (§8).
 
 **Every entity table shows one blank member.** `t_object` holds every element, so for any entity
 table most of its rows match nothing, and Power BI adds a blank row on the one side: "(Blank)" in a
-slicer, one extra row in a table visual (46 rows for 45 business applications on Westbrook). It is
+slicer, one extra row in a table visual (one more row than there are business applications). It is
 the price of the business layer filtering EA's tables; an inactive relationship loses that, and the
-reverse is refused. **The count measures are right** (45; `ALL` or `VALUES` give 46). A figure one
+reverse is refused. **The count measures are right** (`ALL` or `VALUES` give one more). A figure one
 too high is the blank member: use the count measure, or filter out blank.
 
 **Default layout.** Business tables in bands on top - entities, then `Con_` tables, then tag-row
@@ -284,7 +284,7 @@ descriptions; it failed on business terms (§4.4) and on finding the model. Deta
   Premium Per User license per person who asks, the Microsoft 365 admin center setting *Fabric data
   available in Microsoft Copilot*, and the Fabric tenant setting *Share Fabric data with your
   Microsoft 365 services*. Never change these for the customer.
-- **Not deterministic.** The same question answered 45 once and 46 once. Ask twice before quoting.
+- **Not deterministic.** The same question can give a count that is one too high on one run and right on the next. Ask twice before quoting.
 
 ---
 
@@ -307,11 +307,8 @@ Five things, in this order:
 
 Never quote a figure out of this model without saying how populated the columns behind it are.
 
-If the user wants a Claude Cowork or other cloud session to read the results, tell them to
-connect the folder that holds the generated project and, for the Parquet path, the Parquet files:
-`<output-folder>`. Do not connect the folder that holds the model file. Such a session can read
-the project and the files, but it cannot change the model, because the server is not
-available in those sessions today.
+To let a Claude Cowork or other cloud session read the results, put them in one `<output-folder>` and connect that folder, not the folder that holds the model file. That session can read the files but cannot change the model, because the server is not available in cloud sessions today. The folder holds the generated
+project and, for the Parquet path, the Parquet files.
 
 ---
 

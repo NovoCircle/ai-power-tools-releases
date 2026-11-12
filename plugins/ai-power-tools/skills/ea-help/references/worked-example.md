@@ -12,7 +12,7 @@ answers outright. The third it does not, and the honest negative is the result.
 ea_repository(operation="get_repository_info", params={})
 ```
 
-Gives the EA version and the project path. Version resolves to `17.1`; the path ends `.qea`, so
+Gives the EA version (`ea_release`, here `17.1`; `ea_version` is the build, `1716`) and the project path. The path ends `.qea`, so
 this is a file-based repository. Guide base:
 
 ```
@@ -103,6 +103,10 @@ When the thing you need is a COM member, search its name.
 ---
 
 ## Pass 3 — the guide documents the wizard but not the file
+
+This pass is for an EA older than 17.1. On 17.1 and later `ea-mdg-model-build` covers building a
+technology with one command and no selection file, so a session on 17.1 goes there and does not
+come here.
 
 **Question.** Generating an MDG technology from a technology selection file needs such a file to
 exist. What is in one?

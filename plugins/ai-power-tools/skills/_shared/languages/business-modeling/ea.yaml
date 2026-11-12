@@ -1,0 +1,315 @@
+# EA facts for business modeling (language file business-modeling).
+# Measured on EA 17.1 build 1716; see `harvest` for the source of each fact. Examples elsewhere use Westbrook Bank (fictitious).
+language: business-modeling
+technology: EAExtended
+display_name: Business Modeling (EA Business Modeling)
+profile: EAUML
+stereotype_prefix: ''
+stereotype_storage: 't_object.Stereotype holds the bare name with its spaces (business actor, internal worker); the qualified form EAUML::<name> is the
+  FQName in the t_xref row named Stereotypes. Create with the qualified type EAUML::<name>. EA has no Business Modeling profile: the ten names are rows
+  of the EAUML profile of Core Extensions (technology id EAExtended, which is not a stereotype prefix). The OMG kinds EA does not bind are typed keywords
+  (useCaseModel, objectSystem, workUnit, communicate, subscribe): stored as typed in t_object.Stereotype or t_connector.Stereotype with no FQName.'
+measured_on: EA 17.1 build 1716, 2026-10-21
+standard_version: 'OMG UML 1.3, 1.4 and 1.5 chapter 4 (the UML Profile for Business Modeling). It has no newer version: it was dropped from UML 2.0.'
+ea_technology_version: not stored (EAExtended:BusinessModeling is an encrypted Core Extensions file; no version is readable)
+stereotypes_on_resources_tab: 10
+diagram_types:
+  none-in-standard:
+    ea_name: Extended::Business Modeling
+    shown_by_ea_as: not-read
+    base: Logical
+    stereotype_prefix: EAUML
+    layout_style: not-harvested
+    stored_as: t_diagram.Diagram_Type = Logical; StyleEx MDGDgm=Extended::Business Modeling;
+    note: The OMG chapter defines no diagram type. All four diagrams of EA's two business patterns carry this token; the patterns
+      hold use case and realization diagrams only.
+    trap: 'Extended:: followed by an unknown name, and any other prefix (EAExtended::, EAUML::, Business Modeling::), silently creates a plain Class diagram.
+      The token matches without regard to case and spaces, but StyleEx keeps the typed text.'
+concepts:
+  elements:
+    UseCaseModel:
+      constructs:
+      - stereotype: null
+        typed_keyword: useCaseModel
+        metaclass: Package
+        tags: []
+        also_stored_on:
+        - Component
+        - Class
+        ea_note: EA binds no stereotype for this kind (every spelling was refused as EAUML::<name>). The OMG keyword is typed into the Stereotype field;
+          EA stores it as typed, with no profile behind it, and the ruleset keys on that spelling.
+    UseCaseSystem:
+      constructs:
+      - stereotype: null
+        typed_keyword: useCaseSystem
+        metaclass: Package
+        tags: []
+        also_stored_on:
+        - Component
+        - Class
+        ea_note: EA binds no stereotype for this kind (every spelling was refused as EAUML::<name>). The OMG keyword is typed into the Stereotype field;
+          EA stores it as typed, with no profile behind it, and the ruleset keys on that spelling.
+    UseCasePackage:
+      constructs:
+      - stereotype: null
+        typed_keyword: useCasePackage
+        metaclass: Package
+        tags: []
+        also_stored_on:
+        - Component
+        - Class
+        ea_note: EA binds no stereotype for this kind (every spelling was refused as EAUML::<name>). The OMG keyword is typed into the Stereotype field;
+          EA stores it as typed, with no profile behind it, and the ruleset keys on that spelling.
+    ObjectModel:
+      constructs:
+      - stereotype: null
+        typed_keyword: objectModel
+        metaclass: Package
+        tags: []
+        also_stored_on:
+        - Component
+        - Class
+        ea_note: EA binds no stereotype for this kind (every spelling was refused as EAUML::<name>). The OMG keyword is typed into the Stereotype field;
+          EA stores it as typed, with no profile behind it, and the ruleset keys on that spelling.
+    ObjectSystem:
+      constructs:
+      - stereotype: null
+        typed_keyword: objectSystem
+        metaclass: Package
+        tags: []
+        also_stored_on:
+        - Component
+        - Class
+        ea_note: EA binds no stereotype for this kind (every spelling was refused as EAUML::<name>). The OMG keyword is typed into the Stereotype field;
+          EA stores it as typed, with no profile behind it, and the ruleset keys on that spelling.
+    OrganizationUnit:
+      constructs:
+      - stereotype: null
+        typed_keyword: organizationUnit
+        metaclass: Package
+        tags: []
+        also_stored_on:
+        - Component
+        - Class
+        ea_note: EA binds no stereotype for this kind (every spelling was refused as EAUML::<name>). The OMG keyword is typed into the Stereotype field;
+          EA stores it as typed, with no profile behind it, and the ruleset keys on that spelling.
+    WorkUnit:
+      constructs:
+      - stereotype: null
+        typed_keyword: workUnit
+        metaclass: Package
+        tags: []
+        also_stored_on:
+        - Component
+        - Class
+        ea_note: EA binds no stereotype for this kind (every spelling was refused as EAUML::<name>). The OMG keyword is typed into the Stereotype field;
+          EA stores it as typed, with no profile behind it, and the ruleset keys on that spelling.
+      ea_note: A package that holds its entities directly (the ruleset counts them as the package's elements).
+    Worker:
+      constructs:
+      - stereotype: worker
+        technology_prefix: EAUML
+        metaclass: Object
+        also_stored_on:
+        - Collaboration
+        - Component
+        - Node
+        tags: []
+      - stereotype: business worker
+        technology_prefix: EAUML
+        metaclass: Object
+        also_stored_on:
+        - Collaboration
+        - Component
+        - Node
+        tags: []
+        maps_to_by: 'name only (inferred): the OMG name is worker; EA lists both as separate stereotypes'
+      ea_note: An Object element, not a Class.
+    CaseWorker:
+      constructs:
+      - stereotype: case worker
+        technology_prefix: EAUML
+        metaclass: Object
+        also_stored_on:
+        - Collaboration
+        - Component
+        - Node
+        tags: []
+      specializes: Worker
+      ea_note: An Object element; EA stores no specialization. Draw a Generalization to a worker.
+    InternalWorker:
+      constructs:
+      - stereotype: internal worker
+        technology_prefix: EAUML
+        metaclass: Object
+        also_stored_on:
+        - Collaboration
+        - Component
+        - Node
+        tags: []
+      specializes: Worker
+      ea_note: An Object element; the OMG name, with no business prefix.
+    Entity:
+      constructs:
+      - stereotype: business entity
+        technology_prefix: EAUML
+        metaclass: Object
+        also_stored_on:
+        - Collaboration
+        - Component
+        - Node
+        tags: []
+      - stereotype: entity
+        technology_prefix: EAUML
+        metaclass: Object
+        also_stored_on:
+        - Collaboration
+        - Component
+        - Node
+        tags: []
+        note: The EAUML row with the OMG keyword itself. A separate stereotype from business entity; EA does not alias them.
+      ea_note: An Object element, not a Class. The ruleset and the allowed-pairs table treat both stereotypes as the one OMG kind.
+    UseCaseRealization:
+      constructs:
+      - stereotype: business use-case realization
+        technology_prefix: EAUML
+        metaclass: Collaboration
+        also_stored_on: []
+        tags: []
+        maps_to_by: 'meaning: the OMG name use case realization is refused; the UML 1.3 text gives the kind a name only'
+      ea_note: A Collaboration element. A Realisation connector runs from it to the use case (EA's own business pattern).
+  uml_elements:
+    Actor:
+      note: The OMG profile uses the plain UML actor and defines no kind of its own; EA adds a business form.
+      constructs:
+      - stereotype: business actor
+        technology_prefix: EAUML
+        metaclass: Actor
+        also_stored_on: []
+        tags: []
+      - stereotype: null
+        metaclass: Actor
+        ea_note: 'the plain UML actor the OMG table names: an Actor with no stereotype'
+    UseCase:
+      note: The OMG profile uses the plain UML use case; EA adds a business form.
+      constructs:
+      - stereotype: business use case
+        technology_prefix: EAUML
+        metaclass: UseCase
+        also_stored_on: []
+        tags: []
+      - stereotype: null
+        metaclass: UseCase
+        ea_note: 'the plain UML use case: a UseCase with no stereotype'
+  relationships:
+    Communicate:
+      connector_type: Association
+      stereotype: null
+      typed_keyword: communicate
+      tags: []
+      ea_note: No stereotype in any EA profile (StereotypeEx stores nothing). Typed as the connector Stereotype it is stored as typed. With TOGAF loaded,
+        EA matched it to TOGAF::Communicate in the xref while keeping the typed spelling in t_connector.Stereotype.
+    Subscribe:
+      connector_type: Association
+      stereotype: null
+      typed_keyword: subscribe
+      tags: []
+      ea_note: As communicate. The OMG source word for the ends is subscriber (source) and publisher (target).
+    Generalization:
+      connector_type: Generalization
+      stereotype: null
+      ea_note: Accepted between two Object elements. Runs from the specialization to the generalization.
+    Realisation:
+      connector_type: Realisation
+      stereotype: null
+      ea_note: From a business use-case realization (Collaboration) to a business use case. Not an OMG kind.
+    Association:
+      connector_type: Association
+      stereotype: null
+      ea_note: Actor to use case, with no keyword. Not an OMG kind.
+ea_only:
+- stereotype: business boundary
+  technology_prefix: EAUML
+  metaclass: Object
+  tags: []
+  for: EA extra. No source in the OMG business modeling profile (the name is not in the UML 1.3 to 1.5 chapter). The name looks like the business-prefixed
+    counterpart of the boundary kind of the UML 1.4 software-process profile (an inference; no source states it).
+- stereotype: business control
+  technology_prefix: EAUML
+  metaclass: Object
+  tags: []
+  for: EA extra. No source in the OMG business modeling profile. The name looks like the business-prefixed counterpart of the control kind of the UML 1.4
+    software-process profile (an inference; no source states it).
+related_eauml_stereotypes:
+- stereotype: boundary
+  technology_prefix: EAUML
+  metaclass: Object
+  tags: []
+  note: An EAUML row outside the Business Modeling list (the analysis trio boundary, control, entity). Same binding as its business-prefixed counterpart.
+- stereotype: control
+  technology_prefix: EAUML
+  metaclass: Object
+  tags: []
+  note: An EAUML row outside the Business Modeling list (the analysis trio boundary, control, entity). Same binding as its business-prefixed counterpart.
+toolbox:
+  status: read on screen, measured on EA 17.1 build 1716, 2026-11-04; one diagram opened (type shown as Business Modeling Diagram)
+  pages:
+    Business Modeling:
+    - Business Actor
+    - Business Use Case
+    - Business Use Case Realization
+    - Business Boundary
+    - Business Control
+    - Business Entity
+    - Business Worker
+    - Worker
+    - Internal Worker
+    - Case Worker
+  note: the ten items equal the ten EAUML business modeling stereotypes of the Resources tab; EA names the diagram type Business Modeling Diagram
+quick_links:
+  status: read on screen, measured on EA 17.1 build 1716, 2026-11-04; one source, the Business Use Case 'Open Business Account'
+  result: 'only ''Requirement'' and ''Common'' (and Create Multiple Elements): no business-modeling quick link'
+conventions:
+  worker_and_entity_element_type: Object. The stereotypes are refused on a Class, Interface, Artifact and Actor.
+  generalization_direction: from the specialization (case worker) to the generalization (worker)
+  realisation_direction: from the business use-case realization to the business use case
+  association_keyword_direction: from the From element to the To element, as drawn; the OMG direction of communication is the direction of navigability
+    (not stored by the ruleset)
+  package_kinds: typed keywords on a Package; a work unit holds its entities directly, an object model holds its object system directly
+harvest:
+  ea_build: 17.1 build 1716
+  stereotype_list: 'ui: Resources tab, read by computer use; 10 names, plus entity, boundary, control from
+    the same EAUML list'
+  metaclasses_binding_prefixes_diagram_token: 'api: created through COM in a test model and read back'
+  typed_keywords: 'api: read back through COM'
+  samples_in_ea: 'model-pattern: two business patterns, 4 diagrams'
+  toolbox_quick_links: 'ui, EA 17.1 build 1716, 2026-11-04: the Business Modeling toolbox page and the quick links of one Business Use Case were read; the
+    EAUML profile rows were not recounted'
+
+# EA's names for this language's layout. tools/gen_conventions.py reads layout_map.
+layout_map:
+  technology: EAExtended
+  display_name: Business Modeling (EA Business Modeling)
+  extends: UML
+  stereotype_prefix: ''
+  notes: |
+    The standard defines no diagram type, so this one is EA's own. Its arrangement and route are the shared defaults, not measurements.
+
+    `EAExtended` is the id EA reports, measured on EA 17.1 build 1716.
+  diagram_types:
+    Business Modeling:
+      token: Extended::Business Modeling
+      base: Logical
+      arrangement: graph
+      title: frame-header
+      route: straight
+      channels:
+        fill: null
+        free:
+        - fill
+        - border
+        - border_width
+        - line_color
+        - font_color
+        - opacity
+        - icon

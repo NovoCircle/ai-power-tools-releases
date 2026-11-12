@@ -78,7 +78,11 @@ For a BPMN diagram, `Diagram_Type` should contain `"Business Process"` or `"BPMN
 
 ### `layout_diagram` — works as of server v1.0.0
 
-The earlier GUID bug (REQ-004) is **fixed in v1.0.0**. Call `layout_diagram` freely.
+The earlier GUID bug (REQ-004) is **fixed in v1.0.0**. Call `layout_diagram` when the diagram is
+not open in EA with unsaved changes. If it is, the call returns `open_with_unsaved_changes`
+(or `tab_state_unreadable` when the tab state cannot be read) and lays nothing out, because a
+layout replaces the open copy: ask the person to save in EA and run it again. `reload_diagram`
+refuses the same way.
 
 To manually trigger layout on a diagram at any time:
 ```
@@ -127,6 +131,18 @@ The coordinates belong inside each `element_ids` entry, as a dict
 (`{"element_id": 12, "left": 50, "top": 50, "right": 190, "bottom": 110}`). Passed as top-level
 `params`, they are refused with `unknown_parameters`.
 
+Pass positive `top` and `bottom` (y grows downward). The server stores them as EA's negative
+values and returns `stored_top` and `stored_bottom`; a value you already pass as negative is kept.
+`add_element_to_diagram`, `add_elements_to_diagram_bulk`, `set_diagram_object` and
+`set_diagram_objects_bulk` all do this.
+
+**An open diagram.** Placement, link, display and appearance calls write to the model even when
+the diagram is open in EA with unsaved changes (or its tab state cannot be read). The write
+stands, the reload is skipped, and the result carries `open_with_unsaved_changes` or
+`tab_state_unreadable`, `reload_skipped: true` and a `message`: EA does not show the change
+until the person saves and reloads. `update_diagram` still writes `Notes`, warns, and then
+reloads an open diagram.
+
 Pass `layout=None` to skip layout regardless, or one of the four style names above to force
 that style regardless.
 
@@ -150,18 +166,21 @@ not to *show* it.**
 | `t_connector` | The logical connector — model-level, independent of any diagram | `ea_model("create_connector")`, `ea_model("create_connectors_bulk")` |
 | `t_diagramlinks` | Per-diagram presentation of that connector — route, color, width, label placement, hidden flag | Written by EA's own layout pass over the diagram; absent until then, and absence is not a defect |
 
-### `InstanceID` — telling a stored link from a drawn one
+### `InstanceID`: a hint, not a test for a stored row
 
 `ea_diagram("get_diagram")` reads the COM `DiagramLinks` collection, not the table, so it
 reports links EA is rendering whether or not a row backs them:
 
-| `InstanceID` | Meaning |
+| `InstanceID` | What the server says it means |
 |---|---|
-| Non-zero | A real placed link with a stored `t_diagramlinks` row — its presentation is persisted and can be styled |
-| `0` | EA is drawing the connector without a stored row — the line is on the diagram, there is simply nothing yet to style |
+| `0` | EA draws the connector and no diagram link is persisted for it. |
+| Non-zero | A placed link. |
 
-Use that distinction to decide whether a styling change has somewhere to land. Do not use it
-to decide whether a connector is visible; both values render.
+**It does not reliably separate the two.** It cannot tell a row that a layout pass added from a
+rendered-only entry, so do not use it to decide whether a row exists. Query `t_diagramlinks`
+for that (`SELECT * FROM t_diagramlinks WHERE DiagramID = <id>`; note the column is `DiagramID`).
+Whether a styling change has somewhere to land depends on the row, not on this number. Neither
+value says anything about whether the connector is visible; both render.
 
 ### What does not create a row
 
@@ -202,20 +221,41 @@ in `t_diagramlinks`. Check in this order:
 | Relationship | `type` | `stereotype` |
 |-------------|-----------------|--------------|
 | `«Uses»` | `Association` | `Uses` |
-| `«Realizes»` | `Realization` | `Realizes` |
+| `«realizes»` | `Realisation` | `realizes` |
 | `«Flows»` | `InformationFlow` | `Flows` |
 | `«Dependency»` | `Dependency` | *(blank)* |
 | Plain association | `Association` | *(blank)* |
 
-> **Canon note (flagged, not changed in this split):** `_shared/references/westbrook-example.md`
-> section 6 records that the WBA MDG (1.1.1) declares three connector stereotypes: `Uses`,
-> `Flows` and lower-case `realizes`. EA stores them bare in `t_connector.Stereotype`, so write
-> them unqualified, as below — never as `WBA::Uses`. What binds a connector to the technology is
-> its `t_xref` row (`FQName=WestbrookBankArchitecture::Uses`), set by passing `StereotypeEx`
-> `WestbrookBankArchitecture::Uses` to `update_connector`. Whether a connector created with only
-> the bare `stereotype` below is bound to WBA, to another language, or to nothing was not
-> measured. `ConsumesService` and capitalized `Realizes` are not declared; the demo's own tests
-> query the strings. See canon section 6.
+**Two spellings to get exactly right.** The connector `type` is `Realisation`, with an s: that
+is EA's own name for the type, the value stored in `t_connector.Connector_Type`, and the one the
+server's `create_connector` documentation tells you to pass. (Server 3.6.4 was also seen to
+store `Realization` as `Realisation`; the documented spelling is the one to write.) The `stereotype` is lower-case
+`realizes`, which is what the technology declares; capitalized `Realizes` is not a stereotype
+the technology declares, and SQL compares the two as different strings.
+
+You may also pass the qualified stereotype as `type` (`type: "WBA::Uses"`): the server creates
+the metaclass the stereotype extends and applies the stereotype.
+
+If two loaded technologies define a connector stereotype with the same short name, a bare name
+is refused with `ambiguous_stereotype` and a list of `candidates`, and nothing is created. Pass
+`language_id` (the technology id, for example `WBA`) or write the qualified form. Do not retry
+with a guess. `create_connector` and each `create_connectors_bulk` spec take `language_id`.
+
+To set a direction, pass `direction` (`Source -> Destination`, `Destination -> Source` or
+`Bi-Directional`) with the connector, or as a key in a `create_connectors_bulk` spec. Read
+`direction_result`, not the raw Direction field: `status` is `stored`, `navigability_only` (the
+arrowheads say what you asked, which is what EA draws) or `not_stored` (also listed in
+`rejected_properties`).
+
+> A connector stereotype may be written bare (`Uses`) or qualified with the technology id
+> (`WBA::Uses`). The server binds the connector to the technology, translating the id to the
+> profile name EA stores, and reports it in the `stereotype` block (server 3.6.5 or later; before
+> that, only the profile name binds). The Westbrook MDG (1.1.1) declares three connector stereotypes:
+> `Uses`, `Flows` and lower-case `realizes`. What EA stores: `t_connector.Stereotype` holds the
+> bare name, and the `t_xref` row that binds the connector to the technology holds
+> `FQName=WestbrookBankArchitecture::Uses`. `ConsumesService` and capitalized `Realizes` are
+> not declared. Your technology's connector stereotypes, and their case, come from
+> `get_mdg_from_runtime`.
 
 ### Governance rule: WBA-LFY-001 and connector stereotypes
 
@@ -223,6 +263,8 @@ The WBA-LFY-001 governance rule flags connectors where:
 - The **source** element has `lifecycle` = `Strategic` or `Current`
 - The **target** element has `lifecycle` = `Deprecated`
 - The **connector stereotype** is one of: `Uses`, `ConsumesService`, `Realizes`, `Flows`
+  (the rule compares these exact strings; the demo model stores `realizes`, lower case, and no
+  `ConsumesService`, so for those two the rule cannot match)
 
 This means a plain `Association` with **no stereotype** does NOT trigger WBA-LFY-001, even if
 it connects a Strategic source to a Deprecated target.
@@ -313,13 +355,17 @@ ea_diagram(operation="set_element_image", params={
     "diagram_id": <id>,
     "element_id": <id>,
     "image_id": img["image_id"],           # or image_name="WBA Core Banking"
-    "name_under_image": True,              # caption below the icon
+    "name_under_image": True,              # stores the setting; EA 17.1 may not draw the caption
 })
 
 # 3. See it. The token being stored is not the same as EA drawing it.
 ea_diagram(operation="verify_diagram", params={"diagram_id": <id>,
                                                "include_svg": True})
 ```
+
+**No caption under an image.** EA 17.1 does not draw a caption under an image element even with
+`NameUnderImage=1` (measured on EA 17.1 build 1716). The setting is stored. If the caption
+matters, place a Text element under the icon.
 
 ### Rules that save a debugging cycle
 
@@ -395,26 +441,14 @@ These are EA's Custom Style levers: how one **placement** is drawn. They live in
 `t_diagram.StyleEx` under `OPTIONS_<DUID>=`. You never pass a DUID — give
 `diagram_id` and `element_id` and the server resolves the placement's own.
 
-> **Precondition: the placement must already carry a DUID, and one you added
-> through the API does not.** Custom Style is keyed on that token, and EA only
-> writes it for placements EA itself created — dragged onto a diagram in the UI,
-> or brought in by an import. An element placed with `add_element_to_diagram` or
-> `add_elements_to_diagram_bulk` has no DUID, and neither `reload_diagram` nor a
-> `set_diagram_object_appearance` write creates one. The call returns
-> `placement_has_no_duid` and changes nothing. Measured on EA 17.1: 89 of 184
-> placements in a working model carry a DUID; every one added through the API
-> does not.
->
-> **So for a diagram you generated, use `set_diagram_object_appearance`** — fill,
-> font color, border color and width, size and z-order all work on
-> API-placed elements. Custom Style's levers (shape, opacity, rotation, stacked
-> cards) are reachable only on placements EA made. If you need one of those on a
-> generated diagram, apply it through EA's own dialog — right-click the element,
-> Appearance, Custom Style — which makes EA mint the DUID itself.
->
-> The server refuses rather than inventing a DUID, because minting one risks
-> naming a block EA never reads and copying another placement's would clone a
-> model-unique id. The refusal is deliberate, not a gap in error handling.
+> **API-placed elements work.** `set_custom_style` and `set_custom_styles_bulk` work on an
+> element placed with `add_element_to_diagram` or `add_elements_to_diagram_bulk` (server 3.6.5
+> or later). When the placement has no DUID the server writes one into its style and reports
+> `duid_minted: true`; when the diagram's `StyleEx` lacks `DSO=1;` it adds it and reports
+> `dso_set: true`, because EA stores Custom Style blocks but does not draw them without it. If
+> the style write is refused for an element, that element's result is `duid_write_failed`.
+> Fill, font color, border color and width, size and z-order are
+> `set_diagram_object_appearance`, not Custom Style.
 
 ```python
 ea_diagram(operation="set_custom_style", params={

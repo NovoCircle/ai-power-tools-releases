@@ -1,0 +1,2340 @@
+# EA facts for RAAML 1.0 as Sparx Enterprise Architect's built-in RAAML technology stores them.
+# Every stereotype and tag below was created in EA and read back. `concepts` and `relationships` map the language skill's concepts to the stored
+# stereotypes (with the metaclass rows each has and how each row was established); the tags of each stereotype are under `stereotypes`.
+# Evidence words: default = the type AddNew gave for RAAML::<name> (the first row); outside = a form outside the Class family that accepts the
+# stereotype; inferred = nothing tells the row from another; only form = the qualified type is refused and StereotypeEx is the only way.
+# Westbrook Bank appears only in howto.md, as an illustration.
+
+language: raaml-1
+technology: RAAML
+api_technology_id: RAAML1.0
+display_name: RAAML
+stereotype_prefix: ''
+stereotype_storage: 'bare name in t_object.Stereotype and t_connector.Stereotype, case as in the technology (FMEAItem, FailureMode,
+  `ID carrier`, `MAJORITY VOTE`); only the FIRST stereotype of an element is in t_object.Stereotype, a second one is only in the
+  t_xref row named Stereotypes; the qualified form RAAML::<name> is the FQName in that row and is what AddNew and StereotypeEx
+  take. EA matches the name after RAAML:: without regard to case, and a spelling that differs only by case can be a different stereotype
+  on a different metaclass (cause: Port, Cause: Association; failureMode: Port, FailureMode: Class and Association)'
+measured_on:
+  ea: 17.1 build 1716
+  date: '2026-10-21'
+  technology_version: '1.0'
+  technology_file: 'none: the technology is one of EA''s InternalTechnologies (raaml.xml, encrypted); measured by creating objects'
+version_note: EA's RAAML technology reports version 1.0 (Repository.GetTechnologyVersion('RAAML1.0')); the language guide and this
+  reference describe RAAML 1.0. OMG lists RAAML 1.1 (December 2025) and a 1.2 beta; neither was studied,
+  so nothing here says whether EA's stereotypes follow 1.0 exactly or include later changes.
+counts:
+  resources_tab_names: 121
+  resources_tab_rows: 154
+  stereotype_names_bound: 120
+  stereotype_metaclass_pairs_created: 153
+  connector_rows: 31
+  names_listed_but_not_creatable: 1
+  diagram_types_bound: 5
+  diagram_types_on_resources_tab: 8
+  concepts_in_language_file: 153
+  concepts_with_a_stereotype: 94
+  relationships_in_language_file: 51
+  relationships_with_a_stereotype: 29
+diagram_types:
+  RAAML:
+    token: RAAML::RAAML
+    stored_diagram_type: Logical
+    style_ex: MDGDgm=RAAML::RAAML;
+    standard_views:
+    - FMEA (the FMEA pattern is drawn on it)
+    - fault tree (the FTA pattern)
+    note: Sparx's FMEA and fault tree examples are drawn on this type, although EA also lists a type for each (see Failure Mode
+      and Effect Analysis and Fault Tree Analysis below); the standard defines no diagram type of its own
+  RAAML - Core:
+    token: RAAML::RAAML - Core
+    stored_diagram_type: Logical
+    style_ex: MDGDgm=RAAML::RAAML - Core;
+    standard_views:
+    - Core library and profile
+  RAAML - General Concepts:
+    token: RAAML::RAAML - General Concepts
+    stored_diagram_type: Logical
+    style_ex: MDGDgm=RAAML::RAAML - General Concepts;
+    standard_views:
+    - General concepts library and profile
+  Systems Theoretic Process Analysis:
+    token: RAAML::Systems Theoretic Process Analysis
+    stored_diagram_type: Logical
+    style_ex: MDGDgm=RAAML::Systems Theoretic Process Analysis;
+    standard_views:
+    - STPA control structure and loss scenarios
+    note: the model pattern stores the token with ' - STPA' appended; that spelling does not bind
+  Goal Structuring Notation:
+    token: RAAML::Goal Structuring Notation
+    stored_diagram_type: Logical
+    style_ex: MDGDgm=RAAML::Goal Structuring Notation;
+    standard_views:
+    - GSN argument
+    note: the ISO 26262 model pattern is drawn on 'Goal Structuring Notation - GSN', which does not bind (measured through the
+      API)
+  Failure Mode and Effect Analysis:
+    listed_on_resources_tab: true
+    created_on_screen: false
+    token: not measured
+    standard_views:
+    - FMEA
+    note: seen on the Resources tab and in the New Diagram dialog on 2026-11-04; no diagram of this type was created, so its stored
+      token and toolbox pages were not read
+  Fault Tree Analysis:
+    listed_on_resources_tab: true
+    created_on_screen: true
+    properties_type_shown: Fault Tree Analysis - FTA
+    token: not measured
+    standard_views:
+    - fault tree
+    toolbox_pages_on_screen:
+    - Core Profile
+    - FTA Pattern
+    - FTA GATE (AND, INHIBIT, MAJORITY VOTE, NOT, OR, SEQ, Tree, XOR)
+    - FTA Library (nine constraint blocks and FTA Tree, UndevelopedEvent)
+    - FTA EVENT (Basic, Conditional, Dormant, House, Intermediate, Top, Undeveloped, Zero Event)
+    note: created in a copy of the model on 2026-11-04; the diagram's Properties show the type as 'Fault Tree Analysis - FTA'.
+      Its stored token and style were not read
+  ISO 26262 Road Vehicles - Functional Safety:
+    listed_on_resources_tab: true
+    created_on_screen: false
+    token: not measured
+    standard_views:
+    - ISO 26262 concepts
+    note: seen on the Resources tab and in the New Diagram dialog on 2026-11-04; the name was cut off at the panel edge, so the
+      full name is not confirmed; no diagram of this type was created
+concepts:
+  AnySituation:
+    status: library-class
+    reason: 'a library class, not a stereotype: model it as an ordinary class (the standard''s library, raaml-library.xml in EA''s
+      ModelPatterns, provides them) carrying the marker `Situation`'
+    marker_stereotype: Situation
+  Situation:
+    stereotypes:
+    - Situation
+    metaclass:
+    - 'Situation: Class (default)'
+    tags:
+      isEncapsulated:
+        values:
+        - 'true'
+        - 'false'
+  ControllingMeasure:
+    status: not-in-ea
+    reason: no stereotype in EA's RAAML technology (abstract profile element or value type)
+  IDCarrier:
+    stereotypes:
+    - ID carrier
+    metaclass:
+    - 'ID carrier: Element (default)'
+    tags:
+      ID: {}
+    note: stored `ID carrier` (with a space); applies to any UML element, usually as a second stereotype
+  AbstractEvent:
+    status: library-class
+    reason: 'a library class, not a stereotype: model it as an ordinary class (the standard''s library, raaml-library.xml in EA''s
+      ModelPatterns, provides them) carrying the marker `Situation`'
+    marker_stereotype: Situation
+  AbstractCause:
+    status: library-class
+    reason: 'a library class, not a stereotype: model it as an ordinary class (the standard''s library, raaml-library.xml in EA''s
+      ModelPatterns, provides them) carrying the marker `Situation`'
+    marker_stereotype: Situation
+  Cause:
+    stereotypes:
+    - Cause
+    metaclass:
+    - 'Cause: connector Association (default)'
+  DysfunctionalEvent:
+    status: library-class
+    reason: 'a library class, not a stereotype: model it as an ordinary class (the standard''s library, raaml-library.xml in EA''s
+      ModelPatterns, provides them) carrying the marker `Situation`'
+    marker_stereotype: Situation
+  UndesiredState:
+    status: library-class
+    reason: 'a library class, not a stereotype: model it as an ordinary class (the standard''s library, raaml-library.xml in EA''s
+      ModelPatterns, provides them) carrying the marker `Situation`'
+    marker_stereotype: Situation
+  AbstractFailureMode:
+    status: library-class
+    reason: 'a library class, not a stereotype: model it as an ordinary class (the standard''s library, raaml-library.xml in EA''s
+      ModelPatterns, provides them) carrying the marker `FailureMode`'
+    marker_stereotype: FailureMode
+  FailureMode:
+    stereotypes:
+    - FailureMode
+    metaclass:
+    - 'FailureMode: Class (outside)'
+    - 'FailureMode: connector Association (outside)'
+    tags:
+      isEncapsulated:
+        values:
+        - 'true'
+        - 'false'
+    note: both a Class stereotype and an Association stereotype; as a Class (StereotypeEx) it marks a situation, as an Association
+      it joins the failure mode to its FMEA item
+  AbstractEffect:
+    status: library-class
+    reason: 'a library class, not a stereotype: model it as an ordinary class (the standard''s library, raaml-library.xml in EA''s
+      ModelPatterns, provides them) carrying the marker `Situation`'
+    marker_stereotype: Situation
+  Effect:
+    status: library-class
+    reason: 'a library class, not a stereotype: model it as an ordinary class (the standard''s library, raaml-library.xml in EA''s
+      ModelPatterns, provides them) carrying the marker `Situation`'
+    marker_stereotype: Situation
+  HarmPotential:
+    status: library-class
+    reason: 'a library class, not a stereotype: model it as an ordinary class (the standard''s library, raaml-library.xml in EA''s
+      ModelPatterns, provides them) carrying the marker `Situation`'
+    marker_stereotype: Situation
+  Hazard:
+    status: library-class
+    reason: 'a library class, not a stereotype: model it as an ordinary class (the standard''s library, raaml-library.xml in EA''s
+      ModelPatterns, provides them) carrying the marker `Situation`'
+    marker_stereotype: Situation
+  Scenario:
+    status: library-class
+    reason: 'a library class, not a stereotype: model it as an ordinary class (the standard''s library, raaml-library.xml in EA''s
+      ModelPatterns, provides them) carrying the marker `Situation`'
+    marker_stereotype: Situation
+  AbstractRisk:
+    status: library-class
+    reason: 'a library class, not a stereotype: model it as an ordinary class (the standard''s library, raaml-library.xml in EA''s
+      ModelPatterns, provides them) carrying the marker `Situation`'
+    marker_stereotype: Situation
+  Error:
+    stereotypes:
+    - Error
+    metaclass:
+    - 'Error: Class (default)'
+    tags:
+      isEncapsulated:
+        values:
+        - 'true'
+        - 'false'
+  Fault:
+    stereotypes:
+    - Fault
+    metaclass:
+    - 'Fault: Class (default)'
+    tags:
+      isEncapsulated:
+        values:
+        - 'true'
+        - 'false'
+  Detection:
+    stereotypes:
+    - Detection
+    metaclass:
+    - 'Detection: connector Dependency (default)'
+    tags:
+      affects: {}
+      sourcePropertyPath: {}
+      targetPropertyPath: {}
+      sourceContext: {}
+      targetContext: {}
+  Prevention:
+    stereotypes:
+    - Prevention
+    metaclass:
+    - 'Prevention: connector Dependency (default)'
+    tags:
+      affects: {}
+      sourcePropertyPath: {}
+      targetPropertyPath: {}
+      sourceContext: {}
+      targetContext: {}
+  Mitigation:
+    stereotypes:
+    - Mitigation
+    metaclass:
+    - 'Mitigation: connector Dependency (default)'
+    tags:
+      affects: {}
+      sourcePropertyPath: {}
+      targetPropertyPath: {}
+      sourceContext: {}
+      targetContext: {}
+  Recommendation:
+    stereotypes:
+    - Recommendation
+    metaclass:
+    - 'Recommendation: connector Dependency (default)'
+    tags:
+      affects: {}
+      sourcePropertyPath: {}
+      targetPropertyPath: {}
+      sourceContext: {}
+      targetContext: {}
+  FailureState:
+    stereotypes:
+    - FailureState
+    metaclass:
+    - 'FailureState: State (default)'
+  Undeveloped:
+    stereotypes:
+    - Undeveloped
+    metaclass:
+    - 'Undeveloped: Element (default)'
+  AbstractFMEAItem:
+    status: library-class
+    reason: 'a library class, not a stereotype: model it as an ordinary class (the standard''s library, raaml-library.xml in EA''s
+      ModelPatterns, provides them) carrying the marker `FMEAItem`'
+    marker_stereotype: FMEAItem
+  FMEAItem:
+    stereotypes:
+    - FMEAItem
+    metaclass:
+    - 'FMEAItem: Class (default)'
+    tags:
+      isEncapsulated:
+        values:
+        - 'true'
+        - 'false'
+  RPNCalculation:
+    stereotypes:
+    - RPNCalculation
+    metaclass:
+    - 'RPNCalculation: Class (default)'
+    tags:
+      isEncapsulated:
+        values:
+        - 'true'
+        - 'false'
+  LossOfFunction:
+    status: library-class
+    reason: 'a library class, not a stereotype: model it as an ordinary class (the standard''s library, raaml-library.xml in EA''s
+      ModelPatterns, provides them) carrying the marker `FailureMode`'
+    marker_stereotype: FailureMode
+  DegradationOfFunction:
+    status: library-class
+    reason: 'a library class, not a stereotype: model it as an ordinary class (the standard''s library, raaml-library.xml in EA''s
+      ModelPatterns, provides them) carrying the marker `FailureMode`'
+    marker_stereotype: FailureMode
+  IntermittentFunction:
+    status: library-class
+    reason: 'a library class, not a stereotype: model it as an ordinary class (the standard''s library, raaml-library.xml in EA''s
+      ModelPatterns, provides them) carrying the marker `FailureMode`'
+    marker_stereotype: FailureMode
+  PartialFunction:
+    status: library-class
+    reason: 'a library class, not a stereotype: model it as an ordinary class (the standard''s library, raaml-library.xml in EA''s
+      ModelPatterns, provides them) carrying the marker `FailureMode`'
+    marker_stereotype: FailureMode
+  UnintendedFunction:
+    status: library-class
+    reason: 'a library class, not a stereotype: model it as an ordinary class (the standard''s library, raaml-library.xml in EA''s
+      ModelPatterns, provides them) carrying the marker `FailureMode`'
+    marker_stereotype: FailureMode
+  ExceedingFunction:
+    status: library-class
+    reason: 'a library class, not a stereotype: model it as an ordinary class (the standard''s library, raaml-library.xml in EA''s
+      ModelPatterns, provides them) carrying the marker `FailureMode`'
+    marker_stereotype: FailureMode
+  DelayedFunction:
+    status: library-class
+    reason: 'a library class, not a stereotype: model it as an ordinary class (the standard''s library, raaml-library.xml in EA''s
+      ModelPatterns, provides them) carrying the marker `FailureMode`'
+    marker_stereotype: FailureMode
+  FTAElement:
+    status: library-class
+    reason: 'a library class, not a stereotype: model it as an ordinary class (the standard''s library, raaml-library.xml in EA''s
+      ModelPatterns, provides them) carrying the marker `Situation`'
+    marker_stereotype: Situation
+  FTATree:
+    stereotypes:
+    - FTATree
+    metaclass:
+    - 'FTATree: Class (default)'
+    tags:
+      TopEvent: {}
+      isEncapsulated:
+        values:
+        - 'true'
+        - 'false'
+  Event:
+    stereotypes:
+    - Event
+    metaclass:
+    - 'Event: Class (default)'
+  BasicEvent:
+    stereotypes:
+    - BasicEvent
+    metaclass:
+    - 'BasicEvent: Class (default)'
+  IntermediateEvent:
+    stereotypes:
+    - IntermediateEvent
+    metaclass:
+    - 'IntermediateEvent: Class (default)'
+  TopEvent:
+    stereotypes:
+    - TopEvent
+    metaclass:
+    - 'TopEvent: Class (default)'
+    tags:
+      Probability: {}
+  ConditionalEvent:
+    stereotypes:
+    - ConditionalEvent
+    metaclass:
+    - 'ConditionalEvent: Class (default)'
+  DormantEvent:
+    stereotypes:
+    - DormantEvent
+    metaclass:
+    - 'DormantEvent: Class (default)'
+  UndevelopedEvent:
+    stereotypes:
+    - UndevelopedEvent
+    metaclass:
+    - 'UndevelopedEvent: Class (default)'
+  HouseEvent:
+    stereotypes:
+    - HouseEvent
+    metaclass:
+    - 'HouseEvent: Class (default)'
+  ZeroEvent:
+    stereotypes:
+    - ZeroEvent
+    metaclass:
+    - 'ZeroEvent: Class (default)'
+  HouseEventProbability:
+    status: library-class
+    reason: 'a library class, not a stereotype: model it as an ordinary class (the standard''s library, raaml-library.xml in EA''s
+      ModelPatterns, provides them) carrying no marker of its own'
+    note: a value type of the standard; EA's value types (Exposure, Severity, Controllability, Occurence, RPN) are DataType stereotypes
+  Gate:
+    status: listed-but-not-creatable
+    reason: the Resources tab lists GATE (the abstract profile element); EA accepts it on no element, connector, package or diagram
+  AND:
+    stereotypes:
+    - AND
+    metaclass:
+    - 'AND: Class (default)'
+  OR:
+    stereotypes:
+    - OR
+    metaclass:
+    - 'OR: Class (default)'
+  NOT:
+    stereotypes:
+    - NOT
+    metaclass:
+    - 'NOT: Class (default)'
+  XOR:
+    stereotypes:
+    - XOR
+    metaclass:
+    - 'XOR: Class (default)'
+  SEQ:
+    stereotypes:
+    - SEQ
+    metaclass:
+    - 'SEQ: Class (default)'
+  INHIBIT:
+    stereotypes:
+    - INHIBIT
+    metaclass:
+    - 'INHIBIT: Class (default)'
+  MAJORITY_VOTE:
+    stereotypes:
+    - MAJORITY VOTE
+    metaclass:
+    - 'MAJORITY VOTE: Class (default)'
+    note: stored with a space, `MAJORITY VOTE`; `RAAML::MAJORITY_VOTE` does not bind
+  ANDConstraintBlock:
+    stereotypes:
+    - ANDConstraintBlock
+    metaclass:
+    - 'ANDConstraintBlock: Class (default)'
+    tags:
+      isEncapsulated:
+        values:
+        - 'true'
+        - 'false'
+  ORConstraintBlock:
+    stereotypes:
+    - ORConstraintBlock
+    metaclass:
+    - 'ORConstraintBlock: Class (default)'
+    tags:
+      isEncapsulated:
+        values:
+        - 'true'
+        - 'false'
+  SEQConstraintBlock:
+    stereotypes:
+    - SEQConstraintBlock
+    metaclass:
+    - 'SEQConstraintBlock: Class (default)'
+    tags:
+      isEncapsulated:
+        values:
+        - 'true'
+        - 'false'
+  XORConstraintBlock:
+    stereotypes:
+    - XORConstraintBlock
+    metaclass:
+    - 'XORConstraintBlock: Class (default)'
+    tags:
+      isEncapsulated:
+        values:
+        - 'true'
+        - 'false'
+  INHIBITConstraintBlock:
+    stereotypes:
+    - INHIBITConstraintBlock
+    metaclass:
+    - 'INHIBITConstraintBlock: Class (default)'
+    tags:
+      isEncapsulated:
+        values:
+        - 'true'
+        - 'false'
+  MAJORITY_VOTEConstraintBlock:
+    stereotypes:
+    - MAJORITY_VOTEConstraintBlock
+    metaclass:
+    - 'MAJORITY_VOTEConstraintBlock: Class (default)'
+    tags:
+      isEncapsulated:
+        values:
+        - 'true'
+        - 'false'
+  NOTConstraintBlock:
+    stereotypes:
+    - NOTConstraintBlock
+    metaclass:
+    - 'NOTConstraintBlock: Class (default)'
+    tags:
+      isEncapsulated:
+        values:
+        - 'true'
+        - 'false'
+  Tree:
+    stereotypes:
+    - Tree
+    metaclass:
+    - 'Tree: Class (default)'
+    tags:
+      isEncapsulated:
+        values:
+        - 'true'
+        - 'false'
+  TransferIn:
+    stereotypes:
+    - TransferIn
+    metaclass:
+    - 'TransferIn: Part (default)'
+  TransferOut:
+    stereotypes:
+    - TransferOut
+    metaclass:
+    - 'TransferOut: Class (default)'
+    tags:
+      isEncapsulated:
+        values:
+        - 'true'
+        - 'false'
+  UnsafeControlAction:
+    stereotypes:
+    - UnsafeControlAction
+    metaclass:
+    - 'UnsafeControlAction: Class (default)'
+    tags:
+      isEncapsulated:
+        values:
+        - 'true'
+        - 'false'
+  OutOfSequence:
+    status: library-class
+    reason: 'a library class, not a stereotype: model it as an ordinary class (the standard''s library, raaml-library.xml in EA''s
+      ModelPatterns, provides them) carrying the marker `UnsafeControlAction`'
+    marker_stereotype: UnsafeControlAction
+  STPALate:
+    status: library-class
+    reason: 'a library class, not a stereotype: model it as an ordinary class (the standard''s library, raaml-library.xml in EA''s
+      ModelPatterns, provides them) carrying the marker `UnsafeControlAction`'
+    marker_stereotype: UnsafeControlAction
+  STPAEarly:
+    status: library-class
+    reason: 'a library class, not a stereotype: model it as an ordinary class (the standard''s library, raaml-library.xml in EA''s
+      ModelPatterns, provides them) carrying the marker `UnsafeControlAction`'
+    marker_stereotype: UnsafeControlAction
+  TooLong:
+    status: library-class
+    reason: 'a library class, not a stereotype: model it as an ordinary class (the standard''s library, raaml-library.xml in EA''s
+      ModelPatterns, provides them) carrying the marker `UnsafeControlAction`'
+    marker_stereotype: UnsafeControlAction
+  TooShort:
+    status: library-class
+    reason: 'a library class, not a stereotype: model it as an ordinary class (the standard''s library, raaml-library.xml in EA''s
+      ModelPatterns, provides them) carrying the marker `UnsafeControlAction`'
+    marker_stereotype: UnsafeControlAction
+  Provided:
+    status: library-class
+    reason: 'a library class, not a stereotype: model it as an ordinary class (the standard''s library, raaml-library.xml in EA''s
+      ModelPatterns, provides them) carrying the marker `UnsafeControlAction`'
+    marker_stereotype: UnsafeControlAction
+  NotProvided:
+    status: library-class
+    reason: 'a library class, not a stereotype: model it as an ordinary class (the standard''s library, raaml-library.xml in EA''s
+      ModelPatterns, provides them) carrying the marker `UnsafeControlAction`'
+    marker_stereotype: UnsafeControlAction
+  LossScenario:
+    stereotypes:
+    - LossScenario
+    metaclass:
+    - 'LossScenario: Class (default)'
+    tags:
+      isEncapsulated:
+        values:
+        - 'true'
+        - 'false'
+  ProcessModel:
+    stereotypes:
+    - ProcessModel
+    metaclass:
+    - 'ProcessModel: Class (default)'
+    tags:
+      isEncapsulated:
+        values:
+        - 'true'
+        - 'false'
+  InadequateControllerDecisions:
+    status: library-class
+    reason: 'a library class, not a stereotype: model it as an ordinary class (the standard''s library, raaml-library.xml in EA''s
+      ModelPatterns, provides them) carrying the marker `Situation`'
+    marker_stereotype: Situation
+  InadequateControlExecution:
+    status: library-class
+    reason: 'a library class, not a stereotype: model it as an ordinary class (the standard''s library, raaml-library.xml in EA''s
+      ModelPatterns, provides them) carrying the marker `Situation`'
+    marker_stereotype: Situation
+  InadequateProcessBehavior:
+    status: library-class
+    reason: 'a library class, not a stereotype: model it as an ordinary class (the standard''s library, raaml-library.xml in EA''s
+      ModelPatterns, provides them) carrying the marker `Situation`'
+    marker_stereotype: Situation
+  InadequateFeedbackAndInputs:
+    status: library-class
+    reason: 'a library class, not a stereotype: model it as an ordinary class (the standard''s library, raaml-library.xml in EA''s
+      ModelPatterns, provides them) carrying the marker `Situation`'
+    marker_stereotype: Situation
+  Factor:
+    stereotypes:
+    - Factor
+    metaclass:
+    - 'Factor: Class (default)'
+    tags:
+      isEncapsulated:
+        values:
+        - 'true'
+        - 'false'
+  Loss:
+    status: library-class
+    reason: 'a library class, not a stereotype: model it as an ordinary class (the standard''s library, raaml-library.xml in EA''s
+      ModelPatterns, provides them) carrying the marker `Situation`'
+    marker_stereotype: Situation
+  ControlAction:
+    stereotypes:
+    - ControlAction
+    metaclass:
+    - 'ControlAction: Class (default)'
+    - 'ControlAction: Signal (outside)'
+    - 'ControlAction: DataType (outside)'
+  Feedback:
+    stereotypes:
+    - Feedback
+    metaclass:
+    - 'Feedback: Class (default)'
+    - 'Feedback: Signal (outside)'
+    - 'Feedback: DataType (outside)'
+  ControlledProcess:
+    stereotypes:
+    - ControlledProcess
+    metaclass:
+    - 'ControlledProcess: Class (default)'
+    - 'ControlledProcess: Part (child of a class) (outside)'
+  Actuator:
+    stereotypes:
+    - Actuator
+    metaclass:
+    - 'Actuator: Class (default)'
+    - 'Actuator: Part (child of a class) (outside)'
+  Sensor:
+    stereotypes:
+    - Sensor
+    metaclass:
+    - 'Sensor: Class (default)'
+    - 'Sensor: Part (child of a class) (outside)'
+  Controller:
+    stereotypes:
+    - Controller
+    metaclass:
+    - 'Controller: Class (default)'
+    - 'Controller: Part (child of a class) (outside)'
+  ControlStructure:
+    stereotypes:
+    - ControlStructure
+    metaclass:
+    - 'ControlStructure: Class (default)'
+    tags:
+      isEncapsulated:
+        values:
+        - 'true'
+        - 'false'
+  GSNNode:
+    stereotypes:
+    - GSNNode
+    metaclass:
+    - 'GSNNode: Element (default)'
+  GSNArgumentNode:
+    stereotypes:
+    - GSNArgumentNode
+    metaclass:
+    - 'GSNArgumentNode: Element (default)'
+  Goal:
+    stereotypes:
+    - Goal
+    metaclass:
+    - 'Goal: Class (default)'
+    - 'Goal: Element (outside)'
+  Strategy:
+    stereotypes:
+    - Strategy
+    metaclass:
+    - 'Strategy: Class (default)'
+    - 'Strategy: Element (outside)'
+  Solution:
+    stereotypes:
+    - Solution
+    metaclass:
+    - 'Solution: Class (default)'
+    - 'Solution: Element (outside)'
+  ContextualInformation:
+    stereotypes:
+    - ContextualInformation
+    metaclass:
+    - 'ContextualInformation: Element (default)'
+  Context:
+    stereotypes:
+    - Context
+    metaclass:
+    - 'Context: Class (default)'
+    - 'Context: Element (outside)'
+  Assumption:
+    stereotypes:
+    - Assumption
+    metaclass:
+    - 'Assumption: Class (default)'
+    - 'Assumption: Element (outside)'
+  Justification:
+    stereotypes:
+    - Justification
+    metaclass:
+    - 'Justification: Class (default)'
+    - 'Justification: Element (outside)'
+  OperationalCondition:
+    status: library-class
+    reason: 'a library class, not a stereotype: model it as an ordinary class (the standard''s library, raaml-library.xml in EA''s
+      ModelPatterns, provides them) carrying the marker `OperationalSituation`'
+    marker_stereotype: OperationalSituation
+  TrafficAndPeople:
+    status: library-class
+    reason: 'a library class, not a stereotype: model it as an ordinary class (the standard''s library, raaml-library.xml in EA''s
+      ModelPatterns, provides them) carrying the marker `OperationalSituation`'
+    marker_stereotype: OperationalSituation
+  VehicleUsage:
+    status: library-class
+    reason: 'a library class, not a stereotype: model it as an ordinary class (the standard''s library, raaml-library.xml in EA''s
+      ModelPatterns, provides them) carrying the marker `OperationalSituation`'
+    marker_stereotype: OperationalSituation
+  RoadCondition:
+    status: library-class
+    reason: 'a library class, not a stereotype: model it as an ordinary class (the standard''s library, raaml-library.xml in EA''s
+      ModelPatterns, provides them) carrying the marker `OperationalSituation`'
+    marker_stereotype: OperationalSituation
+  Location:
+    status: library-class
+    reason: 'a library class, not a stereotype: model it as an ordinary class (the standard''s library, raaml-library.xml in EA''s
+      ModelPatterns, provides them) carrying the marker `OperationalSituation`'
+    marker_stereotype: OperationalSituation
+  EnvironmentalCondition:
+    status: library-class
+    reason: 'a library class, not a stereotype: model it as an ordinary class (the standard''s library, raaml-library.xml in EA''s
+      ModelPatterns, provides them) carrying the marker `OperationalSituation`'
+    marker_stereotype: OperationalSituation
+  AbstractOperationalSituation:
+    status: library-class
+    reason: 'a library class, not a stereotype: model it as an ordinary class (the standard''s library, raaml-library.xml in EA''s
+      ModelPatterns, provides them) carrying the marker `OperationalSituation`'
+    marker_stereotype: OperationalSituation
+  TypicalAutomotiveSituation:
+    status: library-class
+    reason: 'a library class, not a stereotype: model it as an ordinary class (the standard''s library, raaml-library.xml in EA''s
+      ModelPatterns, provides them) carrying the marker `OperationalSituation`'
+    marker_stereotype: OperationalSituation
+  AnyTrafficAndPeople:
+    stereotypes:
+    - AnyTrafficAndPeople
+    metaclass:
+    - 'AnyTrafficAndPeople: Class (default)'
+    tags:
+      isEncapsulated:
+        values:
+        - 'true'
+        - 'false'
+  AnyVehicleUse:
+    stereotypes:
+    - AnyVehicleUse
+    metaclass:
+    - 'AnyVehicleUse: Class (default)'
+    tags:
+      isEncapsulated:
+        values:
+        - 'true'
+        - 'false'
+  AnyRoadCondition:
+    stereotypes:
+    - AnyRoadCondition
+    metaclass:
+    - 'AnyRoadCondition: Class (default)'
+    tags:
+      isEncapsulated:
+        values:
+        - 'true'
+        - 'false'
+  AnyLocation:
+    stereotypes:
+    - AnyLocation
+    metaclass:
+    - 'AnyLocation: Class (default)'
+    tags:
+      isEncapsulated:
+        values:
+        - 'true'
+        - 'false'
+  AnyEnvironmentalCondition:
+    stereotypes:
+    - AnyEnvironmentalCondition
+    metaclass:
+    - 'AnyEnvironmentalCondition: Class (default)'
+    tags:
+      isEncapsulated:
+        values:
+        - 'true'
+        - 'false'
+  Exposure:
+    stereotypes:
+    - Exposure
+    metaclass:
+    - 'Exposure: DataType (default)'
+    tags:
+      quantityKind: {}
+      unit: {}
+  Severity:
+    stereotypes:
+    - Severity
+    metaclass:
+    - 'Severity: DataType (default)'
+    tags:
+      quantityKind: {}
+      unit: {}
+  Controllability:
+    stereotypes:
+    - Controllability
+    metaclass:
+    - 'Controllability: DataType (default)'
+    tags:
+      quantityKind: {}
+      unit: {}
+  ASIL:
+    status: library-class
+    reason: 'a library class, not a stereotype: model it as an ordinary class (the standard''s library, raaml-library.xml in EA''s
+      ModelPatterns, provides them) carrying the marker `ValueType`'
+    marker_stereotype: ValueType
+    note: a enumeration of the standard; EA's value types (Exposure, Severity, Controllability, Occurence, RPN) are DataType stereotypes
+  AnyMalfunction:
+    status: library-class
+    reason: 'a library class, not a stereotype: model it as an ordinary class (the standard''s library, raaml-library.xml in EA''s
+      ModelPatterns, provides them) carrying the marker `MalfunctioningBehavior`'
+    marker_stereotype: MalfunctioningBehavior
+  Less:
+    status: library-class
+    reason: 'a library class, not a stereotype: model it as an ordinary class (the standard''s library, raaml-library.xml in EA''s
+      ModelPatterns, provides them) carrying the marker `MalfunctioningBehavior`'
+    marker_stereotype: MalfunctioningBehavior
+  More:
+    status: library-class
+    reason: 'a library class, not a stereotype: model it as an ordinary class (the standard''s library, raaml-library.xml in EA''s
+      ModelPatterns, provides them) carrying the marker `MalfunctioningBehavior`'
+    marker_stereotype: MalfunctioningBehavior
+  'No':
+    status: library-class
+    reason: 'a library class, not a stereotype: model it as an ordinary class (the standard''s library, raaml-library.xml in EA''s
+      ModelPatterns, provides them) carrying the marker `MalfunctioningBehavior`'
+    marker_stereotype: MalfunctioningBehavior
+  Intermittent:
+    status: library-class
+    reason: 'a library class, not a stereotype: model it as an ordinary class (the standard''s library, raaml-library.xml in EA''s
+      ModelPatterns, provides them) carrying the marker `MalfunctioningBehavior`'
+    marker_stereotype: MalfunctioningBehavior
+  Unintended:
+    status: library-class
+    reason: 'a library class, not a stereotype: model it as an ordinary class (the standard''s library, raaml-library.xml in EA''s
+      ModelPatterns, provides them) carrying the marker `MalfunctioningBehavior`'
+    marker_stereotype: MalfunctioningBehavior
+  ISO26262Early:
+    status: library-class
+    reason: 'a library class, not a stereotype: model it as an ordinary class (the standard''s library, raaml-library.xml in EA''s
+      ModelPatterns, provides them) carrying the marker `MalfunctioningBehavior`'
+    marker_stereotype: MalfunctioningBehavior
+  ISO26262Late:
+    status: library-class
+    reason: 'a library class, not a stereotype: model it as an ordinary class (the standard''s library, raaml-library.xml in EA''s
+      ModelPatterns, provides them) carrying the marker `MalfunctioningBehavior`'
+    marker_stereotype: MalfunctioningBehavior
+  Inverted:
+    status: library-class
+    reason: 'a library class, not a stereotype: model it as an ordinary class (the standard''s library, raaml-library.xml in EA''s
+      ModelPatterns, provides them) carrying the marker `MalfunctioningBehavior`'
+    marker_stereotype: MalfunctioningBehavior
+  AutomotiveEffect:
+    status: library-class
+    reason: 'a library class, not a stereotype: model it as an ordinary class (the standard''s library, raaml-library.xml in EA''s
+      ModelPatterns, provides them) carrying the marker `Situation`'
+    marker_stereotype: Situation
+  SystemLevelEffect:
+    status: library-class
+    reason: 'a library class, not a stereotype: model it as an ordinary class (the standard''s library, raaml-library.xml in EA''s
+      ModelPatterns, provides them) carrying the marker `Situation`'
+    marker_stereotype: Situation
+  VehicleLevelEffect:
+    status: library-class
+    reason: 'a library class, not a stereotype: model it as an ordinary class (the standard''s library, raaml-library.xml in EA''s
+      ModelPatterns, provides them) carrying the marker `Situation`'
+    marker_stereotype: Situation
+  AccidentScenario:
+    status: library-class
+    reason: 'a library class, not a stereotype: model it as an ordinary class (the standard''s library, raaml-library.xml in EA''s
+      ModelPatterns, provides them) carrying the marker `Situation`'
+    marker_stereotype: Situation
+  HazardousEvent:
+    status: library-class
+    reason: 'a library class, not a stereotype: model it as an ordinary class (the standard''s library, raaml-library.xml in EA''s
+      ModelPatterns, provides them) carrying the marker `Situation`'
+    marker_stereotype: Situation
+  ISO26262SafetyRequirementTemplate:
+    stereotypes:
+    - ISO26262SafetyRequirementTemplate
+    metaclass:
+    - 'ISO26262SafetyRequirementTemplate: Class (default)'
+    - 'ISO26262SafetyRequirementTemplate: Interface (outside)'
+    tags:
+      isEncapsulated:
+        values:
+        - 'true'
+        - 'false'
+  OperationalSituation:
+    stereotypes:
+    - OperationalSituation
+    metaclass:
+    - 'OperationalSituation: Class (default)'
+    tags:
+      isEncapsulated:
+        values:
+        - 'true'
+        - 'false'
+  MalfunctioningBehavior:
+    stereotypes:
+    - MalfunctioningBehavior
+    metaclass:
+    - 'MalfunctioningBehavior: Class (default)'
+    - 'MalfunctioningBehavior: connector Association (outside)'
+    tags:
+      isEncapsulated:
+        values:
+        - 'true'
+        - 'false'
+    note: both a Class stereotype and an Association stereotype
+  Verified:
+    stereotypes:
+    - Verified
+    metaclass:
+    - 'Verified: Class (default)'
+    tags:
+      result: {}
+  Confirmed:
+    stereotypes:
+    - Confirmed
+    metaclass:
+    - 'Confirmed: Class (default)'
+    tags:
+      result: {}
+  HazardAndRiskAssessment:
+    stereotypes:
+    - HazardAndRiskAssessment
+    metaclass:
+    - 'HazardAndRiskAssessment: Package (default)'
+  LessonLearned:
+    stereotypes:
+    - LessonLearned
+    metaclass:
+    - 'LessonLearned: Note (default)'
+  ASILAssignment:
+    stereotypes:
+    - ASILAssignment
+    metaclass:
+    - 'ASILAssignment: Element (default)'
+    tags:
+      ASIL: {}
+      ASILOverride: {}
+  ASILOverrideRationale:
+    stereotypes:
+    - ASILOverrideRationale
+    metaclass:
+    - 'ASILOverrideRationale: Class (default)'
+    - 'ASILOverrideRationale: Note (outside)'
+  DependabilityRequirement:
+    stereotypes:
+    - DependabilityRequirement
+    metaclass:
+    - 'DependabilityRequirement: Class (default)'
+    - 'DependabilityRequirement: Interface (outside)'
+    tags:
+      isEncapsulated:
+        values:
+        - 'true'
+        - 'false'
+  FunctionalSafetyRequirement:
+    stereotypes:
+    - FunctionalSafetyRequirement
+    metaclass:
+    - 'FunctionalSafetyRequirement: Class (default)'
+    - 'FunctionalSafetyRequirement: Interface (outside)'
+    - 'FunctionalSafetyRequirement: Requirement (inferred)'
+    tags:
+      isEncapsulated:
+        values:
+        - 'true'
+        - 'false'
+      id: {}
+      text: {}
+  TechnicalSafetyRequirement:
+    stereotypes:
+    - TechnicalSafetyRequirement
+    metaclass:
+    - 'TechnicalSafetyRequirement: Class (default)'
+    - 'TechnicalSafetyRequirement: Interface (outside)'
+    - 'TechnicalSafetyRequirement: Requirement (inferred)'
+    tags:
+      isEncapsulated:
+        values:
+        - 'true'
+        - 'false'
+      id: {}
+      text: {}
+  SoftwareSafetyRequirement:
+    stereotypes:
+    - SoftwareSafetyRequirement
+    metaclass:
+    - 'SoftwareSafetyRequirement: Class (default)'
+    - 'SoftwareSafetyRequirement: Interface (outside)'
+    - 'SoftwareSafetyRequirement: Requirement (inferred)'
+    tags:
+      isEncapsulated:
+        values:
+        - 'true'
+        - 'false'
+      id: {}
+      text: {}
+  HardwareSafetyRequirement:
+    stereotypes:
+    - HardwareSafetyRequirement
+    metaclass:
+    - 'HardwareSafetyRequirement: Class (default)'
+    - 'HardwareSafetyRequirement: Interface (outside)'
+    - 'HardwareSafetyRequirement: Requirement (inferred)'
+    tags:
+      isEncapsulated:
+        values:
+        - 'true'
+        - 'false'
+      id: {}
+      text: {}
+  SafetyGoal:
+    stereotypes:
+    - SafetyGoal
+    metaclass:
+    - 'SafetyGoal: Class (default)'
+    - 'SafetyGoal: Interface (outside)'
+    - 'SafetyGoal: Requirement (inferred)'
+    tags:
+      isEncapsulated:
+        values:
+        - 'true'
+        - 'false'
+      id: {}
+      text: {}
+  RelevantTo:
+    stereotypes:
+    - RelevantTo
+    metaclass:
+    - 'RelevantTo: connector Dependency (default)'
+    tags:
+      sourcePropertyPath: {}
+      targetPropertyPath: {}
+      sourceContext: {}
+      targetContext: {}
+  Violates:
+    stereotypes:
+    - Violates
+    metaclass:
+    - 'Violates: connector Dependency (default)'
+  InContextOf:
+    stereotypes:
+    - InContextOf
+    metaclass:
+    - 'InContextOf: connector Dependency (default)'
+  SupportedBy:
+    stereotypes:
+    - SupportedBy
+    metaclass:
+    - 'SupportedBy: connector Dependency (default)'
+  IndependenceRequirement:
+    stereotypes:
+    - IndependenceRequirement
+    metaclass:
+    - 'IndependenceRequirement: connector Abstraction (default)'
+    - 'IndependenceRequirement: connector Dependency (inferred)'
+  ASILDecompose:
+    stereotypes:
+    - ASILDecompose
+    metaclass:
+    - 'ASILDecompose: connector Abstraction (default)'
+    - 'ASILDecompose: connector Dependency (inferred)'
+  SafeState:
+    stereotypes:
+    - SafeState
+    metaclass:
+    - 'SafeState: connector Dependency (default)'
+  UserInfoRequirement:
+    stereotypes:
+    - UserInfoRequirement
+    metaclass:
+    - 'UserInfoRequirement: connector Abstraction (default)'
+    - 'UserInfoRequirement: connector Dependency (inferred)'
+  RecoveryRequirement:
+    stereotypes:
+    - RecoveryRequirement
+    metaclass:
+    - 'RecoveryRequirement: connector Abstraction (default)'
+    - 'RecoveryRequirement: connector Dependency (inferred)'
+  OperatingMode:
+    stereotypes:
+    - OperatingMode
+    metaclass:
+    - 'OperatingMode: connector Dependency (default)'
+relationships:
+  Causality:
+    stereotypes:
+    - Causality
+    metaclass:
+    - 'Causality: connector Association (default)'
+  Activation:
+    stereotypes:
+    - Activation
+    metaclass:
+    - 'Activation: connector Association (default)'
+  ErrorPropagation:
+    stereotypes:
+    - ErrorPropagation
+    metaclass:
+    - 'ErrorPropagation: connector Association (default)'
+  ErrorRealization:
+    stereotypes:
+    - ErrorRealization
+    metaclass:
+    - 'ErrorRealization: connector Association (default)'
+  ProcessModelFactor:
+    stereotypes:
+    - ProcessModelFactor
+    metaclass:
+    - 'ProcessModelFactor: connector Association (default)'
+  ProcessModelConsequence:
+    stereotypes:
+    - ProcessModelConsequence
+    metaclass:
+    - 'ProcessModelConsequence: connector Association (default)'
+  UnsafeControlActionHarmPotential:
+    stereotypes:
+    - UnsafeControlActionHarmPotential
+    metaclass:
+    - 'UnsafeControlActionHarmPotential: connector Association (default)'
+  RiskRealization:
+    stereotypes:
+    - RiskRealization
+    metaclass:
+    - 'RiskRealization: Class (default)'
+    tags:
+      isEncapsulated:
+        values:
+        - 'true'
+        - 'false'
+  RelevantTo:
+    stereotypes:
+    - RelevantTo
+    metaclass:
+    - 'RelevantTo: connector Dependency (default)'
+    tags:
+      sourcePropertyPath: {}
+      targetPropertyPath: {}
+      sourceContext: {}
+      targetContext: {}
+  ControllingMeasure:
+    status: not-in-ea
+    reason: the abstract parent; its four kinds Detection, Prevention, Mitigation and Recommendation bind
+  Detection:
+    stereotypes:
+    - Detection
+    metaclass:
+    - 'Detection: connector Dependency (default)'
+    tags:
+      affects: {}
+      sourcePropertyPath: {}
+      targetPropertyPath: {}
+      sourceContext: {}
+      targetContext: {}
+  Prevention:
+    stereotypes:
+    - Prevention
+    metaclass:
+    - 'Prevention: connector Dependency (default)'
+    tags:
+      affects: {}
+      sourcePropertyPath: {}
+      targetPropertyPath: {}
+      sourceContext: {}
+      targetContext: {}
+  Mitigation:
+    stereotypes:
+    - Mitigation
+    metaclass:
+    - 'Mitigation: connector Dependency (default)'
+    tags:
+      affects: {}
+      sourcePropertyPath: {}
+      targetPropertyPath: {}
+      sourceContext: {}
+      targetContext: {}
+  Recommendation:
+    stereotypes:
+    - Recommendation
+    metaclass:
+    - 'Recommendation: connector Dependency (default)'
+    tags:
+      affects: {}
+      sourcePropertyPath: {}
+      targetPropertyPath: {}
+      sourceContext: {}
+      targetContext: {}
+  Violates:
+    stereotypes:
+    - Violates
+    metaclass:
+    - 'Violates: connector Dependency (default)'
+  InContextOf:
+    stereotypes:
+    - InContextOf
+    metaclass:
+    - 'InContextOf: connector Dependency (default)'
+  SupportedBy:
+    stereotypes:
+    - SupportedBy
+    metaclass:
+    - 'SupportedBy: connector Dependency (default)'
+  IndependenceRequirement:
+    stereotypes:
+    - IndependenceRequirement
+    metaclass:
+    - 'IndependenceRequirement: connector Abstraction (default)'
+    - 'IndependenceRequirement: connector Dependency (inferred)'
+  ASILDecompose:
+    stereotypes:
+    - ASILDecompose
+    metaclass:
+    - 'ASILDecompose: connector Abstraction (default)'
+    - 'ASILDecompose: connector Dependency (inferred)'
+  SafeState:
+    stereotypes:
+    - SafeState
+    metaclass:
+    - 'SafeState: connector Dependency (default)'
+  UserInfoRequirement:
+    stereotypes:
+    - UserInfoRequirement
+    metaclass:
+    - 'UserInfoRequirement: connector Abstraction (default)'
+    - 'UserInfoRequirement: connector Dependency (inferred)'
+  RecoveryRequirement:
+    stereotypes:
+    - RecoveryRequirement
+    metaclass:
+    - 'RecoveryRequirement: connector Abstraction (default)'
+    - 'RecoveryRequirement: connector Dependency (inferred)'
+  OperatingMode:
+    stereotypes:
+    - OperatingMode
+    metaclass:
+    - 'OperatingMode: connector Dependency (default)'
+  Scenario.scenarioStep:
+    status: containment
+    reason: a part (composition) property of the owner class; EA stores a plain part, with no stereotype of its own, as a child element (ParentID) or an association end. A rule can count the children an element
+      owns (contains_count, 2026-10-21) but cannot tell which property a part stands for, since that is its name and its type, or read
+      its multiplicity
+  AbstractRisk.trigger:
+    status: containment
+    reason: a part (composition) property of the owner class; EA stores a plain part, with no stereotype of its own, as a child element (ParentID) or an association end. A rule can count the children an element
+      owns (contains_count, 2026-10-21) but cannot tell which property a part stands for, since that is its name and its type, or read
+      its multiplicity
+  AbstractRisk.harm:
+    status: containment
+    reason: a part (composition) property of the owner class; EA stores a plain part, with no stereotype of its own, as a child element (ParentID) or an association end. A rule can count the children an element
+      owns (contains_count, 2026-10-21) but cannot tell which property a part stands for, since that is its name and its type, or read
+      its multiplicity
+  AbstractRisk.harmPotential:
+    status: containment
+    reason: a part (composition) property of the owner class; EA stores a plain part, with no stereotype of its own, as a child element (ParentID) or an association end. A rule can count the children an element
+      owns (contains_count, 2026-10-21) but cannot tell which property a part stands for, since that is its name and its type, or read
+      its multiplicity
+  AbstractFMEAItem.failureMode:
+    stereotypes:
+    - failureMode
+    metaclass:
+    - 'failureMode: Port (child of a class) (default)'
+    note: the part relationship has an EA stereotype of the same name (a Port child, or an Association for input, output and condition)
+  AbstractFMEAItem.cause:
+    stereotypes:
+    - cause
+    metaclass:
+    - 'cause: Port (child of a class) (outside)'
+    note: the part relationship has an EA stereotype of the same name (a Port child, or an Association for input, output and condition)
+  AbstractFMEAItem.finalEffect:
+    stereotypes:
+    - finalEffect
+    metaclass:
+    - 'finalEffect: Port (child of a class) (default)'
+    note: the part relationship has an EA stereotype of the same name (a Port child, or an Association for input, output and condition)
+  AbstractFMEAItem.harmPotential:
+    stereotypes:
+    - harmPotential
+    metaclass:
+    - 'harmPotential: Port (child of a class) (default)'
+    note: the part relationship has an EA stereotype of the same name (a Port child, or an Association for input, output and condition)
+  FTATree.topEvent:
+    status: containment
+    reason: a part (composition) property of the owner class; EA stores a plain part, with no stereotype of its own, as a child element (ParentID) or an association end. A rule can count the children an element
+      owns (contains_count, 2026-10-21) but cannot tell which property a part stands for, since that is its name and its type, or read
+      its multiplicity
+  Gate.input:
+    stereotypes:
+    - input
+    metaclass:
+    - 'input: connector Association (default)'
+    note: the part relationship has an EA stereotype of the same name (a Port child, or an Association for input, output and condition)
+  Gate.output:
+    stereotypes:
+    - output
+    metaclass:
+    - 'output: connector Association (default)'
+    note: the part relationship has an EA stereotype of the same name (a Port child, or an Association for input, output and condition)
+  INHIBIT.condition:
+    stereotypes:
+    - condition
+    metaclass:
+    - 'condition: connector Association (default)'
+    note: the part relationship has an EA stereotype of the same name (a Port child, or an Association for input, output and condition)
+  LossScenario.Factor:
+    status: containment
+    reason: a part (composition) property of the owner class; EA stores a plain part, with no stereotype of its own, as a child element (ParentID) or an association end. A rule can count the children an element
+      owns (contains_count, 2026-10-21) but cannot tell which property a part stands for, since that is its name and its type, or read
+      its multiplicity
+  LossScenario.unsafeControlAction:
+    status: containment
+    reason: a part (composition) property of the owner class; EA stores a plain part, with no stereotype of its own, as a child element (ParentID) or an association end. A rule can count the children an element
+      owns (contains_count, 2026-10-21) but cannot tell which property a part stands for, since that is its name and its type, or read
+      its multiplicity
+  LossScenario.processModel:
+    status: containment
+    reason: a part (composition) property of the owner class; EA stores a plain part, with no stereotype of its own, as a child element (ParentID) or an association end. A rule can count the children an element
+      owns (contains_count, 2026-10-21) but cannot tell which property a part stands for, since that is its name and its type, or read
+      its multiplicity
+  UnsafeControlAction.Context:
+    status: containment
+    reason: a part (composition) property of the owner class; EA stores a plain part, with no stereotype of its own, as a child element (ParentID) or an association end. A rule can count the children an element
+      owns (contains_count, 2026-10-21) but cannot tell which property a part stands for, since that is its name and its type, or read
+      its multiplicity
+  AbstractOperationalSituation.conditions:
+    status: containment
+    reason: a part (composition) property of the owner class; EA stores a plain part, with no stereotype of its own, as a child element (ParentID) or an association end. A rule can count the children an element
+      owns (contains_count, 2026-10-21) but cannot tell which property a part stands for, since that is its name and its type, or read
+      its multiplicity
+  TypicalAutomotiveSituation.trafficAndPeople:
+    status: containment
+    reason: a part (composition) property of the owner class; EA stores a plain part, with no stereotype of its own, as a child element (ParentID) or an association end. A rule can count the children an element
+      owns (contains_count, 2026-10-21) but cannot tell which property a part stands for, since that is its name and its type, or read
+      its multiplicity
+  TypicalAutomotiveSituation.vehicleUsage:
+    status: containment
+    reason: a part (composition) property of the owner class; EA stores a plain part, with no stereotype of its own, as a child element (ParentID) or an association end. A rule can count the children an element
+      owns (contains_count, 2026-10-21) but cannot tell which property a part stands for, since that is its name and its type, or read
+      its multiplicity
+  TypicalAutomotiveSituation.roadCondition:
+    status: containment
+    reason: a part (composition) property of the owner class; EA stores a plain part, with no stereotype of its own, as a child element (ParentID) or an association end. A rule can count the children an element
+      owns (contains_count, 2026-10-21) but cannot tell which property a part stands for, since that is its name and its type, or read
+      its multiplicity
+  TypicalAutomotiveSituation.location:
+    status: containment
+    reason: a part (composition) property of the owner class; EA stores a plain part, with no stereotype of its own, as a child element (ParentID) or an association end. A rule can count the children an element
+      owns (contains_count, 2026-10-21) but cannot tell which property a part stands for, since that is its name and its type, or read
+      its multiplicity
+  TypicalAutomotiveSituation.environmentalCondition:
+    status: containment
+    reason: a part (composition) property of the owner class; EA stores a plain part, with no stereotype of its own, as a child element (ParentID) or an association end. A rule can count the children an element
+      owns (contains_count, 2026-10-21) but cannot tell which property a part stands for, since that is its name and its type, or read
+      its multiplicity
+  AccidentScenario.situation:
+    status: containment
+    reason: a part (composition) property of the owner class; EA stores a plain part, with no stereotype of its own, as a child element (ParentID) or an association end. A rule can count the children an element
+      owns (contains_count, 2026-10-21) but cannot tell which property a part stands for, since that is its name and its type, or read
+      its multiplicity
+  AccidentScenario.malfunctioningBehavior:
+    status: containment
+    reason: a part (composition) property of the owner class; EA stores a plain part, with no stereotype of its own, as a child element (ParentID) or an association end. A rule can count the children an element
+      owns (contains_count, 2026-10-21) but cannot tell which property a part stands for, since that is its name and its type, or read
+      its multiplicity
+  HazardousEvent.scenario:
+    status: containment
+    reason: a part (composition) property of the owner class; EA stores a plain part, with no stereotype of its own, as a child element (ParentID) or an association end. A rule can count the children an element
+      owns (contains_count, 2026-10-21) but cannot tell which property a part stands for, since that is its name and its type, or read
+      its multiplicity
+  HazardousEvent.hazard:
+    status: containment
+    reason: a part (composition) property of the owner class; EA stores a plain part, with no stereotype of its own, as a child element (ParentID) or an association end. A rule can count the children an element
+      owns (contains_count, 2026-10-21) but cannot tell which property a part stands for, since that is its name and its type, or read
+      its multiplicity
+  HazardousEvent.systemLevelEffect:
+    status: containment
+    reason: a part (composition) property of the owner class; EA stores a plain part, with no stereotype of its own, as a child element (ParentID) or an association end. A rule can count the children an element
+      owns (contains_count, 2026-10-21) but cannot tell which property a part stands for, since that is its name and its type, or read
+      its multiplicity
+  HazardousEvent.vehicleLevelEffect:
+    status: containment
+    reason: a part (composition) property of the owner class; EA stores a plain part, with no stereotype of its own, as a child element (ParentID) or an association end. A rule can count the children an element
+      owns (contains_count, 2026-10-21) but cannot tell which property a part stands for, since that is its name and its type, or read
+      its multiplicity
+stereotypes:
+  AbstractRequirement:
+    metaclass_rows:
+    - Class (only form)
+  Activation:
+    metaclass_rows:
+    - connector Association (default)
+  Actuator:
+    metaclass_rows:
+    - Class (default)
+    - Part (child of a class) (outside)
+  AND:
+    metaclass_rows:
+    - Class (default)
+  ANDConstraintBlock:
+    metaclass_rows:
+    - Class (default)
+    tags:
+      isEncapsulated:
+        values:
+        - 'true'
+        - 'false'
+  AnyEnvironmentalCondition:
+    metaclass_rows:
+    - Class (default)
+    tags:
+      isEncapsulated:
+        values:
+        - 'true'
+        - 'false'
+  AnyLocation:
+    metaclass_rows:
+    - Class (default)
+    tags:
+      isEncapsulated:
+        values:
+        - 'true'
+        - 'false'
+  AnyRoadCondition:
+    metaclass_rows:
+    - Class (default)
+    tags:
+      isEncapsulated:
+        values:
+        - 'true'
+        - 'false'
+  AnyTrafficAndPeople:
+    metaclass_rows:
+    - Class (default)
+    tags:
+      isEncapsulated:
+        values:
+        - 'true'
+        - 'false'
+  AnyVehicleUse:
+    metaclass_rows:
+    - Class (default)
+    tags:
+      isEncapsulated:
+        values:
+        - 'true'
+        - 'false'
+  ASILAssignment:
+    metaclass_rows:
+    - Element (default)
+    tags:
+      ASIL: {}
+      ASILOverride: {}
+  ASILDecompose:
+    metaclass_rows:
+    - connector Abstraction (default)
+    - connector Dependency (inferred)
+  ASILOverrideRationale:
+    metaclass_rows:
+    - Class (default)
+    - Note (outside)
+  Assumption:
+    metaclass_rows:
+    - Class (default)
+    - Element (outside)
+  BasicEvent:
+    metaclass_rows:
+    - Class (default)
+  Causality:
+    metaclass_rows:
+    - connector Association (default)
+  Cause:
+    metaclass_rows:
+    - connector Association (default)
+  cause:
+    metaclass_rows:
+    - Port (child of a class) (outside)
+  condition:
+    metaclass_rows:
+    - connector Association (default)
+  ConditionalEvent:
+    metaclass_rows:
+    - Class (default)
+  Confirmed:
+    metaclass_rows:
+    - Class (default)
+    tags:
+      result: {}
+  Context:
+    metaclass_rows:
+    - Class (default)
+    - Element (outside)
+  ContextualInformation:
+    metaclass_rows:
+    - Element (default)
+  ControlAction:
+    metaclass_rows:
+    - Class (default)
+    - Signal (outside)
+    - DataType (outside)
+  Controllability:
+    metaclass_rows:
+    - DataType (default)
+    tags:
+      quantityKind: {}
+      unit: {}
+  ControlledProcess:
+    metaclass_rows:
+    - Class (default)
+    - Part (child of a class) (outside)
+  Controller:
+    metaclass_rows:
+    - Class (default)
+    - Part (child of a class) (outside)
+  ControlStructure:
+    metaclass_rows:
+    - Class (default)
+    tags:
+      isEncapsulated:
+        values:
+        - 'true'
+        - 'false'
+  DependabilityRequirement:
+    metaclass_rows:
+    - Class (default)
+    - Interface (outside)
+    tags:
+      isEncapsulated:
+        values:
+        - 'true'
+        - 'false'
+  Detectability:
+    metaclass_rows:
+    - DataType (default)
+    tags:
+      quantityKind: {}
+      unit: {}
+  Detection:
+    metaclass_rows:
+    - connector Dependency (default)
+    tags:
+      affects: {}
+      sourcePropertyPath: {}
+      targetPropertyPath: {}
+      sourceContext: {}
+      targetContext: {}
+  DormantEvent:
+    metaclass_rows:
+    - Class (default)
+  Error:
+    metaclass_rows:
+    - Class (default)
+    tags:
+      isEncapsulated:
+        values:
+        - 'true'
+        - 'false'
+  ErrorPropagation:
+    metaclass_rows:
+    - connector Association (default)
+  ErrorRealization:
+    metaclass_rows:
+    - connector Association (default)
+  Event:
+    metaclass_rows:
+    - Class (default)
+  Exposure:
+    metaclass_rows:
+    - DataType (default)
+    tags:
+      quantityKind: {}
+      unit: {}
+  Factor:
+    metaclass_rows:
+    - Class (default)
+    tags:
+      isEncapsulated:
+        values:
+        - 'true'
+        - 'false'
+  FailureMode:
+    metaclass_rows:
+    - Class (outside)
+    - connector Association (outside)
+    tags:
+      isEncapsulated:
+        values:
+        - 'true'
+        - 'false'
+  failureMode:
+    metaclass_rows:
+    - Port (child of a class) (default)
+  FailureState:
+    metaclass_rows:
+    - State (default)
+  Fault:
+    metaclass_rows:
+    - Class (default)
+    tags:
+      isEncapsulated:
+        values:
+        - 'true'
+        - 'false'
+  Feedback:
+    metaclass_rows:
+    - Class (default)
+    - Signal (outside)
+    - DataType (outside)
+  finalEffect:
+    metaclass_rows:
+    - Port (child of a class) (default)
+  FMEAItem:
+    metaclass_rows:
+    - Class (default)
+    tags:
+      isEncapsulated:
+        values:
+        - 'true'
+        - 'false'
+  FTATree:
+    metaclass_rows:
+    - Class (default)
+    tags:
+      TopEvent: {}
+      isEncapsulated:
+        values:
+        - 'true'
+        - 'false'
+  FunctionalSafetyRequirement:
+    metaclass_rows:
+    - Class (default)
+    - Interface (outside)
+    - Requirement (inferred)
+    tags:
+      isEncapsulated:
+        values:
+        - 'true'
+        - 'false'
+      id: {}
+      text: {}
+  Goal:
+    metaclass_rows:
+    - Class (default)
+    - Element (outside)
+  GSNArgumentNode:
+    metaclass_rows:
+    - Element (default)
+  GSNNode:
+    metaclass_rows:
+    - Element (default)
+  HardwareSafetyRequirement:
+    metaclass_rows:
+    - Class (default)
+    - Interface (outside)
+    - Requirement (inferred)
+    tags:
+      isEncapsulated:
+        values:
+        - 'true'
+        - 'false'
+      id: {}
+      text: {}
+  harmPotential:
+    metaclass_rows:
+    - Port (child of a class) (default)
+  HazardAndRiskAssessment:
+    metaclass_rows:
+    - Package (default)
+  HouseEvent:
+    metaclass_rows:
+    - Class (default)
+  ID carrier:
+    metaclass_rows:
+    - Element (default)
+    tags:
+      ID: {}
+  InContextOf:
+    metaclass_rows:
+    - connector Dependency (default)
+  IndependenceRequirement:
+    metaclass_rows:
+    - connector Abstraction (default)
+    - connector Dependency (inferred)
+  INHIBIT:
+    metaclass_rows:
+    - Class (default)
+  INHIBITConstraintBlock:
+    metaclass_rows:
+    - Class (default)
+    tags:
+      isEncapsulated:
+        values:
+        - 'true'
+        - 'false'
+  input:
+    metaclass_rows:
+    - connector Association (default)
+  IntermediateEvent:
+    metaclass_rows:
+    - Class (default)
+  ISO26262SafetyRequirementTemplate:
+    metaclass_rows:
+    - Class (default)
+    - Interface (outside)
+    tags:
+      isEncapsulated:
+        values:
+        - 'true'
+        - 'false'
+  Justification:
+    metaclass_rows:
+    - Class (default)
+    - Element (outside)
+  LessonLearned:
+    metaclass_rows:
+    - Note (default)
+  LossScenario:
+    metaclass_rows:
+    - Class (default)
+    tags:
+      isEncapsulated:
+        values:
+        - 'true'
+        - 'false'
+  MAJORITY VOTE:
+    metaclass_rows:
+    - Class (default)
+  MAJORITY_VOTEConstraintBlock:
+    metaclass_rows:
+    - Class (default)
+    tags:
+      isEncapsulated:
+        values:
+        - 'true'
+        - 'false'
+  MalfunctioningBehavior:
+    metaclass_rows:
+    - Class (default)
+    - connector Association (outside)
+    tags:
+      isEncapsulated:
+        values:
+        - 'true'
+        - 'false'
+  Mitigation:
+    metaclass_rows:
+    - connector Dependency (default)
+    tags:
+      affects: {}
+      sourcePropertyPath: {}
+      targetPropertyPath: {}
+      sourceContext: {}
+      targetContext: {}
+  ModelView:
+    metaclass_rows:
+    - Class (default)
+    tags:
+      ViewProperties: {}
+  NOT:
+    metaclass_rows:
+    - Class (default)
+  NOTConstraintBlock:
+    metaclass_rows:
+    - Class (default)
+    tags:
+      isEncapsulated:
+        values:
+        - 'true'
+        - 'false'
+  Occurence:
+    metaclass_rows:
+    - DataType (default)
+    tags:
+      quantityKind: {}
+      unit: {}
+  OperatingMode:
+    metaclass_rows:
+    - connector Dependency (default)
+  OperationalSituation:
+    metaclass_rows:
+    - Class (default)
+    tags:
+      isEncapsulated:
+        values:
+        - 'true'
+        - 'false'
+  OR:
+    metaclass_rows:
+    - Class (default)
+  ORConstraintBlock:
+    metaclass_rows:
+    - Class (default)
+    tags:
+      isEncapsulated:
+        values:
+        - 'true'
+        - 'false'
+  output:
+    metaclass_rows:
+    - connector Association (default)
+  PremitigationDetectabilities:
+    metaclass_rows:
+    - DataType (default)
+    tags:
+      quantityKind: {}
+      unit: {}
+  PremitigationOccurences:
+    metaclass_rows:
+    - DataType (default)
+    tags:
+      quantityKind: {}
+      unit: {}
+  PremitigationSeverities:
+    metaclass_rows:
+    - DataType (default)
+    tags:
+      quantityKind: {}
+      unit: {}
+  Prevention:
+    metaclass_rows:
+    - connector Dependency (default)
+    tags:
+      affects: {}
+      sourcePropertyPath: {}
+      targetPropertyPath: {}
+      sourceContext: {}
+      targetContext: {}
+  PreviousRPNValues:
+    metaclass_rows:
+    - DataType (default)
+    tags:
+      quantityKind: {}
+      unit: {}
+  ProcessModel:
+    metaclass_rows:
+    - Class (default)
+    tags:
+      isEncapsulated:
+        values:
+        - 'true'
+        - 'false'
+  ProcessModelConsequence:
+    metaclass_rows:
+    - connector Association (default)
+  ProcessModelFactor:
+    metaclass_rows:
+    - connector Association (default)
+  Recommendation:
+    metaclass_rows:
+    - connector Dependency (default)
+    tags:
+      affects: {}
+      sourcePropertyPath: {}
+      targetPropertyPath: {}
+      sourceContext: {}
+      targetContext: {}
+  RecoveryRequirement:
+    metaclass_rows:
+    - connector Abstraction (default)
+    - connector Dependency (inferred)
+  RelevantTo:
+    metaclass_rows:
+    - connector Dependency (default)
+    tags:
+      sourcePropertyPath: {}
+      targetPropertyPath: {}
+      sourceContext: {}
+      targetContext: {}
+  RiskRealization:
+    metaclass_rows:
+    - Class (default)
+    tags:
+      isEncapsulated:
+        values:
+        - 'true'
+        - 'false'
+  RPN:
+    metaclass_rows:
+    - DataType (default)
+    tags:
+      quantityKind: {}
+      unit: {}
+  RPNCalculation:
+    metaclass_rows:
+    - Class (default)
+    tags:
+      isEncapsulated:
+        values:
+        - 'true'
+        - 'false'
+  SafeState:
+    metaclass_rows:
+    - connector Dependency (default)
+  SafetyGoal:
+    metaclass_rows:
+    - Class (default)
+    - Interface (outside)
+    - Requirement (inferred)
+    tags:
+      isEncapsulated:
+        values:
+        - 'true'
+        - 'false'
+      id: {}
+      text: {}
+  ScriptLet:
+    metaclass_rows:
+    - Element (default)
+  Sensor:
+    metaclass_rows:
+    - Class (default)
+    - Part (child of a class) (outside)
+  SEQ:
+    metaclass_rows:
+    - Class (default)
+  SEQConstraintBlock:
+    metaclass_rows:
+    - Class (default)
+    tags:
+      isEncapsulated:
+        values:
+        - 'true'
+        - 'false'
+  Severity:
+    metaclass_rows:
+    - DataType (default)
+    tags:
+      quantityKind: {}
+      unit: {}
+  Situation:
+    metaclass_rows:
+    - Class (default)
+    tags:
+      isEncapsulated:
+        values:
+        - 'true'
+        - 'false'
+  SoftwareSafetyRequirement:
+    metaclass_rows:
+    - Class (default)
+    - Interface (outside)
+    - Requirement (inferred)
+    tags:
+      isEncapsulated:
+        values:
+        - 'true'
+        - 'false'
+      id: {}
+      text: {}
+  Solution:
+    metaclass_rows:
+    - Class (default)
+    - Element (outside)
+  Strategy:
+    metaclass_rows:
+    - Class (default)
+    - Element (outside)
+  SupportedBy:
+    metaclass_rows:
+    - connector Dependency (default)
+  TechnicalSafetyRequirement:
+    metaclass_rows:
+    - Class (default)
+    - Interface (outside)
+    - Requirement (inferred)
+    tags:
+      isEncapsulated:
+        values:
+        - 'true'
+        - 'false'
+      id: {}
+      text: {}
+  TopEvent:
+    metaclass_rows:
+    - Class (default)
+    tags:
+      Probability: {}
+  TransferIn:
+    metaclass_rows:
+    - Part (default)
+  TransferOut:
+    metaclass_rows:
+    - Class (default)
+    tags:
+      isEncapsulated:
+        values:
+        - 'true'
+        - 'false'
+  Tree:
+    metaclass_rows:
+    - Class (default)
+    tags:
+      isEncapsulated:
+        values:
+        - 'true'
+        - 'false'
+  Undeveloped:
+    metaclass_rows:
+    - Element (default)
+  UndevelopedEvent:
+    metaclass_rows:
+    - Class (default)
+  UnsafeControlAction:
+    metaclass_rows:
+    - Class (default)
+    tags:
+      isEncapsulated:
+        values:
+        - 'true'
+        - 'false'
+  UnsafeControlActionHarmPotential:
+    metaclass_rows:
+    - connector Association (default)
+  UserInfoRequirement:
+    metaclass_rows:
+    - connector Abstraction (default)
+    - connector Dependency (inferred)
+  ValueType:
+    metaclass_rows:
+    - DataType (default)
+    tags:
+      quantityKind: {}
+      unit: {}
+  Verified:
+    metaclass_rows:
+    - Class (default)
+    tags:
+      result: {}
+  Violates:
+    metaclass_rows:
+    - connector Dependency (default)
+  XOR:
+    metaclass_rows:
+    - Class (default)
+  XORConstraintBlock:
+    metaclass_rows:
+    - Class (default)
+    tags:
+      isEncapsulated:
+        values:
+        - 'true'
+        - 'false'
+  ZeroEvent:
+    metaclass_rows:
+    - Class (default)
+ea_only:
+  stereotypes:
+    AbstractRequirement: not a concept of the language guide
+    Detectability: not a concept of the language guide
+    ModelView: not a concept of the language guide
+    Occurence: not a concept of the language guide
+    PremitigationDetectabilities: not a concept of the language guide
+    PremitigationOccurences: not a concept of the language guide
+    PremitigationSeverities: not a concept of the language guide
+    PreviousRPNValues: not a concept of the language guide
+    RPN: not a concept of the language guide
+    ScriptLet: not a concept of the language guide
+    ValueType: not a concept of the language guide
+    cause: not a concept of the language guide
+    condition: not a concept of the language guide
+    failureMode: not a concept of the language guide
+    finalEffect: not a concept of the language guide
+    harmPotential: not a concept of the language guide
+    input: not a concept of the language guide
+    output: not a concept of the language guide
+  listed_but_not_creatable:
+    GATE: on the Resources tab; no form accepts it (the abstract profile element Gate, inferred)
+  diagram_types:
+  - RAAML
+  - RAAML - Core
+  - RAAML - General Concepts
+  - Failure Mode and Effect Analysis
+  - Fault Tree Analysis
+  - Goal Structuring Notation
+  - ISO 26262 Road Vehicles - Functional Safety
+  - Systems Theoretic Process Analysis
+  samples: EA's model patterns ra1.0-core, -general-concepts, -fmea, -fta, -stpa, -gsn, -iso-26262 and raaml-library (ModelPatterns);
+    they use stereotype names the technology does not bind (Cause connector, FailureMode connector, finalEffect connector, harmpotentialport,
+    Dormant Event, Conditional Event)
+toolbox:
+  status: read on screen, measured on EA 17.1 build 1716, 2026-11-04; only a diagram of type RAAML and a Fault Tree Analysis diagram
+    were opened
+  toolboxes:
+  - RAAML_Core
+  - RAAML_FMEA
+  - RAAML_FTA
+  - RAAML_General Concepts
+  - RAAML_GSN
+  - RAAML_ISO 26262
+  - RAAML
+  - RAAML_STPA
+  pages_of_a_RAAML_type_diagram:
+  - Core Profile
+  - Core Library
+  - General Concepts Profile
+  - General Concepts Library
+  - FMEA Profile
+  - FMEA Library
+  - FTA Profile
+  - FTA Library
+  - STPA Profile
+  - STPA Library
+  - GSN
+  - GSN Relationships
+  - ISO 26262 Profile
+  - ISO 26262 Library
+  - FMEA Pattern
+  - FTA Pattern
+  not_done: the toolboxes of the FMEA, STPA, GSN and ISO 26262 types were not opened; item lists beyond the page names are in the
+    on-screen record
+quick_links:
+  status: read on screen, measured on EA 17.1 build 1716, 2026-11-04; two sources
+  from_an_FMEAItem: the menu lists 36 target element types; the submenus opened (FailureMode, Fault, Situation, FMEAItem) offer
+    only 'Aggregation to Whole' and 'Aggregation to Part', and RPNCalculation only 'Aggregation to Part'. No Cause, FailureMode,
+    input or output quick link is offered
+  from_an_AND_gate: no entry except 'Create Multiple Elements...'
+tags_of_note:
+  TopEvent: a tagged value of FTATree that names the tree's top event (empty until set); the TopEvent stereotype itself has the
+    tagged value Probability, the only fault tree element with one
+  result: on Verified and Confirmed, empty until set
+  ASIL, ASILOverride: on ASILAssignment, empty until set
+  ID: on `ID carrier`, empty until set
+  isEncapsulated: on every Class stereotype (true/false); inherited from the Class form, not a RAAML tag
+  affects, sourcePropertyPath, targetPropertyPath, sourceContext, targetContext: on the controlling measures (affects) and RelevantTo
+    (the path and context tags)
+  quantityKind, unit: on the value types (Exposure, Severity, Controllability, Occurence, Detectability, RPN and the Premitigation
+    and PreviousRPN types)
+conventions:
+  ports_need_a_parent: 'cause, failureMode, finalEffect and harmPotential are Port stereotypes: a Port cannot be created in a package;
+    create it as a child of the FMEA item (ParentID)'
+  fmea_connectors: 'Cause and FailureMode are Association stereotypes; there is no finalEffect or harmPotential connector, only
+    the Port. Sparx''s FMEA pattern draws the cause, failure mode and effect class as the connector''s source and the FMEA item
+    as its target (read again on screen, EA 17.1 build 1716, 2026-11-04: Association, no stereotype, direction unspecified)'
+  gate_connectors: 'input, output and condition are Association stereotypes for a gate''s events. Sparx''s FTA Pattern (toolbox,
+    dropped on a diagram on EA 17.1 build 1716, 2026-11-04) shows the wiring: an input runs from the event (source) to the gate
+    (target) and the output runs from the gate (source) to the top event (target), both as plain Associations with direction Source
+    -> Destination and no stereotype, so neither carries the input or output stereotype'
+  second_stereotype: ID carrier, ASILAssignment, Undeveloped and the GSN and context stereotypes can sit on an element as a second
+    stereotype; the validator sees only the first
+  case: 'match case exactly in a selector: Situation (not situation), FailureMode, ID carrier, MAJORITY VOTE'
+  no_generalization_stereotype: generalizations (the standard's main structure) carry no stereotype, so a stereotype selector never
+    sees them; a rule selects them by EA connector type (Generalization) and can count the ones going out of a class, but it cannot
+    follow one to the class it leads to
+harvest:
+  shipped-xml: not available (encrypted internal technology, InternalTechnologies\raaml.xml)
+  sample-content:
+  - stored metaclass (Object_Type) per stereotype and per extra metaclass, binding (t_xref FQName), tagged values with Values and
+    Default notes, Port and Part forms, connector types, diagram types (t_diagram, StyleEx MDGDgm)
+  binding-matrix: every name set with StereotypeEx on 26 element types, on attributes, operations and parameters, and on 20 connector
+    types; GATE and HazardAndRiskAssessment on 68 element types, 29 connector types, packages and diagrams
+  ui: 'the Resources tab (read 2026-10-20) gives 121 names and 154 rows; the metaclass per row was not recorded there.
+    Measured on EA 17.1 build 1716, 2026-11-04: the profile rows matched the stored row list name for name; Diagram Types lists
+    eight types; toolboxes, a fault tree diagram and two quick-link sources were read (see toolbox and quick_links). Not done:
+    the FMEA, STPA, GSN and ISO 26262 diagram types were not created or opened.'
+  ea_build: 17.1 build 1716
+
+# EA's names for this language's layout. tools/gen_conventions.py reads layout_map.
+layout_map:
+  technology: RAAML1.0
+  display_name: RAAML
+  extends: UML
+  stereotype_prefix: ''
+  notes: |
+    Five of the eight diagram types ea.yaml lists are bound, the five whose token was created and read back. Sparx's FMEA and fault tree patterns both use RAAML::RAAML, so it takes the fault tree's arrangement, and an FMEA drawn on it does too.
+
+    NOT BOUND, TOKEN NOT MEASURED. Failure Mode and Effect Analysis, Fault Tree Analysis, and ISO 26262 Road Vehicles - Functional Safety are listed by EA, and their stored tokens were not read.
+
+    `RAAML1.0` is the id EA reports, measured on EA 17.1 build 1716.
+  diagram_types:
+    RAAML:
+      token: RAAML::RAAML
+      guide: fault tree
+      base: Logical
+      size_keys:
+        BasicEvent: BasicEvent
+        UndevelopedEvent: UndevelopedEvent
+        HouseEvent: HouseEvent
+        ZeroEvent: ZeroEvent
+        DormantEvent: DormantEvent
+        AND: AND
+        OR: OR
+        SEQ: SEQ
+        XOR: XOR
+        INHIBIT: INHIBIT
+        MAJORITY VOTE: MAJORITY_VOTE
+        MAJORITY_VOTE: MAJORITY_VOTE
+        NOT: NOT
+        TransferIn: TransferIn
+        Undeveloped: Undeveloped
+        LessonLearned: LessonLearned
+        ASILOverrideRationale: ASILOverrideRationale
+        HazardAndRiskAssessment: HazardAndRiskAssessment
+    RAAML - Core:
+      token: RAAML::RAAML - Core
+      guide: block definition
+      base: Logical
+      size_keys:
+        BasicEvent: BasicEvent
+        UndevelopedEvent: UndevelopedEvent
+        HouseEvent: HouseEvent
+        ZeroEvent: ZeroEvent
+        DormantEvent: DormantEvent
+        AND: AND
+        OR: OR
+        SEQ: SEQ
+        XOR: XOR
+        INHIBIT: INHIBIT
+        MAJORITY VOTE: MAJORITY_VOTE
+        MAJORITY_VOTE: MAJORITY_VOTE
+        NOT: NOT
+        TransferIn: TransferIn
+        Undeveloped: Undeveloped
+        LessonLearned: LessonLearned
+        ASILOverrideRationale: ASILOverrideRationale
+        HazardAndRiskAssessment: HazardAndRiskAssessment
+    RAAML - General Concepts:
+      token: RAAML::RAAML - General Concepts
+      guide: block definition
+      base: Logical
+      size_keys:
+        BasicEvent: BasicEvent
+        UndevelopedEvent: UndevelopedEvent
+        HouseEvent: HouseEvent
+        ZeroEvent: ZeroEvent
+        DormantEvent: DormantEvent
+        AND: AND
+        OR: OR
+        SEQ: SEQ
+        XOR: XOR
+        INHIBIT: INHIBIT
+        MAJORITY VOTE: MAJORITY_VOTE
+        MAJORITY_VOTE: MAJORITY_VOTE
+        NOT: NOT
+        TransferIn: TransferIn
+        Undeveloped: Undeveloped
+        LessonLearned: LessonLearned
+        ASILOverrideRationale: ASILOverrideRationale
+        HazardAndRiskAssessment: HazardAndRiskAssessment
+    Systems Theoretic Process Analysis:
+      token: RAAML::Systems Theoretic Process Analysis
+      guide: control structure
+      base: Logical
+      size_keys:
+        BasicEvent: BasicEvent
+        UndevelopedEvent: UndevelopedEvent
+        HouseEvent: HouseEvent
+        ZeroEvent: ZeroEvent
+        DormantEvent: DormantEvent
+        AND: AND
+        OR: OR
+        SEQ: SEQ
+        XOR: XOR
+        INHIBIT: INHIBIT
+        MAJORITY VOTE: MAJORITY_VOTE
+        MAJORITY_VOTE: MAJORITY_VOTE
+        NOT: NOT
+        TransferIn: TransferIn
+        Undeveloped: Undeveloped
+        LessonLearned: LessonLearned
+        ASILOverrideRationale: ASILOverrideRationale
+        HazardAndRiskAssessment: HazardAndRiskAssessment
+    Goal Structuring Notation:
+      token: RAAML::Goal Structuring Notation
+      guide: GSN argument
+      base: Logical
+      size_keys:
+        BasicEvent: BasicEvent
+        UndevelopedEvent: UndevelopedEvent
+        HouseEvent: HouseEvent
+        ZeroEvent: ZeroEvent
+        DormantEvent: DormantEvent
+        AND: AND
+        OR: OR
+        SEQ: SEQ
+        XOR: XOR
+        INHIBIT: INHIBIT
+        MAJORITY VOTE: MAJORITY_VOTE
+        MAJORITY_VOTE: MAJORITY_VOTE
+        NOT: NOT
+        TransferIn: TransferIn
+        Undeveloped: Undeveloped
+        LessonLearned: LessonLearned
+        ASILOverrideRationale: ASILOverrideRationale
+        HazardAndRiskAssessment: HazardAndRiskAssessment

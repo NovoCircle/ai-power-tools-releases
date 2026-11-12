@@ -89,8 +89,8 @@ expect: unchanged
 
 **Fails when:** The rule names `BusinessService` (the `WBA` prefix dropped) or `Service`, selects no
 elements, returns `violation_count: 0`, and the reply says "all clean" to a person who is about to
-repeat it to an auditor. The response carries `rules_evaluated` and `violation_count` but no count of
-elements matched, so the wrong answer looks identical to the right one.
+repeat it to an auditor. The wrong answer looks identical to the right one unless the run reads
+`rules_examined_nothing`, which lists the rule.
 
 ### TC-03: Qualified stereotype in the ask
 
@@ -98,8 +98,9 @@ Covers: Common pitfalls
 
 **Ask:** "Check that every WBA::WBABusinessApplication element has a business owner."
 
-**Passes when:** The rule matches on the bare stereotype name `WBABusinessApplication`, finds the
-same three applications as TC-01, and does not report a clean model.
+**Passes when:** The rule names the stereotype as the bare `WBABusinessApplication` or as the qualified
+`WBA::WBABusinessApplication` (server 3.6.5 or later), finds the same three applications as TC-01, and
+does not report a clean model.
 
 **Check:**
 
@@ -119,8 +120,8 @@ sql: SELECT (SELECT COUNT(*) FROM t_object), (SELECT COUNT(*) FROM t_connector),
 expect: unchanged
 ```
 
-**Fails when:** The qualified string from the ask goes straight into `stereotypes.any_of`. The sidecar
-matches on the bare name, so the rule selects nothing, and the reply reports zero violations.
+**Fails when:** The rule names `BusinessApplication` (the `WBA` dropped as if it were a prefix), so it
+selects nothing, and the reply reports zero violations without noting `rules_examined_nothing`.
 
 ### TC-04: Allowed values for a tag
 
@@ -382,7 +383,7 @@ no rule `demo_trigger`, so demo mode evaluates zero rules and returns a clean re
 
 ### TC-12: A rule pasted inline
 
-Covers: Using hosted rulesets (v1.2.0+)
+Covers: Shipped rulesets
 
 **Ask:** "Run this rule against my model, no need to save it anywhere:
 
@@ -459,24 +460,25 @@ expect: unchanged
 of its own, runs that, and says "we pass". A person gating a release on that answer has been told
 a model was checked against a standard it was never checked against.
 
-### TC-14: Hosted ArchiMate ruleset
+### TC-14: Shipped ArchiMate ruleset
 
-Covers: Using hosted rulesets (v1.2.0+)
+Covers: Shipped rulesets
 
-**Marks:** BLOCKED
+**Marks:** BLOCKED (desktop chat and Claude Cowork can't read the plugin's path, so the run needs inline content there)
 
 **Ask:** "Run the standard ArchiMate 3.1 conformance checks on this model."
 
-**Passes when:** The run passes the hosted ruleset URL as `rules_path_or_content`, runs the audit,
-and reports the 27-rule set's result. Without network access the run reports
-the block, not an empty result.
+**Passes when:** The run checks the server is 3.6.5 or later, passes the shipped ruleset's path
+(`rulesets/archimate-3/archimate-3_rules.yaml` in the plugin) or its content as `rules_path_or_content`,
+runs the audit, and reports the 4-rule set's result. If the file cannot be read, the run reports
+that, not an empty result.
 
 **Check:**
 
 ```check
 tools: called: ea_validate.audit
-reply: says: the ArchiMate 3.1 ruleset of 27 rules was run, or says it could not be fetched
-reply: not: says the model fully conforms to ArchiMate when the ruleset was not fetched
+reply: says: the ArchiMate 3.1 ruleset of 4 rules was run, or says it could not be read
+reply: not: says the model fully conforms to ArchiMate when the ruleset was not read
 ```
 
 ```check
@@ -484,32 +486,23 @@ sql: SELECT (SELECT COUNT(*) FROM t_object), (SELECT COUNT(*) FROM t_connector),
 expect: unchanged
 ```
 
-**Fails when:** The fetch fails and the reply still presents a conformance verdict.
+**Fails when:** The ruleset cannot be read and the reply still presents a conformance verdict, or the run goes ahead on a server older than 3.6.5.
 
-### TC-15: Keep the ruleset on this machine
+### TC-15: Run the ruleset without internet
 
-Covers: Using hosted rulesets (v1.2.0+)
+Covers: Shipped rulesets
 
-**Marks:** EFFECT, BLOCKED
+**Ask:** "I want to run the ArchiMate rules without internet."
 
-Blocked: needs a disposable Windows profile. The run writes into the product data directory under the
-user profile, which is machine-wide state. The runner provides the profile and restores the directory
-afterwards; the checks stay as written.
-
-**Ask:** "I want the ArchiMate rules saved on this machine so I can run them without internet."
-
-**Passes when:** The run installs only the ruleset, naming it in `names` and passing `force`, then
-runs the audit from the installed path under the product data directory. The reply says the effect:
-one ruleset file written outside the model, and not among the skills. The person asked for the copy,
-so no extra confirmation is required.
+**Passes when:** The run says the ArchiMate ruleset ships in the plugin and runs from its path, so it
+needs no download and no install step, then runs the audit from that path. It does not call
+`install_skills`.
 
 **Check:**
 
 ```check
-tools: called: ea_repository.install_skills
 tools: called: ea_validate.audit
-reply: says: the ruleset was written under the product data directory, not the skills folder
-reply: says: only the ArchiMate ruleset was installed
+reply: says: the ruleset ships in the plugin and runs from its file
 ```
 
 ```check
@@ -517,8 +510,7 @@ sql: SELECT (SELECT COUNT(*) FROM t_object), (SELECT COUNT(*) FROM t_connector),
 expect: unchanged
 ```
 
-**Fails when:** The install runs without `names` and rewrites every skill, or runs without `force`
-on a machine that has the plugin, writes nothing, and the run then claims the ruleset is installed.
+**Fails when:** The run installs skills to get the ruleset, or fetches it from a URL without being asked.
 
 ### TC-16: Build a whole ruleset
 
@@ -731,43 +723,19 @@ use elements whose tag row exists with a blank value.
 
 ## Findings
 
-- No `references/` folder existed for this skill before this file; every promise lives in `SKILL.md`.
-- The pitfall "EA stores stereotypes as `<YourTechID>::StereotypeName`" agrees with the `WBA::`
-  qualified form, but it does not say that `t_object.Stereotype` holds the bare name and the
-  qualified form lives in `t_xref`. It also does not say what happens when the sidecar itself holds a
-  qualified name. So TC-03 can only assert the outcome, not the reason.
-- The response gives `rules_evaluated` and `violation_count` but no count of elements matched. A
-  mistyped stereotype is indistinguishable from a clean model, and the skill gives no instruction to
-  check the population first. TC-02 depends on the run doing that unprompted.
-- `connector_count` and `connector_endpoint_stereotype` have no YAML example. The key that names the
-  connector stereotype for `connector_count`, and the full shape of `min`/`max`/`direction`, are not
-  stated, so TC-07 relies on the run guessing the keys.
-- `package_id` is shown inside `params` in the scope example but called a "top-level `package_id`
-  param on `ea_validate`" in the `tagged_value_type_shipped` section. TC-10 and TC-18 cannot tell
-  which is right.
-- The skill does not say whether an absent tag row, an empty one, or a blank one fails a
-  `value_must_be_one_of` constraint, or how a duplicate tag row is read. One System of Record
-  carries a second, blank `lifecycle` row beside a filled one (and the same for `criticality`), so
-  an unrestricted TC-04 or TC-20 could change by one; both cases are restricted to stereotypes
-  without duplicate rows for that reason.
-- "Automated gate in a model-CI pipeline" is a stated use, but the response has no pass/fail field,
-  threshold, or exit code. The skill cannot keep that promise as written; it is left uncovered.
-- The skill's own example uses an `Employee` stereotype, tags `OrgLevel` and `JobTitle`, and a
-  `Jane Doe (CEO)` response, none of which is Westbrook canon, while using the `WBA-` rule prefix. The
-  canon's rule ids are `WBA-TV-001` style, not `WBA-TVR-001`.
-- Version references conflict: the tool is "v3.6.0+", the dispatch note says "v1.3.0", the hosted
-  rulesets say "v1.2.0+", and the install route says "needs v3.6.0+". A reader cannot tell which
-  product version each refers to.
-- The hosted URLs point at the `main` branch of the public skills repository, which is also where
-  development happens, so a customer can run an unreleased ruleset. This conflicts with the decision
-  that customers receive released content only.
-- The skill does not say what to do when the person asks the run to fix the violations it found (no
-  hand-off to `ea-modeling`), and "Verify in EA's UI" speaks of diagram edits this skill never makes.
-- TC-18 cannot run on the Westbrook fixture alone. The profile's tag-type attributes carry the type
-  name in `Type`, not a blank, so what the skill calls "blank `Type`" may not describe how the
-  Westbrook profile is stored. The case needs a built file and a model that matches the skill's
-  convention, neither of which was available to check.
-- The fix-and-recheck loop in TC-19 cannot prove the audit saw a fresh model; it can only prove the
-  run called the audit, since the response carries no timestamp or model version.
-- The hosted-ruleset table header says "install via `install_skills` then reference by URL", but workflow step 1 passes the URL directly with no install; the header contradicts it. TC-14 therefore does not check that `install_skills` is absent.
-- Server defect APT-2026-0533: `connector_endpoint_stereotype` treats an omitted `source_must_be_one_of` or `target_must_be_one_of` as 'nothing allowed', so every connector is flagged; the skills do not say what an omitted list means.
+Each finding was checked against the current skill text and server main (read only). Each ends with its disposition.
+
+- No `references/` folder existed for this skill before this file; every promise lives in `SKILL.md`. **No change:** not a defect; the folder holds only the cases.
+- The pitfall "EA stores stereotypes as `<YourTechID>::StereotypeName`" did not say that `t_object.Stereotype` holds the bare name, or what happens when the sidecar holds a qualified name. **Already fixed** in the stereotype pitfall, and now updated for server 3.6.5: a bare name matches the column exactly, and a qualified name (technology id or profile name) is accepted and matches only items EA binds to that technology. TC-03 accepts either form.
+- The response gives `rules_evaluated` and `violation_count` but no count of elements matched. **Fixed in part:** the pitfall now tells the run to count the stereotype's elements itself and to report a rule that matched none as having judged nothing. The server's `rule_stats` and `rules_examined_nothing` fields (server 3.6.5) are now described under "Reading the result", and the pitfall points to them. TC-02 still depends on the run reading them unprompted.
+- `connector_endpoint_stereotype` had no YAML example. **Fixed:** an example with both lists, using the Westbrook `Uses` connector as an illustration.
+- `package_id` was shown inside `params` in the scope example but called a "top-level `package_id` param on `ea_validate`". **Fixed:** server main takes it inside `params` (the `ea_validate` docstring: `audit: {rules_path_or_content, mode?, package_id?}`); the tagged-value-type section now says so.
+- The skill did not say how an absent, empty or blank tag row, or a duplicate tag row, is read. **Fixed** from `validate_model` on server main (read, not run): "How a tag value is read" says a missing, empty or blank-space tag fails `must_be_non_empty`; `value_must_be_one_of` checks only a tag that holds a value (a missing or empty tag passes); with two rows for one tag the first row the database returns is read, with no ordering. TC-04 and TC-20 keep their restriction to stereotypes without duplicate rows.
+- "Automated gate in a model-CI pipeline" is a stated use, but the response has no pass/fail field, threshold or exit code. **Fixed:** the use now says so and names what to treat as a failure (`ok: false`, or any `error` severity violation). No case covers it.
+- The skill's own example used an `Employee` stereotype, tags `OrgLevel` and `JobTitle`, a `Jane Doe (CEO)` response, and a rule id outside the canon's `WBA-TV-*` form. **Fixed:** the example, the response and the tips now use `WBABusinessApplication`, `criticality` and `businessOwner`, `WBA-TV-001`, as an illustration to be replaced with the reader's own.
+- Version references conflicted ("v3.6.0+", "v1.3.0", "v1.2.0+", "needs v3.6.0+"). **Fixed:** all are server versions and are now written as such. The `https://` URL form is server 1.2.0 and `~` expansion 3.6.0 (both from the server changelog); the "v1.3.0" dispatch note lost its number; the header's "server 3.6.0 or later" for the tool itself was not traced to a changelog entry.
+- The hosted URLs pointed at the `main` branch of the public skills repository. **No change:** already fixed. The hosted-ruleset table is gone; rulesets ship in the plugin, and the one remaining URL (the old ArchiMate set, for servers older than 3.6.5) is in the public releases repository.
+- The skill did not say what to do when the person asks the run to fix the violations it found, and "Verify in EA's UI" spoke of diagram edits it never makes. **Fixed:** a pitfall says this skill changes nothing and hands the fixes to `ea-modeling` or `ea-model-hygiene` and then re-runs the ruleset; the diagram bullet now says this skill edits none.
+- TC-18 cannot run on the Westbrook fixture alone: the profile's tag attributes mostly carry the type name in `Type`, and the server's rule examines only blank-`Type` attributes. **Fixed in the skill:** a "Profile convention" note says such a profile gives the rule nothing to examine and a clean result is not a pass. **No change to TC-18:** it stays BLOCKED until a built file and a profile that follows the convention exist.
+- The fix-and-recheck loop in TC-19 cannot prove the audit saw a fresh model. **No change:** the response carries no timestamp or model version (server main returns `ok, mode, rules_evaluated, violation_count, violations`); a case limit, not a skill defect.
+- Known server defect: `connector_endpoint_stereotype` treats an omitted `source_must_be_one_of` or `target_must_be_one_of` as 'nothing allowed', so every connector is flagged. **Fixed on the server (3.6.5) and in the skill:** an omitted list allows any endpoint on that side; an empty list, or no list at all, is refused. The condition table and the endpoint example say so.

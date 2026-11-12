@@ -1,9 +1,17 @@
 # Coverage data -- full worked numbers
 
-All numbers on this page were measured against the live Westbrook Bank demo model on
-2026-09-23 using the operations named. They are not illustrative placeholders -- if you
-re-run the same calls against a changed model, expect different numbers and prefer the
-live ones over this page.
+All numbers on this page come from one snapshot of the Westbrook Bank example, taken on
+2026-09-23 with the operations named. The example has changed since, so its current counts
+differ, and your repository's counts will differ more. The numbers show the shape of an
+answer and how to work one out; never quote one as a fact about a model. Run the same calls
+and use what they return.
+
+For comparison, one later measurement on an unmodified copy of the example (read-only SQL, one
+run): 46 business applications by primary stereotype, or 47 if the one element that carries a
+second Business Application stereotype is counted. Of the 46, 14 have the exact `regulatoryScope`
+value `GLBA` and 29 have a value containing GLBA (30 of the 47). Eight of the 46 have a blank
+`regulatoryScope` or the text `None`. The sections below keep the 2026-09-23 figures (52
+applications, a GLBA count of 28), which no longer match the copy.
 
 Denominators come from:
 
@@ -118,7 +126,7 @@ Nothing in the response distinguishes the three.
 | Tag | Populated (non-blank) | Notes |
 |---|---|---|
 | `lifecycle` | 8 | Strategic on all 8 |
-| `businessOwner` | 0 | tag present on all 8, value `""` on all 8 |
+| `businessOwner` | 0 | tag present on all 8, value `""` on all 8 (a later copy stores no value at all; either is blank) |
 | `criticality` | 0 | tag present on all 8, value `""` on all 8 |
 | `dataClassification` | 0 | tag present on all 8, value `""` on all 8 |
 | `regulatoryScope` | 0 | tag present on all 8, value `""` on all 8 |
@@ -133,30 +141,32 @@ Both produce a roll-up that is technically well-formed and substantively empty.
 
 ---
 
-## `resolve_display_term` transcript
+## `resolve_display_term` results
 
-Run on 2026-10-08 against the 3.6.0 server source, with Westbrook's technology standing in
-for one a customer built, and no technology XML parsed in the session:
+From server 3.6.5 the lookup reads the technology EA has loaded, so with Westbrook's technology
+standing in for one a customer built, a stereotype or tag it declares comes back found. The
+shapes follow the server code; the alias and description values are whatever your technology
+declares, so run these on your own model before quoting them:
 
 ```
-ea_mdg(operation="resolve_display_term", params={"kind": "tagged_value", "technical_name": "criticality"})
--> {"technical_name": "criticality", "alias": "criticality", "description": "", "mdg_id": "", "kind": "tagged_value", "found": false}
-
 ea_mdg(operation="resolve_display_term", params={"kind": "stereotype", "technical_name": "WBABusinessApplication"})
--> {"technical_name": "WBABusinessApplication", "alias": "WBABusinessApplication", "description": "", "mdg_id": "", "kind": "stereotype", "found": false}
+-> {"technical_name": "WBABusinessApplication", "alias": "<the technology's alias>", "description": "", "mdg_id": "WBA", "kind": "stereotype", "found": true}
+
+ea_mdg(operation="resolve_display_term", params={"kind": "tagged_value", "technical_name": "criticality"})
+-> {"technical_name": "criticality", "alias": "Criticality", "description": "<the tag's description>", "mdg_id": "WBA", "kind": "tagged_value", "found": true}
 
 ea_mdg(operation="resolve_display_term", params={"kind": "stereotype", "technical_name": "ApplicationComponent"})
 -> {"technical_name": "ApplicationComponent", "alias": "Application", "description": "", "mdg_id": "ArchiMate3", "kind": "stereotype", "found": true}
 
 ea_mdg(operation="resolve_display_term", params={"kind": "tag", "technical_name": "criticality"})
--> {"technical_name": "criticality", "alias": "criticality", "description": "", "mdg_id": "", "kind": "tag", "found": false}
-   ("tag" is not a kind; it is accepted and comes back as a miss)
+-> {"ok": false, "error": "invalid_kind", "kind": "tag", "valid_kinds": ["stereotype", "tagged_value", "connector_stereotype", "diagram_type"]}
 ```
 
-Why: the lookup reads the server's own alias tables, which cover languages that ship with
-EA. It does not read the technology EA has loaded. `parse_mdg_xml` adds a parsed
-technology's stereotypes and their aliases to those tables for the rest of the session, after
-which its stereotypes resolve; nothing adds its tags, so they never resolve, whichever kind
-is passed.
+Why: the lookup reads the technology EA has loaded first (one read per technology per call),
+then the server's own alias tables, which cover languages that ship with EA, and only then falls
+back to the technical name with `found: false`. `parse_mdg_xml` still adds a parsed technology's
+stereotypes to those tables for the rest of the session. Before server 3.6.5 the lookup did not
+read the loaded technology: a customer's tags never resolved, and the two Westbrook terms above
+came back `found: false`.
 `get_element_business_view` and `aggregate_portfolio` label their output through the same
 lookup.

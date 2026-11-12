@@ -97,8 +97,9 @@ Covers: 2. What "impact analysis" can honestly mean here; Reference files
 **Ask:** A traversal that hits the depth cap. For example: "Trace what depends on Westbrook KYC
 Screening Gateway, two hops out."
 
-**Passes when:** Reports **"stopped at the cap — more exists beyond"**. The model holds further
-connected elements past the second hop, so the answer says the second hop is where it stopped.
+**Passes when:** Reports **"stopped at the cap — more may exist beyond"**. The model holds further
+connected elements past the second hop, so the answer says the second hop is where it stopped, and
+does not claim more than the cap shows.
 
 **Check:**
 
@@ -936,39 +937,62 @@ None. Every heading of `SKILL.md` is named by a `Covers:` line above.
 
 ## Findings
 
+Each finding was checked on 11 Nov 2026 against the skill text. Nothing here was run against
+Prolaborate. The line after each says what was done.
+
 - The traversal sketch in `references/traversal.md` sets `stoppedBy = 'depth cap'` whenever the
   last frontier is non-empty. That shows the last frontier was not expanded, not that more
   exists beyond it. TC-03's pass ("stopped at the cap — more exists beyond") can therefore
   overclaim; its check accepts "may exist beyond" so an honest run is not failed.
+  **Fixed. The reference now says the cap shows an unexpanded frontier and that more may exist; the
+  reporting table says "more may exist beyond"; TC-03's pass says the same.**
 - `SKILL.md` section 2 gives "61 elements, stopped at depth 3" as the model answer but never says a
   capped search's relationship total is a floor. Only `references/traversal.md` section 6 does
   ("at least N relationships"). TC-29 tests the reference's rule.
+  **Fixed. Section 2 now says the total is a floor, to say "at least N relationships" when a cap
+  stopped the search, and points at the reference.**
 - The old note under "The three that matter most" said section 8 of `SKILL.md` requires the
   identity to be reported alongside the result. Section 8 describes the limit; the reporting
   requirement is in `references/traversal.md` section 5 (the table's last row). The note's meaning
   is kept, with the pointer removed.
+  **No change: already fixed in an earlier round (the pointer was removed).**
 - Existing TC-20's pass names `stoppedBy` and `skippedByFilter`, which are variable names in the
   traversal sketch and appear nowhere in `SKILL.md`. The checks are written as statements about the
   reply (whether a cap stopped it, how many relationships a filter discarded).
+  **No change: not a defect. The names live in the reference's sketch, and the checks are already
+  written as statements about the reply.**
 - Existing TC-19 requires a re-read of the list to confirm the delete, and existing TC-18 requires
   that a partial graph is not reported as complete. `SKILL.md` states neither: section 9 says only
   "reload, re-read, retry once", and the list re-read comes from the shared session notes.
+  **Fixed. Section 3 now says to re-read the saved views list after deleting a view this session
+  created, and section 9 has a new line: a traversal that cannot finish is reported as partial,
+  with the missing hops named, and never as complete.**
 - `SKILL.md` does not document the response shape of `GET /api/diagrammer/GetAll`, so no check can
   assert that a named view exists or is absent. The `http` checks use `unchanged`, and TC-05,
   TC-19 and TC-31 rest on `reply` checks for the create and delete outcomes. A documented field
   would make TC-05's "no object named Analyzer View" a mechanical check.
+  **No change, pending a live check: call `GetAll` on a tenant with a saved view and record the
+  field that holds the view's name and its GUID. Then document it in section 7 and give TC-05 and
+  TC-19 an `http` check.**
 - The `tools` check cannot see a request body sent from the page, so TC-14 and TC-25 detect a
   forbidden `Create`, `Update` or `Delete` only by its effect on the list, which a failed call
   leaves unchanged. The runner design should say whether the network log is available.
+  **No change: a harness matter, not a skill defect.**
 - Loading a skill is not a tool call the `tools` check names, so TC-23's preflight promise can
   only be checked from the reply.
+  **No change: the grammar now names a skill load (`called: skill:prol-start-here`), so TC-23 can
+  add that check when one is wanted.**
 - The Westbrook model is too sparse to reproduce the measured growth (28 elements, 63
   relationships): its densest second hop adds five elements and six relationships. TC-08, TC-09
   and TC-10 check the behavior (read both counts, warn, filter or relayout), not a tangle.
+  **No change: a fixture limit, and the cases already check behavior.**
 - The model has no dependency cycle among its `WBA` elements, so TC-13 needs the runner to add
   two connectors, and `SKILL.md` section 8 says de-duplication was never confirmed on a cycle.
   TC-17 and TC-30 need a second, restricted account.
+  **No change: a fixture and runner limit. Section 8 already says plainly that cycles were not
+  encountered.**
 - Not made into cases because nothing checkable follows: that `GetElementsConnectors` is the
   efficient way to expand a frontier (a style, not an outcome); that `GetConnectedElementsList`
   carries an unknown rate limit (a caution with no instruction); and "if none of these explain it,
   say what you observed and stop", which needs a failure no listed cause explains.
+  **No change: these stay as they are, for the reason given.**

@@ -1,0 +1,407 @@
+# CMMN 1.1 Conformance Ruleset
+# Language:     Case Management Model and Notation 1.1 (OMG formal/16-12-01), as modeled with Sparx's built-in `CMMN` technology
+# Enforced by:  AI Power Tools for Sparx EA - validate_model tool
+# Generated from the language skill (language.yaml diagram_links); do not edit by hand.
+#
+# STEREOTYPE NAMES ARE UNQUALIFIED, AND THAT IS MEASURED.
+#
+# validate_model selects with `Stereotype IN (...)` on t_object and t_connector. For Sparx's CMMN technology those columns hold
+# the bare name (`HumanTask`, `EntryCriterion`, `Connector`); the qualified form `CMMN::HumanTask` is only in the t_xref row
+# named `Stereotypes` (FQName). Measured on EA 17.1 build 1716 by creating one element or connector per stereotype in a test
+# model and reading it back: 14 element stereotypes and 1 connector stereotype, all bound.
+#
+# WHAT EA STORES. A CMMN decorator or flag is a tagged value: IsRequired, IsRepetition, IsManualActivation, IsAutoComplete,
+# IsDiscretionary, IsBlocking (HumanTask only), IsExpanded, ShowLabel, each true or false. Entry criteria, exit criteria and
+# planning tables are Port elements that are children of the item they belong to (t_object.ParentID). EA has no stereotype
+# for DecisionTask, a generic EventListener, a DiscretionaryItem (a Stage or task with IsDiscretionary = true), a Sentry, a
+# case file, a role or any definition; the standard's connector and discretionary association are both `Connector`.
+#
+# WHERE AN ELEMENT SITS. The validator reads t_object.ParentID: `contained_in` checks the item a Port is a child of (its
+# container) and `contains_count` bounds the criteria and planning tables an item holds. That is how the rules below judge
+# which items may have an entry criterion, an exit criterion or a planning table. An element's container is the element it is
+# attached to, else its package; plan items in this technology are normally in the package and only drawn inside a stage, so
+# no rule here asks a task to sit in a stage.
+#
+# WHAT THE VALIDATOR CANNOT SEE. It cannot read an element's description, so it cannot see a condition; it cannot read a
+# connector's properties or the criterion a connector leaves; it cannot compare one connector's end with another element's host.
+# The rules.md ids that need those (which sentry holds an on-part, a repeating item's entry criterion, everything about
+# expressions, references and events) are not in this file.
+#
+# NON-BLOCKING. Only a HumanTask has the tag IsBlocking, and a new one defaults to false (non-blocking, drawn as a hand). The
+# two non-blocking rules (CMMN1-CRT-005, CMMN1-PLN-011) select a HumanTask whose IsBlocking is false, so they also report a
+# fresh human task that has been given an exit criterion or a planning table but not yet IsBlocking = true. The other task
+# stereotypes have no blocking flag, so a non-blocking process or case task cannot be seen.
+#
+# ONE CONNECTOR STEREOTYPE. EA's `Connector` draws the standard's connector (an on-part) and its discretionary association.
+# The link table therefore allows a pair when the standard allows it as either: criteria as targets for plan items, exit
+# criteria and case file items; tasks, stages and plan fragments as targets only for a human task.
+#
+# KNOWN EFFECT ON SPARX'S OWN PATTERNS. The three cm1.1 model patterns that ship with EA draw a few connectors that this table
+# refuses (a case file item to a human task, an entry criterion to an entry criterion, found in EA's own sample models). They are
+# reported, as the standard says they are not links CMMN allows.
+#
+# NAME COLLISIONS. `Stage`, `Task` and `Milestone` are also stereotype names in EA's Project Management technology (measured
+# from the plain-file MDG technologies shipped with EA 17.1; EA's encrypted built-in technologies were not searched). A model
+# that mixes the two has those elements judged too; confirm that a clean run also matched more than zero CMMN elements.
+#
+# Sources:
+#   [S1] OMG, Case Management Model and Notation (CMMN) Version 1.1, formal/16-12-01  https://www.omg.org/spec/CMMN/1.1/
+#   [S2] Sparx Systems, Enterprise Architect 17.1, built-in technology `CMMN` (Case Management Model && Notation), read back
+#        from elements and connectors created in a test model
+
+meta:
+  version: "0.2"
+  language: cmmn-1
+  organization: "(your organization)"
+  mdg_family: CMMN
+  description: >
+    Conformance rules for CMMN 1.1 models built with Sparx Enterprise Architect's CMMN technology: which elements a
+    connector may join (the standard's connector and discretionary association), that no connector touches a text
+    annotation, and which items may hold an entry criterion, an exit criterion or a planning table. Each rule names the
+    rules.md id it implements.
+  severity_levels:
+    error: A requirement of the standard (rules.md strength must)
+    warning: Guidance of the standard (rules.md strength should)
+    info: Advisory note; not a conformance violation
+
+tables:
+  cmmn-1-links:
+    source: "OMG CMMN 1.1 (formal/16-12-01) 6.11, 7.4.7, 7.5.3.1 to 7.5.3.3 and Tables 7.17 to 7.19, as language.yaml relationships.diagram_links, written in the stored stereotypes of Sparx's CMMN technology: a connector joins a plan item, an exit criterion or a case file item to an entry or exit criterion; a discretionary association joins a human task to a task, stage or plan fragment (EA stores both as Connector)"
+    connectors:
+      c: Connector
+    cells:
+      CasePlanModel: {}
+      CaseFileItem:
+        EntryCriterion: "c"
+        ExitCriterion: "c"
+      Stage:
+        EntryCriterion: "c"
+        ExitCriterion: "c"
+      PlanFragment: {}
+      Task:
+        EntryCriterion: "c"
+        ExitCriterion: "c"
+      HumanTask:
+        Stage: "c"
+        PlanFragment: "c"
+        Task: "c"
+        HumanTask: "c"
+        CaseTask: "c"
+        ProcessTask: "c"
+        EntryCriterion: "c"
+        ExitCriterion: "c"
+      CaseTask:
+        EntryCriterion: "c"
+        ExitCriterion: "c"
+      ProcessTask:
+        EntryCriterion: "c"
+        ExitCriterion: "c"
+      Milestone:
+        EntryCriterion: "c"
+        ExitCriterion: "c"
+      TimerEventListener:
+        EntryCriterion: "c"
+        ExitCriterion: "c"
+      UserEventListener:
+        EntryCriterion: "c"
+        ExitCriterion: "c"
+      EntryCriterion: {}
+      ExitCriterion:
+        EntryCriterion: "c"
+        ExitCriterion: "c"
+      PlanningTable: {}
+
+rules:
+  - id: CMMN1-REL-001
+    name: A connector joins CMMN elements, never an artifact
+    implements: CMMN-REL-001
+    description: >
+      A text annotation or an association is an artifact and is never the source or target of a connector or a discretionary
+      association (5.5, p. 56). EA stores both kinds of link as `Connector`, so this one rule covers CMMN-REL-001 and
+      CMMN-REL-002. A text annotation is a UML Note with no stereotype; any end of a `Connector` that is not one of the 14
+      CMMN element stereotypes is reported, which also reports an element of another technology. [OMG CMMN 1.1 5.5 p. 56]
+    category: relationship
+    severity: error
+    demo_trigger: false
+    coverage: partial
+    selector:
+      type: connector
+      connector_stereotype: Connector
+    condition:
+      type: connector_endpoint_stereotype
+      source_must_be_one_of:
+      - CasePlanModel
+      - CaseFileItem
+      - Stage
+      - PlanFragment
+      - Task
+      - HumanTask
+      - CaseTask
+      - ProcessTask
+      - Milestone
+      - TimerEventListener
+      - UserEventListener
+      - EntryCriterion
+      - ExitCriterion
+      - PlanningTable
+      target_must_be_one_of:
+      - CasePlanModel
+      - CaseFileItem
+      - Stage
+      - PlanFragment
+      - Task
+      - HumanTask
+      - CaseTask
+      - ProcessTask
+      - Milestone
+      - TimerEventListener
+      - UserEventListener
+      - EntryCriterion
+      - ExitCriterion
+      - PlanningTable
+    remediation:
+      short: Join a text annotation to its element with an association, not a connector.
+      auto_fixable: false
+
+  - id: CMMN1-REL-003
+    name: A connector joins the elements the standard's links allow
+    implements: CMMN-REL-003
+    description: >
+      A connector depicts an on-part: its target is an entry or exit criterion, its source is a plan item (a task, stage,
+      milestone or event listener), an exit criterion or a case file item (7.4.7, 7.5.3.1, 7.5.3.2). A discretionary
+      association, which EA also stores as `Connector`, runs from a human task to a discretionary item, that is a task, stage
+      or plan fragment (7.5.3.3), so the same table also implements CMMN-REL-004 for the pairs it can see. It does not check that
+      the criterion belongs to the sentry that holds the on-part, that the target is discretionary (the tag IsDiscretionary),
+      or that the target sits in this human task's planning table. [OMG CMMN 1.1 6.11, 7.4.7, 7.5.3]
+    category: relationship
+    severity: error
+    demo_trigger: true
+    coverage: partial
+    selector:
+      type: connector
+      connector_stereotypes: any_of_table
+    condition:
+      type: relationship_table
+      table: cmmn-1-links
+      unknown_endpoint: error
+    remediation:
+      short: Draw the connector from a plan item, exit criterion or case file item to a criterion, or a discretionary association from a human task to a task, stage or plan fragment.
+      auto_fixable: false
+
+  # ==============================================================================================================
+  # WHERE-IT-SITS RULES (contained_in, contains_count). A criterion or a planning table is a Port that is a child of the
+  # item it belongs to. Added 2026-10-21 for the validator's type and containment conditions.
+  # ==============================================================================================================
+
+  - id: CMMN1-CRT-003
+    name: An event listener has no entry criteria
+    implements: CMMN-CRT-003
+    description: >
+      A plan item defined by an event listener has no entry criteria (5.4.5, Table 5.24; 7.5.2.6). A timer or user
+      event listener that holds an EntryCriterion port is reported. [OMG CMMN 1.1 5.4.5 p. 30; 7.5.2.6]
+    category: criteria
+    severity: error
+    demo_trigger: false
+    coverage: full
+    selector:
+      type: element
+      stereotypes:
+        any_of: [TimerEventListener, UserEventListener]
+    condition:
+      type: contains_count
+      child: {stereotype_one_of: [EntryCriterion]}
+      max: 0
+    remediation:
+      short: Remove the entry criterion from the event listener; an event listener occurs by its event, not by a criterion.
+      auto_fixable: false
+
+  - id: CMMN1-CRT-004
+    name: A milestone or event listener has no exit criteria
+    implements: CMMN-CRT-004
+    description: >
+      A plan item defined by an event listener or a milestone has no exit criteria (5.4.5, Table 5.24). A milestone,
+      timer event listener or user event listener that holds an ExitCriterion port is reported. [OMG CMMN 1.1 5.4.5 p.
+      30]
+    category: criteria
+    severity: error
+    demo_trigger: false
+    coverage: full
+    selector:
+      type: element
+      stereotypes:
+        any_of: [Milestone, TimerEventListener, UserEventListener]
+    condition:
+      type: contains_count
+      child: {stereotype_one_of: [ExitCriterion]}
+      max: 0
+    remediation:
+      short: Remove the exit criterion; a milestone and an event listener cannot be ended by one.
+      auto_fixable: false
+
+  - id: CMMN1-CRT-005
+    name: A non-blocking human task has no exit criteria
+    implements: CMMN-CRT-005
+    description: >
+      A plan item or discretionary item defined by a non-blocking task has no exit criteria (5.4.5, Table 5.24;
+      5.4.9.2, Table 5.37). EA stores blocking only on a HumanTask (tag IsBlocking, default false); a HumanTask whose
+      IsBlocking is false and that holds an ExitCriterion port is reported. A process task or case task has no
+      blocking flag in EA and is not judged. [OMG CMMN 1.1 5.4.5 p. 30; 5.4.9.2 p. 41]
+    category: criteria
+    severity: error
+    demo_trigger: false
+    coverage: partial
+    selector:
+      type: element
+      stereotypes:
+        any_of: [HumanTask]
+      tagged_value_filter:
+        - tag: IsBlocking
+          value_in: ["false"]
+    condition:
+      type: contains_count
+      child: {stereotype_one_of: [ExitCriterion]}
+      max: 0
+    remediation:
+      short: Set IsBlocking to true on the human task, or remove its exit criterion.
+      auto_fixable: false
+
+  - id: CMMN1-CRT-006-ENTRY
+    name: An entry criterion belongs to a task, stage or milestone
+    implements: CMMN-CRT-006
+    description: >
+      Entry criteria belong only to items whose definition is a Task, Stage or Milestone (7.5.2.6, Table 7.13). An
+      EntryCriterion port whose host is anything else (the case plan model, a plan fragment, an event listener, a case
+      file item, another port) or that sits in a package is reported. The same host list is the entry criterion
+      decorator rule CMMN-DEC-006 (6.6), so this rule also covers it. [OMG CMMN 1.1 7.5.2.6 p. 101; 6.6 p. 61]
+    category: criteria
+    severity: error
+    demo_trigger: false
+    coverage: full
+    selector:
+      type: element
+      stereotypes:
+        any_of: [EntryCriterion]
+    condition:
+      type: contained_in
+      path:
+        - stereotype_one_of: [Task, HumanTask, CaseTask, ProcessTask, Stage, Milestone]
+    remediation:
+      short: Move the entry criterion onto a task, stage or milestone.
+      auto_fixable: false
+
+  - id: CMMN1-CRT-006-EXIT
+    name: An exit criterion belongs to the case plan model, a stage or a task
+    implements: CMMN-CRT-006
+    description: >
+      Exit criteria belong only to the case plan model and to items whose definition is a Task or Stage (7.5.2.7,
+      Table 7.14). An ExitCriterion port whose host is anything else (a milestone, a plan fragment, an event listener,
+      a case file item, another port) or that sits in a package is reported. The same host list is the exit criterion
+      decorator rule CMMN-DEC-007 (6.6), so this rule also covers it. [OMG CMMN 1.1 7.5.2.7 p. 102; 6.6 p. 62]
+    category: criteria
+    severity: error
+    demo_trigger: false
+    coverage: full
+    selector:
+      type: element
+      stereotypes:
+        any_of: [ExitCriterion]
+    condition:
+      type: contained_in
+      path:
+        - stereotype_one_of: [CasePlanModel, Stage, Task, HumanTask, CaseTask, ProcessTask]
+    remediation:
+      short: Move the exit criterion onto the case plan model, a stage or a task.
+      auto_fixable: false
+
+  - id: CMMN1-STR-005
+    name: The case plan model has no entry criteria
+    implements: CMMN-STR-005
+    description: >
+      The case plan model is the outermost stage, created when the case starts, and has no entry criteria (8.4.1, p.
+      111; Table 6.1). A CasePlanModel that holds an EntryCriterion port is reported. [OMG CMMN 1.1 8.4.1 p. 111]
+    category: structure
+    severity: error
+    demo_trigger: false
+    coverage: full
+    selector:
+      type: element
+      stereotypes:
+        any_of: [CasePlanModel]
+    condition:
+      type: contains_count
+      child: {stereotype_one_of: [EntryCriterion]}
+      max: 0
+    remediation:
+      short: Remove the entry criterion from the case plan model.
+      auto_fixable: false
+
+  - id: CMMN1-STR-002
+    name: The case plan model is the outermost stage
+    implements: CMMN-STR-002
+    description: >
+      The case plan model is a Stage and the outermost stage of the case (5.2.1; 5.4; 5.4.8). EA gives it its own
+      stereotype, so it is a stage by construction; this rule checks the outermost part: a CasePlanModel attached to
+      another element (a stage, a task) instead of sitting in a package is reported. [OMG CMMN 1.1 5.2.1; 5.4.8 p. 37]
+    category: structure
+    severity: error
+    demo_trigger: false
+    coverage: partial
+    selector:
+      type: element
+      stereotypes:
+        any_of: [CasePlanModel]
+    condition:
+      type: contained_in
+      path:
+        - stereotype_one_of: [type:Package]
+    remediation:
+      short: Move the case plan model out of the element it is nested in, into the package of the case.
+      auto_fixable: false
+
+  - id: CMMN1-PLN-011
+    name: A non-blocking human task has no planning table
+    implements: CMMN-PLN-011
+    description: >
+      A non-blocking HumanTask has no planning table (5.4.10.4, Table 5.43). A HumanTask whose IsBlocking is false and
+      that holds a PlanningTable port is reported. [OMG CMMN 1.1 5.4.10.4 p. 47]
+    category: planning
+    severity: error
+    demo_trigger: false
+    coverage: full
+    selector:
+      type: element
+      stereotypes:
+        any_of: [HumanTask]
+      tagged_value_filter:
+        - tag: IsBlocking
+          value_in: ["false"]
+    condition:
+      type: contains_count
+      child: {stereotype_one_of: [PlanningTable]}
+      max: 0
+    remediation:
+      short: Set IsBlocking to true on the human task, or remove its planning table.
+      auto_fixable: false
+
+  - id: CMMN1-DEC-005
+    name: A planning table belongs to the case plan model, a stage or a human task
+    implements: CMMN-DEC-005
+    description: >
+      The planning table decorator appears only on the case plan model, a Stage and a HumanTask (6.12; 7.5.2.5; Table
+      6.1). A PlanningTable port whose host is anything else (a plain task, a process task, a case task, a milestone)
+      or that sits in a package is reported. [OMG CMMN 1.1 6.12 p. 73; 7.5.2.5 p. 100]
+    category: decorators
+    severity: error
+    demo_trigger: false
+    coverage: partial
+    selector:
+      type: element
+      stereotypes:
+        any_of: [PlanningTable]
+    condition:
+      type: contained_in
+      path:
+        - stereotype_one_of: [CasePlanModel, Stage, HumanTask]
+    remediation:
+      short: Move the planning table onto the case plan model, a stage or a human task.
+      auto_fixable: false

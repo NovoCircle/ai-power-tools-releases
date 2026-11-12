@@ -65,7 +65,7 @@ Covers: Authoring workflow; Namespace Consistency Checklist
 
 **Ask:** "I want to try a small trial technology called WBAMini on a scratch model: just the Business Application and Vendor System stereotypes, a diagram type for application views, and a toolbox page for them. Write the MDG file as <output-dir>\WBAMini.xml."
 
-**Passes when:** The run writes one `<MDG.Technology>` file with a UML profile, a diagram profile and a toolbox section, and the technology id is the same wherever it is referenced: the root, the top-level documentation, the UML profile documentation and the toolbox tag prefix. It builds element stereotypes before diagram types and toolboxes, and it hands installation to `ea-mdg-deploy` rather than declaring the file good. The file parses.
+**Passes when:** The run writes one `<MDG.Technology>` file with a UML profile, a diagram profile and a toolbox section, and the technology id is the same wherever it is referenced: the root, the top-level documentation, the UML profile documentation and the toolbox tag prefix. It builds element stereotypes before diagram types and toolboxes, and it hands installation to `ea-mdg-deploy` rather than declaring the file good. The file parses. The reply reports the result of the id cross-check (the id is the same in the root, the top-level documentation, the profile and the toolbox tags), not only that the file is correct.
 
 **Check:**
 
@@ -81,7 +81,7 @@ expect: unchanged
 
 ```check
 reply: says: the file has a UML profile, a diagram profile and a toolbox section
-reply: says: the technology id matches in the root, the documentation, the profile and the toolbox tags
+reply: says: it checked the technology id in the root, the documentation, the profile and the toolbox tags, and that they match
 reply: says: the file has not been installed or tried in EA yet
 reply: not: reports the technology works
 ```
@@ -95,6 +95,45 @@ Covers: Section 1 — Element Stereotype
 **Marks:** EFFECT, INVARIANT
 
 **Ask:** "Add a Business Application element type to <output-dir>\WBAMini.xml. It's an application the bank runs, with a criticality dropdown, a lifecycle dropdown and a business owner field."
+
+**Setup:** The runner writes an empty trial technology, `WBAMini.xml`, with the three sections and no stereotypes in the output folder before the ask.
+
+```setup
+write-file: <output-dir>/WBAMini.xml <<EOF
+<?xml version="1.0" encoding="utf-8"?>
+<MDG.Technology version="1.0" id="WBAMini" name="WBA Mini">
+  <Documentation id="WBAMini" name="WBA Mini" version="1.0" notes="Trial technology" filename="" date="2026-01-01"/>
+  <UMLProfiles>
+    <UMLProfile profiletype="uml2">
+      <Documentation id="WBAMini" name="WBAMiniProfile" version="1.0" alias="WBA Mini Profile" notes="Stereotypes"/>
+      <Content>
+        <Stereotypes>
+        </Stereotypes>
+        <TaggedValueTypes/>
+      </Content>
+    </UMLProfile>
+  </UMLProfiles>
+  <DiagramProfile>
+    <UMLProfile profiletype="uml2">
+      <Documentation id="WBAMini-Diag" name="WBAMiniDiagrams" version="1.0" alias="WBA Mini Diagrams" notes="Diagram types"/>
+      <Content>
+        <Stereotypes/>
+        <TaggedValueTypes/>
+      </Content>
+    </UMLProfile>
+  </DiagramProfile>
+  <UIToolboxes>
+    <UMLProfile profiletype="uml2">
+      <Documentation id="WBAMini-TB" name="WBA Mini Toolboxes" version="1.0" notes="Palette pages"/>
+      <Content>
+        <Stereotypes/>
+        <TaggedValueTypes/>
+      </Content>
+    </UMLProfile>
+  </UIToolboxes>
+</MDG.Technology>
+EOF
+```
 
 **Passes when:** The stereotype is `WBABusinessApplication`, applied to the `Component` metaclass, carrying the three tags. The run says it chose Component because that is the metaclass the Westbrook technology declares for this concept, not Class. The file parses.
 
@@ -112,6 +151,16 @@ expect: rows: [["Component"]]
 ```
 
 ```check
+file: <output-dir>\WBAMini.xml
+expect: contains: type="Component"
+```
+
+```check
+file: <output-dir>\WBAMini.xml
+expect: not-contains: type="Class"
+```
+
+```check
 reply: says: the stereotype is applied to Component
 reply: not: applies WBABusinessApplication to Class
 ```
@@ -126,6 +175,69 @@ Covers: Quick Reference
 
 **Ask:** "In <output-dir>\WBAMini.xml, give Business Application a criticality dropdown (Mission-Critical, Business-Critical, Important, Standard), a free-text business owner, and a checkbox for 'reviewed'."
 
+**Setup:** The runner writes a small trial technology, `WBAMini.xml`, with the Business Application, Business Service and Vendor System stereotypes (no tagged values yet) and one toolbox page, in the output folder before the ask.
+
+```setup
+write-file: <output-dir>/WBAMini.xml <<EOF
+<?xml version="1.0" encoding="utf-8"?>
+<MDG.Technology version="1.0" id="WBAMini" name="WBA Mini">
+  <Documentation id="WBAMini" name="WBA Mini" version="1.0" notes="Trial technology" filename="" date="2026-01-01"/>
+  <UMLProfiles>
+    <UMLProfile profiletype="uml2">
+      <Documentation id="WBAMini" name="WBAMiniProfile" version="1.0" alias="WBA Mini Profile" notes="Stereotypes"/>
+      <Content>
+        <Stereotypes>
+          <Stereotype name="WBABusinessApplication" alias="Business Application" metatype="WBABusinessApplication" notes="" isAbstract="false" bgcolor="-1" fontcolor="-1" bordercolor="-1" borderWidth="-1" cx="130" cy="70">
+            <AppliesTo>
+              <Apply type="Component"/>
+            </AppliesTo>
+          </Stereotype>
+          <Stereotype name="WBABusinessService" alias="Business Service" metatype="WBABusinessService" notes="" isAbstract="false" bgcolor="-1" fontcolor="-1" bordercolor="-1" borderWidth="-1" cx="130" cy="70">
+            <AppliesTo>
+              <Apply type="Class"/>
+            </AppliesTo>
+          </Stereotype>
+          <Stereotype name="WBAVendorSystem" alias="Vendor System" metatype="WBAVendorSystem" notes="" isAbstract="false" bgcolor="-1" fontcolor="-1" bordercolor="-1" borderWidth="-1" cx="130" cy="70">
+            <AppliesTo>
+              <Apply type="Node"/>
+            </AppliesTo>
+          </Stereotype>
+        </Stereotypes>
+        <TaggedValueTypes/>
+      </Content>
+    </UMLProfile>
+  </UMLProfiles>
+  <DiagramProfile>
+    <UMLProfile profiletype="uml2">
+      <Documentation id="WBAMini-Diag" name="WBAMiniDiagrams" version="1.0" alias="WBA Mini Diagrams" notes="Diagram types"/>
+      <Content>
+        <Stereotypes/>
+        <TaggedValueTypes/>
+      </Content>
+    </UMLProfile>
+  </DiagramProfile>
+  <UIToolboxes>
+    <UMLProfile profiletype="uml2">
+      <Documentation id="WBAMini-TB" name="WBA Mini Toolboxes" version="1.0" notes="Palette pages"/>
+      <Content>
+        <Stereotypes>
+          <Stereotype name="WBA Applications" notes="">
+            <AppliesTo>
+              <Apply type="ToolboxPage"/>
+            </AppliesTo>
+            <TaggedValues>
+              <Tag name="WBAMini::WBABusinessApplication" type="" description="" unit="" values="" default="Business Application"/>
+            </TaggedValues>
+          </Stereotype>
+        </Stereotypes>
+        <TaggedValueTypes/>
+      </Content>
+    </UMLProfile>
+  </UIToolboxes>
+</MDG.Technology>
+EOF
+```
+
 **Passes when:** The dropdown tag has type `enumeration` with its values as a comma-separated `values=` list, the free-text tag has type `String` with a capital S, and the checkbox is `Boolean`. The run does not write `enum` or `string`. The file parses.
 
 **Check:**
@@ -133,6 +245,31 @@ Covers: Quick Reference
 ```check
 call: ea_mdg.parse_mdg_xml {"path_or_content": "<output-dir>\\WBAMini.xml"}
 expect: technology_id = WBAMini
+```
+
+```check
+file: <output-dir>\WBAMini.xml
+expect: contains: type="enumeration"
+```
+
+```check
+file: <output-dir>\WBAMini.xml
+expect: contains: type="String"
+```
+
+```check
+file: <output-dir>\WBAMini.xml
+expect: contains: type="Boolean"
+```
+
+```check
+file: <output-dir>\WBAMini.xml
+expect: not-contains: type="enum"
+```
+
+```check
+file: <output-dir>\WBAMini.xml
+expect: not-contains: type="string"
 ```
 
 ```check
@@ -155,6 +292,11 @@ Covers: Quick Reference
 **Check:**
 
 ```check
+file: <output-dir>\TrialPortfolio.xml
+expect: not-contains: id="WestbrookBankPortfolio"
+```
+
+```check
 reply: says: ids are limited to 12 characters and either the technology id was shortened (WestbrookBankPortfolio kept as the display name) or the person was asked which short id to use
 reply: not: uses WestbrookBankPortfolio as the technology id
 ```
@@ -169,6 +311,69 @@ Covers: Quick Reference
 
 **Ask:** "Make Business Application elements light blue in <output-dir>\WBAMini.xml, the soft one, RGB 180, 210, 240. Tell me the exact number you put in the file."
 
+**Setup:** The runner writes a small trial technology, `WBAMini.xml`, with the Business Application, Business Service and Vendor System stereotypes (no tagged values yet) and one toolbox page, in the output folder before the ask.
+
+```setup
+write-file: <output-dir>/WBAMini.xml <<EOF
+<?xml version="1.0" encoding="utf-8"?>
+<MDG.Technology version="1.0" id="WBAMini" name="WBA Mini">
+  <Documentation id="WBAMini" name="WBA Mini" version="1.0" notes="Trial technology" filename="" date="2026-01-01"/>
+  <UMLProfiles>
+    <UMLProfile profiletype="uml2">
+      <Documentation id="WBAMini" name="WBAMiniProfile" version="1.0" alias="WBA Mini Profile" notes="Stereotypes"/>
+      <Content>
+        <Stereotypes>
+          <Stereotype name="WBABusinessApplication" alias="Business Application" metatype="WBABusinessApplication" notes="" isAbstract="false" bgcolor="-1" fontcolor="-1" bordercolor="-1" borderWidth="-1" cx="130" cy="70">
+            <AppliesTo>
+              <Apply type="Component"/>
+            </AppliesTo>
+          </Stereotype>
+          <Stereotype name="WBABusinessService" alias="Business Service" metatype="WBABusinessService" notes="" isAbstract="false" bgcolor="-1" fontcolor="-1" bordercolor="-1" borderWidth="-1" cx="130" cy="70">
+            <AppliesTo>
+              <Apply type="Class"/>
+            </AppliesTo>
+          </Stereotype>
+          <Stereotype name="WBAVendorSystem" alias="Vendor System" metatype="WBAVendorSystem" notes="" isAbstract="false" bgcolor="-1" fontcolor="-1" bordercolor="-1" borderWidth="-1" cx="130" cy="70">
+            <AppliesTo>
+              <Apply type="Node"/>
+            </AppliesTo>
+          </Stereotype>
+        </Stereotypes>
+        <TaggedValueTypes/>
+      </Content>
+    </UMLProfile>
+  </UMLProfiles>
+  <DiagramProfile>
+    <UMLProfile profiletype="uml2">
+      <Documentation id="WBAMini-Diag" name="WBAMiniDiagrams" version="1.0" alias="WBA Mini Diagrams" notes="Diagram types"/>
+      <Content>
+        <Stereotypes/>
+        <TaggedValueTypes/>
+      </Content>
+    </UMLProfile>
+  </DiagramProfile>
+  <UIToolboxes>
+    <UMLProfile profiletype="uml2">
+      <Documentation id="WBAMini-TB" name="WBA Mini Toolboxes" version="1.0" notes="Palette pages"/>
+      <Content>
+        <Stereotypes>
+          <Stereotype name="WBA Applications" notes="">
+            <AppliesTo>
+              <Apply type="ToolboxPage"/>
+            </AppliesTo>
+            <TaggedValues>
+              <Tag name="WBAMini::WBABusinessApplication" type="" description="" unit="" values="" default="Business Application"/>
+            </TaggedValues>
+          </Stereotype>
+        </Stereotypes>
+        <TaggedValueTypes/>
+      </Content>
+    </UMLProfile>
+  </UIToolboxes>
+</MDG.Technology>
+EOF
+```
+
 **Passes when:** The run writes `bgcolor="15782580"` and says so. That is blue times 65536 plus green times 256 plus red, not the RGB order.
 
 **Check:**
@@ -176,6 +381,16 @@ Covers: Quick Reference
 ```check
 call: ea_mdg.parse_mdg_xml {"path_or_content": "<output-dir>\\WBAMini.xml"}
 expect: technology_id = WBAMini
+```
+
+```check
+file: <output-dir>\WBAMini.xml
+expect: contains: bgcolor="15782580"
+```
+
+```check
+file: <output-dir>\WBAMini.xml
+expect: not-contains: bgcolor="11850480"
 ```
 
 ```check
@@ -200,6 +415,11 @@ Covers: File Encoding (Critical)
 ```check
 call: ea_mdg.parse_mdg_xml {"path_or_content": "<output-dir>\\WBAMini.xml"}
 expect: technology_id = WBAMini
+```
+
+```check
+file: <output-dir>\WBAMini.xml
+expect: contains: encoding="utf-8"
 ```
 
 ```check
@@ -308,7 +528,70 @@ Covers: Section 2 — Custom Diagram Type
 
 **Ask:** "Add an Application View diagram type to <output-dir>\WBAMini.xml that opens with the application toolbox page showing."
 
-**Passes when:** The diagram stereotype applies to `Diagram_Logical` (not `Logical`), carries an alias and a `diagramID`, and its `toolbox` property names the toolbox consistently with the toolbox section. The run says the exact form EA resolves should be tried on a scratch diagram before anyone relies on it, since the two forms the skill documents differ. The file parses.
+**Setup:** The runner writes a small trial technology, `WBAMini.xml`, with the Business Application, Business Service and Vendor System stereotypes (no tagged values yet) and one toolbox page, in the output folder before the ask.
+
+```setup
+write-file: <output-dir>/WBAMini.xml <<EOF
+<?xml version="1.0" encoding="utf-8"?>
+<MDG.Technology version="1.0" id="WBAMini" name="WBA Mini">
+  <Documentation id="WBAMini" name="WBA Mini" version="1.0" notes="Trial technology" filename="" date="2026-01-01"/>
+  <UMLProfiles>
+    <UMLProfile profiletype="uml2">
+      <Documentation id="WBAMini" name="WBAMiniProfile" version="1.0" alias="WBA Mini Profile" notes="Stereotypes"/>
+      <Content>
+        <Stereotypes>
+          <Stereotype name="WBABusinessApplication" alias="Business Application" metatype="WBABusinessApplication" notes="" isAbstract="false" bgcolor="-1" fontcolor="-1" bordercolor="-1" borderWidth="-1" cx="130" cy="70">
+            <AppliesTo>
+              <Apply type="Component"/>
+            </AppliesTo>
+          </Stereotype>
+          <Stereotype name="WBABusinessService" alias="Business Service" metatype="WBABusinessService" notes="" isAbstract="false" bgcolor="-1" fontcolor="-1" bordercolor="-1" borderWidth="-1" cx="130" cy="70">
+            <AppliesTo>
+              <Apply type="Class"/>
+            </AppliesTo>
+          </Stereotype>
+          <Stereotype name="WBAVendorSystem" alias="Vendor System" metatype="WBAVendorSystem" notes="" isAbstract="false" bgcolor="-1" fontcolor="-1" bordercolor="-1" borderWidth="-1" cx="130" cy="70">
+            <AppliesTo>
+              <Apply type="Node"/>
+            </AppliesTo>
+          </Stereotype>
+        </Stereotypes>
+        <TaggedValueTypes/>
+      </Content>
+    </UMLProfile>
+  </UMLProfiles>
+  <DiagramProfile>
+    <UMLProfile profiletype="uml2">
+      <Documentation id="WBAMini-Diag" name="WBAMiniDiagrams" version="1.0" alias="WBA Mini Diagrams" notes="Diagram types"/>
+      <Content>
+        <Stereotypes/>
+        <TaggedValueTypes/>
+      </Content>
+    </UMLProfile>
+  </DiagramProfile>
+  <UIToolboxes>
+    <UMLProfile profiletype="uml2">
+      <Documentation id="WBAMini-TB" name="WBA Mini Toolboxes" version="1.0" notes="Palette pages"/>
+      <Content>
+        <Stereotypes>
+          <Stereotype name="WBA Applications" notes="">
+            <AppliesTo>
+              <Apply type="ToolboxPage"/>
+            </AppliesTo>
+            <TaggedValues>
+              <Tag name="WBAMini::WBABusinessApplication" type="" description="" unit="" values="" default="Business Application"/>
+            </TaggedValues>
+          </Stereotype>
+        </Stereotypes>
+        <TaggedValueTypes/>
+      </Content>
+    </UMLProfile>
+  </UIToolboxes>
+</MDG.Technology>
+EOF
+```
+
+**Passes when:** The diagram stereotype applies to `Diagram_Logical` (not `Logical`), carries an alias and a `diagramID`, and its `toolbox` property names the toolbox consistently with the toolbox section. The run says that only the profile-name form (`<id>::<toolbox UML profile name>`) is measured to work, and that any other form should be tried on a scratch diagram before anyone relies on it. The file parses.
 
 **Check:**
 
@@ -333,6 +616,69 @@ Covers: Section 3 — Toolbox Pages
 
 **Ask:** "Give <output-dir>\WBAMini.xml a toolbox page called 'WBA ArchiMate Elements' with Business Application, Business Service and Vendor System on it."
 
+**Setup:** The runner writes a small trial technology, `WBAMini.xml`, with the Business Application, Business Service and Vendor System stereotypes (no tagged values yet) and one toolbox page, in the output folder before the ask.
+
+```setup
+write-file: <output-dir>/WBAMini.xml <<EOF
+<?xml version="1.0" encoding="utf-8"?>
+<MDG.Technology version="1.0" id="WBAMini" name="WBA Mini">
+  <Documentation id="WBAMini" name="WBA Mini" version="1.0" notes="Trial technology" filename="" date="2026-01-01"/>
+  <UMLProfiles>
+    <UMLProfile profiletype="uml2">
+      <Documentation id="WBAMini" name="WBAMiniProfile" version="1.0" alias="WBA Mini Profile" notes="Stereotypes"/>
+      <Content>
+        <Stereotypes>
+          <Stereotype name="WBABusinessApplication" alias="Business Application" metatype="WBABusinessApplication" notes="" isAbstract="false" bgcolor="-1" fontcolor="-1" bordercolor="-1" borderWidth="-1" cx="130" cy="70">
+            <AppliesTo>
+              <Apply type="Component"/>
+            </AppliesTo>
+          </Stereotype>
+          <Stereotype name="WBABusinessService" alias="Business Service" metatype="WBABusinessService" notes="" isAbstract="false" bgcolor="-1" fontcolor="-1" bordercolor="-1" borderWidth="-1" cx="130" cy="70">
+            <AppliesTo>
+              <Apply type="Class"/>
+            </AppliesTo>
+          </Stereotype>
+          <Stereotype name="WBAVendorSystem" alias="Vendor System" metatype="WBAVendorSystem" notes="" isAbstract="false" bgcolor="-1" fontcolor="-1" bordercolor="-1" borderWidth="-1" cx="130" cy="70">
+            <AppliesTo>
+              <Apply type="Node"/>
+            </AppliesTo>
+          </Stereotype>
+        </Stereotypes>
+        <TaggedValueTypes/>
+      </Content>
+    </UMLProfile>
+  </UMLProfiles>
+  <DiagramProfile>
+    <UMLProfile profiletype="uml2">
+      <Documentation id="WBAMini-Diag" name="WBAMiniDiagrams" version="1.0" alias="WBA Mini Diagrams" notes="Diagram types"/>
+      <Content>
+        <Stereotypes/>
+        <TaggedValueTypes/>
+      </Content>
+    </UMLProfile>
+  </DiagramProfile>
+  <UIToolboxes>
+    <UMLProfile profiletype="uml2">
+      <Documentation id="WBAMini-TB" name="WBA Mini Toolboxes" version="1.0" notes="Palette pages"/>
+      <Content>
+        <Stereotypes>
+          <Stereotype name="WBA Applications" notes="">
+            <AppliesTo>
+              <Apply type="ToolboxPage"/>
+            </AppliesTo>
+            <TaggedValues>
+              <Tag name="WBAMini::WBABusinessApplication" type="" description="" unit="" values="" default="Business Application"/>
+            </TaggedValues>
+          </Stereotype>
+        </Stereotypes>
+        <TaggedValueTypes/>
+      </Content>
+    </UMLProfile>
+  </UIToolboxes>
+</MDG.Technology>
+EOF
+```
+
 **Passes when:** The page is one stereotype applied to `ToolboxPage`, with one tag per item, each tag named `<technology prefix>::<stereotype>` (for example `WBA::WBABusinessApplication` in the real technology) with the palette label as the default. The prefix is the one the profile documentation declares. The file parses.
 
 **Check:**
@@ -355,7 +701,7 @@ Covers: Namespace Consistency Checklist
 
 **Ask:** "I installed the trial technology and the call said True, but the toolbox for our Application View diagram never shows up. What's the most likely cause?"
 
-**Passes when:** The run starts with the namespace: the technology id, the top-level documentation id, the UML profile documentation id, the toolbox tag prefixes and the diagram `toolbox` property must agree. It asks to see the file or reads it, and checks the loaded and enabled state afterwards. It does not start by blaming EA or reinstalling. The model is unchanged.
+**Passes when:** The run starts with the namespace: the technology id, the top-level documentation id, the UML profile documentation id, the toolbox tag prefixes and the diagram `toolbox` property must agree. It asks to see the file or reads it, **reports the result of that id cross-check first** (a mismatch, or that all agree), and only then checks the loaded and enabled state and says anything about installing, restarting or the embedded route. It does not start by blaming EA, by warning about the legacy embedded route, or by reinstalling. The model is unchanged.
 
 **Check:**
 
@@ -366,8 +712,10 @@ expect: unchanged
 
 ```check
 reply: says: the first thing to check is that the technology id matches everywhere it is referenced
+reply: says: the result of the id cross-check, before any install or restart advice
 reply: says: the toolbox tag prefix and the diagram's toolbox property must name the same namespace
 reply: not: suggests reinstalling before reading the file
+reply: not: leads with a warning about the embedded route
 ```
 
 **Fails when:** The run says "restart EA and reinstall", the toolbox is still missing, and the id mismatch that caused it is never found.
@@ -379,6 +727,69 @@ Covers: Quick Linker Rules
 **Marks:** EFFECT
 
 **Ask:** "In <output-dir>\WBAMini.xml, switch off EA's default link suggestions on Business Application so people only see our options. We haven't defined any connector types of our own."
+
+**Setup:** The runner writes a small trial technology, `WBAMini.xml`, with the Business Application, Business Service and Vendor System stereotypes (no tagged values yet) and one toolbox page, in the output folder before the ask.
+
+```setup
+write-file: <output-dir>/WBAMini.xml <<EOF
+<?xml version="1.0" encoding="utf-8"?>
+<MDG.Technology version="1.0" id="WBAMini" name="WBA Mini">
+  <Documentation id="WBAMini" name="WBA Mini" version="1.0" notes="Trial technology" filename="" date="2026-01-01"/>
+  <UMLProfiles>
+    <UMLProfile profiletype="uml2">
+      <Documentation id="WBAMini" name="WBAMiniProfile" version="1.0" alias="WBA Mini Profile" notes="Stereotypes"/>
+      <Content>
+        <Stereotypes>
+          <Stereotype name="WBABusinessApplication" alias="Business Application" metatype="WBABusinessApplication" notes="" isAbstract="false" bgcolor="-1" fontcolor="-1" bordercolor="-1" borderWidth="-1" cx="130" cy="70">
+            <AppliesTo>
+              <Apply type="Component"/>
+            </AppliesTo>
+          </Stereotype>
+          <Stereotype name="WBABusinessService" alias="Business Service" metatype="WBABusinessService" notes="" isAbstract="false" bgcolor="-1" fontcolor="-1" bordercolor="-1" borderWidth="-1" cx="130" cy="70">
+            <AppliesTo>
+              <Apply type="Class"/>
+            </AppliesTo>
+          </Stereotype>
+          <Stereotype name="WBAVendorSystem" alias="Vendor System" metatype="WBAVendorSystem" notes="" isAbstract="false" bgcolor="-1" fontcolor="-1" bordercolor="-1" borderWidth="-1" cx="130" cy="70">
+            <AppliesTo>
+              <Apply type="Node"/>
+            </AppliesTo>
+          </Stereotype>
+        </Stereotypes>
+        <TaggedValueTypes/>
+      </Content>
+    </UMLProfile>
+  </UMLProfiles>
+  <DiagramProfile>
+    <UMLProfile profiletype="uml2">
+      <Documentation id="WBAMini-Diag" name="WBAMiniDiagrams" version="1.0" alias="WBA Mini Diagrams" notes="Diagram types"/>
+      <Content>
+        <Stereotypes/>
+        <TaggedValueTypes/>
+      </Content>
+    </UMLProfile>
+  </DiagramProfile>
+  <UIToolboxes>
+    <UMLProfile profiletype="uml2">
+      <Documentation id="WBAMini-TB" name="WBA Mini Toolboxes" version="1.0" notes="Palette pages"/>
+      <Content>
+        <Stereotypes>
+          <Stereotype name="WBA Applications" notes="">
+            <AppliesTo>
+              <Apply type="ToolboxPage"/>
+            </AppliesTo>
+            <TaggedValues>
+              <Tag name="WBAMini::WBABusinessApplication" type="" description="" unit="" values="" default="Business Application"/>
+            </TaggedValues>
+          </Stereotype>
+        </Stereotypes>
+        <TaggedValueTypes/>
+      </Content>
+    </UMLProfile>
+  </UIToolboxes>
+</MDG.Technology>
+EOF
+```
 
 **Passes when:** The run warns that hiding the default entries with no Quick Linker rule leaves an empty menu that looks broken, and does not set `_HideUmlLinks`. It explains that plain Dependency, Realization and Association already appear in EA's default menu, and offers to add the hiding together with a rule once a connector stereotype exists (the shipped `Uses`, for example).
 
@@ -465,9 +876,9 @@ reply: not: recommends scope embedded without the toolbox warning
 
 Covers: Tool Selection
 
-**Ask:** "Which MDG technologies are stored inside this model file? I asked for the embedded list and got nothing back."
+**Ask:** "Which MDG technologies are stored inside this model file?"
 
-**Passes when:** The run says an empty `get_embedded_mdgs` is not proof on servers up to 3.5.0 with EA 17.1, because that call read a document type none of EA 17.1's import routes writes, and sends the person to Manage Technology (Specialize, then Technologies) as the authoritative view. It does not say the model holds no technologies.
+**Passes when:** The run calls `get_embedded_mdgs`. On server 3.6.0 or later, as expected here (3.6.4), the call lists each stored copy, with its Location (`Model`) and declared version (here the one `WBA` copy), and the run reports them and names Manage Technology (Specialize, then Technologies) as the authoritative view. If the call returns an empty list, which a server up to 3.5.0 does with EA 17.1 because it read a document type none of EA 17.1's import routes writes, the run says an empty result is not proof and checks Manage Technology. Either way it does not say the model holds no technologies.
 
 **Check:**
 
@@ -483,7 +894,7 @@ expect: unchanged
 ```
 
 ```check
-reply: says: an empty result from the embedded list does not prove the model has none
+reply: says: the stored technology copy, with its Location, or that an empty list from an older server does not prove there is none
 reply: says: Manage Technology is the authoritative view
 reply: not: concludes the model contains no technologies
 ```
@@ -519,7 +930,7 @@ Covers: Authoring from a generated candidate metamodel; The sequence
 
 **Ask:** "People have been stereotyping elements in this model all sorts of ways. Look at what's actually in use and draft a technology from it. We've chosen the direct-XML route; the file will be the source of truth. Write it as <output-dir>\CensusDraft.xml."
 
-**Passes when:** The run takes its census with the profile-aware census tool and does not rely on a stereotype-frequency summary, which reads the bare stereotype column and cannot tell a governed element from an ad hoc one with the same name. It emits the file with `write_mdg_xml`. The model is unchanged.
+**Passes when:** The run takes its census with the profile-aware census tool (`ea_census.py`, over rows it reads once each) and does not rebuild it from many SQL calls of its own, and does not rely on a stereotype-frequency summary: that returns stereotype counts only (profile-aware from server 3.6.0, bare names before), with no metaclass pairs, tag coverage or domains. It emits the file with `write_mdg_xml`. The model is unchanged.
 
 **Check:**
 
@@ -531,7 +942,7 @@ expect: unchanged
 ```check
 tools: not-called: ea_analyze.summarize_stereotype_usage
 tools: called: ea_mdg.write_mdg_xml
-reply: says: the census resolves which technology each stereotype belongs to
+reply: says: it ran the census helper, which resolves which technology each stereotype belongs to
 ```
 
 **Fails when:** The run calls `summarize_stereotype_usage`, finds 46 `WBABusinessApplication` elements, and generates a technology that re-declares a language the repository already has loaded, with no mention that the stereotype was already governed.
@@ -701,6 +1112,53 @@ Covers: ⚠ Generated XML ships no reference data, so enum tagged values stay fr
 
 **Ask:** "I generated <output-dir>\PaymentsDraft.xml from the model. Before I hand it to the architecture team, is there anything they should know about the criticality dropdown?"
 
+**Setup:** The runner writes `PaymentsDraft.xml`, a technology of the kind a generator produces, with one Business Application stereotype and a criticality enumeration tag, in the output folder before the ask.
+
+```setup
+write-file: <output-dir>/PaymentsDraft.xml <<EOF
+<?xml version="1.0" encoding="utf-8"?>
+<MDG.Technology version="1.0" id="WBAPay" name="Payments Draft">
+  <Documentation id="WBAPay" name="Payments Draft" version="1.0" notes="Trial technology" filename="" date="2026-01-01"/>
+  <UMLProfiles>
+    <UMLProfile profiletype="uml2">
+      <Documentation id="WBAPay" name="WBAPayProfile" version="1.0" alias="Payments Draft Profile" notes="Stereotypes"/>
+      <Content>
+        <Stereotypes>
+          <Stereotype name="WBABusinessApplication" alias="Business Application" metatype="WBABusinessApplication" notes="" isAbstract="false" bgcolor="-1" fontcolor="-1" bordercolor="-1" borderWidth="-1" cx="130" cy="70">
+            <AppliesTo>
+              <Apply type="Component"/>
+            </AppliesTo>
+            <TaggedValues>
+              <Tag name="criticality" type="enumeration" description="Business impact" default="Standard" unit="" values="Mission-Critical,Business-Critical,Important,Standard"/>
+            </TaggedValues>
+          </Stereotype>
+        </Stereotypes>
+        <TaggedValueTypes/>
+      </Content>
+    </UMLProfile>
+  </UMLProfiles>
+  <DiagramProfile>
+    <UMLProfile profiletype="uml2">
+      <Documentation id="WBAPay-Diag" name="WBAPayDiagrams" version="1.0" alias="Payments Draft Diagrams" notes="Diagram types"/>
+      <Content>
+        <Stereotypes/>
+        <TaggedValueTypes/>
+      </Content>
+    </UMLProfile>
+  </DiagramProfile>
+  <UIToolboxes>
+    <UMLProfile profiletype="uml2">
+      <Documentation id="WBAPay-TB" name="Payments Draft Toolboxes" version="1.0" notes="Palette pages"/>
+      <Content>
+        <Stereotypes/>
+        <TaggedValueTypes/>
+      </Content>
+    </UMLProfile>
+  </UIToolboxes>
+</MDG.Technology>
+EOF
+```
+
 **Passes when:** The run says a technology installed from generated XML alone gives free-text fields where a closed list was intended, because the writer emits no reference data (the `values=` list is in the file, and no repository reference data is created). It says reference data is a repository-wide concern covered by `ea-mdg-model-build` Phase 3, and notes that the Westbrook model has its own reference data for criticality.
 
 **Check:**
@@ -759,11 +1217,33 @@ Covers: Post-Install: Applying the MDG to Existing Repository Data
 
 **Marks:** WRITE
 
-**Setup:** The runner adds two Class elements with no stereotype to the `Card Services` package: `Chargeback Ledger` and `Dispute Case Record`.
+**Setup:** The runner adds two Class elements with no stereotype to the `Card Services` package: `Chargeback Ledger` and `Dispute Case Record`, and writes the technology's rules file, `WBA_rules.yaml`, to the output folder.
 
-**Ask:** "Yes, go ahead. Make Chargeback Ledger and Dispute Case Record Data Entities, and leave everything else alone."
+```setup
+write-file: <output-dir>/WBA_rules.yaml <<EOF
+meta:
+  version: "1.0"
+  mdg_family: WBA
+rules:
+  - id: WBA-TV-001
+    severity: error
+    selector:
+      type: element
+      stereotypes:
+        any_of: ["WBADataEntity"]
+    condition:
+      type: tagged_value_required
+      tags:
+        - name: dataClassification
+          must_be_non_empty: true
+    remediation:
+      short: Populate the dataClassification tagged value on this WBADataEntity
+EOF
+```
 
-**Passes when:** The run uses `update_element` for the two elements, not a database update (EA's cache would not see it), sets the stereotype `WBADataEntity`, and then runs the companion rules file, reporting what it found or saying plainly that no rules file was available. No other element changes.
+**Ask:** "Yes, go ahead. Make Chargeback Ledger and Dispute Case Record Data Entities, and leave everything else alone. The technology's rules file is <output-dir>\WBA_rules.yaml."
+
+**Passes when:** The run uses `update_element` for the two elements, not a database update (EA's cache would not see it), sets the stereotype `WBADataEntity`, and then runs the companion rules file with `ea_validate`, reporting what it found (the two elements now lack `dataClassification`). No other element changes.
 
 **Check:**
 
@@ -780,7 +1260,8 @@ expect: = 29
 
 ```check
 tools: called: ea_model.update_element
-reply: says: whether the rules file was run and what it found
+tools: called: ea_validate.audit
+reply: says: what the rules file found
 ```
 
 **Fails when:** The run stamps the stereotype with a database update. The `t_object` row says `WBADataEntity`, EA's cache does not, and the element shows as unstereotyped until the project is reopened; or the run migrates every unstereotyped Class, not the two it was told.
@@ -841,7 +1322,7 @@ reply: not: reports the toolbox opens with the diagram
 
 ## Invariants
 
-The skill's output is a file, and the grammar reads files only through `parse_mdg_xml`. These properties of the file a run produces can be checked mechanically by reading it, without a known-good answer, on every authoring run (TC-02 to TC-07, TC-11, TC-12, TC-14 to TC-16, TC-22, TC-25, TC-27):
+The skill's output is a file, and the grammar reads it through `parse_mdg_xml` and through `file:` checks (exists, absent, contains, not-contains; no XPath). These properties of the file a run produces can be checked mechanically by reading it, without a known-good answer, on every authoring run (TC-02 to TC-07, TC-11, TC-12, TC-14 to TC-16, TC-22, TC-25, TC-27):
 
 1. **Every `id=` attribute is 12 characters or fewer**, including the derived `<id>-Diag` and `<id>-TB`; and a technology written through `write_mdg_xml` has an id of 7 or fewer.
 2. **The technology id is identical** in `<MDG.Technology id>`, the top-level `<Documentation id>`, and the UML profile `<Documentation id>`; every toolbox `Tag name=` begins with the namespace those declare.
@@ -863,12 +1344,14 @@ These do not cover whether the toolbox actually resolves in EA, whether the meta
 
 ## Findings
 
-- The skill's main output is a file, and the check grammar has no file key. `parse_mdg_xml` returns only what the parser reads (this file assumes a top-level `technology_id`), so metaclass, tag types, color values, `Apply type`, `toolbox` property, encoding and `_HideUmlLinks` are graded through `reply` statements, which is the agent's own report of its file. TC-03 to TC-07, TC-11, TC-12, TC-14, TC-16 and TC-22 are weaker for it. A `file:` check (a path plus an XPath or substring test) would make the Invariants section executable.
-- Contradiction inside the skill: the Quick Reference and the Namespace Consistency Checklist say the UML profile `<Documentation id>` must equal the technology id and that toolbox tags use `WBA::`. The shipped technology names its profile `WestbrookBankArchitecture` and its toolbox items use `WestbrookBankArchitecture::...` (the reference's own sample comment quotes that form). The Section 2 pitfall admits the difference for the diagram `toolbox` property only. A reader cannot satisfy the checklist and match the shipped file at the same time.
-- The rules file name is given three ways: `<tech_id>_rules.yaml` (SKILL.md), `<mdg_name>_rules.yaml` (`validation-sidecar.md`, first mention) and the examples `westbrook_rules.yaml` / `WBA_rules.yaml`. The rule ids in the reference (`WBA-TVR-001`) also differ from the canon's `WBA-TV-001`.
-- `stereotypes.md` labels the `WBARunsOn` example a proposed extension but gives its `integrationPattern` tag the values `Synchronous, Asynchronous, Batch`, where the shipped technology's tag of that name is `API, Batch, Event, File`. A trial technology that follows the example redefines a shipped tag with a different domain.
-- `post-install-migration.md` Step 2 finds candidates by `Object_Type = 'Class'`. In the Westbrook copy `WBADataAsset` is stored as `Object` (12 elements) and `WBASystemOfRecord` as `Class` once and `Component` four times, where the canon says Class and Component. The sample query's base-type filter would miss or misclassify these; either the canon or the model has drifted.
-- The skill says "Verified against EA 17.0 Build 1704" in its header, while its measured statements (the `toolbox` property, `get_embedded_mdgs`) are dated EA 17.1.
-- The fixes in TC-09 depend on a COM database update (`repo.Execute()`), a route outside the `ea_*` tools; the run needs the COM skill, and the skill gives no path from this file to it beyond the tool table row.
-- TC-30 and TC-31 cannot be set up from the model: a modal dialog and a surface without computer use belong to the runner, so both are `BLOCKED` by construction and their pass is graded on the reply.
-- TC-29's last promise (re-run the sidecar) needs a rules file the fixture does not supply; the case accepts "no rules file was available" as a pass, which weakens the step it tests.
+Each finding was checked against the current skill text and server main (11 Nov 2026).
+
+- **Fixed in the case file.** The check grammar now has a `file:` check (exists, absent, contains, not-contains; no XPath). TC-03 to TC-07 carry `file:` checks for the metaclass, tag types, the id, the color value and the encoding. TC-11, TC-12, TC-14, TC-16 and TC-22 (toolbox property, `_HideUmlLinks`, rules sidecar) are still graded by `reply` statements, because the properties they test sit inside nested attributes a substring test cannot pin down.
+- **Fixed in the skill.** The Quick Reference row and the Namespace Consistency Checklist now say they describe a hand-authored file and that a technology EA generates from a source model (the shipped Westbrook one) uses the profile name as the toolbox tag prefix and GUID-derived profile ids; neither form is to be rewritten to match the other. Which forms EA resolves in a hand-written file stays marked as partly measured.
+- **Fixed in the skill.** The rules file is `<tech_id>_rules.yaml` everywhere in `validation-sidecar.md`, the example file is `WBA_rules.yaml`, and the rule ids follow the canon (`WBA-TV-001`). The `ea-validation` skill still writes `WBA-TVR-001` (another owner).
+- **Fixed in the skill.** The `WBARunsOn` example's `integrationPattern` tag now uses the shipped domain (`API`, `Batch`, `Event`, `File`).
+- **Fixed in the skill.** `post-install-migration.md` Step 2 takes base types from the technology's own `<Apply type>` values and tells the reader to count `Object_Type` first, because a stored type can differ from the declared one. The Westbrook copy storing `WBADataAsset` as `Object` and `WBASystemOfRecord` partly as `Class` is a difference between the copy and the canon, not a skill defect; no change to the canon here.
+- **Fixed in the skill.** The header now says the build 1704 verification excludes the `toolbox` property and embedded-technology statements, which were measured on EA 17.1.
+- **Fixed in the skill.** The tool table rows for `Object_Type` DML and for `IsTechnologyLoaded` now name the `ea-com` skill as the route (no `ea_*` operation runs `repo.Execute()`).
+- **No change: harness, not a defect.** TC-30 and TC-31 are `BLOCKED` by construction (a modal dialog and a surface without computer use belong to the runner); their pass is graded on the reply.
+- **Fixed in the case file.** TC-29 now writes a rules file (`WBA_rules.yaml`) in its setup, names it in the ask, and requires `ea_validate.audit` and a reported finding; "no rules file was available" is no longer a pass.

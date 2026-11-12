@@ -177,6 +177,17 @@ expect: contains: (excluded)
 ```
 
 ```check
+# excluded content is never written to disk: two element names that live only in Core Platforms
+file: westbrook.extract.json
+expect: not-contains: Fiserv DNA Core
+```
+
+```check
+file: westbrook.extract.json
+expect: not-contains: Snowflake Data Platform
+```
+
+```check
 reply: says: links into the excluded package end at stubs that show the element type and never the name
 ```
 
@@ -188,7 +199,7 @@ Covers: 2b. The inclusion choice - settle this before the build steps
 
 **Marks:** INVARIANT
 
-**Ask:** "Set up reporting over the Consumer Banking area and the Systems of Record package of the Westbrook Bank model, as files in <output-dir>. I haven't decided what to include yet."
+**Ask:** "Set up reporting over the Consumer Banking area and the Systems of Record package of the Westbrook Bank model, as files in <output-dir>, with the profile saved as westbrook.json. I haven't decided what to include yet."
 
 **Passes when:** The run takes the census over the scope, then puts the three-way question with the counts: only what the technology defines, everything in the repository, or show me the gaps. It names, for the gaps, the count and an example name. It then waits. No profile is built from a choice the person did not make.
 
@@ -209,6 +220,12 @@ expect: = 71
 tools: called: ea_analyze.execute_sql
 tools: called: ea_mdg.get_mdg_from_runtime
 tools: not-called: ea_repository.build_reporting_database
+```
+
+```check
+# no profile is produced from a choice the person did not make
+file: westbrook.json
+expect: absent
 ```
 
 ```check
@@ -251,7 +268,7 @@ Covers: 2b. The inclusion choice - settle this before the build steps; 5.3 Prefl
 
 **Setup:** The `Uses` connector from "Westbrook Online Account Opening" to "Westbrook KYC Screening Gateway" is stored with the qualified stereotype text `WestbrookBankArchitecture::Uses` and no binding to the technology.
 
-**Ask:** "Go ahead and build the reporting set for Consumer Banking in the Westbrook Bank model as files in <output-dir>. Use only what the technology defines."
+**Ask:** "Go ahead and build the reporting set for Consumer Banking in the Westbrook Bank model as files in <output-dir>, with the profile saved as westbrook.json. Use only what the technology defines."
 
 **Passes when:** The run finds the connector whose stereotype is qualified text with no binding, stops, and does not produce a profile or a build. It shows the fix (bind it to the technology's own stereotype, or clear it) and says to take a baseline first. It does not apply the fix without the person's yes.
 
@@ -264,6 +281,17 @@ expect: unchanged
 
 ```check
 tools: not-called: ea_model.update_connector
+```
+
+```check
+# no profile and no definition are produced while a connector is unbound
+file: westbrook.json
+expect: absent
+```
+
+```check
+file: westbrook.definition.json
+expect: absent
 ```
 
 ```check
@@ -306,7 +334,7 @@ reply: says: it is placed in both tables if the person continues, and the fix fo
 
 Covers: 2b. The inclusion choice - settle this before the build steps
 
-**Ask:** "Show me the gaps for the Consumer Banking area of the Westbrook Bank model. For the vendor application that isn't in the technology, just update the technology so it is."
+**Ask:** "Show me the gaps for the Consumer Banking area of the Westbrook Bank model. For the vendor application that isn't in the technology, just update the technology so it is. Save any profile as westbrook.json."
 
 **Passes when:** The run lists the gaps with count and an example name, then treats "update the technology" as a hand-off to the MDG skills followed by a new census, not as a decision it can record. It produces no profile while that gap is undecided.
 
@@ -319,6 +347,11 @@ expect: unchanged
 
 ```check
 tools: not-called: ea_repository.build_reporting_database
+```
+
+```check
+file: westbrook.json
+expect: absent
 ```
 
 ```check
@@ -423,7 +456,7 @@ Covers: 3. Three paths, and how to choose; 11. Known limits
 
 **Ask:** "The Westbrook Bank model is a .qea file. Put the reporting views straight into that file so the team can query it."
 
-**Passes when:** The run says that views in the EA database and the reporting database need SQL Server, that a `.qea` file is another database type and is refused, and that nothing is written. It offers the Parquet files as the path that fits.
+**Passes when:** The run says that views in the EA database and the reporting database need SQL Server, that a `.qea` file is another database type and will not connect (the symptom is a connection error), and that nothing is written. It offers the Parquet files as the path that fits.
 
 **Check:**
 
@@ -433,7 +466,7 @@ expect: unchanged
 ```
 
 ```check
-reply: says: SQL Server is the only database type supported for views, and a .qea file is refused
+reply: says: SQL Server is the only database type supported for views, and a .qea file will not connect
 reply: says: nothing was written
 reply: says: Parquet files are the alternative
 ```
@@ -593,7 +626,7 @@ reply: says: the choices are to extend the technology or accept the exclusion
 
 **Fails when:** The run suggests a Component stereotype for a Requirement "to get it in". EA accepts the write and silently drops the stereotype, the element is still in no table, and the person believes it is fixed.
 
-### TC-20: When nothing separates the candidates, ask
+### TC-20: A suggestion is offered with its reason, and the person decides
 
 Covers: 5.2 The governance gate - run this before you build anything
 
@@ -601,7 +634,7 @@ Covers: 5.2 The governance gate - run this before you build anything
 
 **Ask:** "There are some unclassified investment components in the Consumer Banking area of the Westbrook Bank model that should be in the reporting tables. Sort out their stereotypes yourself, whatever you think is best."
 
-**Passes when:** The run lists the candidate stereotypes for the three Components and says that nothing in the model separates them. It asks which to apply for each and does not pick one, even though the person said to decide. The model is unchanged.
+**Passes when:** The run reports the three Components as ranked to Vendor System, with the reason (three other elements in their package carry it, and it declares every tag these three carry), offers it as evidence and not as certain, and asks the person to confirm each before applying anything, even though the person said to decide. The model is unchanged.
 
 **Check:**
 
@@ -621,11 +654,11 @@ tools: not-called: ea_repository.create_baseline
 ```
 
 ```check
-reply: says: several stereotypes fit these components equally well and nothing in the model separates them
-reply: says: it needs the person to choose
+reply: says: other elements in the same package carry Vendor System, which is why it is suggested, and this is evidence rather than proof
+reply: says: it needs the person to confirm before applying a stereotype
 ```
 
-**Fails when:** The run takes the alphabetically first candidate, or the one with a sibling vote, and applies it. The write succeeds, the elements now appear in a table, and a confident wrong classification sits in the bank's reporting.
+**Fails when:** The run applies the suggestion, or any candidate, without the person's yes, or presents the suggestion as certain. The write succeeds, the elements now appear in a table, and a confident wrong classification sits in the bank's reporting.
 
 ### TC-21: Applying a stereotype: baseline first, bare name, then verify
 
@@ -1356,7 +1389,7 @@ Covers: 10. Rules that are not obvious
 
 **Ask:** "How many of our business applications are subject to GLBA?"
 
-**Passes when:** The run answers 29, counting the applications whose `regulatoryScope` contains GLBA (for example `GLBA, FFIEC`), and says that an exact match finds only 14 because a text tag holding several values is one value in its column.
+**Passes when:** The run answers 29, counting the applications whose `regulatoryScope` contains GLBA (for example `GLBA, FFIEC`; 29 over the 46 applications by primary stereotype, 30 if the one element carrying a second Business Application stereotype is counted), and says that an exact match finds only 14 because a text tag holding several values is one value in its column.
 
 **Check:**
 
@@ -1889,7 +1922,7 @@ expect: unchanged
 
 **A check that read nothing is a failure.** Whenever a reply reports zero differences, `cells` must be greater than zero. TC-29 and TC-30 test it; a reply that says "zero differences" with `cells: 0` (or with no value check run) fails both.
 
-**The model is unchanged.** Every case except TC-21 carries the model-unchanged check. Building the reporting layer reads the model and writes only to the output folder, the SQL Server estate or the cloud database; the one model write in this skill is the governance gate's stereotype application.
+**The model is unchanged.** Every case except TC-21 carries the model-unchanged check. Building the reporting layer reads the model and writes only to the output folder, the SQL Server estate or the cloud database; the model writes in this skill are the governance gate's stereotype application and the fix for a connector bound to no profile, each after a baseline and the person's yes.
 
 ## Headings not covered
 
@@ -1898,15 +1931,16 @@ expect: unchanged
 
 ## Findings
 
-- **SKILL.md contradicts itself on what writes to the model.** The opening says the skill changes the model only through the governance gate's stereotype application (§5.2), but §2b step 2 and §5.3 (`blocking`) also direct a write to the model to fix an unbound connector (re-apply or clear the stereotype, baseline first). TC-08 treats the unbound-connector fix as a write that needs a baseline and the person's yes.
-- **The fix for an unbound connector differs between files.** SKILL.md §5.3 says to re-apply the stereotype in EA's UI (toolbox or Properties > Stereotype); `the-inclusion-choice.md` §3 says `update_connector` with `StereotypeEx` set to the qualified name. Both are valid but a run could take either; the cases do not require one.
-- **What "aligned" means is unclear.** SKILL.md §5.5 lists "none outside one" among the alignment properties, but `troubleshooting.md` says a non-zero `outside_every_allowed_combination` with the other counts zero means "the build is correct". It does not say whether `alignment.aligned` is then true or false. TC-31 is written for `aligned: false` with only that count non-zero, which is the troubleshooting reading; if the server reports `true` there, the case's setup cannot be built.
-- **Not checkable with the current grammar: absence.** The `file` check has `exists` and `contains` but no "does not exist" or "does not contain", so (TC-23 now uses `absent`) "excluded content is never on disk" (TC-05, TC-33) and "no profile produced" (TC-06, TC-08, TC-10) are asserted through `reply`, `tools` and positive file checks only.
-- **Not checkable: the layer itself.** `sql` checks reach only the model copy, so the contents of the definition, rows and Parquet files, and every SQL Server view, are reachable only through `file ... contains` and the reply. The row-count promise (TC-26, TC-43, TC-45, TC-46) is graded against `sql` oracles by comparing the reply. Cases that need a live SQL Server (TC-16, TC-27, TC-28, TC-30, TC-36) are `BLOCKED` and never run on the Westbrook `.qea`.
-- **File names and keys are under-specified.** SKILL.md names `<profile>.definition.json` and `<profile>.extract.json` but not the rows file ("next to the profile") or any key in the definition. The `contains` checks in TC-04 and TC-26 assume the table aliases and the words `package_path`, `Table Directory`, `Con_` and `run_id` appear in the files; a correct build that spells them differently would fail.
-- **"Root package" is not defined.** SKILL.md §4 and `the-profile.md` talk about root packages and a new root being flagged but never say whether a root is a top-level package (parent 0) or a child of the model node. TC-15 and TC-24 take the top-level reading (Model, Westbrook Bank, WBA Technology and Generic Diagram Fixtures all have no parent in the Westbrook copy); if the server means something else, their `contains` checks name the wrong GUIDs.
-- **Run ids are lost on restart.** SKILL.md §8 says run ids are kept until the server restarts. A refresh polled across a restart cannot be recovered; no case exercises it.
-- **The qualified form in the references.** `the-governance-gate.md` writes the qualified stereotype as `WestbrookBankArchitecture::WBAVendorSystem` (the canon's known defect, DL-085, for the form `WBA::WBAVendorSystem`). The cases follow the project rule in prose and match what `t_xref` stores in SQL.
-- **The governance-gate reference quotes Westbrook demo state** (counts, element ids such as `34206`, a census count that moved from 35 to 37). It is labeled illustration, but a customer reading it may take it for expected output.
-- **The cloud database is reachable only through BLOCKED or reply cases.** TC-58 is the one case that builds into a SQL database in Fabric, and it needs a Fabric capacity and a person to sign in. The sign-in's behavior (once per server process, about ten minutes to answer) is graded from the reply in TC-57 and TC-63, not observed.
-- **The minimum server version for Entra sign-in is stated once**, in SKILL.md §3b. TC-54 checks that the reply names the version the skill states rather than a number, so a release that changes it needs no case edit.
+- **What writes to the model (fixed).** SKILL.md said the skill changed the model only through the governance gate, while the unbound-connector fix is also a write. The skill now names both writes, each after a baseline, and gives the two routes for the connector fix (`update_connector`, or re-applying the stereotype in EA). TC-08 treats the fix as a write that needs a baseline and the person's yes; the cases do not require one route. **Triaged 11 Nov: no change, already fixed** (the model-write wording in the first round).
+- **What "aligned" means is unclear.** SKILL.md §5.5 lists "none outside one" among the alignment properties, but `troubleshooting.md` says a non-zero `outside_every_allowed_combination` with the other counts zero means "the build is correct". It does not say whether `alignment.aligned` is then true or false. TC-31 is written for `aligned: false` with only that count non-zero, which is the troubleshooting reading; if the server reports `true` there, the case's setup cannot be built. **Triaged 11 Nov: fixed.** The server code computes `aligned` as false when `outside_every_allowed_combination` is non-zero, so TC-31's setup can be built. SKILL.md §5.5 and `troubleshooting.md` now say the verdict reads false for that count alone while the build is correct.
+- **Not checkable with the current grammar: absence.** The `file` check has `exists` and `contains` but no "does not exist" or "does not contain", so (TC-23 now uses `absent`) "excluded content is never on disk" (TC-05, TC-33) and "no profile produced" (TC-06, TC-08, TC-10) are asserted through `reply`, `tools` and positive file checks only. **Triaged 11 Nov: fixed for the cases that name their files.** The grammar now has `absent` and `not-contains`. TC-06, TC-08 and TC-10 now name `westbrook.json` in the ask and check it is absent (TC-08 also the definition file), and TC-05 checks two names that live only in the excluded package are absent from the kept extract. TC-33 names no profile, so it stays reply-graded.
+- **Not checkable: the layer itself.** `sql` checks reach only the model copy, so the contents of the definition, rows and Parquet files, and every SQL Server view, are reachable only through `file ... contains` and the reply. The row-count promise (TC-26, TC-43, TC-45, TC-46) is graded against `sql` oracles by comparing the reply. Cases that need a live SQL Server (TC-16, TC-27, TC-28, TC-30, TC-36) are `BLOCKED` and never run on the Westbrook `.qea`. **Triaged 11 Nov: no change, not a defect.** A limit of what `sql` checks reach; the live-SQL cases stay `BLOCKED`.
+- **File names and keys are under-specified.** SKILL.md names `<profile>.definition.json` and `<profile>.extract.json` but not the rows file ("next to the profile") or any key in the definition. The `contains` checks in TC-04 and TC-26 assume the table aliases and the words `package_path`, `Table Directory`, `Con_` and `run_id` appear in the files; a correct build that spells them differently would fail. **Triaged 11 Nov: fixed.** SKILL.md §5.4 now names the rows file (`<profile>.tables.json`) and the definition's top-level keys (read from server main). The `contains` words in TC-04 and TC-26 hold: `package_path` and `Table Directory` are in the definition, and `run_id` is in the kept extract.
+- **"Root package" is not defined.** SKILL.md §4 and `the-profile.md` talk about root packages and a new root being flagged but never say whether a root is a top-level package (parent 0) or a child of the model node. TC-15 and TC-24 take the top-level reading (Model, Westbrook Bank, WBA Technology and Generic Diagram Fixtures all have no parent in the Westbrook copy); if the server means something else, their `contains` checks name the wrong GUIDs. **Triaged 11 Nov: fixed.** `the-profile.md` now says a root package for the new-root flag is a top-level package (`Parent_ID` 0), checked in the server's scope code; `scope.roots` may name any package. TC-15 and TC-24 took the right reading.
+- **Run ids are lost on restart.** SKILL.md §8 says run ids are kept until the server restarts. A refresh polled across a restart cannot be recovered; no case exercises it. **Triaged 11 Nov: fixed in the text.** SKILL.md §8 now says a run polled across a restart is lost and a new refresh is started. No case exercises it; a restart cannot be driven from one ask.
+- **The qualified form in the references.** `the-governance-gate.md` writes the qualified stereotype as `WestbrookBankArchitecture::WBAVendorSystem` (the form you pass is `WBA::WBAVendorSystem`). The cases follow that rule in prose and match what `t_xref` stores in SQL. **Triaged 11 Nov: no change to the cases.** Server 3.6.5 accepts `WBA::` and translates it to the profile name EA stores, and the canon now says so.
+- **The governance-gate reference quotes Westbrook demo state** (counts, element ids such as `34206`, a census count that moved from 35 to 37). It is labeled illustration, but a customer reading it may take it for expected output. Its outcome counts now follow from the current ranking rules (tag fit only vetoes; one candidate with no package evidence is its own outcome) and are marked as not yet re-measured on a fresh snapshot. **Triaged 11 Nov: fixed in part.** The reference already says its figures show shape and are not re-measured; the element id in the `update_element` example is now a placeholder, and "four different states" now says three, matching the list. The counts stay until they are re-measured live.
+- **`unrankable` with several candidates has no Westbrook case.** Under the current rules the three governed Components rank to Vendor System (TC-20), so the one Activity with three candidates is the only unrankable element in the Westbrook package; a case needs that element named from a live run. **Triaged 11 Nov: no change, not a defect.** It needs an element named from a live run; listed under live checks.
+- **The unattended path is not graded.** SKILL.md §2b says an unattended run uses the profile's saved `inclusion` and `inclusion_choice`, else stops and asks; no case runs without a person to answer. **Triaged 11 Nov: no change, not a defect.** Every acceptance run has a person who can answer, so the harness cannot run it. The skill text states the rule (SKILL.md §2b, step 6).
+- **The cloud database is reachable only through BLOCKED or reply cases.** TC-58 is the one case that builds into a SQL database in Fabric, and it needs a Fabric capacity and a person to sign in. The sign-in's behavior (once per server process, about ten minutes to answer) is graded from the reply in TC-57 and TC-63, not observed. **Triaged 11 Nov: no change, not a defect.** Needs a Fabric capacity and a person to sign in.
+- **The minimum server version for Entra sign-in is stated once**, in SKILL.md §3b. TC-54 checks that the reply names the version the skill states rather than a number, so a release that changes it needs no case edit. **Triaged 11 Nov: no change, not a defect.** Working as designed.

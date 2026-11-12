@@ -5,10 +5,10 @@ description: Get content into and out of a Sparx EA repository — XMI package e
 
 # Import / Export — Sparx EA
 
-*Verified against a live Westbrook Bank repository. Every claim below was exercised against
-that model in this session — see the verification table in each reference file for the exact
-call and result. Where EA's own behavior surprised the author, that is flagged as a defect, not
-smoothed over.*
+*Checked against a live Westbrook Bank repository; each reference file has its verification
+table. Where EA's own behavior surprised the author, that is flagged as a defect. Two limits:
+the report notes were measured on server 2.1.0 (§5), and no working XMI export and import round
+trip is recorded here, only the failed one (§4), so check an XMI result yourself.*
 
 ## 1. Which operation for which purpose
 
@@ -19,13 +19,14 @@ smoothed over.*
 | Hand a diagram to a stakeholder who has Visio but not EA, so they can move/relabel shapes | `ea_diagram(operation="export_diagram_to_visio")` | Preserves shape geometry and connectors as editable Visio objects — see §3. A one-off file only; for new work see §3b. |
 | Redraw a diagram in another tool, or keep a copy in step with the model | `ea_diagram(operation="get_diagram_manifest")` / `get_package_manifest` | Every shape keeps the link to its element, with nesting and line routes — see §3b. |
 | Give diagrams a description that a screen reader or an AI can read, and keep it current | `ea_diagram(operation="create_diagram_description")` / `update_diagram_description` / `audit_diagram_descriptions` | Words in the diagram's Notes, generated from the diagram — see §3c. |
-| Move a package into another repository, or feed a tool that reads XMI | `ea_repository(operation="export_xmi")` / `import_xmi` | **Read the warning in §4 before relying on this for anything you can't afford to lose.** |
-| A formatted document (headings, tagged values, prose) rather than a picture | `ea_repository(operation="generate_report")` | RTF only in this server version — see §5. |
+| Move a package into another repository, or feed a tool that reads XMI | `ea_repository(operation="export_xmi")` / `import_xmi` | §4 says what the server checks on export; compare `elements_in_export` with `elements_in_package`, and take a baseline of the target package before an import. |
+| Move a whole model to another repository (every package, diagram and setting) | EA's own Settings > Transfer > Native XML | No operation here does it; it is an EA UI procedure. Every numeric id changes. Read §4b before you start. |
+| A formatted document (headings, tagged values, prose) rather than a picture | `ea_repository(operation="generate_report")` | RTF, Word (`.doc`, `.docx`) or PDF; see §5. |
 
 Do **not** use the plain `ea_diagram(operation="get_diagram")` read call as an export path even
 though it returns image bytes in its `preview_size_bytes`/`saved_path` fields — it is a
-diagram-inspection call, and the preview it silently writes lands in the server's own cache
-folder next to the model file, not wherever you intend the deliverable to go. Use
+diagram-inspection call, and the preview it silently writes lands in a per-user cache folder
+(under `%LOCALAPPDATA%\ea-mcp-server\previews`), not beside the model, and not wherever you intend the deliverable to go. Use
 `get_diagram_png` / `get_diagram_svg` with an explicit `path` when the PNG or SVG itself is the
 deliverable.
 
@@ -118,6 +119,7 @@ too: `diagram_guid`, `package_guid`.)
   §3c would write. A person's own notes with no marker lines do not count as a stored description.
   `description_source` says which (`notes` or `generated`). When the diagram's technology cannot be read, the description is null
   and `description_unavailable` says why; the rest of the read is unaffected.
+- **`orphan_placements`.** A placement whose element is gone is left out of the shapes and listed here, in descriptions, audits and manifests.
 - **`verify_diagram`'s keys, unchanged.** A checker that reads a verification reads a manifest. One
   value differs: `stereotype` on a shape is the qualified form (`WBA::WBABusinessApplication`),
   and the bare name is `concept`.
@@ -132,6 +134,7 @@ too: `diagram_guid`, `package_guid`.)
   picture is taken, no drawn sizes are given, and the result says the diagram is open with unsaved
   changes. If the person wants those changes included, ask them to save in EA and read again.
 - **A diagram you did not have open is not left open.** The server closes only what it opened.
+- **EA tells whether a diagram is open only by its tab name,** so two diagrams with the same name (or long names that share their first 27 characters) cannot be told apart: if one is open, the other reads as open too, and an unsaved change in one blocks the other.
 - **The package form describes each element once.** `elements` is keyed by GUID; each shape in a
   diagram then carries `element_guid` and its placement only. A package holds every diagram that
   belongs to it, including a diagram that an element in it owns. When you report a package read,
@@ -186,7 +189,7 @@ ea_diagram(operation="update_diagram_description", params={"package_id": 5, "rec
 The audit writes nothing. It gives each diagram one status: `empty`, `human_only`, `broken_markers`,
 `technology_not_loaded`, `older_generator`, `language_changed`, `needs_decision`, `stale`, `edited`
 or `current`, and on any text that is there it flags what the text leaves out (`incomplete`, with
-`names_missing` and `relationships_missing`). Report the counts by status and the diagrams that need
+`names_missing` and `relationships_missing`). Rows, and the results of create and update, also carry `names_unresolved_list`: the stereotypes the description could not resolve to a business name. Report the counts by status and the diagrams that need
 work, not the raw rows.
 
 `refresh` creates where Notes are empty, extends where there is only a person's text, and
@@ -242,6 +245,9 @@ ea_diagram(operation="update_diagram_description", params={
 | `notes_changed` | Someone edited the description in EA while the person was deciding. Nothing was written. The result carries the new `current_text` and `current_text_hash`; show the person what is there now. |
 | `open_with_unsaved_changes` | The diagram is open in EA with unsaved changes. Nothing was written, because EA would discard the person's edits on reload and their next save would undo the write. Ask the person to save in EA and run it again. A package run carries on with the others. |
 | `technology_not_loaded` | The diagram's technology cannot be read here, so business names are unavailable. Nothing was written; the server will not replace good text with base EA terms. Ask the person to enable or import the technology in EA (**Specialize > Technologies > Manage Technology**) and run it again. |
+| `tab_state_unreadable` | EA could not say whether the diagram is open; nothing was written, reloaded or closed. Ask the person to open or save the diagram in EA, then run it again. |
+| `write_failed` | The write raised an error; the Notes may have changed. Read `stored_text` or the Notes before running again. |
+| `write_not_confirmed` | A success, not a failure: EA accepted the write but the stored Notes differ (`ok: true`, `applied: true`, `stored_differs: true`). Show `stored_text` to the person; an open diagram is reloaded. |
 | `broken_markers` | A marker line has lost its pair or cannot be read. Nothing was written and no second description is added. Tell the person to remove or repair the stray marker line in EA's Notes window, then run it again. Do not edit the Notes around it. |
 
 **Read-only mode.** `create_diagram_description` and `update_diagram_description` are refused,
@@ -255,58 +261,83 @@ the elements on the diagram.
 
 ## 4. XMI package export/import — `export_xmi` / `import_xmi`
 
-> **Fixed in server 2.2.0.** This path was genuinely broken and this skill told you not to trust
-> it. `export_xmi` wrote a ~350-byte **XPDL 2.2** stub containing none of the package's elements
-> while reporting `"xmi_type": "XMI 2.1"` and `"status": "exported"`, and re-importing it created
-> zero objects while reporting `"status": "imported"`. The cause was that `xmiType` is an ordinal
-> from Sparx's `EnumXMIType` and the mapping table had been written as though the ordinal were the
-> XMI version number, so every entry was wrong.
->
-> **What the server does now:** `export_xmi` reads the file back before reporting success and
-> confirms both that it is XMI and that the package's elements appear in it. A wrong-format or
-> empty result returns `xmi_export_wrong_format` or `xmi_export_empty` instead of a false success,
-> and the response carries `elements_in_package` / `elements_in_export` so you can see the export
-> is real. `xmi_type` accepts `"XMI 1.0"`, `"XMI 1.1"`, `"XMI 1.2"`, `"XMI 2.1"` (default),
-> `"XMI 2.4.1"` and `"XMI 2.5.1"`.
+> **What the server does (2.2.0 or later):** `export_xmi` reads the file back before reporting
+> success and confirms both that it is XMI and that the package's elements appear in it. A
+> wrong-format or empty result returns `xmi_export_wrong_format` or `xmi_export_empty`, and the
+> response carries `elements_in_package` / `elements_in_export`. `xmi_type` accepts `"XMI 1.0"`,
+> `"XMI 1.1"`, `"XMI 1.2"`, `"XMI 2.1"` (default), `"XMI 2.4.1"` and `"XMI 2.5.1"`. (The defect
+> that once made it report success on an empty file is recorded in
+> [`references/xmi-export-import.md`](references/xmi-export-import.md).)
 >
 > **Still worth doing:** check `elements_in_export` against `elements_in_package` rather than
-> reading `status` alone. The server checks it for you now, but the habit is what caught this.
+> reading `status` alone. Diagrams are included by default, so a package moved with `import_xmi`
+> keeps them. Compare `diagrams_in_export` with `diagrams_in_package`; `diagrams_missing: true`
+> means the file holds none although the package has some. Pass `export_diagrams: false` for a
+> smaller file without diagrams. Paths may use forward slashes; the server converts them. An empty
+> path is refused (`path_required`).
+
+**`import_xmi` writes into the target package.** It can overwrite elements whose identifiers
+already exist there. Before importing into a repository that already holds the package, take a
+baseline of the target (`ea-change-management`, section 6: always for an XMI import), and say what
+the import may replace.
 
 The original investigation -- the file contents observed and the SQL that confirmed zero import --
 is kept in [`references/xmi-export-import.md`](references/xmi-export-import.md) as the record of a
 defect that reported success, which is worth reading for the pattern even though the specific bug
 is gone.
 
-## 5. `generate_report` — RTF document generation
+## 4b. Moving a whole model to another repository
+
+Per-package XMI (§4) is not a whole-model move. For a whole model, use EA's own Native XML
+transfer (Settings > Transfer > Native XML). It worked for a cloud model of about 3,300 elements,
+8,950 connectors and 2,580 diagrams (export about 1 minute, import about 50, every model table
+matched). "Full Project Transfer via Connection" needs direct database access to the server, so it
+cannot be used on a cloud repository. These numbers are one measurement.
+
+The import **deletes everything in the target first** (EA warns), so back up the target before
+you start. The short version:
+
+1. Back up the target. 2. Export the source. 3. Import into the target. 4. Reopen the target (EA
+   keeps the old technologies loaded until then). 5. Compare by GUID. 6. Rebuild the diagram image
+   cache. 7. Work the post-transfer checklist.
+
+**Every numeric id is new after a transfer** (elements, diagrams, connectors, packages); GUIDs are
+kept. EA remaps matrix-profile package ids, navigation cells and click-through links, but a
+matrix profile whose package did not exist in the source keeps its old number and now points at an
+unrelated package. Anything outside EA that stores numeric ids (Prolaborate queries and links,
+script markers) silently points at the wrong thing. Build a source-to-target id table by GUID and
+check matrix profiles after the import.
+
+**What the export leaves out or changes** (differences, not data loss): cached diagram images are
+never exported; element notes lose trailing blank lines; one system setting stored with garbled
+bytes (`MySQL_MemoDataType`) is skipped and EA rewrites it on reopen. The model also still carries
+the old Prolaborate repository id (`usys_system.ProLabRepoID`). Compare it with the intended
+Prolaborate repository (see `ea-com` and `prol-start-here` section 5) and set it in Model Options (Cloud).
+
+The procedure, the id-table code and the full checklist are in
+[`references/move-model-between-repositories.md`](references/move-model-between-repositories.md).
+
+## 5. `generate_report` — document generation
 
 ```python
 ea_repository(operation="generate_report", params={
     "template": "Simple",
     "package_id": 21,
-    "output_path": "<scratch-dir>\\account_origination.rtf",
+    "output_path": "<output-dir>\\<file-name-the-person-gave>.rtf",
 })
 ```
 
-Three things verified in this session that are easy to get wrong:
+Use exactly the file name the person gave (add `.rtf` only if they gave no extension). Never
+prefix, suffix or otherwise rename a requested file, for example with the package name.
 
-1. **`output_path` must end in `.rtf`.** The same call with a `.html` path failed with
-   `{"error": "report_failed", "detail": "RunReport returned but output file does not exist"}`
-   regardless of the `template` value. This server version generates RTF only through this
-   operation.
-2. **`template` is not validated against anything in this repository.** This model has no
-   custom report templates defined (`SELECT * FROM t_rtfreport` returns zero rows — check this
-   first via `ea_analyze(operation="execute_sql", ...)` to see what's actually available). With
-   no custom template to find, three different nonsense strings and the plausible-sounding
-   `"Simple"` all produced the identical byte-for-byte 20,334-byte default document. A
-   `"generated"` status is **not** confirmation your named template was used — open the output
-   and check its heading.
-3. **Never pass an empty string for `template`.** It reproducibly hung the call (once reported
-   as a closed connection, once as a timeout) rather than failing fast. EA itself stayed
-   responsive throughout — confirmed with `ping()` and `get_repository_info` immediately after —
-   so this is a per-call hang, not a reason to restart EA.
+Three things that are easy to get wrong (server 3.6.5 or later):
 
-The generated RTF embeds each element's Created/Modified `Author` field verbatim from the
-model — that is the modeler's own EA/Windows username, not a Westbrook Bank tagged value. Check
+1. **`output_path` must end in `.rtf`, `.doc`, `.docx` or `.pdf`;** other extensions, `.html` included, are refused with `unsupported_report_format`. EA ignores the extension and does not write HTML from this call. An empty `output_path` is refused (`path_required`).
+2. **`template` is not validated against anything.** An unknown template name silently falls back to a default document, so a misspelled name still produces a report: a `"generated"` status is not confirmation your named template was used, so open the output and check its heading. `SELECT * FROM t_rtfreport` shows only the templates stored in the model (an unmodified model has none).
+3. **An empty `template` is refused with `template_required`;** the call no longer hangs. Supply a non-empty name (for example `"Simple"`). If any call seems to hang, look at EA's screen for a blocking dialog before you conclude anything.
+
+The generated report embeds each element's Created/Modified `Author` field verbatim from the
+model: the modeler's own EA/Windows username, not a Westbrook Bank tagged value. EA writes the Windows login name as the author of each element; this is EA's behavior. Check
 report content for anything identifying before sharing a generated report outside the team.
 
 Full discovery method for real templates once a project has them, and the complete test matrix,
@@ -314,12 +345,8 @@ are in [`references/generate-report.md`](references/generate-report.md).
 
 ## 5b. Reading the results from a Claude Cowork or cloud session
 
-Exports and generated reports are files. If the user wants a Claude Cowork or other cloud session
-to read them, tell them to export into one `<output-folder>` and connect that folder, not the
-folder that holds the model file. Such a session can read the XMI, images and reports, but it
-cannot change the model or import anything back, because the server is not available in those
-sessions today. Review a generated report for identifying details before connecting the folder
-(§5).
+Exports and generated reports are files. To let a Claude Cowork or other cloud session read the results, put them in one `<output-folder>` and connect that folder, not the folder that holds the model file. That session can read the files but cannot change the model, because the server is not available in cloud sessions today. Review a generated report for
+identifying details before connecting the folder (§5).
 
 ## 6. EA Computer-Use — Latency
 
@@ -331,13 +358,14 @@ diagram in EA to compare against the export, use the standard wait-before-screen
 ## Reference files
 
 - [`references/xmi-export-import.md`](references/xmi-export-import.md) — full `export_xmi`/`import_xmi` repro, file contents, and the SQL verification of the failed round trip
-- [`references/generate-report.md`](references/generate-report.md) — template discovery, the RTF-only extension requirement, and the empty-template hang
+- [`references/move-model-between-repositories.md`](references/move-model-between-repositories.md) — Native XML whole-model transfer: route choice, procedure, id renumbering, what the export changes, and the post-transfer checklist
+- [`references/generate-report.md`](references/generate-report.md) — template discovery, the accepted extensions, and the empty-template refusal
 
 ## See also
 
 - `ea-modeling` — for building the content you're about to export in the first place
 - `ea-stakeholder-reporting` — reading a diagram's description to someone who has no EA
-- `ea-diagnostic` — escalation path for the `export_xmi` defect above, or any other repeated failure
+- `ea-diagnostic` — escalation path for any repeated failure
 - `_shared/references/westbrook-example.md` — canonical stereotypes/tags used in every example here
 
 ## Verify in EA's UI
@@ -348,10 +376,10 @@ COM connection rather than as an error you can catch. Neither shows up in a tool
 - **If a call seems to hang, screenshot EA and read the dialog before concluding anything.**
   It names the cause. Dismiss from the front — dialogs stack, and a later call can be queued
   behind one raised by an earlier one. Windows reporting EA as "Responding" means nothing.
-- **After any diagram create or edit, reload the diagram, screenshot it, and look.**
-  `ok: true` means rows were written, not that elements landed where you intended, that
-  styling applied, or that the result is readable.
-- **Without computer use**, say so and ask the user to look — never report a hang you have
-  not diagnosed or a diagram you have not seen.
+- **This skill edits no diagram.** It exports them; to check an export, compare the file with
+  the diagram open in EA. `ok: true` means a file was written, not that it is readable.
+- **Without computer use**, say so. Ask the user to paste a screenshot of the EA window or
+  dialog into the conversation, read the cause from it, and ask the user to dismiss the dialog
+  before you retry. Never report a hang you have not diagnosed or a diagram you have not seen.
 
 Full procedure: [`../_shared/references/ea-ui-verification.md`](../_shared/references/ea-ui-verification.md)

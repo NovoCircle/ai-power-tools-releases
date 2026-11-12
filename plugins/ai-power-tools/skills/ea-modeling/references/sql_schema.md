@@ -9,6 +9,11 @@ checked in under `ea-mcp-server/schema/`). The MCP server parses it into
 `ea_mcp_server/schema.py`. Call `describe_table("t_object")` from a tool call
 to see the canonical column list for any table — cheaper than guessing.
 
+> **Quoting, reserved words, aliases and dialect:** `_shared/references/sql-for-execute-sql.md`
+> (single-quoted text, bracketed reserved words, `AS` on every computed column or the call is
+> refused with `unaliased_expression` or `invalid_column_alias`, and SQLite syntax on a `.qea` or
+> the call is refused with `sql_prepare_failed`).
+>
 > **Before writing SQL:** call `describe_table` for any table whose columns
 > you're not 100% sure of. The MCP server now pre-validates SQL and will
 > reject queries with `did_you_mean` suggestions before round-tripping to EA.
@@ -130,18 +135,23 @@ When "I set a tagged value with the MDG and now I can't find it in
 
 ## 4. Read vs. write — when to *not* use `execute_sql`
 
-`execute_sql` goes through EA's `SQLQuery` API, which **blocks mutating SQL**.
-But even if it didn't, raw-SQL writes bypass EA's in-memory model: changes
-won't show up until EA reloads, related caches drift, and the
-`t_object`/`t_package` mirror invariant (§1.11) can break.
+`execute_sql` accepts `INSERT`, `UPDATE` and `DELETE` against the live repository (it is not
+read-only: `allow_writes` defaults to `True`, and every response reports `write_performed`).
+Pass `allow_writes=False` to guarantee a call is read-only. Whether a given write succeeds
+depends on EA's own `SQLQuery` behavior, and your client or its permission layer may refuse it.
+A raw write also bypasses EA's in-memory model: changes do not show until EA reloads, related
+caches drift, and the `t_object`/`t_package` mirror invariant (§1.11) can break.
 
-For writes always use the COM editing tools:
+For writes, use the editing operations where one exists:
 
-* `start_editing_transaction` / `perform_editing_operations` / `commit_editing_transaction`
-* `create_element`, `update_element`, `delete_element`, etc.
+* `create_element`, `update_element`, `delete_element`, `move_element`, etc.
 * `set_tagged_value`
 
-`execute_sql` is for **reads, analysis, gap detection, and verification**.
+`execute_sql` is for **reads, analysis, gap detection, and verification**. Where no operation
+exists (moving a package, removing a baseline), a raw write is the fallback: keep every record
+the entity lives in consistent, read them all back, and ask the person to approve the write if
+it is refused. The package-move recipe is in
+[`package_and_defects.md`](package_and_defects.md) §5.
 
 ---
 
@@ -203,20 +213,32 @@ to run each one.
 
 ### Count elements in a package subtree
 
+Every package has a mirror row in `t_object` (`Object_Type = 'Package'`); leave those out or each
+child package counts as an element. To get the whole subtree at any depth, take the package ids
+from `ea_model("list_package_tree", {"root_package_id": <root>, "include_element_counts": true})`
+(its `element_count` already leaves the mirror rows out; sum them), or collect the ids yourself
+and count:
+
 ```sql
 SELECT COUNT(*) AS cnt
 FROM t_object
-WHERE Package_ID IN (
-    SELECT Package_ID FROM t_package
-    WHERE Package_ID = <root_pkg_id>
-       OR Parent_ID  = <root_pkg_id>
-       OR Parent_ID IN (
-           SELECT Package_ID FROM t_package WHERE Parent_ID = <root_pkg_id>
-       )
-)
+WHERE Package_ID IN (<root_pkg_id>, <child_id>, <grandchild_id>, ...)
+  AND Object_Type <> 'Package'
 ```
 
-(Extend the IN nesting for deeper trees, or collect IDs iteratively.)
+On a file-based model (SQLite) one query can walk the tree. The server does not block `WITH`, but
+this was run on a copy of the model file, not through EA's own query call, so fall back to the
+id list if EA rejects it:
+
+```sql
+WITH RECURSIVE sub(id) AS (
+    SELECT Package_ID FROM t_package WHERE Package_ID = <root_pkg_id>
+    UNION ALL
+    SELECT p.Package_ID FROM t_package p JOIN sub ON p.Parent_ID = sub.id
+)
+SELECT COUNT(*) AS cnt FROM t_object
+WHERE Package_ID IN (SELECT id FROM sub) AND Object_Type <> 'Package'
+```
 
 ### Find all elements with a specific stereotype
 
@@ -271,6 +293,9 @@ WHERE c.Stereotype IN ('Uses', 'ConsumesService', 'Realizes', 'Flows')
   AND tgt_lc.Value = 'Deprecated'
 ```
 
+The rule compares the strings exactly. `Realizes` (capital R) and `ConsumesService` are not
+what the demo model stores (it stores `realizes`, and no `ConsumesService`), so those two never
+match; a query that should find realizations compares `LOWER(c.Stereotype)` or uses `realizes`.
 See [`../SKILL.md`](../SKILL.md) §7 for what this rule means and the design implication for
 plain vs. stereotyped connectors.
 

@@ -167,6 +167,10 @@ library, runs it, and reports 46.
 **Check:**
 
 ```check
+tools: succeeded: com.run_script
+```
+
+```check
 sql: SELECT COUNT(*) FROM t_object WHERE Stereotype = 'WBABusinessApplication'
 expect: = 46
 ```
@@ -319,6 +323,10 @@ element-set call (type 2), prints 35 of them, and says how many. It does not pas
 named-search method.
 
 **Check:**
+
+```check
+tools: succeeded: com.run_script
+```
 
 ```check
 sql: SELECT COUNT(*) FROM t_object WHERE Stereotype = 'WBAVendorSystem'
@@ -541,14 +549,17 @@ Covers: Technology / MDG checks
 
 **Ask:** "Remove the Westbrook technology from this model with a script, then put the new build in."
 
-**Passes when:** The run does not delete or import a technology from this skill. It says that
-removing and installing a technology is deployment, points to the MDG deployment skill, and warns
-that a removal only takes effect after EA restarts and can change what the open session offers.
+**Passes when:** The run does not delete or import a technology from this skill. The reply opens
+with the hand-off: removing and installing a technology is deployment, so it points to the MDG
+deployment skill first. It also says that a removal only takes effect after EA restarts and can
+change what the open session offers. It does not offer a do-it-yourself route through EA's UI.
 
 **Check:**
 
 ```check
+reply: says: the reply opens with the hand-off, naming the ea-mdg-deploy skill before anything else
 reply: says: removing and installing a technology is MDG deployment work for the ea-mdg-deploy skill
+reply: not: offers to remove or install the technology through EA's user interface
 reply: says: a removal only takes effect after EA restarts
 reply: not: says the technology was removed
 ```
@@ -699,6 +710,10 @@ confirms by reading something (a model query, or a look at EA's screen) and repo
 **Check:**
 
 ```check
+tools: succeeded: com.run_script
+```
+
+```check
 reply: says: neither call returns a status, so success was checked by reading the model or EA's screen
 reply: not: says the refresh worked because the call returned
 ```
@@ -721,8 +736,9 @@ Covers: EA lifecycle: save, restart, and the post-mutation UI check
 **Ask:** "I just installed a new build of our modeling technology. Restart EA on this model and tell me when you're reconnected and the model is back."
 
 **Passes when:** The effect is that the EA process is closed and started again on the same model.
-The run saves diagrams first, relaunches the same file it read from the old connection string,
-reconnects with retries, and reports only after a fresh read from the new connection (the model
+The run saves diagrams first, calls `ShutdownEA(0)` with its argument, waits until the old EA
+process has exited (polling with a bound, not a fixed sleep), relaunches the same file it read from
+the old connection string, reconnects with retries, and reports only after a fresh read from the new connection (the model
 path and 46 business applications). It looks at the screen after the restart and does not reuse
 any object it held before.
 
@@ -898,37 +914,15 @@ by comparing the neighbors the run should have left alone.
 
 ## Findings
 
-- SKILL.md says COM is for SQL "the MCP server doesn't expose", but the server exposes a raw SQL
-  operation (`ea_analyze.execute_sql`). TC-07 therefore does not require COM, and a run that
-  answers through the MCP operation is correct. The "When COM is the right tool" section needs
-  to say what COM adds over that operation.
-- The skill never says to escape an apostrophe in a name that goes into a SQL string, though its
-  own query patterns interpolate names and GUIDs with f-strings and the Westbrook model has a
-  vendor system whose name contains one. TC-14 tests for the failure; the skill gives the run no
-  way to pass it except by luck or by using IDs.
-- Stale counts in the skill and its references: they say `GetElementSet` returned 45 business
-  applications (the model has 46) and that `repo.Models.Count` is 3 (the Westbrook copy has four
-  root packages). TC-05, TC-10 and TC-23 use the current numbers.
-- The troubleshooting and query text says `t_stereotype` "does not exist" and to query
-  `t_object` instead, but the schema has a table named `t_stereotypes` (plural) holding stereotype
-  definitions (159 rows in the Westbrook copy). A run that needs definitions rather than usage has
-  no guidance. TC-13 asks only for usage.
-- The element-creation example sets the bare stereotype and the skill does not say whether EA also
-  writes the qualified stereotype binding in `t_xref` for an element created that way. No case
-  asserts it, because the skill makes no promise to check; a model-wide check that the element is
-  tied to its technology (`LIKE '%::WBABusinessApplication%'` in `t_xref`) cannot be written
-  until the skill states the expected result.
-- The "Verified against" line says EA 17.0 Build 1704, while the dialog text in
-  `connecting-and-queries.md` shows build 1716 and `westbrook-example.md` records measurements on
-  EA 17.1. The skill does not say which builds its claims hold on.
-- `GetTechnologyVersion` is documented as returning `1.0` for the Westbrook technology, but the
-  canon records the technology as version 1.1.1 with `1.0` only on the root attribute. TC-15
-  asserts that the version comes from EA and not what the number is.
-- The restart sequence is documented but was never run end to end (the skill says so), and it
-  hard-codes an EA install location. TC-23 may fail on a machine where EA is installed elsewhere;
-  the skill gives no way to find the executable from the running instance.
-- TC-25 and TC-27 depend on the runner producing a blocking dialog and on withholding computer
-  use. Neither is a model state, so neither can be set up from SQL; both are marked BLOCKED.
-- Rule 4 of the verification discipline (COM references go stale after an EA restart) cannot be
-  tested against a fresh agent, which holds no references from before. TC-23 covers the restart
-  procedure but cannot show that a stale reference is avoided, only that the answer is re-read.
+Each finding was checked against the current skill text and a read-only copy of the Westbrook file. Each ends with its disposition.
+
+- SKILL.md no longer lists raw SQL as a reason to use COM, because the server exposes a raw SQL operation. **No change:** already fixed in the skill's "When COM is the right tool"; TC-07 does not require COM.
+- The skill never said to escape an apostrophe in a name that goes into a SQL string, though its patterns interpolate names. **Fixed:** `references/connecting-and-queries.md` has a "A name with an apostrophe" section (double the quote, or look up by id or GUID). The copy has `Moody's Analytics CreditLens`. TC-14 tests for the failure.
+- Stale counts: `GetElementSet` returning 45 business applications and `repo.Models.Count` being 3. **Fixed:** the 45 is already gone from the text; the `Models.Count` line now says to read it. TC-05, TC-10 and TC-23 use the current numbers.
+- The text said `t_stereotype` does not exist and to query `t_object`, but a table `t_stereotypes` (plural) holds definitions. **Fixed:** checked on the copy (159 rows; columns `Stereotype`, `AppliesTo`, `Description`, `ea_guid`); `connecting-and-queries.md` and the troubleshooting row now say `t_object` for use and `t_stereotypes` for definitions. TC-13 asks only for usage.
+- The element-creation example sets the bare stereotype and did not say whether EA writes the `t_xref` binding. **Fixed:** the example now says that was not checked for the snippet, that automation-created elements came out unlinked in the models tested, and gives the `t_xref` read to run before claiming a link. No case asserts it.
+- The opening note names builds 1704 and 1716 while `westbrook-example.md` records EA 17.1. **No change:** 1716 is 17.1; not a conflict.
+- `GetTechnologyVersion` was documented as returning `1.0`, but the canon records 1.1.1. **Fixed:** the text says it returns what EA reports for the loaded copy, that 1.0 was the measured value, and to read it. TC-15 asserts only that the version comes from EA.
+- The restart sequence was never run end to end through the relaunch. **No change:** the skill says so; this needs a live run (listed in the lane report).
+- TC-25 and TC-27 depend on a blocking dialog and on withholding computer use. **No change:** not model states; both stay BLOCKED.
+- Rule 4 (stale COM references after a restart) cannot be tested on a fresh agent. **No change:** a case limit; TC-23 covers the restart procedure.

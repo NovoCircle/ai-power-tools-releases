@@ -90,7 +90,7 @@ In the Card presentation step set `Symbol: Percentage` and `Prefix/Suffix: Suffi
 
 > **Execute every card and read the number before saving.** Then run one query that would return
 > zero or something absurd if your key assumption were wrong. A number that agrees with your
-> expectation deserves the same scepticism as one that does not — during verification a rollup
+> expectation deserves the same skepticism as one that does not — during verification a rollup
 > query returned exactly the expected figure because its join was matching nothing.
 
 ## Step 3 — criticality split (Pie)
@@ -135,6 +135,12 @@ where o.Stereotype = 'WBABusinessApplication'
 "Which applications do the most other things depend on" is a count-per-thing bar: **one row per
 dependency pair**, with `series` as the application name. The bar height is the number of rows.
 
+**Which end is the dependant.** On a `Uses` connector the Start is the dependant and the End is the
+thing depended on (EA's client-to-supplier direction), so the query below counts the End. Read a few
+connector rows to confirm that direction in your repository before you count. A repository can hold
+few such pairs: the Westbrook copy has only two applications at the End of a `Uses` connector, so
+this chart has two bars there. Say so rather than padding it.
+
 ```sql
 select o.Name,
        o.ea_guid     AS Classguid,
@@ -167,8 +173,11 @@ level-numbered contract right, and the designer handles the connector traversal.
 
 - Group 1 must be the **top tier** of the hierarchy. Starting from a middle tier silently produces a
   partial landscape.
-- Set the hierarchy connector's stereotype, and **set no Type filter** — a Westbrook `part-of`
-  connector may be an Aggregation, and a Type filter of `Association` hides it completely.
+- Set the hierarchy connector's stereotype, and **set no Type filter** — a hierarchy connector may
+  be an Aggregation, and a Type filter of `Association` hides it completely. (The Westbrook copy
+  has no application hierarchy: its two `part-of` connectors are Associations between tool
+  elements. Against that copy this step ends with "the data cannot support a landscape", as
+  section 1 of the skill says to report.)
 - Direction: derive it rather than assuming. If Start is the child and End the parent, descending is
   `Target To Source`. Confirm by row count — parent-child connectors should equal elements minus
   roots.

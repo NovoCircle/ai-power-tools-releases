@@ -1,0 +1,638 @@
+# EA facts for requirements modeling (language file requirements).
+# Measured on EA 17.1 build 1716; see `harvest` for the source of each fact. Examples elsewhere use Westbrook Bank (fictitious).
+language: requirements
+technology: EAExtended:Requirements
+display_name: 'EA Requirements (stereotypes: the EAREQ profile of Core Extensions)'
+profile: EAREQ
+creation_prefix: 'EAREQ::'
+stereotype_prefix: ''
+stereotype_storage: t_object.Stereotype holds the bare name (BusinessRequirement); the qualified form is the FQName in the t_xref row named Stereotypes
+  (EAREQ::BusinessRequirement). Create with the qualified type. The element type is Requirement (t_object.Object_Type), not a stereotype. Only the first
+  of several stereotypes is stored in t_object.Stereotype. The built-in stereotypes Functional and RequirementsChecklist are stored by bare name with a
+  GUID and no FQName.
+measured_on: EA 17.1 build 1716, 2026-10-21
+technology_note: 'The EA Requirements technology holds model templates only: no profile of its own, no toolbox read from the Resources tab (a diagram''s
+  toolbox pages were read on screen, see toolbox). No version is stored.'
+levels_in_ea:
+  business: EAREQ::BusinessRequirement
+  stakeholder: EAREQ::UserRequirement (a judgment)
+  system and below: every other requirement stereotype, and Functional (a judgment of the ruleset; EA stores no level)
+  note: The language's four levels are not stored by EA. The ruleset reads level only from the two stereotypes above; a Requirement with no stereotype has
+    no level.
+diagram_types:
+  none-in-standard:
+    ea_name: Extended::Requirements
+    base: Custom
+    stereotype_prefix: EAREQ
+    layout_style: not-harvested
+    stored_as: t_diagram.Diagram_Type = Custom; StyleEx MDGDgm=Extended::Requirements;
+    note: The language defines no diagram type; this is EA's Requirements diagram. SysML1.4::Requirement is SysML's. An unknown token creates a plain Class
+      diagram without a message.
+element_fields:
+  note: EA's own fields of a Requirement element. They are columns of t_object, not tagged values; the rule grammar cannot read them.
+  Status:
+    column: t_object.Status
+    default: Proposed
+    language_attribute: status
+  Priority:
+    column: t_object.PDATA2
+    default: Medium
+    language_attribute: priority
+    trap: Not the tag priority of the EAREQ stereotypes (empty by default).
+  Difficulty:
+    column: t_object.PDATA3
+    default: Medium
+    language_attribute: difficulty
+  Complexity:
+    column: t_object.Complexity
+    default: '1'
+  Phase:
+    column: t_object.Phase
+    default: '1.0'
+  Version:
+    column: t_object.Version
+    default: '1.0'
+    language_attribute: version
+  Author:
+    column: t_object.Author
+    default: the EA user name
+    language_attribute: owner
+  Alias:
+    column: t_object.Alias
+    default: (empty)
+    language_attribute: identifier (a convention; EA has no identifier field)
+  Notes:
+    column: t_object.Note
+    default: (empty)
+    language_attribute: statement
+  internal requirements:
+    table: t_objectrequires
+    note: Sub-records of an element (name, ReqType Functional, Status Proposed, Stability, Difficulty, Priority), not elements and not linkable.
+  other tabs:
+    tables:
+    - t_objectproblems
+    - t_objectconstraint
+    - t_objecttests
+    - t_objectscenarios
+    - t_objectrisks
+    - t_objecteffort
+    - t_objectmetrics
+concepts:
+  elements:
+    Requirement:
+      constructs:
+      - ea_type: Requirement
+        stereotype: null
+        metaclass: Requirement
+        match: exact
+        note: The EA element type. Every EAREQ requirement stereotype is on it; select it as type:Requirement. It carries EA's own fields (status, priority,
+          difficulty, version, author, alias, notes).
+    BusinessRequirement:
+      constructs:
+      - stereotype: BusinessRequirement
+        technology_prefix: EAREQ
+        qualified: EAREQ::BusinessRequirement
+        metaclass: Requirement
+        match: exact
+        tags:
+        - name: constraint
+          type: memo
+          default: (empty; reads as <memo>)
+        - name: context
+          type: memo
+          default: (empty; reads as <memo>)
+        - name: objective
+          type: memo
+          default: (empty; reads as <memo>)
+        - name: priority
+          type: enumeration
+          allowed_values:
+          - High
+          - Medium
+          - Low
+          - Essential
+          - Conditional
+          - Optional
+          default: (empty)
+        - name: rules
+          type: memo
+          default: (empty; reads as <memo>)
+        - name: scope
+          type: memo
+          default: (empty; reads as <memo>)
+        level: business
+        note: Name matches; tags objective, scope, context, rules, constraint fit the business level.
+    StakeholderRequirement:
+      constructs:
+      - stereotype: UserRequirement
+        technology_prefix: EAREQ
+        qualified: EAREQ::UserRequirement
+        metaclass: Requirement
+        match: nearest-by-name
+        tags:
+        - name: communication
+          type: memo
+          default: (empty; reads as <memo>)
+        - name: designation
+          type: free text
+          default: (empty)
+        - name: expectation
+          type: memo
+          default: (empty; reads as <memo>)
+        - name: impact
+          type: memo
+          default: (empty; reads as <memo>)
+        - name: priority
+          type: enumeration
+          allowed_values:
+          - High
+          - Medium
+          - Low
+          - Essential
+          - Conditional
+          - Optional
+          default: (empty)
+        level: stakeholder
+        note: 'NEAREST BY NAME, a judgment: 29148 stakeholder requirements are what older vocabulary calls user requirements. EA''s definition text was
+          not read.'
+    SystemRequirement:
+      constructs: []
+      note: No stereotype and no EA type of its own.
+    SystemElementRequirement:
+      constructs: []
+      note: No stereotype and no EA type of its own.
+    SoftwareRequirement:
+      constructs: []
+      note: No stereotype and no EA type of its own.
+    FunctionalRequirement:
+      constructs:
+      - stereotype: FunctionalRequirement
+        technology_prefix: EAREQ
+        qualified: EAREQ::FunctionalRequirement
+        metaclass: Requirement
+        match: exact
+        tags:
+        - name: dataDescription
+          type: memo
+          default: (empty; reads as <memo>)
+        - name: operationDescription
+          type: memo
+          default: (empty; reads as <memo>)
+        - name: priority
+          type: enumeration
+          allowed_values:
+          - High
+          - Medium
+          - Low
+          - Essential
+          - Conditional
+          - Optional
+          default: (empty)
+        - name: reportDescription
+          type: memo
+          default: (empty; reads as <memo>)
+        - name: workflowDescription
+          type: memo
+          default: (empty; reads as <memo>)
+        level: system and below (ruleset reading)
+      - ea_type: Requirement
+        stereotype: Functional
+        technology_prefix: null
+        metaclass: Requirement
+        match: exact
+        note: EA's built-in stereotype used by the rq2.0 model patterns (t_stereotypes); GUID form, not EAREQ. Its type is Requirement.
+    PerformanceRequirement:
+      constructs: []
+      note: No stereotype and no EA type of its own.
+    InterfaceRequirement:
+      constructs: []
+      note: No stereotype and no EA type of its own.
+    ProcessRequirement:
+      constructs: []
+      note: No stereotype and no EA type of its own.
+    QualityRequirement:
+      constructs:
+      - stereotype: NonfunctionalRequirement
+        technology_prefix: EAREQ
+        qualified: EAREQ::NonfunctionalRequirement
+        metaclass: Requirement
+        match: synonym
+        tags:
+        - name: availability
+          type: memo
+          default: (empty; reads as <memo>)
+        - name: configurability
+          type: memo
+          default: (empty; reads as <memo>)
+        - name: interoperability
+          type: memo
+          default: (empty; reads as <memo>)
+        - name: maintainability
+          type: memo
+          default: (empty; reads as <memo>)
+        - name: portability
+          type: memo
+          default: (empty; reads as <memo>)
+        - name: priority
+          type: enumeration
+          allowed_values:
+          - High
+          - Medium
+          - Low
+          - Essential
+          - Conditional
+          - Optional
+          default: (empty)
+        - name: reliability
+          type: memo
+          default: (empty; reads as <memo>)
+        - name: scalability
+          type: memo
+          default: (empty; reads as <memo>)
+        - name: usability
+          type: memo
+          default: (empty; reads as <memo>)
+        level: system and below (ruleset reading)
+        note: The language file lists non-functional requirement as a synonym. The tags are quality categories (availability, reliability, usability and
+          others).
+    UsabilityRequirement:
+      constructs: []
+      note: No stereotype and no EA type of its own.
+    HumanFactorsRequirement:
+      constructs: []
+      note: No stereotype and no EA type of its own.
+    Constraint:
+      constructs: []
+      note: No stereotype and no EA type of its own.
+    PolicyAndRegulationRequirement:
+      constructs:
+      - stereotype: RegulatoryRequirement
+        technology_prefix: EAREQ
+        qualified: EAREQ::RegulatoryRequirement
+        metaclass: Requirement
+        match: nearest-by-name
+        tags:
+        - name: externalRegulation
+          type: memo
+          default: (empty; reads as <memo>)
+        - name: internalRegulation
+          type: memo
+          default: (empty; reads as <memo>)
+        - name: legislativeRegulation
+          type: memo
+          default: (empty; reads as <memo>)
+        - name: priority
+          type: enumeration
+          allowed_values:
+          - High
+          - Medium
+          - Low
+          - Essential
+          - Conditional
+          - Optional
+          default: (empty)
+        level: system and below (ruleset reading)
+        note: 'NEAREST BY NAME and tags (external, internal and legislative regulation): a judgment.'
+    TransitionRequirement:
+      constructs:
+      - stereotype: ImplementationRequirement
+        technology_prefix: EAREQ
+        qualified: EAREQ::ImplementationRequirement
+        metaclass: Requirement
+        match: nearest-by-tags
+        tags:
+        - name: migration
+          type: memo
+          default: (empty; reads as <memo>)
+        - name: priority
+          type: enumeration
+          allowed_values:
+          - High
+          - Medium
+          - Low
+          - Essential
+          - Conditional
+          - Optional
+          default: (empty)
+        - name: recruitment
+          type: memo
+          default: (empty; reads as <memo>)
+        - name: roleChange
+          type: memo
+          default: (empty; reads as <memo>)
+        level: system and below (ruleset reading)
+        note: 'NEAREST BY TAGS, a judgment: the tags migration, recruitment and roleChange describe the move to a future state. EA''s definition text was
+          not read.'
+    Stakeholder:
+      constructs:
+      - ea_type: Actor
+        stereotype: null
+        metaclass: Actor
+        match: none
+        note: No stereotype. The Westbrook example uses an Actor; any element can be a source of a trace.
+    Need:
+      constructs: []
+      note: No stereotype and no EA type of its own.
+    BusinessRule:
+      constructs: []
+      note: No stereotype and no EA type of its own.
+    Assumption:
+      constructs: []
+      note: No stereotype and no EA type of its own.
+    TradeStudy:
+      constructs: []
+      note: No stereotype and no EA type of its own.
+    SourceDocument:
+      constructs:
+      - ea_type: Artifact
+        stereotype: null
+        metaclass: Artifact
+        match: none
+        note: No stereotype. The Westbrook example uses an Artifact.
+    DesignElement:
+      constructs:
+      - ea_type: Component
+        stereotype: null
+        metaclass: Component
+        match: none
+        note: 'No stereotype. The ruleset treats these EA types as design elements: Artifact, Class, Component, Entity, Interface, Node, Object, Part.'
+    VerificationEntity:
+      constructs:
+      - ea_type: Class
+        stereotype: null
+        metaclass: Class
+        match: none
+        note: No stereotype. The Westbrook example uses a Class for each test; the sources allow any element (EA also offers the type Test and internal
+          test records on an element).
+    RequirementsSpecification:
+      constructs: []
+      note: No stereotype and no EA type of its own.
+    BusinessRequirementsSpecification:
+      constructs: []
+      note: No stereotype and no EA type of its own.
+    StakeholderRequirementsSpecification:
+      constructs: []
+      note: No stereotype and no EA type of its own.
+    SystemRequirementsSpecification:
+      constructs: []
+      note: No stereotype and no EA type of its own.
+    SoftwareRequirementsSpecification:
+      constructs: []
+      note: No stereotype and no EA type of its own.
+    OperationalConcept:
+      constructs: []
+      note: No stereotype and no EA type of its own.
+relationships:
+  derive:
+    connector_type: Dependency
+    stereotype: deriveReqt
+    created_as: SysML1.4::deriveReqt
+    direction: derived requirement (source) to parent requirement (target)
+    technology: SysML1.4
+  contain:
+    connector_type: Aggregation
+    stereotype: null
+    direction: child (source) to parent (target), the diamond at the parent (DestIsAggregate = 1); or nesting by ParentID
+    note: EA's rq2.0 patterns use the Aggregation, 24 of them, and the nested form in one pattern. An Aggregation carries no marker of requirements, so
+      the ruleset reads nesting only.
+  satisfy:
+    connector_type: Dependency
+    stereotype: satisfy
+    created_as: SysML1.4::satisfy
+    direction: design element (source) to requirement (target)
+    technology: SysML1.4
+  verify:
+    connector_type: Dependency
+    stereotype: verify
+    created_as: SysML1.4::verify
+    direction: verification entity (source) to requirement (target)
+    technology: SysML1.4
+  allocate:
+    connector_type: Abstraction
+    stereotype: allocate
+    created_as: SysML1.4::allocate
+    direction: requirement (source) to design element (target)
+    technology: SysML1.4
+    trap: Created unqualified (StereotypeEx = allocate) it binds MARTE::Allocate and is stored as Allocate, a different name.
+  refine:
+    connector_type: Dependency
+    stereotype: refine
+    created_as: SysML1.4::refine, or EA's built-in refine
+    direction: refining element (source) to requirement (target)
+  trace:
+    connector_type: Dependency
+    stereotype: trace
+    created_as: SysML1.4::trace, or EA's built-in trace (Dependency or Abstraction)
+    direction: requirement or element (source) to its origin (target)
+    trap: The connector type token Trace is stored as an Abstraction stereotyped Trace (capital T, StandardProfileL2::Trace), a different name.
+  copy:
+    connector_type: Dependency
+    stereotype: copy
+    created_as: SysML1.4::copy
+    direction: slave requirement (source) to master requirement (target)
+    technology: SysML1.4
+  sourced from:
+    connector_type: Dependency
+    stereotype: trace
+    direction: requirement (source) to its source (target)
+    note: 'This guide''s and the ruleset''s convention (no source defines the relationship): a trace from the requirement to a stakeholder, need, document,
+      study, rule or parent requirement.'
+  constrained by:
+    connector_type: null
+    stereotype: null
+    note: No EA construct. Draw a trace or a plain Dependency to the constraint.
+  assumes:
+    connector_type: null
+    stereotype: null
+    note: No EA construct.
+  specified in:
+    connector_type: null
+    stereotype: null
+    note: No EA construct. A requirement is in a package or a generated document.
+  held by:
+    connector_type: null
+    stereotype: null
+    note: No EA construct.
+ruleset_ends:
+  note: The EA types the ruleset's pair table treats as the ends of satisfy, verify and allocate.
+  any element (source of satisfy and verify):
+  - Action
+  - Activity
+  - Actor
+  - Artifact
+  - Boundary
+  - Change
+  - Class
+  - Collaboration
+  - Component
+  - Constraint
+  - DataType
+  - Decision
+  - Entity
+  - Enumeration
+  - Event
+  - Feature
+  - GUIElement
+  - Interface
+  - Issue
+  - Node
+  - Object
+  - Package
+  - Part
+  - Requirement
+  - Risk
+  - Screen
+  - Sequence
+  - Signal
+  - State
+  - StateMachine
+  - Test
+  - UseCase
+  design element types (target of allocate):
+  - Artifact
+  - Class
+  - Component
+  - Entity
+  - Interface
+  - Node
+  - Object
+  - Part
+  types that may not be nested in a requirement:
+  - Action
+  - Activity
+  - Actor
+  - Artifact
+  - Boundary
+  - Change
+  - Class
+  - Collaboration
+  - Component
+  - Constraint
+  - DataType
+  - Decision
+  - Entity
+  - Enumeration
+  - Event
+  - Feature
+  - GUIElement
+  - Interface
+  - Issue
+  - Node
+  - Object
+  - Part
+  - Risk
+  - Screen
+  - Sequence
+  - Signal
+  - State
+  - StateMachine
+  - Test
+  - UseCase
+ea_only:
+  ArchitecturalRequirement:
+    for: 'An EAREQ requirement stereotype for a requirement on the architecture (tags hardware, software, performance, priority). No concept of the language:
+      the language has no architecture requirement type.'
+  SecurityRequirement:
+    for: An EAREQ requirement stereotype (tags goal, policy, priority). The language treats security as a quality category of a QualityRequirement, not
+      as a type.
+  RequirementsChecklist:
+    for: An EAREQ stereotype on an Artifact, not a requirement. Its Checklist tag holds ten quality items (Atomic, Attainable, Cohesive, Complete, Current,
+      Independent, Modifiable, Traceable, Unambiguous, Verifiable), none of which is checked at creation. EA also has a built-in stereotype of the same
+      name on the Requirement type.
+  Functional:
+    for: EA's built-in stereotype of the Requirement type that the rq2.0 model patterns use (t_stereotypes; GUID form, not EAREQ). Counted by the ruleset
+      with the system level stereotypes.
+toolbox:
+  status: read on screen, measured on EA 17.1 build 1716, 2026-11-04; one diagram opened (type Requirements)
+  pages:
+    Requirements:
+    - Package
+    - Requirement
+    - Feature
+    - Risk
+    - Object
+    Extended Requirements:
+    - Functional
+    - Business
+    - User
+    - Non-Functional
+    - Architectural
+    - Implementation
+    - Regulatory
+    - Security
+    - Requirements Checklist
+    Requirements Relationships:
+    - Aggregate
+    - Inheritance
+    - Associate
+    - Implements
+    - Dependency
+    - InformationFlow
+    - Trace
+    Patterns:
+    - Functional Requirements
+    - Non-Functional Requireme...
+  note: the nine Extended Requirements items equal the nine EAREQ stereotypes; the plain Requirement item makes an element with no stereotype. What the
+    Trace item creates (trace or Trace) was not tried
+quick_links:
+  status: read on screen, measured on EA 17.1 build 1716, 2026-11-04; one source, a new Requirement with no stereotype
+  targets_offered:
+  - Artifact
+  - Change
+  - Issue
+  - Requirement
+  - Risk
+  - Note
+  - Common
+  requirement_submenu:
+  - Aggregation to Whole
+  - Association
+  - Generalization
+  - Aggregation to Part
+  - Specialization
+  artifact_submenu:
+  - Aggregation to Whole
+  - Association
+  result: 'no requirements-specific quick link: no Trace, DeriveReqt or Satisfy'
+conventions:
+  priority: Two priorities exist. The EAREQ tag priority is empty until set (values High, Medium, Low, Essential, Conditional, Optional); EA's own Priority
+    field is Medium by default. The ruleset reads the tag.
+  memo tags: A memo tag reads as the text <memo> to a tagged-value test whether or not it holds text; only the enumeration tag priority can be tested.
+  several stereotypes: Only the first is stored in t_object.Stereotype. A requirement that is both business level and functional is seen by a selector as
+    the first only.
+harvest:
+  stereotype_names: 'ui: Resources tab, Core Extensions > UML Profiles > EAREQ, 9 names; api-readback: all nine bound by EAREQ::'
+  metaclass_tags_storage_connectors_diagram: 'api-readback: elements and connectors created through the API in a test model and read back, over five probes'
+  stored_form_of_patterns: 'model-pattern: EA''s model patterns (rq2.0 patterns store Functional, Aggregation, Extended::Requirements)'
+  concept_to_stereotype_mapping: 'judgment: by name and tags; the definition text of the EAREQ stereotypes was not read (encrypted profile)'
+  toolbox_quick_links_model_templates: 'ui, EA 17.1 build 1716, 2026-11-04: one diagram''s toolbox pages and one quick-link source were read; model templates
+    were not read'
+  ea_build: 17.1 build 1716
+
+# EA's names for this language's layout. tools/gen_conventions.py reads layout_map.
+layout_map:
+  technology: EAExtended:Requirements
+  display_name: EA Requirements
+  extends: UML
+  stereotype_prefix: ''
+  notes: |
+    The standard defines no diagram type, so this one is EA's own. Its arrangement and route are the shared defaults, not measurements.
+
+    `EAExtended:Requirements` is the id EA reports, measured on EA 17.1 build 1716.
+  diagram_types:
+    Requirements:
+      token: Extended::Requirements
+      base: Custom
+      arrangement: graph
+      title: frame-header
+      route: straight
+      channels:
+        fill: null
+        free:
+        - fill
+        - border
+        - border_width
+        - line_color
+        - font_color
+        - opacity
+        - icon

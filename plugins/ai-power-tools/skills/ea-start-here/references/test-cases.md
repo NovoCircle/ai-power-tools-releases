@@ -23,6 +23,11 @@ a stop, a question or a hand-off), `INVARIANT` (must pass on every run), `BLOCKE
 state a runner may not be able to arrange). Every case that is not `WRITE` carries the
 model-unchanged check.
 
+**Skill-choice cases** (TC-14 to TC-19, TC-21, TC-24) grade the route the reply takes, not the
+words it uses. A reply that follows the named skill's route passes whether or not it writes the
+skill's name, because a customer does not need the name. A case says so when the name matters (a
+hand-off sentence).
+
 ## Cases
 
 ### TC-01: Preflight runs in order before a read
@@ -186,8 +191,8 @@ Covers: 1.1 Is the server alive, and does it match these skills?
 **Ask:** "Before we start, is the AI Power Tools connection up, and is it a version these skills work with?"
 
 **Passes when:** The run calls `ping` with `skills_version` set to the exact string stamped in the
-skill, without editing or looking it up, reads the response, and states the server version it got
-back.
+skill's own `ping(skills_version=...)` line, without editing or looking it up, reads the response,
+and states the server version it got back.
 
 **Check:**
 
@@ -197,14 +202,14 @@ expect: unchanged
 ```
 
 ```check
-tools: called: ping {"skills_version": "3.6.3"}
+tools: called: ping
 reply: says: the server version the ping returned
 ```
 
 **Fails when:** The run calls `ping()` bare, or sends a different version string (its own guess, or
-one it read from the server). The server then cannot say whether the skills are current, and the
-person is never told. The check string is the one stamped in this release and changes with each
-release.
+or one it read from the server). The server then cannot say whether the skills are current, and the
+person is never told. The runner compares the argument with the stamp in this release's `SKILL.md`,
+so the case carries no version number of its own.
 
 ### TC-06: Server notice shown word for word
 
@@ -227,7 +232,7 @@ expect: unchanged
 ```
 
 ```check
-tools: called: ping {"skills_version": "3.6.3"}
+tools: called: ping
 tools: before: ping ea_repository.get_repository_info
 reply: says: the notice text from the ping response, unaltered
 reply: not: paraphrases or summarizes the notice
@@ -475,9 +480,9 @@ Covers: 2. Which skill for which task
 
 **Ask:** "I need to roll up our applications by criticality and lifecycle across the whole model, and I want my analysts to be able to query it directly. How would you approach it? Don't change anything yet."
 
-**Passes when:** The run names `ea-reporting-database` as the skill for querying or reporting across
-a whole model and for getting EA content into a database that can be queried directly, and continues
-with that skill rather than answering with a one-off SQL query.
+**Passes when:** The run follows the route of `ea-reporting-database`, the skill for querying or
+reporting across a whole model and for getting EA content into a database that can be queried
+directly, and continues on it rather than answering with a one-off SQL query.
 
 **Check:**
 
@@ -487,7 +492,7 @@ expect: unchanged
 ```
 
 ```check
-reply: says: it takes this job to the ea-reporting-database skill
+reply: says: the content goes into a database or tables the analysts can query directly
 reply: not: answers only with a single SQL query against the model
 ```
 
@@ -501,9 +506,9 @@ Covers: 2. Which skill for which task
 
 **Ask:** "Can we get our EA model into Power BI so the architecture board can slice it? Tell me the approach first; don't build anything."
 
-**Passes when:** The run names `ea-power-bi` as the skill for EA content in Power BI (a dataset, a
-`.pbip`, a semantic model, or refreshing one), and does not route to the reporting-database skill as
-if it were the whole answer.
+**Passes when:** The run follows the route of `ea-power-bi`, the skill for EA content in Power BI (a
+dataset, a `.pbip`, a semantic model, or refreshing one), and does not treat the reporting-database
+route as if it were the whole answer.
 
 **Check:**
 
@@ -513,7 +518,7 @@ expect: unchanged
 ```
 
 ```check
-reply: says: it takes this job to the ea-power-bi skill
+reply: says: the model's content reaches Power BI as a dataset, a project or a semantic model that can be refreshed
 reply: not: suggests exporting to CSV and importing by hand
 ```
 
@@ -526,8 +531,9 @@ Covers: 2. Which skill for which task
 
 **Ask:** "I want people to click down through our business capability levels instead of reading one big tree. Which approach would you use? Don't change the model yet."
 
-**Passes when:** The run names `ea-navigation-diagrams` as the skill for click-through navigation
-over hierarchical data, and does not treat it as plain diagram creation under `ea-modeling`.
+**Passes when:** The run follows the route of `ea-navigation-diagrams`, the skill for click-through
+navigation over hierarchical data (one diagram per level, each linked to the next), and does not
+treat it as plain diagram creation under `ea-modeling`.
 
 **Check:**
 
@@ -537,7 +543,7 @@ expect: unchanged
 ```
 
 ```check
-reply: says: it takes this job to the ea-navigation-diagrams skill
+reply: says: the levels become separate diagrams that link down from one to the next
 reply: not: proposes one large tree diagram of all the capability levels
 ```
 
@@ -551,9 +557,9 @@ Covers: 2. Which skill for which task
 
 **Ask:** "Which cloud-provider icons could I put on the AWS Cloud Platform element in a diagram? Just look; don't change anything."
 
-**Passes when:** The run sends the job to `ea-modeling` and its diagrams-and-connectors reference
-(section 6 on custom element images), and uses the icon search the reference names rather than
-inventing an approach.
+**Passes when:** The run follows the `ea-modeling` diagrams-and-connectors reference (section 6 on
+custom element images), and uses the icon search the reference names rather than inventing an
+approach.
 
 **Check:**
 
@@ -566,7 +572,7 @@ expect: unchanged
 tools: called: ea_diagram.find_icon
 tools: not-called: ea_diagram.set_element_icon
 tools: not-called: ea_diagram.add_image
-reply: says: it follows the ea-modeling reference on drawing an element as an icon
+reply: says: which icons the search found for the element
 ```
 
 **Fails when:** The run tells the person to drag an image into EA by hand, or goes to the UI, when
@@ -579,9 +585,10 @@ Covers: 2. Which skill for which task
 
 **Ask:** "We need a full set of conformance rules for our modeling language, built from nothing. How would you go about it? Don't write anything yet."
 
-**Passes when:** The run names `ea-ruleset-author` as the skill for building a complete ruleset
-from scratch, and distinguishes it from `ea-validation`, which writes small rule sets or runs one
-against a model.
+**Passes when:** The run follows the route of `ea-ruleset-author`, the skill for building a complete
+ruleset from scratch (research the language, plan the rule categories, then write and test the
+rules), and distinguishes it from `ea-validation`, which writes small rule sets or runs one against
+a model.
 
 **Check:**
 
@@ -591,7 +598,7 @@ expect: unchanged
 ```
 
 ```check
-reply: says: it takes this job to the ea-ruleset-author skill
+reply: says: the language is researched and the rule categories planned before any rule is written
 reply: not: starts writing rule YAML in the reply
 ```
 
@@ -604,8 +611,8 @@ Covers: 2. Which skill for which task
 
 **Ask:** "I'd like a Python script that talks to EA directly, not through the AI tools, so I can schedule it. Where do I start?"
 
-**Passes when:** The run names `ea-com` as the skill for driving EA from Python through the COM API
-rather than MCP.
+**Passes when:** The run follows the route of `ea-com`, the skill for driving EA from Python through
+the COM API rather than MCP.
 
 **Check:**
 
@@ -615,7 +622,7 @@ expect: unchanged
 ```
 
 ```check
-reply: says: it takes this job to the ea-com skill
+reply: says: the script drives EA through its COM API from Python, outside the AI tools
 reply: not: writes a script that calls the AI Power Tools operations
 ```
 
@@ -658,7 +665,7 @@ Covers: 2. Which skill for which task
 **Ask:** "How do I turn on the diagram grid in EA's Options dialog? Walk me through it, and don't change the setting yourself."
 
 **Passes when:** The run checks the skills in the table and the operation list, finds no skill,
-operation or COM route for an EA Options setting, and then hands the task to `ea-help`, saying that
+operation or COM route for an EA Options setting, and then takes the `ea-help` route, saying that
 this is why. It does not change the setting.
 
 **Check:**
@@ -671,7 +678,7 @@ expect: unchanged
 ```check
 tools: not-called: computer-use.left_click
 tools: not-called: computer-use.type
-reply: says: no skill, operation or COM route covers this, so it uses ea-help
+reply: says: no skill, operation or COM route covers this, so it works from the user guide and EA's own screen
 reply: says: the steps come from the user guide for the EA version that is running
 ```
 
@@ -685,12 +692,12 @@ Covers: Choosing between the two MDG paths
 
 **Marks:** INVARIANT
 
-**Ask:** "We want to turn our application types into a modeling technology, and I'll hand-write the XML for it. Where should I start?"
+**Ask:** "We need to add a stereotype to our existing modeling technology, and I'll hand-write the XML change. Where should I start?"
 
 **Passes when:** The run checks the repository for a profile package before agreeing to hand
-authoring, finds the technology's source package, and routes to `ea-mdg-model-build` to generate
-the technology from it. It says that building by hand what already exists as a model is wasted
-work.
+authoring, finds the technology's source package, and routes to `ea-mdg-model-build` to extend the
+technology there and generate it again. It says that building by hand what already exists as a
+model is wasted work.
 
 **Check:**
 
@@ -707,13 +714,13 @@ expect: = 24
 
 ```check
 reply: says: a profile package for this technology already exists in the repository
-reply: says: it routes to ea-mdg-model-build to generate the technology from that package
+reply: says: it routes to ea-mdg-model-build to add the stereotype in that package and generate the technology from it
 reply: not: starts hand-writing technology XML
 ```
 
 **Fails when:** The run takes "I'll hand-write the XML" as the plan and routes to `ea-mdg-author`
-without looking. The person ends up with a second, hand-built copy of a technology that already has
-a source model, and the two drift apart. This is the most common routing mistake.
+without looking. The person ends up with a hand-edited copy of a technology that already has a
+source model, and the next generation from the model overwrites the edit. This is the most common routing mistake.
 
 ### TC-23: No source model, so author by hand
 
@@ -753,7 +760,7 @@ Covers: 3. When it goes wrong
 **Ask:** "I've tried creating that connector twice now and I get the same error both times, even after I fixed the input. What now?"
 
 **Passes when:** The run does not make a third attempt. It treats two failures of the same thing as
-the signal to escalate, says so, and hands the job to `ea-diagnostic` to produce a report suitable
+the signal to escalate, says so, and takes the `ea-diagnostic` route: a structured report suitable
 for support.
 
 **Check:**
@@ -767,7 +774,7 @@ expect: unchanged
 tools: not-called: ea_model.create_connector
 tools: not-called: ea_model.create_connectors_bulk
 reply: says: two failures with the same error is the signal to escalate
-reply: says: it takes this to the ea-diagnostic skill for a report
+reply: says: it will produce a structured report for support instead of trying again
 ```
 
 **Fails when:** The run tries a third variation of the call. A third guess is exactly what the skill
@@ -1040,8 +1047,9 @@ Covers: Verify in EA's UI
 
 **Ask:** "Put the ACH Notification Service and the Westbrook Wire Transfer Service on the Payments Integration Architecture diagram, and tell me how it looks. Go ahead, no need to check back with me."
 
-**Passes when:** The run places both elements, reloads the diagram, takes a screenshot, and
-describes what the screenshot shows, rather than reporting success from the call's `ok: true`.
+**Passes when:** The run places both elements, opens the diagram in EA, reloads it, takes a
+screenshot of EA, and describes what the screenshot shows, rather than reporting success from the call's `ok: true` or
+describing the PNG that `verify_diagram` rendered. If no screenshot could be taken, it says so.
 
 **Check:**
 
@@ -1051,14 +1059,21 @@ expect: = 2
 ```
 
 ```check
+tools: called: ea_diagram.open_diagram
 tools: called: ea_diagram.reload_diagram
 tools: called: computer-use.screenshot
+tools: before: ea_diagram.open_diagram ea_diagram.reload_diagram
 tools: before: ea_diagram.reload_diagram computer-use.screenshot
 reply: says: what the screenshot showed, not only that the call succeeded
+reply: not: describes how the diagram looks from the rendered PNG alone, with no EA screenshot
 ```
 
-**Fails when:** The run reports the diagram as done because the call returned `ok: true`. That means
-rows were written, not that the elements landed where intended, are readable, or are visible at all.
+**Fails when:** The run reports the diagram as done because the call returned `ok: true`, or
+describes the image `verify_diagram` rendered and calls that how it looks. `ok: true` means rows
+were written, not that the elements landed where intended, are readable, or are visible at all. The
+rendered image shows what the server drew, and only a screenshot shows what EA shows. Run it with EA
+in front: a window of another application over EA stops the screenshot, and the case then records
+that none could be taken.
 
 ### TC-34: No computer use: say so and ask the person to look
 
@@ -1139,49 +1154,76 @@ a wrong model. TC-03, TC-10 and TC-02 test the reading.
 ## Headings not covered
 
 None. Every heading of `SKILL.md` is named by at least one case. The routing table in "2. Which skill
-for which task" has twelve rows; TC-14 to TC-21 exercise the rows where the wrong route is plausible
-(reporting, Power BI, navigation, icons, ruleset authoring, COM, and the UI fallback), and the rows
-for modeling, MDG authoring and deployment, validation and diagnostics are exercised through TC-22,
-TC-23, TC-27 and TC-24.
+for which task" has a row for every other shipped EA skill; TC-14 to TC-21 exercise the rows where the
+wrong route is plausible (reporting, Power BI, navigation, icons, ruleset authoring, COM, and the UI
+fallback), and the rows for modeling, MDG authoring and deployment, validation and diagnostics are
+exercised through TC-22, TC-23, TC-27 and TC-24. The rows for the import and export, stakeholder
+reporting, change management, model hygiene, diagram advisor, diagram composition and MDG assessment
+skills have no case yet.
 
 ## Findings
 
-- The routing table in section 2 omits seven skills that ship alongside it: `ea-mdg-assess`,
-  `ea-change-management`, `ea-import-export`, `ea-model-hygiene`, `ea-stakeholder-reporting`,
-  `ea-diagram-advisor` and `ea-diagram-composition`. A task that belongs to one of them cannot be
-  routed by this skill, so no case can test it. `ea-mdg-assess` says to use it at the start of any
-  MDG task, yet "Choosing between the two MDG paths" sends the reader straight to authoring or
-  model-build.
+Each finding was checked on 11 Nov 2026 against the skill text and server main. The line after
+each says what was done.
+
+- The routing table in section 2 now has a row for each of the seven skills it used to omit, and
+  the release check fails when a shipped EA skill has no row. No case yet sends a task to one of
+  those seven.
+  **Skill: already fixed (the table has the rows). No change to the skill. The missing cases are a
+  test gap, not a skill defect: one routing case each for the rows listed under "Headings not
+  covered".**
 - Section 4 says the other `ea_validate` operations "return `not_yet_implemented`". Section 5 says an
   operation not in the operation list "returns an error listing the valid names", and the generated
   list shows `ea_validate` with one operation. One of the two is wrong; TC-27 does not assert which
   error comes back.
-- Hard-coded versions drift. The `ping` stamp (`3.6.3`) is in the skill and in TC-05 and TC-06 and
-  must change in all three at each release. Section 5 hard-codes "144" operations, and the generated
-  list it points to is stamped with server 3.6.0, not the skills' version.
-- Section 1.4 says to "get agreement before the first write" and does not say whether an explicit
-  instruction in the request counts. TC-13 is written on the stricter reading (a bulk change asked
-  for in a few words is stated and agreed first); the `WRITE` cases carry an explicit "no need to
-  check back" so they test the work. A runner needs one rule for this.
+  **Fixed in the skill. Both statements are true on server main: the reserved names (`check`,
+  `inspect` and the rule-library group) return `not_yet_implemented`, and a name the server does not
+  know returns an unknown-operation error whose list includes those reserved names. Sections 4 and 5
+  now say so. TC-27 tests the reserved-name behavior, which is the one that misleads.**
+- Hard-coded numbers drift. The `ping` stamp is in the skill only; TC-05 and TC-06 no longer carry a
+  version and the runner reads the stamp from the skill. Section 5 hard-codes "144" operations, and
+  the generated list it points to is stamped with a server version, not the skills' version.
+  **Fixed. Section 5 no longer states a count (the generated list says 149 for 3.6.4, so 144 was
+  already wrong) and points at the list's header. The `ping` stamp stays: the build stamps it.**
+- Section 1.4 now says an explicit instruction counts as agreement for one named change, and that a
+  write touching more than one element states its scope first. TC-13 follows it; the `WRITE` cases
+  carry an explicit "no need to check back" so they test the work.
+  **No change: already fixed (an earlier round).**
 - Section 1 says to "stop at the first one that fails", but 1.3 and 1.4 are not calls that fail. The
   stop conditions are only defined for 1.1 and 1.2. TC-02 tests the 1.2 stop; no case can test a
   stop at 1.3.
+  **Fixed. The opening of section 1 now says 1.1 and 1.2 can fail and stop the run, 1.3 informs, and
+  1.4 gates a write. No stop at 1.3 exists, so no case is needed for one.**
 - The check grammar has no spelling for a tool with no operation (`ping`) and none for loading a
   skill. TC-01 and TC-06 write `ping` bare; every routing case (TC-14 to TC-23) grades the reply
   instead of the transcript, because a skill load has no `tools` form and its name varies by
   packaging.
+  **No change: the grammar now names both (`called: ping`, `called: skill:<name>`; see the case
+  template). The routing cases keep grading the route and not the skill name on purpose (see the
+  skill-choice note at the top), so they stay reply checks.**
 - Eight cases (TC-02, TC-04, TC-06 to TC-09, TC-34, TC-35) depend on session state a runner may not
   be able to arrange: EA closed, no project open, a server older or newer than the skills, a session
   with no tools, a session without computer use. They are marked `BLOCKED`, and their checks are
   mostly reply tests.
+  **No change: a runner limit, not a skill defect. The cases carry `BLOCKED` for that reason.**
 - Section 4 tells the reader to consult "the schema reference in `ea-modeling`" without naming the
   file, so TC-29 cannot check that the schema was consulted rather than guessed; it checks the
   outcome (a correct count).
+  **Fixed. Section 4 now names `ea-modeling/references/sql_schema.md` and `describe_table`. TC-29
+  still checks the outcome; a check on the file being read is not possible in the grammar.**
 - The "Verify in EA's UI" section says to reload the diagram and screenshot it. The shared
   verification procedure it links says to open the diagram first, then reload. TC-33 checks reload
   then screenshot only.
+  **Fixed. The skill now says open the diagram, reload it, then screenshot, as the shared procedure
+  does. TC-33 checks the open before the reload.**
 - TC-21 depends on EA having no operation or COM route for an Options setting. A server release that
   adds one makes the case stale, and a case writer cannot confirm the claim without driving EA.
-- The shared canon (`westbrook-example.md`) still writes the qualified form as
-  `WestbrookBankArchitecture::`; the project file's `WBA::` is followed here (DL-085). The SQL in
-  TC-31 matches what the model stores, as the template requires.
+  **No change: a case dependency, not a skill defect. Recheck TC-21 after each server release (live
+  check in the lane report).**
+- The shared canon (`westbrook-example.md`) now writes the qualified form you pass as `WBA::`, the
+  same as this file. The SQL in TC-31 matches what the model stores, as the template requires.
+  **No change to this file. Server 3.6.5 accepts `WBA::` and translates it; what the model stores
+  stays the profile name.**
+- Server 3.6.5 returns `ea_choice_needed` when several EAs run, and section 1.2 now says to ask the
+  person and attach with `launch_ea` and `target`. **No case stages two running EAs, so none changed;
+  a case for it needs a runner with two EAs (live check in the lane report).**

@@ -26,6 +26,10 @@ width  = right - left
 height = top - bottom          <-- not bottom - top
 ```
 
+A caller may pass either sign for `top` and `bottom`; from server 3.6.5 the server stores negatives
+and returns `stored_top` and `stored_bottom`. The composer keeps negative `top` and `bottom` with
+`top > bottom`, which pass through unchanged.
+
 A real element as EA placed it: `left=50, top=-50, right=190, bottom=-110`. That box is 140 wide
 and 60 tall.
 
@@ -76,10 +80,11 @@ should be taking one more parameter.
 
 ---
 
-## 3. Status — eight grammars, three placements
+## 3. Status — twelve grammars, three placements
 
-The vocabulary has **eight** values. Six are layouts this library computes coordinates for; the
-other two are the cases where it computes none. What separates them is *who places the geometry*,
+The vocabulary has **twelve** values. Ten are layouts this library computes coordinates for; the
+other two are the cases where it computes none. `matrix`, `radial-tree`, `chevron-stack` and `treemap`
+each live in a module of their own and are described in their modules' docstrings. What separates them is *who places the geometry*,
 because that decides what may be done with a diagram type that names the grammar.
 
 | Grammar | Who places the geometry | Status |
@@ -89,7 +94,7 @@ because that decides what may be done with a diagram type that names the grammar
 | Nested grid | Our arithmetic | **Implemented** — `compose_nested_grid` |
 | Radial | Our arithmetic | **Implemented** — `compose_radial` |
 | Two-column cycle | Our arithmetic | **Implemented** — `compose_two_column_cycle` |
-| Computed geometry | Our arithmetic, not yet written | **Not built.** What remains under the name: the treemap |
+| Computed geometry | Our arithmetic, not yet written | **Not built.** The treemap has its own name and composer now |
 | Graph | EA's own layout, which we tidy afterward | **Producible today**, with no composer behind it |
 | EA-semantic | The diagram type itself | **Not producible.** Recorded so the gap is visible as data |
 
@@ -728,7 +733,7 @@ like one.
 ### Worked shape
 
 An example composition over the Westbrook Bank reference model: three bands, centered, with
-`Channels` holding three items at the default 140x60 and `Business Applications` holding two at
+`Channels` holding three items at the engine's default 140x60 (composed with no binding; the ArchiMate binding would size them 100x70) and `Business Applications` holding two at
 200x60. The top band's rect starts at `left=20, top=-20`; its items sit at `top=-48`, below the
 label strip; the second band's rect starts at `top=-150`, below the first band's `bottom=-120` plus
 the band gap. The `Data Platform` band is empty and keeps a label row 40 tall, so the layer is

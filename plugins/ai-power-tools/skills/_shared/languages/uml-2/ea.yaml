@@ -1,0 +1,2923 @@
+# EA facts for UML 2.5.1 as Sparx Enterprise Architect stores it.
+# Measured by reading back what EA stores.
+# UML is EA's native language, not an MDG technology: an element is told apart by t_object.Object_Type and a connector by
+# t_connector.Connector_Type, mostly with no stereotype. So `concepts` maps a concept to an EA element type, connector type or record
+# (not to a stereotype), and the sections `element_types`, `connector_types`, `connector_kinds`, `standard_profile` and `keywords`
+# list every stored form a ruleset selector may name. Every type below was created in EA and read back; Westbrook Bank appears only in
+# howto.md, as an illustration.
+language: uml-2
+technology: none
+technology_note: EA's native UML types. EA reports the internal technologies UML2 and EAExtended as loaded, but neither is a prefix that creates
+  anything (IsTechnologyLoaded('UML') is False). No <TECH>::<name> form applies to elements or connectors; diagrams take a plain type string.
+display_name: UML 2.5.1
+profile:
+  standard_profile: StandardProfileL2 (the UML Standard Profile; names bind as StandardProfileL2::<name>)
+  core_extensions: EAUML (EA's own profile; holds some UML keyword stereotypes)
+stereotype_prefix: ''
+stereotype_storage: 'Almost nothing carries a stereotype. A UML element is identified by t_object.Object_Type (EA''s own names: Class, UseCase,
+  Actor, Component, Port, StateNode, Action, ActionPin...) and a connector by t_connector.Connector_Type (Generalization, Association, Realisation,
+  UseCase, ControlFlow, StateFlow...). The UML keywords (include, extend, import, access, merge, substitute, use, call, send, create, instantiate,
+  derive, refine, trace) are free text in t_connector.Stereotype (EA stores any string; the t_xref row holds only a GUID) unless the string matches
+  a profile name, which then adds an FQName (StandardProfileL2::, EAUML::, or another technology''s name for a word it also defines). A kind of
+  element that EA keeps under one type (initial or final state, event kind, fragment operator) is a number in t_object.NType. A rule selects with
+  selector.types, selector.connector_types and type:<Object_Type> in connector ends, tables and containers.'
+measured_on:
+  ea: 17.1 build 1716
+  date: '2026-10-21'
+  library_version: '1716'
+  technology_version: none
+  technology_file: 'none: UML types are built into EA; nothing was read from a file except EA''s shipped UML model patterns (ModelPatterns\um2.5-*.xml)
+    for diagram type strings and use case connector kinds'
+  standard_version: UML 2.5.1 (OMG formal/17-12-05); the latest version, no newer one exists (OMG lists none after December 2017)
+counts:
+  element_types_package_level: 64
+  element_types_under_a_parent_only: 9
+  element_types_distinct: 73
+  connector_types: 27
+  diagram_types_created: 16
+  standard_profile_names_bound: 33
+  names_resolved_to_another_technology: 19
+  concepts: 242
+diagram_types:
+  Class diagram:
+    ea_name: Logical
+    stored_diagram_type: Logical
+    token_in_xmi: ClassDiagram
+    style_ex: '(empty: not an MDG diagram type)'
+    base: UML
+    standard_views:
+    - Class
+    note: EA calls the class diagram Logical; the string Class is also stored as given
+  Object diagram:
+    ea_name: Object
+    stored_diagram_type: Object
+    token_in_xmi: ObjectDiagram
+    style_ex: '(empty: not an MDG diagram type)'
+    base: UML
+    standard_views:
+    - Object
+  Package diagram:
+    ea_name: Package
+    stored_diagram_type: Package
+    token_in_xmi: PackageDiagram
+    style_ex: '(empty: not an MDG diagram type)'
+    base: UML
+    standard_views:
+    - Package
+  Composite structure diagram:
+    ea_name: CompositeStructure
+    stored_diagram_type: CompositeStructure
+    token_in_xmi: CompositeStructureDiagram
+    style_ex: '(empty: not an MDG diagram type)'
+    base: UML
+    standard_views:
+    - Composite structure
+  Component diagram:
+    ea_name: Component
+    stored_diagram_type: Component
+    token_in_xmi: ComponentDiagram
+    style_ex: '(empty: not an MDG diagram type)'
+    base: UML
+    standard_views:
+    - Component
+  Deployment diagram:
+    ea_name: Deployment
+    stored_diagram_type: Deployment
+    token_in_xmi: DeploymentDiagram
+    style_ex: '(empty: not an MDG diagram type)'
+    base: UML
+    standard_views:
+    - Deployment
+  Profile diagram:
+    ea_name: Profile
+    stored_diagram_type: Profile
+    token_in_xmi: (none seen)
+    style_ex: '(empty: not an MDG diagram type)'
+    base: UML
+    standard_views:
+    - Profile
+    status: created, not confirmed
+    note: no EA UML model pattern holds a profile diagram, so Profile is the string this catalog tried; whether EA's UI stores it is not confirmed
+  Use case diagram:
+    ea_name: Use Case
+    stored_diagram_type: Use Case
+    token_in_xmi: UseCaseDiagram
+    style_ex: '(empty: not an MDG diagram type)'
+    base: UML
+    standard_views:
+    - Use case
+  Activity diagram:
+    ea_name: Activity
+    stored_diagram_type: Activity
+    token_in_xmi: ActivityDiagram
+    style_ex: '(empty: not an MDG diagram type)'
+    base: UML
+    standard_views:
+    - Activity
+  State machine diagram:
+    ea_name: Statechart
+    stored_diagram_type: Statechart
+    token_in_xmi: StateDiagram
+    style_ex: '(empty: not an MDG diagram type)'
+    base: UML
+    standard_views:
+    - State machine
+    note: EA's string is Statechart
+  Sequence diagram:
+    ea_name: Sequence
+    stored_diagram_type: Sequence
+    token_in_xmi: SequenceDiagram
+    style_ex: '(empty: not an MDG diagram type)'
+    base: UML
+    standard_views:
+    - Sequence
+  Communication diagram:
+    ea_name: Collaboration
+    stored_diagram_type: Collaboration
+    token_in_xmi: CollaborationDiagram
+    style_ex: '(empty: not an MDG diagram type)'
+    base: UML
+    standard_views:
+    - Communication
+    note: EA's string is Collaboration; the string Communication is stored as given but no EA sample uses it
+  Timing diagram:
+    ea_name: Timing
+    stored_diagram_type: Timing
+    token_in_xmi: TimingDiagram
+    style_ex: '(empty: not an MDG diagram type)'
+    base: UML
+    standard_views:
+    - Timing
+  Interaction overview diagram:
+    ea_name: InteractionOverview
+    stored_diagram_type: InteractionOverview
+    token_in_xmi: InteractionOverviewDiagram
+    style_ex: '(empty: not an MDG diagram type)'
+    base: UML
+    standard_views:
+    - Interaction overview
+diagram_type_check: 'EA does not check a diagram type string: AddNew stores any text as Diagram_Type. Use only the ea_name values above.'
+element_types:
+  Action:
+    object_type: Action
+    nature: uml
+    concepts:
+    - Action
+    - SequenceNode
+  Activity:
+    object_type: Activity
+    nature: uml
+    concepts:
+    - Activity
+  ActivityPartition:
+    object_type: ActivityPartition
+    nature: uml
+    concepts:
+    - ActivityPartition
+  Actor:
+    object_type: Actor
+    nature: uml
+    concepts:
+    - Actor
+  Artifact:
+    object_type: Artifact
+    nature: uml
+    concepts:
+    - Artifact
+  Association:
+    object_type: Association
+    nature: ea-only
+    concepts: []
+    note: an element EA accepts under this name; its use is not documented here
+  Boundary:
+    object_type: Boundary
+    nature: ea-only
+    concepts:
+    - analysis class; also a lifeline (EA samples)
+    note: EA analysis class (UML Class with the analysis meaning)
+  CentralBufferNode:
+    object_type: CentralBufferNode
+    nature: uml
+    concepts:
+    - CentralBufferNode
+  Class:
+    object_type: Class
+    nature: uml
+    concepts:
+    - Class
+    - Stereotype
+  Collaboration:
+    object_type: Collaboration
+    nature: uml
+    concepts:
+    - Collaboration
+  CollaborationOccurrence:
+    object_type: CollaborationOccurrence
+    nature: uml
+    concepts:
+    - CollaborationUse
+  Component:
+    object_type: Component
+    nature: uml
+    concepts:
+    - Component
+  Constraint:
+    object_type: Constraint
+    nature: uml
+    concepts:
+    - Constraint
+  DataType:
+    object_type: DataType
+    nature: uml
+    concepts:
+    - DataType
+  Decision:
+    object_type: Decision
+    nature: uml
+    concepts:
+    - DecisionNode
+  DeploymentSpecification:
+    object_type: DeploymentSpecification
+    nature: uml
+    concepts:
+    - DeploymentSpecification
+  Device:
+    object_type: Device
+    nature: uml
+    concepts:
+    - Device
+  Entity:
+    object_type: Entity
+    nature: ea-only
+    concepts:
+    - analysis class
+    note: EA analysis class
+  Enumeration:
+    object_type: Enumeration
+    nature: uml
+    concepts:
+    - Enumeration
+  Event:
+    object_type: Event
+    nature: uml
+    concepts:
+    - Event
+    - CallEvent
+    - SignalEvent
+    - ChangeEvent
+    - TimeEvent
+    - AnyReceiveEvent
+  ExceptionHandler:
+    object_type: ExceptionHandler
+    nature: uml
+    concepts:
+    - ExceptionHandler
+  ExecutionEnvironment:
+    object_type: ExecutionEnvironment
+    nature: uml
+    concepts:
+    - ExecutionEnvironment
+  ExpansionRegion:
+    object_type: ExpansionRegion
+    nature: uml
+    concepts:
+    - ExpansionRegion
+  Feature:
+    object_type: Feature
+    nature: ea-only
+    concepts: []
+    note: EA feature element (software-requirements family)
+  GUIElement:
+    object_type: GUIElement
+    nature: ea-only
+    concepts: []
+    note: EA user-interface element
+  InformationItem:
+    object_type: InformationItem
+    nature: uml
+    concepts:
+    - InformationItem
+  Interaction:
+    object_type: Interaction
+    nature: uml
+    concepts:
+    - Interaction
+  InteractionFragment:
+    object_type: InteractionFragment
+    nature: uml
+    concepts:
+    - CombinedFragment
+    - InteractionFragment
+    - ConsiderIgnoreFragment
+  InteractionOccurrence:
+    object_type: InteractionOccurrence
+    nature: uml
+    concepts:
+    - InteractionUse
+  InteractionState:
+    object_type: InteractionState
+    nature: uml
+    concepts:
+    - StateInvariant
+  Interface:
+    object_type: Interface
+    nature: uml
+    concepts:
+    - Interface
+  InterruptibleActivityRegion:
+    object_type: InterruptibleActivityRegion
+    nature: uml
+    concepts:
+    - InterruptibleActivityRegion
+  Issue:
+    object_type: Issue
+    nature: ea-only
+    concepts: []
+    note: EA project-management element
+  LoopNode:
+    object_type: LoopNode
+    nature: uml
+    concepts:
+    - LoopNode
+  ConditionalNode:
+    object_type: ConditionalNode
+    nature: uml
+    concepts:
+    - ConditionalNode
+  MergeNode:
+    object_type: MergeNode
+    nature: uml
+    concepts:
+    - MergeNode
+  MessageEndpoint:
+    object_type: MessageEndpoint
+    nature: uml
+    concepts:
+    - Gate
+  Node:
+    object_type: Node
+    nature: uml
+    concepts:
+    - Node
+  Note:
+    object_type: Note
+    nature: uml
+    concepts:
+    - Comment
+  Object:
+    object_type: Object
+    nature: uml
+    concepts:
+    - InstanceSpecification
+    - DataStoreNode
+  Package:
+    object_type: Package
+    nature: uml
+    concepts:
+    - Package
+  Part:
+    object_type: Part
+    nature: uml
+    concepts:
+    - a part (Property in a composite structure)
+  PrimitiveType:
+    object_type: PrimitiveType
+    nature: uml
+    concepts:
+    - PrimitiveType
+  Region:
+    object_type: Region
+    nature: uml
+    concepts:
+    - Region
+  Report:
+    object_type: Report
+    nature: ea-only
+    concepts: []
+    note: EA element
+  Requirement:
+    object_type: Requirement
+    nature: ea-only
+    concepts: []
+    note: EA requirement element
+  Risk:
+    object_type: Risk
+    nature: ea-only
+    concepts: []
+    note: EA project-management element
+  Screen:
+    object_type: Screen
+    nature: ea-only
+    concepts: []
+    note: EA user-interface element
+  Sequence:
+    object_type: Sequence
+    nature: uml
+    concepts:
+    - Lifeline
+  Signal:
+    object_type: Signal
+    nature: uml
+    concepts:
+    - Signal
+  State:
+    object_type: State
+    nature: uml
+    concepts:
+    - State
+  StateMachine:
+    object_type: StateMachine
+    nature: uml
+    concepts:
+    - StateMachine
+    - ProtocolStateMachine
+  StateNode:
+    object_type: StateNode
+    nature: uml
+    concepts:
+    - FinalState
+    - Pseudostate
+    - InitialNode
+    - ActivityFinalNode
+    - FlowFinalNode
+    default_ntype: 3
+  StructuredActivityNode:
+    object_type: StructuredActivityNode
+    nature: uml
+    concepts:
+    - StructuredActivityNode
+  Synchronization:
+    object_type: Synchronization
+    nature: uml
+    concepts:
+    - ForkNode
+    - JoinNode
+  Test:
+    object_type: Test
+    nature: ea-only
+    concepts: []
+    note: EA test element
+  Task:
+    object_type: Task
+    nature: ea-only
+    concepts: []
+    note: EA project-management element
+  Change:
+    object_type: Change
+    nature: ea-only
+    concepts: []
+    note: EA project-management element
+  Text:
+    object_type: Text
+    nature: ea-only
+    concepts: []
+    note: EA text label element
+  TimeLine:
+    object_type: TimeLine
+    nature: uml
+    concepts:
+    - Lifeline in a timing diagram
+  Trigger:
+    object_type: Trigger
+    nature: uml
+    concepts:
+    - Trigger
+  UMLDiagram:
+    object_type: UMLDiagram
+    nature: ea-only
+    concepts: []
+    note: EA element that stands for a diagram
+  UseCase:
+    object_type: UseCase
+    nature: uml
+    concepts:
+    - UseCase
+  DiagramFrame:
+    object_type: DiagramFrame
+    nature: ea-only
+    concepts: []
+    note: EA diagram frame element
+  Port:
+    object_type: Port
+    nature: uml
+    concepts:
+    - Port
+    requires_parent: true
+    parents_accepted_in_catalog:
+    - Class
+    - Component
+    default_ntype: 0
+  ProvidedInterface:
+    object_type: ProvidedInterface
+    nature: uml
+    concepts:
+    - a provided interface (ball)
+    requires_parent: true
+    parents_accepted_in_catalog:
+    - Class
+    - Component
+    default_ntype: 0
+  RequiredInterface:
+    object_type: RequiredInterface
+    nature: uml
+    concepts:
+    - a required interface (socket)
+    requires_parent: true
+    parents_accepted_in_catalog:
+    - Class
+    - Component
+    default_ntype: 1
+  ActionPin:
+    object_type: ActionPin
+    nature: uml
+    concepts:
+    - Pin
+    - InputPin
+    - OutputPin
+    - ValuePin
+    - ActionInputPin
+    requires_parent: true
+    parents_accepted_in_catalog:
+    - Action
+    - Activity
+    default_ntype: 0
+  ObjectNode:
+    object_type: ObjectNode
+    nature: uml
+    concepts:
+    - ObjectNode
+    requires_parent: true
+    parents_accepted_in_catalog:
+    - Activity
+    default_ntype: 0
+  ActivityParameter:
+    object_type: ActivityParameter
+    nature: uml
+    concepts:
+    - ActivityParameterNode
+    requires_parent: true
+    parents_accepted_in_catalog:
+    - Activity
+    default_ntype: 0
+  ExpansionNode:
+    object_type: ExpansionNode
+    nature: uml
+    concepts:
+    - ExpansionNode
+    requires_parent: true
+    parents_accepted_in_catalog:
+    - ExpansionRegion
+    default_ntype: 0
+  EntryPoint:
+    object_type: EntryPoint
+    nature: uml
+    concepts:
+    - Pseudostate of kind entryPoint (a connection point)
+    requires_parent: true
+    parents_accepted_in_catalog:
+    - State
+    default_ntype: 0
+  ExitPoint:
+    object_type: ExitPoint
+    nature: uml
+    concepts:
+    - Pseudostate of kind exitPoint (a connection point)
+    requires_parent: true
+    parents_accepted_in_catalog:
+    - State
+    default_ntype: 0
+element_types_resolved:
+  Control:
+    stored_object_type: Object
+    stereotype: control
+    bound_to: EAUML::control
+  Comment:
+    stored_object_type: Note
+    stereotype: ''
+    bound_to: ''
+  Iteration:
+    stored_object_type: Boundary
+    stereotype: ''
+    bound_to: ''
+  Message:
+    stored_object_type: Class
+    stereotype: Message
+    bound_to: BPMN1.1::Message
+  Metaclass:
+    stored_object_type: Class
+    stereotype: Metaclass
+    bound_to: StandardProfileL2::Metaclass
+  Stereotype:
+    stored_object_type: Class
+    stereotype: stereotype
+    bound_to: EAUML::stereotype
+  Operation:
+    stored_object_type: Class
+    stereotype: Operation
+    bound_to: BPMN2.0::Operation
+  Property:
+    stored_object_type: Part
+    stereotype: ''
+    bound_to: ''
+  Subsystem:
+    stored_object_type: Component
+    stereotype: Subsystem
+    bound_to: StandardProfileL2::Subsystem
+  Service:
+    stored_object_type: Component
+    stereotype: Service
+    bound_to: StandardProfileL2::Service
+  Document:
+    stored_object_type: Artifact
+    stereotype: Document
+    bound_to: StandardProfileL2::Document
+  Objective:
+    stored_object_type: Requirement
+    stereotype: objective
+    bound_to: BABOK::objective
+  Slot:
+    stored_object_type: Class
+    stereotype: Slot
+    bound_to: IFML::Slot
+  Template:
+    stored_object_type: Class
+    stereotype: FACE_Template
+    bound_to: FACE::FACE_Template
+  DataStore:
+    stored_object_type: Object
+    stereotype: datastore
+    bound_to: (plain string)
+  SequenceNode:
+    stored_object_type: Action
+    stereotype: ''
+    bound_to: ''
+  AcceptEventAction:
+    stored_object_type: Action
+    stereotype: ''
+    bound_to: ''
+  AcceptCallAction:
+    stored_object_type: Action
+    stereotype: ''
+    bound_to: ''
+  DestructionEvent:
+    stored_object_type: Action
+    stereotype: ''
+    bound_to: ''
+element_types_refused:
+- Abstraction
+- ActivityFinal
+- AssociationClass
+- Attribute
+- ChangeRequest
+- CombinedFragment
+- ConnectionPoint
+- Continuation
+- Delegate
+- Dependency
+- DurationConstraint
+- DurationObservation
+- ExecutionSpecification
+- ExtensionPoint
+- FinalNode
+- FinalState
+- FlowFinal
+- ForkNode
+- Frame
+- Gate
+- Generalization
+- InitialNode
+- InitialState
+- InputPin
+- Instance
+- InstanceSpecification
+- InteractionConstraint
+- InteractionOperand
+- JoinNode
+- Lifeline
+- Manifest
+- MessageOccurrence
+- Model
+- Nesting
+- Occurrence
+- OutputPin
+- Pin
+- Profile
+- ProfileApplication
+- Pseudostate
+- Realisation
+- Receive
+- Reception
+- StateInvariant
+- StructuredActivity
+- TemplateParameter
+- TimeConstraint
+- TimeObservation
+- Usage
+- UseCaseExtensionPoint
+- ValuePin
+- Variable
+kind_numbers:
+  StateNode:
+    stored_in: t_object.NType (Element.Subtype)
+    '3': initial pseudostate (EA's default for a new StateNode)
+    '4': final state
+    other: 0 to 13 stored as given; their kinds were not read
+  Event:
+    stored_in: t_object.NType
+    range_stored: 0 to 8
+    meaning: not read
+  InteractionFragment:
+    stored_in: t_object.NType
+    range_stored: 0 to 13
+    meaning: not read (combined fragment operator)
+  RequiredInterface:
+    default_ntype: 1
+    note: EA stores a required interface (socket) as NType 1 and a provided interface (ball) as 0
+parents:
+  accepted:
+  - ActionPin under Action
+  - ActivityParameter under Activity
+  - Actor under Component
+  - Artifact under Node
+  - Class under Component
+  - Class under Device
+  - Class under ExecutionEnvironment
+  - Class under Node
+  - Component under Component
+  - Component under Device
+  - Component under ExecutionEnvironment
+  - Component under Node
+  - Decision under Activity
+  - Decision under Class
+  - Device under Node
+  - EntryPoint under Class
+  - EntryPoint under State
+  - EntryPoint under StateMachine
+  - ExecutionEnvironment under Node
+  - ExitPoint under State
+  - Interaction under Class
+  - Interaction under Package
+  - Interface under Component
+  - Node under Node
+  - Port under Actor
+  - Port under Artifact
+  - Port under Class
+  - Port under Collaboration
+  - Port under Component
+  - Port under Interface
+  - Port under Node
+  - Port under Part
+  - Port under State
+  - Port under UseCase
+  - ProvidedInterface under Actor
+  - ProvidedInterface under Class
+  - Region under Class
+  - Region under Component
+  - Region under Package
+  - Region under State
+  - Region under StateMachine
+  - State under Class
+  - State under State
+  - State under StateMachine
+  - StateNode under Class
+  - StateNode under State
+  - UseCase under Component
+  refused:
+  - ActionPin under Class
+  - ActivityParameter under Class
+  - ExpansionNode under Class
+  - Interaction under Interaction
+  - Port under Action
+  - Port under Enumeration
+  - Port under Note
+  note: EA accepts many parents the standard forbids (a Port under an Interface, an Actor or an Artifact; a Region under a Class; a Class under
+    a Component or a Node)
+connector_types:
+  Association:
+    concepts:
+    - Association
+    stereotypes_seen:
+    - Include
+    - Extend
+    variants:
+    - Association
+    - Association (navigable to target)
+    - AddNew 'Include' (capital)
+    - AddNew 'Extend' (capital)
+    - Association (information item)
+  Aggregation:
+    concepts: []
+    stereotypes_seen: []
+    variants:
+    - Aggregation (shared)
+    - Aggregation (composite)
+    - Aggregation (no end set)
+  Generalization:
+    concepts:
+    - Generalization
+    stereotypes_seen: []
+    variants:
+    - Generalization
+  Realisation:
+    concepts:
+    - Realization
+    - InterfaceRealization
+    - ComponentRealization
+    stereotypes_seen: []
+    variants:
+    - Realisation
+    - Realization (US spelling asked)
+  Dependency:
+    concepts:
+    - Dependency
+    - ElementImport
+    stereotypes_seen:
+    - import
+    - access
+    - merge
+    - ElementImport
+    - role binding
+    - bind
+    - friend
+    - permit
+    variants:
+    - Dependency
+    - Dependency + plain 'import'
+    - Dependency + plain 'access'
+    - Dependency + plain 'merge'
+    - Dependency + plain 'ElementImport'
+    - Dependency + plain 'role binding'
+    - Dependency + plain 'bind'
+    - Dependency + plain 'friend'
+  Usage:
+    concepts:
+    - Usage
+    stereotypes_seen:
+    - use
+    - call
+    - create
+    - instantiate
+    - send
+    - responsibility
+    variants:
+    - Usage
+    - Usage + plain 'use'
+    - Usage + plain 'call'
+    - Usage + plain 'create'
+    - Usage + plain 'instantiate'
+    - Usage + plain 'send'
+    - Usage + plain 'responsibility'
+  Abstraction:
+    concepts:
+    - Abstraction
+    stereotypes_seen:
+    - derive
+    - refine
+    - trace
+    variants:
+    - Abstraction
+    - Abstraction + plain 'derive'
+    - Abstraction + plain 'refine'
+    - Abstraction + plain 'trace'
+  Substitution:
+    concepts:
+    - Substitution
+    stereotypes_seen:
+    - substitute
+    variants:
+    - Substitution
+    - Substitution + plain 'substitute'
+  Package:
+    concepts:
+    - PackageImport
+    - PackageMerge
+    stereotypes_seen:
+    - import
+    - merge
+    variants:
+    - Package connector
+    - Package connector + plain 'import'
+    - Package connector + plain 'merge'
+  UseCase:
+    concepts:
+    - Include
+    - Extend
+    stereotypes_seen:
+    - include
+    - extend
+    variants:
+    - UseCase connector (actor to use case)
+    - UseCase connector + 'include' + Includes
+    - UseCase connector + 'extend' + Extends
+  ControlFlow:
+    concepts:
+    - ControlFlow
+    stereotypes_seen: []
+    variants:
+    - ControlFlow
+  ObjectFlow:
+    concepts:
+    - ObjectFlow
+    stereotypes_seen: []
+    variants:
+    - ObjectFlow
+  InterruptFlow:
+    concepts: []
+    stereotypes_seen: []
+    variants:
+    - InterruptFlow
+  StateFlow:
+    concepts:
+    - Transition
+    stereotypes_seen: []
+    variants:
+    - StateFlow (transition)
+  Sequence:
+    concepts:
+    - Message
+    stereotypes_seen: []
+    variants:
+    - Sequence (message)
+  Nesting:
+    concepts: []
+    stereotypes_seen: []
+    variants:
+    - Nesting
+  Delegate:
+    concepts: []
+    stereotypes_seen: []
+    variants:
+    - Delegate
+  InformationFlow:
+    concepts:
+    - InformationFlow
+    stereotypes_seen: []
+    variants:
+    - InformationFlow
+  Deployment:
+    concepts:
+    - Deployment
+    stereotypes_seen: []
+    variants:
+    - Deployment
+  Manifest:
+    concepts:
+    - Manifestation
+    stereotypes_seen: []
+    variants:
+    - Manifest
+  CommunicationPath:
+    concepts:
+    - CommunicationPath
+    stereotypes_seen: []
+    variants:
+    - CommunicationPath
+  Collaboration:
+    concepts: []
+    stereotypes_seen: []
+    variants:
+    - Collaboration (use)
+  Extension:
+    concepts:
+    - Extension
+    stereotypes_seen: []
+    variants:
+    - Extension
+  Connector:
+    concepts:
+    - Connector
+    stereotypes_seen: []
+    variants:
+    - Connector (parts)
+    - Connector (ports)
+  Assembly:
+    concepts: []
+    stereotypes_seen: []
+    variants:
+    - Assembly
+  NoteLink:
+    concepts: []
+    stereotypes_seen: []
+    variants:
+    - NoteLink
+  TemplateBinding:
+    concepts:
+    - TemplateBinding
+    stereotypes_seen: []
+    variants:
+    - TemplateBinding
+connector_type_notes:
+  Realisation: British spelling in the stored type; Realization is accepted and stored as Realisation. Interface realization, component realization
+    and realization are one type
+  Aggregation: shared and composite are one connector type; the end flag t_connector.SourceIsAggregate or DestIsAggregate is 1 (shared) or 2 (composite);
+    EA's own patterns also store SubType Weak or Strong
+  UseCase: the actor-to-use-case association; include and extend are this type with a stereotype and a SubType
+  StateFlow: a transition
+  Sequence: a message (the lifeline elements are Sequence elements)
+  Package: a connector between packages (an import or a merge carries a stereotype string)
+  Dependency: AddNew of a name EA does not know stores a Dependency without an error (Transition, InterfaceRealization, ComponentRealization,
+    RoleBinding, ProtocolTransition, PackageImport, PackageMerge, ProfileApplication, AssociationClass)
+connector_kinds:
+  include:
+    connector_type: UseCase
+    stereotype: include
+    subtype: Includes
+    basis: EA pattern um2.5-basic-use-case-model-with-include; reproduced
+  extend:
+    connector_type: UseCase
+    stereotype: extend
+    subtype: Extends
+    basis: EA pattern; reproduced
+  package import:
+    connector_type: Package or Dependency
+    stereotype: import
+    basis: Package in EA's pattern; Dependency measured
+  access:
+    connector_type: Dependency
+    stereotype: access
+    basis: measured (plain string)
+  package merge:
+    connector_type: Package or Dependency
+    stereotype: merge
+    basis: measured (plain string)
+  substitution:
+    connector_type: Substitution
+    stereotype: substitute
+    basis: measured (plain string)
+  role binding:
+    connector_type: Dependency
+    stereotype: role binding
+    basis: EA pattern
+  derive, refine, trace:
+    connector_type: Abstraction
+    stereotype: derive | refine | trace
+    basis: measured; EAUML binds them on request
+  use, call, create, instantiate, send, responsibility:
+    connector_type: Usage
+    stereotype: use | call | create | instantiate | send | responsibility
+    basis: measured; create and responsibility resolve to StandardProfileL2, the others stay plain
+standard_profile:
+  Auxiliary:
+  - fq: StandardProfileL2::Auxiliary
+    applies_to: Class
+    qualified_type_creates_element: true
+    stereotype_ex:
+      'on': Class
+      bound: true
+  BuildComponent:
+  - fq: StandardProfileL2::BuildComponent
+    applies_to: Component
+    qualified_type_creates_element: true
+    stereotype_ex:
+      'on': Component
+      bound: true
+  Call:
+  - fq: StandardProfileL2::Call
+    applies_to: Usage
+    connectors:
+    - how: qualified connector type
+      stored_type: Usage
+      stereotype: Call
+      bound: StandardProfileL2::Call
+    - how: StereotypeEx
+      stored_type: Usage
+      stereotype: Call
+      bound: StandardProfileL2::Call
+  Create:
+  - fq: StandardProfileL2::Create
+    applies_to: Usage
+    connectors:
+    - how: qualified connector type
+      stored_type: Usage
+      stereotype: Create
+      bound: StandardProfileL2::Create
+    - how: StereotypeEx
+      stored_type: Usage
+      stereotype: Create
+      bound: StandardProfileL2::Create
+  - fq: StandardProfileL2::Create
+    applies_to: BehavioralFeature
+    operation_bound: false
+  Derive:
+  - fq: StandardProfileL2::Derive
+    applies_to: Abstraction
+    connectors:
+    - how: qualified connector type
+      stored_type: Abstraction
+      stereotype: Derive
+      bound: StandardProfileL2::Derive
+    - how: StereotypeEx
+      stored_type: Abstraction
+      stereotype: Derive
+      bound: StandardProfileL2::Derive
+  Destroy:
+  - fq: StandardProfileL2::Destroy
+    applies_to: BehavioralFeature
+    operation_bound: false
+  Document:
+  - fq: StandardProfileL2::Document
+    applies_to: Artifact
+    qualified_type_creates_element: true
+    stereotype_ex:
+      'on': Artifact
+      bound: true
+  Entity:
+  - fq: StandardProfileL2::Entity
+    applies_to: Component
+    qualified_type_creates_element: true
+    stereotype_ex:
+      'on': Component
+      bound: true
+  Executable:
+  - fq: StandardProfileL2::Executable
+    applies_to: Artifact
+    qualified_type_creates_element: true
+    stereotype_ex:
+      'on': Artifact
+      bound: true
+  File:
+  - fq: StandardProfileL2::File
+    applies_to: Artifact
+    qualified_type_creates_element: true
+    stereotype_ex:
+      'on': Artifact
+      bound: true
+  Focus:
+  - fq: StandardProfileL2::Focus
+    applies_to: Class
+    qualified_type_creates_element: true
+    stereotype_ex:
+      'on': Class
+      bound: true
+  Framework:
+  - fq: StandardProfileL2::Framework
+    applies_to: Package
+    qualified_type_creates_element: false
+    stereotype_ex:
+      'on': Package
+      bound: true
+  Implement:
+  - fq: StandardProfileL2::Implement
+    applies_to: Component
+    qualified_type_creates_element: true
+    stereotype_ex:
+      'on': Component
+      bound: true
+  ImplementationClass:
+  - fq: StandardProfileL2::ImplementationClass
+    applies_to: Class
+    qualified_type_creates_element: true
+    stereotype_ex:
+      'on': Class
+      bound: true
+  Instantiate:
+  - fq: StandardProfileL2::Instantiate
+    applies_to: Usage
+    connectors:
+    - how: qualified connector type
+      stored_type: Usage
+      stereotype: Instantiate
+      bound: StandardProfileL2::Instantiate
+    - how: StereotypeEx
+      stored_type: Usage
+      stereotype: Instantiate
+      bound: StandardProfileL2::Instantiate
+  Library:
+  - fq: StandardProfileL2::Library
+    applies_to: Artifact
+    qualified_type_creates_element: true
+    stereotype_ex:
+      'on': Artifact
+      bound: true
+  Metaclass:
+  - fq: StandardProfileL2::Metaclass
+    applies_to: Class
+    qualified_type_creates_element: true
+    stereotype_ex:
+      'on': Class
+      bound: true
+  Metamodel:
+  - fq: StandardProfileL2::Metamodel
+    applies_to: Model
+    qualified_type_creates_element: false
+    stereotype_ex:
+      'on': Package
+      bound: true
+  ModelLibrary:
+  - fq: StandardProfileL2::ModelLibrary
+    applies_to: Package
+    qualified_type_creates_element: false
+    stereotype_ex:
+      'on': Package
+      bound: true
+  Process:
+  - fq: StandardProfileL2::Process
+    applies_to: Component
+    qualified_type_creates_element: true
+    stereotype_ex:
+      'on': Component
+      bound: true
+  Realization:
+  - fq: StandardProfileL2::Realization
+    applies_to: Classifier
+    qualified_type_creates_element: true
+    stereotype_ex:
+      'on': Class
+      bound: true
+  Refine:
+  - fq: StandardProfileL2::Refine
+    applies_to: Abstraction
+    connectors:
+    - how: qualified connector type
+      stored_type: Dependency
+      stereotype: Refine
+      bound: StandardProfileL2::Refine
+    - how: StereotypeEx
+      stored_type: Abstraction
+      stereotype: Refine
+      bound: StandardProfileL2::Refine
+  Responsibility:
+  - fq: StandardProfileL2::Responsibility
+    applies_to: Usage
+    connectors:
+    - how: qualified connector type
+      stored_type: Usage
+      stereotype: Responsibility
+      bound: StandardProfileL2::Responsibility
+    - how: StereotypeEx
+      stored_type: Usage
+      stereotype: Responsibility
+      bound: StandardProfileL2::Responsibility
+  Script:
+  - fq: StandardProfileL2::Script
+    applies_to: Artifact
+    qualified_type_creates_element: true
+    stereotype_ex:
+      'on': Artifact
+      bound: true
+  Send:
+  - fq: StandardProfileL2::Send
+    applies_to: Usage
+    connectors:
+    - how: qualified connector type
+      stored_type: Usage
+      stereotype: Send
+      bound: StandardProfileL2::Send
+    - how: StereotypeEx
+      stored_type: Usage
+      stereotype: Send
+      bound: StandardProfileL2::Send
+  Service:
+  - fq: StandardProfileL2::Service
+    applies_to: Component
+    qualified_type_creates_element: true
+    stereotype_ex:
+      'on': Component
+      bound: true
+  Source:
+  - fq: StandardProfileL2::Source
+    applies_to: Artifact
+    qualified_type_creates_element: true
+    stereotype_ex:
+      'on': Artifact
+      bound: true
+  Specification:
+  - fq: StandardProfileL2::Specification
+    applies_to: Classifier
+    qualified_type_creates_element: true
+    stereotype_ex:
+      'on': Class
+      bound: true
+  Subsystem:
+  - fq: StandardProfileL2::Subsystem
+    applies_to: Component
+    qualified_type_creates_element: true
+    stereotype_ex:
+      'on': Component
+      bound: true
+  SystemModel:
+  - fq: StandardProfileL2::SystemModel
+    applies_to: Model
+    qualified_type_creates_element: false
+    stereotype_ex:
+      'on': Package
+      bound: true
+  Trace:
+  - fq: StandardProfileL2::Trace
+    applies_to: Abstraction
+    connectors:
+    - how: qualified connector type
+      stored_type: Abstraction
+      stereotype: Trace
+      bound: StandardProfileL2::Trace
+    - how: StereotypeEx
+      stored_type: Abstraction
+      stereotype: Trace
+      bound: StandardProfileL2::Trace
+  Type:
+  - fq: StandardProfileL2::Type
+    applies_to: Class
+    qualified_type_creates_element: true
+    stereotype_ex:
+      'on': Class
+      bound: true
+  Utility:
+  - fq: StandardProfileL2::Utility
+    applies_to: Class
+    qualified_type_creates_element: true
+    stereotype_ex:
+      'on': Class
+      bound: true
+standard_profile_note: 'All 33 names bind. Create is listed twice by the standard (Usage and BehavioralFeature). StereotypeEx checks the metaclass:
+  StandardProfileL2::Document on a Class stores nothing.'
+eauml:
+  abstraction:
+  - Dependency
+  - Usage
+  - Abstraction
+  use:
+  - Dependency
+  - Usage
+  - Abstraction
+  import:
+  - Dependency
+  - Usage
+  - Abstraction
+  derive:
+  - Dependency
+  - Usage
+  - Abstraction
+  instantiate:
+  - Dependency
+  - Usage
+  - Abstraction
+  navigate:
+  - Package
+  trace:
+  - Dependency
+  - Usage
+  - Abstraction
+  enumeration:
+  - Class
+  - Component
+  boundary:
+  - Component
+  control:
+  - Component
+  entity:
+  - Component
+  stereotype:
+  - Class
+  - Component
+  profile:
+  - Package
+  Model:
+  - Package
+keywords:
+  note: 'Annex C keywords set as plain strings; (plain string) means no profile owns the word. The words listed with an FQName that is not StandardProfileL2
+    or EAUML are another technology''s stereotype of the same name: do not select by them.'
+  tried:
+    abstraction:
+      on_class: (plain string)
+      on_dependency: EAUML::abstraction
+    access:
+      on_class: (plain string)
+      on_dependency: (plain string)
+    activity:
+      on_class: BPMN1.1::Activity
+      on_dependency: (plain string)
+    actor:
+      on_class: (plain string)
+      on_dependency: (plain string)
+    apply:
+      on_class: (plain string)
+      on_dependency: (plain string)
+    artifact:
+      on_class: (plain string)
+      on_dependency: (plain string)
+    bind:
+      on_class: (plain string)
+      on_dependency: (plain string)
+    centralBuffer:
+      on_class: (plain string)
+      on_dependency: (plain string)
+    collaboration:
+      on_class: (plain string)
+      on_dependency: (plain string)
+    component:
+      on_class: (plain string)
+      on_dependency: (plain string)
+    datastore:
+      on_class: ''
+      on_dependency: (plain string)
+    dataType:
+      on_class: GML::DataType
+      on_dependency: (plain string)
+    decisionInput:
+      on_class: (plain string)
+      on_dependency: (plain string)
+    decisionInputFlow:
+      on_class: (plain string)
+      on_dependency: (plain string)
+    deploy:
+      on_class: (plain string)
+      on_dependency: (plain string)
+    deployment spec:
+      on_class: (plain string)
+      on_dependency: (plain string)
+    device:
+      on_class: (plain string)
+      on_dependency: (plain string)
+    element access:
+      on_class: (plain string)
+      on_dependency: (plain string)
+    element import:
+      on_class: (plain string)
+      on_dependency: ''
+    enumeration:
+      on_class: GML::Enumeration
+      on_dependency: (plain string)
+    executionEnvironment:
+      on_class: (plain string)
+      on_dependency: (plain string)
+    extend:
+      on_class: (plain string)
+      on_dependency: (plain string)
+    extended:
+      on_class: SOMF::extended
+      on_dependency: SOMF::extended
+    external:
+      on_class: (plain string)
+      on_dependency: (plain string)
+    final:
+      on_class: (plain string)
+      on_dependency: (plain string)
+    flow:
+      on_class: (plain string)
+      on_dependency: (plain string)
+    import:
+      on_class: (plain string)
+      on_dependency: (plain string)
+    include:
+      on_class: (plain string)
+      on_dependency: (plain string)
+    information:
+      on_class: EPProfile::information
+      on_dependency: (plain string)
+    interface:
+      on_class: (plain string)
+      on_dependency: (plain string)
+    iterative:
+      on_class: (plain string)
+      on_dependency: (plain string)
+    localPostcondition:
+      on_class: (plain string)
+      on_dependency: (plain string)
+    localPrecondition:
+      on_class: (plain string)
+      on_dependency: (plain string)
+    manifest:
+      on_class: (plain string)
+      on_dependency: (plain string)
+    merge:
+      on_class: (plain string)
+      on_dependency: (plain string)
+    model:
+      on_class: IEEE1471::Model
+      on_dependency: (plain string)
+    multicast:
+      on_class: (plain string)
+      on_dependency: (plain string)
+    multireceive:
+      on_class: (plain string)
+      on_dependency: (plain string)
+    occurrence:
+      on_class: (plain string)
+      on_dependency: (plain string)
+    parallel:
+      on_class: (plain string)
+      on_dependency: (plain string)
+    postcondition:
+      on_class: (plain string)
+      on_dependency: (plain string)
+    precondition:
+      on_class: (plain string)
+      on_dependency: (plain string)
+    primitive:
+      on_class: (plain string)
+      on_dependency: (plain string)
+    profile:
+      on_class: (plain string)
+      on_dependency: (plain string)
+    protocol:
+      on_class: UAFP::Protocol
+      on_dependency: (plain string)
+    reference:
+      on_class: (plain string)
+      on_dependency: (plain string)
+    representation:
+      on_class: (plain string)
+      on_dependency: (plain string)
+    selection:
+      on_class: (plain string)
+      on_dependency: (plain string)
+    signal:
+      on_class: (plain string)
+      on_dependency: (plain string)
+    singleExecution:
+      on_class: (plain string)
+      on_dependency: (plain string)
+    statemachine:
+      on_class: (plain string)
+      on_dependency: (plain string)
+    stream:
+      on_class: (plain string)
+      on_dependency: (plain string)
+    stereotype:
+      on_class: (plain string)
+      on_dependency: (plain string)
+    strict:
+      on_class: (plain string)
+      on_dependency: (plain string)
+    structured:
+      on_class: (plain string)
+      on_dependency: (plain string)
+    substitute:
+      on_class: (plain string)
+      on_dependency: (plain string)
+    transformation:
+      on_class: (plain string)
+      on_dependency: (plain string)
+    use:
+      on_class: (plain string)
+      on_dependency: (plain string)
+features:
+  Property: t_attribute
+  Operation: t_operation
+  Parameter: t_operationparams
+  EnumerationLiteral: t_attribute on the Enumeration element
+  Constraint: t_objectconstraint (also a Constraint element type)
+  tagged value of an instance: t_objectproperties
+concepts:
+  Abstraction:
+    how: connector
+    basis: catalog
+    ea_connector_type: Abstraction
+    note: the keywords derive, refine and trace are plain stereotype strings on it
+  Comment:
+    how: type
+    basis: catalog
+    ea_element_type: Note
+    stereotype: ''
+    note: a Note element; an annotation is a NoteLink connector
+  Constraint:
+    how: type
+    basis: catalog
+    ea_element_type: Constraint
+    stereotype: ''
+    note: also a record on any element (t_objectconstraint, measured); a Constraint element is a separate type
+  Dependency:
+    how: connector
+    basis: catalog
+    ea_connector_type: Dependency
+  DirectedRelationship:
+    how: abstract
+    note: no instances; the EA types of its subclasses apply
+  Element:
+    how: abstract
+    note: no instances; the EA types of its subclasses apply
+  ElementImport:
+    how: connector
+    basis: catalog
+    ea_connector_type: Dependency
+    note: a Dependency with a stereotype string; EA has no element-import type (ElementImport is a SysML 1.1 stereotype name)
+  MultiplicityElement:
+    how: abstract
+    note: no instances; the EA types of its subclasses apply
+  NamedElement:
+    how: abstract
+    note: no instances; the EA types of its subclasses apply
+  Namespace:
+    how: abstract
+    note: no instances; the EA types of its subclasses apply
+  PackageImport:
+    how: connector
+    basis: catalog
+    ea_connector_type: Package
+    note: a Package connector with stereotype string import, as EA's own samples store it; a Dependency with import also works
+  PackageableElement:
+    how: abstract
+    note: no instances; the EA types of its subclasses apply
+  ParameterableElement:
+    how: abstract
+    note: no instances; the EA types of its subclasses apply
+  Realization:
+    how: connector
+    basis: catalog
+    ea_connector_type: Realisation
+    note: stored with the British spelling; AddNew accepts Realization
+  Relationship:
+    how: abstract
+    note: no instances; the EA types of its subclasses apply
+  TemplateBinding:
+    how: connector
+    basis: catalog
+    ea_connector_type: TemplateBinding
+  TemplateParameter:
+    how: none
+    basis: not-found
+    note: no element; a template parameter is text on the templated element
+  TemplateParameterSubstitution:
+    how: none
+    basis: not-found
+  TemplateSignature:
+    how: none
+    basis: not-found
+    note: no element; EA keeps template parameters as a text field of the class
+  TemplateableElement:
+    how: abstract
+    note: no instances; the EA types of its subclasses apply
+  Type:
+    how: abstract
+    note: no instances; the EA types of its subclasses apply
+  TypedElement:
+    how: abstract
+    note: no instances; the EA types of its subclasses apply
+  Usage:
+    how: connector
+    basis: catalog
+    ea_connector_type: Usage
+    note: the keywords use, call, create, instantiate, send and responsibility are stereotype strings on it
+  Duration:
+    how: none
+    basis: inferred
+    note: held as text (a constraint or a field value)
+  DurationConstraint:
+    how: none
+    basis: not-found
+    note: EA refused AddNew DurationConstraint; a Constraint element or a timing diagram label
+  DurationInterval:
+    how: none
+    basis: inferred
+    note: held as text
+  DurationObservation:
+    how: none
+    basis: not-found
+    note: EA refused AddNew DurationObservation
+  Expression:
+    how: none
+    basis: inferred
+    note: held as text (guard, effect, default value)
+  Interval:
+    how: none
+    basis: inferred
+    note: held as text
+  IntervalConstraint:
+    how: none
+    basis: inferred
+    note: held as text
+  LiteralBoolean:
+    how: none
+    basis: inferred
+    note: held as text
+  LiteralInteger:
+    how: none
+    basis: inferred
+    note: held as text
+  LiteralNull:
+    how: none
+    basis: inferred
+    note: held as text
+  LiteralReal:
+    how: none
+    basis: inferred
+    note: held as text
+  LiteralSpecification:
+    how: abstract
+    note: no instances; the EA types of its subclasses apply
+  LiteralString:
+    how: none
+    basis: inferred
+    note: held as text
+  LiteralUnlimitedNatural:
+    how: none
+    basis: inferred
+    note: held as text
+  Observation:
+    how: abstract
+    note: no instances; the EA types of its subclasses apply
+  OpaqueExpression:
+    how: none
+    basis: inferred
+    note: held as text (guard, effect, constraint body)
+  StringExpression:
+    how: none
+    basis: inferred
+    note: held as text
+  TimeConstraint:
+    how: none
+    basis: not-found
+    note: EA refused AddNew TimeConstraint; a Constraint element or a timing diagram label
+  TimeExpression:
+    how: none
+    basis: inferred
+    note: held as text
+  TimeInterval:
+    how: none
+    basis: inferred
+    note: held as text
+  TimeObservation:
+    how: none
+    basis: not-found
+    note: EA refused AddNew TimeObservation
+  ValueSpecification:
+    how: abstract
+    note: no instances; the EA types of its subclasses apply
+  BehavioralFeature:
+    how: abstract
+    note: no instances; the EA types of its subclasses apply
+  Classifier:
+    how: abstract
+    note: no instances; the EA types of its subclasses apply
+  ClassifierTemplateParameter:
+    how: none
+    basis: not-found
+  Feature:
+    how: abstract
+    note: no instances; the EA types of its subclasses apply
+  Generalization:
+    how: connector
+    basis: catalog
+    ea_connector_type: Generalization
+  GeneralizationSet:
+    how: none
+    basis: inferred
+    note: EA has no element for a generalization set; the set name is a field of the Generalization connector (not exercised)
+  InstanceSpecification:
+    how: type
+    basis: catalog
+    ea_element_type: Object
+    stereotype: ''
+    note: an Object element; a link between objects is an Association connector
+  InstanceValue:
+    how: none
+    basis: not-found
+  Operation:
+    how: feature
+    basis: catalog
+    ea_record: t_operation
+    note: a record of the class (Methods.AddNew), with t_operationparams for parameters; not an element
+  OperationTemplateParameter:
+    how: none
+    basis: not-found
+  Parameter:
+    how: feature
+    basis: catalog
+    ea_record: t_operationparams
+    note: a record of an operation; in an activity the parameter node is an ActivityParameter element
+  ParameterSet:
+    how: none
+    basis: not-found
+  Property:
+    how: feature
+    basis: catalog
+    ea_record: t_attribute
+    note: an attribute record of the class, or a Part element for a part in a composite structure; an association end is a field of the connector
+  RedefinableElement:
+    how: abstract
+    note: no instances; the EA types of its subclasses apply
+  RedefinableTemplateSignature:
+    how: none
+    basis: not-found
+  Slot:
+    how: none
+    basis: not-found
+    note: EA resolved the name Slot to an IFML stereotype on a Class; no slot record was exercised
+  StructuralFeature:
+    how: abstract
+    note: no instances; the EA types of its subclasses apply
+  Substitution:
+    how: connector
+    basis: catalog
+    ea_connector_type: Substitution
+    note: a Substitution connector; EA's samples do not use it; the keyword substitute is a plain string
+  BehavioredClassifier:
+    how: abstract
+    note: no instances; the EA types of its subclasses apply
+  DataType:
+    how: type
+    basis: catalog
+    ea_element_type: DataType
+    stereotype: ''
+  Enumeration:
+    how: type
+    basis: catalog
+    ea_element_type: Enumeration
+    stereotype: ''
+  EnumerationLiteral:
+    how: feature
+    basis: catalog
+    ea_record: t_attribute
+    note: an attribute of the Enumeration element (Attributes.AddNew)
+  Interface:
+    how: type
+    basis: catalog
+    ea_element_type: Interface
+    stereotype: ''
+  InterfaceRealization:
+    how: connector
+    basis: catalog
+    ea_connector_type: Realisation
+    note: the same Realisation connector as any realization; EA has no separate interface-realization type
+  PrimitiveType:
+    how: type
+    basis: catalog
+    ea_element_type: PrimitiveType
+    stereotype: ''
+  Reception:
+    how: none
+    basis: not-found
+    note: EA refused AddNew Reception; an operation of the class with a signal reference is the closest, not exercised
+  Signal:
+    how: type
+    basis: catalog
+    ea_element_type: Signal
+    stereotype: ''
+  Association:
+    how: connector
+    basis: catalog
+    ea_connector_type: Association
+    note: aggregation and composition are the connector type Aggregation with the end flag DestIsAggregate or SourceIsAggregate = 1 (shared) or
+      2 (composite)
+  AssociationClass:
+    how: none
+    basis: not-found
+    note: EA refused AddNew AssociationClass; modeled as a Class and an Association (not exercised)
+  Class:
+    how: type
+    basis: catalog
+    ea_element_type: Class
+    stereotype: ''
+  Collaboration:
+    how: type
+    basis: catalog
+    ea_element_type: Collaboration
+    stereotype: ''
+  CollaborationUse:
+    how: type
+    basis: catalog
+    ea_element_type: CollaborationOccurrence
+    stereotype: ''
+    note: the element EA calls a collaboration occurrence; a Collaboration connector joins it to the collaboration
+  Component:
+    how: type
+    basis: catalog
+    ea_element_type: Component
+    stereotype: ''
+  ComponentRealization:
+    how: connector
+    basis: catalog
+    ea_connector_type: Realisation
+    note: the same Realisation connector
+  ConnectableElement:
+    how: abstract
+    note: no instances; the EA types of its subclasses apply
+  ConnectableElementTemplateParameter:
+    how: none
+    basis: not-found
+  Connector:
+    how: connector
+    basis: catalog
+    ea_connector_type: Connector
+    note: also Assembly and Delegate connector types; ends are Part, Port, ProvidedInterface or RequiredInterface elements
+  ConnectorEnd:
+    how: none
+    basis: inferred
+    note: a field of the connector (end role, multiplicity)
+  EncapsulatedClassifier:
+    how: abstract
+    note: no instances; the EA types of its subclasses apply
+  Port:
+    how: child
+    basis: catalog
+    ea_element_type: Port
+    stereotype: ''
+    requires_parent: true
+    note: a child of its owner (ParentID); EA accepted a Port under Class, Interface, Actor, UseCase, Component, Node, Artifact, State, Part and
+      Collaboration
+  StructuredClassifier:
+    how: abstract
+    note: no instances; the EA types of its subclasses apply
+  Extension:
+    how: connector
+    basis: catalog
+    ea_connector_type: Extension
+    note: from the stereotype class to the metaclass class
+  ExtensionEnd:
+    how: none
+    basis: inferred
+    note: a field of the Extension connector
+  Image:
+    how: none
+    basis: not-found
+  Model:
+    how: none
+    basis: catalog
+    note: EA refused AddNew Model; the root package of the repository plays the model
+  Package:
+    how: type
+    basis: catalog
+    ea_element_type: Package
+    stereotype: ''
+  PackageMerge:
+    how: connector
+    basis: catalog
+    ea_connector_type: Package
+    note: a Package connector with stereotype string merge (plain string, not measured against an EA sample)
+  Profile:
+    how: none
+    basis: not-found
+    note: EA refused AddNew Profile; a Package carrying a profile stereotype is used (not exercised)
+  ProfileApplication:
+    how: none
+    basis: not-found
+    note: EA refused AddNew ProfileApplication; AddNew of the name makes a plain Dependency
+  Stereotype:
+    how: type
+    basis: catalog
+    ea_element_type: Class
+    stereotype: ''
+    note: a Class with the stereotype stereotype (EAUML::stereotype); AddNew Stereotype resolves to it
+  AnyReceiveEvent:
+    how: kind
+    basis: catalog
+    ea_element_type: Event
+    stereotype: ''
+  Behavior:
+    how: abstract
+    note: no instances; the EA types of its subclasses apply
+  CallEvent:
+    how: kind
+    basis: catalog
+    ea_element_type: Event
+    stereotype: ''
+  ChangeEvent:
+    how: kind
+    basis: catalog
+    ea_element_type: Event
+    stereotype: ''
+  Event:
+    how: abstract
+    note: no instances; the EA types of its subclasses apply
+  FunctionBehavior:
+    how: none
+    basis: not-found
+  MessageEvent:
+    how: abstract
+    note: no instances; the EA types of its subclasses apply
+  OpaqueBehavior:
+    how: none
+    basis: inferred
+    note: a Behavior (Activity, StateMachine, Interaction) or text on an operation
+  SignalEvent:
+    how: kind
+    basis: catalog
+    ea_element_type: Event
+    stereotype: ''
+  TimeEvent:
+    how: kind
+    basis: catalog
+    ea_element_type: Event
+    stereotype: ''
+  Trigger:
+    how: type
+    basis: catalog
+    ea_element_type: Trigger
+    stereotype: ''
+  ConnectionPointReference:
+    how: none
+    basis: not-found
+    note: EA has EntryPoint and ExitPoint children of a State; no reference type
+  FinalState:
+    how: kind
+    basis: catalog
+    ea_element_type: StateNode
+    stereotype: ''
+    note: StateNode with NType 4 (read from EA's XMI export)
+  ProtocolConformance:
+    how: none
+    basis: not-found
+  ProtocolStateMachine:
+    how: kind
+    basis: inferred
+    ea_element_type: StateMachine
+    stereotype: ''
+    note: EA keeps no separate protocol state machine type (not exercised)
+  ProtocolTransition:
+    how: none
+    basis: not-found
+    note: AddNew ProtocolTransition makes a plain Dependency
+  Pseudostate:
+    how: kind
+    basis: catalog
+    ea_element_type: StateNode
+    stereotype: ''
+    note: one EA type (StateNode, Decision, Synchronization, EntryPoint, ExitPoint) serves the kinds; the StateNode kind is the stored number
+      NType (3 initial, 4 final read from the XMI export; the others stored but not named)
+  Region:
+    how: type
+    basis: catalog
+    ea_element_type: Region
+    stereotype: ''
+    note: a Region element; EA accepted it under State, StateMachine, Class, Component and Package
+  State:
+    how: type
+    basis: catalog
+    ea_element_type: State
+    stereotype: ''
+    note: a State may be a child of a State or of a StateMachine
+  StateMachine:
+    how: type
+    basis: catalog
+    ea_element_type: StateMachine
+    stereotype: ''
+  Transition:
+    how: connector
+    basis: catalog
+    ea_connector_type: StateFlow
+    note: a StateFlow connector between states or pseudostates
+  Vertex:
+    how: abstract
+    note: no instances; the EA types of its subclasses apply
+  Activity:
+    how: type
+    basis: catalog
+    ea_element_type: Activity
+    stereotype: ''
+  ActivityEdge:
+    how: abstract
+    note: no instances; the EA types of its subclasses apply
+  ActivityFinalNode:
+    how: kind
+    basis: inferred
+    ea_element_type: StateNode
+    stereotype: ''
+    note: a StateNode (the kind code is not confirmed by this catalog)
+  ActivityGroup:
+    how: abstract
+    note: no instances; the EA types of its subclasses apply
+  ActivityNode:
+    how: abstract
+    note: no instances; the EA types of its subclasses apply
+  ActivityParameterNode:
+    how: child
+    basis: catalog
+    ea_element_type: ActivityParameter
+    stereotype: ''
+    requires_parent: true
+    note: a child of an Activity; EA refuses it under a Class or a package
+  ActivityPartition:
+    how: type
+    basis: catalog
+    ea_element_type: ActivityPartition
+    stereotype: ''
+  CentralBufferNode:
+    how: type
+    basis: catalog
+    ea_element_type: CentralBufferNode
+    stereotype: ''
+  ControlFlow:
+    how: connector
+    basis: catalog
+    ea_connector_type: ControlFlow
+  ControlNode:
+    how: abstract
+    note: no instances; the EA types of its subclasses apply
+  DataStoreNode:
+    how: type
+    basis: catalog
+    ea_element_type: Object
+    stereotype: ''
+    note: an Object with the stereotype datastore (AddNew DataStore resolves to it)
+  DecisionNode:
+    how: type
+    basis: catalog
+    ea_element_type: Decision
+    stereotype: ''
+  ExceptionHandler:
+    how: type
+    basis: catalog
+    ea_element_type: ExceptionHandler
+    stereotype: ''
+  ExecutableNode:
+    how: abstract
+    note: no instances; the EA types of its subclasses apply
+  FinalNode:
+    how: abstract
+    note: no instances; the EA types of its subclasses apply
+  FlowFinalNode:
+    how: kind
+    basis: inferred
+    ea_element_type: StateNode
+    stereotype: ''
+    note: a StateNode (the kind code is not confirmed by this catalog)
+  ForkNode:
+    how: type
+    basis: catalog
+    ea_element_type: Synchronization
+    stereotype: ''
+    note: one Synchronization element serves fork and join
+  InitialNode:
+    how: kind
+    basis: catalog
+    ea_element_type: StateNode
+    stereotype: ''
+    note: StateNode with NType 3 (EA's default for a new StateNode)
+  InterruptibleActivityRegion:
+    how: type
+    basis: catalog
+    ea_element_type: InterruptibleActivityRegion
+    stereotype: ''
+  JoinNode:
+    how: type
+    basis: catalog
+    ea_element_type: Synchronization
+    stereotype: ''
+    note: one Synchronization element serves fork and join
+  MergeNode:
+    how: type
+    basis: catalog
+    ea_element_type: MergeNode
+    stereotype: ''
+  ObjectFlow:
+    how: connector
+    basis: catalog
+    ea_connector_type: ObjectFlow
+  ObjectNode:
+    how: abstract
+    note: no instances; the EA types of its subclasses apply
+  Variable:
+    how: none
+    basis: not-found
+  AcceptCallAction:
+    how: none
+    basis: not-found
+    note: no EA type or record of this name found
+  AcceptEventAction:
+    how: none
+    basis: not-found
+    note: no EA type or record of this name found
+  Action:
+    how: abstract
+    note: no instances; the EA types of its subclasses apply
+  ActionInputPin:
+    how: child
+    basis: catalog
+    ea_element_type: ActionPin
+    stereotype: ''
+    requires_parent: true
+  AddStructuralFeatureValueAction:
+    how: none
+    basis: not-found
+    note: no EA type or record of this name found
+  AddVariableValueAction:
+    how: none
+    basis: not-found
+    note: no EA type or record of this name found
+  BroadcastSignalAction:
+    how: none
+    basis: not-found
+    note: no EA type or record of this name found
+  CallAction:
+    how: abstract
+    note: no instances; the EA types of its subclasses apply
+  CallBehaviorAction:
+    how: none
+    basis: not-found
+    note: no EA type or record of this name found
+  CallOperationAction:
+    how: none
+    basis: not-found
+    note: no EA type or record of this name found
+  Clause:
+    how: none
+    basis: not-found
+    note: a part of a ConditionalNode in the UML model; EA has no element for it
+  ClearAssociationAction:
+    how: none
+    basis: not-found
+    note: no EA type or record of this name found
+  ClearStructuralFeatureAction:
+    how: none
+    basis: not-found
+    note: no EA type or record of this name found
+  ClearVariableAction:
+    how: none
+    basis: not-found
+    note: no EA type or record of this name found
+  ConditionalNode:
+    how: type
+    basis: catalog
+    ea_element_type: ConditionalNode
+    stereotype: ''
+  CreateLinkAction:
+    how: none
+    basis: not-found
+    note: no EA type or record of this name found
+  CreateLinkObjectAction:
+    how: none
+    basis: not-found
+    note: no EA type or record of this name found
+  CreateObjectAction:
+    how: none
+    basis: not-found
+    note: no EA type or record of this name found
+  DestroyLinkAction:
+    how: none
+    basis: not-found
+    note: no EA type or record of this name found
+  DestroyObjectAction:
+    how: none
+    basis: not-found
+    note: no EA type or record of this name found
+  ExpansionNode:
+    how: child
+    basis: catalog
+    ea_element_type: ExpansionNode
+    stereotype: ''
+    requires_parent: true
+    note: a child of an ExpansionRegion
+  ExpansionRegion:
+    how: type
+    basis: catalog
+    ea_element_type: ExpansionRegion
+    stereotype: ''
+  InputPin:
+    how: child
+    basis: catalog
+    ea_element_type: ActionPin
+    stereotype: ''
+    requires_parent: true
+  InvocationAction:
+    how: abstract
+    note: no instances; the EA types of its subclasses apply
+  LinkAction:
+    how: abstract
+    note: no instances; the EA types of its subclasses apply
+  LinkEndCreationData:
+    how: none
+    basis: not-found
+    note: no EA type or record of this name found
+  LinkEndData:
+    how: none
+    basis: not-found
+    note: no EA type or record of this name found
+  LinkEndDestructionData:
+    how: none
+    basis: not-found
+    note: no EA type or record of this name found
+  LoopNode:
+    how: type
+    basis: catalog
+    ea_element_type: LoopNode
+    stereotype: ''
+  OpaqueAction:
+    how: none
+    basis: not-found
+    note: no EA type or record of this name found
+  OutputPin:
+    how: child
+    basis: catalog
+    ea_element_type: ActionPin
+    stereotype: ''
+    requires_parent: true
+  Pin:
+    how: abstract
+    note: no instances; the EA types of its subclasses apply
+  QualifierValue:
+    how: none
+    basis: not-found
+    note: no EA type or record of this name found
+  RaiseExceptionAction:
+    how: none
+    basis: not-found
+    note: no EA type or record of this name found
+  ReadExtentAction:
+    how: none
+    basis: not-found
+    note: no EA type or record of this name found
+  ReadIsClassifiedObjectAction:
+    how: none
+    basis: not-found
+    note: no EA type or record of this name found
+  ReadLinkAction:
+    how: none
+    basis: not-found
+    note: no EA type or record of this name found
+  ReadLinkObjectEndAction:
+    how: none
+    basis: not-found
+    note: no EA type or record of this name found
+  ReadLinkObjectEndQualifierAction:
+    how: none
+    basis: not-found
+    note: no EA type or record of this name found
+  ReadSelfAction:
+    how: none
+    basis: not-found
+    note: no EA type or record of this name found
+  ReadStructuralFeatureAction:
+    how: none
+    basis: not-found
+    note: no EA type or record of this name found
+  ReadVariableAction:
+    how: none
+    basis: not-found
+    note: no EA type or record of this name found
+  ReclassifyObjectAction:
+    how: none
+    basis: not-found
+    note: no EA type or record of this name found
+  ReduceAction:
+    how: none
+    basis: not-found
+    note: no EA type or record of this name found
+  RemoveStructuralFeatureValueAction:
+    how: none
+    basis: not-found
+    note: no EA type or record of this name found
+  RemoveVariableValueAction:
+    how: none
+    basis: not-found
+    note: no EA type or record of this name found
+  ReplyAction:
+    how: none
+    basis: not-found
+    note: no EA type or record of this name found
+  SendObjectAction:
+    how: none
+    basis: not-found
+    note: no EA type or record of this name found
+  SendSignalAction:
+    how: none
+    basis: not-found
+    note: no EA type or record of this name found
+  SequenceNode:
+    how: kind
+    basis: catalog
+    ea_element_type: Action
+    stereotype: ''
+    note: AddNew SequenceNode gave an Action
+  StartClassifierBehaviorAction:
+    how: none
+    basis: not-found
+    note: no EA type or record of this name found
+  StartObjectBehaviorAction:
+    how: none
+    basis: not-found
+    note: no EA type or record of this name found
+  StructuralFeatureAction:
+    how: abstract
+    note: no instances; the EA types of its subclasses apply
+  StructuredActivityNode:
+    how: type
+    basis: catalog
+    ea_element_type: StructuredActivityNode
+    stereotype: ''
+  TestIdentityAction:
+    how: none
+    basis: not-found
+    note: no EA type or record of this name found
+  UnmarshallAction:
+    how: none
+    basis: not-found
+    note: no EA type or record of this name found
+  ValuePin:
+    how: child
+    basis: catalog
+    ea_element_type: ActionPin
+    stereotype: ''
+    requires_parent: true
+  ValueSpecificationAction:
+    how: none
+    basis: not-found
+    note: no EA type or record of this name found
+  VariableAction:
+    how: abstract
+    note: no instances; the EA types of its subclasses apply
+  WriteLinkAction:
+    how: abstract
+    note: no instances; the EA types of its subclasses apply
+  WriteStructuralFeatureAction:
+    how: abstract
+    note: no instances; the EA types of its subclasses apply
+  WriteVariableAction:
+    how: abstract
+    note: no instances; the EA types of its subclasses apply
+  ActionExecutionSpecification:
+    how: none
+    basis: not-found
+  BehaviorExecutionSpecification:
+    how: none
+    basis: not-found
+  CombinedFragment:
+    how: type
+    basis: catalog
+    ea_element_type: InteractionFragment
+    stereotype: ''
+    note: one InteractionFragment element serves the operators; the operator is a stored number
+  ConsiderIgnoreFragment:
+    how: kind
+    basis: inferred
+    ea_element_type: InteractionFragment
+    stereotype: ''
+  Continuation:
+    how: none
+    basis: not-found
+    note: EA refused AddNew Continuation
+  DestructionOccurrenceSpecification:
+    how: none
+    basis: not-found
+    note: AddNew DestructionEvent gave an Action
+  ExecutionOccurrenceSpecification:
+    how: none
+    basis: not-found
+  ExecutionSpecification:
+    how: abstract
+    note: no instances; the EA types of its subclasses apply
+  Gate:
+    how: type
+    basis: sample-files
+    ea_element_type: MessageEndpoint
+    stereotype: ''
+    note: EA's samples use MessageEndpoint for the end of a message at the frame
+  GeneralOrdering:
+    how: none
+    basis: not-found
+  Interaction:
+    how: type
+    basis: catalog
+    ea_element_type: Interaction
+    stereotype: ''
+    note: EA refused an Interaction under an Interaction
+  InteractionConstraint:
+    how: none
+    basis: not-found
+    note: EA refused AddNew InteractionConstraint; text on the operand
+  InteractionFragment:
+    how: abstract
+    note: no instances; the EA types of its subclasses apply
+  InteractionOperand:
+    how: none
+    basis: inferred
+    note: an operand is a region of the fragment on the diagram, not an element
+  InteractionUse:
+    how: type
+    basis: catalog
+    ea_element_type: InteractionOccurrence
+    stereotype: ''
+  Lifeline:
+    how: type
+    basis: sample-files
+    ea_element_type: Sequence
+    stereotype: ''
+    note: a Sequence element; EA's samples also use Boundary, Part, TimeLine, ProvidedInterface and RequiredInterface as lifelines
+  Message:
+    how: connector
+    basis: catalog
+    ea_connector_type: Sequence
+    note: a Sequence connector; its message kind is a stored field
+  MessageEnd:
+    how: abstract
+    note: no instances; the EA types of its subclasses apply
+  MessageOccurrenceSpecification:
+    how: none
+    basis: not-found
+  OccurrenceSpecification:
+    how: none
+    basis: not-found
+  PartDecomposition:
+    how: none
+    basis: not-found
+  StateInvariant:
+    how: type
+    basis: catalog
+    ea_element_type: InteractionState
+    stereotype: ''
+  Actor:
+    how: type
+    basis: catalog
+    ea_element_type: Actor
+    stereotype: ''
+  Extend:
+    how: connector
+    basis: catalog
+    ea_connector_type: UseCase
+    note: a UseCase-type connector with stereotype extend and SubType Extends, as EA's samples store it
+  ExtensionPoint:
+    how: none
+    basis: not-found
+    note: EA refused AddNew ExtensionPoint; extension points are text on the use case (not exercised)
+  Include:
+    how: connector
+    basis: catalog
+    ea_connector_type: UseCase
+    note: a UseCase-type connector with stereotype include and SubType Includes, as EA's samples store it
+  UseCase:
+    how: type
+    basis: catalog
+    ea_element_type: UseCase
+    stereotype: ''
+  Artifact:
+    how: type
+    basis: catalog
+    ea_element_type: Artifact
+    stereotype: ''
+  CommunicationPath:
+    how: connector
+    basis: catalog
+    ea_connector_type: CommunicationPath
+  DeployedArtifact:
+    how: abstract
+    note: no instances; the EA types of its subclasses apply
+  Deployment:
+    how: connector
+    basis: catalog
+    ea_connector_type: Deployment
+  DeploymentSpecification:
+    how: type
+    basis: catalog
+    ea_element_type: DeploymentSpecification
+    stereotype: ''
+  DeploymentTarget:
+    how: abstract
+    note: no instances; the EA types of its subclasses apply
+  Device:
+    how: type
+    basis: catalog
+    ea_element_type: Device
+    stereotype: ''
+  ExecutionEnvironment:
+    how: type
+    basis: catalog
+    ea_element_type: ExecutionEnvironment
+    stereotype: ''
+  Manifestation:
+    how: connector
+    basis: catalog
+    ea_connector_type: Manifest
+    note: stored as Manifest
+  Node:
+    how: type
+    basis: catalog
+    ea_element_type: Node
+    stereotype: ''
+  InformationFlow:
+    how: connector
+    basis: catalog
+    ea_connector_type: InformationFlow
+  InformationItem:
+    how: type
+    basis: catalog
+    ea_element_type: InformationItem
+    stereotype: ''
+ea_only:
+  element_types:
+    Boundary: EA analysis class (UML Class with the analysis meaning)
+    Entity: EA analysis class
+    Feature: EA feature element (software-requirements family)
+    GUIElement: EA user-interface element
+    Issue: EA project-management element
+    Report: EA element
+    Requirement: EA requirement element
+    Risk: EA project-management element
+    Screen: EA user-interface element
+    Test: EA test element
+    Task: EA project-management element
+    Change: EA project-management element
+    Text: EA text label element
+    UMLDiagram: EA element that stands for a diagram
+    DiagramFrame: EA diagram frame element
+    Association: an element EA accepts under this name; its use is not documented here
+  connector_types:
+    Nesting: EA's nesting connector (a child shown inside its parent)
+    NoteLink: joins a Note to any element
+    InterruptFlow: the edge of an interruptible region
+    Collaboration: joins a collaboration use to its collaboration
+    Assembly: joins a provided and a required interface
+    Delegate: joins a port to an inner part or port
+    Connector: a connector in a composite structure
+  note: the connector types other than these are UML metaclasses (see concepts)
+toolbox:
+  status: read on screen, measured on EA 17.1 build 1716, 2026-11-04; a Class diagram was opened
+  pages_of_a_class_diagram:
+    Class:
+    - Class
+    - Interface
+    - Data Type
+    - Enumeration
+    - Primitive
+    - Signal
+    - Association
+    Class Relationships:
+    - Associate
+    - Generalize
+    - Compose
+    - Aggregate
+    - Association Class
+    - Realize
+    - Template Binding
+    Composite Parts:
+    - Part
+    - Port
+    - Expose Interface
+    - Assembly
+    - Connector
+    - Delegate
+    UML Standard Profile:
+    - Auxiliary
+    - Call
+    - Create
+    - Create
+    - Destroy
+    - Focus
+    - Implementation Class
+    - Instantiate
+    - Realization
+    - Send
+    - Specification
+    - Type
+    - Utility
+  note: EA's generic pages follow; 'Create' appears twice on the UML Standard Profile page. The toolboxes of other diagram types were not opened
+quick_links:
+  status: read on screen, measured on EA 17.1 build 1716, 2026-11-04; one source, the Class 'Customer' (two target types opened)
+  targets:
+  - Artifact
+  - Class
+  - DataType
+  - Enumeration
+  - InformationItem
+  - Interface
+  - PrimitiveType
+  - Signal
+  - Note
+  - Common
+  class_submenu:
+  - Aggregation to Whole
+  - Association
+  - AssociationClass
+  - Calls
+  - Composition to Whole
+  - Generalization
+  - Instantiates
+  - Substitution
+  - Template Binding
+  - Aggregation to Part
+  - Called by
+  - Composition to Part
+  - Instantiated by
+  - Specialization
+  interface_submenu:
+  - Aggregation to Whole
+  - Association
+  - AssociationClass
+  - Composition to Whole
+  - Instantiates
+  - Realization
+  - Template Binding
+  - Aggregation to Part
+  - Composition to Part
+  - Instantiated by
+ruleset_selectors:
+  element_types_used:
+  - Action
+  - ActionPin
+  - Activity
+  - ActivityParameter
+  - ActivityPartition
+  - Actor
+  - Artifact
+  - Association
+  - Boundary
+  - CentralBufferNode
+  - Change
+  - Class
+  - Collaboration
+  - CollaborationOccurrence
+  - Component
+  - ConditionalNode
+  - Constraint
+  - DataType
+  - Decision
+  - DeploymentSpecification
+  - Device
+  - DiagramFrame
+  - Entity
+  - EntryPoint
+  - Enumeration
+  - Event
+  - ExceptionHandler
+  - ExecutionEnvironment
+  - ExitPoint
+  - ExpansionNode
+  - ExpansionRegion
+  - Feature
+  - GUIElement
+  - InformationItem
+  - Interaction
+  - InteractionFragment
+  - InteractionOccurrence
+  - InteractionState
+  - Interface
+  - InterruptibleActivityRegion
+  - Issue
+  - LoopNode
+  - MergeNode
+  - MessageEndpoint
+  - Node
+  - Note
+  - Object
+  - ObjectNode
+  - Package
+  - Part
+  - Port
+  - PrimitiveType
+  - ProvidedInterface
+  - Region
+  - Report
+  - RequiredInterface
+  - Requirement
+  - Risk
+  - Screen
+  - Sequence
+  - Signal
+  - State
+  - StateMachine
+  - StateNode
+  - StructuredActivityNode
+  - Synchronization
+  - Task
+  - Test
+  - Text
+  - TimeLine
+  - Trigger
+  - UMLDiagram
+  - UseCase
+  connector_types_used:
+  - Generalization
+  - UseCase
+  - Extension
+  - ControlFlow
+  - ObjectFlow
+  - CommunicationPath
+  - InformationFlow
+  - Connector
+  - Assembly
+  - Delegate
+  stereotypes_used:
+  - call
+  - Call
+  - send
+  - Send
+  - create
+  - Create
+  - instantiate
+  - Instantiate
+  - include
+  - extend
+  - import
+  - access
+  - merge
+  - substitute
+  note: the ruleset's rules name these forms
+conventions:
+  state_machine_children: states, pseudostates and regions are children of the StateMachine or State element (ParentID); create them with AddNew
+    on the parent element
+  activity_children: actions, decisions, object nodes and activity parameters are children of the Activity element; pins are children of the Action
+  port_owner: a Port is a child of its owner element
+  deployment: deploy an Artifact to a Node with a Deployment connector; nest an ExecutionEnvironment in a Device or Node with ParentID
+  diagram_children: a diagram that shows its owning StateMachine or Activity element refuses (throws on) child elements placed outside the owner's
+    box; leave the owner off the diagram
+harvest:
+  element_types: 'ui-api: AddNew(name, type) in a headless EA, read back from t_object'
+  connector_types: 'ui-api: AddNew on a connector, read back from t_connector; include/extend kinds also from EA''s pattern um2.5-basic-use-case-model-with-include'
+  diagram_types: 'model-pattern: the type tag of 162 diagrams in ModelPatterns\um2.5-*.xml; Profile only created, not confirmed'
+  standard_profile: 'ui-api: AddNew and StereotypeEx, read back from t_xref FQName'
+  kind_numbers: ui-api plus the XMI 1.1 export of the same elements (StateNode 3 and 4)
+  toolbox_and_quick_links: 'ui, EA 17.1 build 1716, 2026-11-04: one Class diagram''s toolbox pages and one quick-link source were read; other
+    diagram types were not'
+  ea_build: 17.1 build 1716
+
+# EA's names for this language's layout. tools/gen_conventions.py reads layout_map.
+layout_map:
+  technology: UML
+  display_name: UML 2.5 (EA base notation)
+  stereotype_prefix: ''
+  notes: |
+    Each EA diagram type here draws the guide diagram type named on its `guide` line. This map has no entry for EA's Sequence, Collaboration (the guide's communication diagram), InteractionOverview, or Profile.
+
+    Analysis and Custom are EA's own diagram types. The guide has no such types, so they are kept from the earlier conventions, and this file didn't measure them.
+
+    Two sizes differ from the guide on purpose. On a class diagram an Activity is a box, where the guide says container, because it's drawn there as a classifier and holds no nodes. On a package diagram the default is a large box, where the guide's Package is a container, because a package there is drawn as a tile.
+
+    The route names are conventions, not measurements: nothing here maps EA's stored route numbers to them.
+  diagram_types:
+    Logical:
+      guide: Class diagram
+      base: Logical
+      size_keys:
+        Package: Package
+        Activity: box
+        Actor: Actor
+      size_reason:
+        Activity: On a class diagram an Activity is drawn as a classifier and holds no nodes.
+    Statechart:
+      guide: State machine diagram
+      base: Statechart
+      size_keys:
+        StateNode: Pseudostate
+    Activity:
+      guide: Activity diagram
+      base: Activity
+      size_keys:
+        StateNode: Pseudostate
+        ActionPin: InputPin
+        Decision: DecisionNode
+        MergeNode: MergeNode
+      size_reason:
+        Activity: The default element on an activity diagram is an Action, drawn as a box. The Activity that owns the nodes is left off the diagram, or sized to hold them, because EA refuses child elements placed outside the owner's box.
+    Package:
+      guide: Package diagram
+      base: Package
+      default_type: large-box
+      size_reason:
+        Package: On a package diagram EA draws a package as a tile, so the default is a large box, where the guide's Package is a container.
+    Deployment:
+      guide: Deployment diagram
+      base: Deployment
+    Use Case:
+      guide: Use case diagram
+      base: Use Case
+      default_type: large-box
+      size_keys:
+        Actor: Actor
+    Component:
+      guide: Component diagram
+      base: Component
+      size_keys:
+        Port: Port
+        ProvidedInterface: attached-item
+    CompositeStructure:
+      guide: Composite structure diagram
+      base: CompositeStructure
+    Object:
+      guide: Object diagram
+      base: Object
+    Timing:
+      guide: Timing diagram
+      base: Timing
+      default_type: container
+    Analysis:
+      token_reason: EA's own diagram type, kept from the earlier conventions and not measured in this file. The UML guide has no such type.
+      base: Analysis
+      arrangement: graph
+      title: frame-header
+      route: straight
+      channels:
+        fill: null
+        claimed:
+          position: Spoken for by EA's layout; see the Logical diagram type.
+          size: Content. An object on one of these diagrams is sized by the text it carries, with 14 distinct
+            sizes across 21 objects, so using size to encode something else fights the content.
+          line_style: Normative in UML; see the Logical diagram type.
+        free:
+        - fill
+        - border
+        - border_width
+        - line_color
+        - font_color
+        - opacity
+        - icon
+    Custom:
+      token_reason: EA's own diagram type, kept from the earlier conventions and not measured in this file. The UML guide has no such type.
+      base: Custom
+      default_type: large-box
+      arrangement: graph
+      title: frame-header
+      route: straight
+      channels:
+        fill: null
+        claimed:
+          position: Spoken for by EA's layout; see the Logical diagram type.
+          size: 'Content, as everywhere else in this file: 20 distinct sizes across 22 packages, because
+            a box on an MDG canvas is sized by what it holds.'
+          line_style: Normative in UML; see the Logical diagram type.
+        free:
+        - fill
+        - border
+        - border_width
+        - line_color
+        - font_color
+        - opacity
+        - icon
+  presentation_profiles: true

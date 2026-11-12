@@ -24,7 +24,7 @@ agentic sessions productive on large repos:
   compounds with the response-shape minimization: a 10-element single-call sequence
   with full responses costs ~2× more tokens than the same work via
   `ea_model("create_elements_bulk")` returning summary records.
-- **Budget rule of thumb:** catalog load >50 elements → use VBScript (§0.5);
+- **Budget rule of thumb:** a one-shot catalog load of more than 100 elements → use VBScript, 30 to 100 either way (`SKILL.md` §0.5);
   verification, gap analysis, refinement of any size → MCP.
 
 ### What users can control right now to reduce token spend
@@ -94,7 +94,7 @@ Each session starts fresh with minimal context and can focus cleanly.
 Don't ask Claude to "figure out the state of the repository" — that burns context.
 Instead, open each session with targeted SQL:
 ```
-ea_analyze(operation="execute_sql", params={"sql": "SELECT COUNT(*) FROM t_object WHERE Stereotype LIKE 'WBA%'"})
+ea_analyze(operation="execute_sql", params={"sql": "SELECT COUNT(*) AS n FROM t_object WHERE Stereotype LIKE 'WBA%'"})
 ea_analyze(operation="execute_sql", params={"sql": "SELECT Package_ID, Name FROM t_package WHERE Parent_ID = <root>"})
 ```
 Two round trips, minimal tokens, Claude knows exactly where it is.

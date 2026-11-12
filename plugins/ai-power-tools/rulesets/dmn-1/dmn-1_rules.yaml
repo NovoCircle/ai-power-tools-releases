@@ -1,0 +1,242 @@
+# Decision Model and Notation (DMN) 1.2 Conformance Ruleset
+# Language:     OMG Decision Model and Notation 1.2 (formal/19-01-05), language file id dmn-1
+# Enforced by:  AI Power Tools for Sparx EA -- validate_model tool
+#
+# STEREOTYPE NAMES ARE THE CONCEPT NAMES, WITH NO TECHNOLOGY PREFIX, AND THAT IS MEASURED.
+#
+# Measured on EA 17.1 build 1716, in a test model: an element or connector created with the type
+# `DMN1.1::Decision` stores `t_object.Stereotype = Decision` and a t_xref row `FQName=DMN1.1::Decision`. The technology
+# id is DMN1.1 although EA's Resources tab shows the node as DMN1.2: the same names created as `DMN1.2::<name>` are
+# refused with `Invalid type`. validate_model selects with `Stereotype IN (...)` against those columns, exact and case
+# sensitive, so the selectors below use the bare names and not `DMN1.1::Decision`.
+#
+# DIRECTION. A requirement is stored as a Dependency from the REQUIRING element (source) to the REQUIRED one (target), as
+# EA's own sample models store it. The standard's Table 2 is keyed from the required element (From) to the requiring one
+# (To); the tables below are that table flipped, generated from the language file.
+#
+# WHAT IS CHECKABLE HERE. Only the decision requirements graph (which elements a requirement joins, and the one
+# stored-tag link from a Decision's logic kind to its Knowledge Requirement). Decision tables, hit policies, boxed
+# expressions, FEEL text, names and diagrams are not fields the rule grammar can read (a Decision Service's members
+# sit in the memo tagged value DMNDecisionServiceData, and the grammar has no text, name or diagram condition), so
+# those rules of references/rules.md have no rule here.
+#
+# Source:
+#   [S1] OMG Decision Model and Notation 1.2, formal/19-01-05 -- https://www.omg.org/spec/DMN/1.2/
+#
+# Rule ids: `DMN12-<CAT>-nnn` here, `implements: DMN-<CAT>-nnn` names the rule of references/rules.md.
+
+meta:
+  version: "1.0"
+  language: dmn-1
+  organization: "(your organization)"
+  mdg_family: DMN1.1
+  description: >
+    Conformance rules for Decision Model and Notation 1.2 models built with Sparx EA's DMN technology (technology id
+    DMN1.1, shown as DMN1.2). They check the decision requirements graph: which pairs of elements an Information,
+    Knowledge or Authority Requirement may join, that Input Data requires nothing, and that a Decision whose logic is an
+    invocation has a Knowledge Requirement. Rules about decision tables, hit policies, expressions, names and diagrams
+    are not checkable and are not included.
+  severity_levels:
+    error:   The standard states it as a requirement (a must).
+    warning: The standard gives it as guidance or in prose only (a should).
+    info:    Advisory note; not a conformance violation.
+
+tables:
+  dmn-1.2-requirements:
+    source: "OMG DMN 1.2 (formal/19-01-05), clause 6.2.3, Table 2 (pp. 40-41): the connection table for the three requirements (11 pairs); generated from the DMN language file, flipped so the source is the requiring element (EA's client end)"
+    connectors:
+      "i": InformationRequirement
+      "k": KnowledgeRequirement
+      "a": AuthorityRequirement
+    cells:
+      BusinessKnowledgeModel:
+        BusinessKnowledgeModel: "k"
+        DecisionService: "k"
+        KnowledgeSource: "a"
+      Decision:
+        BusinessKnowledgeModel: "k"
+        Decision: "i"
+        DecisionService: "k"
+        InputData: "i"
+        KnowledgeSource: "a"
+      KnowledgeSource:
+        Decision: "a"
+        InputData: "a"
+        KnowledgeSource: "a"
+  dmn-1.2-authority-requirements:
+    source: "OMG DMN 1.2 (formal/19-01-05), clause 6.2.3, Table 2 (pp. 40-41): the Authority Requirement pairs of that table; generated from the DMN language file, flipped so the source is the requiring element (EA's client end)"
+    connectors:
+      "a": AuthorityRequirement
+    cells:
+      BusinessKnowledgeModel:
+        KnowledgeSource: "a"
+      Decision:
+        KnowledgeSource: "a"
+      KnowledgeSource:
+        Decision: "a"
+        InputData: "a"
+        KnowledgeSource: "a"
+
+rules:
+
+  # --------------------------------------------------------------------------
+  # DRD
+  # --------------------------------------------------------------------------
+  - id: DMN12-DRD-001
+    implements: DMN-DRD-001
+    name: "A requirement joins only the pairs of the connection table"
+    description: >
+      A requirement connector joins only the 11 pairs of the standard's connection table (6.2.3, Table
+      2), and the pair of element types fixes the kind: Decision to Decision or to Input Data =
+      information; Decision or Business Knowledge Model to Business Knowledge Model or Decision
+      Service = knowledge; Decision, Business Knowledge Model or Knowledge Source to Knowledge Source,
+      and Knowledge Source to Decision or Input Data = authority. The table is keyed from the
+      requiring element (the connector's source) to the required one (its target), which is how EA
+      stores a requirement. A known pair with no cell allows nothing.
+    category: drd
+    severity: error
+    demo_trigger: true
+
+    selector:
+      type: connector
+      connector_stereotypes: any_of_table
+
+    condition:
+      type: relationship_table
+      table: dmn-1.2-requirements
+      unknown_endpoint: ignore
+
+    remediation:
+      short: "Use the requirement the table gives for this pair, or join elements the table allows: for example an Information Requirement joins a Decision to a Decision or to Input Data."
+      auto_fixable: false
+  - id: DMN12-DRD-002
+    implements: DMN-DRD-002
+    name: "No requirement is held by an Input Data element"
+    description: >
+      An Input Data element requires nothing (6.2.3): in EA's storage no requirement connector starts
+      at an Input Data element. The source of a requirement is a Decision, a Business Knowledge Model,
+      a Decision Service or a Knowledge Source; which of those may hold which requirement is
+      DMN12-DRD-001's table.
+    category: drd
+    severity: error
+    demo_trigger: false
+
+    selector:
+      type: connector
+      connector_stereotypes: [InformationRequirement, KnowledgeRequirement, AuthorityRequirement]
+
+    condition:
+      type: connector_endpoint_stereotype
+      source_must_be_one_of: [Decision, BusinessKnowledgeModel, DecisionService, KnowledgeSource]
+      target_must_be_one_of: [Decision, BusinessKnowledgeModel, DecisionService, InputData, KnowledgeSource]
+
+    remediation:
+      short: "Reverse the requirement so the Input Data element is the required end (the connector's target), or remove it."
+      auto_fixable: false
+  - id: DMN12-DRD-007
+    implements: DMN-DRD-007
+    name: "An Information Requirement requires a Decision or Input Data"
+    description: >
+      An Information Requirement references the Decision or the Input Data it requires, and nothing
+      else (6.3.13). The connector's target is therefore a Decision or an Input Data element. The
+      holder is a DRG element; that it is a Decision is DMN12-DRD-001's table.
+    category: drd
+    severity: error
+    demo_trigger: false
+
+    selector:
+      type: connector
+      connector_stereotypes: [InformationRequirement]
+
+    condition:
+      type: connector_endpoint_stereotype
+      source_must_be_one_of: [Decision, BusinessKnowledgeModel, DecisionService, InputData, KnowledgeSource]
+      target_must_be_one_of: [Decision, InputData]
+
+    remediation:
+      short: "Point the Information Requirement at a Decision or an Input Data element; use a Knowledge Requirement for a Business Knowledge Model or Decision Service and an Authority Requirement for a Knowledge Source."
+      auto_fixable: false
+  - id: DMN12-DRD-008
+    implements: DMN-DRD-008
+    name: "A Knowledge Requirement joins a Decision or Business Knowledge Model to an invocable"
+    description: >
+      A Knowledge Requirement is held by a Decision or a Business Knowledge Model and references a
+      Business Knowledge Model or a Decision Service, the two invocable elements (6.3.14, 6.3.9,
+      6.3.10). A Decision Service holds no requirement.
+    category: drd
+    severity: error
+    demo_trigger: false
+
+    selector:
+      type: connector
+      connector_stereotypes: [KnowledgeRequirement]
+
+    condition:
+      type: connector_endpoint_stereotype
+      source_must_be_one_of: [Decision, BusinessKnowledgeModel]
+      target_must_be_one_of: [BusinessKnowledgeModel, DecisionService]
+
+    remediation:
+      short: "Hold the Knowledge Requirement on a Decision or Business Knowledge Model and point it at a Business Knowledge Model or Decision Service."
+      auto_fixable: false
+  - id: DMN12-DRD-009
+    implements: DMN-DRD-009
+    name: "An Authority Requirement joins the pairs Table 21 allows"
+    description: >
+      An Authority Requirement held by a Decision or a Business Knowledge Model references a Knowledge
+      Source. One held by a Knowledge Source references a Knowledge Source, a Decision or an Input
+      Data element (6.3.15, Table 21). The table holds the five Authority Requirement pairs of the
+      connection table, keyed from holder (source) to required element (target).
+    category: drd
+    severity: error
+    demo_trigger: false
+
+    selector:
+      type: connector
+      connector_stereotypes: any_of_table
+
+    condition:
+      type: relationship_table
+      table: dmn-1.2-authority-requirements
+      unknown_endpoint: ignore
+
+    remediation:
+      short: "Hold the Authority Requirement on a Decision, Business Knowledge Model or Knowledge Source and point it at a Knowledge Source (a Knowledge Source may also point at a Decision or Input Data)."
+      auto_fixable: false
+
+  # --------------------------------------------------------------------------
+  # LOGIC
+  # --------------------------------------------------------------------------
+  - id: DMN12-LOGIC-004
+    implements: DMN-LOGIC-004
+    name: "A Decision without a Knowledge Requirement has table or literal logic"
+    description: >
+      A Decision that requires no Business Knowledge Model has a value expression that is a literal
+      expression or a decision table giving the whole logic (7.1). EA stores the kind of the
+      Decision's logic in the tagged value expressionType (DecisionTable by default). A Decision whose
+      expressionType is Invocation, Context, List or Relation must therefore require a Business
+      Knowledge Model, so it needs a Knowledge Requirement. Partial: the grammar counts Knowledge
+      Requirements by stereotype, so a requirement that ends in a Decision Service counts like one
+      that ends in a Business Knowledge Model, and the rule cannot tell that the logic is the whole
+      logic. It never flags a Decision with a literal expression or a decision table.
+    category: logic
+    severity: error
+    demo_trigger: false
+
+    selector:
+      type: element
+      stereotypes:
+        any_of: [Decision]
+      tagged_value_filter:
+        - tag: expressionType
+          value_in: ["Invocation", "Context", "List", "Relation"]
+
+    condition:
+      type: connector_count
+      connector_stereotype: KnowledgeRequirement
+      direction: outgoing
+      min: 1
+
+    remediation:
+      short: "Add a Knowledge Requirement to the Business Knowledge Model the Decision invokes, or change the logic to a literal expression or a decision table."
+      auto_fixable: false

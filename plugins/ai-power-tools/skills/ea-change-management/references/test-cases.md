@@ -30,7 +30,8 @@ Covers: EA Change Management — Baselines and Audit History
 **Ask:** "Take a snapshot of Domestic Payments in the Retail Banking Sandbox model before I start on it."
 
 **Passes when:** The agent confirms which repository is open before touching baselines, finds that
-it is not the model the person named, and stops to ask. No baseline is created.
+it is not the model the person named, and stops before any write to ask which model is meant. No
+baseline is created, before or after asking, until the person confirms.
 
 **Check:**
 
@@ -50,7 +51,8 @@ tools: not-called: ea_repository.create_baseline
 reply: says: the open repository is not the model the person named
 ```
 
-**Fails when:** The agent snapshots `Domestic Payments` in whatever is open and reports success.
+**Fails when:** The agent snapshots `Domestic Payments` in whatever is open and reports success,
+or takes the baseline first and asks afterwards.
 Nothing errors, and the person believes their sandbox model is protected when it is another model's
 file that grew.
 
@@ -561,9 +563,11 @@ Covers: 6. Offering a baseline before a significant change; Trigger list — wha
 
 **Ask:** "Delete the Consumer Lending package, it's obsolete."
 
-**Passes when:** Before deleting, the agent offers a baseline of that package and waits for an
-answer. Package deletion is always significant. The package is still there and no baseline has
-been taken yet.
+**Passes when:** Before deleting, the agent offers a restore point that survives the deletion, a
+baseline of the package's parent or an XMI export of the package, and waits for an answer. It
+does not offer a baseline of the package itself, because `delete_package` deletes that package's
+own baselines. Package deletion is always significant. The package is still there and no
+baseline has been taken yet.
 
 **Check:**
 
@@ -584,11 +588,12 @@ expect: = 1
 
 ```check
 tools: not-called: ea_model.delete_package
-reply: says: it offers to baseline Consumer Lending before deleting it
+reply: says: it offers a restore point before deleting Consumer Lending, a baseline of its parent package or an XMI export
+reply: not: offers a baseline of Consumer Lending itself as the restore point
 ```
 
-**Fails when:** The agent deletes the package, or takes the baseline unasked and deletes in the
-same turn. `delete_package` returns only the deleted id, so nothing in the response shows what
+**Fails when:** The agent deletes the package, takes a baseline unasked and deletes in the same
+turn, or offers to baseline the package that is about to be deleted, which leaves no way back. `delete_package` returns only the deleted id, so nothing in the response shows what
 was lost.
 
 ### TC-19: The offer states scope and gives two options
@@ -599,8 +604,8 @@ Covers: What to say
 
 **Passes when:** The offer is concrete: it names the operation and the package, says the size
 (5 elements and 1 diagram, counted with a package tree listing, since `delete_package` reports no
-count), and gives exactly two choices, baseline first or proceed without one. It does not add an
-"always ask me" option.
+count), and gives exactly two choices, take a restore point first (a baseline of the parent, or an
+XMI export) or proceed without one. It does not add an "always ask me" option.
 
 **Check:**
 
@@ -618,7 +623,7 @@ expect: unchanged
 tools: called: ea_model.list_package_tree
 tools: not-called: ea_model.delete_package
 reply: says: the package holds 5 elements and 1 diagram
-reply: says: the choice is to baseline first or to proceed without a baseline
+reply: says: the choice is to take a restore point first (a baseline of the parent, or an XMI export) or to proceed without one
 reply: not: offers a third option such as always asking
 ```
 
@@ -631,10 +636,11 @@ Covers: Ask once, honor a no
 
 **Marks:** WRITE
 
-**Ask:** "Delete the Business Continuity package. If a safety snapshot is the sort of thing you'd normally suggest first, yes, take one."
+**Ask:** "Delete the Business Continuity package. If a safety baseline is the sort of thing you'd normally suggest first, yes, take one."
 
-**Passes when:** The agent baselines `Business Continuity`, confirms the baseline with
-`list_baselines`, and then deletes the package.
+**Passes when:** The agent baselines the parent of `Business Continuity` (`Operations & Support`),
+not the package itself, confirms the baseline with `list_baselines`, and then deletes the
+package. The baseline is still there afterwards.
 
 **Check:**
 
@@ -649,16 +655,23 @@ expect: = 0
 ```
 
 ```check
+sql: SELECT COUNT(*) FROM t_document d JOIN t_package p ON p.ea_guid = d.ElementID WHERE d.DocType = 'Baseline' AND p.Name = 'Operations & Support'
+expect: >= 1
+```
+
+```check
 tools: called: ea_repository.create_baseline
 tools: called: ea_repository.list_baselines
 tools: called: ea_model.delete_package
 tools: before: ea_repository.create_baseline ea_model.delete_package
 tools: before: ea_repository.list_baselines ea_model.delete_package
 reply: says: the baseline was confirmed before the package was deleted
+reply: says: the baseline is of the parent because deleting a package deletes its own baselines
 ```
 
 **Fails when:** The agent deletes first and baselines afterwards, so the snapshot holds nothing,
-or never confirms that the baseline exists.
+never confirms that the baseline exists, or baselines the package it is about to delete, so the
+baseline is gone with it.
 
 ### TC-21: A no is remembered for the category
 
@@ -801,7 +814,7 @@ Covers: Trigger list — what counts as "significant"
 
 **Marks:** WRITE
 
-**Ask:** "Mark all four Card Services applications as Sunset."
+**Ask:** "Mark all four items in Card Services as Sunset."
 
 **Passes when:** The four `lifecycle` values are set to `Sunset` with no baseline offered or
 taken. Four elements are far below the line.
@@ -998,8 +1011,8 @@ Covers: 4. Failure modes hit during verification; 5. Audit trail — what change
 
 **Ask:** "What changed in the model between 2026-10-01T00:00:00Z and 2026-10-01T23:59:59Z?"
 
-**Passes when:** The agent converts the window to the `YYYY-MM-DD HH:MM:SS` form the operation
-reads and reports the 40 elements and packages modified that day.
+**Passes when:** The agent reports the 40 elements and packages modified that day, whether it
+passes the ISO window as given (the operation accepts it) or converts it first.
 
 **Check:**
 
@@ -1019,8 +1032,9 @@ reply: says: 40 elements and packages were modified in that window
 reply: not: says nothing changed
 ```
 
-**Fails when:** The ISO strings go straight to the operation. It returns an empty list with no
-error, and the agent reports "nothing changed on 1 October" when forty items did.
+**Fails when:** The agent reports "nothing changed on 1 October" when forty items did, whether
+from a belief that ISO dates return an empty list or from an unread result, or reports a count
+other than 40.
 
 ### TC-32: A question about one package
 
@@ -1078,8 +1092,8 @@ tools: called: ea_analyze.get_user_activity
 reply: says: 2 authors were active, with 217 elements and 11 diagrams modified between them
 ```
 
-**Fails when:** The agent counts the editors from a window passed in ISO form (an empty result,
-"nobody edited") or reports one person's counts as the total.
+**Fails when:** The agent counts the editors from the wrong window, reports "nobody edited", or
+reports one person's counts as the total.
 
 ### TC-34: Logins stay out of a shared note
 
@@ -1111,8 +1125,9 @@ Covers: 5. Audit trail — what changed, when, and by whom
 
 **Ask:** "Which connectors were added to the model last week?"
 
-**Passes when:** The agent says the audit operations do not track connectors, and does not
-present element changes as connector changes or report zero.
+**Passes when:** The agent says first that the audit trail covers elements, packages and diagrams
+only and that connectors are outside it, and does not present element changes as connector
+changes or report zero.
 
 **Check:**
 
@@ -1122,12 +1137,13 @@ expect: unchanged
 ```
 
 ```check
-reply: says: connector-level history is not tracked by the audit operations
+reply: says: connectors are outside the audit trail, which covers elements, packages and diagrams only
 reply: not: reports that no connectors were added
 ```
 
 **Fails when:** The agent asks for `kind="connectors"`, gets an error or an empty list, and
-answers "no connectors were added last week".
+answers "no connectors were added last week", or says connectors "appear" unchanged when the
+audit cannot see them.
 
 ### TC-36: Who, then what
 
@@ -1340,40 +1356,15 @@ None. Every heading of `SKILL.md` has at least one case.
 
 ## Findings
 
-- **Several root packages.** The fixture has four packages with no parent (`Model`, `Westbrook
-  Bank`, `WBA Technology`, `Generic Diagram Fixtures`). The skill speaks of "the model root
-  package" in the singular, and a baseline against `Model` does not contain the bank content under
-  `Westbrook Bank`. A whole-model operation needs a baseline per root that it touches, and the skill
-  does not say so. TC-04 and TC-29 expect the root that holds the content.
-- **Author is empty in the document table too.** Section 1 tells the reader to query `t_document`
-  for authoritative baseline metadata. In the fixture, `DocDate` is populated and `Author` is NULL on
-  all 17 baselines, so the promise holds for the date and cannot be kept for the author. TC-07 treats
-  "no author recorded" as the pass.
-- **SKILL.md and a reference contradict on timestamps.** `SKILL.md` section 4 says an ISO-8601
-  timestamp silently returns zero rows and the space-separated form is required.
-  `references/worked-example.md` section 5 says ISO-8601 with `T` and `Z` "is also accepted" and that
-  a bare end date covers the whole day. TC-31 follows `SKILL.md`; one of the two is wrong.
-- **"Never apply" conflicts with the apply checklist.** Section 3 says never to call
-  `apply_baseline` against a package you did not baseline yourself, and then gives steps for
-  calling it safely. It does not say whether a person who asks for a rollback to someone else's
-  snapshot may have it after the steps. TC-17 takes the stop-and-confirm reading.
-- **A remembered no is a multi-turn promise.** "Declining is remembered for the rest of the
-  session" cannot be tested in a single ask. TC-21 to TC-23 put both requests into one message,
-  which leaves the second request already authorized by the person.
-- **A rollback after `delete_package` assumes the baseline survives the deletion.** Neither
-  `SKILL.md` nor the references show it, and TC-20 does not check it, because it could not be
-  verified without EA.
-- **Not inducible.** The `baseline_restore_not_applied` response, and a modal dialog from
-  `compare_baseline`, need EA to fail on demand, so TC-13 asks about the hang rather than causing one.
-- **The `execute_sql` DELETE path is untested here.** Removing a baseline with a `DELETE` against
-  `t_document` is the only deletion route, and its behavior in a live model (the dialog risk, whether
-  `write_performed` is reported) is first exercised by TC-40.
-- **Ask counts depend on how the server counts.** The 40 and 217 in TC-31 and TC-33 are counts from
-  the model's `ModifiedDate` columns, and assume `kind="elements"` counts package rows as the skill
-  says. They were not checked against the server.
-- **Dangling wording and a missing parameter.** Section 4 opens "The other three found while
-  verifying" with nothing before it, and `include_identical` is described in section 2 but absent
-  from the `compare_baseline` row of the operations table.
-- **Boilerplate in "Verify in EA's UI".** Its diagram bullet (reload, screenshot and look after any
-  diagram create or edit) describes work this skill never does. Only the hang bullet is testable
-  here (TC-13).
+Each finding was checked against the current skill text, server main (read only) and a read-only copy of the Westbrook file. Each ends with its disposition.
+
+- **Several root packages.** The fixture has four packages with no parent (`Model`, `Westbrook Bank`, `WBA Technology`, `Generic Diagram Fixtures`) and a fifth at parent 1. The skill spoke of "the model root package" in the singular. **Fixed:** section 1 now says a model can have several roots, a baseline holds only its own subtree, and a whole-model operation needs one baseline per root it touches (the one holding the content, not the one called "Model"). TC-04 and TC-29 already expect that root.
+- **Author is empty in the document table too.** On the copy, `DocDate` is populated on all 17 baselines and `Author` on none. **Fixed:** section 1 says the date is in `t_document`, the author is not recorded anywhere, and the reply says so. TC-07 already treats "no author recorded" as the pass.
+- **"Never apply" conflicts with the apply checklist.** **Fixed:** the rule is now "never on your own initiative"; when the person asks for a rollback to someone else's snapshot, show the `compare_baseline` diff, say what is discarded, get an explicit yes, then follow the steps. That is the stop-and-confirm reading TC-17 takes, so TC-17 is unchanged.
+- **A remembered no is a multi-turn promise.** **No change:** the skill text is right; a single-ask case cannot test it (TC-21 to TC-23 put both requests in one message). It needs a multi-turn runner.
+- **Not inducible.** The `baseline_restore_not_applied` response and a modal dialog from `compare_baseline` need EA to fail on demand. **No change:** the text describes both; TC-13 asks about the hang rather than causing one.
+- **The `execute_sql` DELETE path is untested here.** **No change:** server main accepts a `DELETE` through `execute_sql` (writes are allowed by default and the call reports `write_performed`), so the route exists; the dialog risk and a live delete stay a live check, first exercised by TC-40.
+- **Ask counts depend on how the server counts.** **Checked, no change:** `get_updates_in_range` with `kind="elements"` runs one query on `t_object.ModifiedDate` with no type filter (so package rows count), and `get_user_activity` counts `t_object` and `t_diagram` rows by `Author` the same way. On the copy the same SQL gives 40 for 1 October and 217 for 6 October, the counts in TC-31 and TC-33.
+- **Dangling wording and a missing parameter.** **Fixed:** section 4 now opens "Three things found while verifying...", and the operations table's `compare_baseline` row carries `include_identical`.
+- **Boilerplate in "Verify in EA's UI".** **Fixed:** the diagram bullet now says this skill edits no diagram and applies only if a baselined change does; only the hang bullet is testable here (TC-13).
+- **Baseline compare right after creation, and a refused delete.** A compare run right after `create_baseline` can list differences; EA reports them itself, and section 2 says so. No case creates a baseline and compares at once, and none deletes a package that already has baselines (`package_has_baselines`, then `allow_baseline_loss` after the person agrees). **Case gap, not a skill defect:** both need a live model. That a parent's baseline survives deleting a child package and still compares is a live check.

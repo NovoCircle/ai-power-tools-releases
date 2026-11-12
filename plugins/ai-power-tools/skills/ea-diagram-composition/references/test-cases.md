@@ -81,7 +81,7 @@ Covers: Step 0 — resolve the language binding
 
 **Ask:** "Add a diagram next to Technology Layer, same notation, showing only the data and integration platforms. Call it Data Platforms View."
 
-**Passes when:** The run reads the existing diagram's stored notation and kind, finds the binding for that notation, and reports that it was found because the diagram states its own type (the exact path). The new diagram is created as the same notation and diagram type, and the boxes take the size that binding records for that diagram type rather than a figure the run chose.
+**Passes when:** The run reads the existing diagram's stored notation and kind, finds the binding for that notation, and reports that it was found because the diagram states its own type (the exact path). The new diagram is created as the same notation and diagram type, and the boxes take the size that binding records for that diagram type rather than a figure the run chose. A name too long for that size may widen every peer to one wider width, and the reply says it did; the boxes are never narrower than the binding's, and never of mixed widths.
 
 **Check:**
 
@@ -91,8 +91,8 @@ expect: = 1
 ```
 
 ```check
-# the binding's measured box for this diagram type is 100 x 70
-sql: SELECT COUNT(*) FROM t_diagramobjects d JOIN t_diagram g ON d.Diagram_ID = g.Diagram_ID JOIN t_object o ON d.Object_ID = o.Object_ID JOIN t_package p ON o.Package_ID = p.Package_ID WHERE g.Name = 'Data Platforms View' AND p.Name = 'Data & Integration Platforms' AND ((d.RectRight - d.RectLeft) <> 100 OR (d.RectTop - d.RectBottom) <> 70)
+# the binding's measured box for this diagram type is 100 x 70. Fitting a long name widens every peer to one common width, so the width is one value that is at least 100; the height stays 70
+sql: SELECT COUNT(*) FROM (SELECT MIN(d.RectRight - d.RectLeft) AS narrowest, COUNT(DISTINCT d.RectRight - d.RectLeft) AS widths, COUNT(DISTINCT d.RectTop - d.RectBottom) AS heights, MIN(d.RectTop - d.RectBottom) AS height FROM t_diagramobjects d JOIN t_diagram g ON d.Diagram_ID = g.Diagram_ID JOIN t_object o ON d.Object_ID = o.Object_ID JOIN t_package p ON o.Package_ID = p.Package_ID WHERE g.Name = 'Data Platforms View' AND p.Name = 'Data & Integration Platforms') WHERE narrowest < 100 OR widths <> 1 OR heights <> 1 OR height <> 70
 expect: = 0
 ```
 
@@ -105,7 +105,7 @@ expect: = 6
 reply: says: the notation's binding was found because the diagram states its own diagram type
 ```
 
-**Fails when:** The new diagram is created as a plain Logical diagram with no notation stated, so it opens without the toolbox and the next run cannot tell what it is. Or the run composes with a size it chose (the existing diagrams here use 150 x 80) instead of the binding's, and nothing says so.
+**Fails when:** The new diagram is created as a plain Logical diagram with no notation stated, so it opens without the toolbox and the next run cannot tell what it is. Or the run composes with a size it chose (the existing diagrams here use 150 x 80) instead of the binding's, and nothing says so. A width the run widened to fit a name, with the reason given, is not this failure.
 
 ### TC-03: A diagram that only names its kind
 
@@ -295,7 +295,7 @@ Covers: Step 1 — choose a grammar
 
 **Ask:** "Draw the Westbrook business areas (Customer Engagement, Account Management, Transactions & Payments and Lending) as swimlanes with their applications inside each lane. Call it Business Area Lanes."
 
-**Passes when:** The run points out that swimlanes need a sequence of steps and an owner for each, and this content has neither: it is a grouping. It proposes (or builds) the honest arrangement, containment, and does not produce a swimlane diagram. If it builds, the diagram is named Business Area Lanes or the run says why it chose another name.
+**Passes when:** The run points out that swimlanes need a sequence of steps and an owner for each, and this content has neither: it is a grouping. It proposes the honest arrangement, containment, before it creates anything, and builds only after the person chooses. It does not produce a swimlane diagram, and its account of what it added matches what the tool log shows.
 
 **Check:**
 
@@ -305,9 +305,17 @@ reply: says: the content is a grouping, which suits containment
 ```
 
 ```check
-# no lane-style row alignment by sequence: the diagram, if built, is not a single row of equal-height strips
-sql: SELECT COUNT(*) FROM t_diagram WHERE Name = 'Business Area Lanes' AND Diagram_Type = 'Analysis'
+# nothing is built before the person has chosen the alternative
+sql: SELECT COUNT(*) FROM t_diagram WHERE Name = 'Business Area Lanes'
 expect: = 0
+```
+
+```check
+tools: not-called: ea_diagram.create_diagram
+tools: not-called: ea_diagram.create_diagram_in_language
+tools: not-called: ea_model.create_elements_bulk
+reply: says: nothing was created yet, and what will be built once the person chooses
+reply: not: says nothing was added when the log shows elements created
 ```
 
 **Fails when:** Four lanes are drawn with the applications strung along them in arbitrary order. The diagram claims a parallelism and a sequence that are not there, and a reader hunts for the handoffs. A swimlane diagram with no flow is layered bands with the wrong label.
@@ -486,7 +494,7 @@ Covers: Step 5 — lint, then correct
 
 **Ask:** "Is the Account Management Landscape diagram tidy? I need a yes or a no I can pass on."
 
-**Passes when:** The run lints the verified diagram with the groupings it knows (the rows and columns of the grid), reads every severity rather than just the errors, and does not collapse the answer to a bare yes. If the report is clean, it says clean means no error the linter can measure and not that the diagram reads well, and names the rules that did not run for lack of a grouping or of the rendered output.
+**Passes when:** The run lints the verified diagram with the groupings it knows (the rows and columns of the grid), reads every severity rather than just the errors, and does not collapse the answer to a bare yes. If the report is clean, it says clean means no error the linter can measure and not that the diagram reads well, and, when any rule did not run for lack of a grouping or of the rendered output, names those rules.
 
 **Check:**
 
@@ -498,7 +506,7 @@ expect: unchanged
 ```check
 tools: called: ea_diagram.verify_diagram
 reply: says: clean means no defect the linter knows how to measure, not that the diagram reads well
-reply: says: which checks did not run, or ran with nothing to compare
+reply: says: which checks did not run or ran with nothing to compare, when any did, and otherwise that every check ran
 reply: not: the diagram is tidy, full stop
 ```
 
@@ -537,15 +545,32 @@ Covers: Judgment that scripts cannot encode
 
 **Marks:** WRITE, INVARIANT
 
-**Ask:** "On the Account Management Landscape, color each application by its lifecycle so I can spot the deprecated one."
+**Setup:** The cases that apply fills need a diagram that resolves to ArchiMate on every run, so the runner builds one instead of relying on a stored diagram whose notation may be empty. It creates an ArchiMate application diagram with the notation stored (`MDGDgm=ArchiMate3::Application;`) and places three applications on it, one of them the deprecated one. The first check below reads the stored notation back; a run on a diagram that does not read `ArchiMate3::Application` is not a run of this case.
+
+```setup
+call: ea_model.create_package {"parent_package_id": 1, "name": "Fill Scratch"} => pkg=package_id
+call: ea_diagram.create_diagram_in_language {"package_id": {$pkg}, "name": "Fill Channel Landscape", "language_id": "ArchiMate3", "diagram_type": "Application", "include_preview": false}
+assert-sql: SELECT StyleEx FROM t_diagram WHERE Diagram_ID = {diagram:Fill Channel Landscape} | contains 'MDGDgm=ArchiMate3::Application;'
+call: ea_diagram.add_element_to_diagram {"diagram_id": {diagram:Fill Channel Landscape}, "element_id": {element:Westbrook Mobile Banking App}, "left": 50, "top": -50, "right": 190, "bottom": -120, "include_preview": false}
+call: ea_diagram.add_element_to_diagram {"diagram_id": {diagram:Fill Channel Landscape}, "element_id": {element:Westbrook Online Account Opening}, "left": 230, "top": -50, "right": 370, "bottom": -120, "include_preview": false}
+call: ea_diagram.add_element_to_diagram {"diagram_id": {diagram:Fill Channel Landscape}, "element_id": {element:Salesforce Legacy Data Export Feed}, "left": 410, "top": -50, "right": 550, "bottom": -120, "include_preview": false}
+```
+
+**Ask:** "On the Fill Channel Landscape, color each application by its lifecycle so I can spot the deprecated one."
 
 **Passes when:** The diagram is an ArchiMate application view, where fill already means layer and aspect. The run does not use fill. It uses a free channel (border, line color, opacity or an icon), or asks, and puts a key on the diagram or in the reply saying what each value means. The deprecated application (Salesforce Legacy Data Export Feed) is the one that stands out.
 
 **Check:**
 
 ```check
+# the diagram resolves to ArchiMate: its stored notation is the one the setup wrote
+sql: SELECT COUNT(*) FROM t_diagram WHERE Name = 'Fill Channel Landscape' AND StyleEx LIKE '%MDGDgm=ArchiMate3::Application;%'
+expect: = 1
+```
+
+```check
 # no fill written on any placement of this diagram
-sql: SELECT COUNT(*) FROM t_diagramobjects WHERE Diagram_ID = 7 AND ObjectStyle LIKE '%BCol=%'
+sql: SELECT COUNT(*) FROM t_diagramobjects WHERE Diagram_ID = (SELECT Diagram_ID FROM t_diagram WHERE Name = 'Fill Channel Landscape') AND ObjectStyle LIKE '%BCol=%'
 expect: = 0
 ```
 
@@ -563,14 +588,31 @@ Covers: Judgment that scripts cannot encode
 
 **Marks:** WRITE
 
-**Ask:** "On the Account Management Landscape, show lifecycle and criticality at the same time."
+**Setup:** A scratch ArchiMate application diagram with its notation stored, built by the runner as in TC-18.
+
+```setup
+call: ea_model.create_package {"parent_package_id": 1, "name": "Fill Scratch Two"} => pkg=package_id
+call: ea_diagram.create_diagram_in_language {"package_id": {$pkg}, "name": "Fill Channel Landscape Two", "language_id": "ArchiMate3", "diagram_type": "Application", "include_preview": false}
+assert-sql: SELECT StyleEx FROM t_diagram WHERE Diagram_ID = {diagram:Fill Channel Landscape Two} | contains 'MDGDgm=ArchiMate3::Application;'
+call: ea_diagram.add_element_to_diagram {"diagram_id": {diagram:Fill Channel Landscape Two}, "element_id": {element:Westbrook Mobile Banking App}, "left": 50, "top": -50, "right": 190, "bottom": -120, "include_preview": false}
+call: ea_diagram.add_element_to_diagram {"diagram_id": {diagram:Fill Channel Landscape Two}, "element_id": {element:Westbrook Online Account Opening}, "left": 230, "top": -50, "right": 370, "bottom": -120, "include_preview": false}
+call: ea_diagram.add_element_to_diagram {"diagram_id": {diagram:Fill Channel Landscape Two}, "element_id": {element:Salesforce Legacy Data Export Feed}, "left": 410, "top": -50, "right": 550, "bottom": -120, "include_preview": false}
+```
+
+**Ask:** "On the Fill Channel Landscape Two, show lifecycle and criticality at the same time."
 
 **Passes when:** The run assigns one visual channel to each variable and never the same one to both (for example border color for lifecycle and opacity or an icon for criticality), leaves fill alone, and says which channel carries which.
 
 **Check:**
 
 ```check
-sql: SELECT COUNT(*) FROM t_diagramobjects WHERE Diagram_ID = 7 AND ObjectStyle LIKE '%BCol=%'
+# the diagram resolves to ArchiMate: its stored notation is the one the setup wrote
+sql: SELECT COUNT(*) FROM t_diagram WHERE Name = 'Fill Channel Landscape Two' AND StyleEx LIKE '%MDGDgm=ArchiMate3::Application;%'
+expect: = 1
+```
+
+```check
+sql: SELECT COUNT(*) FROM t_diagramobjects WHERE Diagram_ID = (SELECT Diagram_ID FROM t_diagram WHERE Name = 'Fill Channel Landscape Two') AND ObjectStyle LIKE '%BCol=%'
 expect: = 0
 ```
 
@@ -674,7 +716,7 @@ Covers: When you cannot make it work
 
 **Ask:** "Put every business application and vendor system we have, and every connection between them, on one diagram I can print on a letter page."
 
-**Passes when:** The run says plainly that 81 elements with their connectors will not read on one page, says why, and suggests a split (by domain, by package) or a summary view. It does not quietly build the illegible diagram. If it builds the split diagrams, none holds more than about 30 elements.
+**Passes when:** The run says plainly that 81 elements with their connectors will not read on one page, says why, and suggests a split (by domain, by package) or a summary view. It creates nothing before it has given that warning and the alternative, and builds only after the person chooses. If it then builds the split diagrams, none holds more than about 30 elements.
 
 **Check:**
 
@@ -685,8 +727,11 @@ expect: = 0
 ```
 
 ```check
+tools: not-called: ea_diagram.create_diagram
+tools: not-called: ea_diagram.add_elements_to_diagram_bulk
 reply: says: that many elements and connectors will not read at that size
 reply: says: a way to split or summarize it
+reply: says: nothing was built before the person chose
 ```
 
 **Fails when:** One diagram of 81 boxes and over a hundred lines is built and returned as done. It may lint with only warnings and it is unreadable.
@@ -752,13 +797,12 @@ rule), which a SQL check cannot ask. It also says nothing about whether the gram
 
 ## Findings
 
-- **Sequence diagrams have no binding.** `uml.yaml` leaves Sequence unbound on purpose, so Step 0 on a sequence diagram returns unbound, and SKILL.md says an unbound answer means compose with the engine's defaults. The rule that a message-exchange diagram must never be composed or laid out as a graph is stated in `grammars.md` §9 and `bindings.md` §8, not in the steps of SKILL.md. A run that follows SKILL.md alone can place a sequence diagram by hand. TC-06 asserts the `grammars.md` answer.
-- **The grammar vocabulary in the prose is out of date.** SKILL.md Step 1 says the full set is eight grammars (`bindings.GRAMMARS`), five with a composer, and `grammars.md` §3 and `bindings.md` §3 say the treemap is all that remains unbuilt. The code defines twelve: `bindings.GRAMMAR_PLACEMENT` adds `matrix`, `radial-tree`, `chevron-stack` and `treemap`, and `tools/` holds composers for all four. Shipped bindings already use `matrix`, `radial-tree` and `chevron-stack`. A run told "that is the full set" will mis-resolve those diagram types. No case can test them while the prose does not describe them.
-- **`render-exceeds-rect` is missing from SKILL.md.** `verification.md` §3a says this error exists because the stored geometry is blind to a box EA grew, and that it needs `include_svg`. SKILL.md Step 5 lists only the label rules as needing `include_svg` and omits `render-exceeds-rect` from "What it checks". A run that follows SKILL.md alone calls `verify_diagram` without the render and loses the one rule that catches TC-10's failure. The Step 5 snippet also omits the `expected_route` argument shown in `verification.md` §3.
-- **`verification.md` §6 miscounts.** It says eight defect classes are listed that no rule reaches; ten bullets follow.
-- **The worked example is stale.** `grammars.md` §10 describes Channels items at the default 140x60; `archimate3.yaml` records 100x70 for every ArchiMate diagram type.
-- **The stereotype prefix does not match the fixture.** `archimate3.yaml` sets `stereotype_prefix: ArchiMate_`, but the Westbrook model stores its ArchiMate fixtures bare (`ApplicationComponent`, `BusinessActor`, `Node`). `stereotype_for("ApplicationComponent")` would query a stereotype that is not stored.
-- **A stale comment in `uml.yaml`.** Its notes say `grammars.md` §7 still lists the timing diagram under computed-geometry; §7 now says it was moved to `ea-semantic`.
-- **Not checkable: the three-pass bound and the stall stop.** The `tools` check can say a call happened, not how many times or in what order. TC-17 can only assert the reply's account of how many passes ran.
-- **Not checkable: what EA actually paints.** SQL reads stored rectangles. The drawn-versus-stored width, the colors EA drew, and the stale-render trap need `verify_diagram` with a diagram id the case cannot know in advance (the run creates it), so the check grammar has no way to call it by name. TC-10, TC-14 and TC-15 settle for stored geometry and reply statements.
-- **Not reachable from the Westbrook fixture: the ambiguous, weak and not-installed resolution paths.** No diagram in the model carries a kind claimed by several installed bindings, a base-type-only match, or a technology id the repository lacks. Whether the Westbrook technology counts as installed in the copy (as against embedded) decides whether TC-04 returns unbound or not-installed; the case accepts either. These paths need a purpose-built fixture.
+- **Sequence diagrams have no binding.** The UML binding leaves Sequence unbound on purpose, so Step 0 on a sequence diagram returns unbound, and SKILL.md says an unbound answer means compose with the engine's defaults. The rule that a message-exchange diagram must never be composed or laid out as a graph is stated in `grammars.md` §9 and `bindings.md` §8, not in the steps of SKILL.md. A run that follows SKILL.md alone can place a sequence diagram by hand. TC-06 asserts the `grammars.md` answer. **Triaged 11 Nov: fixed.** SKILL.md Step 0 now says that for an unbound answer you compose with the engine's defaults, but never place or lay out a sequence or other message-exchange diagram as a graph. TC-06 already asserts it.
+- **`render-exceeds-rect` is missing from SKILL.md.** `verification.md` §3a says this error exists because the stored geometry is blind to a box EA grew, and that it needs `include_svg`. SKILL.md Step 5 lists only the label rules as needing `include_svg` and omits `render-exceeds-rect` from "What it checks". A run that follows SKILL.md alone calls `verify_diagram` without the render and loses the one rule that catches TC-10's failure. The Step 5 snippet also omits the `expected_route` argument shown in `verification.md` §3. **Triaged 11 Nov: fixed.** SKILL.md Step 5 now names `render-exceeds-rect` beside the label rules as needing `include_svg`, and the snippet passes `expected_route`; `verification.md` lists the rule under "What each rule checks".
+- **`verification.md` §6 miscounts.** It says eight defect classes are listed that no rule reaches; ten bullets follow. **Triaged 11 Nov: fixed.** The text now says ten classes, matching the ten bullets.
+- **The worked example is stale.** `grammars.md` §10 describes Channels items at the default 140x60; the ArchiMate binding gives 100x70 for every ArchiMate diagram type. **Triaged 11 Nov: fixed.** `grammars.md` §10 now says the example used the engine's default size with no binding, and that the ArchiMate binding would size the items 100x70.
+- **The stereotype prefix does not match the fixture.** The ArchiMate binding sets `stereotype_prefix: ArchiMate_`, but the Westbrook model stores its ArchiMate fixtures bare (`ApplicationComponent`, `BusinessActor`, `Node`). `stereotype_for("ApplicationComponent")` would query a stereotype that is not stored. **Triaged 11 Nov: no change, not a defect in this skill.** The binding records the prefix EA's built-in ArchiMate technology stores, which is what `stereotype_for` must produce. The fixture's bare names belong to a different technology (the TOGAF profile). Attributing a bare stored name to the right language is handled in the advisor's scope profile; which stored names the ArchiMate 3 binding accepts is the modeling-languages repository's.
+- **A stale note in the UML binding.** Its notes say `grammars.md` §7 still lists the timing diagram under computed-geometry; §7 now says it was moved to `ea-semantic`. **Triaged 11 Nov: no change, already fixed.** No such note exists in the UML binding now, and `bindings.md` and `grammars.md` §7 and §9 agree that the timing diagram is `ea-semantic`.
+- **Not checkable: the three-pass bound and the stall stop.** The `tools` check can say a call happened, not how many times or in what order. TC-17 can only assert the reply's account of how many passes ran. **Triaged 11 Nov: no change, not a defect.** A limit of the case grammar; TC-17 grades the reply's account.
+- **Not checkable: what EA actually paints.** SQL reads stored rectangles. The drawn-versus-stored width, the colors EA drew, and the stale-render trap need `verify_diagram` with a diagram id the case cannot know in advance (the run creates it), so the check grammar has no way to call it by name. TC-10, TC-14 and TC-15 settle for stored geometry and reply statements. **Triaged 11 Nov: no change, not a defect.** A limit of the case grammar; the live checks stay in the reply statements.
+- **Not reachable from the Westbrook fixture: the ambiguous, weak and not-installed resolution paths.** No diagram in the model carries a kind claimed by several installed bindings, a base-type-only match, or a technology id the repository lacks. Whether the Westbrook technology counts as installed in the copy (as against embedded) decides whether TC-04 returns unbound or not-installed; the case accepts either. These paths need a purpose-built fixture. **Triaged 11 Nov: no change, not a defect.** It needs a purpose-built fixture, which is test work, not skill text.

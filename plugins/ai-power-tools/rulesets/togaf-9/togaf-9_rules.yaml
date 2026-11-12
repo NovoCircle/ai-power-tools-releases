@@ -1,0 +1,291 @@
+# TOGAF 9.1 Conformance Ruleset
+# Language:     TOGAF 9.1 content metamodel (The Open Group, G116), as modeled with Sparx Enterprise Architect's TOGAF technology
+# Enforced by:  AI Power Tools for Sparx EA - validate_model tool
+# Generated from the language skill's rules and relationships; do not edit by hand.
+#
+# VERSION. The language guide describes TOGAF 9.1. The Open Group has published TOGAF 9.2 (2018) and the TOGAF Standard 10th Edition (2022), which
+# were not studied. EA's technology reports version 3.0 (Repository.GetTechnologyVersion('TOGAF')), a number of its own that
+# names no edition of the standard.
+#
+# STEREOTYPE NAMES ARE UNQUALIFIED, CASE-SENSITIVE AND HAVE NO SPACES, AND THAT IS MEASURED.
+#
+# validate_model selects with `Stereotype IN (...)` on t_object and t_connector. For Sparx's TOGAF technology that column holds the bare name
+# (`BusinessService`, `OrganizationUnit`, `OwnsAndGoverns`); the qualified form `TOGAF::BusinessService` is only in the t_xref row named
+# `Stereotypes`. The Resources tab shows display text with spaces (`Business Service`) and, for some rows, another spelling (`Platform Sevice`
+# is stored PlatformService; `influence` is stored in lower case). Measured on EA 17.1 build 1716 by creating one object per tab row and
+# reading it back: 204 stored names, FQName `TOGAF::<name>`; the IEEE1471 profile of the same technology stores `IEEE1471::<name>`.
+#
+# WHAT THE VALIDATOR CAN SEE, AND WHAT IT CANNOT. A rule selects an element by the FIRST stereotype in t_object.Stereotype, by its EA type and by its
+# tagged values; selects a connector by its stereotype or by EA's own connector type; counts connectors; and checks where an element sits
+# (`contained_in`, `contains_count`: the element it is attached to by ParentID, else its package, named by stereotype, type or name). No rule in
+# this file uses types or containers yet. A rule cannot follow a generalization or read numeric values. Eight of the language skill's rules are in
+# this file; the others are listed with the reason in the guide.
+#
+# RELATIONSHIP TABLE. 104 of the 143 relationship rows (34.7 and the figures) carry a relationship name that EA has as a connector stereotype;
+# they are generated into `togaf-9-relationships` (39 stereotypes, 110 source/target cells). Abstract entities
+# expand to their kinds (an Application Component row applies to the logical and physical kinds as well). Each stereotype's direction is its verb's. ITService (the Information System Service, which specializes Business Service) has the cells of BusinessService, as source and as target.
+#
+# Sources:
+#   [S1] The Open Group, TOGAF Version 9.1, Part IV Architecture Content Framework (chapters 33 to 37), document G116
+#   [S2] Sparx Systems, the TOGAF technology built into Enterprise Architect 17.1 (API id TOGAF, reported version 3.0)
+
+meta:
+  version: "0.1"
+  language: togaf-9
+  organization: "(your organization)"
+  mdg_family: TOGAF
+  description: >
+    Conformance rules for TOGAF 9.1 content metamodel models built with Sparx Enterprise Architect's TOGAF technology: which entities a relationship may join,
+    that a Business Service is owned and governed, that a Principle has a rationale and a priority, and the value sets of the standard's category attributes.
+    Each rule names the rules.md id it implements.
+  severity_levels:
+    error: A requirement of the standard (rules.md strength must)
+    warning: Guidance of the standard (rules.md strength should)
+    info: Advisory note; not a conformance violation
+
+tables:
+  togaf-9-relationships:
+    source: "TOGAF 9.1 34.7 relationship table (G116), generated from language.yaml relationships.list, written in the stored stereotypes of Sparx's TOGAF technology"
+    connectors:
+      "a": "Generate"
+      "b": "Resolve"
+      "c": "InteractsWith"
+      "d": "Perform"
+      "e": "OperatesIn"
+      "f": "BelongsTo"
+      "g": "ParticipatesIn"
+      "h": "PerformsTaskIn"
+      "i": "Consume"
+      "j": "Decompose"
+      "k": "Deliver"
+      "l": "GovernsAndMeasures"
+      "m": "Meets"
+      "n": "EnsureCorrectOperationOf"
+      "o": "IsProcessedBy"
+      "p": "IsAccessedAndUpdatedThrough"
+      "q": "Create"
+      "r": "Motivate"
+      "s": "Supports"
+      "t": "Owns"
+      "u": "Access"
+      "v": "Communicate"
+      "w": "Contain"
+      "x": "OperatesOn"
+      "y": "Extend"
+      "z": "Implement"
+      "A": "Encapsulate"
+      "B": "Supply"
+      "C": "ProvidesPlatformFor"
+      "D": "SetPerformanceCriteriaFor"
+      "E": "Produce"
+      "F": "OwnsAndGoverns"
+      "G": "IsHostedIn"
+      "H": "Orchestrate"
+      "I": "Provide"
+      "J": "ProvideGovernedInterface"
+      "K": "AppliesTo"
+      "L": "influence"
+      "M": "Identify"
+    cells:
+      "Actor": {"Actor": "j", "BusinessFunction": "cd", "BusinessService": "i", "Event": "ab", "ITService": "i", "Location": "e", "OrganizationUnit": "f", "PlatformService": "i", "Process": "g", "Role": "h"}
+      "ArchitecturalDescription": {"Concern": "M", "Rationale": "I", "Stakeholder": "M"}
+      "BusinessDriver": {"BusinessDriver": "j", "Goal": "q", "OrganizationUnit": "r"}
+      "BusinessFunction": {"Actor": "s", "BusinessFunction": "jv", "Process": "s"}
+      "BusinessService": {"BusinessFunction": "J", "BusinessService": "ij", "DataEntity": "Ii", "Event": "b", "ITService": "ij", "PlatformService": "ij", "Process": "s", "ServiceQuality": "m"}
+      "Contract": {"BusinessService": "l", "ITService": "l", "PlatformService": "l", "ServiceQuality": "m"}
+      "Control": {"Process": "n"}
+      "DataEntity": {"BusinessService": "p", "DataEntity": "j", "ITService": "p", "LogicalApplicationComponent": "o", "PlatformService": "p"}
+      "Environment": {"System": "L"}
+      "Goal": {"Goal": "j"}
+      "ITService": {"BusinessFunction": "J", "BusinessService": "ij", "DataEntity": "Ii", "Event": "b", "ITService": "ij", "PlatformService": "ij", "Process": "s", "ServiceQuality": "m"}
+      "Location": {"Actor": "w", "Location": "j", "OrganizationUnit": "w", "PhysicalApplicationComponent": "w", "PhysicalDataComponent": "w", "PhysicalTechnologyComponent": "w"}
+      "LogicalApplicationComponent": {"BusinessService": "z", "DataEntity": "x", "ITService": "z", "LogicalApplicationComponent": "jv", "PlatformService": "z"}
+      "LogicalDataComponent": {"DataEntity": "A"}
+      "LogicalTechnologyComponent": {"BusinessService": "C", "ITService": "C", "LogicalTechnologyComponent": "j", "PlatformService": "BC"}
+      "Measure": {"BusinessService": "D", "ITService": "D", "Measure": "j", "Objective": "D", "PlatformService": "D"}
+      "Objective": {"Objective": "j"}
+      "OrganizationUnit": {"Actor": "w", "BusinessFunction": "t", "BusinessService": "F", "ITService": "F", "Location": "e", "OrganizationUnit": "j", "PlatformService": "F", "Product": "E"}
+      "PhysicalApplicationComponent": {"Location": "G", "LogicalApplicationComponent": "y", "PhysicalApplicationComponent": "jv", "PhysicalDataComponent": "A"}
+      "PhysicalDataComponent": {"Location": "G", "LogicalDataComponent": "y", "PhysicalApplicationComponent": "A", "PhysicalDataComponent": "j"}
+      "PhysicalTechnologyComponent": {"Location": "G", "LogicalTechnologyComponent": "y", "PhysicalTechnologyComponent": "j"}
+      "PlatformService": {"BusinessFunction": "J", "BusinessService": "ij", "DataEntity": "Ii", "Event": "b", "ITService": "ij", "PlatformService": "ij", "Process": "s", "ServiceQuality": "m"}
+      "Process": {"BusinessFunction": "Hj", "BusinessService": "Hj", "Event": "ba", "ITService": "Hj", "PlatformService": "Hj", "Process": "j", "Product": "E"}
+      "Role": {"BusinessFunction": "u", "Role": "j"}
+      "ServiceQuality": {"BusinessService": "K", "Contract": "K", "ITService": "K", "PlatformService": "K"}
+      "WorkPackage": {"Capability": "k"}
+
+rules:
+  - id: TOGAF9-REL-001
+    name: "A relationship joins entities the content metamodel lists for it"
+    implements: TOGAF-REL-001
+    description: "A relationship between two entities should be one that the content metamodel lists for that source entity, target entity and relationship name (the table of 34.7). EA stores the relationship name as the connector stereotype (Contain, Decompose, OwnsAndGoverns and so on) and the entities as the element stereotypes of the TOGAF profile. A connector whose stereotype the table knows, drawn between two entities the table knows, but not allowed between that pair, is reported as a warning: the standard presents the table as the possible relationships and invites tailoring. [TOGAF 9.1 (The Open Group, document G116) 33.2; 34.2.1; 34.7]"
+    category: rel
+    severity: warning
+    demo_trigger: false
+    coverage: partial
+    not_checked: "Only the 104 table rows whose relationship name has an EA connector stereotype are in the table (39 stereotypes); the other 39 rows (Is realized by, Has, Relates to and others) are drawn with plain UML connectors, which the validator cannot select. A connector is judged only when both ends carry an entity stereotype the table names (EA's generic items such as Asset are not judged). The direction of each stereotype is read from its verb; EA does not enforce a direction and no Sparx pattern shows one. Information System Service is ITService (a working assumption, 2026-10-21). It specializes Business Service in the language file, so ITService has every table cell Business Service has, as source and as target; its own row in the guide ('Automates some or all of') has no EA connector stereotype and is not in the table."
+    selector:
+      type: "connector"
+      connector_stereotypes: "any_of_table"
+    condition:
+      type: "relationship_table"
+      table: "togaf-9-relationships"
+      unknown_endpoint: "ignore"
+    remediation:
+      short: "Use a relationship the metamodel lists for this pair of entities, or draw it from the other end; the direction is the verb's (an Organization Unit Contains an Actor)."
+      auto_fixable: false
+
+  - id: TOGAF9-DEF-003
+    name: "A Business Service is owned and governed by an Organization Unit"
+    implements: TOGAF-DEF-003
+    description: "A Business Service should be owned and governed by an Organization Unit. In EA the relationship is the connector stereotyped OwnsAndGoverns, drawn from the Organization Unit to the Business Service; the rule counts the OwnsAndGoverns connectors that end at the Business Service. An Information System Service (EA's ITService, a working assumption of 2026-10-21) specializes Business Service in the language file, so the rule selects it as well. [TOGAF 9.1 (The Open Group, document G116) 34.2.1; 34.5]"
+    category: def
+    severity: warning
+    demo_trigger: false
+    coverage: partial
+    not_checked: "That the service has an explicitly defined interface and a granularity that matches its governance is not checked (no data in the model). The count assumes the direction Organization Unit to Business Service; a connector drawn the other way, or a plain connector, is not counted."
+    selector:
+      type: "element"
+      stereotypes:
+        any_of: ["BusinessService", "ITService"]
+    condition:
+      type: "connector_count"
+      connector_stereotype: "OwnsAndGoverns"
+      direction: "incoming"
+      min: 1
+    remediation:
+      short: "Draw an OwnsAndGoverns connector from the Organization Unit that governs the service to the Business Service."
+      auto_fixable: false
+
+  - id: TOGAF9-DEF-008
+    name: "A Principle has a rationale and a priority"
+    implements: TOGAF-DEF-008
+    description: "A Principle has at least a supporting rationale and a measure of importance (priority). EA's Principle stereotype carries the tagged values Rationale and Priority; the rule reports a Principle whose Rationale or Priority is empty. [TOGAF 9.1 (The Open Group, document G116) 34.5; 34.6]"
+    category: def
+    severity: warning
+    demo_trigger: false
+    coverage: full
+    selector:
+      type: "element"
+      stereotypes:
+        any_of: ["Principle"]
+    condition:
+      type: "tagged_value_required"
+      tags:
+        - name: "Rationale"
+          must_be_non_empty: true
+        - name: "Priority"
+          must_be_non_empty: true
+    remediation:
+      short: "Fill in the Rationale and Priority tagged values of the Principle."
+      auto_fixable: false
+
+  - id: TOGAF9-ATTR-002
+    name: "Standards class is one of the six values"
+    implements: TOGAF-ATTR-002
+    description: "The standards class of a Business Service, Function, Process, Application Component, Logical or Physical Application, Data and Technology Component, Platform Service, Technology Component or Information System Service takes one of six values. EA stores it in the tagged value StandardsClass (spelled StandardClass on ITService, EA's stereotype for Information System Service) and offers the six values without the word Standard on four of them (Non-Standard, Proposed, Provisional, Standard, Phasing-Out, Retired); the standard writes 'Proposed Standard', 'Provisional Standard', 'Phasing-Out Standard' and 'Retired Standard'. The rule accepts EA's spelling and reports any other value; an empty value is not reported. [TOGAF 9.1 (The Open Group, document G116) 34.6]"
+    category: attr
+    severity: warning
+    demo_trigger: false
+    coverage: partial
+    not_checked: "Information System Service is EA's ITService (a working assumption, 2026-10-21); that stereotype spells the tag StandardClass, so the rule reads both spellings (an element has only one of them). A modeler who types the standard's long spelling ('Proposed Standard') is reported. An element stored as BusinessProcess is not a Process of this guide and is not selected."
+    selector:
+      type: "element"
+      stereotypes:
+        any_of: ["ApplicationComponent", "BusinessFunction", "BusinessService", "LogicalApplicationComponent", "PhysicalApplicationComponent", "LogicalDataComponent", "PhysicalDataComponent", "LogicalTechnologyComponent", "PhysicalTechnologyComponent", "PlatformService", "Process", "TechnologyComponent", "ITService"]
+    condition:
+      type: "tagged_value_constraint"
+      tags:
+        - name: "StandardsClass"
+          value_must_be_one_of: ["Non-Standard", "Proposed", "Provisional", "Standard", "Phasing-Out", "Retired"]
+        - name: "StandardClass"
+          value_must_be_one_of: ["Non-Standard", "Proposed", "Provisional", "Standard", "Phasing-Out", "Retired"]
+    remediation:
+      short: "Set StandardsClass to one of: Non-Standard, Proposed, Provisional, Standard, Phasing-Out, Retired."
+      auto_fixable: false
+
+  - id: TOGAF9-ATTR-003
+    name: "Lifecycle status of a Physical Application Component is one of five values"
+    implements: TOGAF-ATTR-003
+    description: "The lifecycle status of a Physical Application Component takes one of five values: Proposed, In Development, Live, Phasing Out, Retired. EA stores it in the free-text tagged value LifeCycleStatus; the rule reports any other non-empty value. [TOGAF 9.1 (The Open Group, document G116) 34.6 (Physical Application Component entry)]"
+    category: attr
+    severity: warning
+    demo_trigger: false
+    coverage: full
+    selector:
+      type: "element"
+      stereotypes:
+        any_of: ["PhysicalApplicationComponent"]
+    condition:
+      type: "tagged_value_constraint"
+      tags:
+        - name: "LifeCycleStatus"
+          value_must_be_one_of: ["Proposed", "In Development", "Live", "Phasing Out", "Retired"]
+    remediation:
+      short: "Set LifeCycleStatus to Proposed, In Development, Live, Phasing Out or Retired."
+      auto_fixable: false
+
+  - id: TOGAF9-ATTR-004
+    name: "Principle category is one of six values"
+    implements: TOGAF-ATTR-004
+    description: "The category of a Principle takes one of six values: Guiding, Business, Data, Application, Integration, Technology. EA stores the category in the tagged value Type, whose list offers those six and four more (Architecture, Testing, Management, Security); the rule reports a value outside the standard's six, including the four EA offers. [TOGAF 9.1 (The Open Group, document G116) 34.6 (Principle entry)]"
+    category: attr
+    severity: warning
+    demo_trigger: false
+    coverage: partial
+    not_checked: "That EA's tag Type is the standard's attribute Category is read from the matching value list, not stated by EA. EA's own values Architecture, Testing, Management and Security are reported although EA offers them."
+    selector:
+      type: "element"
+      stereotypes:
+        any_of: ["Principle"]
+    condition:
+      type: "tagged_value_constraint"
+      tags:
+        - name: "Type"
+          value_must_be_one_of: ["Guiding", "Business", "Data", "Application", "Integration", "Technology"]
+    remediation:
+      short: "Set the Principle's Type to Guiding, Business, Data, Application, Integration or Technology."
+      auto_fixable: false
+
+  - id: TOGAF9-ATTR-005
+    name: "Data Entity category is one of two values"
+    implements: TOGAF-ATTR-005
+    description: "The category of a Data Entity takes one of two values: Message, Internally Stored Entity. EA stores it in the free-text tagged value Category; the rule reports any other non-empty value. [TOGAF 9.1 (The Open Group, document G116) 34.6 (Data Entity entry)]"
+    category: attr
+    severity: warning
+    demo_trigger: false
+    coverage: full
+    selector:
+      type: "element"
+      stereotypes:
+        any_of: ["DataEntity"]
+    condition:
+      type: "tagged_value_constraint"
+      tags:
+        - name: "Category"
+          value_must_be_one_of: ["Message", "Internally Stored Entity"]
+    remediation:
+      short: "Set the Data Entity's Category to Message or Internally Stored Entity."
+      auto_fixable: false
+
+  - id: TOGAF9-ATTR-006
+    name: "Work Package category is one of five values"
+    implements: TOGAF-ATTR-006
+    description: "The category of a Work Package takes one of five values: Work Package, Work Stream, Project, Program, Portfolio. EA stores a Work Package as an element of type Package with the stereotype WorkPackage, and its tagged value Category offers the same five values; the rule reports any other non-empty value. [TOGAF 9.1 (The Open Group, document G116) 34.6 (Work Package entry)]"
+    category: attr
+    severity: warning
+    demo_trigger: false
+    coverage: full
+    selector:
+      type: "element"
+      stereotypes:
+        any_of: ["WorkPackage"]
+    condition:
+      type: "tagged_value_constraint"
+      tags:
+        - name: "Category"
+          value_must_be_one_of: ["Work Package", "Work Stream", "Project", "Program", "Portfolio"]
+    remediation:
+      short: "Set the Work Package's Category to Work Package, Work Stream, Project, Program or Portfolio."
+      auto_fixable: false
+

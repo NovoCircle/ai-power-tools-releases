@@ -1,0 +1,778 @@
+# EA facts for data modeling and entity-relationship modeling (language file data-modeling-er).
+# Measured on EA 17.1 build 1716; see `harvest` for the source of each fact. Examples elsewhere use Westbrook Bank (fictitious).
+# EA splits this language across two technologies, so `technology` names the first (ERD) and `technologies` both.
+language: data-modeling-er
+technology: ERD
+technologies:
+  conceptual_and_logical:
+    technology: ERD
+    display_name: Entity Relationship Diagram
+    profile: ERD
+    version: '1.1'
+    creation_prefix: 'ERD::'
+    stereotypes_on_resources_tab: 8
+    diagram_type: ERD_dp::ERD_DP
+  logical_and_physical:
+    technology: EAExtended (Core Extensions)
+    display_name: Data Modeling (the EAUML profile of Core Extensions)
+    profile: EAUML
+    creation_prefix: 'EAUML::'
+    stereotypes_on_resources_tab: 23 names (24 rows, FK twice)
+    diagram_type: Extended::Data Modeling
+display_name: Entity Relationship Diagram (ERD) and Data Modeling
+profile: ERD; EAUML
+stereotype_prefix: ''
+stereotype_storage: t_object.Stereotype and t_connector.Stereotype hold the bare name (ERD_Entity, table, FK); the qualified form is the FQName
+  in the t_xref row named Stereotypes (ERD::ERD_Entity, EAUML::table). Create with the qualified type. Stereotypes of an attribute or an operation
+  (column, PK, FK, unique, index) are stored on t_attribute / t_operation, not t_object. No prefix is part of the stored name.
+measured_on: EA 17.1 build 1716, 2026-10-21
+levels:
+  conceptual:
+    technology: ERD
+    diagram_type: ERD_dp::ERD_DP
+    elements:
+    - ERD_Entity
+    - ERD_Relationship (connector)
+    - ERD_naryAssociation (element)
+    - WeakRelationship (element)
+    note: Entities and relationships; attributes optional; many-to-many allowed.
+  logical:
+    technology: ERD (this guide's choice; EA has no separate logical technology)
+    diagram_type: ERD_dp::ERD_DP
+    alternative: EAUML tables on an Extended::Data Modeling diagram with no database product, when keys are to migrate as foreign keys
+    elements:
+    - ERD_Entity
+    - ERD_Attribute (attributeType = primaryKey)
+    - ERD_Connector
+    - ERD_Relationship
+    - ERD_Disjoint / ERD_Overlapping
+    note: Keys are a tag on an attribute; nothing migrates.
+  physical:
+    technology: EAUML (Data Modeling)
+    diagram_type: Extended::Data Modeling
+    package_stereotype: DataModel
+    elements:
+    - table
+    - column (attribute)
+    - PK, FK, unique, index (operations)
+    - FK (association)
+    note: Database product in t_object.GenType; referential actions in the FK operation's tagged values Delete and Update.
+diagram_types:
+  ChenDiagram:
+    ea_name: ERD_dp::ERD_DP
+    shown_by_ea_as: a group named Entity Relationship Diagram holds one type, named Entity Relationship (Resources tab, EA 17.1 build 1716, 2026-11-04)
+    base: Logical
+    stereotype_prefix: ERD
+    layout_style: not-harvested
+    stored_as: t_diagram.Diagram_Type = Logical; StyleEx MDGDgm=ERD_dp::ERD_DP
+    notation: EA's one ERD sample diagram uses Information Engineering (crow's foot) connector notation; the notation is a diagram setting
+    trap: An unknown diagram type (ERD::ERD_DP, EAUML::Data Modeling and others) raises no error and creates a plain Class diagram.
+  IDEF1XEntityRelationshipView:
+    ea_name: Extended::Data Modeling
+    base: Logical
+    stereotype_prefix: EAUML
+    stored_as: Diagram_Type = Logical; StyleEx MDGDgm=Extended::Data Modeling
+    notation: connector notation IDEF1X (a diagram setting; 230 of EA's sample diagrams)
+    note: 'EA has no diagram type per IDEF1X view level: the three views are one diagram type with a different amount of detail.'
+  IDEF1XKeyBasedView:
+    ea_name: Extended::Data Modeling
+    note: As above; keys are columns with PK / FK operations.
+  IDEF1XFullyAttributedView:
+    ea_name: Extended::Data Modeling
+    note: As above.
+  CrowsFootDiagram:
+    ea_name: ERD_dp::ERD_DP or Extended::Data Modeling
+    notation: Information Engineering connector notation (a diagram setting; 149 of EA's sample Data Modeling diagrams and the one ERD diagram)
+  PhysicalDataModelDiagram:
+    ea_name: Extended::Data Modeling
+    base: Logical
+    stereotype_prefix: EAUML
+    stored_as: Diagram_Type = Logical; StyleEx MDGDgm=Extended::Data Modeling
+    opens_with: the Data Modeling toolbox (pages not read)
+concepts:
+  elements:
+    Entity:
+      constructs:
+      - stereotype: ERD_Entity
+        technology_prefix: ERD
+        metaclass: Class
+        also_stored_on:
+        - Component
+        - Entity
+        - Node
+        level: conceptual, logical
+        tags: &id001
+        - name: isWeakEntity
+          type: enumeration
+          allowed_values:
+          - 'true'
+          - 'false'
+          default: 'false'
+      - stereotype: table
+        technology_prefix: EAUML
+        metaclass: Class
+        also_stored_on:
+        - Component
+        - Entity
+        - Node
+        level: logical (without a database product), physical
+        tags: &id005
+        - name: DBVersion
+          type: free text
+          allowed_values: null
+          default: null
+        - name: Owner
+          type: free text
+          allowed_values: null
+          default: null
+        - name: Tablespace
+          type: free text
+          allowed_values: null
+          default: null
+      ea_note: 'ERD level: an ERD_Entity. Data-model level: a Class stereotyped table; its attributes are columns.'
+    WeakEntity:
+      constructs:
+      - stereotype: ERD_Entity
+        technology_prefix: ERD
+        metaclass: Class
+        also_stored_on:
+        - Component
+        - Entity
+        - Node
+        level: conceptual, logical
+        tags: *id001
+        marker: tagged value isWeakEntity = true
+      ea_note: 'Chen''s weak entity (the identifier-dependent entity of IDEF1X). A marker on an ERD_Entity, not a separate stereotype. A table
+        has no marker: its dependence shows only as a primary key that contains the foreign key.'
+    AssociativeEntity:
+      constructs:
+      - stereotype: ERD_Entity
+        technology_prefix: ERD
+        metaclass: Class
+        also_stored_on:
+        - Component
+        - Entity
+        - Node
+        level: logical
+        tags: *id001
+        marker: 'none: an ordinary ERD_Entity related to the two parents'
+      ea_note: No stereotype and no marker. Model it as an ERD_Entity with two ERD_Relationship lines, or a table with a composite primary key
+        and two FK associations.
+    GenericEntity:
+      constructs:
+      - stereotype: ERD_Entity
+        technology_prefix: ERD
+        metaclass: Class
+        also_stored_on:
+        - Component
+        - Entity
+        - Node
+        level: conceptual, logical
+        tags: *id001
+        marker: the target (generic end) of ERD_Disjoint / ERD_Overlapping
+      ea_note: 'A role, not a kind of element: the entity at the generic end of one or more categorizations.'
+    CategoryEntity:
+      constructs:
+      - stereotype: ERD_Entity
+        technology_prefix: ERD
+        metaclass: Class
+        also_stored_on:
+        - Component
+        - Entity
+        - Node
+        level: conceptual, logical
+        tags: *id001
+        marker: the source (category end) of ERD_Disjoint / ERD_Overlapping
+      ea_note: 'A role: the entity at the category end. It can be the generic end of another.'
+    Attribute:
+      constructs:
+      - stereotype: ERD_Attribute
+        technology_prefix: ERD
+        metaclass: Class
+        also_stored_on:
+        - Component
+        - Entity
+        - Node
+        level: conceptual, logical
+        tags: &id002
+        - name: attributeType
+          type: enumeration
+          allowed_values:
+          - normal
+          - primaryKey
+          - multi-valued
+          - derived
+          default: normal
+        - name: commonDataType
+          type: enumeration
+          allowed_values:
+          - bigint
+          - binary
+          - blob
+          - boolean
+          - char
+          - currency
+          - date
+          - datetime
+          - decimal
+          - double
+          - float
+          - guid
+          - integer
+          - long
+          - money
+          - nchar
+          - ntext
+          - number
+          - numeric
+          - nvarchar
+          - real
+          - smallint
+          - sqlvariant
+          - text
+          - time
+          - timestamp
+          - tinyint
+          - varbinary
+          - varchar
+          - na
+          default: na
+        - name: dbmsDataType
+          type: free text
+          allowed_values: null
+          default: null
+      - stereotype: column
+        technology_prefix: EAUML
+        metaclass: attribute
+        owner: table
+        level: physical
+        tags: []
+      ea_note: 'ERD level: an ERD_Attribute ELEMENT joined to its owner by an ERD_Connector drawn from the owner. Data-model level: a column,
+        an ATTRIBUTE of the table (not an element).'
+    Domain:
+      stereotype: null
+      metaclass: null
+      tags: []
+      ea_note: No EA construct. ERD_Attribute has commonDataType and dbmsDataType tags, which are data types.
+    BaseDomain:
+      constructs:
+      - stereotype: ERD_Attribute
+        technology_prefix: ERD
+        metaclass: Class
+        also_stored_on:
+        - Component
+        - Entity
+        - Node
+        level: logical
+        tags: *id002
+        marker: tags commonDataType / dbmsDataType (a data type, not a named domain)
+      ea_note: The nearest EA fact is a data type.
+    TypedDomain:
+      stereotype: null
+      metaclass: null
+      tags: []
+      ea_note: No EA construct.
+    Relationship:
+      constructs:
+      - stereotype: ERD_Relationship
+        technology_prefix: ERD
+        metaclass: Association
+        stored_direction: parent (owner) to child, a convention of this guide; EA stores no parent/child
+        level: conceptual, logical
+        tags:
+        - &id003
+          name: isWeak
+          type: enumeration
+          allowed_values:
+          - 'true'
+          - 'false'
+          default: 'false'
+      - stereotype: ERD_naryAssociation
+        technology_prefix: ERD
+        metaclass: Class
+        also_stored_on:
+        - Component
+        - Entity
+        - Node
+        level: conceptual
+        tags:
+        - name: isRecursive
+          type: enumeration
+          allowed_values:
+          - 'true'
+          - 'false'
+          default: 'false'
+      - stereotype: WeakRelationship
+        technology_prefix: ERD
+        metaclass: Class
+        also_stored_on:
+        - Component
+        - Entity
+        - Node
+        level: conceptual
+        tags: []
+      ea_note: 'Chen''s relationship set: an ERD_Relationship connector between entities, or a diamond element (ERD_naryAssociation; WeakRelationship
+        for the identifying relationship of a weak entity) for an n-ary relationship or one with attributes. Attributes of a relationship hang
+        on the diamond by ERD_Connector.'
+    ConnectionRelationship:
+      constructs:
+      - stereotype: ERD_Relationship
+        technology_prefix: ERD
+        metaclass: Association
+        stored_direction: parent (owner) to child, a convention of this guide; EA stores no parent/child
+        level: conceptual, logical
+        tags:
+        - *id003
+      - stereotype: FK
+        technology_prefix: EAUML
+        metaclass: Association
+        stored_direction: referencing (child) table to referenced (parent) table
+        level: physical
+        tags: []
+      ea_note: An ERD_Relationship between two entities; at the data-model level an FK association from child table to parent table.
+    IdentifyingRelationship:
+      constructs:
+      - stereotype: ERD_Relationship
+        technology_prefix: ERD
+        metaclass: Association
+        stored_direction: parent (owner) to child, a convention of this guide; EA stores no parent/child
+        level: logical
+        tags:
+        - *id003
+        marker: connector tagged value isWeak = true (the closest marker; EA names no identifying relationship)
+      ea_note: EA has no identifying/non-identifying stereotype. The isWeak tag on an ERD_Relationship is the nearest marker; a table shows it
+        only through its primary key.
+    NonIdentifyingRelationship:
+      constructs:
+      - stereotype: ERD_Relationship
+        technology_prefix: ERD
+        metaclass: Association
+        stored_direction: parent (owner) to child, a convention of this guide; EA stores no parent/child
+        level: logical
+        tags:
+        - *id003
+        marker: isWeak = false (the default)
+      ea_note: As above.
+    MandatoryNonIdentifyingRelationship:
+      constructs:
+      - stereotype: ERD_Relationship
+        technology_prefix: ERD
+        metaclass: Association
+        stored_direction: parent (owner) to child, a convention of this guide; EA stores no parent/child
+        level: logical
+        tags:
+        - *id003
+        marker: cardinality string on the parent end (1)
+      ea_note: Mandatory or optional is the minimum of the cardinality string on an end (t_connector.SourceCard / DestCard), not a stereotype.
+    OptionalNonIdentifyingRelationship:
+      constructs:
+      - stereotype: ERD_Relationship
+        technology_prefix: ERD
+        metaclass: Association
+        stored_direction: parent (owner) to child, a convention of this guide; EA stores no parent/child
+        level: logical
+        tags:
+        - *id003
+        marker: cardinality string on the parent end (0..1)
+      ea_note: As above.
+    CategorizationRelationship:
+      constructs:
+      - stereotype: ERD_Disjoint
+        technology_prefix: ERD
+        metaclass: Generalization
+        stored_direction: category to generic entity
+        level: conceptual, logical
+        tags:
+        - &id004
+          name: Participation
+          type: enumeration
+          allowed_values:
+          - partial
+          - total
+          default: partial
+      - stereotype: ERD_Overlapping
+        technology_prefix: ERD
+        metaclass: Generalization
+        stored_direction: category to generic entity
+        level: conceptual, logical
+        tags:
+        - &id006
+          name: Participation
+          type: enumeration
+          allowed_values:
+          - partial
+          - total
+          default: partial
+      ea_note: A Generalization from the category to the generic entity. ERD_Overlapping allows an instance in several categories, which IDEF1X
+        (and DATA-CAT-003) does not.
+    CategoryCluster:
+      constructs:
+      - stereotype: ERD_Disjoint
+        technology_prefix: ERD
+        metaclass: Generalization
+        stored_direction: category to generic entity
+        level: logical
+        tags:
+        - *id004
+        marker: the group of generalizations that share one generic entity
+      ea_note: No element. The cluster is implied by the generalizations with the same target; the tagged value Participation (partial or total)
+        on each is the nearest thing to complete / incomplete.
+    NonSpecificRelationship:
+      constructs:
+      - stereotype: ERD_Relationship
+        technology_prefix: ERD
+        metaclass: Association
+        stored_direction: parent (owner) to child, a convention of this guide; EA stores no parent/child
+        level: conceptual
+        tags:
+        - *id003
+        marker: many (*) on both cardinality strings
+      ea_note: 'No stereotype: a many-to-many ERD_Relationship. Not allowed at the physical level (DATA-PHY-010).'
+    Key:
+      stereotype: null
+      metaclass: null
+      tags: []
+      ea_note: Abstract. Not a stereotype.
+    CandidateKey:
+      stereotype: null
+      metaclass: null
+      tags: []
+      ea_note: No EA construct. Only the primary key is marked.
+    PrimaryKey:
+      constructs:
+      - stereotype: ERD_Attribute
+        technology_prefix: ERD
+        metaclass: Class
+        also_stored_on:
+        - Component
+        - Entity
+        - Node
+        level: conceptual, logical
+        tags: *id002
+        marker: attribute tagged value attributeType = primaryKey
+      - stereotype: PK
+        technology_prefix: EAUML
+        metaclass: operation
+        owner: table
+        level: physical
+        tags: []
+      ea_note: 'ERD level: a tag on each key ERD_Attribute. Data-model level: a PK operation of the table whose parameters are the key columns.'
+    AlternateKey:
+      constructs:
+      - stereotype: unique
+        technology_prefix: EAUML
+        metaclass: operation
+        owner: table
+        level: physical
+        tags: []
+      ea_note: 'Data-model level only: a unique operation. The ERD attribute type has no alternate-key value.'
+    ForeignKey:
+      constructs:
+      - stereotype: FK
+        technology_prefix: EAUML
+        metaclass: operation
+        owner: table
+        level: physical
+        tags: []
+      - stereotype: FK
+        technology_prefix: EAUML
+        metaclass: Association
+        stored_direction: referencing (child) table to referenced (parent) table
+        level: physical
+        tags: []
+      ea_note: 'Data-model level only: an FK operation on the referencing table (parameters = the referencing columns; tagged values Delete and
+        Update) AND an FK association between the tables. The ERD technology does not migrate keys.'
+    View:
+      stereotype: null
+      metaclass: null
+      tags: []
+      ea_note: No stereotype. The language's View is an IDEF1X model view (a diagram); EA's `view` is a database view (see ea_only).
+    Note:
+      stereotype: null
+      metaclass: null
+      tags: []
+      ea_note: EA's core Note element (Object_Type Note), no stereotype of either technology.
+    Table:
+      constructs:
+      - stereotype: table
+        technology_prefix: EAUML
+        metaclass: Class
+        also_stored_on:
+        - Component
+        - Entity
+        - Node
+        level: logical (without a database product), physical
+        tags: *id005
+      ea_note: A Class stereotyped table; the database product is t_object.GenType.
+    Column:
+      constructs:
+      - stereotype: column
+        technology_prefix: EAUML
+        metaclass: attribute
+        owner: table
+        level: physical
+        tags: []
+      ea_note: An attribute of the table with stereotype column; Type holds the SQL type text.
+    TableConstraint:
+      stereotype: null
+      metaclass: null
+      tags: []
+      ea_note: Abstract. Not a stereotype.
+    PrimaryKeyConstraint:
+      constructs:
+      - stereotype: PK
+        technology_prefix: EAUML
+        metaclass: operation
+        owner: table
+        level: physical
+        tags: []
+      ea_note: An operation of the table; parameters are the key columns.
+    UniqueConstraint:
+      constructs:
+      - stereotype: unique
+        technology_prefix: EAUML
+        metaclass: operation
+        owner: table
+        level: physical
+        tags: []
+      ea_note: An operation of the table; parameters are the columns.
+    ForeignKeyConstraint:
+      constructs:
+      - stereotype: FK
+        technology_prefix: EAUML
+        metaclass: operation
+        owner: table
+        level: physical
+        tags: []
+      - stereotype: FK
+        technology_prefix: EAUML
+        metaclass: Association
+        stored_direction: referencing (child) table to referenced (parent) table
+        level: physical
+        tags: []
+      ea_note: Operation plus association, see ForeignKey.
+    CheckConstraint:
+      constructs:
+      - stereotype: check
+        technology_prefix: EAUML
+        metaclass: operation
+        owner: table
+        level: physical
+        tags: []
+      ea_note: An operation of the table. No sample model of EA's uses it.
+    Index:
+      constructs:
+      - stereotype: index
+        technology_prefix: EAUML
+        metaclass: operation
+        owner: table
+        level: physical
+        tags: []
+      ea_note: An operation of the table; parameters are the columns.
+  relationships:
+    ERD_Connector:
+      stereotype: ERD_Connector
+      technology_prefix: ERD
+      metaclass: Association
+      stored_direction: owner to attribute
+      level: conceptual, logical
+      tags: []
+    ERD_Relationship:
+      stereotype: ERD_Relationship
+      technology_prefix: ERD
+      metaclass: Association
+      stored_direction: parent (owner) to child, a convention of this guide; EA stores no parent/child
+      level: conceptual, logical
+      tags:
+      - *id003
+    ERD_Disjoint:
+      stereotype: ERD_Disjoint
+      technology_prefix: ERD
+      metaclass: Generalization
+      stored_direction: category to generic entity
+      level: conceptual, logical
+      tags:
+      - *id004
+    ERD_Overlapping:
+      stereotype: ERD_Overlapping
+      technology_prefix: ERD
+      metaclass: Generalization
+      stored_direction: category to generic entity
+      level: conceptual, logical
+      tags:
+      - *id006
+    FK:
+      stereotype: FK
+      technology_prefix: EAUML
+      metaclass: Association
+      stored_direction: referencing (child) table to referenced (parent) table
+      level: physical
+      tags: []
+ea_only:
+- stereotype: view
+  technology_prefix: EAUML
+  metaclass: Class
+  tags:
+  - DBVersion
+  - Owner
+  for: A database view. The language file does not cover database views. Carried as a Class; never an FK end in the ruleset.
+- stereotype: function
+  technology_prefix: EAUML
+  metaclass: Class
+  tags:
+  - DBVersion
+  - Owner
+  for: A stored function (Class). Not in the language file.
+- stereotype: procedure
+  technology_prefix: EAUML
+  metaclass: Class
+  tags:
+  - DBVersion
+  - Owner
+  for: A stored procedure (Class). Not in the language file.
+- stereotype: dbsequence
+  technology_prefix: EAUML
+  metaclass: Class
+  tags:
+  - DBVersion
+  - Owner
+  for: A database sequence (Class). Not in the language file.
+- stereotype: package
+  technology_prefix: EAUML
+  metaclass: Class
+  tags:
+  - DBVersion
+  - Owner
+  for: A database package (Class; Oracle style). Not an EA package.
+- stereotype: functions
+  technology_prefix: EAUML
+  metaclass: Class
+  tags: []
+  for: A container whose operations are stereotyped func.
+- stereotype: procedures
+  technology_prefix: EAUML
+  metaclass: Class
+  tags: []
+  for: A container whose operations are stereotyped proc.
+- stereotype: sequences
+  technology_prefix: EAUML
+  metaclass: Class
+  tags: []
+  for: A container whose operations are stereotyped sequ.
+- stereotype: database connection
+  technology_prefix: EAUML
+  metaclass: Artifact
+  tags:
+  - ConnectionOptions
+  - OtherSchemas
+  for: An Artifact that holds a connection to a live database, for reverse engineering and DDL import.
+- stereotype: sqlquery
+  technology_prefix: EAUML
+  metaclass: Artifact
+  tags:
+  - SQL
+  for: An Artifact that holds an SQL query (tag SQL).
+- stereotype: DataModel
+  technology_prefix: EAUML
+  metaclass: Package
+  tags: []
+  for: A package that holds a data model (tables, views). The stereotype is on the package's own t_object row.
+- stereotype: Database
+  technology_prefix: EAUML
+  metaclass: Package
+  tags: []
+  for: A package that stands for a database (schema level). Not in the language file.
+- stereotype: trigger
+  technology_prefix: EAUML
+  metaclass: operation
+  owner: table
+  tags: []
+  for: A trigger. Not in the language file.
+- stereotype: func / proc / sequ
+  technology_prefix: EAUML
+  metaclass: operation
+  tags: []
+  for: Members of the functions, procedures and sequences containers.
+toolbox:
+  status: ERD toolbox read on screen, measured on EA 17.1 build 1716, 2026-11-04; the Data Modeling toolbox (Core Extensions) was not read
+  toolboxes_under_ERD:
+  - Entity Relationship Diagram
+  pages:
+    ERD:
+    - Entity
+    - Attribute
+    - N-ary Association
+    ERD - Relationships:
+    - Connector
+    - Relationship
+    - Disjoint
+    - Overlapping
+  not_on_the_toolbox: WeakRelationship and a weak entity have no toolbox item
+quick_links:
+  status: ERD entity source read on screen, measured on EA 17.1 build 1716, 2026-11-04; one source; the Data Modeling quick links were not read
+  from_an_entity:
+    Attribute:
+    - Association
+    n-ary Association:
+    - Association
+    Entity:
+    - Relationship
+    - Disjoint
+    - Overlapping
+    Common: EA's generic list
+  note: 'the quick link to an n-ary diamond is a plain ''Association'' (the stereotype it would give was not read: nothing was created); nothing
+    offers a weak entity or a weak relationship'
+transforms:
+  status: runs through COM (one observation, EA 17.1 build 1716); the dialog route was not confirmed
+  transforms_node_under_ERD: the node 'Transforms' has no children in the Resources tree (EA 17.1 build 1716, 2026-11-04); the Resources tab, as read on 2026-10-20,
+    said it holds the ERD to data model transform
+  com_route: 'Project.TransformPackage("ERD to Data Modeling", source package GUID, target package GUID, options) returned True in about 7 s and created, from a package of 8 ERD_Entity, 16 ERD_Attribute and 1 ERD_naryAssociation, a package named after the source plus DataModeling with a diagram of the same name, 9 table classes, 25 column attributes and 9 FK connectors. The transform added key and foreign-key columns. Only samples of the output were compared. The name "ERD to Data Model" returned True and created only an empty package and diagram; a made-up name also returned True and created nothing, so the return value does not show success'
+  dialog: Design ribbon > Transform with a package selected opens a 'Model Transformation' dialog that lists C#, C++, VBNet, PHP, DDL, EJB Entity,
+    EJB Session, Java, JUnit, NUnit, Tables, WSDL, XSD, 'Data Modeling t...' and 'ERD to Data Mo...' (names cut off at the column edge), each
+    with a Target Package cell
+  attempts: 'five attempts with automated clicks on the dialog never showed a tick in the transformation''s checkbox and wrote nothing; whether a person with a mouse gets the tick is not established'
+  how_to_finish: someone using the mouse by hand ticks the box, sets the target package, runs it once and records the result; the full name EA shows is still unread
+samples_in_ea:
+  files: 45
+  note: 'EA''s model patterns: 40 de1.0 database engineering patterns, er1.0 simple ER model, bk3.0, three dws1.0 MySQL patterns'
+  data_modeling_diagrams: 379
+  idef1x_notation: 230
+  information_engineering_notation: 149
+  erd_diagrams: 1
+  database_products_seen: 17
+  referential_actions_seen:
+  - No Action
+  - Restrict
+conventions:
+  attribute_line_direction: ERD_Connector runs from the owner (entity or relationship diamond) to the ERD_Attribute
+  generalization_direction: ERD_Disjoint / ERD_Overlapping run from the category to the generic entity
+  fk_direction: the FK association runs from the referencing table to the referenced table, child end 0..*, parent end 1
+  relationship_direction: this guide and the ruleset draw an ERD_Relationship from parent (owner) to child; EA stores no parent / child
+  primary_key: 'ERD: attributeType = primaryKey on an ERD_Attribute. Data model: a PK operation of the table with the key columns as parameters'
+  database_product: t_object.GenType on a table or view; exported as product_name
+harvest:
+  ea_build: 17.1 build 1716
+  stereotype_list: 'ui: Resources tab, read by computer use ; 8 ERD rows, 24 EAUML data-modeling rows'
+  metaclasses_tags_directions_diagram_types: 'api: created through COM in a test model and read back'
+  columns_keys_indexes: 'api and sample-content: elements created through COM in a test model, and EA''s model patterns'
+  database_products_notation_counts: 'model-pattern: EA''s ModelPatterns folder'
+  toolbox_quick_links_transform: 'ui, EA 17.1 build 1716, 2026-11-04: the ERD toolbox pages and the quick links of one entity were read; the transform
+    was attempted four times and gave no result (see transforms); the Data Modeling toolbox and quick links were not read'
+
+# EA's names for this language's layout. tools/gen_conventions.py reads layout_map.
+layout_map:
+  technology: ERD
+  display_name: Entity Relationship Diagram
+  extends: UML
+  stereotype_prefix: ERD_
+  notes: |
+    `ERD_DP` is one EA diagram type, and it draws both the guide's Chen and crow's foot diagrams, so the map names both guide types and the first sets its layout. The map has no entry for `Extended::Data Modeling`. Route names are conventions, not measurements.
+
+    `ERD` is the id EA reports, measured on EA 17.1 build 1716.
+  diagram_types:
+    ERD_DP:
+      token: ERD_dp::ERD_DP
+      guide:
+      - ChenDiagram
+      - CrowsFootDiagram
+      base: Logical

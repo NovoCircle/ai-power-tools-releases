@@ -94,7 +94,7 @@ sql: SELECT (SELECT COUNT(*) FROM t_object), (SELECT COUNT(*) FROM t_connector),
 expect: unchanged
 ```
 
-**Fails when:** The run calls `get_diagram`, sees the preview bytes and a `saved_path`, and tells the person the picture is saved there. The preview sits in the server's cache folder next to the model file; the folder the person named stays empty. The reply looks like a success and the path it quotes is real.
+**Fails when:** The run calls `get_diagram`, sees the preview bytes and a `saved_path`, and tells the person the picture is saved there. The preview sits in a per-user cache folder (under `%LOCALAPPDATA%\ea-mcp-server\previews`), not beside the model; the folder the person named stays empty. The reply looks like a success and the path it quotes is real.
 
 ### TC-03: SVG when the picture will be scaled
 
@@ -434,7 +434,7 @@ reply: not: reports the import as done on the strength of the status field alone
 
 ### TC-13: A report comes out as an RTF document
 
-Covers: 5. `generate_report` — RTF document generation
+Covers: 5. `generate_report` — document generation
 
 **Marks:** EFFECT
 
@@ -458,22 +458,22 @@ expect: unchanged
 tools: called: ea_repository.generate_report
 ```
 
-**Fails when:** The run builds the output path with a `.docx` or `.html` extension. The call fails with `report_failed`, the run retries with other template names, and the failure is blamed on the template.
+**Fails when:** The run builds the output path with an `.html` extension. The call is refused with `unsupported_report_format`, the run retries with other template names, and the failure is blamed on the template.
 
-### TC-14: A request for HTML is answered with the RTF limit
+### TC-14: A request for HTML is answered with the formats the tool can make
 
-Covers: 5. `generate_report` — RTF document generation
+Covers: 5. `generate_report` — document generation
 
 **Marks:** EFFECT
 
 **Ask:** "Generate the Account Origination report as an HTML page for our intranet. If HTML isn't possible, I'll take whatever format the tool can make. Save it in <output-dir> as account-origination."
 
-**Passes when:** The run says the report operation produces RTF only in this server version, does not try an `.html` path, and produces the `.rtf` and says so. It does not claim an HTML report exists.
+**Passes when:** The run says the report operation cannot write HTML (it takes `.rtf`, `.doc`, `.docx` or `.pdf`), does not try an `.html` path, and produces the `.rtf` and says so. It does not claim an HTML report exists.
 
 **Check:**
 
 ```check
-reply: says: the report operation writes RTF only in this server version
+reply: says: the report operation cannot write HTML and writes RTF, Word or PDF documents
 reply: not: says an HTML report was generated
 ```
 
@@ -487,11 +487,11 @@ sql: SELECT (SELECT COUNT(*) FROM t_object), (SELECT COUNT(*) FROM t_connector),
 expect: unchanged
 ```
 
-**Fails when:** The run passes `account-origination.html`, gets `RunReport returned but output file does not exist`, then loops over template names looking for one that works. The extension was the cause every time.
+**Fails when:** The run passes `account-origination.html`, gets `unsupported_report_format`, then loops over template names looking for one that works. The extension was the cause every time.
 
 ### TC-15: A named template that does not exist is not applied
 
-Covers: 5. `generate_report` — RTF document generation
+Covers: 5. `generate_report` — document generation
 
 **Marks:** EFFECT, INVARIANT
 
@@ -525,7 +525,7 @@ expect: unchanged
 
 ### TC-16: "No template" does not become an empty template
 
-Covers: 5. `generate_report` — RTF document generation
+Covers: 5. `generate_report` — document generation
 
 **Marks:** EFFECT
 
@@ -541,7 +541,7 @@ expect: contains: {\rtf
 ```
 
 ```check
-reply: says: a non-empty template name was supplied because an empty one hangs the call
+reply: says: a non-empty template name was supplied because an empty one is refused
 ```
 
 ```check
@@ -549,11 +549,11 @@ sql: SELECT (SELECT COUNT(*) FROM t_object), (SELECT COUNT(*) FROM t_connector),
 expect: unchanged
 ```
 
-**Fails when:** The run takes "no template" literally and passes an empty string. The call hangs or returns a closed connection or a timeout, and the run reports that Enterprise Architect has crashed. No file is written.
+**Fails when:** The run takes "no template" literally and passes an empty string. The call is refused with `template_required` (older servers hung, returned a generic `report_failed` or a closed connection), the run blames Enterprise Architect or the output folder, and no file is written.
 
 ### TC-17: A report is not ready to share until its authors are checked
 
-Covers: 5. `generate_report` — RTF document generation
+Covers: 5. `generate_report` — document generation
 
 **Marks:** EFFECT, INVARIANT
 
@@ -588,7 +588,7 @@ expect: unchanged
 
 ### TC-18: A call that hangs is diagnosed, not guessed at
 
-Covers: 5. `generate_report` — RTF document generation; Verify in EA's UI
+Covers: 5. `generate_report` — document generation; Verify in EA's UI
 
 **Ask:** "I ran the report with a blank template name and the connection closed. EA looks frozen. What's going on, and should I restart it?"
 
@@ -1486,17 +1486,19 @@ nothing; a person's text that is complete by name can still read badly.
 
 ## Findings
 
-- SKILL.md "See also" sends the `export_xmi` defect to `ea-diagnostic` as an "escalation path for the `export_xmi` defect above", but section 4 says the defect was fixed in server 2.2.0; TC-11 requires the run not to follow that pointer.
-- SKILL.md section 1 table says "Read the warning in §4 before relying on this for anything you can't afford to lose", but section 4 now holds a "Fixed" note and no warning; the pointer is stale.
-- `references/generate-report.md` (and the SKILL.md section 5 text built on it) was measured on server 2.1.0; nothing records that the RTF-only limit, the template behavior or the empty-template hang still hold after 2.2.0.
-- `references/generate-report.md` calls the empty-template hang "a per-call hang, not a reason to restart EA" on the strength of a `ping` answering, while `_shared/references/ea-ui-verification.md` says a hang is usually a blocking dialog and that nobody should conclude anything before looking at the screen; the two disagree on whether the diagnosis is already known. TC-18 asks for both (named cause plus a look at the screen).
-- SKILL.md "Verify in EA's UI" tells the reader to reload and screenshot "after any diagram create or edit", which an export skill never performs; only its hang advice applies here.
-- SKILL.md says the intro "Every claim below was exercised against that model ... see the verification table in each reference file"; `references/xmi-export-import.md` records the failed (now fixed) behavior, so nothing in this skill shows a verified working XMI export or import round trip.
-- `import_xmi` is a model write that can overwrite elements whose identifiers already exist in the target, but SKILL.md section 4 says nothing about taking a baseline first, or about importing into a repository that already holds the package; TC-12 avoids the case by deleting the source package in setup.
-- The `tools` check can name an operation but not its parameters, so `xmi_type` (TC-10) and a non-empty template (TC-16) are graded through the reply and the file, which an agent could misreport; the runner design needs a parameter check.
-- TC-10 cannot test that the file is XMI 2.5.1: the version marker EA writes at the top of an XMI 2.5.1 file was not verified, so the check stops at "file exists" plus the reply.
-- TC-18 and the SKILL.md latency section depend on a `computer-use` transcript tool name; none is defined in the template's `tools` grammar.
-- TC-26 grades "picture off" through `not-called` render operations, and TC-38 cannot grade that the decided text went with the two fingerprints: a `tools` check can say a parameter must be present with a value, but not that one is absent or that a field holds the hash from an earlier result. The runner design needs both.
-- The `setup` blocks of TC-23, TC-25, TC-28, TC-32 to TC-38 and TC-43 are checked by `tools/test_acceptance_setup.py` against a fake caller. They have not been run against a live server: the scratch diagrams of TC-23 and TC-25 place elements at negative tops (the form EA stores; a positive top reads as not found in the picture), and TC-25 assumes EA draws the 69-character name 120 wide by about 91 high, as in the E0 long-name fixture.
-- TC-30 fails against server 3.6.x until the description generator stops writing the technology id ("WBA business applications") for the Westbrook model, whose stereotypes are stored under the profile name.
-- TC-39 and TC-40 grade `diagram_changed` and `notes_changed` on the reply only. The race they describe cannot be set up in a single-ask run, so no check reads the server's refusal; a reply that sounds right passes. A known limit.
+Each finding was checked against the current skill text and server main (read only). Each ends with its disposition.
+
+- "See also" sent the `export_xmi` defect to `ea-diagnostic`, but section 4 says it was fixed in 2.2.0. **Fixed:** the pointer now names any repeated failure. TC-11 still requires the run not to follow the old pointer.
+- The section 1 table said "Read the warning in section 4", but section 4 holds a "Fixed" note. **Fixed:** the row now says what the server checks and to compare `elements_in_export` with `elements_in_package`.
+- `references/generate-report.md` and SKILL.md section 5 were measured on 2.1.0; only the empty-template behavior was re-checked (3.6.4: a fast `report_failed`). **Fixed (server 3.6.5):** section 5 now describes the refusals (`unsupported_report_format`, `template_required`, `path_required`) and the silent fallback for an unknown template. The `.pdf` and `.docx` rows of the reference table were not run here; they are a live check (lane report).
+- `generate-report.md` called the 2.1.0 hang "not a reason to restart EA" on the strength of `ping`, against the shared guidance to look at the screen. **Fixed:** both files now say the cause was not read from the screen and to look before concluding. TC-18 keeps asking for both.
+- "Verify in EA's UI" told the reader to reload and screenshot after a diagram edit. **Fixed:** the bullet says this skill edits no diagram and how to check an export.
+- The intro said every claim was exercised, but nothing shows a working XMI round trip. **Fixed:** the intro now says no working round trip is recorded and to check an XMI result yourself. A live round trip is a live check.
+- `import_xmi` can overwrite elements that exist in the target, and section 4 said nothing about a baseline. **Fixed:** section 4 says to baseline the target first (`ea-change-management` section 6) and to say what may be replaced. TC-12 still avoids the case in setup.
+- The `tools` check names an operation but not its parameters (`xmi_type` in TC-10, a non-empty template in TC-16). **No change:** a runner limit, not a skill defect.
+- TC-10 cannot test the XMI 2.5.1 marker. **No change:** the marker was not verified; needs a live export.
+- TC-18 and the latency section depend on a `computer-use` tool name. **No change:** the template grammar now has `computer-use.<op>` (per the step-4 review); a case-file matter.
+- TC-26 and TC-38 need checks the runner cannot express (a parameter absent, a field equal to an earlier hash). **No change:** runner design.
+- The `setup` blocks of TC-23, TC-25, TC-28, TC-32 to TC-38 and TC-43 are checked only against a fake caller. **No change:** needs a live run.
+- TC-30 fails against server 3.6.x until the description generator stops writing the technology id for the Westbrook model. **Covered by** the server-fix text that follows the server merge (item 0937) if EA-S01 addresses it; otherwise a server defect, listed in the report.
+- TC-39 and TC-40 grade `diagram_changed` and `notes_changed` on the reply only. **No change:** known limit; the race cannot be set up in a single ask.

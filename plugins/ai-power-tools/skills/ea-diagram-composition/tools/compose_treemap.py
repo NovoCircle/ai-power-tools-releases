@@ -236,8 +236,8 @@ __all__ = [
 DEFAULT_TREEMAP_SPEC: dict[str, Any] = {
     # Top-left of the region that gets tiled. `origin_top` is negative because
     # EA's vertical axis is.
-    "origin_left": 20,
-    "origin_top": -20,
+    "origin_left": 40,
+    "origin_top": -40,
 
     # The region. Unlike every other grammar here, a treemap's extent is an
     # INPUT rather than an output: area means nothing without a total to be a

@@ -31,7 +31,7 @@ Covers: AI Power Tools for Sparx EA — Diagnostic Report Skill; Step 1 — Auto
 **Ask:** "I asked EA for an RTF report of the Domestic Payments package and it threw 'Error: Connection closed'. When I tried again it said 'Error: Request timed out'. I can't get past it. Can you put together what NovoCircle support needs to look at this?"
 
 **Passes when:** Before writing any issue entry, the agent calls the three collection operations
-(`get_repository_info`, `list_available_skills`, `assess_mdg_situation`) and builds the header
+(`get_repository_info`, `ping`, `assess_mdg_situation`) and builds the header
 from what they returned. If one of them fails it records the failure and carries on; it does not
 skip the collection.
 
@@ -44,10 +44,10 @@ expect: unchanged
 
 ```check
 tools: called: ea_repository.get_repository_info
-tools: called: ea_repository.list_available_skills
+tools: called: ping
 tools: called: ea_mdg.assess_mdg_situation
-reply: says: the EA version in the report header is the ea_version that get_repository_info returned
-reply: says: the MCP server version in the report header is the server_version that list_available_skills returned
+reply: says: the EA version in the report header is the ea_release and the build is the ea_version that get_repository_info returned
+reply: says: the MCP server version in the report header is the version that ping returned
 reply: not: contains header fields still holding template text such as <YYYY-MM-DD> or <e.g. ...>
 ```
 
@@ -124,7 +124,7 @@ reply: not: contains header fields still holding template text such as <YYYY-MM-
 ```
 
 **Fails when:** A field is dropped because its source call did not return it, or the header keeps
-the template's example text ("EA 17.0 Build 1704", "0.3.1") so that a made-up version sits in the
+the template's example text ("0.3.1") so that a made-up version sits in the
 report as if measured. A reader cannot tell the placeholder from a reading.
 
 ### TC-03: A failed collection call does not stop the report
@@ -429,7 +429,9 @@ Covers: Step 3 — Issue Entries
 **Ask:** "The RTF report on Domestic Payments never worked and I found no way round it; I gave up and screenshotted the package instead. Write this up for support and save it to <output-dir>\diagnostic-report.md."
 
 **Passes when:** Workaround applied reads `None found.` The screenshot is mentioned, if at all, as
-what the person did instead of the report, not as a workaround of the failing call.
+what the person did instead of the report, not as a workaround of the failing call. Any route the
+assistant found on its own is under "What the assistant tried", not under the person's workaround,
+and the report adds no issue the person did not raise.
 
 **Check:**
 
@@ -588,7 +590,9 @@ Covers: Step 6 — Footer: Reproduction and Environment Detail
 
 **Passes when:** The report ends its body with the reproduction and environment section: steps to
 reproduce, model state at issue time, relevant log output and the transcript note. The steps are
-only what the person said they did.
+only what the person said they did ("open the model and call the export on that package"). The
+assistant's own session calls and arguments are not in "Steps to reproduce"; if the report lists
+them, they are under "What the assistant tried" and labeled as the assistant's.
 
 **Check:**
 
@@ -701,8 +705,9 @@ Covers: Step 7 — Submission Section
 
 **Passes when:** The report ends with the submission section as the skill gives it: the address
 `help@novocircle.com`, a subject line in the form `[Diagnostic] <summary> — EA <version> — <date>`
-filled with this session's summary, EA version and date, the list of attachments, and the response
-time sentence.
+filled with this session's summary, EA version and date (never the skill's example subject line), the list of attachments, the response
+time sentence, and the line telling the person to read the report and remove what they do not want
+to share.
 
 **Check:**
 
@@ -737,7 +742,13 @@ expect: contains: The support team typically responds within 1 business day.
 ```
 
 ```check
+file: diagnostic-report.md
+expect: contains: remove anything you do not want to share
+```
+
+```check
 reply: says: the subject line uses this session's issue summary, EA version and date
+reply: not: leaves the example subject line about create_connector in the report
 reply: not: leaves <Short issue summary>, <version> or <YYYY-MM-DD> unfilled in the subject line
 ```
 
@@ -838,6 +849,7 @@ expect: unchanged
 
 ```check
 tools: called: computer-use.screenshot
+tools: before: computer-use.screenshot ea_repository.get_repository_info
 reply: says: what EA's window showed, including whether a dialog was open
 reply: not: names a hang cause in the report that no screenshot or tool result supports
 reply: not: treats Windows showing EA as Responding as proof that EA is not blocked
@@ -981,55 +993,69 @@ not headings and are discussed under Findings.
 
 ## Findings
 
-- `get_repository_info` returns no `build` and no `project_file` (it returns `project_path`,
-  `connection_string`, `ea_version`, `repository_type` and a `diagnostics` block), so the Step 1
-  field table points at keys that do not exist. The header's "EA version + build" and "Project
-  file" cannot be filled as written. Already tracked in the backlog.
-- `list_available_skills` lists the skills in the public release bundle, fetched over the network,
-  not the installed ones; it fails with `fetch_failed` offline. Step 1's comment ("installed skill
-  names and versions") is wrong, and the header has no field that uses the skill list. Only
-  `server_version` is used.
-- Step 1 names operations bare (`get_repository_info()`). `_shared/references/operations.md` says
-  every call is `<meta_tool>(operation=..., params={...})`, so the calls are not callable as shown.
-- Step 3 lists "licensing service" as a possible affected component. The product no longer has one.
-- Step 3's workaround example calls `execute_sql("INSERT INTO t_connector ...")`. `execute_sql` is a
-  read-only query operation, and the example teaches a write path that does not exist and that
-  `ea-modeling` would not endorse. The example also cites `ea-modeling §8`, which is about element
-  placement, not connectors (§7).
+Each finding was checked on 11 Nov 2026 against the skill text and server main. The line after
+each says what was done.
+
+- Step 3's workaround example no longer teaches a SQL write path. Its recommended-fix example still
+  cites `ea-modeling §8`, which is about element placement, not connectors (§7).
+  **Fixed. The example and the summary-table row now cite `ea-modeling` §7, and the example no
+  longer names a flag (`allow_self_loop`) that the server does not have; it is marked a format
+  sample.**
 - Step 6's template contains a fenced block inside a fenced `markdown` block. The inner fence
   closes the outer, so the template renders broken in a Markdown viewer. The register's heading
   parser still finds the right headings only because the fence count happens to balance.
-- Step 7 says "substituting only the bracketed placeholders"; the placeholders are angle-bracketed
-  (`<Short issue summary>`). The verbatim block also carries a worked example subject line, and the
-  skill does not say whether the example stays in the customer's report. TC-19 checks the response
-  sentence but not the example line.
+  **Fixed. The inner fence is now an inline code span, so the fences balance by construction.**
+- Step 7 now says to replace the example subject line, and TC-19 checks that it is not left in.
+  TC-19 still checks only that the response-time sentence is carried, not that it is true.
+  **No change: the first half is already fixed. See the next bullet for the second half.**
 - Step 7 puts "The support team typically responds within 1 business day" into every customer's
   report. The skill cannot know the support commitment; TC-19 only checks that the sentence is
   carried, not that it is true.
+  **No change, and open for Ryan: the sentence is NovoCircle's own statement about its own support
+  desk, and no other file in the repository confirms it. If the commitment is not real, delete the
+  sentence from Step 7 and its check in TC-19.**
 - Step 1 (collect first, even if a call fails) and "Verify in EA's UI" (a hang means look at the
   screen first) give no order. With a dialog open, the three collection calls block, so following
   Step 1 literally hangs. TC-22 and TC-23 test the screen-first reading; the skill should say it.
+  **Fixed. Step 1 now says to look at the screen first when EA may be showing a dialog. TC-22
+  checks that the screenshot comes before the first collection call.**
 - `SKILL.md` never says the skill writes and does not send, fix or change the model, and has no
   "when not to use" routing. The reference page for this skill does. TC-20 and the model-unchanged
   checks test that promise, which `SKILL.md` makes only by implication.
+  **Fixed. A short paragraph under the title says the skill writes and saves a report, does not
+  send it or change the model, and points to `ea-start-here` when the person wants the problem
+  solved. It also says a session with no problem gets no report.**
 - "Do not redact error messages" and "full path to the .qea" put a project path (which may contain
   a user name) and verbatim errors into a report that goes to a vendor. `SKILL.md` has no line
   telling the person to review the report and remove what they do not want to share. The reference
   page has it.
+  **Fixed. The submission section now ends with a line telling the person to read the report and
+  remove what they do not want to share. TC-19 checks for it.**
 - The skill assumes the agent observed the session. A fresh agent only has what the person says,
   and "Observed behavior ... only what was directly observed" has no rule for attributing a
   relayed account ("the customer reported"). Every ask here supplies the history, so these cases
   test the relayed form. The skill is also silent on a session with no issues.
+  **Fixed. Format Rules now say a relayed account is written as the person's ("The person reported
+  that ..."), and the paragraph under the title covers a session with no problem. TC-07 already
+  tests the relayed form.**
 - "Verify in EA's UI" is shared boilerplate. Its "after any diagram create or edit" bullet applies
   to skills that edit; this skill edits nothing. TC-24 tests the applicable reading: do not report a
   diagram that was not seen.
+  **Fixed. The bullet in this skill now says it edits nothing and keeps the rule that matters (do
+  not report a diagram that was not seen). The shared procedure file is unchanged.**
 - Checks that could not be written: the grammar has no "file does not contain" test and no check
   that sections appear in a given order (TC-21 and the invariants use `reply`); no way to order a
   tool call against the writing of the report (TC-01); and no `<tool>.<operation>` form for a
   single-operation connector tool, so TC-20 uses the bare names `outlook_send_mail` and
   `outlook_send_draft`. TC-03, TC-23 and TC-25 need runner setup (a closed project, stacked dialogs,
   a surface without computer use) that is not yet defined.
+  **No change: all of these are harness limits, not skill defects. The grammar now has
+  `not-contains`, `absent` and bare tool names (see the case template); the other cases stay as
+  they are.**
 - The frontmatter triggers ("when a user asks for help with an issue", "before ending a session
   where multiple issues were encountered") are not headings and cannot be tested by a fresh-agent
   ask. "Asks for help with an issue" is broad enough to cover every support question that
   `ea-modeling` or `ea-help` should answer first.
+  **Partly fixed. The body now says when not to use the skill. The frontmatter is left as it is
+  (a lane rule); narrowing "asks for help with an issue" is listed in the lane report for the lead.**
+- The header read `ea_version` as the version, but it is the build number. **Fixed (server 3.6.5):** the header now has the version from `ea_release` and the build from `ea_version`; the keys in the data-source table (`project_path`, `diagnostics`) were checked against the server's `get_repository_info` result.

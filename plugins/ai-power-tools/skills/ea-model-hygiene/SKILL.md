@@ -22,24 +22,29 @@ mechanism in full, if that is your actual task rather than an audit).
 
 ---
 
-## 1. What "orphan" actually means -- and why it needs judgement
+## 1. What "orphan" actually means -- and why it needs judgment
 
 `ea_model(operation="find_orphan_elements", params={"package_id": <pkg>})` finds elements with
 **no connectors**. That is the entire definition -- not "unused," not "unreferenced," not "safe
 to delete." Treating its output as a delete list is the most common way this skill goes wrong.
 
-Run it against a real capability model and the numbers are startling. Scoped to the whole
-Westbrook Bank tree it returned **140 orphans out of 170 elements checked -- 82%**. Almost none
-of them are decay:
+Run it against a real capability model and the numbers are startling. On the Westbrook copy as
+last counted (one SQL run on an unmodified copy), a scan over the whole bank tree flagged 89 of
+213 non-package elements, and only 13 of those pass the three tests below (three of the 13 are
+model documents). The counts move as the copy
+changes; the shape does not. Most of what the scan flags is not decay:
 
-- **Capability-hierarchy containers.** Elements like "Consumer Banking," "Lending," "Customer
-  Engagement" have no stereotype and no connectors -- their only relationship is parent/child
-  containment (`t_object.ParentID`), which EA does not model as a connector.
+- **Capability-hierarchy containers**, in a model that nests capability elements by `ParentID`
+  (the current Westbrook copy models its capability tree as packages and has none, so the check
+  cannot be shown there without building one). Elements like "Consumer Banking," "Lending,"
+  "Customer Engagement" would have no stereotype and no connectors -- their only relationship is
+  parent/child containment (`t_object.ParentID`), which EA does not model as a connector.
   `find_orphan_elements` cannot see containment, so every container in a capability tree comes
   back flagged. Deleting them deletes the tree.
-- **Package proxy objects.** Every package has a mirror row in `t_object`. Creating a scratch
-  sub-package and immediately re-running the scan surfaced the package itself as an "orphan
-  element" -- it is the package's own object, not a modeling element at all.
+- **Package proxy objects.** Every package has a mirror row in `t_object`. Servers before 3.6.5
+  listed it as an "orphan element" and counted it in the total; from 3.6.5 package rows are left
+  out of the list and out of `scoped_total`. If a run on an older server shows a package among
+  the orphans, it is that row, not a modeling element.
 - **Elements that are genuinely disconnected in `t_connector` but still referenced elsewhere** --
   placed on a diagram, or the parent of a composite drill-down diagram. A connector is one kind
   of reference. It is not the only kind.
@@ -51,7 +56,8 @@ defect -- and `find_orphan_elements` alone cannot tell you which one you are loo
 
 **The only elements worth treating as real candidates** are ones that carry a real stereotype
 (so they are not a structural container or a package proxy), have zero connectors, and do not
-appear on any diagram. All three, not one.
+appear on any diagram. All three, not one. `model document` elements (EA's own documentation
+holders) usually pass all three; list them apart from the candidates and ask whether they count.
 
 ---
 
@@ -93,10 +99,12 @@ ea_model(operation="traverse_element_subgraph", params={"element_id": <id>, "dep
 ```
 
 `traverse_element_subgraph` walks **both** directions at once (its own `direction` field reports
-`"both"`) and is the better call when you need the whole neighborhood rather than one side of
-it -- e.g. before deleting a package, to see what the elements inside connect to outside it.
-Note it can list the same edge more than once when a node is reached by more than one path; treat
-the node and edge lists as a set, not a count.
+`"both"`) and puts the language's own terms in the answer -- e.g. before deleting a package, to
+see what the elements inside connect to outside it. It is slower and stops at depth 5; on a large
+model, `trace_connectors` with `"direction": "both"` gives the same neighborhood faster (Section 6).
+Each connector appears once, with its `connector_id`, so the edge list can be counted (server
+3.6.5 or later; older servers could list an edge more than once). Links between two nodes at the
+outermost depth are not read; raise `depth` if you need them.
 
 Three further operations read the same graph -- including the only one that answers "how do
 these *two* elements connect" (`find_paths`) and the only one that returns a rooted chain rather
@@ -117,15 +125,24 @@ Any row means the element is on a diagram, even if it has no connectors there --
 for data assets and reference elements in this model (see Section 1).
 
 ```
+ea_analyze(operation="execute_sql", params={
+    "sql": "SELECT Diagram_ID, Name FROM t_diagram WHERE ParentID = <id>"
+})
+```
+
+Any row means the element is a composite parent: it anchors that child navigation diagram, and
+deleting the element orphans the diagram -- it does not auto-delete. This is the check that
+answers the question for this element.
+
+```
 ea_model(operation="find_composite_diagram_mismatches", params={"package_id": <pkg>, "recursive": true})
 ```
 
-Run this over the element's parent package before deleting it. If the element is a composite
-parent (has a child navigation diagram), deleting it orphans that diagram -- it does not
-auto-delete. Verified clean on the Westbrook demo: scoped to `Consumer Banking` recursively, 70
-elements checked, zero mismatches (`{"ok": true, "checked_count": 70, "mismatches": []}`). Full
-mechanism detail -- the two-part `ParentID` / `NType` flag, and why they drift -- is in
-`ea-navigation-diagrams`; this skill only needs the audit call.
+This is a different check: it lists drill-down **links that are broken**, over a package. A
+healthy composite parent returns zero mismatches, so a clean result does not tell you the element
+anchors a diagram. Run it over the parent package to audit links (on the Westbrook demo, scoped to
+`Consumer Banking` recursively: 70 elements checked, zero mismatches). Full mechanism detail --
+the two-part `ParentID` / `NType` flag, and why they drift -- is in `ea-navigation-diagrams`.
 
 ### Step 4 -- delete, then verify by re-querying, not by re-fetching
 
@@ -136,13 +153,15 @@ ea_model(operation="delete_package", params={"package_id": <id>})    # package +
 
 `delete_package` is silent and total: elements, diagrams, and nested packages all go, with no
 per-item confirmation. Never use it as a shortcut for "this package is probably empty" --
-`list_package_tree` or `list_elements_in_package` first.
+`list_package_tree` or `list_elements_in_package` first. Before a package delete or a bulk delete,
+offer a restore point (`ea-change-management` section 6): baseline the parent package, not the one
+being deleted, because its baselines go with it.
 
-To confirm a delete landed, do not call `get_element` on the id you just deleted -- it does not
-return a clean "not found," it raises a raw COM exception (`Internal application error`,
-code 61704). That exception *is* your confirmation, but it reads like a tool failure the first
-time you see it. Prefer a scoped re-run of `find_orphan_elements` on the parent package, or a
-`SELECT COUNT(*) FROM t_object WHERE Object_ID = <id>` -- both return a clean, checkable zero.
+To confirm a delete landed, call `get_element` on the id you just deleted: since server 2.3.0 it
+returns a structured `{"ok": false, "error": "element_not_found", "element_id": <id>}`, which is
+your confirmation. (Older servers raised a raw COM exception, `Internal application error`,
+code 61704.) A scoped re-run of `find_orphan_elements` on the parent package, or a
+`SELECT COUNT(*) AS n FROM t_object WHERE Object_ID = <id>`, returns a checkable zero on any version.
 
 See `references/pre-delete-safety.md` for the full worked transcript of this sequence, including
 the exact calls and responses from a live verification pass.
@@ -151,7 +170,7 @@ the exact calls and responses from a live verification pass.
 
 ## 3. Spotting inconsistency
 
-Three operations audit consistency across a stereotype rather than one element at a time. Full
+Four operations audit consistency across a stereotype rather than one element at a time. Full
 tables from a live run against the Westbrook model are in
 `references/consistency-audits.md`; the shape of each:
 
@@ -180,7 +199,7 @@ element count -- every element carries the tag, even if the value is blank. A ta
 small fraction of elements of the same stereotype is either optional-by-design (say so in the
 model's own documentation if it is) or a field only some contributors knew to fill in. The live
 data had exactly this case on 2026-09-23, under WBA 1.0: `pciScopeJustification` -- which 1.0 did
-not declare -- appeared on 2 of the 52 `WBABusinessApplication` elements, an ad hoc tag someone
+not declare -- appeared on 2 of the `WBABusinessApplication` elements in the snapshot, an ad hoc tag someone
 added for two elements. WBA 1.1.1 now declares it on `WBABusinessApplication` and `WBAVendorSystem`,
 so the same low count would now be a declared tag that few elements fill in.
 
@@ -197,8 +216,23 @@ one `object_type` in the distribution) means the same stereotype string was appl
 created as different EA base types -- almost always because someone typed the stereotype into
 the wrong element instead of using the toolbox, and it will not behave like the rest of its type
 in reports, searches, or `create_element_in_language` lookups. A stereotype with `total_count: 0`
-(observed for `WBAAIModel` on this repository) is not an error -- it means the MDG declares the
+is not an error -- it means the MDG declares the
 stereotype but the model has never used it, worth knowing before you assume an example needs one.
+
+**`summarize_connector_patterns`** -- no parameters; the connector counterpart. It returns
+source-stereotype, connector-stereotype, target-stereotype tuples with counts, marks each
+stereotype as profile-bound or ad hoc (`resolved_items`), and lists connector stereotype names
+that appear both bound and ad hoc, or bound to more than one profile (`split_stereotypes`). Use
+it for connector stereotype drift, not a hand-written `GROUP BY` on `t_connector`:
+
+```
+ea_analyze(operation="summarize_connector_patterns", params={})
+```
+
+**Unlinked elements.** An element whose stereotype is a plain name, not the loaded technology's, has
+a `t_xref` row with `GUID=` and no `FQName=` (`ea-modeling` `references/element_creation.md` §2).
+List the ones whose bare name matches a stereotype of a loaded profile, and offer to recreate them
+with `create_element_in_language`; the query is in `references/consistency-audits.md` section 5.
 
 ---
 
@@ -218,9 +252,10 @@ different package than the element itself -- that is expected, not corruption, a
 
 What *does* change: the element's Browser location, and any package-scoped recursive count
 (`ea-modeling` covers the recursive-count trap in more detail). There is no `move_package` --
-moving a whole subtree is a `duplicate_package` plus `delete_package` on the original, or a
-direct `UPDATE t_package SET Parent_ID = ...` (see `ea-modeling`'s package reference for that
-pattern and its caveats).
+moving a whole subtree means updating both records that place the package, its `t_package` row
+and its mirror `t_object` row (see `ea-modeling`'s package reference for the recipe and its
+read-back), or a `duplicate_package` plus `delete_package` on the original, which gives every
+element a new GUID.
 
 ---
 
@@ -230,15 +265,16 @@ pattern and its caveats).
   `find_composite_diagram_mismatches`, and `summarize_tagged_value_usage` when several sessions
   are working the same repository at once. Retry once before concluding the call is broken --
   every one of these resolved cleanly on a second attempt with no change to the arguments.
-- **`create_package` with `parent_package_id: 0`** raises a raw COM `Internal application error`,
-  even though every existing root package shows `Parent_ID = 0` in `t_package`. Use
+- **`create_package` with `parent_package_id: 0`** is refused with
+  `{"ok": false, "error": "package_not_found"}` (server 3.0.0 and later; earlier servers raised
+  a raw COM `Internal application error`), even though every existing root package shows
+  `Parent_ID = 0` in `t_package`. Use
   `ea_repository(operation="get_repository_info", params={})` or
-  `ea_model(operation="list_root_packages", params={})` to find a working parent id (on this
-  server, `1` -- the `Model` root -- works; `0` does not) rather than assuming the stored value
-  is also a valid input.
-- **A re-fetch of a just-deleted id is not a clean "not found."** `get_element` on a deleted id
-  raises the same raw COM exception as the internal-error case above. Do not debug it as a tool
-  failure -- if you just deleted that id, the exception is the confirmation.
+  `ea_model(operation="list_root_packages", params={})` to find a working parent id (`1`, the
+  `Model` root, works; `0` does not) rather than assuming the stored value is also a valid input.
+- **A re-fetch of a just-deleted id** returns `element_not_found` (server 2.3.0 and later), not
+  an exception. If you just deleted that id, that answer is the confirmation. On an older server
+  the same call raised a raw COM error, which meant the same thing.
 - **Scope the scan.** `find_orphan_elements` and `find_composite_diagram_mismatches` both got
   noticeably slower on the whole-model root than on a single top-level package. Scope to the
   smallest package that answers the question, especially while other sessions are active against
@@ -254,7 +290,7 @@ confirm a deletion visually, for example) rather than just another MCP call, see
 
 Five operations read the connector graph. Section 2 uses two of them; the other three answer
 questions those two do not. Picking wrongly is not a style matter -- `trace_connectors` cannot
-tell you *how* two elements connect no matter how you parameterise it, and reaching for
+tell you *how* two elements connect no matter how you parameterize it, and reaching for
 `traverse_element_subgraph` on a large model will be slow for no benefit.
 
 Pick by the question, not by the name:
@@ -299,11 +335,13 @@ annotates every child with the connector that reached it (`via_connector`). Use 
 
 ```
 ea_analyze(operation="get_traceability_tree",
-           params={"root_id": <id>, "connector_types": ["Realization"], "direction": "outbound"})
+           params={"root_id": <id>, "connector_types": ["Realisation", "realizes"], "direction": "outbound"})
 ```
 
 `connector_types` is required -- an unfiltered tree is a neighborhood graph in a tree costume,
-and `trace_connectors` does that better. `direction` accepts `outbound`/`inbound`, and also
+and `trace_connectors` does that better. Each value is matched against the stored stereotype or
+connector type, so a realization is `realizes` (stereotype) or `Realisation` (EA's type, spelled
+with an s); `Realization` matches nothing. `direction` accepts `outbound`/`inbound`, and also
 `downstream`/`upstream` and `outgoing`/`incoming`, because the other operations disagree on the
 word. Cycle handling is per-branch: an element is refused only if it already appears on the path
 from the root down to here, so a diamond correctly shows the same element under both parents
@@ -344,10 +382,11 @@ COM connection rather than as an error you can catch. Neither shows up in a tool
 - **If a call seems to hang, screenshot EA and read the dialog before concluding anything.**
   It names the cause. Dismiss from the front — dialogs stack, and a later call can be queued
   behind one raised by an earlier one. Windows reporting EA as "Responding" means nothing.
-- **After any diagram create or edit, reload the diagram, screenshot it, and look.**
-  `ok: true` means rows were written, not that elements landed where you intended, that
-  styling applied, or that the result is readable.
-- **Without computer use**, say so and ask the user to look — never report a hang you have
-  not diagnosed or a diagram you have not seen.
+- **This skill edits no diagram.** If a fix you hand off creates or edits one, reload it,
+  screenshot it, and look: `ok: true` means rows were written, not that the result is
+  readable.
+- **Without computer use**, say so. Ask the user to paste a screenshot of the EA window or
+  dialog into the conversation, read the cause from it, and ask the user to dismiss the dialog
+  before you retry. Never report a hang you have not diagnosed or a diagram you have not seen.
 
 Full procedure: [`../_shared/references/ea-ui-verification.md`](../_shared/references/ea-ui-verification.md)

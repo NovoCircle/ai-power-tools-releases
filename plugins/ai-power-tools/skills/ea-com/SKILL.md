@@ -5,7 +5,10 @@ description: Use the Sparx EA COM API from Python to read and modify EA models �
 
 # Sparx EA COM API — Python Automation
 
-*Verified against EA 17.0 Build 1704.*
+*Measured on two EA builds: 17.0 build 1704 (the first pass) and 17.1 build 1716 (later checks).
+A statement that names a build holds for that build. A statement that names none was first checked
+on 1704 and has not been re-checked on later builds. Cloud repositories on a MySQL back end were
+checked on EA 17.0.*
 
 This skill is self-contained. Every snippet is plain `win32com.client` + `pywin32` —
 there is no helper module to install. If you have Python, `pywin32`, and EA running
@@ -39,13 +42,21 @@ with a project open, you can follow this skill with nothing else.
 
 ## When COM is the right tool
 
-Use `ea-com` when you need direct SQL access to the repository schema (bulk queries,
-ad-hoc reporting, cross-table joins) or EA lifecycle control (technology load/enable
-checks, restart) that the MCP server doesn't expose. If the task is building or
-editing a model through well-formed operations — create element, add connector, set
-tagged value — prefer the `ea-modeling` skill's MCP tools; they validate input
-and don't require a Python environment on the machine running EA. Drop to COM when
-MCP has no tool for what you need, or when you need raw SQL.
+Raw SQL is not a reason to use COM: the MCP server's `ea_analyze(operation="execute_sql")` runs
+SQL against the open repository and checks column names before EA sees them. Use that first for
+queries; its rules (`_shared/references/sql-for-execute-sql.md`) hold for `SQLQuery()` too.
+
+Use `ea-com` when you need something the MCP server doesn't expose: the COM-only calls
+(`GetElementSet`, `Repository.Execute` for bulk DML, technology load/enable checks, EA lifecycle
+control such as restart), or work on an EA instance other than the one the server is attached to
+(see [`references/instances-and-sessions.md`](references/instances-and-sessions.md)). If the task
+is building or editing a model through well-formed operations (create element, add connector, set
+tagged value), prefer the `ea-modeling` skill's MCP tools; they validate input and don't require a
+Python environment on the machine running EA.
+
+**Two rules before any script that writes.** Open each model file in at most one EA session at a
+time (visible or headless), and never `Update()` an object you held from before an outside write.
+Both are in [`references/instances-and-sessions.md`](references/instances-and-sessions.md).
 
 ## Connecting
 
@@ -86,6 +97,15 @@ repo = connect(retries=10, delay=3.0)  # for post-restart reconnect
 Verified live: both forms return the connected `Repository`, and
 `repo.ConnectionString` reads back the open project's path.
 
+**`GetActiveObject("EA.App")` is safe only when exactly one EA is running.** With several
+running (visible or headless) it attaches to whichever registered first, which can be an
+instance with no project open (`ConnectionString` is `''`) or a different model from the one you
+mean. The MCP server does not guess: with more than one EA running (server 3.6.5 or later) it makes no
+call into EA and returns `ea_choice_needed`, and you ask the person which EA to use and call `launch_ea` with it as `target`
+(see `ea-start-here`). To reach a specific instance from a script, attach by process id or by its exact `Data Source=`,
+and check `repo.ConnectionString` before every write:
+[`references/instances-and-sessions.md`](references/instances-and-sessions.md).
+
 ## SQL access — sql()/execute() helpers and the GetElementSet trap
 
 Build a small `sql()` helper once per script — `Repository.SQLQuery()` returns XML,
@@ -111,26 +131,43 @@ for elem in elements:
 ```
 
 Verified live against the Westbrook Bank demo model: `GetElementsByQuery` raised the
-`com_error` above; `GetElementSet(sql, 2)` returned all 45 matching elements,
+`com_error` above; `GetElementSet(sql, 2)` returned every matching element,
 iterable with `.Name` / `.Stereotype`.
 
 ## Another live trap: malformed SQL blocks on a modal dialog, not a Python exception
 
 A `SQLQuery()` call against a table or column that doesn't exist does **not** raise
-in Python and does **not** return an empty result immediately — EA raises a blocking
-"SQL API Open FAILED" dialog first, and the call only returns (as an error XML
-payload, not a Python exception) once a human dismisses it. An unattended script
-hangs here. Verified live — details and the exact dialog text in
+in Python. EA shows a visible modal ("SQL API Open FAILED with error: no such table: ...")
+and the call blocks until someone dismisses it. It then returns an empty result with no
+exception, and `GetLastError()` is `''`, so a bad query looks exactly like "no rows". Headless
+EA shows the dialog on the user's desktop too. An unattended script hangs here.
+
+- `SuppressEADialogs = True` did not prevent this dialog on build 1704 (set before `OpenFile` it
+  reads back False; set after, it reads back True and the dialog still appears). A different
+  dialog was suppressed on build 1716, so scope the setting to the dialog you tested.
+- For a `.qea` file, check each statement before sending it: `EXPLAIN <sql>` through Python
+  `sqlite3` opened read-only (`file:<path>?mode=ro`). It catches a wrong column before EA sees it.
+- For unattended runs, use the dialog watchdog, and never auto-answer a question dialog.
+
+Dialog text, the `EXPLAIN` helper and the watchdog are in
+[`references/connecting-and-queries.md`](references/connecting-and-queries.md) and
+[`references/instances-and-sessions.md`](references/instances-and-sessions.md). This is the
+same failure mode `latency.md` calls "any COM call that may trigger a dialog"; it applies to
+read-only `SQLQuery()`, not just DML.
+
+## `Repository.Execute` and cloud repositories
+
+`Execute` returns nothing and, on some back ends, fails without an error. On a cloud repository
+with a MySQL back end `GETDATE()` ran with no error and wrote no row, while `NOW()` worked. Every
+write must be read back. Dialect differences are listed in
 [`references/connecting-and-queries.md`](references/connecting-and-queries.md).
-This is the same failure mode `latency.md` calls "any COM call that may trigger a
-dialog"; it applies to read-only `SQLQuery()`, not just DML.
 
 ## Technology / MDG checks
 
 ```python
 repo.IsTechnologyLoaded("WBA")      # bool — is the MDG loaded?
 repo.IsTechnologyEnabled("WBA")     # bool — is it enabled for this project?
-repo.GetTechnologyVersion("WBA")    # str — e.g. "1.0"
+repo.GetTechnologyVersion("WBA")    # str — the version EA reports for the loaded copy; read it, don't assume
 ```
 
 Verified live: all three returned correctly for the `WBA` technology.
@@ -153,19 +190,23 @@ pattern, the `AddNew` duplicate-row trap, and the bulk-SQL-update alternative �
 
 ## EA lifecycle: save, restart, and the post-mutation UI check
 
+**Rule for any reply about installing or removing a modeling language (technology):** start by
+handing the job to `ea-mdg-deploy`, and say that a removal takes effect only after EA restarts and
+can change what the open session offers. Don't offer a route through EA's UI or `DeleteTechnology` /
+`ImportTechnology` from this skill. This skill only documents that those calls exist.
+
 `repo.SaveAllDiagrams()` and `repo.RefreshModelView(0)` both return `None` on success
-(verified live) — they are fire-and-forget; verify results with a `sql()` read-back,
+(verified live): they are fire-and-forget; verify results with a `sql()` read-back,
 not the return value.
 
 Restarting EA is required after deploying an MDG, calling `DeleteTechnology`, or any
-change that needs a fresh session. **This is the one procedure in this skill that was
-not executed against the live model** — the verification pass for this skill was run
-against a live, in-use EA session that had to stay open and unchanged, so the full
-save/shutdown/relaunch/reconnect sequence was documented but not run end-to-end.
-`repo.ShutdownEA` was confirmed to resolve to a real bound method without invoking
-it. Full sequence, plus the post-mutation/post-query UI check pattern (take a
-screenshot, expect "(Not Responding)" during long operations, never retry blind) in
-[`references/technology-and-lifecycle.md`](references/technology-and-lifecycle.md).
+change that needs a fresh session. On build 1716 `repo.ShutdownEA()` with no argument fails
+with "Parameter not optional"; `repo.ShutdownEA(0)` works and closes the window at once. The
+process exited in 2 to 3 seconds on a visible EA started with `EA.exe <model>`, and once took about
+3.5 minutes. Relaunch only after the old process has exited (poll for it with a bound), never after a fixed sleep. The full sequence and the post-mutation UI check
+pattern (screenshot, expect "(Not Responding)" during long operations, never retry blind) are in
+[`references/technology-and-lifecycle.md`](references/technology-and-lifecycle.md). The sequence
+was run through a relaunch on a visible EA; a headless EA was not tested.
 
 For any COM call that drives visible EA UI state — restart, MDG import, a DML call
 that might pop a dialog — follow the wait-then-screenshot timing in
@@ -183,11 +224,14 @@ that might pop a dialog — follow the wait-then-screenshot timing in
   full `sql()`/`execute()` helpers, the SQLite schema notes (including the
   malformed-SQL dialog trap), the useful-tables reference, and common query patterns.
 - [`references/mutating-elements.md`](references/mutating-elements.md) — creating
-  elements, the tagged-value update pattern and the `AddNew` duplicate-row trap, and
-  the bulk-SQL-update alternative.
+  elements, the stereotype read-back, the tagged-value update pattern and the `AddNew`
+  duplicate-row trap, the bulk-SQL-update alternative, keeping GUIDs (unverified), and storing
+  a file on an Artifact.
 - [`references/technology-and-lifecycle.md`](references/technology-and-lifecycle.md) —
-  the COM object hierarchy, the restart pattern, the post-mutation UI check, and the
-  full troubleshooting table.
+  the COM object hierarchy, the restart pattern, removing a technology from a model, the
+  post-mutation UI check, and the full troubleshooting table.
+- [`references/instances-and-sessions.md`](references/instances-and-sessions.md) — attaching
+  to a specific EA instance, headless EA, one session per model, and the dialog watchdog.
 - [`../_shared/references/latency.md`](../_shared/references/latency.md) — shared
   wait-time guidance for any COM call that can raise a blocking EA dialog.
 
@@ -199,10 +243,11 @@ COM connection rather than as an error you can catch. Neither shows up in a tool
 - **If a call seems to hang, screenshot EA and read the dialog before concluding anything.**
   It names the cause. Dismiss from the front — dialogs stack, and a later call can be queued
   behind one raised by an earlier one. Windows reporting EA as "Responding" means nothing.
-- **After any diagram create or edit, reload the diagram, screenshot it, and look.**
-  `ok: true` means rows were written, not that elements landed where you intended, that
-  styling applied, or that the result is readable.
-- **Without computer use**, say so and ask the user to look — never report a hang you have
-  not diagnosed or a diagram you have not seen.
+- **This skill edits no diagram.** If a script's work creates or edits one, reload it,
+  screenshot it, and look: `ok: true` means rows were written, not that the result is
+  readable.
+- **Without computer use**, say so. Ask the user to paste a screenshot of the EA window or
+  dialog into the conversation, read the cause from it, and ask the user to dismiss the dialog
+  before you retry. Never report a hang you have not diagnosed or a diagram you have not seen.
 
 Full procedure: [`../_shared/references/ea-ui-verification.md`](../_shared/references/ea-ui-verification.md)

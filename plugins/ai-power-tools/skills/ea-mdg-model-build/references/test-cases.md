@@ -160,7 +160,7 @@ Covers: Phase 0 — Protect the baseline before you touch anything; Phase 3 — 
 
 **Ask:** "For the next WBA version add a 'Low' value to the criticality list and rebuild the MDG."
 
-**Passes when:** Before touching reference data the run exports the current profiles, the `.mts` (if any) and the deployed MDG into a package named `Files`, and says that tagged value types are repository-wide, so adding one makes any later export from the old profile packages stop being the old version. Only after the archive does it change `criticality`.
+**Passes when:** Before touching reference data the run exports the current profiles, the `.mts` (if any) and the deployed MDG, keeps the files on disk, and also stores each in the model as an `Artifact` element in a package named `Files`. It says that tagged value types are repository-wide, so adding one makes any later export from the old profile packages stop being the old version, and that the old version cannot be recovered afterwards without the archive. Only after the archive does it change `criticality`.
 
 **Check:**
 
@@ -242,7 +242,7 @@ Covers: Where this tree comes from; Phase 1 — Package structure
 
 **Ask:** "The Westbrook Bank package uses a lot of stereotypes that nothing defines. Turn them into a proper EA language, with the definition kept in the model."
 
-**Passes when:** The run takes a profile-aware census first (not `summarize_stereotype_usage`, which reads the bare name and cannot tell a governed element from an ad hoc one), then creates the packages in sequence, one `«metaclass»` element per distinct metaclass observed and one `«stereotype»` element per `(stereotype, metaclass)` pair, with an Extension from each stereotype to its metaclass, and the census's tag names as attributes.
+**Passes when:** The run takes a profile-aware census first with the census helper (`ea_census.py`, over rows read once each, not many SQL calls of its own; `summarize_stereotype_usage` is profile-aware from server 3.6.0 but returns stereotype counts only, so it does not supply the metaclass pairs and tags the profile needs), then creates the packages in sequence, one `«metaclass»` element per distinct metaclass observed and one `«stereotype»` element per `(stereotype, metaclass)` pair, with an Extension from each stereotype to its metaclass, and the census's tag names as attributes.
 
 **Check:**
 
@@ -265,7 +265,7 @@ expect: >= 1
 tools: not-called: ea_analyze.summarize_stereotype_usage
 ```
 
-**Fails when:** The run reports a census from `summarize_stereotype_usage` and builds from it, or tries to duplicate a tree that does not exist, or creates stereotypes without Extension connectors. The stereotypes sit in the package looking complete and appear in no MDG.
+**Fails when:** The run reports a census from `summarize_stereotype_usage` alone and builds from it, or tries to duplicate a tree that does not exist, or creates stereotypes without Extension connectors. The stereotypes sit in the package looking complete and appear in no MDG.
 
 ### TC-11: Each child package gets its own stereotype
 
@@ -326,7 +326,7 @@ Covers: Phase 1 — Package structure
 
 **Ask:** "Make version 2 of the WBA profile tree as a copy of the current one, including the toolbox pages."
 
-**Passes when:** The run duplicates the tree, notices that `duplicate_package` does not carry diagrams or diagram objects, and gets the three toolbox diagrams into the copy (Paste as New in the UI, or a separate copy), because the toolboxes export from those diagrams. The three toolbox diagrams exist twice, and each copy holds its page element.
+**Passes when:** The run duplicates the tree with `duplicate_package`, which copies diagrams, their objects and their links (server 2.3.0 or later), and confirms the three toolbox diagrams exist in the copy, because the toolboxes export from those diagrams. It does not say the operation skips diagrams. The three toolbox diagrams exist twice, and each copy holds its page element.
 
 **Check:**
 
@@ -340,7 +340,7 @@ sql: SELECT COUNT(*) FROM t_object WHERE Name IN ('WBA ArchiMate Elements', 'WBA
 expect: = 6
 ```
 
-**Fails when:** The copy has the stereotypes and the toolbox page elements but no toolbox diagrams. Everything looks complete in the Browser, and Phase 5 then has nothing to export each toolbox from.
+**Fails when:** The run tells the person `duplicate_package` skips diagrams and copies them another way, or the copy has the stereotypes and the toolbox page elements but no toolbox diagrams. Everything looks complete in the Browser, and Phase 5 then has nothing to export each toolbox from.
 
 ### TC-14: The copy is verified before moving on
 
@@ -350,7 +350,7 @@ Covers: Phase 1 — Package structure
 
 **Ask:** "Copy the current WBA profile tree to start the next version, and tell me it's a faithful copy."
 
-**Passes when:** Immediately after the copy the run compares element, attribute, connector and diagram counts against the source and reports them, and confirms the original's metaclasses were not linked to the copy (no cross-package leakage). It says what it measured, not that it "looks right".
+**Passes when:** Immediately after the copy the run compares element, attribute, connector and diagram counts against the source and reports them, and confirms the original's metaclasses were not linked to the copy (no cross-package leakage). It also compares what a copy can lose without warning, source against copy, and reports each: the Quick Linker `stereotype` tag value on every `stereotyped relationship` connector, the attribute-to-enumeration links, and each Enumeration's literal order. If any differ it says the copy is damaged and repairs it or uses Paste as New. It says what it measured, not that it "looks right".
 
 **Check:**
 
@@ -366,6 +366,7 @@ expect: = 2
 
 ```check
 reply: says: the element, attribute and connector counts of the copy match the source
+reply: says: the Quick Linker tag values, the enumeration links and the literal order were compared between the source and the copy
 ```
 
 **Fails when:** The run reports success after a create call returns. An Extension in the copy that still points at the original's metaclass passes every glance and edits the wrong tree later.
@@ -658,7 +659,7 @@ Covers: Phase 3 — Reference data
 
 **Ask:** "Rename the regulatoryScope tag to regulatoryRegime across the WBA profile. It reads better."
 
-**Passes when:** The run says a rename orphans the values already in `t_objectproperties`, counts them (132 rows carry `regulatoryScope`), and says to fix names before a production load, never after. It does not rename in a repository that already holds data without that warning and a go-ahead.
+**Passes when:** The run works in two steps. First it reports what the rename would orphan: the values already in `t_objectproperties` (132 rows carry `regulatoryScope`), says nothing has been renamed, and says to fix names before a production load, never after. It then asks. It renames on no stereotype until the person agrees, so the first reply to this ask changes nothing.
 
 **Check:**
 
@@ -870,13 +871,14 @@ Covers: Phase 5 — Build
 
 **Ask:** "Build the WBA MDG as version 1.2.0, save it as <build-dir>\WBA_MDG.xml, and tell me when it's ready to deploy."
 
-**Passes when:** The run opens the built file, finds its `version` attribute empty (setting the package `Version` beforehand does not carry through), stamps `1.2.0` afterwards, and reads System Output for diagnostics such as `WARNING: Duplicate profile name`. It reports the version it verified in the file.
+**Passes when:** The run opens the built file, finds its `version` attribute empty (setting the package `Version` beforehand does not carry through), stamps `1.2.0` afterwards, clears System Output before the build and reads it after for diagnostics such as `WARNING: Duplicate profile name`, and notes that EA's confirmation dialog on generation is expected and was dismissed. It reports the version it verified in the file.
 
 **Check:**
 
 ```check
 reply: says: the generated file came out with an empty version and was stamped 1.2.0 afterwards
-reply: says: it read System Output after the build
+reply: says: it cleared System Output before the build and read it after
+reply: says: EA's confirmation dialog appeared when the file was generated and was dismissed before the next call
 ```
 
 ```check
@@ -1370,11 +1372,13 @@ None. Every heading of `SKILL.md` has at least one case. Two further notes on co
 
 ## Findings
 
-- `duplicate_package` cannot produce a buildable profile tree on its own. Phase 1 recommends it, but it carries no diagrams, and the tree always holds the toolbox diagrams (Phase 4 puts toolbox pages on them; Phase 5 exports each toolbox from its diagram). The skill's "if the package holds diagrams you need" understates this; TC-13 tests the consequence.
-- The skill says enum tag attributes have a blank `Type` ("`Type` blank for enums") and that Phase 6's `tagged_value_type_shipped` rule compares blank-`Type` attributes. In the Westbrook source tree the enum tags carry `Type` set to the enumeration name (`criticality` and so on) alongside 7 Enumeration classes, and only the free-text tags (`String`) behave as the skill describes. Either the skill or the Westbrook source is out of step.
-- The skill says "the four profile `id` values", but the tree it describes has a profile, a diagram profile and one toolbox profile per toolbox; the Westbrook technology has five (one profile, one diagram profile, three toolboxes). TC-35 uses the five.
-- `Phase 2` names `_strictness` (`Default = profile`) as the enforcement attribute, but none of the 18 stereotypes in the Westbrook source has one, and the Westbrook `_metatype` `Default` is the bare stereotype name, not the friendly alias the table promises. TC-17 therefore checks `_metatype` against the requested display name and does not check `_strictness`.
-- "Namespace-qualify every constraint value" and "Widened constraints list all targets, semicolon-separated" cannot be checked by SQL: the Westbrook source holds no rows in `t_attributeconstraints` or `t_connectorconstraint`, and the only qualified value in the source is the Quick Linker `stereotype` tag. TC-18 and Invariant 3 test that tag. The skill's qualified form (`WBA::`) is also not what the copy stores (the profile-name prefix), so the checks match the `::<name>` suffix.
-- The pre-17.1 cause of "free text despite a complete definition" is the wizard's Tagged Value Types page, but the skill tells readers on 17.1 and later to skip the wizard. It does not say how a type is selected into a build on the 17.1 `Save Package as MDG Technology` route, so TC-33 cannot name a fix for that route.
-- `references/generating-from-a-census.md` repeats the "Two cases" paragraph from `SKILL.md` Phase 1 verbatim, including "That is the rest of this phase", which points at a phase that is in a different file.
-- The skill's Phase 1 tree (a "design metamodel" package beside a "profile V<n>" package, with three children) does not match the Westbrook source, which has a plain container, the technology package, and five children (a profile, a diagram profile, three toolbox profiles). The checks key on stereotypes, not package names, so they do not depend on the layout.
+Each finding was checked against the current skill text and server main (11 Nov 2026).
+
+- **No change: waits on the server.** `duplicate_package` can still lose Quick Linker tag values, attribute-to-enumeration links and literal order; the fix is on an unmerged EA-S01 branch. The skill already warns and compares (Phase 1, "Copying a package"); once that merges, it should name the server version that copies them. TC-14 tests the comparison.
+- **Fixed in the skill.** The Phase 2 tagged-value row now says an enum tag's `Type` is either blank or carries the enumeration's name, and to check which the source uses. The wizard-page note adds that `tagged_value_type_shipped` reads only blank-`Type` attributes (server main), so the other kind is compared against RefData by hand.
+- **Fixed in the skill.** The Phase 6 check says "the profile `id` values (the profile, the diagram profile and one per toolbox profile)", not "four". TC-35 keeps its five.
+- **Fixed in the skill.** Phase 2 says `_strictness` is applied where enforcement is wanted (the Westbrook source sets none) and that `_metatype` `Default` is the display name, with the Westbrook source storing the bare stereotype name, so check an existing stereotype first. TC-17 already checks `_metatype` only.
+- **No change: already `WBA::`.** "Namespace-qualify every constraint value" and its checklist line pass `WBA::`, which server 3.6.5 accepts and translates to the profile name EA stores. The Westbrook source holds no constraint rows, so the checks test the Quick Linker `stereotype` tag only.
+- **Partly fixed in the skill.** The wizard-page note now says that on EA 17.1 and later there is no wizard page and that how a type is selected into the build on that route is not measured; the Phase 6 RefData comparison shows whether it shipped. Measuring the selection route is a live check, so TC-33 still cannot name a fix for that route.
+- **Fixed in the reference.** `generating-from-a-census.md` no longer repeats the "Two cases" paragraph or points at "the rest of this phase"; step 3 names the child packages without a fixed count.
+- **Fixed in the skill.** The Phase 1 tree now shows one `«toolbox profile»` per toolbox, and the package names are not what routes content (the child package's stereotype is, as the warning below the tree says). The Westbrook layout (a plain container, the technology package and five children) differs from the tree in names only; the checks key on stereotypes.

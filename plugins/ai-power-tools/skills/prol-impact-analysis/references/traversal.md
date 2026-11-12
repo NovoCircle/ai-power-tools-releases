@@ -82,7 +82,8 @@ async function impact(seedGuid, { maxDepth = 2, follow = null, maxNodes = 300 } 
    dependency graph is not a tree.
 2. **Cap, and report the cap.** `stoppedBy` is the difference between "nothing further is
    affected" and "I stopped looking". Those are not the same answer and must never be reported the
-   same way.
+   same way. `stoppedBy = 'depth cap'` means the last frontier was not expanded, so more *may*
+   exist beyond it. It does not show that more does. Report it that way.
 3. **Count what the filter threw away.** `skippedByFilter` is what separates "nothing is connected"
    from "my `follow` list matched nothing" — the second being the `baseType` versus `stereotype`
    trap below. Without the counter both look like an empty result, and the wrong one is far more
@@ -140,7 +141,7 @@ A useful impact answer states, every time:
 | the depth reached | 2 hops |
 | the relationship types followed | `Uses`, `Aggregation` |
 | what was found | 61 elements, 184 relationships |
-| **whether a cap was hit** | **stopped at the depth cap — more exists beyond** |
+| **whether a cap was hit** | **stopped at the depth cap — more may exist beyond** |
 | **whether a filter discarded anything** | 1,204 relationships skipped as not in the follow list |
 | the identity it was read as | Super Admin, so ACL filtering may not have applied |
 

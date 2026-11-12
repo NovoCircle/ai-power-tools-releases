@@ -1,0 +1,730 @@
+# EA facts for CMMN 1.1 (language file cmmn-1), as Sparx Enterprise Architect's built-in CMMN technology stores them.
+# Generated from elements created in EA and read back; do not edit by hand.
+# `concepts` maps every concept of the language skill to what EA offers: a stereotype, a tag, a UML construct or nothing.
+# Westbrook Bank appears only in howto.md, as an illustration.
+
+language: cmmn-1
+technology: CMMN
+display_name: CMMN 1.1
+profile: CMMN
+stereotype_prefix: ''
+stereotype_storage: bare name in t_object.Stereotype and t_connector.Stereotype (HumanTask, EntryCriterion, Connector); the qualified
+  form CMMN::<name> is the FQName in the t_xref row named Stereotypes and is what AddNew takes
+measured_on:
+  ea: 17.1 build 1716
+  date: '2026-10-21'
+  counts:
+  stereotypes_on_resources_tab: 15
+  element_stereotypes_bound: 14
+  connector_stereotypes_bound: 1
+  concept_names_refused: 57
+  diagram_types: 1
+  tag_rows_read: 34
+  concepts_in_language_file: 71
+  concepts_by_representation:
+    stereotype: 15
+    tag: 9
+    uml: 5
+    none: 42
+version_note: The technology's stereotypes cover CMMN 1.1 except DecisionTask (new in 1.1). Sparx's three model patterns are named cm1.1.
+  Whether the technology follows 1.0 or is incomplete for 1.1 is not determined here.
+diagram_types:
+  CMMNDiagram:
+    ea_name: CMMN
+    token: CMMN::CMMN
+    base: Logical
+    stored_diagram_type: Logical
+    style_ex: MDGDgm=CMMN::CMMN;
+    note: the standard's one diagram kind; EA has one diagram type for it
+stereotypes:
+  CasePlanModel:
+    metaclass: Component
+    fqname: CMMN::CasePlanModel
+    created_as: element in a package
+    tags:
+    - name: IsAutoComplete
+      default: 'false'
+      values: true,false
+  CaseFileItem:
+    metaclass: Artifact
+    fqname: CMMN::CaseFileItem
+    created_as: element in a package
+    tags:
+    - name: ShowLabel
+      default: 'false'
+      values: true,false
+  Stage:
+    metaclass: Class
+    fqname: CMMN::Stage
+    created_as: element in a package
+    tags:
+    - name: IsAutoComplete
+      default: 'false'
+      values: true,false
+    - name: IsDiscretionary
+      default: 'false'
+      values: true,false
+    - name: IsExpanded
+      default: 'false'
+      values: true,false
+    - name: IsManualActivation
+      default: 'false'
+      values: true,false
+    - name: IsRepetition
+      default: 'false'
+      values: true,false
+    - name: IsRequired
+      default: 'false'
+      values: true,false
+  PlanFragment:
+    metaclass: Class
+    fqname: CMMN::PlanFragment
+    created_as: element in a package
+    tags:
+    - name: IsExpanded
+      default: 'false'
+      values: true,false
+  Task:
+    metaclass: Activity
+    fqname: CMMN::Task
+    created_as: element in a package
+    tags:
+    - name: IsDiscretionary
+      default: 'false'
+      values: true,false
+    - name: IsManualActivation
+      default: 'false'
+      values: true,false
+    - name: IsRepetition
+      default: 'false'
+      values: true,false
+    - name: IsRequired
+      default: 'false'
+      values: true,false
+  HumanTask:
+    metaclass: Activity
+    fqname: CMMN::HumanTask
+    created_as: element in a package
+    tags:
+    - name: IsBlocking
+      default: 'false'
+      values: true,false
+    - name: IsDiscretionary
+      default: 'false'
+      values: true,false
+    - name: IsManualActivation
+      default: 'false'
+      values: true,false
+    - name: IsRepetition
+      default: 'false'
+      values: true,false
+    - name: IsRequired
+      default: 'false'
+      values: true,false
+  CaseTask:
+    metaclass: Activity
+    fqname: CMMN::CaseTask
+    created_as: element in a package
+    tags:
+    - name: IsDiscretionary
+      default: 'false'
+      values: true,false
+    - name: IsManualActivation
+      default: 'false'
+      values: true,false
+    - name: IsRepetition
+      default: 'false'
+      values: true,false
+    - name: IsRequired
+      default: 'false'
+      values: true,false
+  ProcessTask:
+    metaclass: Activity
+    fqname: CMMN::ProcessTask
+    created_as: element in a package
+    tags:
+    - name: IsDiscretionary
+      default: 'false'
+      values: true,false
+    - name: IsManualActivation
+      default: 'false'
+      values: true,false
+    - name: IsRepetition
+      default: 'false'
+      values: true,false
+    - name: IsRequired
+      default: 'false'
+      values: true,false
+  Milestone:
+    metaclass: Class
+    fqname: CMMN::Milestone
+    created_as: element in a package
+    tags:
+    - name: IsRepetition
+      default: 'false'
+      values: true,false
+    - name: IsRequired
+      default: 'false'
+      values: true,false
+  TimerEventListener:
+    metaclass: Class
+    fqname: CMMN::TimerEventListener
+    created_as: element in a package
+    tags:
+    - name: ShowLabel
+      default: 'false'
+      values: true,false
+  UserEventListener:
+    metaclass: Class
+    fqname: CMMN::UserEventListener
+    created_as: element in a package
+    tags:
+    - name: ShowLabel
+      default: 'false'
+      values: true,false
+  EntryCriterion:
+    metaclass: Port
+    fqname: CMMN::EntryCriterion
+    created_as: child of a host element (Port; creating it in a package fails with 'Invalid parent for Port (Package)')
+    tags:
+    - name: ShowLabel
+      default: 'false'
+      values: true,false
+  ExitCriterion:
+    metaclass: Port
+    fqname: CMMN::ExitCriterion
+    created_as: child of a host element (Port; creating it in a package fails with 'Invalid parent for Port (Package)')
+    tags:
+    - name: ShowLabel
+      default: 'false'
+      values: true,false
+  PlanningTable:
+    metaclass: Port
+    fqname: CMMN::PlanningTable
+    created_as: child of a host element (Port; creating it in a package fails with 'Invalid parent for Port (Package)')
+    tags:
+    - name: IsExpanded
+      default: 'false'
+      values: true,false
+    - name: ShowLabel
+      default: 'false'
+      values: true,false
+connector_stereotypes:
+  Connector:
+    metaclass: Dependency
+    fqname: CMMN::Connector
+    direction: Unspecified
+    tags: []
+    note: the standard's connector (an on-part) and its discretionary association; EA draws both the same
+concepts:
+  CasePlanModel:
+    representation: stereotype
+    stereotype: CasePlanModel
+    metaclass: Component
+    tags:
+    - IsAutoComplete
+    note: the outermost stage; its own stereotype, not a Stage
+  CaseFileItem:
+    representation: stereotype
+    stereotype: CaseFileItem
+    metaclass: Artifact
+    tags:
+    - ShowLabel
+  Stage:
+    representation: stereotype
+    stereotype: Stage
+    metaclass: Class
+    tags:
+    - IsAutoComplete
+    - IsDiscretionary
+    - IsExpanded
+    - IsManualActivation
+    - IsRepetition
+    - IsRequired
+  PlanFragment:
+    representation: stereotype
+    stereotype: PlanFragment
+    metaclass: Class
+    tags:
+    - IsExpanded
+    note: 'no IsDiscretionary tag: the standard says a plan fragment can only be discretionary'
+  Task:
+    representation: stereotype
+    stereotype: Task
+    metaclass: Activity
+    tags:
+    - IsDiscretionary
+    - IsManualActivation
+    - IsRepetition
+    - IsRequired
+    note: a plain task of no kind; no IsBlocking tag
+  HumanTask:
+    representation: stereotype
+    stereotype: HumanTask
+    metaclass: Activity
+    tags:
+    - IsBlocking
+    - IsDiscretionary
+    - IsManualActivation
+    - IsRepetition
+    - IsRequired
+    note: the only task with IsBlocking, default false in EA (the standard's default is true)
+  ProcessTask:
+    representation: stereotype
+    stereotype: ProcessTask
+    metaclass: Activity
+    tags:
+    - IsDiscretionary
+    - IsManualActivation
+    - IsRepetition
+    - IsRequired
+    note: no tag names the process called
+  CaseTask:
+    representation: stereotype
+    stereotype: CaseTask
+    metaclass: Activity
+    tags:
+    - IsDiscretionary
+    - IsManualActivation
+    - IsRepetition
+    - IsRequired
+    note: no tag names the case called
+  Milestone:
+    representation: stereotype
+    stereotype: Milestone
+    metaclass: Class
+    tags:
+    - IsRepetition
+    - IsRequired
+  TimerEventListener:
+    representation: stereotype
+    stereotype: TimerEventListener
+    metaclass: Class
+    tags:
+    - ShowLabel
+    note: no tag holds the timer expression
+  UserEventListener:
+    representation: stereotype
+    stereotype: UserEventListener
+    metaclass: Class
+    tags:
+    - ShowLabel
+  EntryCriterion:
+    representation: stereotype
+    stereotype: EntryCriterion
+    metaclass: Port
+    tags:
+    - ShowLabel
+    note: a Port element, a child of the item it guards
+  ExitCriterion:
+    representation: stereotype
+    stereotype: ExitCriterion
+    metaclass: Port
+    tags:
+    - ShowLabel
+    note: a Port element, a child of the item it ends
+  PlanningTable:
+    representation: stereotype
+    stereotype: PlanningTable
+    metaclass: Port
+    tags:
+    - IsExpanded
+    - ShowLabel
+    note: a Port element, a child of a case plan model, stage or human task
+  DecisionTask:
+    representation: none
+    note: no stereotype (EA refused CMMN::DecisionTask); model a plain Task or a ProcessTask and say in its name or description what
+      it decides
+  EventListener:
+    representation: none
+    note: no generic stereotype; use TimerEventListener or UserEventListener
+  DiscretionaryItem:
+    representation: tag
+    tag: IsDiscretionary
+    'on':
+    - Stage
+    - Task
+    - HumanTask
+    - CaseTask
+    - ProcessTask
+    note: a Stage or task whose IsDiscretionary is true is the standard's DiscretionaryItem; drawn with a dashed border; no separate
+      element
+  DiscretionaryTask:
+    representation: tag
+    tag: IsDiscretionary
+    'on':
+    - Task
+    - HumanTask
+    - CaseTask
+    - ProcessTask
+    note: named use of DiscretionaryItem
+  BlockingTask:
+    representation: tag
+    tag: IsBlocking
+    'on':
+    - HumanTask
+    note: true on a HumanTask; the other task stereotypes have no IsBlocking tag
+  NonBlockingTask:
+    representation: tag
+    tag: IsBlocking
+    'on':
+    - HumanTask
+    note: false on a HumanTask (EA's default); drawn with a hand icon
+  ManualTask:
+    representation: tag
+    tag: IsBlocking
+    'on':
+    - HumanTask
+    note: a HumanTask with IsBlocking false
+  PlanFragmentOnly:
+    representation: stereotype
+    stereotype: PlanFragment
+    metaclass: Class
+    tags:
+    - IsExpanded
+    note: a Stage is its own stereotype, so PlanFragment is the plan fragment that is not a Stage
+  ManualActivationRule:
+    representation: tag
+    tag: IsManualActivation
+    'on':
+    - Stage
+    - Task
+    - HumanTask
+    - CaseTask
+    - ProcessTask
+    note: a true or false flag that shows the decorator; the rule's condition expression cannot be stored
+  RequiredRule:
+    representation: tag
+    tag: IsRequired
+    'on':
+    - Stage
+    - Task
+    - HumanTask
+    - CaseTask
+    - ProcessTask
+    - Milestone
+    note: a flag that shows the decorator; no expression
+  RepetitionRule:
+    representation: tag
+    tag: IsRepetition
+    'on':
+    - Stage
+    - Task
+    - HumanTask
+    - CaseTask
+    - ProcessTask
+    - Milestone
+    note: a flag that shows the decorator; no expression
+  PlanItemControl:
+    representation: tag
+    tag: IsManualActivation, IsRequired, IsRepetition
+    'on':
+    - Stage
+    - Task
+    - HumanTask
+    - CaseTask
+    - ProcessTask
+    - Milestone
+    note: the three flags together; no default control apart from the item
+  Sentry:
+    representation: none
+    note: no element; the criterion stands for it and EA stores no if-part
+  Criterion:
+    representation: none
+    note: abstract; EntryCriterion and ExitCriterion are the stereotypes
+  OnPart:
+    representation: uml
+    note: the drawn Connector (stereotype Connector, Dependency); an on-part has no event or source property in EA
+  PlanItemOnPart:
+    representation: uml
+    note: the drawn Connector; the standard event is not stored
+  CaseFileItemOnPart:
+    representation: uml
+    note: the drawn Connector from a CaseFileItem; the transition is not stored
+  TextAnnotation:
+    representation: uml
+    note: a UML Note, no stereotype (Object_Type Note), measured
+  Association:
+    representation: uml
+    note: a UML Association connector, no CMMN stereotype; not measured with CMMN elements
+  PlanItem:
+    representation: none
+    note: 'no separate element: one element is both the definition and its use'
+  CMMNElement:
+    representation: none
+    note: no stereotype or tag (EA refused CMMN::CMMNElement)
+  Documentation:
+    representation: none
+    note: no stereotype or tag (EA refused CMMN::Documentation)
+  Definitions:
+    representation: none
+    note: no stereotype or tag (EA refused CMMN::Definitions)
+  Import:
+    representation: none
+    note: no stereotype or tag (EA refused CMMN::Import)
+  Expression:
+    representation: none
+    note: no stereotype or tag (EA refused CMMN::Expression)
+  Extension:
+    representation: none
+    note: no stereotype or tag (EA refused CMMN::Extension)
+  ExtensionDefinition:
+    representation: none
+    note: no stereotype or tag (EA refused CMMN::ExtensionDefinition)
+  ExtensionAttributeDefinition:
+    representation: none
+    note: no stereotype or tag (EA refused CMMN::ExtensionAttributeDefinition)
+  ExtensionAttributeValue:
+    representation: none
+    note: no stereotype or tag (EA refused CMMN::ExtensionAttributeValue)
+  Relationship:
+    representation: none
+    note: no stereotype or tag (EA refused CMMN::Relationship)
+  Case:
+    representation: none
+    note: no stereotype or tag (EA refused CMMN::Case)
+  Role:
+    representation: none
+    note: no stereotype or tag (EA refused CMMN::Role)
+  CaseFile:
+    representation: none
+    note: no stereotype or tag (EA refused CMMN::CaseFile)
+  CaseFileItemDefinition:
+    representation: none
+    note: no stereotype or tag (EA refused CMMN::CaseFileItemDefinition)
+  Property:
+    representation: none
+    note: no stereotype or tag (EA refused CMMN::Property)
+  PlanItemDefinition:
+    representation: none
+    note: no stereotype or tag (EA refused CMMN::PlanItemDefinition)
+  StartTrigger:
+    representation: none
+    note: no stereotype or tag (EA refused CMMN::StartTrigger)
+  CaseFileItemStartTrigger:
+    representation: none
+    note: no stereotype or tag (EA refused CMMN::CaseFileItemStartTrigger)
+  PlanItemStartTrigger:
+    representation: none
+    note: no stereotype or tag (EA refused CMMN::PlanItemStartTrigger)
+  IfPart:
+    representation: none
+    note: no stereotype or tag (EA refused CMMN::IfPart)
+  TableItem:
+    representation: none
+    note: no stereotype or tag (EA refused CMMN::TableItem)
+  ApplicabilityRule:
+    representation: none
+    note: no stereotype or tag (EA refused CMMN::ApplicabilityRule)
+  Parameter:
+    representation: none
+    note: no stereotype or tag (EA refused CMMN::Parameter)
+  CaseParameter:
+    representation: none
+    note: no stereotype or tag (EA refused CMMN::CaseParameter)
+  ProcessParameter:
+    representation: none
+    note: no stereotype or tag (EA refused CMMN::ProcessParameter)
+  DecisionParameter:
+    representation: none
+    note: no stereotype or tag (EA refused CMMN::DecisionParameter)
+  ParameterMapping:
+    representation: none
+    note: no stereotype or tag (EA refused CMMN::ParameterMapping)
+  Process:
+    representation: none
+    note: no stereotype or tag (EA refused CMMN::Process)
+  Decision:
+    representation: none
+    note: no stereotype or tag (EA refused CMMN::Decision)
+  Artifact:
+    representation: none
+    note: no stereotype or tag (EA refused CMMN::Artifact)
+  CMMNDI:
+    representation: none
+    note: interchange class; EA stores diagrams in its own tables (t_diagram, t_diagramobjects)
+  CMMNDiagram:
+    representation: none
+    note: interchange class; EA stores diagrams in its own tables (t_diagram, t_diagramobjects)
+  CMMNDiagramElement:
+    representation: none
+    note: interchange class; EA stores diagrams in its own tables (t_diagram, t_diagramobjects)
+  CMMNShape:
+    representation: none
+    note: interchange class; EA stores diagrams in its own tables (t_diagram, t_diagramobjects)
+  CMMNEdge:
+    representation: none
+    note: interchange class; EA stores diagrams in its own tables (t_diagram, t_diagramobjects)
+  CMMNLabel:
+    representation: none
+    note: interchange class; EA stores diagrams in its own tables (t_diagram, t_diagramobjects)
+  CMMNStyle:
+    representation: none
+    note: interchange class; EA stores diagrams in its own tables (t_diagram, t_diagramobjects)
+cannot_represent:
+  concepts_with_no_stereotype_tag_or_uml_home:
+  - ApplicabilityRule
+  - Artifact
+  - Case
+  - CaseFile
+  - CaseFileItemDefinition
+  - CaseFileItemStartTrigger
+  - CaseParameter
+  - Criterion
+  - Decision
+  - DecisionParameter
+  - DecisionTask
+  - Definitions
+  - Documentation
+  - EventListener
+  - Expression
+  - Extension
+  - ExtensionAttributeDefinition
+  - ExtensionAttributeValue
+  - ExtensionDefinition
+  - IfPart
+  - Import
+  - Parameter
+  - ParameterMapping
+  - PlanItem
+  - PlanItemDefinition
+  - PlanItemStartTrigger
+  - Process
+  - ProcessParameter
+  - Property
+  - Relationship
+  - Role
+  - Sentry
+  - StartTrigger
+  - TableItem
+  unbound_names_refused_by_EA:
+  - CMMNElement
+  - Documentation
+  - Definitions
+  - Import
+  - Expression
+  - Extension
+  - ExtensionDefinition
+  - ExtensionAttributeDefinition
+  - ExtensionAttributeValue
+  - Relationship
+  - Case
+  - Role
+  - CaseFile
+  - CaseFileItemDefinition
+  - Property
+  - PlanItemDefinition
+  - EventListener
+  - StartTrigger
+  - CaseFileItemStartTrigger
+  - PlanItemStartTrigger
+  - PlanItem
+  - Criterion
+  - Sentry
+  - OnPart
+  - CaseFileItemOnPart
+  - PlanItemOnPart
+  - IfPart
+  - TableItem
+  - DiscretionaryItem
+  - ApplicabilityRule
+  - DecisionTask
+  - Parameter
+  - CaseParameter
+  - ProcessParameter
+  - DecisionParameter
+  - ParameterMapping
+  - Process
+  - Decision
+  - PlanItemControl
+  - ManualActivationRule
+  - RequiredRule
+  - RepetitionRule
+  - Artifact
+  - Association
+  - TextAnnotation
+  - CMMNDI
+  - CMMNDiagram
+  - CMMNDiagramElement
+  - CMMNShape
+  - CMMNEdge
+  - CMMNLabel
+  - CMMNStyle
+  - BlockingTask
+  - NonBlockingTask
+  - ManualTask
+  - DiscretionaryTask
+  - PlanFragmentOnly
+ea_only:
+  IsExpanded: 'tag on Stage, PlanFragment and PlanningTable: draws the minus (expanded) or plus (collapsed) marker; not a CMMN concept'
+  ShowLabel: 'tag on CaseFileItem, both event listeners, both criteria and PlanningTable: shows the name on the shape; not a CMMN concept'
+  Is* flags: IsRequired, IsRepetition, IsManualActivation, IsAutoComplete, IsDiscretionary are booleans EA draws as decorators and a
+    dashed border; the standard's rules carry expressions, EA stores only whether one exists
+  ports: criteria and planning tables are Port elements that are children of their host (t_object.ParentID), not properties of it
+toolbox:
+  status: read on screen, measured on EA 17.1 build 1716, 2026-11-04; the diagram 'CMMN (catalog)' was opened
+  toolboxes:
+  - CMMN
+  pages:
+    CMMN:
+    - Case Plan Model
+    - Case File Item
+    - Stage
+    - Entry Criterion
+    - Exit Criterion
+    - Plan Fragment
+    - Task
+    - Human Task
+    - Case Task
+    - Process Task
+    - Milestone
+    - Timer Event Listener
+    - User Event Listener
+    - Planning Table
+    - Connector
+  note: 'one page, no relationship page: the connector is the one item ''Connector''. The 15 items equal the 15 profile stereotypes'
+  diagram_type_shown: 'the kit''s catalog diagram is stored as a Logical diagram, yet EA showed the CMMN toolbox on it: the toolbox
+    follows the elements, not the diagram type (not tested further)'
+quick_links:
+  status: read on screen, measured on EA 17.1 build 1716, 2026-11-04; one source, a Stage
+  result: 'the menu lists Case File Item, Stage, Task, Human Task, Case Task, Process Task, Milestone and Common, each directly with
+    no submenu (a click would create an element, not a connector): no connector pair was seen'
+  not_done: a connector quick link was not read; on two tries from a Human Task the drag produced no menu
+harvest:
+  created_and_read_back:
+  - 14 element stereotypes (metaclass, binding, tags with Values and Default), 1 connector stereotype, the diagram type token, the Port
+    rule, 57 concept names EA refuses, the decorator rendering
+  resources_tab:
+  - the 15 stereotype names and the one diagram type (read from the Resources tab); the catalog adds none
+  on_screen_2026_11_04: 'EA 17.1 build 1716: the CMMN profile lists the same 15 names; Diagram Types holds one group CMMN with one type
+    CMMN; one toolbox page and one quick-link source were read'
+  not_harvested:
+  - a connector quick link
+  - model templates
+  - constraints
+  - the definition file (encrypted)
+  ea_build: 17.1 build 1716
+# EA's names for this language's layout. tools/gen_conventions.py reads layout_map.
+layout_map:
+  technology: CMMN
+  display_name: CMMN 1.1
+  extends: UML
+  stereotype_prefix: ''
+  notes: |
+    Sizes, gaps and the route come from the layout standard, through `layout` in the language file. How CMMN diagrams are laid out in EA was not measured.
+
+    `CMMN` is the id EA reports, measured on EA 17.1 build 1716.
+  diagram_types:
+    CMMN:
+      guide: CMMNDiagram
+      base: Logical
+      size_keys:
+        CasePlanModel: CasePlanModel
+        Stage: Stage
+        PlanFragment: PlanFragment
+        TimerEventListener: TimerEventListener
+        UserEventListener: UserEventListener
+        EntryCriterion: EntryCriterion
+        ExitCriterion: ExitCriterion
+        PlanningTable: PlanningTable
+        CaseFileItem: CaseFileItem

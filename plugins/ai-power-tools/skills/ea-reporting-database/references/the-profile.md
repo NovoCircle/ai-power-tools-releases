@@ -13,16 +13,25 @@ shape. Westbrook Bank's `WBA` technology is an illustration; substitute your own
 | `target.server`, `target.database` | Paths A and B. For A, the EA repository's own database. For B, a separate database: letters, digits, `_` and `-` only. On SQL Server it is created if it does not exist; a SQL database in Microsoft Fabric is created in the Fabric portal first, and its database name is the one on its connection strings, not the display name ([`the-cloud-database.md`](the-cloud-database.md)). A reporting build refuses a database that holds an EA repository's own tables, because it replaces the tables in its target |
 | `target.authentication` | How the database is signed in to: `windows` (the default: the Windows account running AI Power Tools) or `entra-interactive` (a person signs in with a Microsoft work account; for a SQL database in Fabric or an Azure SQL Database). Direct access (`ea_database`) refuses `entra-interactive` |
 | `target.user` | Optional, with `entra-interactive` only: the account the sign-in window suggests. Refused with `windows` |
-| `target.schema` | The schema the business tables go in. Path B uses `logical` when the profile gives none |
+| `target.schema` | The schema the business tables go in. `logical` when the profile gives none, on every path |
 | `target.folder` | Path C: the folder the Parquet files go in |
 
-**Scope rules.** There is no masking: everything in a kept package is in the output, including
+**Scope rules.** `scope.roots` entries may be any package; its whole subtree is kept. A *root package*, for the new-root flag below, is a top-level package, one with no parent package (`Parent_ID` 0). There is no masking: everything in a kept package is in the output, including
 EA's own notes and tagged values. To keep content out, exclude the package. A root package created
 after setup is **left out and flagged** on the next build; an exclusion that matches nothing is
 flagged; a package deleted in EA is gone after the next build.
 
 **List every root package you do not want reported in `scope.exclude`, by GUID.** A root package
 the profile names in neither `roots` nor `exclude` is flagged `new_root_left_out` on every
-preflight, build and refresh, because the flag is meant for packages created after setup and
+preflight, build and refresh of the reporting-database and Parquet paths (direct access does not
+report it), because the flag is meant for packages created after setup and
 cannot tell those from ones you chose to leave out. Naming it in `exclude` is what records the
 decision and silences the flag.
+
+**The census cannot tell a documentation subtree from model content.** A repository can hold packages
+that describe the modeling language (a hand-built metamodel or pattern library) using the same
+stereotypes as real content. The census reads the stereotype an element carries, never the package it
+sits in, so those elements are counted as business data and inflate every count. No check can find
+them. Look at the top-level package layout before choosing `roots`, ask whether any subtree describes
+the language rather than the estate, and scope it out: name only the roots that hold the estate, and
+list the rest in `scope.exclude`.

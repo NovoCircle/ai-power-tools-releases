@@ -5,6 +5,8 @@ description: Build a Sparx EA MDG Technology from a model held inside the reposi
 
 # Building an MDG Technology from a Model
 
+For a language that has a file in `../_shared/languages/<id>/ea.yaml`, that file holds the technology id, stored stereotype names and diagram types. Read it before measuring them again.
+
 *Grounded in an end-to-end, model-driven build of the Westbrook Bank Architecture (`WBA`)
 technology. Tool-surface claims verified against `ea-mcp-server` v2.2.0 — see the
 note at the bottom of Quick Reference.*
@@ -25,7 +27,7 @@ Two ways exist to produce an MDG. This skill covers the model-driven one. `ea-md
 | Task | Route |
 |---|---|
 | Create stereotype, attribute, constraint | MCP API |
-| Duplicate a package | MCP API — `duplicate_package` (fresh GUIDs throughout; the API equivalent of Paste as New) |
+| Duplicate a package | MCP API: `duplicate_package` (fresh GUIDs; copies diagrams from server 2.3.0; **can lose** connector tag values, attribute-to-enumeration links and literal order, so compare the copy: Phase 1) |
 | Connector tagged value (Quick Linker constraint) | MCP API — `set_connector_tagged_value` / `get_connector_tags` / `list_connector_tagged_values` / `delete_connector_tagged_value` |
 | Element appearance — background, font, border | MCP API — `set_element_appearance` for the model-wide default; `set_diagram_object` for one placement on one diagram |
 | Export a profile | MCP API — `publish_package_as_profile` (always pass `version`) |
@@ -74,27 +76,18 @@ Skipping this is the single most expensive mistake available, because one step i
 | 0.1 | Confirm the current technology is imported **and enabled** in the target repository |
 | 0.2 | Re-export the current profiles and diff them against the deployed file; account for every delta |
 | 0.3 | Rebuild a current-version-equivalent MDG from the source |
-| 0.4 | Archive every artifact — profile XMLs, `.mts`, MDG — into a `Files` package |
+| 0.4 | Archive every artifact (profile XMLs, `.mts`, MDG) into the model's `Files` package, and on disk ([how](references/source-model-mechanics.md)) |
 | 0.5 | Baseline the source packages |
 | 0.6 | Rename the baseline package roots unmistakably, e.g. `[3.0.14 BASELINE - DO NOT EDIT]` |
 
-⚠ **0.4 gates Phase 3.** Tagged Value Types live in `t_propertytypes`, which is **repository-wide**. The moment a new-version type is added, any export from the old profile packages stops being the old version — silently, with no error and no visible change in the Browser. Archive first or the baseline is unrecoverable.
+⚠ **0.4 gates Phase 3.** Tagged Value Types live in `t_propertytypes`, which is **repository-wide**. The moment a new-version type is added, any export from the old profile packages stops being the old version, silently, with no error and no visible change in the Browser. Archive first or the baseline is unrecoverable, and **say so to the person**: tag types are repository-wide, and the old version cannot be recovered afterwards without the archive.
 
 ⚠ **0.1 needs the UI — which means computer use, not a manual detour.** Untick "Hide disabled Technologies" in Manage Technology. `get_mdg_from_runtime` separates present-but-disabled from absent only where it can read the technology's XML: `registered_not_loaded` means registered and readable but not loaded, while `unknown_mdg` for a technology with no readable copy cannot tell disabled from never installed. Drive it with computer use and screenshot the result; only ask the user to do it by hand if computer use is unavailable in the session.
 
 ⚠ **0.6 matters more than it looks.** A duplicated profile package has the same name as its source — both trees show a child called `WBA`. Renaming the baseline root is the cheapest protection for the remaining phases, and unlike locking it blocks nobody.
 
-**Verifying baseline scope.** A package baseline covers the whole subtree. Confirm it rather than assume: a package holding no elements directly still produces a large compressed payload if its children are captured.
-
-```sql
-SELECT DocID, DocName, LENGTH(BinContent) AS bytes
-FROM t_document WHERE DocType = 'Baseline'
-```
-
-> **Use `LENGTH`, never `OCTET_LENGTH`.** A `.qea` repository is SQLite, which has no
-> `OCTET_LENGTH` function. EA answers an unrunnable query with a **modal dialog**, which blocks
-> the calling tool until someone clicks OK at the machine — it does not return an error you can
-> catch. `LENGTH(...)` returns the byte count of a BLOB and is the correct form.
+**Verifying baseline scope.** Confirm a baseline covers the whole subtree with `LENGTH(BinContent)`, never `OCTET_LENGTH`
+(query and reason: [references/source-model-mechanics.md](references/source-model-mechanics.md)).
 
 ---
 
@@ -106,7 +99,7 @@ Model
 └── <Tech> profile V<n>
     ├── <Tech>  «profile»            stereotypes, metaclasses, constraints
     ├── <Tech>  «diagram profile»    custom diagram types
-    └── <Tech>  «toolbox profile»    toolbox pages, one diagram per toolbox
+    └── <Tech>  «toolbox profile»    one per toolbox: its pages, one diagram
 ```
 
 ### Where this tree comes from
@@ -119,7 +112,9 @@ the rest of this phase.
 **A first version, generated from what the repository already contains** — there is nothing to
 duplicate, so the tree is created and populated from a census. That is a different procedure:
 see [references/generating-from-a-census.md](references/generating-from-a-census.md). Route there
-from `ea-mdg-assess` §2a, which is where path B is chosen and recorded.
+from `ea-mdg-assess` §2a, which is where path B is chosen and recorded. The census is
+`_shared/tools/ea_census.py`, run over the rows `ea-mdg-assess` §2a lists; do not rebuild it from
+your own SQL calls.
 
 ⚠ **The child package's stereotype routes its content into a section of the built MDG** —
 `«profile»` → `<UMLProfiles>`, `«toolbox profile»` → `<UIToolboxes>`, `«diagram profile»` →
@@ -130,12 +125,18 @@ repeats the error in its own dev model — it does not.
 ---
 
 Duplicate with `ea_model(operation="duplicate_package", ...)`, which generates fresh GUIDs
-throughout — the API equivalent of Paste as New. It does not carry diagrams or diagram
-objects; if the package holds diagrams you need, use Paste as New in the UI instead, or copy
-them separately. XMI export/import is not a substitute — it does not dependably strip GUIDs,
-and two packages claiming the same profile `id` is worse than a manual copy.
+throughout — the API equivalent of Paste as New. It copies diagrams, their objects and their
+links (server 2.3.0 or later). XMI export/import is not a substitute: it does not dependably
+strip GUIDs, and two packages claiming the same profile `id` is worse than a manual copy.
 
-**Verify the copy immediately** — element counts, attribute counts, connector counts and diagram populations against the source, and confirm no cross-package leakage back into the original's metaclasses.
+⚠ **The copy can be damaged and look complete.** Runs on 3.6.4 lost Quick Linker connector tag
+values, attribute-to-enumeration links and literal order. **Verify the copy immediately:**
+element, attribute, connector and diagram counts against the source, that no connector leaks back
+to the original's metaclasses, and those three things: compare the Quick Linker `stereotype` tag
+values, the attribute classifier links and each Enumeration's literal order, source against copy
+(queries in [references/source-model-mechanics.md](references/source-model-mechanics.md)). If any
+differ, repair the copy or make it with Paste as New in the UI, which was faithful, and compare
+again.
 
 Record the new package GUIDs and the toolbox **diagram** GUIDs. The profile `id` values in the built MDG are derived from them, and that is how you later prove a file was built from the right source.
 
@@ -148,9 +149,9 @@ Read from working stereotypes so new work matches. Every one of these is a model
 | Aspect | Mechanism |
 |---|---|
 | Stereotype | Class with stereotype `«stereotype»`, in the `«profile»` package |
-| Display name | Attribute `_metatype`, `Default` = friendly name |
-| Enforcement | Attribute `_strictness`, `Default` = `profile` |
-| Tagged value | Attribute. `Type` blank for enums — the type comes from reference data of the same name — or a primitive (`int`, `Date`) |
+| Display name | Attribute `_metatype`, `Default` = the display name (the Westbrook source stores the bare stereotype name here, so check an existing stereotype first) |
+| Enforcement | Attribute `_strictness`, `Default` = `profile`, where you want enforcement (the Westbrook source sets none) |
+| Tagged value | Attribute. For an enum, `Type` is blank and the type comes from reference data of the same name, or it carries the enumeration's name (the Westbrook source does this); a primitive is `int`, `Date`. Check which your source uses before relying on a rule that reads blank `Type` |
 | Metaclass binding, every base | **Extension** connector to the plain `«Metaclass»` element — ArchiMate included |
 | Quick Linker rule | **Dependency** stereotyped `stereotyped relationship`, with a **connector tagged value** `stereotype = <Tech>::<Relationship>` |
 
@@ -159,6 +160,8 @@ Read from working stereotypes so new work matches. Every one of these is a model
 ⚠ **`Generalization` is not an alternative to `Extension`, for any base.** An earlier version of the table above offered it for ArchiMate-derived stereotypes. Measured against EA 17.1 build 1716: three builds made that way came out with `Apply=0` and every stereotype extending nothing. Converting one connector to `Extension` produced exactly one `<Apply type="Component"/>`; converting all twenty produced `Apply=20`, an exact match to the authored file. The Profile toolbox's *Profile Relationships* page lists Extension, Generalize, Tagged Value and Redefines — only Extension binds a stereotype to a metaclass. The book's prose calls it "Extend", which is what made this easy to get wrong.
 
 ⚠ **Namespace-qualify every constraint value.** `WBA::WBABusinessApplication`, never `WBABusinessApplication`. Unqualified constraints do not resolve and fail silently. Where `_strictness = profile` is set, enforcement is live against a rule that cannot resolve — the worst combination.
+
+**Building the source model by script** has traps that raise no error: a quick link connector's stereotype already creates an empty `stereotype` tag (set it, never add a second), closed lists need an Enumeration class, shape scripts have a stored form, and `TaggedValues.AddNew` does not set the value. All six are in [references/source-model-mechanics.md](references/source-model-mechanics.md).
 
 **Connector tagged values are scriptable.** Use `set_connector_tagged_value`, and read them back with `get_connector_tags` or `list_connector_tagged_values`. `update_connector` ignores a tagged value passed as an ordinary property — use the dedicated operations, not a property write.
 
@@ -206,12 +209,12 @@ Where a profile carries Enumeration classes on a data-types diagram, those value
 **Check defaults against real values in use.** A default absent from its own value list means the dropdown cannot round-trip data the repository already holds:
 
 ```sql
-SELECT [Value], COUNT(*) FROM t_objectproperties WHERE Property = '<tag>' GROUP BY [Value]
+SELECT [Value], COUNT(*) AS n FROM t_objectproperties WHERE Property = '<tag>' GROUP BY [Value]
 ```
 
-`Value` is a reserved-word column on `t_objectproperties` — bracket it, or the query is rejected. (See the `ea-modeling` SQL reference for the full reserved-word list.)
+`Value` is a reserved-word column on `t_objectproperties`: bracket it, or the query is rejected. Reserved words, single-quoted text and an `AS` name on every computed column: `_shared/references/sql-for-execute-sql.md`.
 
-⚠ **Renaming a tag orphans its values** in `t_objectproperties`. Fix trailing spaces and spelling before a production load, never after.
+⚠ **Renaming a tag orphans its values** in `t_objectproperties`. Fix trailing spaces and spelling before a production load, never after. **Two steps:** first count what the rename would orphan and say so, with nothing renamed; ask; rename only after the person agrees ([how](references/source-model-mechanics.md)).
 
 ---
 
@@ -248,20 +251,28 @@ Two halves, and only the first is scriptable today. The sequence matters and sev
    step: no intermediate profile exports, no `.mts`, a Save As dialog, and `MDG Technology
    successfully saved to file`. This is the route to use on a current EA.
 
-   Two things to know before relying on it:
+   Things to know before relying on it:
 
    - **The technology id comes from the package name**, and a name over 12 characters has been
      seen truncated (`WBA Technology` became `WBA Technolo`) on one route and kept whole on
      another. Name the package for the id you want, in 12 characters or fewer.
-   - **Generated files come out with an empty `version` attribute**, and setting the package
+   - **Saved files come out with an empty `version` attribute** (the copy Import stores carries the package `Version`: see the reference), and setting the package
      `Version` beforehand does not carry through. Stamp it afterwards — two unversioned builds are
      indistinguishable in Manage Technologies, which is a mistake that has already been made here.
-   - **Read System Output, not just the return.** It carries diagnostics the result does not, such
-     as `WARNING: Duplicate profile name: …`.
+   - **EA raises a confirmation dialog every time it generates the technology.** It is expected, no
+     server operation runs this command, and it is driven on screen. Dismiss it (or confirm by
+     screenshot that none is open) before the next COM call: a COM call made while it is open
+     blocks. No step here assumes the generation runs without it.
+   - **Read System Output, not just the return, and clear it first.** The panel keeps old lines
+     across model switches and EA restarts: before the command, right-click in System Output and
+     choose **Clear**, so every line afterwards belongs to this build. If you cannot clear it, treat
+     lines present before as old. It carries diagnostics the result does not, such as
+     `WARNING: Duplicate profile name: …`.
 
    **Pre-17.1 — the MTS Generation Wizard**, `Specialize ▸ Publish Technology ▸ Generate MDG
-   Technology`. Needs the `.mts` described below, and needs the profile exports from step 1. Use it
-   only when the EA in front of you predates 17.1.
+   Technology`. Needs an `.mts` and the profile exports from step 1; the details are in
+   [references/source-model-mechanics.md](references/source-model-mechanics.md). Use it only when
+   the EA in front of you predates 17.1.
 
    ⚠ **`Save Package as MDG Technology` and `Import Package as MDG Technology` do different
    things.** Save writes a file and installs nothing. Import builds the same technology and imports
@@ -277,26 +288,18 @@ ea_mdg(operation="publish_package_as_profile", params={
 })
 ```
 
+If you call COM `SavePackageAsUMLProfile` directly, **pass the output path as its second
+argument**: without it EA writes to the path stored in the package's profile options, which may be
+another person's machine. It does not update the version in the written file, so set
+`<Documentation version>` afterwards.
+
 ⚠ **Always pass `version`.** EA reads a package's `Version` property the first time that package is published in a session and then caches it — republish after changing the package and you get the old value, silently. This is the same stale-version failure the UI export dialog has, and it is why the operation takes an explicit `version` and stamps it into the generated XML rather than trusting EA. The response reports `version_from_ea` alongside it, so you can see what EA would have shipped.
 
 ⚠ **`Publish Diagram as UML Profile` is greyed out unless the diagram is open.** Selecting it in the Browser is not enough.
 
-⚠ **The MTS wizard route is for pre-17.1 only, and its `.mts` cannot be hand-written.** On EA 17.1+ use `Save Package as MDG Technology` above and skip this entirely. `Repository.GenerateMDGTechnology(mtsFilename)` is callable and validates its argument, but the `.mts` schema is not published — Sparx documents the root element, the hand-edited `<ModelValidation>` and `<ModelTemplates>` sections, and the wizard's section list, but not the element names the wizard writes per section or the on-disk form of the tagged-value-type inclusion list. A hand-reconstructed file is rejected for reasons nothing explains. Run the wizard once to emit a real `.mts`, keep it under version control, and edit that file from then on.
+⚠ **The wizard's Tagged Value Types page is a selection step, not an inclusion step.** Types not selected here do not ship, however completely they are defined. This is the usual cause of "the type exists but the field is still free text" — and because the omission is invisible in the model, it can persist across many releases. Detect it: `ea-validation`'s `tagged_value_type_shipped` rule condition compares a profile's blank-`Type` tagged-value attributes against a built MDG file's RefData and flags anything defined but not shipped; an attribute whose `Type` names the enumeration is not read by it, so compare those against RefData by hand. On EA 17.1 and later the build has no wizard page, and how a type is selected into the build on that route is not measured; the RefData comparison in Phase 6 is what shows whether it shipped.
 
-⚠ **The wizard's Tagged Value Types page is a selection step, not an inclusion step.** Types not selected here do not ship, however completely they are defined. This is the usual cause of "the type exists but the field is still free text" — and because the omission is invisible in the model, it can persist across many releases. Detect it: `ea-validation`'s `tagged_value_type_shipped` rule condition compares a profile's blank-`Type` tagged-value attributes against a built MDG file's RefData and flags anything defined but not shipped. Run it as part of Phase 6 verification.
-
-⚠ **Match the Contents checkboxes to the shape of the current deployed file** rather than guessing. Parse the deployed file and tick to match:
-
-```
-<MDG.Technology>
-  <Documentation/>      → (header fields)
-  <UMLProfiles>         → Profiles
-  <TaggedValueTypes>    → Tagged Value Types
-  <DiagramProfile>      → Diagram Types
-  <UIToolboxes>         → Toolboxes
-```
-
-**Filenames.** Use stable unversioned names in the build folder — the `.mts` references the profile XMLs **by filename**, so versioned names force a rename and an `.mts` rebuild every release, and a stale `.mts` silently ships the previous version's content. Add the version only when archiving.
+⚠ **Match the Contents checkboxes** to the deployed file's shape (parse it and tick to match), and keep the build folder's file names unversioned, as the reference describes.
 
 ---
 
@@ -304,7 +307,7 @@ ea_mdg(operation="publish_package_as_profile", params={
 
 Verification is API work and should be mechanical. Parse the built XML and compare against the source.
 
-**The check that catches the expensive mistake:** the four profile `id` values must match the V<n> package and diagram GUIDs recorded in Phase 1, not the previous version's. A correctly-versioned file built from the wrong package source passes every other check.
+**The check that catches the expensive mistake:** the profile `id` values (the profile, the diagram profile and one per toolbox profile) must match the V<n> package and diagram GUIDs recorded in Phase 1, not the previous version's. A correctly-versioned file built from the wrong package source passes every other check.
 
 The `id` is a 10-character slice of the GUID:
 
@@ -327,6 +330,8 @@ Checklist:
 
 ⚠ **Match on exact strings, never prefixes.** Profiles routinely contain near-identical names (`AI Technology` vs `AI Type`) whose blast radius differs by an order of magnitude.
 
+Before a release, the acceptance test in a scratch repository (one of every concept, rendered, with a "did not behave" report) is in `ea-mdg-deploy`'s `references/deploy-procedures.md`.
+
 ---
 
 ## Phase 7 — Deploy
@@ -342,11 +347,11 @@ An MDG is deployed either **into the repository** (a model technology, picked up
 A model-driven technology belongs at **Location: Model**: it is the only in-model Location that keeps
 the toolbox profiles this skill builds in Phase 4.
 
-⚠ **EA auto-registers any MDG file found on its search path.** The path list is at `Manage Technology ▸ Advanced`, and it routinely includes a user's `Downloads` folder. A build written there registers itself silently, shadows the model copy, and makes deployment appear to succeed on the author's desktop while nothing changes for anyone else. The search path is **not** recursive — a subfolder is safe.
+⚠ **EA auto-registers any MDG file found on its search path** (`Manage Technology ▸ Advanced`, often including `Downloads`). A build written there shadows the model copy and makes deployment look successful on the author's desktop only. The path is **not** recursive — a subfolder is safe.
 
 **Before validating any deployment**, check Manage Technology with "Hide disabled Technologies" unticked and confirm one entry, at `Location: Model`, at the expected version. More than one entry for the same technology means something is shadowing something else.
 
-Then: import, confirm **enabled** rather than merely present, **restart EA** (until then the toolbox may not switch to the new pages, though they are already loaded), and validate on a scratch diagram — toolbox page, Quick Linker, tag dropdowns — before any content is touched. Measured for WBA 1.1.1 after a restart: each of the three diagram types opened its own page (12, 5 and 5 items), and a dragged item came out bound to `WestbrookBankArchitecture::`.
+Then: import, confirm **enabled** rather than merely present, **restart EA** (until then the toolbox may not switch to the new pages, though they are already loaded), and validate on a scratch diagram — toolbox page, Quick Linker, tag dropdowns — before any content is touched. Measured for WBA 1.1.1 after a restart: each of the three diagram types opened its own page (12, 5 and 5 items), and a dragged item came out bound to `WestbrookBankArchitecture::` (what EA stores in `t_xref`; the form you pass is `WBA::`).
 
 ---
 
@@ -361,15 +366,12 @@ Then: import, confirm **enabled** rather than merely present, **restart EA** (un
 | New stereotype invisible to users | On no toolbox page |
 | An element's color changed on one diagram but not the others | `set_diagram_object` restyles one placement. The model-wide default is `set_element_appearance` |
 | A color comes out with red and blue swapped | An integer color is EA's Win32 COLORREF, `0x00BBGGRR` — `255` is red, not blue. Pass `"#RRGGBB"` instead and the swap is handled for you |
-| Published profile carries the wrong version | `version` was omitted, so EA supplied its cached value — always pass it |
 | Connector tagged value not applied | `update_connector` ignores it as a property — use `set_connector_tagged_value` instead |
 | `get_mdg_from_runtime` says `unknown_mdg` | EA reports nothing loaded under that exact id, and neither a registered technology file nor the model holds its XML. The registered id often differs from the display name — confirm it in Manage Technology |
 | `get_embedded_mdgs` returns empty on a server up to 3.5.0 | Those servers read a document type none of EA 17.1's import routes writes. Later servers list both in-model Locations. Confirm in the UI |
 | Designed toolbox pages missing; one automatic page instead | The technology is at Location: Project, which stores no toolbox pages. Install at Location: Model |
 | `get_mdg_from_runtime` answers from version A while Manage Technology shows version B | The same id is stored at both Locations and EA answers from Project. Remove one; `provenance.also_stored` names the other |
-| Only the author sees the new version | File-based registration shadowing the model copy |
 | Export produces the previous version's content | `.mts` still referencing old filenames |
-| A query hangs and EA shows "SQL API Open FAILED" | The SQL used a function this backend lacks (e.g. `OCTET_LENGTH` on a `.qea`). Click OK on the dialog; use `LENGTH(...)` |
 
 ---
 
@@ -391,7 +393,8 @@ COM connection rather than as an error you can catch. Neither shows up in a tool
 - **After any diagram create or edit, reload the diagram, screenshot it, and look.**
   `ok: true` means rows were written, not that elements landed where you intended, that
   styling applied, or that the result is readable.
-- **Without computer use**, say so and ask the user to look — never report a hang you have
-  not diagnosed or a diagram you have not seen.
+- **Without computer use**, say so. Ask the user to paste a screenshot of the EA window or
+  dialog into the conversation, read the cause from it, and ask the user to dismiss the dialog
+  before you retry. Never report a hang you have not diagnosed or a diagram you have not seen.
 
 Full procedure: [`../_shared/references/ea-ui-verification.md`](../_shared/references/ea-ui-verification.md)

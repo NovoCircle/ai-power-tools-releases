@@ -441,7 +441,9 @@ Covers: 4. Element Creation and Tagged Values
 **Ask:** "Add a new payments application called Card Disputes to Domestic Payments. It's mission-critical and strategic, the business side is Payments Operations and the technical side is Payments Engineering, the data is confidential and it falls under PCI-DSS."
 
 **Passes when:** One Component carrying the business-application stereotype exists in Domestic
-Payments, bound to the technology, with all six tags set to the stated values.
+Payments, bound to the technology, with all six tags set to the stated values. The run reads
+the stereotype and its binding back after creating the element, rather than trusting the
+response.
 
 **Check:**
 
@@ -878,18 +880,19 @@ Covers: 7. Connectors
 **Ask:** "Record that the Westbrook Wire Transfer Service realizes the Payment Processing Service."
 
 **Passes when:** One realization connector from the Wire Transfer Service to the Payment
-Processing Service exists, stereotyped `realizes` (the case of the letters is not part of this
-check), of the connector type EA stores for realizations.
+Processing Service exists, of connector type `Realisation` (EA's spelling, which the server
+documents and stores) and stereotyped lower-case `realizes`, the form the technology declares.
 
 **Check:**
 
 ```check
-sql: SELECT c.Connector_Type, LOWER(COALESCE(c.Stereotype, '')) FROM t_connector c JOIN t_object s ON s.Object_ID = c.Start_Object_ID JOIN t_object e ON e.Object_ID = c.End_Object_ID WHERE s.Name = 'Westbrook Wire Transfer Service' AND e.Name = 'Payment Processing Service'
+sql: SELECT c.Connector_Type, COALESCE(c.Stereotype, '') FROM t_connector c JOIN t_object s ON s.Object_ID = c.Start_Object_ID JOIN t_object e ON e.Object_ID = c.End_Object_ID WHERE s.Name = 'Westbrook Wire Transfer Service' AND e.Name = 'Payment Processing Service'
 expect: rows: [["Realisation", "realizes"]]
 ```
 
 **Fails when:** The connector is a plain association or dependency, or runs from the service to
-the application.
+the application, or carries the capitalized stereotype `Realizes`, which the technology does not
+declare.
 
 ### TC-28: A deliberate link to a deprecated element stays unflagged
 
@@ -1260,7 +1263,10 @@ Covers: 12. Error Recovery Patterns
 **Ask:** "The Treasury Services package is filed under Transactions & Payments, but it belongs under Treasury Management in Operations & Support. Move it there with everything in it."
 
 **Passes when:** The package's parent is Treasury Management, the object that mirrors it in the
-browser sits in Treasury Management too, and the package's contents are as they were.
+browser sits in Treasury Management too, and the package's contents are as they were. The run
+updates both records and reads both back before saying it moved. If the client refuses the raw
+write, the run stops, says the package has not been moved, and asks the person to approve the
+write or to move the package in EA; the model is then unchanged, and that is a correct result.
 
 **Check:**
 
@@ -1285,7 +1291,8 @@ sql: SELECT (SELECT COUNT(*) FROM t_object), (SELECT COUNT(*) FROM t_connector),
 expect: unchanged
 ```
 
-**Fails when:** Only the package row is updated. The browser tree and queries that join through
+**Fails when:** Only the package row is updated, or a refused write ends with the package
+reported as moved. The browser tree and queries that join through
 the mirror object then disagree about where the package is, and nothing reports it.
 
 ### TC-40: Verifies a build with one query
@@ -1421,8 +1428,9 @@ Covers: 1. Build Order
 **Ask:** "Make the capability map under Consumer Banking click-through. Someone opens the top diagram, double-clicks Lending, gets a diagram of its parts, and so on down."
 
 **Passes when:** The reply says drill-down diagrams over a hierarchy are not plain diagram building
-and are the job of the `ea-navigation-diagrams` skill, and hands off to it. The run does not build
-ordinary diagrams here and call them click-through. Nothing in the model changes.
+and are the job of the `ea-navigation-diagrams` skill, and hands off to it. The run builds no
+diagram and creates no elements first, not even a trial diagram, and does not call the composite
+mechanics itself. Nothing in the model changes.
 
 **Check:**
 
@@ -1433,6 +1441,7 @@ reply: not: says the click-through diagrams were built
 
 ```check
 tools: not-called: ea_diagram.create_diagram
+tools: not-called: ea_diagram.set_composite_diagram
 ```
 
 ```check
@@ -1469,23 +1478,23 @@ that touch those carry their own checks.
 
 - `14. Quick-Reference: Most-Used Tools`: a cheat-sheet of tool names, with no promise beyond what the numbered sections make and the cases above test.
 - `Reference files`: an index of links; nothing to do, refuse or warn about.
+- `4.6 A File Stored on an Artifact`: needs an Artifact with a stored file, which the fixture does not hold, and a read of the stored zip; check live.
+- `13. Finish: Audit the Package, Respect the Language`: needs a technology with a ruleset the run can find, and a rule that refuses a relationship; check live against the fixture with its ruleset.
 
 ## Findings
 
-- `references/element_creation.md` section 2, verification query 2, filters `t_xref.[Type] = 'element'`. The model stores `element property` (and `references/sql_schema.md` section 3 says the same), so the documented query returns no rows for every element, bound or not, and would lead a run to conclude no profile was applied.
-- `references/element_creation.md` section 2, verification query 1, selects `StereotypeEx` from `t_object`. That column does not exist in the schema (`t_object` has `StyleEx`, not `StereotypeEx`), so the query errors. The "three storage locations" table presents it as a stored column.
-- A wrong package parent: `SKILL.md` section 12 and `references/package_and_defects.md` section 5 say to fix it with a raw `UPDATE` through `execute_sql`, and section 1 of that file does the same for the root package. `references/sql_schema.md` section 4 says `execute_sql` blocks mutating SQL; the server's own description says it accepts writes but the outcome depends on EA. The recipe also updates only `t_package`, which breaks the mirror-object invariant that `references/sql_schema.md` section 1 (item 11) tells writers to keep. TC-39 checks the mirror; the recipe as written fails it.
-- `references/sql_schema.md` section 7, "Count elements in a package subtree", counts every `t_object` row, so each child package's mirror row is counted as an element, and the nesting stops at three levels. In the fixture's `05 Census Coverage` tree it reports 33 or 39 against a true 27 (TC-31). The note "Extend the IN nesting for deeper trees" does not say how to know the depth.
-- `SKILL.md` section 8 says to check the target subtree count "against the expected range before placing". Nothing tells a customer where an expected range comes from; `references/package_and_defects.md` section 3 calls it "the test's expected range". TC-30 tests the placement rule only.
-- The standing correction says the qualified stereotype is `WBA::WBABusinessApplication`; the fixture stores `WestbrookBankArchitecture::WBABusinessApplication` as the `FQName` in `t_xref`. The `t_xref` checks here match the prefix with a wildcard so they hold under either.
-- `SKILL.md` section 7 and `references/diagrams_and_connectors.md` section 4 give the type `Realization` and stereotype `Realizes`. EA stores the connector type `Realisation` (all 26 realizations in the fixture), the technology declares lowercase `realizes`, and `WBA-LFY-001` compares `Realizes` and `ConsumesService`, which no connector carries. TC-27 uses `LOWER()` on the stereotype so it does not arbitrate; whether the server maps `Realization` to the stored spelling was not verified.
-- `references/element_creation.md` maps `WBADataAsset` to `Object` and lists `TechNode`, which is not a stereotype (canon: `WBATechnologyNode`, Node); `references/class-modeling.md` and the canon file say `WBADataAsset` is a Class. The fixture's 12 data assets are stored as `Object`.
-- `references/element_creation.md` says the canonical tag set is 10 and that `vendor`, `product` and `pciScopeJustification` are not part of the technology. `SKILL.md` section 10, `references/wba_mdg_reference.md` and the canon file say they are declared on some stereotypes (13 tags in all), and the fixture carries them (`vendor` 40 times).
-- `SKILL.md` section 0.5 puts the scripting threshold at over 100 elements and says 30-100 is either route; `references/token_and_session_management.md` says over 50 elements goes to scripting. TC-06 tests the 400-element case, which both agree on.
-- `SKILL.md` section 4.5 says to fix an unbound element by recreating it. Recreating loses its tags, connectors and diagram placements, and the skill does not say to carry them across. TC-18 uses an element with tags and no connectors and checks the tags survive.
-- Section 3 covers package names only. The fixture also stores diagram names encoded (`Transactions &amp; Payments Landscape`, `Risk &amp; Compliance Landscape`), and nothing in the skill says whether to check those.
-- `SKILL.md` section 2 gives no rule for choosing between parent 0 and parent 1 for a new top-level package, and the fixture has roots at both. TC-10 supplies the rule in the ask ("alongside Westbrook Bank").
-- `references/package_and_defects.md` section 3 says a recursive CTE is not available in EA's SQLite. SQLite supports `WITH RECURSIVE`; whether the server's validator blocks it was not verified, so the cases use fixed package id lists.
-- The section numbering in `SKILL.md` skips 13 (12 is followed by 14). Cosmetic.
-- Not checkable here: that write calls were issued one at a time (TC-09 tests the outcome only); that a hang was diagnosed from a dialog; the model-tier, `verbose=False` and `/clear` guidance; the "say it was not re-verified" promise when a read is too expensive; and the 4.5 claim that a row with no `FQName` means the technology was not loaded.
-- The proactive offer after a load that created elements with parentage (section 1, Build Order) has no case. It needs a load that surfaces a hierarchy past the thresholds that `ea-navigation-diagrams` sets, and a reply check for the offer; TC-44 covers only the hand-off when the person asks.
+Each finding was checked against the current skill text and the code on server main (read only), and
+on a read-only copy of the Westbrook file for the model facts. Each ends with its disposition.
+
+- `references/sql_schema.md` section 7, "Count elements in a package subtree", counted every `t_object` row, so each child package's mirror row was counted as an element, and the nesting stopped at three levels. In the fixture's `05 Census Coverage` tree it reported 33 against a true 27 (TC-31). **Fixed:** the section now leaves the mirror rows out, takes the package ids from `list_package_tree` (any depth), and gives a `WITH RECURSIVE` form; the old query returns 33 and the new ones 27 on the copy.
+- `SKILL.md` section 8 said to check the target subtree count "against the expected range before placing" and nothing said where a range comes from. **Fixed:** the range is the one the person gave or the count taken before the build; with neither, report the count and say there was no range. TC-30 tests the placement rule only and stays as it is.
+- The fixture stores `WestbrookBankArchitecture::WBABusinessApplication` as the `FQName` in `t_xref`, while the standing text says `WBA::WBABusinessApplication`. **No change to the checks:** not a skill defect. That long form is what EA stores, and the checks here match it with a wildcard. From server 3.6.5 the technology id (`WBA::WBABusinessApplication`) binds as well, and the skill text says to write the stereotype that way and to read the `stereotype` block in the result.
+- The fixture's 12 data assets are stored as `Object`; the technology and the canon say `WBADataAsset` is a Class. The hypothesis that they are unlinked was checked on the copy: 11 of the 12 carry `FQName=WestbrookBankArchitecture::WBADataAsset` in `t_xref`, and one (Customer Master Data) carries only a `GUID=`. **No change to the skill** (the reference already says Class). The fixture's metaclass and the one unlinked element are a demo-model defect, proposed as a backlog item in the lane report.
+- `WBA-LFY-001` compares `Realizes` and `ConsumesService`, which no connector in the fixture carries (it stores `realizes`), so the rule cannot match a realization. **No change:** `SKILL.md` section 7 already says so; the rule belongs to the demo and is covered by the governance demo redesign.
+- `SKILL.md` section 0.5 puts the scripting threshold at over 100 elements and says 30-100 is either route; `references/token_and_session_management.md` said over 50 goes to scripting. **Fixed:** the reference now matches section 0.5. TC-06 (400 elements) is unaffected.
+- `SKILL.md` section 4.5 said to fix an unbound element by recreating it, which loses its tags, connectors and diagram placements. **Fixed:** the section now says to carry them across or say what the recreate dropped. TC-18's element has tags and no connectors, so it still tests only the tags; a variant with a connector is a case gap, not a skill defect.
+- Section 3 covered package names only; the fixture also stores two diagram names encoded (`Transactions &amp; Payments Landscape`, `Risk &amp; Compliance Landscape`). **Fixed:** section 3 now says to check `t_diagram.Name` after `create_diagram` and fix it with `update_diagram`. Whether `create_diagram` itself encodes was not run (no EA); the fixture is the only evidence. No case covers it yet (live check).
+- `SKILL.md` section 2 gave no rule for choosing between parent 0 and parent 1 for a new top-level package, and the fixture has roots at both. **Fixed:** a new top-level package takes the parent of the root it sits beside (the one the person names, or the one holding the content); if the roots disagree and none is named, ask. TC-10 already supplies the rule in its ask.
+- `references/package_and_defects.md` section 3 said a recursive CTE is not available in EA's SQLite. **Fixed:** SQLite supports `WITH RECURSIVE` and the server's validator does not block it (it checks `t_*` column names only, and `WITH` is not a write verb). It was run on a copy of the file, not through EA's own query call, so the text says to fall back to the id list if EA rejects it.
+- Not checkable here: that write calls were issued one at a time (TC-09 tests the outcome only); that a hang was diagnosed from a dialog; the model-tier, `verbose=False` and `/clear` guidance; the "say it was not re-verified" promise when a read is too expensive; and the 4.5 claim that a row with no `FQName` means the technology was not loaded. **No change:** none can be settled without a live run or a runner that reads the transcript; they stay as listed.
+- The proactive offer after a load that created elements with parentage (section 1, Build Order) has no case. **No change:** the skill text is right and points to `ea-navigation-diagrams` for the thresholds; the gap is a case that needs a load surfacing a hierarchy past those thresholds and a reply check for the offer. TC-44 covers only the hand-off when the person asks.

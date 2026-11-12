@@ -238,7 +238,7 @@ bundles referenced reports as dependencies.
 block carries both a reference and queries, so a stale copy is still possible. Treat propagation as
 likely but unverified.
 
-Editing a referenced query inside a block **detaches it from the report** — see `../SKILL.md` §5.
+Editing a referenced query inside a block **detaches it from the report**. This is the only place the skill says so.
 
 ---
 
@@ -268,3 +268,25 @@ which survives a same-tab navigation; a `window`-scoped variable does not.
 
 Read it back after the save with `JSON.parse(sessionStorage.getItem('__cap'))`. Prolaborate also
 uses `XMLHttpRequest` on some screens, so patch both if a capture comes back empty.
+
+---
+
+## 6. Changing one widget without touching the layout
+
+Use this to fix a widget's query or link when nothing else on the dashboard should move.
+
+1. Open the dashboard's own Edit page and hook the page's save (the capture in section 5 shows where).
+   Make the page send its own save, which is `PUT /api/dashboard/Update`, and edit that outgoing body
+   before it leaves. The body is the page's own write-schema payload, not a read played back, so the
+   warning in section 3 does not apply.
+2. Change only the target widget's block. Leave every position (`x`, `y`, `cols`, `rows`) as the page
+   sent it.
+3. The block must carry `isUpdate: true`, and `updatedNotes` where its content changed. The server
+   ignores a changed block without `isUpdate: true`: the save succeeds and nothing changes.
+4. Stored queries are base64 of URL-encoded SQL in some blocks and plain SQL in others. Decode and
+   re-encode only when the round trip gives back exactly the original text; otherwise stop.
+5. Read the dashboard back (section 1) and re-open the widget to confirm the change persisted and the
+   positions are unchanged.
+
+41 one-widget saves done this way left every position unchanged. The rule against touching `Notes` on
+a block you did not author still holds for every other block.

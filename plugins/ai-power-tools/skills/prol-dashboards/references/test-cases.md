@@ -140,10 +140,10 @@ small group** — the output is confidently inverted.
 
 Covers: 1. Probe the data before choosing anything; 2. Choosing a widget
 
-**Ask:** "Put a pie chart of applications by stereotype on the dashboard." (Westbrook has 14
-element stereotypes.)
+**Ask:** "Put a pie chart of applications by stereotype on the dashboard." (Westbrook has 13
+`WBA` element stereotypes.)
 
-**Passes when:** the run pushes back — fourteen slices is past the readable limit — and offers a Bar,
+**Passes when:** the run pushes back — thirteen slices is past the readable limit — and offers a Bar,
 a top-N, or a Pie over a lower-cardinality column such as `criticality`.
 
 **Check:**
@@ -160,7 +160,7 @@ reply: says: a bar, a top-N, or a pie over a column with few values such as crit
 reply: not: says a pie was built with one slice per stereotype
 ```
 
-**Fails when:** a fourteen-slice pie is built because it was asked for.
+**Fails when:** a thirteen-slice pie is built because it was asked for.
 
 ### TC-05: Bubble without numeric axes
 
@@ -269,7 +269,8 @@ are there: `select top 10 o.Name, o.ea_guid AS Classguid, o.Object_Type AS BaseT
 **Setup:** give the skill a query containing a construct from the wrong dialect. The ask above uses
 `TOP`, which a MySQL-backed repository does not accept.
 
-**Passes when:** the run treats the empty result as a probable query failure and bisects.
+**Passes when:** the run treats the empty result as a probable query failure, suspects the SQL
+dialect before the data, and compares the query with `VIEW SAMPLE`.
 
 **Check:**
 
@@ -1346,38 +1347,67 @@ figure with the model.
 
 ## Findings
 
+Each finding was checked on 11 Nov 2026 against the skill text and a read-only copy of the
+Westbrook model (counts only; no EA and no Prolaborate was used). The line after each says what
+was done.
+
 - **TC-04's "14 element stereotypes" does not match the Westbrook copy.** The copy holds 13 distinct
   `WBA` element stereotypes and 49 distinct stereotypes in all. The pass (push back past seven slices)
   still holds, and the check asserts only "more than seven". The `14` in `data-probes.md` and in this
   case is out of date.
+  **Fixed. `data-probes.md` and TC-04 now say 13 `WBA` stereotypes (confirmed on a copy of the
+  model). The census reading for connector stereotypes was also stale (it said 8; the copy has 16)
+  and now says "greater than one".**
 - **TC-01 and TC-08 depend on a dependency count the copy barely has.** Only 2 applications are the End
   of a `Uses` connector (25 `Uses` connectors in all; 11 applications are the Start of one), so a
   "top 10 by dependants" column has two bars. The worked example takes End as the depended-on side and
   `SKILL.md` §3 never says which end is the dependant.
+  **Fixed in the worked example, which now says Start is the dependant and End the thing depended on,
+  to confirm the direction on the repository, and that a thin result is reported and not padded. The
+  copy's two-bar result is a fixture limit; TC-01 and TC-08 are unchanged.**
 - **The Landscape cases cannot run on Westbrook (TC-21, TC-22, TC-38).** `worked-example.md` and
   `data-probes.md` say a Westbrook `part-of` connector may be an Aggregation. The copy has two `part-of`
   connectors, both Associations between tool elements, and its six Aggregations join untyped fixture
   elements: no application hierarchy exists. A correct run there reports that the data cannot support a
   landscape.
+  **Partly fixed. `worked-example.md` no longer says a Westbrook `part-of` may be an Aggregation, and
+  says the copy has no application hierarchy. `data-probes.md` made the Aggregation point in general
+  terms only. The cases stay as written: they describe a correct run, and a fixture with a hierarchy
+  is a change to the demo model, which is not in this lane.**
 - **The Road Map cases cannot run on Westbrook (TC-12, TC-36).** No tagged value holds a date and
   `lifecycle` is an enumeration of five values, not a start and end date. They are marked BLOCKED, and
   a correct run there behaves as in TC-02.
+  **No change: a fixture limit, not a skill defect. The skill already says to report that the data
+  cannot support a Road Map.**
 - **TC-23 has no support in the skill.** Nothing in `SKILL.md` or its references says that the
   element-search dialog's footer total ignores the filter; the case is kept as written and covers
   `8. Verification` only because that is the nearest heading.
+  **No change, pending a live check. The claim is a single observation with no source in the skill.
+  Open the element picker, filter it, and compare the footer with the filtered rows. If it is
+  confirmed, add one line to section 8 and the case is covered; if not, delete TC-23.**
 - **TC-09's "bisects" is not a step the skill states.** `SKILL.md` §10 says to suspect the dialect
   before the data and to compare with `VIEW SAMPLE`. Bisecting is the existing pass wording and is
   kept, but the skill does not teach it.
+  **Fixed. The case's pass now says what the skill says: suspect the dialect before the data and
+  compare with `VIEW SAMPLE`. Its reply checks already did.**
 - **TC-19's warning is the run's, not the product's.** `SKILL.md` §4 says changing the chart type wipes
   the name, query and result query; it does not say the product warns, so the case checks that the run
   warns.
+  **Fixed. Section 4 now tells the run to say what will be wiped and get the person's yes before it
+  changes the type of an existing chart, which is what TC-19 checks.**
 - **Method promises are checkable only through the reply.** The browser tools differ by surface, so the
   `tools` check cannot name them; "probe before choosing", "blur the query box", "read the Execute row
   count" and "re-open the configuration" (§1, §4, §8) are all `reply` checks. `SKILL.md` §10 steps 2
   (the click landed) and 6 (two failed attempts means stop) have no mechanical check at all; they are
   exercised only indirectly through TC-13, TC-14 and TC-44.
+  **No change: a harness limit, not a skill defect.**
 - **The `http` checks assume two things the template does not define.** A path into an array
   (`dashboardWidgets.length`) and a `<dashboardId>` placeholder. `SKILL.md` §7 also names no endpoint
   for the dashboard list, so TC-30 cannot have an `http` check.
+  **No change to the skill: the array path and placeholder are harness matters. The list endpoint
+  is a live check: watch the network log as the Dashboards list loads, name the call in section 7,
+  and then TC-30 can have an `http` check.**
 - **The `prol-start-here` preflight cannot be checked.** `SKILL.md` says to run it first, but a skill
   invocation is not a tool the `tools` check can name.
+  **No change: the grammar now names a skill load (`called: skill:prol-start-here`), so a case can
+  check it when one is wanted.**

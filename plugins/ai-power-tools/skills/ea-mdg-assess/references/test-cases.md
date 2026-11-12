@@ -12,8 +12,11 @@ failure column is the useful part of each case.
 `WBA` technology (qualified form `WBA::WBABusinessApplication`) loaded. Westbrook Bank is our
 illustration. A customer runs these cases against their own model, substituting their technology,
 stereotypes and package names; the numbers in the checks are the Westbrook copy's and will differ.
-The one thing the checks do not pin is the server build: several cases pass differently on a server
-up to 3.5.0 and on a later one, and say so.
+**Fixture state the cases depend on:** the model holds one stored technology build, `WBA` 1.1.1 at
+Location: Model (one `t_document` row of type `TECHNOLOGY`, nothing in `t_trxtypes`); the two older
+builds that earlier copies held have been removed. It holds a model-driven technology (the WBA source
+package tree) as well as the stored build. The expected server is 3.6.4. The checks do not pin the
+server build; a few cases mention what a server up to 3.5.0 does, and say so.
 
 **Marks.** `WRITE` (changes the model, copy only), `REFUSE` (the pass is a hand-off),
 `INVARIANT` (must pass on every run), `BLOCKED` (needs setup a model may not have; a correct run
@@ -356,11 +359,12 @@ Covers: 3. Installed, embedded, and loaded are three different questions; 6. Fai
 
 **Ask:** "Does the model file itself carry the Westbrook technology, or does it depend on what's installed on each machine?"
 
-**Passes when:** The run calls `get_embedded_mdgs`. If the server returns `count: 0` (a server up to
-3.5.0, which read a document type no EA 17.1 import route writes), it says that the empty result
-proves nothing and cross-checks with `get_mdg_from_runtime` or `list_registered_technologies`. If a
-later server lists the stored copies, it reports them with their Location (`Model`). Either way it
-ends by saying the model carries a copy.
+**Passes when:** The run calls `get_embedded_mdgs`. On server 3.6.0 or later, as expected here (3.6.4),
+it lists the stored copy with its Location (`Model`) and the version that copy declares, and ends by
+saying the model carries a copy. If the server instead returns `count: 0` (a server up to 3.5.0,
+which read a document type no EA 17.1 import route writes), it says that the empty result proves
+nothing and cross-checks with `get_mdg_from_runtime` or `list_registered_technologies` before it
+concludes.
 
 **Check:**
 
@@ -370,9 +374,9 @@ expect: unchanged
 ```
 
 ```check
-# three Location: Model copies in t_document, nothing at Location: Project
+# one Location: Model copy in t_document, nothing at Location: Project
 sql: SELECT (SELECT COUNT(*) FROM t_document WHERE DocType = 'TECHNOLOGY'), (SELECT COUNT(*) FROM t_trxtypes)
-expect: rows: [[3, 0]]
+expect: rows: [[1, 0]]
 ```
 
 ```check
@@ -481,7 +485,9 @@ Covers: 3. Installed, embedded, and loaded are three different questions; 6. Fai
 declines (`source: unavailable`, `mdg_loaded_no_definition`, which a server up to 3.5.0 gives for a
 technology imported at Location: Model), it says that EA has the technology loaded but there is
 nothing to read, and tells the person to export it from Specialize > Technologies > Manage
-Technology and run `parse_mdg_xml` on the file. It does not produce a list the calls did not return.
+Technology and run `parse_mdg_xml` on the file (the Westbrook technology is not one EA ships). For a
+technology EA ships with the product (`builtin: true`), it does not tell the person to export it: it
+points to the static language tables. It does not produce a list the calls did not return.
 
 **Check:**
 
@@ -505,13 +511,18 @@ from it.
 
 Covers: 3. Installed, embedded, and loaded are three different questions; 6. Failure modes hit in this session
 
-**Ask:** "Manage Technology shows several Westbrook entries. Which one is the live one, and is something wrong?"
+**Setup:** The cleaned fixture state: one stored build, `WBA` 1.1.1 at Location: Model, and no other
+copy of the id. Rows can still repeat on another repository, so the case is about how the run reads
+them.
+
+**Ask:** "Manage Technology lists the Westbrook technology. Which row is the live one, and is something wrong?"
 
 **Passes when:** The run reads `list_registered_technologies` row by row, using `name`, `version`,
 `location` and `enabled` for each, and says that the operation does not deduplicate: separate
-registrations of one id (a Project copy and a Model copy, or older builds left disabled) coexist
-legitimately, so no single row speaks for the technology. It names the enabled build and says the
-older ones are disabled. It does not call this a bug.
+registrations of one id (a Project copy and a Model copy, or older builds left disabled) can coexist
+legitimately, so no single row speaks for the technology. On this fixture it reports the one
+`WBA` row, at Location `Model` and enabled, at the version that copy declares, and says nothing is
+wrong. It does not call repeated rows, where there are any, a bug.
 
 **Check:**
 
@@ -521,20 +532,21 @@ expect: unchanged
 ```
 
 ```check
-# the model carries three stored copies: two older builds and WBA 1.1.1
+# the model carries one stored copy: WBA 1.1.1
 sql: SELECT DocName FROM t_document WHERE DocType = 'TECHNOLOGY' ORDER BY DocName
-expect: rows: [["WBA"], ["WBA Technolo"], ["WBA Technology"]]
+expect: rows: [["WBA"]]
 ```
 
 ```check
 tools: called: ea_mdg.list_registered_technologies
-reply: says: the registrations are separate rows and are not deduplicated by id
-reply: says: which row is enabled and which are disabled
-reply: not: calls the repeated entries a defect in the model or the server
+reply: says: registrations are separate rows and are not deduplicated by id
+reply: says: which row is the enabled one, at which Location
+reply: not: calls repeated entries, where there are any, a defect in the model or the server
 ```
 
 **Fails when:** The run takes the first matching row as "the" registration, and reports a version
-or an enabled flag that belongs to a different build.
+or an enabled flag that belongs to a different build, or reports a problem the one-build fixture
+does not have.
 
 ### TC-17: A Project copy and a Model copy
 
@@ -612,8 +624,9 @@ Covers: 2a. Generating a technology from what the repository already contains
 
 **Ask:** "Our architects have been using ArchiMate-style types like Application Component and Application Service in the onboarding views. Should those go into our own modeling language?"
 
-**Passes when:** The run resolves each stereotype's language from `t_xref` (using the census helper
-or an equivalent query), not from the bare `Stereotype` column alone. It reports that in this model
+**Passes when:** The run takes the census, even though the question looks narrow, with the census
+helper (`ea_census.py`) over the model's rows, and so resolves each stereotype's language from
+`t_xref`, not from the bare `Stereotype` column alone. It reports that in this model
 `ApplicationComponent` resolves to `TOGAF::` (2 elements) and that the Application Service and
 Application Function elements (4) are bound to no profile at all, so "ArchiMate-looking" names come
 from different places. It also reports the other things the census decides on: whether usage is
@@ -639,6 +652,7 @@ expect: = 4
 ```
 
 ```check
+reply: says: the census was run over the repository's rows, not skipped because the question was narrow
 reply: says: the stereotype names were resolved to their languages through t_xref
 reply: says: ApplicationComponent resolves to TOGAF in this model
 reply: says: some of the ArchiMate-style names are bound to no profile
@@ -690,6 +704,10 @@ out to need versions or reviewers, the person has silently lost the model-driven
 ### TC-21: Switching routes later
 
 Covers: Then ask which path, and say what it costs
+
+**Setup:** The fixture already holds a model-driven technology (the WBA source package tree, with the
+stored build at Location: Model). The ask is about a new technology the person will generate by XML,
+so the reply is not excused from the route-switching answer because one source model exists.
 
 **Ask:** "We'll do the XML route now. If it grows we can always move it into the model later, and until then I can tweak the model's profile package by hand. Fine?"
 
@@ -933,29 +951,12 @@ TC-19 look at the per-stereotype table and the `t_xref` binding as well.
 
 ## Findings
 
-- SKILL.md says "This skill is read-only" (under Reference files) but "Record which path was taken"
-  tells the reader to write the path into profile package notes or the technology's
-  `<Documentation notes>`. The record is a write; TC-23 therefore carries WRITE. The skill does not
-  say which skill performs it for Path A, whose XML is `ea-mdg-author`'s artifact.
-- "Verify in EA's UI" tells the reader to reload and screenshot "after any diagram create or edit".
-  This skill creates and edits no diagram, so that bullet cannot be exercised here; only the
-  hang-diagnosis bullet has a case (TC-27).
-- `cannot_determine` ("EA could not be probed at all; treat as unknown, not absent") needs EA to be
-  unprobeable, which the fixture cannot produce. It has no case.
-- Several promises depend on the server build (the `get_embedded_mdgs` empty result up to 3.5.0,
-  `mdg_loaded_no_definition` for a Location: Model technology, `resolved_items` and
-  `split_stereotypes` from 3.6.0, `registered_not_enabled` after 3.5.0). The cases are written to
-  pass on either side of each boundary; the skill itself does not tell the reader how to learn the
-  server version, which is what a run needs to say which side it is on.
-- The skill's sizing rule for ad hoc usage ("under 5%" and "at or over 5%") is stated for
-  `ad_hoc_stereotype_count`, which SKILL.md defines as a count of elements, while the
-  `description` strings and the section 2 table call the quantity "ad hoc usage under 5% of
-  stereotyped elements". The two agree only if the share is computed over elements; TC-06 assumes
-  that reading.
-- The skill says the assessment strips everything before `::` when matching (verification
-  walkthrough, section 4) while SKILL.md section 1 says it reads the unqualified `t_object.Stereotype`
-  column; in the Westbrook copy that column is always unqualified, so the strip cannot be observed,
-  and the walkthrough's normalization advice has no checkable case.
-- In the Westbrook copy `t_xref` stores `FQName=WestbrookBankArchitecture::<Stereotype>` (153
-  element and connector rows), not `WBA::`. The qualified form `WBA::` therefore appears in the
-  asks and prose of these cases only, and the SQL matches on `::<Stereotype>`.
+Each finding was checked against the current skill text and server main (11 Nov 2026).
+
+- **Fixed in the skill.** The closing paragraph no longer says the skill is read-only: it says the one write is the record of the path taken, written by `ea-mdg-model-build` (Path B, profile package notes) or by `ea-mdg-author` into the XML (Path A, `<Documentation notes>`). TC-23 keeps its WRITE mark.
+- **Fixed in the skill.** "Verify in EA's UI" now says this skill creates and edits no diagram, and applies the reload-and-screenshot step to a task that follows. Only the hang-diagnosis bullet has a case (TC-27).
+- **No change: cannot be staged.** `cannot_determine` needs EA to be unprobeable, which no fixture can produce; the skill's wording matches the server.
+- **No change: closed.** The server 3.6.4 expectation is stated in the cases, with the older-server branch kept as an alternative.
+- **No change: not a defect.** The server counts elements (`SUM(COUNT(*))` over `t_object` rows grouped by stereotype) and compares against 5% of the element total; SKILL.md says so ("a count of elements, not of distinct stereotypes") and TC-06 assumes that reading.
+- **No change: not a defect.** The server strips everything before `::` on the stored value when matching, as the walkthrough says; the Westbrook copy stores the column unqualified, so the strip cannot be observed there.
+- **No change: fixture property.** The Westbrook copy's `t_xref` stores the profile-name prefix, not `WBA::`; the cases keep `WBA::` in prose and match on `::<Stereotype>`. Server 3.6.5 now accepts `WBA::` and translates it to the profile name for what you pass; what EA stores stays the profile name.

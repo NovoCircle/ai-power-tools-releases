@@ -1,0 +1,565 @@
+# VDML 1.0 Conformance Ruleset
+# Language:     Value Delivery Modeling Language 1.0 (OMG formal/2015-10-05), as modeled with Sparx's built-in `VDML` technology
+# Enforced by:  AI Power Tools for Sparx EA - validate_model tool
+# Generated from vdml_rules.py (the link tables and the rules); do not edit by hand.
+#
+# STEREOTYPE NAMES ARE UNQUALIFIED, AND THAT IS MEASURED.
+#
+# validate_model selects with `Stereotype IN (...)` on t_object and t_connector. For Sparx's VDML technology those columns hold
+# the bare name (`BoundaryPort`, `Role`, `DeliverableFlow`); the qualified form `VDML::Role` is only in the t_xref row named
+# `Stereotypes` (FQName). Measured on EA 17.1 build 1716 by creating one element or connector per stereotype in a test model and
+# reading it back: 17 element stereotypes and 7 connector stereotypes, all bound.
+#
+# VERSION. The skill describes VDML 1.0. OMG published 1.1 in 2018. EA's technology does not say which it implements; its model
+# patterns carry no version. The rules below are 1.0 rules.
+#
+# WHAT EA STORES. EA's VDML technology has 24 stereotypes. Several standard classes are connectors: DeliverableFlow (also the
+# provider and recipient link of a ValueProposition, and the flow between Roles), InternalPortDelegation (a port delegation),
+# RoleAssignment (an Assignment), RoleContainment (a Collaboration's Role), CapabilityAssociation and CapabilityDependency
+# (Capability Management links), MeasurementRelationship. An input or output port is one stereotype, BoundaryPort, with the tag
+# InputOutput (Input, Output or Either); a Collaboration's own port is `Port`. Position, Party, Member and Performer are all
+# `Role`. EA has no stereotype for BusinessItem, ValueAdd, ResourceUse, Scenario, DelegationContext, the libraries or the
+# definitions.
+#
+# WHERE THINGS SIT. EA stores containment as the element's parent: a port on its Activity, Store or Pool; a Store, Pool, CapabilityOffer
+# and CapabilityMethod in their OrgUnit. A `contained_in` rule reads that chain. Four rules use it.
+#
+# WHAT THE VALIDATOR STILL CANNOT SEE. A rule judges one element or one connector. It cannot compare an element's container with
+# another element's (which Collaboration an Activity and its Role share), cannot follow a connector to the far element's container,
+# cannot read a connector's own tags (isTangible, influence), an element's description, or a diagram, and EA stores no link from an
+# Activity to the Role that performs it or to its Collaboration. The ids of rules.md that need those (the CONT, ROLE, MEAS, VALUE,
+# CAP, CTX and LIB groups, the port timing rules, most CARD rules and the diagram rules) are not in this file.
+#
+# PARTIAL RULES. Every rule below checks the part of its rules.md id that EA stores; each says in its description what it leaves
+# out.
+#
+# Sources:
+#   [S1] OMG, Value Delivery Metamodel (VDML) Version 1.0, formal/2015-10-05  https://www.omg.org/spec/VDML/1.0/
+#   [S2] Sparx Systems, Enterprise Architect 17.1, built-in technology `VDML`, read back from elements and connectors created in a
+#        test model, and the endpoints of the model patterns that ship with EA (vdml-*.xml)
+
+meta:
+  version: "0.2"
+  language: vdml-1
+  organization: "(your organization)"
+  mdg_family: VDML
+  description: >
+    Conformance rules for VDML 1.0 models built with Sparx Enterprise Architect's VDML technology: which elements a deliverable
+    flow, a port delegation, a role assignment and a role containment may join; how many flows and delegations a port may have,
+    given its direction; how many containers a Role has; how many providers and recipients a ValueProposition has; which kind
+    of element a Store, Pool, CapabilityOffer, CapabilityMethod or BoundaryPort sits in. Each rule names the rules.md id it
+    implements.
+  severity_levels:
+    error: A requirement of the standard (rules.md strength must)
+    warning: Guidance of the standard (rules.md strength should)
+    info: Advisory note; not a conformance violation
+
+tables:
+  vdml-1-deliverable-flow:
+    source: "OMG VDML 1.0 7.2.1.2.4 and 8.2 to 8.4 (language.yaml: DeliverableFlow, diagram_types Role Collaboration, ValueProposition Exchange, Activity Network), written in the stored stereotypes of Sparx's VDML technology, whose endpoints were read in its model patterns: a flow joins two ports (BoundaryPort), two Roles (Role Collaboration diagram), or a Role and a ValueProposition (ValueProposition Exchange diagram, either direction)"
+    connectors:
+      f: DeliverableFlow
+    cells:
+      BoundaryPort:
+        BoundaryPort: "f"
+      Role:
+        Role: "f"
+        ValueProposition: "f"
+      ValueProposition:
+        Role: "f"
+  vdml-1-port-delegation:
+    source: "OMG VDML 1.0 7.2.4.4.2 and 7.2.4.4.3 (language.yaml: InputDelegation, OutputDelegation, Collaboration internalPortDelegation), written in the stored stereotypes of Sparx's VDML technology: a delegation joins a Collaboration port (Port) and an Activity port (BoundaryPort), in either direction"
+    connectors:
+      d: InternalPortDelegation
+    cells:
+      Port:
+        BoundaryPort: "d"
+      BoundaryPort:
+        Port: "d"
+  vdml-1-role-assignment:
+    source: "OMG VDML 1.0 7.2.1.2.3 (language.yaml: Assignment, role 1 Role, participant 0..1 Participant), written in the stored stereotypes of Sparx's VDML technology: RoleAssignment runs from a Participant (an Actor, a Role or a Collaboration of any kind) to the Role it fills"
+    connectors:
+      a: RoleAssignment
+    cells:
+      Actor:
+        Role: "a"
+      Role:
+        Role: "a"
+      Collaboration:
+        Role: "a"
+      BusinessNetwork:
+        Role: "a"
+      Community:
+        Role: "a"
+      OrgUnit:
+        Role: "a"
+      CapabilityMethod:
+        Role: "a"
+  vdml-1-role-containment:
+    source: "OMG VDML 1.0 7.2.1.1.5 (language.yaml: CollaborationRole, a Collaboration contains its Roles), written in the stored stereotypes of Sparx's VDML technology: RoleContainment runs from a Role to the Collaboration that contains it; a Collaboration drawn as the filler of a Role in another Collaboration is joined the same way (as in Sparx's collaboration-structure pattern)"
+    connectors:
+      c: RoleContainment
+    cells:
+      Role:
+        Collaboration: "c"
+        BusinessNetwork: "c"
+        Community: "c"
+        OrgUnit: "c"
+        CapabilityMethod: "c"
+      Collaboration:
+        Collaboration: "c"
+        BusinessNetwork: "c"
+        Community: "c"
+        OrgUnit: "c"
+        CapabilityMethod: "c"
+      BusinessNetwork:
+        Collaboration: "c"
+        BusinessNetwork: "c"
+        Community: "c"
+        OrgUnit: "c"
+        CapabilityMethod: "c"
+      Community:
+        Collaboration: "c"
+        BusinessNetwork: "c"
+        Community: "c"
+        OrgUnit: "c"
+        CapabilityMethod: "c"
+      OrgUnit:
+        Collaboration: "c"
+        BusinessNetwork: "c"
+        Community: "c"
+        OrgUnit: "c"
+        CapabilityMethod: "c"
+      CapabilityMethod:
+        Collaboration: "c"
+        BusinessNetwork: "c"
+        Community: "c"
+        OrgUnit: "c"
+        CapabilityMethod: "c"
+
+rules:
+  - id: VDML1-FLOW-001
+    name: A deliverable flow joins two ports, two Roles, or a Role and a ValueProposition
+    implements: VDML-FLOW-001
+    description: >
+      A DeliverableFlow connects the Ports of two Activities, or a Port of an Activity with a Port of a Store; a flow
+      between two Stores is not allowed [VDML 1.0 7.2.1.2.4 p. 39, 7.1.9 p. 20]. EA draws three of the standard's diagram
+      kinds with this one stereotype: ports in an Activity Network (BoundaryPort to BoundaryPort), Roles in a Role
+      Collaboration diagram (Role to Role) and a ValueProposition's provider and recipient in a ValueProposition Exchange
+      diagram (Role to ValueProposition and back). The Role and ValueProposition pairs are the standard's
+      ProviderProvidedProposition and RecipientReceivedProposition relationships, not VDML-FLOW-001. Any other pair is reported, including a flow drawn straight between two
+      Activities or two Stores instead of between their ports. A flow between two Store ports is not told apart from a flow
+      between two Activity ports: a relationship table judges the stereotypes of the two ends, not the element each port
+      sits in.
+    category: relationship
+    severity: error
+    demo_trigger: false
+    coverage: partial
+    selector:
+      type: connector
+      connector_stereotypes: any_of_table
+    condition:
+      type: relationship_table
+      table: vdml-1-deliverable-flow
+      unknown_endpoint: error
+    remediation:
+      short: "Draw the flow between the ports (BoundaryPort) of the two Activities, or of an Activity and a Store; use Role to Role only on a Role Collaboration diagram."
+      auto_fixable: false
+
+  - id: VDML1-FLOW-011
+    name: A port delegation joins a Collaboration port and an Activity port
+    implements: VDML-FLOW-011
+    description: >
+      An InputDelegation maps an InputPort of an Activity to an InputPort of a Collaboration, or an InputPort of a
+      Collaboration to an InputPort of an Activity contained in it; an OutputDelegation does the same for output ports [VDML
+      1.0 7.2.4.4.2 and 7.2.4.4.3 p. 67]. EA stores both as InternalPortDelegation, joining a Collaboration port (Port) and
+      an Activity port (BoundaryPort). A delegation between two Activity ports, between two Collaboration ports, or with any
+      other element is reported. This one rule covers VDML-FLOW-011 and VDML-FLOW-012.
+    category: relationship
+    severity: error
+    demo_trigger: false
+    coverage: partial
+    selector:
+      type: connector
+      connector_stereotypes: any_of_table
+    condition:
+      type: relationship_table
+      table: vdml-1-port-delegation
+      unknown_endpoint: error
+    remediation:
+      short: "Join a Collaboration port (Port) to a port of one of its Activities (BoundaryPort)."
+      auto_fixable: false
+
+  - id: VDML1-FLOW-013
+    name: An Activity port takes at most one incoming port delegation
+    implements: VDML-FLOW-013
+    description: >
+      An InputPort of an Activity contained in a Collaboration must not be mapped by InputDelegations to more than one
+      InputPort of that Collaboration [VDML 1.0 7.2.4.4.2 p. 67]. In EA an input delegation arrives at the Activity's
+      BoundaryPort from a Collaboration Port; a BoundaryPort with two incoming InternalPortDelegation connectors is
+      reported.
+    category: relationship
+    severity: error
+    demo_trigger: false
+    coverage: partial
+    selector:
+      type: element
+      stereotypes:
+        any_of: [BoundaryPort]
+    condition:
+      type: connector_count
+      connector_stereotype: InternalPortDelegation
+      direction: incoming
+      max: 1
+    remediation:
+      short: "Keep one delegation into the Activity port; remove or re-route the other."
+      auto_fixable: false
+
+  - id: VDML1-FLOW-014
+    name: An Activity port gives at most one outgoing port delegation
+    implements: VDML-FLOW-014
+    description: >
+      An OutputPort of an Activity contained in a Collaboration must not be mapped by OutputDelegations to more than one
+      OutputPort of that Collaboration [VDML 1.0 7.2.4.4.3 p. 67]. In EA an output delegation leaves the Activity's
+      BoundaryPort for a Collaboration Port; a BoundaryPort with two outgoing InternalPortDelegation connectors is reported.
+    category: relationship
+    severity: error
+    demo_trigger: false
+    coverage: partial
+    selector:
+      type: element
+      stereotypes:
+        any_of: [BoundaryPort]
+    condition:
+      type: connector_count
+      connector_stereotype: InternalPortDelegation
+      direction: outgoing
+      max: 1
+    remediation:
+      short: "Keep one delegation out of the Activity port; remove or re-route the other."
+      auto_fixable: false
+
+  - id: VDML1-CARD-003A
+    name: An input port provides no flow
+    implements: VDML-CARD-003
+    description: >
+      A DeliverableFlow has one provider OutputPort and one recipient InputPort [VDML 1.0 7.2.1.2.4 p. 38; 7.2.4.3.2 p. 64].
+      EA keeps the direction of a BoundaryPort in its InputOutput tag (Input, Output or Either). A port tagged Input with an
+      outgoing DeliverableFlow is reported. A port tagged Either is not judged.
+    category: cardinality
+    severity: error
+    demo_trigger: false
+    coverage: partial
+    selector:
+      type: element
+      stereotypes:
+        any_of: [BoundaryPort]
+      tagged_value_filter:
+        - tag: InputOutput
+          value_in: [Input]
+    condition:
+      type: connector_count
+      connector_stereotype: DeliverableFlow
+      direction: outgoing
+      max: 0
+    remediation:
+      short: "Tag the port Output, or draw the flow from an output port."
+      auto_fixable: false
+
+  - id: VDML1-CARD-003B
+    name: An output port receives no flow
+    implements: VDML-CARD-003
+    description: >
+      A DeliverableFlow has one provider OutputPort and one recipient InputPort [VDML 1.0 7.2.1.2.4 p. 38; 7.2.4.3.3 p. 65].
+      A port tagged Output with an incoming DeliverableFlow is reported.
+    category: cardinality
+    severity: error
+    demo_trigger: false
+    coverage: partial
+    selector:
+      type: element
+      stereotypes:
+        any_of: [BoundaryPort]
+      tagged_value_filter:
+        - tag: InputOutput
+          value_in: [Output]
+    condition:
+      type: connector_count
+      connector_stereotype: DeliverableFlow
+      direction: incoming
+      max: 0
+    remediation:
+      short: "Tag the port Input, or draw the flow into an input port."
+      auto_fixable: false
+
+  - id: VDML1-CARD-003C
+    name: An output port provides at most one flow
+    implements: VDML-CARD-003
+    description: >
+      An OutputPort provides at most one DeliverableFlow [VDML 1.0 7.2.4.3.2 p. 64]. A port tagged Output with two or more
+      outgoing DeliverableFlow connectors is reported.
+    category: cardinality
+    severity: error
+    demo_trigger: false
+    coverage: partial
+    selector:
+      type: element
+      stereotypes:
+        any_of: [BoundaryPort]
+      tagged_value_filter:
+        - tag: InputOutput
+          value_in: [Output]
+    condition:
+      type: connector_count
+      connector_stereotype: DeliverableFlow
+      direction: outgoing
+      max: 1
+    remediation:
+      short: "Give each flow its own output port."
+      auto_fixable: false
+
+  - id: VDML1-CARD-003D
+    name: An input port receives at most one flow
+    implements: VDML-CARD-003
+    description: >
+      An InputPort receives at most one DeliverableFlow [VDML 1.0 7.2.4.3.3 p. 65]. A port tagged Input with two or more
+      incoming DeliverableFlow connectors is reported.
+    category: cardinality
+    severity: error
+    demo_trigger: false
+    coverage: partial
+    selector:
+      type: element
+      stereotypes:
+        any_of: [BoundaryPort]
+      tagged_value_filter:
+        - tag: InputOutput
+          value_in: [Input]
+    condition:
+      type: connector_count
+      connector_stereotype: DeliverableFlow
+      direction: incoming
+      max: 1
+    remediation:
+      short: "Give each flow its own input port."
+      auto_fixable: false
+
+  - id: VDML1-CARD-005
+    name: A Store or Pool sits in an OrgUnit or a Role swim-lane
+    implements: VDML-CARD-005
+    description: >
+      A Store has exactly one owning OrgUnit [VDML 1.0 7.2.1.2.7 p. 41]; a Pool is a Store of reusable resources. Only an
+      OrgUnit owns Stores and Pools; no other kind of Collaboration owns resources, and a CapabilityMethod receives its
+      resources from other sources [7.1.7 p. 16; 7.2.2.4.1 p. 51]. EA stores ownership as the element's parent. Sparx's own
+      patterns use two parents: the OrgUnit, in the Capability Management view, and the Role swim-lane (RoleSwimlane), in
+      the Activity Network, where the element is drawn inside the lane (measured in the shipped vdml-*.xml patterns). An
+      element has one parent, so a Store in a lane does not record its OrgUnit, and this rule accepts both. A Store or Pool
+      whose parent is anything else (a Collaboration, a CapabilityMethod, an Activity) or that has no parent (it sits
+      straight in a package) is reported. This rule is also the Store and Pool half of VDML-CONT-008; VDML1-CARD-006A is the
+      CapabilityOffer half.
+    category: containment
+    severity: error
+    demo_trigger: false
+    coverage: partial
+    selector:
+      type: element
+      stereotypes:
+        any_of: [Store, Pool]
+    condition:
+      type: contained_in
+      path:
+        - stereotype_one_of: [OrgUnit, RoleSwimlane]
+    remediation:
+      short: "Create the Store or Pool as a child of the OrgUnit that owns it, or draw it in the swim-lane of the Role that handles it."
+      auto_fixable: false
+
+  - id: VDML1-CARD-006A
+    name: A CapabilityOffer sits in an OrgUnit
+    implements: VDML-CARD-006
+    description: >
+      A CapabilityOffer is owned and provided by exactly one OrgUnit [VDML 1.0 7.2.2.3.3 p. 50]; only an OrgUnit provides
+      CapabilityOffers [7.1.7 p. 16]. EA stores the owner as the element's parent: the offer is a Port of its OrgUnit. An
+      offer whose parent is not an OrgUnit, or that has no parent (the Object form of the stereotype, created in a package),
+      is reported. This rule is also the CapabilityOffer half of VDML-CONT-008.
+    category: containment
+    severity: error
+    demo_trigger: false
+    coverage: partial
+    selector:
+      type: element
+      stereotypes:
+        any_of: [CapabilityOffer]
+    condition:
+      type: contained_in
+      path:
+        - stereotype_one_of: [OrgUnit]
+    remediation:
+      short: "Create the CapabilityOffer as a child (a port) of the OrgUnit that provides it."
+      auto_fixable: false
+
+  - id: VDML1-CARD-006B
+    name: A CapabilityMethod sits in an OrgUnit
+    implements: VDML-CARD-006
+    description: >
+      A CapabilityMethod has exactly one owning OrgUnit [VDML 1.0 7.2.2.4.1 p. 52]. EA stores the owner as the element's
+      parent. A CapabilityMethod whose parent is not an OrgUnit, or that has no parent, is reported.
+    category: containment
+    severity: error
+    demo_trigger: false
+    coverage: partial
+    selector:
+      type: element
+      stereotypes:
+        any_of: [CapabilityMethod]
+    condition:
+      type: contained_in
+      path:
+        - stereotype_one_of: [OrgUnit]
+    remediation:
+      short: "Create the CapabilityMethod as a child of the OrgUnit that owns it."
+      auto_fixable: false
+
+  - id: VDML1-CARD-001C
+    name: A BoundaryPort sits in an Activity, Store or Pool
+    implements: VDML-CARD-001
+    description: >
+      A Port is contained in exactly one PortContainer [VDML 1.0 7.2.4.3.1 p. 64; machine-readable model]. EA stores the
+      container as the port's parent, and does not refuse any host (a BoundaryPort was accepted on an OrgUnit and on a
+      Collaboration). EA's technology draws the ports of an Activity, a Store and a Pool as BoundaryPort and a
+      Collaboration's own ports as Port (free-floating), so a BoundaryPort whose parent is any other kind of element is
+      reported.
+    category: containment
+    severity: error
+    demo_trigger: false
+    coverage: partial
+    selector:
+      type: element
+      stereotypes:
+        any_of: [BoundaryPort]
+    condition:
+      type: contained_in
+      path:
+        - stereotype_one_of: [Activity, Store, Pool]
+    remediation:
+      short: "Create the BoundaryPort as a child of its Activity, Store or Pool; use the Port stereotype for a Collaboration's own port."
+      auto_fixable: false
+
+  - id: VDML1-CARD-004
+    name: A role assignment runs from a participant to a Role
+    implements: VDML-CARD-004
+    description: >
+      An Assignment assigns exactly one Role and names at most one Participant [VDML 1.0 7.2.1.2.3 p. 37]. EA stores it as
+      RoleAssignment from the Participant (an Actor, a Role or a Collaboration of any kind) to the Role. An assignment whose
+      target is not a Role, or whose source is not a participant, is reported.
+    category: relationship
+    severity: error
+    demo_trigger: false
+    coverage: partial
+    selector:
+      type: connector
+      connector_stereotypes: any_of_table
+    condition:
+      type: relationship_table
+      table: vdml-1-role-assignment
+      unknown_endpoint: error
+    remediation:
+      short: "Draw the assignment from the participant to the Role it fills."
+      auto_fixable: false
+
+  - id: VDML1-CARD-001A
+    name: A Role is contained by a Collaboration
+    implements: VDML-CARD-001
+    description: >
+      A Role is contained in exactly one Collaboration [VDML 1.0 7.2.1.1.5 p. 31; machine-readable model]. EA stores
+      containment as a RoleContainment connector from the Role to its Collaboration (BusinessNetwork, Community, OrgUnit,
+      CapabilityMethod or a plain Collaboration); Sparx's collaboration-structure pattern also joins a Collaboration filling
+      a Role the same way. A containment whose target is not a Collaboration, or whose source is not a Role or a
+      Collaboration, is reported.
+    category: relationship
+    severity: error
+    demo_trigger: false
+    coverage: partial
+    selector:
+      type: connector
+      connector_stereotypes: any_of_table
+    condition:
+      type: relationship_table
+      table: vdml-1-role-containment
+      unknown_endpoint: error
+    remediation:
+      short: "Draw the containment from the Role to the Collaboration that owns it."
+      auto_fixable: false
+
+  - id: VDML1-CARD-001B
+    name: A Role has at most one container
+    implements: VDML-CARD-001
+    description: >
+      Each contained element has exactly one container; a Role is in one Collaboration [VDML 1.0 7.2.1.1.5 p. 31]. A Role
+      with two or more outgoing RoleContainment connectors is reported. A Role with none is not reported: the Role
+      Collaboration diagram draws Roles without their Collaboration (as Sparx's own pattern does), so a missing container
+      cannot be told from a view that leaves it out.
+    category: cardinality
+    severity: error
+    demo_trigger: false
+    coverage: partial
+    selector:
+      type: element
+      stereotypes:
+        any_of: [Role]
+    condition:
+      type: connector_count
+      connector_stereotype: RoleContainment
+      direction: outgoing
+      max: 1
+    remediation:
+      short: "Keep one RoleContainment per Role."
+      auto_fixable: false
+
+  - id: VDML1-CARD-012A
+    name: A ValueProposition has at most one provider
+    implements: VDML-CARD-012
+    description: >
+      A ValueProposition has at most one provider and one recipient [VDML 1.0 7.2.1.3.1 p. 43]. On a ValueProposition
+      Exchange diagram EA draws the provider as a DeliverableFlow from a Role to the proposition. The direction is read from
+      Sparx's model pattern, not stated by the standard. A ValueProposition with two or more incoming DeliverableFlow
+      connectors is reported.
+    category: cardinality
+    severity: error
+    demo_trigger: false
+    coverage: partial
+    selector:
+      type: element
+      stereotypes:
+        any_of: [ValueProposition]
+    condition:
+      type: connector_count
+      connector_stereotype: DeliverableFlow
+      direction: incoming
+      max: 1
+    remediation:
+      short: "Keep one providing Role."
+      auto_fixable: false
+
+  - id: VDML1-CARD-012B
+    name: A ValueProposition has at most one recipient
+    implements: VDML-CARD-012
+    description: >
+      A ValueProposition has at most one provider and one recipient [VDML 1.0 7.2.1.3.1 p. 43]. EA draws the recipient as a
+      DeliverableFlow from the proposition to a Role. A ValueProposition with two or more outgoing DeliverableFlow
+      connectors is reported.
+    category: cardinality
+    severity: error
+    demo_trigger: false
+    coverage: partial
+    selector:
+      type: element
+      stereotypes:
+        any_of: [ValueProposition]
+    condition:
+      type: connector_count
+      connector_stereotype: DeliverableFlow
+      direction: outgoing
+      max: 1
+    remediation:
+      short: "Keep one receiving Role."
+      auto_fixable: false

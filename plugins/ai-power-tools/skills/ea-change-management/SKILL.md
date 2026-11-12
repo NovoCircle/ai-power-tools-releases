@@ -10,7 +10,9 @@ AI Power Tools for Sparx EA v2.3.0+*
 
 Run the `ea-start-here` preflight first — confirm the right repository is open before touching
 baselines. A baseline captured against, or applied to, the wrong model is a wasted afternoon at
-best.
+best. **If the model the person named is not the one `get_repository_info` reports as open, stop
+before any write, say which model is open, and ask which one they mean.** Create no baseline
+until they confirm.
 
 ## When to use
 
@@ -18,6 +20,9 @@ best.
 - To find out what changed in a package or the whole repository over a time window, and who
   changed it.
 - To compare current state against a known-good snapshot before deciding whether to keep a change.
+- **Not** for a baseline of a modeling language (an MDG technology), or renaming and locking a
+  technology's package root. Hand that to `ea-mdg-model-build`, which owns versioned technology
+  baselines, and create nothing here. The baselines in this skill are for package content only.
 - **Not** for source-controlled model files (`.xml`/`.eaxmi` exports under version control) —
   that's a different workflow. This skill covers EA's own baseline mechanism, stored inside the
   `.qea`/`.eap` file itself.
@@ -28,7 +33,7 @@ best.
 |---|---|---|
 | Create a baseline | `ea_repository(operation="create_baseline", params={"package_id": ..., "version": ..., "notes": ...})` | Snapshots a package subtree into the repository as a compressed document. |
 | List baselines | `ea_repository(operation="list_baselines", params={"package_id": ...})` | Lists snapshots taken against that package. |
-| Compare to a baseline | `ea_repository(operation="compare_baseline", params={"package_id": ..., "baseline_guid": ...})` | Diffs current package state against a named snapshot. Read-only. |
+| Compare to a baseline | `ea_repository(operation="compare_baseline", params={"package_id": ..., "baseline_guid": ..., "include_identical": false})` | Diffs current package state against a named snapshot. Read-only. `include_identical` (default `false`) adds the unchanged items (§2). |
 | **Apply a baseline** | `ea_repository(operation="apply_baseline", params={"package_id": ..., "baseline_guid": ...})` | **Overwrites current package content with the snapshot.** See the warning below before you call this. |
 | Updates in a time window | `ea_analyze(operation="get_updates_in_range", params={"start": ..., "end": ..., "kind": ...})` | Repository-wide list of elements/packages/diagrams created or modified in `[start, end]`. |
 | Activity by user | `ea_analyze(operation="get_user_activity", params={"start": ..., "end": ...})` | Repository-wide edit counts grouped by the author who made them. |
@@ -57,6 +62,11 @@ Pick scope by what you're protecting against, not by habit:
 | Handing a package to another team or tool to edit | That package, immediately before the handoff — gives you a clean "before" to diff against later |
 | Trying out an MDG or ruleset change | A dedicated scratch package, never a real content package — see §3 |
 
+**A model can have several root packages** (`list_root_packages` shows them; in the Westbrook example
+there are five, and the one named `Model` holds none of the bank's content). A baseline holds only the
+subtree under its `package_id`, so a whole-model operation needs one baseline per root it touches:
+name each root, and baseline the one that holds the content, not the one called "Model".
+
 Package-level baselines are cheaper and easier to reason about: a diff against a 20-element
 package is something you can actually read, where a diff against the whole model is not. Default
 to the narrowest package that contains the change you're protecting against, and reserve
@@ -71,8 +81,9 @@ FROM t_document WHERE DocType = 'Baseline'
 ```
 
 `list_baselines` returns `version` and `notes` intact, but `date` and `author` come back empty —
-don't build logic that depends on them being populated. If you need authoritative baseline
-metadata, query `t_document` directly.
+don't build logic that depends on them being populated. `t_document` has the date (`DocDate`)
+but not the author: `Author` is empty on every baseline in the Westbrook copy. Query `t_document`
+for the date, and say plainly that no author is recorded.
 
 ---
 
@@ -87,26 +98,11 @@ The diff arrives under `diff`, alongside `baseline` (the snapshot's own metadata
 now) and `baseline_payload_bytes` (the snapshot's compressed size — a size proxy, not a diff).
 `structured_diff_available` is `true` when EA returned a comparison to parse.
 
-```python
-{"status": "comparison_opened", "package_id": 5, "baseline_guid": "{...}",
- "structured_diff_available": True,
- "diff": {
-   "has_changes": True,
-   "item_status_counts": {"Identical": 1, "Model only": 1, "Baseline only": 1},
-   "item_count": 3,
-   "include_identical": False,
-   "items": [
-     {"name": "PaymentGateway", "type": "", "status": "Model only",
-      "guid": "{C0CA1B4C-F674-4652-A180-F283DF5D06C6}",
-      "parent_guid": "{CE22A172-94A8-4c09-9979-B67BD05C8279}", "depth": 1,
-      "properties": [{"name": "Name", "model": "PaymentGateway",
-                      "baseline": None, "status": "Model only"}]},
-   ],
-   "compared_packages": [{"name": "Payments", "guid_form": "underscore",
-                          "guid": "EAID_CE22A172_94A8_4c09_9979_B67BD05C8279",
-                          "compared_on": "2026-09-24 10:14:21", "has_changes": True}],
-   "log_bytes": 5465}}
-```
+A trimmed example of the whole response is in
+[`references/worked-example.md`](references/worked-example.md) §4.
+
+A compare run right after `create_baseline` can still list differences. EA reports them itself,
+so treat a non-empty compare right after creation as EA's behavior, not as a change someone made.
 
 **Read `status`, on items and on properties, as the four buckets EA uses:**
 
@@ -152,10 +148,13 @@ That means, plainly: **every element, connector, diagram, and tagged-value chang
 package since the baseline was taken is discarded**, including work by other people, not just
 yours. It is not a merge and not a selective revert — it replaces the subtree wholesale.
 
-**Never call `apply_baseline` against a package you did not baseline yourself for this purpose.**
-On a shared repository, a package-level apply can silently erase a colleague's concurrent edits
-with no separate confirmation step. Treat every `apply_baseline` call as irreversible unless you
-have already taken the precaution below.
+**Never call `apply_baseline` on your own initiative against a package you did not baseline
+yourself for this purpose.** On a shared repository, a package-level apply can silently erase a
+colleague's concurrent edits with no separate confirmation step. If the person asks for a
+rollback to a snapshot someone else took, stop first: show `compare_baseline`'s diff, say what the
+apply will discard (including other people's changes), and get an explicit yes. Only then follow
+the steps below. Treat every `apply_baseline` call as irreversible unless you have already taken
+the precaution below.
 
 ### Before you call it
 
@@ -183,19 +182,20 @@ contents either way rather than trusting the response alone.
 
 ## 4. Failure modes hit during verification
 
-The other three found while verifying this skill against a live, small (2-element) scratch
+Three things found while verifying this skill against a live, small (2-element) scratch
 package — not edge cases from a large or unusual repository.
 
 - **A call that appears to hang is usually a modal dialog**, not a slow operation. EA raises
   one for any SQL its backend cannot run, and it holds the COM connection until dismissed.
   Look at the screen before retrying — see
   [`../_shared/references/ea-ui-verification.md`](../_shared/references/ea-ui-verification.md).
-- **`get_updates_in_range` / `get_user_activity` silently return zero rows for ISO-8601
-  timestamps.** Both expect `start`/`end` as `YYYY-MM-DD HH:MM:SS`, matching how
-  `t_object.CreatedDate`/`ModifiedDate` are actually stored — not `2026-09-23T00:00:00Z`. Passing
-  the ISO form is **not an error**; it just returns an empty result set, which reads exactly like
-  "nothing changed in that window." Confirmed reproducible on both operations. Always use the
-  space-separated form.
+- **Dates.** Since server 2.3.0, `get_updates_in_range` and `get_user_activity` accept
+  `YYYY-MM-DD`, `YYYY-MM-DD HH:MM[:SS]`, and ISO-8601 (`2026-09-23T00:00:00Z`, fractional
+  seconds, `Z` or an offset). They normalize to the form EA stores, ignore a timezone designator
+  (EA stores local times; the response notes it in `date_notes`), and treat a bare end date as
+  the whole day. A date they cannot read returns `invalid_date_range`, as does a start after the
+  end; neither returns an empty list. Before 2.3.0, ISO timestamps returned an empty result with
+  no error, so on an older server use `YYYY-MM-DD HH:MM:SS`.
 - **Neither audit operation takes a `package_id`.** Both are repository-wide. To answer a
   package-scoped question, filter the returned items by `package_id` client-side, or query
   `t_object`/`t_package` directly with `execute_sql` and a `WHERE Package_ID = ...` clause.
@@ -211,7 +211,7 @@ Two read-only, repository-wide operations answer complementary questions.
 ea_analyze(operation="get_updates_in_range", params={
     "start": "2026-09-23 00:00:00",
     "end": "2026-09-23 23:59:59",
-    "kind": "elements",   # default; also valid: "packages", "diagrams"
+    "kind": "elements",   # default; also valid: "packages", "diagrams", "all"
 })
 
 # Who was active, and how much did each person touch?
@@ -223,8 +223,14 @@ ea_analyze(operation="get_user_activity", params={
 
 `get_updates_in_range` returns one row per changed item (`kind`, `id`, `name`, `type`,
 `package_id`, `modified`). `kind="elements"` (the default) includes packages alongside ordinary
-elements — packages are objects too, in EA's terms. `kind="connectors"` is **not** a valid value;
-connector-level history isn't tracked by this operation.
+elements, since packages are objects too in EA's terms. `kind="all"` returns elements, packages and
+diagrams in one list, so a package can appear twice (as its object, and as a package).
+`kind="connectors"` is **not** a valid value.
+
+**The audit trail covers elements, packages and diagrams only. Connectors are outside it.**
+Neither operation can tell you a connector was added, changed or removed. In any answer about
+history, say what the audit cannot see *before* you say what did not change, and never reply
+"no connectors were added": the honest answer is that connector history is not tracked here.
 
 `get_user_activity` returns one row per author with `elements_modified`, `diagrams_modified`, and
 `last_active`. The `author` value is the raw EA/Windows login that made the edit, not a chosen
@@ -253,7 +259,7 @@ offering on none: it bloats the repository (§1) and trains people to click thro
 
 | Trigger | Operation | Threshold |
 |---|---|---|
-| Package deletion | `ea_model(operation="delete_package", params={"package_id": ...})` | Always. There's no size below which deleting a whole subtree isn't worth protecting. |
+| Package deletion | `ea_model(operation="delete_package", params={"package_id": ...})` | Always. There's no size below which deleting a whole subtree isn't worth protecting. **Do not baseline the package being deleted: `delete_package` deletes that package's own baselines, so the restore point goes with it.** Baseline its parent package (or the model root), or export the package as XMI first (`ea_repository("export_xmi")`). If the package or one below it already has baselines, the call is refused with `package_has_baselines`: say those baselines will be lost, and pass `allow_baseline_loss: true` only after the person agrees. |
 | Bulk edit | `ea_model(operation="create_elements_bulk")`, `ea_model(operation="create_connectors_bulk")`, `ea_diagram(operation="add_elements_to_diagram_bulk")`, or a scripted loop of `update_element`/`delete_element`/`set_tagged_value` calls performing one logical change | More than **25 elements or connectors** touched, counting the whole logical operation — a change made as 40 individual `update_element` calls is still a 40-element change, not 40 one-element changes. |
 | Ruleset-driven fix | Corrective writes applied after `ea_validate(operation="audit", ...)` reports non-conformant elements. The audit call itself is read-only and doesn't trigger this — only acting on its findings does. | More than 25 elements affected by the corrections, same rule as above. |
 | MDG rollout | `ea_mdg(operation="install_mdg", ...)` into a repository that already holds content of the kind the technology governs, followed by bringing existing elements into conformance with it | Always. A rollout's whole point is reclassifying existing elements, and the "before" state is exactly what a baseline protects. |
@@ -272,8 +278,8 @@ Mirrors `ea-navigation-diagrams`'s own offer:
   how many elements are affected, and which package or the model root you'd baseline, then offer
   the choice.
 - **Accepting** creates the baseline (§1 picks scope: the package being changed, or the model
-  root for a repository-wide operation), confirms it with `list_baselines`, then proceeds with
-  the triggering call.
+  root for a repository-wide operation; for a deletion, the package's parent, never the package
+  itself), confirms it with `list_baselines`, then proceeds with the triggering call.
 - **Declining** is remembered **for the rest of the session, per trigger category** — the same
   granularity `ea-navigation-diagrams` uses per package. Don't re-ask about another
   `delete_package` this session once the user has said no to one; a separate bulk edit or
@@ -287,13 +293,15 @@ Mirrors `ea-navigation-diagrams`'s own offer:
 
 State scope and operation before the user answers — never ask blind:
 
-> "About to delete the `Legacy Integrations` package (14 elements, 3 diagrams). Want me to
-> baseline it first, so there's a rollback point?"
+> "About to delete the `Legacy Integrations` package (14 elements, 3 diagrams). Deleting it also
+> deletes any baseline of it, so want me to baseline its parent, or export it as XMI, first so
+> there's a way back?"
 
 > "This ruleset fix will update 38 elements' `criticality` tag. Want a baseline of
 > `Consumer Banking` before I apply it?"
 
-Two options, every time: **yes, baseline first**, or **no, proceed without one**. No third
+Two options, every time: **yes, take a restore point first** (a baseline of the package, or for
+a deletion a baseline of its parent or an XMI export), or **no, proceed without one**. No third
 "always ask me" option — the per-category "no" already gives standing relief for the rest of the
 session, and the default behavior already asks the first time.
 
@@ -381,10 +389,11 @@ COM connection rather than as an error you can catch. Neither shows up in a tool
 - **If a call seems to hang, screenshot EA and read the dialog before concluding anything.**
   It names the cause. Dismiss from the front — dialogs stack, and a later call can be queued
   behind one raised by an earlier one. Windows reporting EA as "Responding" means nothing.
-- **After any diagram create or edit, reload the diagram, screenshot it, and look.**
-  `ok: true` means rows were written, not that elements landed where you intended, that
-  styling applied, or that the result is readable.
-- **Without computer use**, say so and ask the user to look — never report a hang you have
-  not diagnosed or a diagram you have not seen.
+- **This skill edits no diagram.** If a change you baseline for creates or edits one, reload
+  it, screenshot it, and look: `ok: true` means rows were written, not that the result is
+  readable.
+- **Without computer use**, say so. Ask the user to paste a screenshot of the EA window or
+  dialog into the conversation, read the cause from it, and ask the user to dismiss the dialog
+  before you retry. Never report a hang you have not diagnosed or a diagram you have not seen.
 
 Full procedure: [`../_shared/references/ea-ui-verification.md`](../_shared/references/ea-ui-verification.md)

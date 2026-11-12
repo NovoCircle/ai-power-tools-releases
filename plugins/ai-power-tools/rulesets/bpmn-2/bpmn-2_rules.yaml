@@ -1,0 +1,1654 @@
+# BPMN 2.0.2 Conformance Ruleset
+# Language:     BPMN 2.0.2 (OMG formal/13-12-09), as modeled with Sparx's built-in `BPMN2.0` technology
+# Enforced by:  AI Power Tools for Sparx EA - validate_model tool
+# Generated from the language skill's rules and connection tables; do not edit by hand.
+#
+# STEREOTYPE NAMES ARE UNQUALIFIED, AND THAT IS MEASURED.
+#
+# validate_model selects with `Stereotype IN (...)` on t_object and t_connector. For Sparx's BPMN2.0 technology that
+# column holds the bare name (`StartEvent`, `Activity`, `SequenceFlow`); the qualified form `BPMN2.0::StartEvent` is only in
+# the t_xref row named `Stereotypes`. Measured on EA 17.1 build 1716 by creating one element or connector per stereotype in a
+# test model and reading it back: 56 of the technology's 57 stereotypes bound, FQName `BPMN2.0::<name>`.
+#
+# THE STANDARD'S KINDS ARE TAG VALUES, NOT STEREOTYPES. EA stores a task, a sub-process, a call activity, an event
+# sub-process, a transaction and an ad-hoc sub-process under one stereotype, `Activity`; the kind is the tagged values
+# `taskType`, `activityType`, `isACalledActivity`, `triggeredByEvent`, `isATransaction`, `adHoc`. The same holds for events
+# (`eventDefinition`, `catchOrThrow`, `cancelActivity`) and gateways (`gatewayType`, `gatewayDirection`). So the rules below
+# select a stereotype and narrow it with `tagged_value_filter` on those tags. Defaults are stored when the element is
+# created (a new Activity is taskType Abstract, a new IntermediateEvent is eventDefinition Message, a new Gateway is Exclusive
+# with gatewayDirection Unspecified).
+#
+# WHAT THE VALIDATOR CAN SEE, AND WHAT IT CANNOT. A rule selects an element by its own stereotype, EA type and tags, selects a
+# connector by stereotype or EA connector type, and counts its connectors. It can also check where an element sits
+# (`contained_in`, `contains_count`: the element it is attached to by ParentID, else its package, named by stereotype, type or
+# name), so the pool, lane or process an element is in, and a boundary event (stored as an ObjectNode child of its activity), can
+# be named. No rule in this file uses the containment rules yet. A rule cannot read a container's tagged values or a connector's
+# tagged values, and it cannot say "or". The language skill's rules that need those, or that are not written, are not in this file.
+#
+# EXECUTABLE PROCESSES. A process is marked executable by the tagged value `isExecutable` = true on a `BusinessProcess`
+# (values true or false, no default; empty until set). Only BPMN2-ACT-011 has the process element itself as its subject and
+# is therefore in this file. The other rules the standard limits to executable processes concern activities, events and
+# gateways inside the process; those elements carry no marker, and the validator can name the process an element sits in but cannot read its isExecutable tag, so
+# applying them to every model would report ordinary non-executable models. They are left out, not applied.
+#
+# WS-BPEL MAPPING. The standard defines no flag for it and EA's `BPELProcess` marks a process, not the elements inside it.
+# The rules that apply only when a mapping is requested are not in this file.
+#
+# NAME COLLISIONS. The names are not unique to BPMN 2.0: EA's BPMN 1.0 and BPMN 1.1 technologies declare the same short
+# names for Activity, BusinessProcess, DataObject, EndEvent, Gateway, Group, IntermediateEvent, Lane, Message, MessageFlow,
+# Participant, Pool, Property, SequenceFlow, StartEvent and TextAnnotation (measured from the MDG files shipped with EA
+# 17.1), and `Interface`, `Operation`, `Error` and `Signal` are common elsewhere. A model that mixes technologies has those
+# elements judged too; confirm that a clean run also matched more than zero BPMN 2.0 elements.
+#
+# Sources:
+#   [S1] OMG, Business Process Model and Notation (BPMN) Version 2.0.2, formal/13-12-09
+#        https://www.omg.org/spec/BPMN/2.0.2/
+#   [S2] Sparx Systems, BPMN 2.0 Technology.xml (MDG technology id BPMN2.0, file version 1.0.7)
+
+meta:
+  version: "0.1"
+  language: bpmn-2
+  organization: "(your organization)"
+  mdg_family: BPMN2.0
+  description: >
+    Conformance rules for BPMN 2.0.2 models built with Sparx Enterprise Architect's BPMN2.0 technology: which flow nodes a
+    sequence flow and a message flow may join (Tables 7.3 and 7.4), the incoming and outgoing flows each event and gateway
+    needs, and the required tagged values of a few supporting elements. Each rule names the rules.md id it implements.
+  severity_levels:
+    error: A requirement of the standard (rules.md strength must)
+    warning: Guidance of the standard (rules.md strength should)
+    info: Advisory note; not a conformance violation
+
+tables:
+  bpmn-2-sequence-flow:
+    source: "OMG BPMN 2.0.2 (formal/13-12-09) Table 7.3, 7.6.1 (pp. 40 to 41), written in the stored stereotypes of Sparx's BPMN2.0 technology: Task, Sub-Process and Call Activity are Activity; choreography tasks are Choreography"
+    connectors:
+      s: SequenceFlow
+    cells:
+      Activity:
+        Activity: "s"
+        EndEvent: "s"
+        Gateway: "s"
+        IntermediateEvent: "s"
+      Choreography:
+        Choreography: "s"
+        EndEvent: "s"
+        Gateway: "s"
+        IntermediateEvent: "s"
+      EndEvent: {}
+      Gateway:
+        Activity: "s"
+        Choreography: "s"
+        EndEvent: "s"
+        Gateway: "s"
+        IntermediateEvent: "s"
+      IntermediateEvent:
+        Activity: "s"
+        Choreography: "s"
+        EndEvent: "s"
+        Gateway: "s"
+        IntermediateEvent: "s"
+      StartEvent:
+        Activity: "s"
+        Choreography: "s"
+        EndEvent: "s"
+        Gateway: "s"
+        IntermediateEvent: "s"
+  bpmn-2-message-flow:
+    source: "OMG BPMN 2.0.2 (formal/13-12-09) Table 7.4, 7.6.2 (p. 42), written in the stored stereotypes of Sparx's BPMN2.0 technology: Pool and Participant for the standard's Participant"
+    connectors:
+      m: MessageFlow
+    cells:
+      Activity:
+        Activity: "m"
+        IntermediateEvent: "m"
+        Participant: "m"
+        Pool: "m"
+        StartEvent: "m"
+      EndEvent:
+        Activity: "m"
+        IntermediateEvent: "m"
+        Participant: "m"
+        Pool: "m"
+        StartEvent: "m"
+      IntermediateEvent:
+        Activity: "m"
+        IntermediateEvent: "m"
+        Participant: "m"
+        Pool: "m"
+        StartEvent: "m"
+      Participant:
+        Activity: "m"
+        IntermediateEvent: "m"
+        Participant: "m"
+        Pool: "m"
+        StartEvent: "m"
+      Pool:
+        Activity: "m"
+        IntermediateEvent: "m"
+        Participant: "m"
+        Pool: "m"
+        StartEvent: "m"
+  bpmn-2-process-or-choreography:
+    source: "OMG BPMN 2.0.2 (formal/13-12-09) Table 8.45 and clause 11 (rule BPMN-CONN-011): a process and a choreography do not share flow elements; derived from the rule, not printed as a table"
+    connectors:
+      s: SequenceFlow
+    cells:
+      Activity:
+        Activity: "s"
+      Choreography:
+        Choreography: "s"
+  bpmn-2-conversation-link:
+    source: "OMG BPMN 2.0.2 (formal/13-12-09) Table 9.13 and 9.4.1 (rule BPMN-CONN-015): a conversation link joins one conversation node to one other interaction node, which is a participant, an activity or an event; derived from the rule, not printed as a table. A row with no cells names a stereotype that can't be the other end, so a link to it is reported"
+    connectors:
+      l: ConversationLink
+    cells:
+      Activity:
+        Conversation: "l"
+      Assignment: {}
+      BPELProcess: {}
+      BusinessProcess: {}
+      Category: {}
+      CategoryValue: {}
+      Choreography: {}
+      ChoreographyModel: {}
+      CollaborationModel: {}
+      ComplexBehaviorDefinition: {}
+      Conversation:
+        Activity: "l"
+        EndEvent: "l"
+        IntermediateEvent: "l"
+        Participant: "l"
+        Pool: "l"
+        StartEvent: "l"
+      ConversationModel: {}
+      CorrelationKey: {}
+      CorrelationProperty: {}
+      CorrelationPropertyBinding: {}
+      CorrelationPropertyRetrievalExpression: {}
+      CorrelationSubscription: {}
+      DataObject: {}
+      DataStore: {}
+      EndEvent:
+        Conversation: "l"
+      EndPoint: {}
+      Error: {}
+      Escalation: {}
+      Gateway: {}
+      GlobalTask: {}
+      Group: {}
+      IOSpecification: {}
+      InputOutputBinding: {}
+      InputSet: {}
+      Interface: {}
+      IntermediateEvent:
+        Conversation: "l"
+      ItemDefinition: {}
+      Lane: {}
+      Message: {}
+      Operation: {}
+      OutputSet: {}
+      Participant:
+        Conversation: "l"
+      PartnerEntity: {}
+      PartnerRole: {}
+      Pool:
+        Conversation: "l"
+      Resource: {}
+      ResourceParameter: {}
+      ResourceRole: {}
+      Signal: {}
+      StartEvent:
+        Conversation: "l"
+      TextAnnotation: {}
+
+rules:
+  - id: BPMN2-CONN-002
+    name: Sequence flow joins flow nodes allowed by Table 7.3
+    implements: BPMN-CONN-002
+    description: 'A sequence flow joins events, activities (or choreography activities) and gateways, and only the pairs Table
+      7.3 allows: nothing leaves an end event, nothing enters a start event. Checked on the stored stereotypes, so a task,
+      a sub-process and a call activity are all `Activity`. Pools, lanes, data objects, groups and text annotations are judged
+      by BPMN2-CONN-005 and BPMN2-CONN-006a. [OMG BPMN 2.0.2 (formal/13-12-09) 8.4.13 p. 95]'
+    category: connection
+    severity: error
+    demo_trigger: true
+    coverage: full
+    selector:
+      type: connector
+      connector_stereotypes: any_of_table
+    condition:
+      type: relationship_table
+      table: bpmn-2-sequence-flow
+      skip_endpoints:
+      - Pool
+      - Lane
+      - DataObject
+      - Group
+      - TextAnnotation
+      unknown_endpoint: error
+    remediation:
+      short: Connect the sequence flow between events, activities and gateways Table 7.3 allows, or use a message flow to
+        cross to another participant.
+      auto_fixable: false
+
+  - id: BPMN2-CONN-005
+    name: Artifacts take no sequence or message flow
+    implements: BPMN-CONN-005
+    description: A group or a text annotation is an artifact and is never the source or target of a sequence flow or a message
+      flow; link it with an association. [OMG BPMN 2.0.2 (formal/13-12-09) 8.4.1 pp. 64 to 65]
+    category: connection
+    severity: error
+    demo_trigger: false
+    coverage: full
+    selector:
+      type: connector
+      connector_stereotypes:
+      - SequenceFlow
+      - MessageFlow
+    condition:
+      type: connector_endpoint_stereotype
+      source_must_be_one_of:
+      - Activity
+      - Assignment
+      - BPELProcess
+      - BusinessProcess
+      - Category
+      - CategoryValue
+      - Choreography
+      - ChoreographyModel
+      - CollaborationModel
+      - ComplexBehaviorDefinition
+      - Conversation
+      - ConversationModel
+      - CorrelationKey
+      - CorrelationProperty
+      - CorrelationPropertyBinding
+      - CorrelationPropertyRetrievalExpression
+      - CorrelationSubscription
+      - DataObject
+      - DataStore
+      - EndEvent
+      - EndPoint
+      - Error
+      - Escalation
+      - Gateway
+      - GlobalTask
+      - IOSpecification
+      - InputOutputBinding
+      - InputSet
+      - Interface
+      - IntermediateEvent
+      - ItemDefinition
+      - Lane
+      - Message
+      - Operation
+      - OutputSet
+      - Participant
+      - PartnerEntity
+      - PartnerRole
+      - Pool
+      - Resource
+      - ResourceParameter
+      - ResourceRole
+      - Signal
+      - StartEvent
+      - ''
+      target_must_be_one_of:
+      - Activity
+      - Assignment
+      - BPELProcess
+      - BusinessProcess
+      - Category
+      - CategoryValue
+      - Choreography
+      - ChoreographyModel
+      - CollaborationModel
+      - ComplexBehaviorDefinition
+      - Conversation
+      - ConversationModel
+      - CorrelationKey
+      - CorrelationProperty
+      - CorrelationPropertyBinding
+      - CorrelationPropertyRetrievalExpression
+      - CorrelationSubscription
+      - DataObject
+      - DataStore
+      - EndEvent
+      - EndPoint
+      - Error
+      - Escalation
+      - Gateway
+      - GlobalTask
+      - IOSpecification
+      - InputOutputBinding
+      - InputSet
+      - Interface
+      - IntermediateEvent
+      - ItemDefinition
+      - Lane
+      - Message
+      - Operation
+      - OutputSet
+      - Participant
+      - PartnerEntity
+      - PartnerRole
+      - Pool
+      - Resource
+      - ResourceParameter
+      - ResourceRole
+      - Signal
+      - StartEvent
+      - ''
+    remediation:
+      short: Replace the flow with an Association between the artifact and the element.
+      auto_fixable: false
+
+  - id: BPMN2-CONN-006a
+    name: No sequence flow on pools, lanes, data objects or artifacts
+    implements: BPMN-CONN-006
+    description: A pool, a lane, a data object, a group and a text annotation cannot be the source or target of a sequence
+      flow. [OMG BPMN 2.0.2 (formal/13-12-09) 7.6.1 to 7.6.2 pp. 41 to 42]
+    category: connection
+    severity: error
+    demo_trigger: false
+    coverage: full
+    selector:
+      type: connector
+      connector_stereotype: SequenceFlow
+    condition:
+      type: connector_endpoint_stereotype
+      source_must_be_one_of:
+      - Activity
+      - Assignment
+      - BPELProcess
+      - BusinessProcess
+      - Category
+      - CategoryValue
+      - Choreography
+      - ChoreographyModel
+      - CollaborationModel
+      - ComplexBehaviorDefinition
+      - Conversation
+      - ConversationModel
+      - CorrelationKey
+      - CorrelationProperty
+      - CorrelationPropertyBinding
+      - CorrelationPropertyRetrievalExpression
+      - CorrelationSubscription
+      - DataStore
+      - EndEvent
+      - EndPoint
+      - Error
+      - Escalation
+      - Gateway
+      - GlobalTask
+      - IOSpecification
+      - InputOutputBinding
+      - InputSet
+      - Interface
+      - IntermediateEvent
+      - ItemDefinition
+      - Message
+      - Operation
+      - OutputSet
+      - Participant
+      - PartnerEntity
+      - PartnerRole
+      - Resource
+      - ResourceParameter
+      - ResourceRole
+      - Signal
+      - StartEvent
+      - ''
+      target_must_be_one_of:
+      - Activity
+      - Assignment
+      - BPELProcess
+      - BusinessProcess
+      - Category
+      - CategoryValue
+      - Choreography
+      - ChoreographyModel
+      - CollaborationModel
+      - ComplexBehaviorDefinition
+      - Conversation
+      - ConversationModel
+      - CorrelationKey
+      - CorrelationProperty
+      - CorrelationPropertyBinding
+      - CorrelationPropertyRetrievalExpression
+      - CorrelationSubscription
+      - DataStore
+      - EndEvent
+      - EndPoint
+      - Error
+      - Escalation
+      - Gateway
+      - GlobalTask
+      - IOSpecification
+      - InputOutputBinding
+      - InputSet
+      - Interface
+      - IntermediateEvent
+      - ItemDefinition
+      - Message
+      - Operation
+      - OutputSet
+      - Participant
+      - PartnerEntity
+      - PartnerRole
+      - Resource
+      - ResourceParameter
+      - ResourceRole
+      - Signal
+      - StartEvent
+      - ''
+    remediation:
+      short: Attach the sequence flow to a flow node inside the pool or lane; use a data association for data.
+      auto_fixable: false
+
+  - id: BPMN2-CONN-006b
+    name: No message flow on lanes, gateways, data objects or artifacts
+    implements: BPMN-CONN-006
+    description: A lane, a gateway, a data object, a group and a text annotation cannot be the source or target of a message
+      flow. [OMG BPMN 2.0.2 (formal/13-12-09) 7.6.1 to 7.6.2 pp. 41 to 42]
+    category: connection
+    severity: error
+    demo_trigger: false
+    coverage: full
+    selector:
+      type: connector
+      connector_stereotype: MessageFlow
+    condition:
+      type: connector_endpoint_stereotype
+      source_must_be_one_of:
+      - Activity
+      - Assignment
+      - BPELProcess
+      - BusinessProcess
+      - Category
+      - CategoryValue
+      - Choreography
+      - ChoreographyModel
+      - CollaborationModel
+      - ComplexBehaviorDefinition
+      - Conversation
+      - ConversationModel
+      - CorrelationKey
+      - CorrelationProperty
+      - CorrelationPropertyBinding
+      - CorrelationPropertyRetrievalExpression
+      - CorrelationSubscription
+      - DataStore
+      - EndEvent
+      - EndPoint
+      - Error
+      - Escalation
+      - GlobalTask
+      - IOSpecification
+      - InputOutputBinding
+      - InputSet
+      - Interface
+      - IntermediateEvent
+      - ItemDefinition
+      - Message
+      - Operation
+      - OutputSet
+      - Participant
+      - PartnerEntity
+      - PartnerRole
+      - Pool
+      - Resource
+      - ResourceParameter
+      - ResourceRole
+      - Signal
+      - StartEvent
+      - ''
+      target_must_be_one_of:
+      - Activity
+      - Assignment
+      - BPELProcess
+      - BusinessProcess
+      - Category
+      - CategoryValue
+      - Choreography
+      - ChoreographyModel
+      - CollaborationModel
+      - ComplexBehaviorDefinition
+      - Conversation
+      - ConversationModel
+      - CorrelationKey
+      - CorrelationProperty
+      - CorrelationPropertyBinding
+      - CorrelationPropertyRetrievalExpression
+      - CorrelationSubscription
+      - DataStore
+      - EndEvent
+      - EndPoint
+      - Error
+      - Escalation
+      - GlobalTask
+      - IOSpecification
+      - InputOutputBinding
+      - InputSet
+      - Interface
+      - IntermediateEvent
+      - ItemDefinition
+      - Message
+      - Operation
+      - OutputSet
+      - Participant
+      - PartnerEntity
+      - PartnerRole
+      - Pool
+      - Resource
+      - ResourceParameter
+      - ResourceRole
+      - Signal
+      - StartEvent
+      - ''
+    remediation:
+      short: Attach the message flow to the pool, an activity or an event instead.
+      auto_fixable: false
+
+  - id: BPMN2-CONN-007
+    name: Message flow joins the endpoints Table 7.4 allows
+    implements: BPMN-CONN-007
+    description: 'A message flow runs between pools or participants, activities and events only, and only the pairs Table
+      7.4 allows: a start event is never a source, an end event is never a target. Checked on the stored stereotypes. Lanes,
+      gateways, data objects, groups and text annotations are judged by BPMN2-CONN-006b. [OMG BPMN 2.0.2 (formal/13-12-09)
+      9.4 p. 122; Table 9.8]'
+    category: connection
+    severity: error
+    demo_trigger: false
+    coverage: partial
+    not_checked: Table 7.4 also fixes the event definition (a message start event, a throwing or catching message event);
+      the stored stereotype does not carry it, so the check is on the stereotype pair only.
+    selector:
+      type: connector
+      connector_stereotypes: any_of_table
+    condition:
+      type: relationship_table
+      table: bpmn-2-message-flow
+      skip_endpoints:
+      - Lane
+      - Gateway
+      - DataObject
+      - Group
+      - TextAnnotation
+      unknown_endpoint: error
+    remediation:
+      short: Connect the message flow between pools, activities and events Table 7.4 allows.
+      auto_fixable: false
+
+  - id: BPMN2-CONN-008a
+    name: A black-box pool receives no sequence flow
+    implements: BPMN-CONN-008
+    description: A black-box pool shows no process, so no sequence flow may end at it; message flows attach to its boundary.
+      [OMG BPMN 2.0.2 (formal/13-12-09) 9.3 p. 111]
+    category: connection
+    severity: error
+    demo_trigger: false
+    coverage: partial
+    not_checked: Elements placed inside a black-box pool are not seen (containment is not reachable).
+    selector:
+      type: element
+      stereotypes:
+        any_of:
+        - Pool
+      tagged_value_filter:
+      - tag: blackBoxPool
+        value_in:
+        - 'true'
+    condition:
+      type: connector_count
+      connector_stereotype: SequenceFlow
+      direction: incoming
+      max: 0
+    remediation:
+      short: Remove the sequence flow, or open the pool (blackBoxPool = false) and attach the flow to an element inside.
+      auto_fixable: false
+
+  - id: BPMN2-CONN-008b
+    name: A black-box pool sends no sequence flow
+    implements: BPMN-CONN-008
+    description: A black-box pool shows no process, so no sequence flow may start at it; message flows attach to its boundary.
+      [OMG BPMN 2.0.2 (formal/13-12-09) 9.3 p. 111]
+    category: connection
+    severity: error
+    demo_trigger: false
+    coverage: partial
+    not_checked: Elements placed inside a black-box pool are not seen (containment is not reachable).
+    selector:
+      type: element
+      stereotypes:
+        any_of:
+        - Pool
+      tagged_value_filter:
+      - tag: blackBoxPool
+        value_in:
+        - 'true'
+    condition:
+      type: connector_count
+      connector_stereotype: SequenceFlow
+      direction: outgoing
+      max: 0
+    remediation:
+      short: Remove the sequence flow, or open the pool (blackBoxPool = false) and attach the flow to an element inside.
+      auto_fixable: false
+
+  - id: BPMN2-CONN-010
+    name: A choreography references no other choreography
+    implements: BPMN-CONN-010
+    description: 'A collaboration may reference a choreography, but a choreography model cannot: its `choreographyRef` stays
+      empty. [OMG BPMN 2.0.2 (formal/13-12-09) Table 9.1 p. 109]'
+    category: connection
+    severity: error
+    demo_trigger: false
+    coverage: full
+    selector:
+      type: element
+      stereotypes:
+        any_of:
+        - ChoreographyModel
+    condition:
+      type: tagged_value_constraint
+      tags:
+      - name: choreographyRef
+        value_must_be_one_of:
+        - ''
+    remediation:
+      short: Clear choreographyRef on the choreography model.
+      auto_fixable: false
+
+  - id: BPMN2-CONN-011
+    name: Process activities and choreography activities are not joined by a sequence flow
+    implements: BPMN-CONN-011
+    description: Choreography activities are not flow elements of a process, and activities are not flow elements of a choreography,
+      so no sequence flow joins an Activity and a Choreography. [OMG BPMN 2.0.2 (formal/13-12-09) Table 8.45 p. 87]
+    category: connection
+    severity: error
+    demo_trigger: false
+    coverage: partial
+    not_checked: Containment (which process or choreography an element sits in) is not reachable; only a flow that joins the
+      two kinds is seen.
+    selector:
+      type: connector
+      connector_stereotype: SequenceFlow
+    condition:
+      type: relationship_table
+      table: bpmn-2-process-or-choreography
+      unknown_endpoint: ignore
+    remediation:
+      short: 'Keep a sequence flow inside one diagram kind: process flow between activities, choreography flow between choreography
+        activities.'
+      auto_fixable: false
+
+  - id: BPMN2-CONN-015
+    name: A conversation link has exactly one conversation node
+    implements: BPMN-CONN-015
+    description: A conversation link joins one conversation node to an interaction node (a pool, a participant, an activity,
+      an event); if one end is not a conversation node the other must be, it never joins two conversation nodes, and any
+      other element at the far end is reported. [OMG BPMN 2.0.2 (formal/13-12-09) Table 9.13 p. 133]
+    category: connection
+    severity: error
+    demo_trigger: false
+    coverage: full
+    selector:
+      type: connector
+      connector_stereotype: ConversationLink
+    condition:
+      type: relationship_table
+      table: bpmn-2-conversation-link
+      unknown_endpoint: ignore
+    remediation:
+      short: Join a Conversation to a pool, a participant, an activity or an event with the link; do not join two conversations or two of the others.
+      auto_fixable: false
+
+  - id: BPMN2-CONN-019
+    name: A choreography activity has two or more participants
+    implements: BPMN-CONN-019
+    description: A choreography activity involves two or more participants; EA's `numberOfParticipants` offers 2, 3 or 4.
+      [OMG BPMN 2.0.2 (formal/13-12-09) Table 9.10 p. 128; Table 11.1 p. 322]
+    category: connection
+    severity: error
+    demo_trigger: false
+    coverage: partial
+    not_checked: 'Conversation nodes (two or more participants) are not checked: it needs the count of conversation links
+      in both directions.'
+    selector:
+      type: element
+      stereotypes:
+        any_of:
+        - Choreography
+    condition:
+      type: tagged_value_constraint
+      tags:
+      - name: numberOfParticipants
+        value_must_be_one_of:
+        - '2'
+        - '3'
+        - '4'
+    remediation:
+      short: Set numberOfParticipants to 2, 3 or 4.
+      auto_fixable: false
+
+  - id: BPMN2-EVT-002a
+    name: A start event takes no incoming sequence flow
+    implements: BPMN-EVT-002
+    description: A start event is never the target of a sequence flow. A start event attached to the boundary of an expanded
+      sub-process is an exception the standard allows; the stored element cannot be told apart, so it is reported too. [OMG
+      BPMN 2.0.2 (formal/13-12-09) 10.5.2 p. 244]
+    category: event
+    severity: error
+    demo_trigger: false
+    coverage: partial
+    not_checked: The condition-free outgoing flows half of the rule is not checked (needs the flow's tag).
+    selector:
+      type: element
+      stereotypes:
+        any_of:
+        - StartEvent
+    condition:
+      type: connector_count
+      connector_stereotype: SequenceFlow
+      direction: incoming
+      max: 0
+    remediation:
+      short: Remove the incoming sequence flow; use a message flow to trigger a start event from another participant.
+      auto_fixable: false
+
+  - id: BPMN2-EVT-002b
+    name: A start event has an outgoing sequence flow
+    implements: BPMN-EVT-002
+    description: A start event is the source of at least one sequence flow. [OMG BPMN 2.0.2 (formal/13-12-09) 10.5.2 p. 244]
+    category: event
+    severity: error
+    demo_trigger: true
+    coverage: full
+    selector:
+      type: element
+      stereotypes:
+        any_of:
+        - StartEvent
+    condition:
+      type: connector_count
+      connector_stereotype: SequenceFlow
+      direction: outgoing
+      min: 1
+    remediation:
+      short: Add a sequence flow from the start event to the first activity.
+      auto_fixable: false
+
+  - id: BPMN2-EVT-003
+    name: A start event sends no message flow
+    implements: BPMN-EVT-003
+    description: A start event may receive message flows (each is a trigger) but is never the source of one. [OMG BPMN 2.0.2
+      (formal/13-12-09) 10.5.2 p. 245]
+    category: event
+    severity: error
+    demo_trigger: false
+    coverage: full
+    selector:
+      type: element
+      stereotypes:
+        any_of:
+        - StartEvent
+    condition:
+      type: connector_count
+      connector_stereotype: MessageFlow
+      direction: outgoing
+      max: 0
+    remediation:
+      short: Remove the message flow from the start event; send from an activity or an intermediate or end event.
+      auto_fixable: false
+
+  - id: BPMN2-EVT-004a
+    name: An end event has an incoming sequence flow
+    implements: BPMN-EVT-004
+    description: An end event is the target of at least one sequence flow. [OMG BPMN 2.0.2 (formal/13-12-09) 10.5.3 p. 248]
+    category: event
+    severity: error
+    demo_trigger: false
+    coverage: full
+    selector:
+      type: element
+      stereotypes:
+        any_of:
+        - EndEvent
+    condition:
+      type: connector_count
+      connector_stereotype: SequenceFlow
+      direction: incoming
+      min: 1
+    remediation:
+      short: Add a sequence flow into the end event.
+      auto_fixable: false
+
+  - id: BPMN2-EVT-004b
+    name: An end event has no outgoing sequence flow
+    implements: BPMN-EVT-004
+    description: An end event is never the source of a sequence flow. A end event attached to the boundary of an expanded
+      sub-process is an exception the standard allows; the stored element cannot be told apart, so it is reported too. [OMG
+      BPMN 2.0.2 (formal/13-12-09) 10.5.3 p. 248]
+    category: event
+    severity: error
+    demo_trigger: false
+    coverage: full
+    selector:
+      type: element
+      stereotypes:
+        any_of:
+        - EndEvent
+    condition:
+      type: connector_count
+      connector_stereotype: SequenceFlow
+      direction: outgoing
+      max: 0
+    remediation:
+      short: Remove the outgoing sequence flow, or replace the end event with an intermediate event.
+      auto_fixable: false
+
+  - id: BPMN2-EVT-005
+    name: An end event receives no message flow
+    implements: BPMN-EVT-005
+    description: An end event sends messages but is never the target of a message flow. [OMG BPMN 2.0.2 (formal/13-12-09)
+      10.5.3 p. 248]
+    category: event
+    severity: error
+    demo_trigger: false
+    coverage: partial
+    not_checked: An end event with outgoing message flows must have the result Message or Multiple; this needs the flow count
+      and the tag together.
+    selector:
+      type: element
+      stereotypes:
+        any_of:
+        - EndEvent
+    condition:
+      type: connector_count
+      connector_stereotype: MessageFlow
+      direction: incoming
+      max: 0
+    remediation:
+      short: Point the message flow at an activity, a catching intermediate event or a start event.
+      auto_fixable: false
+
+  - id: BPMN2-EVT-007a
+    name: An intermediate event has an outgoing sequence flow
+    implements: BPMN-EVT-007
+    description: 'An intermediate event passes the flow on: it is the source of a sequence flow (a link source and a compensation
+      catch event are the exceptions, judged by the next rules). [OMG BPMN 2.0.2 (formal/13-12-09) 10.5.4 p. 258]'
+    category: event
+    severity: error
+    demo_trigger: false
+    coverage: partial
+    not_checked: 'The incoming half (an intermediate event in normal flow is a target) is not checked: a boundary event shares
+      the stereotype and must have no incoming flow.'
+    selector:
+      type: element
+      stereotypes:
+        any_of:
+        - IntermediateEvent
+      tagged_value_filter:
+      - tag: eventDefinition
+        value_in:
+        - None
+        - Cancel
+        - Conditional
+        - Escalation
+        - Error
+        - Message
+        - Multiple
+        - Timer
+        - Signal
+        - ParallelMultiple
+    condition:
+      type: connector_count
+      connector_stereotype: SequenceFlow
+      direction: outgoing
+      min: 1
+    remediation:
+      short: Add a sequence flow from the intermediate event to the next element.
+      auto_fixable: false
+
+  - id: BPMN2-EVT-007b
+    name: A throwing compensation event has an outgoing sequence flow
+    implements: BPMN-EVT-007
+    description: A throwing compensation intermediate event in normal flow is the source of a sequence flow. [OMG BPMN 2.0.2
+      (formal/13-12-09) 10.5.4 p. 258]
+    category: event
+    severity: error
+    demo_trigger: false
+    coverage: partial
+    not_checked: See BPMN2-EVT-007a.
+    selector:
+      type: element
+      stereotypes:
+        any_of:
+        - IntermediateEvent
+      tagged_value_filter:
+      - tag: eventDefinition
+        value_in:
+        - Compensation
+      - tag: catchOrThrow
+        value_in:
+        - Throw
+    condition:
+      type: connector_count
+      connector_stereotype: SequenceFlow
+      direction: outgoing
+      min: 1
+    remediation:
+      short: Add a sequence flow from the compensation event to the next element.
+      auto_fixable: false
+
+  - id: BPMN2-EVT-007c
+    name: A link target event has an outgoing sequence flow
+    implements: BPMN-EVT-007
+    description: A catching link event (the target of a link pair) continues the flow; only a throwing link event may end
+      a path. [OMG BPMN 2.0.2 (formal/13-12-09) 10.5.4 p. 258]
+    category: event
+    severity: error
+    demo_trigger: false
+    coverage: partial
+    not_checked: See BPMN2-EVT-007a.
+    selector:
+      type: element
+      stereotypes:
+        any_of:
+        - IntermediateEvent
+      tagged_value_filter:
+      - tag: eventDefinition
+        value_in:
+        - Link
+      - tag: catchOrThrow
+        value_in:
+        - Catch
+    condition:
+      type: connector_count
+      connector_stereotype: SequenceFlow
+      direction: outgoing
+      min: 1
+    remediation:
+      short: Add a sequence flow from the link target event to the next element.
+      auto_fixable: false
+
+  - id: BPMN2-EVT-008
+    name: A compensation boundary event has no outgoing sequence flow
+    implements: BPMN-EVT-008
+    description: A catching compensation event is attached to an activity and points to its compensation handler by an association;
+      it takes no outgoing sequence flow. [OMG BPMN 2.0.2 (formal/13-12-09) 10.5.4 p. 258]
+    category: event
+    severity: error
+    demo_trigger: false
+    coverage: partial
+    not_checked: A boundary event of any other trigger must have no incoming and one outgoing flow; the stored stereotype
+      does not tell a boundary event from a normal one, so only the compensation case is checked.
+    selector:
+      type: element
+      stereotypes:
+        any_of:
+        - IntermediateEvent
+      tagged_value_filter:
+      - tag: eventDefinition
+        value_in:
+        - Compensation
+      - tag: catchOrThrow
+        value_in:
+        - Catch
+    condition:
+      type: connector_count
+      connector_stereotype: SequenceFlow
+      direction: outgoing
+      max: 0
+    remediation:
+      short: Replace the sequence flow with an Association to the compensation activity.
+      auto_fixable: false
+
+  - id: BPMN2-EVT-011
+    name: Error and cancel events always interrupt
+    implements: BPMN-EVT-011
+    description: For an Error or Cancel event, `cancelActivity` is always true. [OMG BPMN 2.0.2 (formal/13-12-09) Table 10.92
+      p. 257]
+    category: event
+    severity: error
+    demo_trigger: false
+    coverage: partial
+    not_checked: Other triggers may be true or false, and the attribute is not applicable to Compensation; neither is checked.
+    selector:
+      type: element
+      stereotypes:
+        any_of:
+        - IntermediateEvent
+      tagged_value_filter:
+      - tag: eventDefinition
+        value_in:
+        - Error
+        - Cancel
+    condition:
+      type: tagged_value_constraint
+      tags:
+      - name: cancelActivity
+        value_must_be_one_of:
+        - 'true'
+    remediation:
+      short: Set cancelActivity to true.
+      auto_fixable: false
+
+  - id: BPMN2-EVT-013a
+    name: A message intermediate event has at most one incoming message flow
+    implements: BPMN-EVT-013
+    description: 'A message intermediate event stands for one message: at most one incoming message flow. [OMG BPMN 2.0.2
+      (formal/13-12-09) 10.5.4 p. 259]'
+    category: event
+    severity: error
+    demo_trigger: false
+    coverage: partial
+    not_checked: The rule says one incoming or one outgoing message flow, not both; the combination is not checked.
+    selector:
+      type: element
+      stereotypes:
+        any_of:
+        - IntermediateEvent
+      tagged_value_filter:
+      - tag: eventDefinition
+        value_in:
+        - Message
+    condition:
+      type: connector_count
+      connector_stereotype: MessageFlow
+      direction: incoming
+      max: 1
+    remediation:
+      short: Keep one message flow per message event; add an event for each further message.
+      auto_fixable: false
+
+  - id: BPMN2-EVT-013b
+    name: A message intermediate event has at most one outgoing message flow
+    implements: BPMN-EVT-013
+    description: 'A message intermediate event stands for one message: at most one outgoing message flow. [OMG BPMN 2.0.2
+      (formal/13-12-09) 10.5.4 p. 259]'
+    category: event
+    severity: error
+    demo_trigger: false
+    coverage: partial
+    not_checked: See BPMN2-EVT-013a.
+    selector:
+      type: element
+      stereotypes:
+        any_of:
+        - IntermediateEvent
+      tagged_value_filter:
+      - tag: eventDefinition
+        value_in:
+        - Message
+    condition:
+      type: connector_count
+      connector_stereotype: MessageFlow
+      direction: outgoing
+      max: 1
+    remediation:
+      short: Keep one message flow per message event; add an event for each further message.
+      auto_fixable: false
+
+  - id: BPMN2-EVT-019
+    name: A parallel multiple event sets parallelMultiple
+    implements: BPMN-EVT-019
+    description: An event whose trigger is Parallel Multiple must have `parallelMultiple` true. [OMG BPMN 2.0.2 (formal/13-12-09)
+      10.5.5 p. 271]
+    category: event
+    severity: error
+    demo_trigger: false
+    coverage: full
+    selector:
+      type: element
+      stereotypes:
+        any_of:
+        - StartEvent
+        - IntermediateEvent
+      tagged_value_filter:
+      - tag: eventDefinition
+        value_in:
+        - ParallelMultiple
+    condition:
+      type: tagged_value_constraint
+      tags:
+      - name: parallelMultiple
+        value_must_be_one_of:
+        - 'true'
+    remediation:
+      short: Set parallelMultiple to true on the event.
+      auto_fixable: false
+
+  - id: BPMN2-EVT-024a
+    name: An event sub-process has no incoming sequence flow
+    implements: BPMN-EVT-024
+    description: An event sub-process is started by its own event; no sequence flow enters it. [OMG BPMN 2.0.2 (formal/13-12-09)
+      10.3.5 p. 174; 10.5.2 p. 241]
+    category: event
+    severity: error
+    demo_trigger: false
+    coverage: partial
+    not_checked: Exactly one start event with a defined trigger inside the event sub-process is not checked (containment is
+      not reachable).
+    selector:
+      type: element
+      stereotypes:
+        any_of:
+        - Activity
+      tagged_value_filter:
+      - tag: triggeredByEvent
+        value_in:
+        - 'true'
+    condition:
+      type: connector_count
+      connector_stereotype: SequenceFlow
+      direction: incoming
+      max: 0
+    remediation:
+      short: Remove the incoming sequence flow.
+      auto_fixable: false
+
+  - id: BPMN2-EVT-024b
+    name: An event sub-process has no outgoing sequence flow
+    implements: BPMN-EVT-024
+    description: An event sub-process is not connected to the normal flow; no sequence flow leaves it. [OMG BPMN 2.0.2 (formal/13-12-09)
+      10.3.5 p. 174; 10.5.2 p. 241]
+    category: event
+    severity: error
+    demo_trigger: false
+    coverage: partial
+    not_checked: See BPMN2-EVT-024a.
+    selector:
+      type: element
+      stereotypes:
+        any_of:
+        - Activity
+      tagged_value_filter:
+      - tag: triggeredByEvent
+        value_in:
+        - 'true'
+    condition:
+      type: connector_count
+      connector_stereotype: SequenceFlow
+      direction: outgoing
+      max: 0
+    remediation:
+      short: Remove the outgoing sequence flow.
+      auto_fixable: false
+
+  - id: BPMN2-ACT-005
+    name: An instantiating receive task has no incoming sequence flow
+    implements: BPMN-ACT-005
+    description: A receive task with `instantiate` true starts the process and takes no incoming sequence flow. [OMG BPMN
+      2.0.2 (formal/13-12-09) 10.3.3.1 p. 159]
+    category: activity
+    severity: error
+    demo_trigger: false
+    coverage: partial
+    not_checked: That a receive task without incoming flow has instantiate true is not checked (it cannot be known that the
+      task starts the process).
+    selector:
+      type: element
+      stereotypes:
+        any_of:
+        - Activity
+      tagged_value_filter:
+      - tag: taskType
+        value_in:
+        - Receive
+      - tag: instantiate
+        value_in:
+        - 'true'
+    condition:
+      type: connector_count
+      connector_stereotype: SequenceFlow
+      direction: incoming
+      max: 0
+    remediation:
+      short: Remove the incoming sequence flow, or set instantiate to false.
+      auto_fixable: false
+
+  - id: BPMN2-ACT-011
+    name: A public process is not executable
+    implements: BPMN-ACT-011
+    description: A public process shows only what other participants see and is never executable. EA marks a process executable
+      with the tagged value `isExecutable` on a `BusinessProcess` (values true or false, no default). [OMG BPMN 2.0.2 (formal/13-12-09)
+      Table 10.1 p. 146; Table 8.51 p. 97]
+    category: activity
+    severity: error
+    demo_trigger: true
+    coverage: partial
+    not_checked: The second sentence of the rule (isImmediate on a flow of an executable process) needs the flow's tag.
+    selector:
+      type: element
+      stereotypes:
+        any_of:
+        - BusinessProcess
+      tagged_value_filter:
+      - tag: processType
+        value_in:
+        - Public
+    condition:
+      type: tagged_value_constraint
+      tags:
+      - name: isExecutable
+        value_must_be_one_of:
+        - 'false'
+    remediation:
+      short: Set processType to Private, or set isExecutable to false.
+      auto_fixable: false
+
+  - id: BPMN2-GATE-002a
+    name: A converging gateway has at least two incoming sequence flows
+    implements: BPMN-GATE-002
+    description: A gateway whose `gatewayDirection` is Converging has at least two incoming sequence flows. [OMG BPMN 2.0.2
+      (formal/13-12-09) 10.6.1 p. 289]
+    category: gateway
+    severity: error
+    demo_trigger: false
+    coverage: partial
+    not_checked: Gateways whose gatewayDirection is Unspecified (EA's default) are not checked; BPMN-GATE-001 (merge or split)
+      needs 'incoming at least two OR outgoing at least two', which the rule grammar cannot say.
+    selector:
+      type: element
+      stereotypes:
+        any_of:
+        - Gateway
+      tagged_value_filter:
+      - tag: gatewayDirection
+        value_in:
+        - Converging
+    condition:
+      type: connector_count
+      connector_stereotype: SequenceFlow
+      direction: incoming
+      min: 2
+    remediation:
+      short: Add or remove sequence flows so the gateway merges, or set gatewayDirection to match.
+      auto_fixable: false
+
+  - id: BPMN2-GATE-002b
+    name: A converging gateway has at most one outgoing sequence flow
+    implements: BPMN-GATE-002
+    description: A gateway whose `gatewayDirection` is Converging has at most one outgoing sequence flow. [OMG BPMN 2.0.2
+      (formal/13-12-09) 10.6.1 p. 289]
+    category: gateway
+    severity: error
+    demo_trigger: false
+    coverage: partial
+    not_checked: Gateways whose gatewayDirection is Unspecified (EA's default) are not checked; BPMN-GATE-001 (merge or split)
+      needs 'incoming at least two OR outgoing at least two', which the rule grammar cannot say.
+    selector:
+      type: element
+      stereotypes:
+        any_of:
+        - Gateway
+      tagged_value_filter:
+      - tag: gatewayDirection
+        value_in:
+        - Converging
+    condition:
+      type: connector_count
+      connector_stereotype: SequenceFlow
+      direction: outgoing
+      max: 1
+    remediation:
+      short: Add or remove sequence flows so the gateway merges, or set gatewayDirection to match.
+      auto_fixable: false
+
+  - id: BPMN2-GATE-002c
+    name: A diverging gateway has at least two outgoing sequence flows
+    implements: BPMN-GATE-002
+    description: A gateway whose `gatewayDirection` is Diverging has at least two outgoing sequence flows. [OMG BPMN 2.0.2
+      (formal/13-12-09) 10.6.1 p. 289]
+    category: gateway
+    severity: error
+    demo_trigger: true
+    coverage: partial
+    not_checked: Gateways whose gatewayDirection is Unspecified (EA's default) are not checked; BPMN-GATE-001 (merge or split)
+      needs 'incoming at least two OR outgoing at least two', which the rule grammar cannot say.
+    selector:
+      type: element
+      stereotypes:
+        any_of:
+        - Gateway
+      tagged_value_filter:
+      - tag: gatewayDirection
+        value_in:
+        - Diverging
+    condition:
+      type: connector_count
+      connector_stereotype: SequenceFlow
+      direction: outgoing
+      min: 2
+    remediation:
+      short: Add or remove sequence flows so the gateway splits, or set gatewayDirection to match.
+      auto_fixable: false
+
+  - id: BPMN2-GATE-002d
+    name: A diverging gateway has at most one incoming sequence flow
+    implements: BPMN-GATE-002
+    description: A gateway whose `gatewayDirection` is Diverging has at most one incoming sequence flow. [OMG BPMN 2.0.2 (formal/13-12-09)
+      10.6.1 p. 289]
+    category: gateway
+    severity: error
+    demo_trigger: false
+    coverage: partial
+    not_checked: Gateways whose gatewayDirection is Unspecified (EA's default) are not checked; BPMN-GATE-001 (merge or split)
+      needs 'incoming at least two OR outgoing at least two', which the rule grammar cannot say.
+    selector:
+      type: element
+      stereotypes:
+        any_of:
+        - Gateway
+      tagged_value_filter:
+      - tag: gatewayDirection
+        value_in:
+        - Diverging
+    condition:
+      type: connector_count
+      connector_stereotype: SequenceFlow
+      direction: incoming
+      max: 1
+    remediation:
+      short: Add or remove sequence flows so the gateway splits, or set gatewayDirection to match.
+      auto_fixable: false
+
+  - id: BPMN2-GATE-002e
+    name: A mixed gateway has at least two incoming sequence flows
+    implements: BPMN-GATE-002
+    description: A gateway whose `gatewayDirection` is Mixed has at least two incoming sequence flows. [OMG BPMN 2.0.2 (formal/13-12-09)
+      10.6.1 p. 289]
+    category: gateway
+    severity: error
+    demo_trigger: false
+    coverage: partial
+    not_checked: Gateways whose gatewayDirection is Unspecified (EA's default) are not checked; BPMN-GATE-001 (merge or split)
+      needs 'incoming at least two OR outgoing at least two', which the rule grammar cannot say.
+    selector:
+      type: element
+      stereotypes:
+        any_of:
+        - Gateway
+      tagged_value_filter:
+      - tag: gatewayDirection
+        value_in:
+        - Mixed
+    condition:
+      type: connector_count
+      connector_stereotype: SequenceFlow
+      direction: incoming
+      min: 2
+    remediation:
+      short: Add or remove sequence flows so the gateway merges and splits, or set gatewayDirection to match.
+      auto_fixable: false
+
+  - id: BPMN2-GATE-002f
+    name: A mixed gateway has at least two outgoing sequence flows
+    implements: BPMN-GATE-002
+    description: A gateway whose `gatewayDirection` is Mixed has at least two outgoing sequence flows. [OMG BPMN 2.0.2 (formal/13-12-09)
+      10.6.1 p. 289]
+    category: gateway
+    severity: error
+    demo_trigger: false
+    coverage: partial
+    not_checked: Gateways whose gatewayDirection is Unspecified (EA's default) are not checked; BPMN-GATE-001 (merge or split)
+      needs 'incoming at least two OR outgoing at least two', which the rule grammar cannot say.
+    selector:
+      type: element
+      stereotypes:
+        any_of:
+        - Gateway
+      tagged_value_filter:
+      - tag: gatewayDirection
+        value_in:
+        - Mixed
+    condition:
+      type: connector_count
+      connector_stereotype: SequenceFlow
+      direction: outgoing
+      min: 2
+    remediation:
+      short: Add or remove sequence flows so the gateway merges and splits, or set gatewayDirection to match.
+      auto_fixable: false
+
+  - id: BPMN2-GATE-005
+    name: An event-based gateway has two or more outgoing sequence flows
+    implements: BPMN-GATE-005
+    description: An event-based gateway waits for one of several events, so it has at least two outgoing sequence flows. [OMG
+      BPMN 2.0.2 (formal/13-12-09) 10.6.6 p. 296]
+    category: gateway
+    severity: error
+    demo_trigger: false
+    coverage: partial
+    not_checked: That the outgoing flows carry no condition needs the flow's tag.
+    selector:
+      type: element
+      stereotypes:
+        any_of:
+        - Gateway
+      tagged_value_filter:
+      - tag: gatewayType
+        value_in:
+        - Event
+    condition:
+      type: connector_count
+      connector_stereotype: SequenceFlow
+      direction: outgoing
+      min: 2
+    remediation:
+      short: Add the missing outgoing flows to events or receive tasks.
+      auto_fixable: false
+
+  - id: BPMN2-GATE-007a
+    name: An instantiating event-based gateway has no incoming sequence flow
+    implements: BPMN-GATE-007
+    description: An event-based gateway with `instantiate` true starts the process and takes no incoming sequence flow. [OMG
+      BPMN 2.0.2 (formal/13-12-09) 10.6.6 p. 298]
+    category: gateway
+    severity: error
+    demo_trigger: false
+    coverage: partial
+    not_checked: That parallel instantiating messages share correlation is not checked.
+    selector:
+      type: element
+      stereotypes:
+        any_of:
+        - Gateway
+      tagged_value_filter:
+      - tag: gatewayType
+        value_in:
+        - Event
+      - tag: instantiate
+        value_in:
+        - 'true'
+    condition:
+      type: connector_count
+      connector_stereotype: SequenceFlow
+      direction: incoming
+      max: 0
+    remediation:
+      short: Remove the incoming sequence flow, or set instantiate to false.
+      auto_fixable: false
+
+  - id: BPMN2-GATE-007b
+    name: A parallel event-based gateway instantiates the process
+    implements: BPMN-GATE-007
+    description: An event-based gateway of type Parallel is allowed only when `instantiate` is true. [OMG BPMN 2.0.2 (formal/13-12-09)
+      10.6.6 p. 298]
+    category: gateway
+    severity: error
+    demo_trigger: false
+    coverage: partial
+    not_checked: See BPMN2-GATE-007a.
+    selector:
+      type: element
+      stereotypes:
+        any_of:
+        - Gateway
+      tagged_value_filter:
+      - tag: gatewayType
+        value_in:
+        - Event
+      - tag: eventGatewayType
+        value_in:
+        - Parallel
+    condition:
+      type: tagged_value_constraint
+      tags:
+      - name: instantiate
+        value_must_be_one_of:
+        - 'true'
+    remediation:
+      short: Set eventGatewayType to Exclusive, or set instantiate to true.
+      auto_fixable: false
+
+  - id: BPMN2-CORR-005
+    name: A correlation property has a retrieval expression
+    implements: BPMN-CORR-005
+    description: Each correlation property has at least one correlation property retrieval expression. [OMG BPMN 2.0.2 (formal/13-12-09)
+      8.4.2; Table 8.32; Table 8.37 (pp. 72; 75; 77)]
+    category: correlation
+    severity: error
+    demo_trigger: false
+    coverage: full
+    selector:
+      type: element
+      stereotypes:
+        any_of:
+        - CorrelationProperty
+    condition:
+      type: tagged_value_required
+      tags:
+      - name: correlationPropertyRetrievalExpression
+        must_be_non_empty: true
+    remediation:
+      short: Add a CorrelationPropertyRetrievalExpression and fill correlationPropertyRetrievalExpression.
+      auto_fixable: false
+
+  - id: BPMN2-CORR-006
+    name: A retrieval expression has a message path and a message
+    implements: BPMN-CORR-006
+    description: A correlation property retrieval expression needs its `messagePath` and the `messageRef` of the message it
+      reads. [OMG BPMN 2.0.2 (formal/13-12-09) Table 8.33; Table 8.39 (pp. 76; 78)]
+    category: correlation
+    severity: error
+    demo_trigger: false
+    coverage: full
+    selector:
+      type: element
+      stereotypes:
+        any_of:
+        - CorrelationPropertyRetrievalExpression
+    condition:
+      type: tagged_value_required
+      tags:
+      - name: messagePath
+        must_be_non_empty: true
+      - name: messageRef
+        must_be_non_empty: true
+    remediation:
+      short: Fill messagePath and messageRef.
+      auto_fixable: false
+
+  - id: BPMN2-CORR-009a
+    name: A correlation subscription names its correlation key
+    implements: BPMN-CORR-009
+    description: A correlation subscription needs its `correlationKeyRef`. [OMG BPMN 2.0.2 (formal/13-12-09) 8.4.2; Tables
+      8.34, 8.35; XSD (pp. 73; 76 to 78)]
+    category: correlation
+    severity: warning
+    demo_trigger: false
+    coverage: partial
+    not_checked: One binding per property of the key is not checked.
+    selector:
+      type: element
+      stereotypes:
+        any_of:
+        - CorrelationSubscription
+    condition:
+      type: tagged_value_required
+      tags:
+      - name: correlationKeyRef
+        must_be_non_empty: true
+    remediation:
+      short: Fill correlationKeyRef.
+      auto_fixable: false
+
+  - id: BPMN2-CORR-009b
+    name: A correlation property binding names its property and path
+    implements: BPMN-CORR-009
+    description: A correlation property binding needs its `correlationPropertyRef` and its `dataPath`. [OMG BPMN 2.0.2 (formal/13-12-09)
+      8.4.2; Tables 8.34, 8.35; XSD (pp. 73; 76 to 78)]
+    category: correlation
+    severity: warning
+    demo_trigger: false
+    coverage: partial
+    not_checked: See BPMN2-CORR-009a.
+    selector:
+      type: element
+      stereotypes:
+        any_of:
+        - CorrelationPropertyBinding
+    condition:
+      type: tagged_value_required
+      tags:
+      - name: correlationPropertyRef
+        must_be_non_empty: true
+      - name: dataPath
+        must_be_non_empty: true
+    remediation:
+      short: Fill correlationPropertyRef and dataPath.
+      auto_fixable: false
+
+  - id: BPMN2-SERV-001
+    name: An interface defines an operation
+    implements: BPMN-SERV-001
+    description: An interface defines at least one operation. [OMG BPMN 2.0.2 (formal/13-12-09) 8.5.1; Table 8.65; Table 8.67
+      (pp. 102 to 104)]
+    category: service
+    severity: error
+    demo_trigger: false
+    coverage: partial
+    not_checked: The interface's name is the element name and is not checked. The stereotype name `Interface` is shared with
+      other notations.
+    selector:
+      type: element
+      stereotypes:
+        any_of:
+        - Interface
+    condition:
+      type: tagged_value_required
+      tags:
+      - name: operationRefs
+        must_be_non_empty: true
+    remediation:
+      short: Add an Operation and list it in operationRefs.
+      auto_fixable: false
+
+  - id: BPMN2-SERV-002
+    name: An operation has an input message
+    implements: BPMN-SERV-002
+    description: An operation has exactly one input message (`inMessageRef`). [OMG BPMN 2.0.2 (formal/13-12-09) 8.5.3; Table
+      8.66; Table 8.68 (pp. 103 to 104)]
+    category: service
+    severity: error
+    demo_trigger: false
+    coverage: partial
+    not_checked: At most one output message is not checked. The stereotype name `Operation` is shared with other notations.
+    selector:
+      type: element
+      stereotypes:
+        any_of:
+        - Operation
+    condition:
+      type: tagged_value_required
+      tags:
+      - name: inMessageRef
+        must_be_non_empty: true
+    remediation:
+      short: Fill inMessageRef with the operation's input Message.
+      auto_fixable: false

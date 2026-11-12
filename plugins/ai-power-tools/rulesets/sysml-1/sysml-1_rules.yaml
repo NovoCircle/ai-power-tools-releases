@@ -1,0 +1,1265 @@
+# SysML 1.5 Conformance Ruleset
+# Language:     SysML 1.5 (OMG formal/17-05-01), as modeled with Sparx's built-in SysML technology (MDG technology id `SysML1.4`,
+#               which EA's Resources tab shows as "SysML 1.5")
+# Enforced by:  AI Power Tools for Sparx EA - validate_model tool
+# Generated from the language skill's rules; do not edit by hand.
+#
+# STEREOTYPE NAMES ARE UNQUALIFIED AND AS EA STORES THEM, AND THAT IS MEASURED.
+#
+# validate_model selects with `Stereotype IN (...)` on t_object and t_connector. For Sparx's SysML technology that column holds the bare
+# name (`block`, `requirement`, `view`, `viewpoint`, `conform`, `Expose`, `deriveReqt`, `satisfy`, `verify`, `copy`); the qualified
+# form `SysML1.4::block` is only in the t_xref row named `Stereotypes`. Measured on EA 17.1 build 1716 by creating one object per
+# stereotype in a test model and reading it back: 63 names bound, FQName `SysML1.4::<name>`. The case is EA's own and mixed: lower
+# camel case for most (`block`, `satisfy`), upper camel for a few (`Expose`, `FlowProperty`, `ProxyPort`, `FullPort`, `Stakeholder`).
+# The Resources tab shows `Flow Property`, `Full Port` and `Proxy Port` with a space; those are display names, the stored names have
+# none. A selector compares the stored string exactly, so a name one character off selects nothing.
+#
+# THE QUALIFIED PREFIX IS `SysML1.4`, NOT `SysML1.5`. Older SysML 1.1, 1.2 and 1.3 technologies are installed beside it; this ruleset
+# is for the technology the tab shows as 1.5 only.
+#
+# REQUIREMENT KINDS. A requirement is `requirement` or one of six kinds EA adds (functionalRequirement, interfaceRequirement,
+# performanceRequirement, physicalRequirement, designConstraint, extendedRequirement). A rule about a requirement names all seven.
+#
+# WHAT A RULE CAN SEE. A rule selects an element by its stereotype (`selector.stereotypes`) or by EA's element type (`selector.types`), and a
+# connector by its stereotype or by EA's connector type (`selector.connector_types`); an end or a table row can be named by stereotype or as
+# `type:<Object_Type>`; a rule can count connectors by stereotype or type (`connector_count`) and check where an element sits
+# (`contained_in`, the element it is attached to by ParentID, else its package) and what it holds (`contains_count`). The EA type names used
+# below were measured on a model built in EA 17.1 (Part, Requirement, Activity, StateMachine, Interaction, DataType, Enumeration, PrimitiveType, Decision,
+# ObjectNode, ActivityParameter, CentralBufferNode, ExpansionNode, ActionPin, Association, Aggregation, Generalization, ControlFlow, ObjectFlow).
+# WHAT IT CANNOT SEE. A rule cannot read what a part, port or property is typed by, operations, attributes, multiplicity, aggregation,
+# a second stereotype, built-in columns such as Status, numeric values, or follow a generalization or a conditional on the other end of a
+# connector. Most of SysML's rules are about those, so only twenty-one of the language skill's rules are in this file.
+#
+# ENDPOINT LISTS. The engine's endpoint condition needs a list for both ends. The end a rule does not constrain lists every SysML
+# element stereotype plus the empty stereotype (a plain UML element). An end that carries another technology's stereotype is
+# therefore reported by these rules; use them on models that hold SysML and plain UML elements.
+#
+# The standard gives no table of allowed relationship pairs (each relationship states its own ends), so the only `tables:` entry is the
+# full-port binding table behind SYSML1-PORT-008, written from that one constraint (SysML 1.5, 9.3.2.8 [2]).
+#
+# Sources:
+#   [S1] OMG, OMG Systems Modeling Language (SysML) Version 1.5, formal/17-05-01
+#        https://www.omg.org/spec/SysML/1.5/
+#   [S2] Sparx Systems, the SysML technology built into Enterprise Architect 17.1 (MDG technology id SysML1.4, shown as SysML 1.5)
+
+meta:
+  version: "0.2"
+  language: sysml-1
+  organization: "(your organization)"
+  mdg_family: SysML1.4
+  description: >
+    Conformance rules for SysML 1.5 models built with Sparx Enterprise Architect's SysML technology: what a conform and an expose may
+    join, that a view conforms to one viewpoint, that a requirement has an id and a text, and which elements the requirement
+    relationships (copy, deriveReqt, satisfy, verify) may join, that a deprecated flow port has a direction, and (from 0.2) what a
+    requirement may not join, where a probability may start, how a full port is bound, where the property stereotypes sit, and what an
+    interface block or a requirement may hold. Each rule names the rules.md id it implements.
+  severity_levels:
+    error: A requirement of the standard (rules.md strength must)
+    warning: Guidance of the standard (rules.md strength should)
+    info: Advisory note; not a conformance violation
+
+tables:
+  sysml-1.5-full-port-bindings:
+    source: "OMG SysML 1.5 (formal/17-05-01) 9.3.2.8 [2]: a binding connector does not link a full port to another composite property of the block that owns it, unless that property is a non-full port"
+    connectors:
+      b: BindingConnector
+    cells:
+      "FullPort":
+        "FullPort": "b"
+      "type:Part":
+        "type:Part": "b"
+
+rules:
+  - id: SYSML1-MOD-001
+    name: The general end of a conform is a viewpoint
+    implements: SYSML-MOD-001
+    description: A conform runs from a view (the specific classifier) to a viewpoint (the general classifier). In EA's SysML
+      technology it is a Generalization stereotyped conform, drawn from the view to the viewpoint; the target must carry the
+      stereotype viewpoint. The end the rule does not constrain lists every SysML element stereotype and the empty stereotype
+      (a plain UML element), because the engine needs both lists; an end that carries another technology's stereotype is reported
+      too. [OMG SysML 1.5 (formal/17-05-01) 7.3.2.1 [1]]
+    category: mod
+    severity: error
+    demo_trigger: false
+    coverage: full
+    selector:
+      type: connector
+      connector_stereotype: conform
+    condition:
+      type: connector_endpoint_stereotype
+      source_must_be_one_of:
+      - AdjunctProperty
+      - BoundReference
+      - ClassifierBehaviorProperty
+      - DirectedFeature
+      - ElementGroup
+      - EndPathMultiplicity
+      - FlowPort
+      - FlowProperty
+      - FullPort
+      - InterfaceBlock
+      - NestedConnectorEnd
+      - PropertySpecificType
+      - ProxyPort
+      - RequirementRelated
+      - Stakeholder
+      - ValueType
+      - allocateActivityPartition
+      - allocated
+      - block
+      - connectorProperty
+      - constraintBlock
+      - constraintProperty
+      - continuous
+      - controlOperator
+      - designConstraint
+      - discrete
+      - distributedProperty
+      - effbd
+      - extendedRequirement
+      - flowSpecification
+      - functionalRequirement
+      - interfaceRequirement
+      - model
+      - moe
+      - noBuffer
+      - nonStreaming
+      - objectiveFunction
+      - optional
+      - overwrite
+      - participantProperty
+      - performanceRequirement
+      - physicalRequirement
+      - probability
+      - problem
+      - rate
+      - rationale
+      - requirement
+      - streaming
+      - testCase
+      - view
+      - viewpoint
+      - ''
+      target_must_be_one_of:
+      - viewpoint
+    remediation:
+      short: Draw the conform from the view to the viewpoint it conforms to.
+      auto_fixable: false
+
+  - id: SYSML1-MOD-002
+    name: The specific end of a conform is a view
+    implements: SYSML-MOD-002
+    description: The source of a conform is a view. The source must carry the stereotype view; a block, a viewpoint or a plain
+      UML element is reported. The end the rule does not constrain lists every SysML element stereotype and the empty stereotype
+      (a plain UML element), because the engine needs both lists; an end that carries another technology's stereotype is reported
+      too. [OMG SysML 1.5 (formal/17-05-01) 7.3.2.1 [2]]
+    category: mod
+    severity: error
+    demo_trigger: false
+    coverage: full
+    selector:
+      type: connector
+      connector_stereotype: conform
+    condition:
+      type: connector_endpoint_stereotype
+      source_must_be_one_of:
+      - view
+      target_must_be_one_of:
+      - AdjunctProperty
+      - BoundReference
+      - ClassifierBehaviorProperty
+      - DirectedFeature
+      - ElementGroup
+      - EndPathMultiplicity
+      - FlowPort
+      - FlowProperty
+      - FullPort
+      - InterfaceBlock
+      - NestedConnectorEnd
+      - PropertySpecificType
+      - ProxyPort
+      - RequirementRelated
+      - Stakeholder
+      - ValueType
+      - allocateActivityPartition
+      - allocated
+      - block
+      - connectorProperty
+      - constraintBlock
+      - constraintProperty
+      - continuous
+      - controlOperator
+      - designConstraint
+      - discrete
+      - distributedProperty
+      - effbd
+      - extendedRequirement
+      - flowSpecification
+      - functionalRequirement
+      - interfaceRequirement
+      - model
+      - moe
+      - noBuffer
+      - nonStreaming
+      - objectiveFunction
+      - optional
+      - overwrite
+      - participantProperty
+      - performanceRequirement
+      - physicalRequirement
+      - probability
+      - problem
+      - rate
+      - rationale
+      - requirement
+      - streaming
+      - testCase
+      - view
+      - viewpoint
+      - ''
+    remediation:
+      short: Draw the conform from a view, not from another kind of element.
+      auto_fixable: false
+
+  - id: SYSML1-MOD-003
+    name: The client of an expose is a view
+    implements: SYSML-MOD-003
+    description: The source of an expose is a view; the target is any element. The source must carry the stereotype view.
+      The end the rule does not constrain lists every SysML element stereotype and the empty stereotype (a plain UML element),
+      because the engine needs both lists; an end that carries another technology's stereotype is reported too. [OMG SysML
+      1.5 (formal/17-05-01) 7.3.2.3 [1]]
+    category: mod
+    severity: error
+    demo_trigger: false
+    coverage: full
+    selector:
+      type: connector
+      connector_stereotype: Expose
+    condition:
+      type: connector_endpoint_stereotype
+      source_must_be_one_of:
+      - view
+      target_must_be_one_of:
+      - AdjunctProperty
+      - BoundReference
+      - ClassifierBehaviorProperty
+      - DirectedFeature
+      - ElementGroup
+      - EndPathMultiplicity
+      - FlowPort
+      - FlowProperty
+      - FullPort
+      - InterfaceBlock
+      - NestedConnectorEnd
+      - PropertySpecificType
+      - ProxyPort
+      - RequirementRelated
+      - Stakeholder
+      - ValueType
+      - allocateActivityPartition
+      - allocated
+      - block
+      - connectorProperty
+      - constraintBlock
+      - constraintProperty
+      - continuous
+      - controlOperator
+      - designConstraint
+      - discrete
+      - distributedProperty
+      - effbd
+      - extendedRequirement
+      - flowSpecification
+      - functionalRequirement
+      - interfaceRequirement
+      - model
+      - moe
+      - noBuffer
+      - nonStreaming
+      - objectiveFunction
+      - optional
+      - overwrite
+      - participantProperty
+      - performanceRequirement
+      - physicalRequirement
+      - probability
+      - problem
+      - rate
+      - rationale
+      - requirement
+      - streaming
+      - testCase
+      - view
+      - viewpoint
+      - ''
+    remediation:
+      short: Draw the expose from a view.
+      auto_fixable: false
+
+  - id: SYSML1-MOD-004
+    name: A view conforms to one viewpoint
+    implements: SYSML-MOD-004
+    description: 'A view conforms to a single viewpoint: it is the source of at most one conform. EA stores a conform as a
+      connector stereotyped conform that starts at the view. [OMG SysML 1.5 (formal/17-05-01) 7.3.2.7 [1]]'
+    category: mod
+    severity: error
+    demo_trigger: false
+    coverage: full
+    selector:
+      type: element
+      stereotypes:
+        any_of:
+        - view
+    condition:
+      type: connector_count
+      connector_stereotype: conform
+      direction: outgoing
+      max: 1
+    remediation:
+      short: Keep one conform on the view, or split the view into one view per viewpoint.
+      auto_fixable: false
+
+  - id: SYSML1-REQ-007
+    name: A requirement has an id and a text
+    implements: SYSML-REQ-007
+    description: Every requirement has a text and an id. In EA's SysML technology the seven requirement kinds (requirement,
+      functionalRequirement, interfaceRequirement, performanceRequirement, physicalRequirement, designConstraint, extendedRequirement)
+      carry the tagged values id and text (lower case), stored empty until set. The rule reports a requirement whose id or
+      text is empty. [OMG SysML 1.5 (formal/17-05-01) 16.3.2.1 (attributes)]
+    category: req
+    severity: error
+    demo_trigger: false
+    coverage: partial
+    not_checked: 'That the id is unique: the rule checks that an id is present, not that no other requirement uses it.'
+    selector:
+      type: element
+      stereotypes:
+        any_of:
+        - requirement
+        - functionalRequirement
+        - interfaceRequirement
+        - performanceRequirement
+        - physicalRequirement
+        - designConstraint
+        - extendedRequirement
+    condition:
+      type: tagged_value_required
+      tags:
+      - name: id
+        must_be_non_empty: true
+      - name: text
+        must_be_non_empty: true
+    remediation:
+      short: Fill in the tagged values id and text.
+      auto_fixable: false
+
+  - id: SYSML1-REQ-009
+    name: A copy joins two requirements
+    implements: SYSML-REQ-009
+    description: A copy dependency is created only between two named elements that carry a requirement kind. In EA's SysML
+      technology it is a Dependency stereotyped copy; both ends must carry one of the seven requirement stereotypes. [OMG
+      SysML 1.5 (formal/17-05-01) 16.3.2.2 [1]]
+    category: req
+    severity: error
+    demo_trigger: false
+    coverage: full
+    selector:
+      type: connector
+      connector_stereotype: copy
+    condition:
+      type: connector_endpoint_stereotype
+      source_must_be_one_of:
+      - requirement
+      - functionalRequirement
+      - interfaceRequirement
+      - performanceRequirement
+      - physicalRequirement
+      - designConstraint
+      - extendedRequirement
+      target_must_be_one_of:
+      - requirement
+      - functionalRequirement
+      - interfaceRequirement
+      - performanceRequirement
+      - physicalRequirement
+      - designConstraint
+      - extendedRequirement
+    remediation:
+      short: Draw the copy between two requirements.
+      auto_fixable: false
+
+  - id: SYSML1-REQ-012
+    name: The supplier of a derive-requirement is a requirement
+    implements: SYSML-REQ-012
+    description: The supplier (the arrowhead end, the target) of a deriveReqt is a requirement kind. The end the rule does
+      not constrain lists every SysML element stereotype and the empty stereotype (a plain UML element), because the engine
+      needs both lists; an end that carries another technology's stereotype is reported too. [OMG SysML 1.5 (formal/17-05-01)
+      16.3.2.3 [1]]
+    category: req
+    severity: error
+    demo_trigger: false
+    coverage: full
+    selector:
+      type: connector
+      connector_stereotype: deriveReqt
+    condition:
+      type: connector_endpoint_stereotype
+      source_must_be_one_of:
+      - AdjunctProperty
+      - BoundReference
+      - ClassifierBehaviorProperty
+      - DirectedFeature
+      - ElementGroup
+      - EndPathMultiplicity
+      - FlowPort
+      - FlowProperty
+      - FullPort
+      - InterfaceBlock
+      - NestedConnectorEnd
+      - PropertySpecificType
+      - ProxyPort
+      - RequirementRelated
+      - Stakeholder
+      - ValueType
+      - allocateActivityPartition
+      - allocated
+      - block
+      - connectorProperty
+      - constraintBlock
+      - constraintProperty
+      - continuous
+      - controlOperator
+      - designConstraint
+      - discrete
+      - distributedProperty
+      - effbd
+      - extendedRequirement
+      - flowSpecification
+      - functionalRequirement
+      - interfaceRequirement
+      - model
+      - moe
+      - noBuffer
+      - nonStreaming
+      - objectiveFunction
+      - optional
+      - overwrite
+      - participantProperty
+      - performanceRequirement
+      - physicalRequirement
+      - probability
+      - problem
+      - rate
+      - rationale
+      - requirement
+      - streaming
+      - testCase
+      - view
+      - viewpoint
+      - ''
+      target_must_be_one_of:
+      - requirement
+      - functionalRequirement
+      - interfaceRequirement
+      - performanceRequirement
+      - physicalRequirement
+      - designConstraint
+      - extendedRequirement
+    remediation:
+      short: Draw the deriveReqt to the requirement it is derived from.
+      auto_fixable: false
+
+  - id: SYSML1-REQ-013
+    name: The client of a derive-requirement is a requirement
+    implements: SYSML-REQ-013
+    description: The client (the tail end, the source) of a deriveReqt is a requirement kind. The end the rule does not constrain
+      lists every SysML element stereotype and the empty stereotype (a plain UML element), because the engine needs both lists;
+      an end that carries another technology's stereotype is reported too. [OMG SysML 1.5 (formal/17-05-01) 16.3.2.3 [2]]
+    category: req
+    severity: error
+    demo_trigger: false
+    coverage: full
+    selector:
+      type: connector
+      connector_stereotype: deriveReqt
+    condition:
+      type: connector_endpoint_stereotype
+      source_must_be_one_of:
+      - requirement
+      - functionalRequirement
+      - interfaceRequirement
+      - performanceRequirement
+      - physicalRequirement
+      - designConstraint
+      - extendedRequirement
+      target_must_be_one_of:
+      - AdjunctProperty
+      - BoundReference
+      - ClassifierBehaviorProperty
+      - DirectedFeature
+      - ElementGroup
+      - EndPathMultiplicity
+      - FlowPort
+      - FlowProperty
+      - FullPort
+      - InterfaceBlock
+      - NestedConnectorEnd
+      - PropertySpecificType
+      - ProxyPort
+      - RequirementRelated
+      - Stakeholder
+      - ValueType
+      - allocateActivityPartition
+      - allocated
+      - block
+      - connectorProperty
+      - constraintBlock
+      - constraintProperty
+      - continuous
+      - controlOperator
+      - designConstraint
+      - discrete
+      - distributedProperty
+      - effbd
+      - extendedRequirement
+      - flowSpecification
+      - functionalRequirement
+      - interfaceRequirement
+      - model
+      - moe
+      - noBuffer
+      - nonStreaming
+      - objectiveFunction
+      - optional
+      - overwrite
+      - participantProperty
+      - performanceRequirement
+      - physicalRequirement
+      - probability
+      - problem
+      - rate
+      - rationale
+      - requirement
+      - streaming
+      - testCase
+      - view
+      - viewpoint
+      - ''
+    remediation:
+      short: Draw the deriveReqt from the derived requirement.
+      auto_fixable: false
+
+  - id: SYSML1-REQ-016
+    name: The supplier of a satisfy is a requirement
+    implements: SYSML-REQ-016
+    description: 'The supplier (the target) of a satisfy is a requirement or a specialization of one: one of the seven requirement
+      stereotypes. The client is any named element. The end the rule does not constrain lists every SysML element stereotype
+      and the empty stereotype (a plain UML element), because the engine needs both lists; an end that carries another technology''s
+      stereotype is reported too. [OMG SysML 1.5 (formal/17-05-01) 16.3.2.7 [1]]'
+    category: req
+    severity: error
+    demo_trigger: false
+    coverage: full
+    selector:
+      type: connector
+      connector_stereotype: satisfy
+    condition:
+      type: connector_endpoint_stereotype
+      source_must_be_one_of:
+      - AdjunctProperty
+      - BoundReference
+      - ClassifierBehaviorProperty
+      - DirectedFeature
+      - ElementGroup
+      - EndPathMultiplicity
+      - FlowPort
+      - FlowProperty
+      - FullPort
+      - InterfaceBlock
+      - NestedConnectorEnd
+      - PropertySpecificType
+      - ProxyPort
+      - RequirementRelated
+      - Stakeholder
+      - ValueType
+      - allocateActivityPartition
+      - allocated
+      - block
+      - connectorProperty
+      - constraintBlock
+      - constraintProperty
+      - continuous
+      - controlOperator
+      - designConstraint
+      - discrete
+      - distributedProperty
+      - effbd
+      - extendedRequirement
+      - flowSpecification
+      - functionalRequirement
+      - interfaceRequirement
+      - model
+      - moe
+      - noBuffer
+      - nonStreaming
+      - objectiveFunction
+      - optional
+      - overwrite
+      - participantProperty
+      - performanceRequirement
+      - physicalRequirement
+      - probability
+      - problem
+      - rate
+      - rationale
+      - requirement
+      - streaming
+      - testCase
+      - view
+      - viewpoint
+      - ''
+      target_must_be_one_of:
+      - requirement
+      - functionalRequirement
+      - interfaceRequirement
+      - performanceRequirement
+      - physicalRequirement
+      - designConstraint
+      - extendedRequirement
+    remediation:
+      short: Draw the satisfy from the design element to the requirement it satisfies.
+      auto_fixable: false
+
+  - id: SYSML1-REQ-019
+    name: The supplier of a verify is a requirement
+    implements: SYSML-REQ-019
+    description: 'The supplier (the target) of a verify is a requirement or a specialization of one: one of the seven requirement
+      stereotypes. The client is any named element, usually a test case. The end the rule does not constrain lists every SysML
+      element stereotype and the empty stereotype (a plain UML element), because the engine needs both lists; an end that
+      carries another technology''s stereotype is reported too. [OMG SysML 1.5 (formal/17-05-01) 16.3.2.9 [1]]'
+    category: req
+    severity: error
+    demo_trigger: false
+    coverage: full
+    selector:
+      type: connector
+      connector_stereotype: verify
+    condition:
+      type: connector_endpoint_stereotype
+      source_must_be_one_of:
+      - AdjunctProperty
+      - BoundReference
+      - ClassifierBehaviorProperty
+      - DirectedFeature
+      - ElementGroup
+      - EndPathMultiplicity
+      - FlowPort
+      - FlowProperty
+      - FullPort
+      - InterfaceBlock
+      - NestedConnectorEnd
+      - PropertySpecificType
+      - ProxyPort
+      - RequirementRelated
+      - Stakeholder
+      - ValueType
+      - allocateActivityPartition
+      - allocated
+      - block
+      - connectorProperty
+      - constraintBlock
+      - constraintProperty
+      - continuous
+      - controlOperator
+      - designConstraint
+      - discrete
+      - distributedProperty
+      - effbd
+      - extendedRequirement
+      - flowSpecification
+      - functionalRequirement
+      - interfaceRequirement
+      - model
+      - moe
+      - noBuffer
+      - nonStreaming
+      - objectiveFunction
+      - optional
+      - overwrite
+      - participantProperty
+      - performanceRequirement
+      - physicalRequirement
+      - probability
+      - problem
+      - rate
+      - rationale
+      - requirement
+      - streaming
+      - testCase
+      - view
+      - viewpoint
+      - ''
+      target_must_be_one_of:
+      - requirement
+      - functionalRequirement
+      - interfaceRequirement
+      - performanceRequirement
+      - physicalRequirement
+      - designConstraint
+      - extendedRequirement
+    remediation:
+      short: Draw the verify from the test case to the requirement it verifies.
+      auto_fixable: false
+
+  - id: SYSML1-DEP-002
+    name: A flow port has a direction
+    implements: SYSML-DEP-002
+    description: An atomic flow port has a direction and no conjugation setting. Flow ports are deprecated since SysML 1.3;
+      EA keeps them as the stereotype FlowPort, which carries the tagged value direction (in, out, inout, none; EA creates
+      it as inout). The rule reports a flow port whose direction is empty. [OMG SysML 1.5 (formal/17-05-01) C.3.2.3 [2]]
+    category: dep
+    severity: error
+    demo_trigger: false
+    coverage: partial
+    not_checked: 'Whether the port is atomic (typed by a value type, block or signal, not a flow specification) and that it
+      is not conjugated: both follow a reference or a flag, not a tag.'
+    selector:
+      type: element
+      stereotypes:
+        any_of:
+        - FlowPort
+    condition:
+      type: tagged_value_required
+      tags:
+      - name: direction
+        must_be_non_empty: true
+    remediation:
+      short: Set the tagged value direction of the flow port.
+      auto_fixable: false
+
+  - id: SYSML1-REQ-003
+    name: A requirement joins no association
+    implements: SYSML-REQ-003
+    description: 'A requirement does not take part in associations. EA stores an association, or a shared or composite aggregation,
+      as a connector of EA type Association or Aggregation with no stereotype, so the rule selects them by EA type; neither
+      end may carry a requirement stereotype. The end the rule does not forbid lists every SysML element stereotype that is
+      not a requirement kind and the empty stereotype (a plain UML element): an endpoint condition says ''one of'', so a rule
+      that forbids a requirement has to list everything else. An end that carries another technology''s stereotype is reported
+      too. [OMG SysML 1.5 (formal/17-05-01) 16.3.2.5 [3]]'
+    category: req
+    severity: error
+    demo_trigger: false
+    coverage: partial
+    not_checked: A requirement that carries no requirement stereotype (a plain class, or a Requirement element with none)
+      is not seen as one.
+    selector:
+      type: connector
+      connector_types:
+      - Association
+      - Aggregation
+    condition:
+      type: connector_endpoint_stereotype
+      source_must_be_one_of:
+      - AdjunctProperty
+      - BoundReference
+      - ClassifierBehaviorProperty
+      - DirectedFeature
+      - ElementGroup
+      - EndPathMultiplicity
+      - FlowPort
+      - FlowProperty
+      - FullPort
+      - InterfaceBlock
+      - NestedConnectorEnd
+      - PropertySpecificType
+      - ProxyPort
+      - RequirementRelated
+      - Stakeholder
+      - ValueType
+      - allocateActivityPartition
+      - allocated
+      - block
+      - connectorProperty
+      - constraintBlock
+      - constraintProperty
+      - continuous
+      - controlOperator
+      - discrete
+      - distributedProperty
+      - effbd
+      - flowSpecification
+      - model
+      - moe
+      - noBuffer
+      - nonStreaming
+      - objectiveFunction
+      - optional
+      - overwrite
+      - participantProperty
+      - probability
+      - problem
+      - rate
+      - rationale
+      - streaming
+      - testCase
+      - view
+      - viewpoint
+      - ''
+      target_must_be_one_of:
+      - AdjunctProperty
+      - BoundReference
+      - ClassifierBehaviorProperty
+      - DirectedFeature
+      - ElementGroup
+      - EndPathMultiplicity
+      - FlowPort
+      - FlowProperty
+      - FullPort
+      - InterfaceBlock
+      - NestedConnectorEnd
+      - PropertySpecificType
+      - ProxyPort
+      - RequirementRelated
+      - Stakeholder
+      - ValueType
+      - allocateActivityPartition
+      - allocated
+      - block
+      - connectorProperty
+      - constraintBlock
+      - constraintProperty
+      - continuous
+      - controlOperator
+      - discrete
+      - distributedProperty
+      - effbd
+      - flowSpecification
+      - model
+      - moe
+      - noBuffer
+      - nonStreaming
+      - objectiveFunction
+      - optional
+      - overwrite
+      - participantProperty
+      - probability
+      - problem
+      - rate
+      - rationale
+      - streaming
+      - testCase
+      - view
+      - viewpoint
+      - ''
+    remediation:
+      short: Replace the association with a dependency such as deriveReqt, satisfy, refine or trace, or remove it.
+      auto_fixable: false
+
+  - id: SYSML1-REQ-004
+    name: A requirement joins no generalization
+    implements: SYSML-REQ-004
+    description: 'A requirement does not take part in generalizations. A generalization is a connector of EA type Generalization
+      (a conform is one too, with the stereotype conform); neither end may carry a requirement stereotype. The end the rule
+      does not forbid lists every SysML element stereotype that is not a requirement kind and the empty stereotype (a plain
+      UML element): an endpoint condition says ''one of'', so a rule that forbids a requirement has to list everything else.
+      An end that carries another technology''s stereotype is reported too. [OMG SysML 1.5 (formal/17-05-01) 16.3.2.5 [4]]'
+    category: req
+    severity: error
+    demo_trigger: false
+    coverage: partial
+    not_checked: A requirement that carries no requirement stereotype is not seen as one.
+    selector:
+      type: connector
+      connector_types:
+      - Generalization
+    condition:
+      type: connector_endpoint_stereotype
+      source_must_be_one_of:
+      - AdjunctProperty
+      - BoundReference
+      - ClassifierBehaviorProperty
+      - DirectedFeature
+      - ElementGroup
+      - EndPathMultiplicity
+      - FlowPort
+      - FlowProperty
+      - FullPort
+      - InterfaceBlock
+      - NestedConnectorEnd
+      - PropertySpecificType
+      - ProxyPort
+      - RequirementRelated
+      - Stakeholder
+      - ValueType
+      - allocateActivityPartition
+      - allocated
+      - block
+      - connectorProperty
+      - constraintBlock
+      - constraintProperty
+      - continuous
+      - controlOperator
+      - discrete
+      - distributedProperty
+      - effbd
+      - flowSpecification
+      - model
+      - moe
+      - noBuffer
+      - nonStreaming
+      - objectiveFunction
+      - optional
+      - overwrite
+      - participantProperty
+      - probability
+      - problem
+      - rate
+      - rationale
+      - streaming
+      - testCase
+      - view
+      - viewpoint
+      - ''
+      target_must_be_one_of:
+      - AdjunctProperty
+      - BoundReference
+      - ClassifierBehaviorProperty
+      - DirectedFeature
+      - ElementGroup
+      - EndPathMultiplicity
+      - FlowPort
+      - FlowProperty
+      - FullPort
+      - InterfaceBlock
+      - NestedConnectorEnd
+      - PropertySpecificType
+      - ProxyPort
+      - RequirementRelated
+      - Stakeholder
+      - ValueType
+      - allocateActivityPartition
+      - allocated
+      - block
+      - connectorProperty
+      - constraintBlock
+      - constraintProperty
+      - continuous
+      - controlOperator
+      - discrete
+      - distributedProperty
+      - effbd
+      - flowSpecification
+      - model
+      - moe
+      - noBuffer
+      - nonStreaming
+      - objectiveFunction
+      - optional
+      - overwrite
+      - participantProperty
+      - probability
+      - problem
+      - rate
+      - rationale
+      - streaming
+      - testCase
+      - view
+      - viewpoint
+      - ''
+    remediation:
+      short: Relate the requirements with deriveReqt or copy instead of a generalization.
+      auto_fixable: false
+
+  - id: SYSML1-ACT-006
+    name: A probability leaves a decision node or an object node
+    implements: SYSML-ACT-006
+    description: A probability applies only to activity edges whose source is a decision node or an object node. In EA's SysML
+      technology it is the stereotype probability on a control flow or an object flow. The source must be an element of EA
+      type Decision, ObjectNode, ActivityParameter, CentralBufferNode, ExpansionNode or ActionPin, or a data store (the built-in
+      stereotype datastore). The end it arrives at is any activity node. [OMG SysML 1.5 (formal/17-05-01) 11.3.2.7 [1]]
+    category: act
+    severity: error
+    demo_trigger: false
+    coverage: partial
+    not_checked: Output parameter sets, which the standard also allows as the place of a probability and which EA's technology
+      does not model with a stereotype.
+    selector:
+      type: connector
+      connector_stereotype: probability
+      connector_types:
+      - ControlFlow
+      - ObjectFlow
+    condition:
+      type: connector_endpoint_stereotype
+      source_must_be_one_of:
+      - type:Decision
+      - type:ObjectNode
+      - type:ActivityParameter
+      - type:CentralBufferNode
+      - type:ExpansionNode
+      - type:ActionPin
+      - datastore
+      target_must_be_one_of:
+      - AdjunctProperty
+      - BoundReference
+      - ClassifierBehaviorProperty
+      - DirectedFeature
+      - ElementGroup
+      - EndPathMultiplicity
+      - FlowPort
+      - FlowProperty
+      - FullPort
+      - InterfaceBlock
+      - NestedConnectorEnd
+      - PropertySpecificType
+      - ProxyPort
+      - RequirementRelated
+      - Stakeholder
+      - ValueType
+      - allocateActivityPartition
+      - allocated
+      - block
+      - connectorProperty
+      - constraintBlock
+      - constraintProperty
+      - continuous
+      - controlOperator
+      - designConstraint
+      - discrete
+      - distributedProperty
+      - effbd
+      - extendedRequirement
+      - flowSpecification
+      - functionalRequirement
+      - interfaceRequirement
+      - model
+      - moe
+      - noBuffer
+      - nonStreaming
+      - objectiveFunction
+      - optional
+      - overwrite
+      - participantProperty
+      - performanceRequirement
+      - physicalRequirement
+      - probability
+      - problem
+      - rate
+      - rationale
+      - requirement
+      - streaming
+      - testCase
+      - view
+      - viewpoint
+      - ''
+      - type:Action
+      - type:Decision
+      - type:MergeNode
+      - type:ObjectNode
+      - type:ActivityParameter
+      - type:CentralBufferNode
+      - type:ExpansionNode
+      - type:ActionPin
+    remediation:
+      short: Put the probability on an edge that leaves a decision node or an object node, or remove it.
+      auto_fixable: false
+
+  - id: SYSML1-PORT-008
+    name: A full port is not bound to a part
+    implements: SYSML-PORT-008
+    description: 'A binding connector does not link a full port to another composite property of the block that owns it, unless
+      that property is a non-full port. The rule is a table of the binding connector between the ends it can judge: a full
+      port (stereotype FullPort) and a part (EA type Part). A full port may be bound to a full port or a part to a part; a
+      full port bound to a part is reported. Any other end (a proxy port, a plain port) is ignored. [OMG SysML 1.5 (formal/17-05-01)
+      9.3.2.8 [2]]'
+    category: port
+    severity: error
+    demo_trigger: false
+    coverage: partial
+    not_checked: 'That the part belongs to the block that owns the full port, and bindings that reach the full port through
+      other binding connectors: the rule reports a full port bound to any part. A full port bound to another full port is
+      not reported.'
+    selector:
+      type: connector
+      connector_stereotypes: any_of_table
+    condition:
+      type: relationship_table
+      table: sysml-1.5-full-port-bindings
+      unknown_endpoint: ignore
+    remediation:
+      short: Bind the full port to a proxy port or another non-full port, not to a part.
+      auto_fixable: false
+
+  - id: SYSML1-PORT-009
+    name: An interface block owns no behavior
+    implements: SYSML-PORT-009
+    description: An interface block does not own behaviors. The rule reports an activity, a state machine or an interaction
+      nested directly in an interface block (an element attached to it by ParentID). [OMG SysML 1.5 (formal/17-05-01) 9.3.2.9
+      [1]]
+    category: port
+    severity: error
+    demo_trigger: false
+    coverage: partial
+    not_checked: 'Inherited behaviors, a classifier behavior, and the methods of behavioral features: they are references
+      and operations, not nested elements.'
+    selector:
+      type: element
+      stereotypes:
+        any_of:
+        - InterfaceBlock
+    condition:
+      type: contains_count
+      child:
+        stereotype_one_of:
+        - type:Activity
+        - type:StateMachine
+        - type:Interaction
+      max: 0
+    remediation:
+      short: Move the behavior into a block that uses the interface block, or remove it.
+      auto_fixable: false
+
+  - id: SYSML1-BLK-029
+    name: A classifier behavior property sits in a block
+    implements: SYSML-BLK-029
+    description: A classifier behavior property is applied only to properties owned by blocks. EA stores the property as a
+      Part with the stereotype ClassifierBehaviorProperty, attached to its owner by ParentID; the owner must carry block,
+      constraintBlock or InterfaceBlock. [OMG SysML 1.5 (formal/17-05-01) 8.3.2.6 [1]]
+    category: blk
+    severity: error
+    demo_trigger: false
+    coverage: partial
+    not_checked: That the owner has a classifier behavior, and that the property is owned and not inherited.
+    selector:
+      type: element
+      stereotypes:
+        any_of:
+        - ClassifierBehaviorProperty
+    condition:
+      type: contained_in
+      path:
+      - stereotype_one_of:
+        - block
+        - constraintBlock
+        - InterfaceBlock
+    remediation:
+      short: Create the property inside a block.
+      auto_fixable: false
+
+  - id: SYSML1-BLK-032
+    name: A connector property sits in a block
+    implements: SYSML-BLK-032
+    description: A connector property is applied only to properties of blocks. EA stores the property as a Part with the stereotype
+      connectorProperty, attached to its owner by ParentID; the owner must carry block, constraintBlock or InterfaceBlock.
+      [OMG SysML 1.5 (formal/17-05-01) 8.3.2.7 [1]]
+    category: blk
+    severity: error
+    demo_trigger: false
+    coverage: full
+    selector:
+      type: element
+      stereotypes:
+        any_of:
+        - connectorProperty
+    condition:
+      type: contained_in
+      path:
+      - stereotype_one_of:
+        - block
+        - constraintBlock
+        - InterfaceBlock
+    remediation:
+      short: Create the property inside a block.
+      auto_fixable: false
+
+  - id: SYSML1-BLK-042
+    name: A distributed property sits in a block or value type
+    implements: SYSML-BLK-042
+    description: A distributed property is applied only to properties of blocks or value types. EA stores the property as
+      a Part with the stereotype distributedProperty, attached to its owner by ParentID; the owner must carry block, constraintBlock,
+      InterfaceBlock or ValueType. [OMG SysML 1.5 (formal/17-05-01) 8.3.2.9 [1]]
+    category: blk
+    severity: error
+    demo_trigger: false
+    coverage: full
+    selector:
+      type: element
+      stereotypes:
+        any_of:
+        - distributedProperty
+    condition:
+      type: contained_in
+      path:
+      - stereotype_one_of:
+        - block
+        - constraintBlock
+        - InterfaceBlock
+        - ValueType
+    remediation:
+      short: Create the property inside a block or a value type.
+      auto_fixable: false
+
+  - id: SYSML1-BLK-056
+    name: A property-specific type specializes at most one classifier
+    implements: SYSML-BLK-056
+    description: A property-specific type specializes at most the single classifier that was named as its starting type. In
+      EA's SysML technology it is a class with the stereotype PropertySpecificType; a specialization is a connector of EA
+      type Generalization that leaves it. The rule reports more than one. [OMG SysML 1.5 (formal/17-05-01) 8.3.2.14]
+    category: blk
+    severity: error
+    demo_trigger: false
+    coverage: partial
+    not_checked: 'That the one classifier is the starting type, and that a type with no starting type specializes nothing:
+      both follow a reference.'
+    selector:
+      type: element
+      stereotypes:
+        any_of:
+        - PropertySpecificType
+    condition:
+      type: connector_count
+      connector_type: Generalization
+      direction: outgoing
+      max: 1
+    remediation:
+      short: Keep one generalization on the property-specific type, the one to its starting type.
+      auto_fixable: false
+
+  - id: SYSML1-REQ-005
+    name: A requirement holds no classifier that is not a requirement
+    implements: SYSML-REQ-005
+    description: A classifier nested in a requirement is also a requirement. The rule reports a block, a value type or a data
+      type, enumeration or primitive type attached to a requirement by ParentID. [OMG SysML 1.5 (formal/17-05-01) 16.3.2.5
+      [5]]
+    category: req
+    severity: error
+    demo_trigger: false
+    coverage: partial
+    not_checked: 'A plain class nested in a requirement, and the other classifier types: a requirement stereotyped onto a
+      Class keeps the type Class, so naming that type would report it.'
+    selector:
+      type: element
+      stereotypes:
+        any_of:
+        - requirement
+        - functionalRequirement
+        - interfaceRequirement
+        - performanceRequirement
+        - physicalRequirement
+        - designConstraint
+        - extendedRequirement
+    condition:
+      type: contains_count
+      child:
+        stereotype_one_of:
+        - block
+        - constraintBlock
+        - InterfaceBlock
+        - ValueType
+        - type:DataType
+        - type:Enumeration
+        - type:PrimitiveType
+      max: 0
+    remediation:
+      short: Move the classifier out of the requirement, or make it a requirement.
+      auto_fixable: false

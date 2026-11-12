@@ -1,0 +1,205 @@
+# Zachman Framework Conformance Ruleset
+# Language:     The Zachman Framework for Enterprise Architecture, pre-3.0 naming (1992 rules), as modeled with Sparx's built-in `ZF` technology
+# Enforced by:  AI Power Tools for Sparx EA - validate_model tool
+# Written for the language skill (the zachman language file); the rules need the where-it-sits rules, which arrive in server 3.6.5.
+#
+# THE FRAMEWORK IS A CLASSIFICATION SCHEMA. Its checkable rules (rules.md: ZF-COL-001, ZF-COL-004, ZF-ROW-001, ZF-CELL-001 and
+# ZF-CELL-002 are `static`; ZF-COL-003, ZF-ROW-004, ZF-ROW-005, ZF-CELL-003, ZF-CELL-004, ZF-CELL-007, ZF-PRIM-001, ZF-PRIM-002,
+# ZF-INT-002 and ZF-INT-003 are `partial`) are about which cell an element sits in: one cell each, the right concept in the cell,
+# nothing of another column in it. language.yaml says they hold only "if the model records each element's cell (row and column)
+# as a label or a place".
+#
+# HOW EA RECORDS THE CELL (measured on EA 17.1 build 1716):
+#   * a cell is a PACKAGE stereotyped ZFCell (stored `ZFCell`, FQName ZF::ZFCell, Object_Type Package);
+#   * the row is that package's PARENT package (unstereotyped: Planner, Owner, Designer, Builder, Subcontractor, Functioning Enterprise);
+#   * the column is not stored: the cell package's name and the type of its diagram imply it;
+#   * an element is in a cell by t_object.Package_ID; t_object.ParentID stays 0;
+#   * no tagged value on the ZFCell package or on any of the 44 element stereotypes names a row, a column or a cell.
+# So the cell is a place, not a label.
+#
+# WHAT THE VALIDATOR CAN SEE. validate_model selects an element by its own stereotype, its EA type (selector.types) and its tagged
+# values; counts an element's connectors; judges one connector's two ends; checks where an element sits (`contained_in`: each container
+# outward, named by stereotype, EA type or name); and bounds what a container holds (`contains_count`). That is enough to say which cell
+# package, in which row package, an element sits in, and it is what the seven rules below do. It still cannot compare the cells of a
+# connector's two ends, read the diagrams an element is shown on, or read what an element means (an instance has no marker in EA, so
+# ZF-ROW-005 takes an Object as one).
+#
+# WHAT THE RULES CHECK. ZF-CELL-002 (an element sits in a cell), ZF-CELL-003 and ZF-CELL-004 (a business entity in the owner's data cell,
+# a business process in the owner's function cell), ZF-COL-004 (events and cycles stay in the time column), ZF-ROW-005 (an object sits in
+# the Functioning Enterprise row) and ZF-COL-001 (a row package holds at most six cells). The rules.md ids with no rule in this file are
+# ZF-COL-003, ZF-ROW-001, ZF-ROW-004, ZF-CELL-001, ZF-CELL-007, ZF-PRIM-001, ZF-PRIM-002, ZF-INT-002 and ZF-INT-003; each rule's
+# description says what it leaves out.
+#
+# NO RULE IS INVENTED. The framework defines no connector, no relationship table and no tag (rules.md ZF-GUID-004), and EA binds no
+# stereotype to any framework concept except the cell container (the reference file's concepts). A rule over EA's generic stereotypes
+# (Communicate, Control, BusinessEvent and the rest) would be a rule this language skill does not have.
+#
+# STEREOTYPE NAMES are unqualified and measured: BusinessEntity, ZFCell, Communicate (not ZF::...).
+#
+# Sources:
+#   [S1] Sowa and Zachman, "Extending and formalizing the framework for information systems architecture", IBM Systems Journal 31(3), 1992
+#   [S2] Sparx Systems, Enterprise Architect 17.1, built-in technology `ZF` (Zachman Framework), read back from elements, packages and
+#        diagrams created in a test model, and Sparx's model pattern zf1.0-zachman-framework.xml (read only)
+#
+# From server 3.6.5 the validator can read where an element sits
+# (`contained_in`, `contains_count`) and select by EA type. The rules below use them. The column is known only
+# from the cell's name, so column rules list the six cell names of that column.
+# 2026-11-03: header corrected to match the validator's grammar (comments only; no rule changed).
+
+meta:
+  version: "0.2"
+  language: zachman
+  organization: "(your organization)"
+  mdg_family: ZF
+  description: >
+    Conformance rules for the Zachman Framework as modeled with Sparx Enterprise Architect's ZF technology: which cell (a ZFCell
+    package, in its row's package) an element sits in. Needs a server with the where-it-sits rules (released after 3.6.4).
+  severity_levels:
+    error: A rule of the framework (rules.md strength must)
+    warning: Guidance of the framework (rules.md strength should)
+    info: Advisory note; not a conformance violation
+
+rules:
+  - id: ZF-CELL-002-A
+    implements: ZF-CELL-002
+    name: "A classified element sits in a cell"
+    description: >
+      Every classified element is placed in a cell [S1 p. 602, Rule 5]. In EA a cell is a ZFCell package, so an element of the
+      framework's stereotypes sits directly in one. Partial: that it is shown on no other cell's diagram is not checked.
+    category: cell
+    severity: error
+    demo_trigger: false
+    selector:
+      type: element
+      stereotypes: {any_of: [BusinessEntity, BusinessProcess, BusinessEvent, BusinessCycle, HeadQuarters, BranchOffice,
+                              OfficeBlock, Goal, Strategy, Personnel]}
+    condition:
+      type: contained_in
+      path:
+        - {stereotype_one_of: [ZFCell]}
+    remediation:
+      short: "Move the element into the cell (ZFCell package) it belongs to."
+      auto_fixable: false
+
+  - id: ZF-CELL-002-B
+    implements: ZF-CELL-002
+    name: "A plain classified element sits in a cell"
+    description: >
+      As ZF-CELL-002-A, for the plain UML elements a cell model uses below the owner row (classes, components, objects), which
+      carry no stereotype and are selected by EA type.
+    category: cell
+    severity: error
+    demo_trigger: false
+    selector:
+      type: element
+      types: {any_of: [Class, Component, Object]}
+    condition:
+      type: contained_in
+      path:
+        - {stereotype_one_of: [ZFCell]}
+    remediation:
+      short: "Move the element into the cell (ZFCell package) it belongs to."
+      auto_fixable: false
+
+  - id: ZF-CELL-003-ENTITY
+    implements: ZF-CELL-003
+    name: "A business entity sits in the owner's data cell"
+    description: >
+      A business entity belongs only in the data cell of the owner row [S1 p. 602, Rule 5].
+    category: cell
+    severity: error
+    demo_trigger: false
+    selector:
+      type: element
+      stereotypes: {any_of: [BusinessEntity]}
+    condition:
+      type: contained_in
+      path:
+        - {stereotype_one_of: [ZFCell], name_one_of: [Semantic Data Model]}
+        - {name_one_of: [Owner]}
+    remediation:
+      short: "Move the business entity to the Owner row's data cell (Semantic Data Model)."
+      auto_fixable: false
+
+  - id: ZF-CELL-003-PROCESS
+    implements: ZF-CELL-003
+    also_implements: [ZF-CELL-004]
+    name: "A business process sits in the owner's function cell"
+    description: >
+      A business process belongs only in the function cell of the owner row [S1 p. 602, Rule 5]; in another column's cell it
+      makes that cell's model use a primitive of another column (ZF-CELL-004).
+    category: cell
+    severity: error
+    demo_trigger: false
+    selector:
+      type: element
+      stereotypes: {any_of: [BusinessProcess]}
+    condition:
+      type: contained_in
+      path:
+        - {stereotype_one_of: [ZFCell], name_one_of: [Process Analysis Model]}
+        - {name_one_of: [Owner]}
+    remediation:
+      short: "Move the business process to the Owner row's function cell (Process Analysis Model)."
+      auto_fixable: false
+
+  - id: ZF-COL-004-TIME
+    implements: ZF-COL-004
+    name: "Time and cycle stay in the time column"
+    description: >
+      A primitive of one column does not recur in another [S1 p. 601, Rule 3]. Events and cycles are the time column's
+      primitives, so they sit only in that column's cells (named by row: Business Events, Event Schedule, Processing Structure, Control Structure, Timing Definition, Business Schedule).
+    category: column
+    severity: error
+    demo_trigger: false
+    selector:
+      type: element
+      stereotypes: {any_of: [BusinessEvent, BusinessCycle]}
+    condition:
+      type: contained_in
+      path:
+        - {stereotype_one_of: [ZFCell], name_one_of: ['Business Events', 'Event Schedule', 'Processing Structure', 'Control Structure', 'Timing Definition', 'Business Schedule']}
+    remediation:
+      short: "Move the event or cycle into the time column's cell of its row."
+      auto_fixable: false
+
+  - id: ZF-ROW-005
+    implements: ZF-ROW-005
+    name: "Instances belong in the functioning enterprise"
+    description: >
+      Particular occurrences belong only in the last row, the functioning enterprise. Partial: EA has no instance marker; an
+      object (EA type Object) is taken as an instance.
+    category: row
+    severity: error
+    demo_trigger: false
+    selector:
+      type: element
+      types: {any_of: [Object]}
+    condition:
+      type: contained_in
+      path:
+        - {stereotype_one_of: [ZFCell]}
+        - {name_one_of: [Functioning Enterprise]}
+    remediation:
+      short: "Move the instance to a cell of the Functioning Enterprise row, or model it as a type."
+      auto_fixable: false
+
+  - id: ZF-COL-001
+    implements: ZF-COL-001
+    name: "A row has no more than six cells"
+    description: >
+      The framework has exactly six columns [S1 p. 596], so a row package holds at most six cells. Partial: that each of the six
+      is a different column is not checked, and a row with fewer cells is not reported (EA stores no marker for a row package).
+    category: column
+    severity: error
+    demo_trigger: false
+    selector:
+      type: element
+      types: {any_of: [Package]}
+    condition:
+      type: contains_count
+      child: {stereotype_one_of: [ZFCell]}
+      max: 6
+    remediation:
+      short: "Remove the extra cell; each row has one cell per column."
+      auto_fixable: false

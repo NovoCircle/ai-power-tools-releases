@@ -49,7 +49,7 @@ reply: not: presents every element without connectors as something to delete
 
 ### TC-02: A scan result is not a delete list
 
-Covers: 1. What "orphan" actually means -- and why it needs judgement
+Covers: 1. What "orphan" actually means -- and why it needs judgment
 
 **Marks:** WRITE, INVARIANT
 
@@ -90,7 +90,7 @@ expect: = 1
 
 ### TC-03: Data assets drawn by placement are not decay
 
-Covers: 1. What "orphan" actually means -- and why it needs judgement
+Covers: 1. What "orphan" actually means -- and why it needs judgment
 
 **Ask:** "Our data architects say the data assets in the model aren't linked to anything. Are those orphans we should get rid of?"
 
@@ -119,7 +119,7 @@ reply: not: recommends deleting the data assets
 
 ### TC-04: Package objects are not modeling elements
 
-Covers: 1. What "orphan" actually means -- and why it needs judgement
+Covers: 1. What "orphan" actually means -- and why it needs judgment
 
 **Ask:** "Run an orphan check over Consumer Banking and tell me how many dead elements it found."
 
@@ -147,7 +147,7 @@ reply: not: recommends deleting a package because the scan listed it
 
 ### TC-05: Containers held together by parent and child are not decay
 
-Covers: 1. What "orphan" actually means -- and why it needs judgement
+Covers: 1. What "orphan" actually means -- and why it needs judgment
 
 **Setup:** In the package `Account Management`, an element `Retail Deposits Group` with no stereotype and no connectors, and two child elements `Branch Deposit Intake` and `Online Deposit Intake` (stereotype `WBABusinessApplication`, Component) whose parent is `Retail Deposits Group` (`ParentID`, EA's nesting) and which are linked to each other by one `Uses` connector.
 
@@ -177,7 +177,7 @@ reply: not: lists Retail Deposits Group among the dead elements
 
 ### TC-06: A real candidate fails all three tests
 
-Covers: 1. What "orphan" actually means -- and why it needs judgement
+Covers: 1. What "orphan" actually means -- and why it needs judgment
 
 **Ask:** "I want a short list of Westbrook elements that look genuinely abandoned, for me to review. Only the bank content, not the Fixtures packages. Nothing gets removed yet."
 
@@ -454,7 +454,7 @@ Covers: Step 4 -- delete, then verify by re-querying, not by re-fetching; 5. Fai
 
 **Ask:** "Estate Planning Workbench is dead. Nobody uses it, it isn't on any diagram and nothing connects to it. Delete it and confirm it's gone."
 
-**Passes when:** The run does the pre-delete checks anyway (what points at it, whether it is drawn anywhere), deletes the one element, and confirms it is gone with a query or a scoped re-scan that returns a clean zero. If it fetches the deleted id and gets an internal application error, it reads that as confirmation, not as a tool failure.
+**Passes when:** The run does the pre-delete checks anyway (what points at it, whether it is drawn anywhere), deletes the one element, and confirms it is gone with a query or a scoped re-scan that returns a clean zero. If it fetches the deleted id and gets `element_not_found`, it reads that as confirmation, not as a tool failure.
 
 **Check:**
 
@@ -484,10 +484,10 @@ tools: called: ea_analyze.trace_connectors
 tools: called: ea_analyze.execute_sql
 tools: called: ea_model.delete_element
 reply: says: the element is gone
-reply: not: says the delete failed or that a tool is broken because of an internal application error
+reply: not: says the delete failed or that a tool is broken because the fetch of the deleted id returned element_not_found
 ```
 
-**Fails when:** The run deletes straight away on the person's word, or deletes correctly and then reports "the delete failed" because the confirming fetch raised a COM exception. The reply contradicts the model.
+**Fails when:** The run deletes straight away on the person's word, or deletes correctly and then reports "the delete failed" because the confirming fetch returned `element_not_found`. The reply contradicts the model.
 
 ### TC-15: A one-off stereotype next to a real one is flagged, not fixed
 
@@ -649,7 +649,7 @@ Covers: 4. Moving elements safely
 
 **Ask:** "Move the Trust & Estate package so it sits under Enterprise Functions instead of Wealth Management."
 
-**Passes when:** The reply says there is no operation that moves a package. It offers the two routes (duplicate the package and delete the original, or update the package's parent directly) with their cost, and either completes one of them with both applications intact or stops and asks which. It does not report a move done through an operation that does not exist.
+**Passes when:** The reply says there is no operation that moves a package. It offers the two routes (update both records that place the package, its row and its mirror object, or duplicate the package and delete the original) with their cost, and either completes one of them with both applications intact or stops and asks which. It does not report a move done through an operation that does not exist.
 
 **Check:**
 
@@ -667,6 +667,12 @@ expect: = 1
 # the parent is the old one (stopped to ask) or the new one (completed)
 sql: SELECT p2.Name IN ('Wealth Management', 'Enterprise Functions') FROM t_package p JOIN t_package p2 ON p.Parent_ID = p2.Package_ID WHERE p.Name LIKE 'Trust%Estate'
 expect: = 1
+```
+
+```check
+# the package row and its mirror object agree about where the package sits
+sql: SELECT COUNT(*) FROM t_package p JOIN t_object m ON m.ea_guid = p.ea_guid AND m.Object_Type = 'Package' WHERE p.Name LIKE 'Trust%Estate' AND p.Parent_ID <> m.Package_ID
+expect: = 0
 ```
 
 ```check
@@ -702,7 +708,7 @@ expect: rows: [[1]]
 reply: not: says package creation failed or is unsupported
 ```
 
-**Fails when:** The run passes parent id 0 because every existing root package shows 0, gets an internal application error, and tells the person the tool cannot create packages.
+**Fails when:** The run passes parent id 0 because every existing root package shows 0, is refused with `package_not_found`, and tells the person the tool cannot create packages.
 
 ### TC-22: Scan the smallest package that answers the question
 
@@ -955,7 +961,7 @@ reply: not: says it looked at EA and nothing odd is showing
 2. Package objects in `t_object` are never deleted.
 3. Total elements fall by no more than the number of genuine candidates (ten in the bank content outside the Fixtures packages in the Westbrook copy).
 
-It does not cover: a genuine candidate the person would have wanted kept (a judgement the run must put to them), deleting the parent of a drill-down diagram that has no connectors or placements (TC-11 covers that case directly, since the diagram survives and the counts do not move), or a move that preserves the counts but puts an element in the wrong package.
+It does not cover: a genuine candidate the person would have wanted kept (a judgment the run must put to them), deleting the parent of a drill-down diagram that has no connectors or placements (TC-11 covers that case directly, since the diagram survives and the counts do not move), or a move that preserves the counts but puts an element in the wrong package.
 
 ## Headings not covered
 
@@ -963,12 +969,13 @@ None. Every heading in the skill has at least one case.
 
 ## Findings
 
-- Counts in the skill do not match the current Westbrook copy: 52 business applications (now 46), "140 orphans out of 170 elements" (now 81 of 119 non-package elements in the bank packages), 229 elements in total, `WBAAIModel` at zero use (now 3 elements), one `ExternalReference` element (none). The cases read counts from the model.
-- Section 1's capability-hierarchy containers (unstereotyped elements nested by `ParentID`) do not exist in the current copy: the capability tree is packages and no non-package element in the bank packages is a parent. The promise is testable only with the setup in TC-05.
-- Step 3's composite check cannot detect the case it names. `find_composite_diagram_mismatches` lists broken links, so a healthy drill-down parent returns zero mismatches and the call does not reveal that the element anchors a diagram. Detecting it needs `t_diagram.ParentID = <id>`. TC-11 therefore checks the outcome and does not require the mismatch call.
-- `pre-delete-safety.md` scopes Step 3 for `Westbrook Account Master` to "Consumer Banking, package 5"; in the current copy that element is in `Core Platforms` (under Enterprise Functions). The 70-element figure is Consumer Banking's.
-- `consistency-audits.md` says the WBA MDG declares 14 element stereotypes and that `pciScopeJustification` is not among the canon's ten tagged values; the canon now says 15 stereotypes and 13 tagged values with that tag declared. The file header caveats the 1.0 capture, but the body reads as current.
-- Step 2 calls `traverse_element_subgraph` "the better call" for the whole neighborhood; Section 6 makes `trace_connectors` the default and calls the subgraph slower with depth capped at 5. Both can hold, but TC-09 checks the reply and not the tool.
-- The delete sequence makes no mention of a baseline; the change-management skill says to offer one before a package delete or bulk edit. TC-02, TC-13 and TC-14 do not check for it.
-- Not checkable here: the retry-once-on-timeout rule, the `truncated: true` guard (2000 nodes, 8000 ms), the claim that the orphan scan returns package objects, and the first two bullets of "Verify in EA's UI" (diagnose a hang by screenshot, reload and screenshot after a diagram edit). None can be induced on a copy; only the no-computer-use bullet is tested (TC-30).
-- The skill does not say whether model documents count as decay candidates. The three `model document` elements in the Fixtures package pass all three tests (a stereotype, no connectors, no diagram placement), so a scan over the whole Westbrook Bank tree finds 13 candidates, not 10. TC-02 and TC-06 scope the ask to the bank content outside the Fixtures packages, which leaves 10.
+Each finding was checked against the current skill text, server main (read only) and a read-only copy of the Westbrook file. Each ends with its disposition.
+
+- Counts in the skill did not match the current Westbrook copy: 52 business applications (now 46), "140 orphans out of 170 elements" (the scan over the whole bank tree now flags 89 of 213 non-package elements, 81 of 119 in the narrower scope the cases use), 229 elements in total, `WBAAIModel` at zero use (now 3 elements), one `ExternalReference` element (none). **Fixed in `SKILL.md`:** section 1 quotes the current counts with their scope and says they move (the counts came from SQL that leaves package rows out, which is what the scan does from server 3.6.5; re-run the scan on the whole bank tree and compare); the `WBAAIModel` observation is gone. **No change to `references/consistency-audits.md`:** its tables are a dated snapshot (23 Sep 2026, WBA 1.0) and the file already says the current counts differ and no number is to be quoted as fact. The cases read counts from the model.
+- Section 1's capability-hierarchy containers (unstereotyped elements nested by `ParentID`) do not exist in the current copy: no non-package element in the bank packages has a `ParentID`. **Fixed:** the bullet now says the check applies to a model that nests capability elements and that the Westbrook copy has none. The promise is testable only with the setup in TC-05.
+- Step 3's composite check cannot detect the case it names: `find_composite_diagram_mismatches` lists broken links, so a healthy drill-down parent returns zero mismatches. **Fixed:** step 3 now gives the `t_diagram.ParentID = <id>` query that answers the question for one element and says what the mismatch call does and does not show. TC-11 still checks the outcome and does not require the mismatch call.
+- `pre-delete-safety.md` scoped step 3 for `Westbrook Account Master` to "Consumer Banking, package 5"; in the current copy the element is in `Core Platforms` (under `IT Operations`), and the 70-element figure is Consumer Banking's. **Fixed** in `references/pre-delete-safety.md`.
+- Step 2 called `traverse_element_subgraph` "the better call" while section 6 makes `trace_connectors` the default. **Fixed:** step 2 now says the subgraph call is slower and stops at depth 5, and that `trace_connectors` with `"direction": "both"` gives the same neighborhood on a large model (both operations accept `both`, read from server main). TC-09 checks the reply and not the tool.
+- The delete sequence made no mention of a baseline. **Fixed:** step 4 offers a restore point before a package or bulk delete and says to baseline the parent, as `ea-change-management` section 6 does. TC-02, TC-13 and TC-14 do not check for the offer; a check would be a new case.
+- Not checkable here: the retry-once-on-timeout rule, the `truncated: true` guard (2000 nodes, 8000 ms), the claim that an older orphan scan returns package objects (from server 3.6.5 it does not, and `SKILL.md` section 1 says so), and the first two bullets of "Verify in EA's UI". **No change:** none can be induced on a copy. Only the no-computer-use bullet is tested (TC-30); the diagram bullet now says this skill edits no diagram.
+- The skill did not say whether model documents count as decay candidates. The three `model document` elements in the Fixtures package pass all three tests, so a scan over the whole Westbrook Bank tree finds 13 candidates, not 10 (verified on the copy: 6 business applications, 4 vendor systems, 3 model documents). **Fixed:** section 1 says model documents usually pass the three tests and are listed apart, with a question whether they count. TC-02 and TC-06 scope the ask to the bank content outside the Fixtures packages, which leaves 10; no change.

@@ -64,7 +64,7 @@ directions correctly, through the `Con_` tables. It failed in three places:
   matched it, and otherwise answered from the person's other Microsoft 365 content, or not at all.
 - **Business terms.** Asked which applications are being retired, it found the Sunset ones and
   missed Archive in all four runs that reached the model.
-- **One row too many.** It answered 46 business applications once where there are 45, likely the
+- **One row too many.** It answered with a count one too high once, likely the
   blank member (`SKILL.md` §2).
 
 ### Descriptions, and how they reach it
@@ -117,7 +117,7 @@ These are the customer's administrators' settings. Say what is needed; never cha
 Copilot in Power BI, Fabric data agents and any Copilot other than Microsoft 365 Copilot Chat;
 whether Copilot uses the count measures instead of writing its own DAX; the Overview page's effect on
 finding the model; descriptions over 210 characters; a model past the 1,000 tables-plus-columns
-limit. **Copilot is not deterministic**: the same question once gave 45 and once 46, so ask twice
+limit. **Copilot is not deterministic**: the same question once gave a count one too high and once the right one, so ask twice
 before quoting an answer.
 
 ---

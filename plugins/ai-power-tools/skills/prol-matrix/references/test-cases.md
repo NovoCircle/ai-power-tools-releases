@@ -193,7 +193,7 @@ Covers: 4.1 Join by set membership. Never by direction.
 
 **Ask:** "Show me which rows and columns are linked in the Westbrook Capability Map, and tell me if you left anything out"
 
-**Setup:** A connector with both ends in the same list (both in `sourceElements` only, or both in `targetElements` only, and neither in the intersection). See Findings: where both ends are in the intersection of the two lists the connector is placed, not collected.
+**Setup:** A connector with both ends in the same list (both in `sourceElements` only, or both in `targetElements` only, and neither in the intersection). Where both ends are in the intersection of the two lists the connector is placed, not collected; TC-21 covers that case, and `SKILL.md` §4.1 says why.
 
 **Passes when:** Collected in `unplaced` and reported.
 
@@ -711,9 +711,18 @@ customer repository.
 
 ## Findings
 
+Each finding was checked on 11 Nov 2026 against the skill text. Nothing here was run against
+Prolaborate. The line after each says what was done.
+
 - **TC-08 contradicts SKILL.md §4.1 as written.** TC-08's pass ("A connector with both ends in the same list: collected in `unplaced`") holds only when the two ends are in the same list and not in the intersection of the two lists. When both ends lie in the intersection, §4.1 says both membership branches match, the first wins and `unplaced` stays empty. The case is kept as written and its Setup narrows the condition; TC-21 covers the intersection case.
+  **No change to the skill: §4.1 is right. The case's Setup already narrows the condition, and now points at TC-21 and §4.1 instead of at this list.**
 - **The session preflight is not checkable.** The opening of SKILL.md promises to read `prolaborate-session.md` and to run the `prol-start-here` preflight first. A `reply` or `tools` check cannot show that a file was read; no case tests it.
+  **No change: the grammar now names a skill load (`called: skill:prol-start-here`), so a case can check the preflight when one is wanted. Reading a file is still not checkable.**
 - **The limits SKILL.md §8 states cannot be exercised on a Westbrook fixture.** Behavior at scale beyond 1027 x 61, non-Package selector types, profile types 1 to 7, restricted-user views and the share and download flows are all stated as unverified. TC-09, TC-17, TC-18, TC-28 and TC-13/TC-14 test only that the skill says so, not that the stated limits are accurate.
+  **No change: a fixture limit, not a skill defect. The skill says plainly that these are unverified, which is all it can say.**
 - **`GetEAMatrixData` is a POST.** The `http` check is GET only, so no case can check the grid's data against the API; the invariant checks are `reply` checks and rest on how the runner grades a reply.
+  **No change: a harness limit.**
 - **No case can verify that the skill read the API instead of scraping the table** (TC-02) or fetched only the settings (TC-03): the transcript's browser calls are not named in the `tools` grammar.
+  **No change: a harness limit.**
 - **`GetMatrixShareURL` cannot be used as a check.** It mints a URL when called (reference §1), so TC-13 can check only the share flag with `CheckIsMatrixShareEnabled` and the reply.
+  **Fixed in the skill. §6 now says calling `GetMatrixShareURL` creates the link and needs the same confirmation as sharing, and that `CheckIsMatrixShareEnabled` is the way to find out whether sharing is on. TC-13 is unchanged.**

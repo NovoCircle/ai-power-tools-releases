@@ -1,0 +1,6535 @@
+# ArchiMate 3.1 in Sparx EA: the EA references (generated from the harvest and the model readback; do not edit by hand)
+language: archimate-3
+technology: ArchiMate3
+display_name: ArchiMate 3.1
+profile: ArchiMate3
+stereotype_prefix: ArchiMate_
+stereotype_storage:
+  stored: ArchiMate_<Concept>
+  stored_in: t_object.Stereotype and t_connector.Stereotype (the unqualified name; what a ruleset selector matches)
+  qualified: ArchiMate3::ArchiMate_<Concept>
+  qualified_in: t_xref, the row named Stereotypes, FQName (the technology the stereotype is bound to)
+  create_with: the qualified form as the element or connector type, for example ArchiMate3::ArchiMate_BusinessActor
+  avoid: 'create_element_in_language with language_id ArchiMate3: binds seven element types to the ArchiMate 2 technology'
+  shared_short_names: ArchiMate 2 (technology id Archimate) uses the same short names, so a ruleset cannot tell the two apart;
+    only the qualified name in t_xref can
+measured_on:
+  ea: 17.1 build 1716
+  date: '2026-10-20'
+diagram_types:
+  Business Layer:
+    ea_name: ArchiMate3::Business
+    alias: Business Layer
+    base: Diagram_Logical
+    toolbox: ArchiMate3::Business
+    stored:
+      t_diagram.Diagram_Type: Logical
+      t_diagram.StyleEx: MDGDgm=ArchiMate3::Business;
+    measured: true
+    conventions:
+      provenance:
+        status: measured
+        note: Conventions were measured on existing diagrams; the numbers are carried in separately and are not restated here.
+  Application Layer:
+    ea_name: ArchiMate3::Application
+    alias: Application Layer
+    base: Diagram_Logical
+    toolbox: ArchiMate3::Application
+    stored:
+      t_diagram.Diagram_Type: Logical
+      t_diagram.StyleEx: MDGDgm=ArchiMate3::Application;
+    measured: true
+    conventions:
+      provenance:
+        status: measured
+        note: Conventions were measured on existing diagrams; the numbers are carried in separately and are not restated here.
+  Technology Layer:
+    ea_name: ArchiMate3::Technology
+    alias: Technology Layer
+    base: Diagram_Logical
+    toolbox: ArchiMate3::Technology
+    stored:
+      t_diagram.Diagram_Type: Logical
+      t_diagram.StyleEx: MDGDgm=ArchiMate3::Technology;
+    measured: true
+    conventions:
+      provenance:
+        status: measured
+        note: Conventions were measured on existing diagrams; the numbers are carried in separately and are not restated here.
+  Motivation:
+    ea_name: ArchiMate3::Motivation
+    alias: Motivation
+    base: Diagram_Logical
+    toolbox: ArchiMate3::Motivation
+    stored:
+      t_diagram.Diagram_Type: Logical
+      t_diagram.StyleEx: MDGDgm=ArchiMate3::Motivation;
+    measured: true
+    conventions:
+      provenance:
+        status: measured
+        note: Conventions were measured on existing diagrams; the numbers are carried in separately and are not restated here.
+  Implementation and Migration:
+    ea_name: ArchiMate3::Implementation
+    alias: Implementation and Migration
+    base: Diagram_Logical
+    toolbox: ArchiMate3::Implementation
+    stored:
+      t_diagram.Diagram_Type: Logical
+      t_diagram.StyleEx: MDGDgm=ArchiMate3::Implementation;
+    measured: true
+    conventions:
+      provenance:
+        status: measured
+        note: Conventions were measured on existing diagrams; the numbers are carried in separately and are not restated here.
+  Strategy:
+    conventions: not-measured
+    ea_name: null
+    use: ArchiMate3::Motivation
+    note: The technology has no strategy diagram type. Strategy concepts (Resource, Capability, Value Stream, Course of Action)
+      are on the Motivation toolbox, page 'Strategy Concepts'; draw them on a Motivation diagram.
+  Physical:
+    conventions: not-measured
+    ea_name: null
+    use: ArchiMate3::Technology
+    note: The technology has no physical diagram type. Physical concepts (Equipment, Facility, Distribution Network, Material)
+      and Location are on the Technology toolbox, page 'Physical Extension'; draw them on a Technology diagram.
+concepts:
+  Grouping:
+    stereotype: ArchiMate_Grouping
+    kind: element
+    qualified: ArchiMate3::ArchiMate_Grouping
+    metaclass: Boundary
+    tags: []
+    default_diagram_type: null
+    measured: true
+  Location:
+    stereotype: ArchiMate_Location
+    kind: element
+    qualified: ArchiMate3::ArchiMate_Location
+    metaclass: Class
+    tags: []
+    default_diagram_type: ArchiMate3::Motivation
+    measured: true
+  Stakeholder:
+    stereotype: ArchiMate_Stakeholder
+    kind: element
+    qualified: ArchiMate3::ArchiMate_Stakeholder
+    metaclass: Class
+    tags: []
+    default_diagram_type: ArchiMate3::Motivation
+    measured: true
+  Driver:
+    stereotype: ArchiMate_Driver
+    kind: element
+    qualified: ArchiMate3::ArchiMate_Driver
+    metaclass: Class
+    tags: []
+    default_diagram_type: ArchiMate3::Motivation
+    measured: true
+  Assessment:
+    stereotype: ArchiMate_Assessment
+    kind: element
+    qualified: ArchiMate3::ArchiMate_Assessment
+    metaclass: Class
+    tags: []
+    default_diagram_type: ArchiMate3::Motivation
+    measured: true
+  Goal:
+    stereotype: ArchiMate_Goal
+    kind: element
+    qualified: ArchiMate3::ArchiMate_Goal
+    metaclass: Class
+    tags: []
+    default_diagram_type: ArchiMate3::Motivation
+    measured: true
+  Outcome:
+    stereotype: ArchiMate_Outcome
+    kind: element
+    qualified: ArchiMate3::ArchiMate_Outcome
+    metaclass: Class
+    tags: []
+    default_diagram_type: ArchiMate3::Motivation
+    measured: true
+  Principle:
+    stereotype: ArchiMate_Principle
+    kind: element
+    qualified: ArchiMate3::ArchiMate_Principle
+    metaclass: Class
+    tags: []
+    default_diagram_type: ArchiMate3::Motivation
+    measured: true
+  Requirement:
+    stereotype: ArchiMate_Requirement
+    kind: element
+    qualified: ArchiMate3::ArchiMate_Requirement
+    metaclass: Class
+    tags: []
+    default_diagram_type: ArchiMate3::Motivation
+    measured: true
+  Constraint:
+    stereotype: ArchiMate_Constraint
+    kind: element
+    qualified: ArchiMate3::ArchiMate_Constraint
+    metaclass: Class
+    tags: []
+    default_diagram_type: ArchiMate3::Motivation
+    measured: true
+  Meaning:
+    stereotype: ArchiMate_Meaning
+    kind: element
+    qualified: ArchiMate3::ArchiMate_Meaning
+    metaclass: Class
+    tags: []
+    default_diagram_type: ArchiMate3::Motivation
+    measured: true
+  Value:
+    stereotype: ArchiMate_Value
+    kind: element
+    qualified: ArchiMate3::ArchiMate_Value
+    metaclass: Class
+    tags: []
+    default_diagram_type: ArchiMate3::Motivation
+    measured: true
+  Resource:
+    stereotype: ArchiMate_Resource
+    kind: element
+    qualified: ArchiMate3::ArchiMate_Resource
+    metaclass: Class
+    tags: []
+    default_diagram_type: ArchiMate3::Motivation
+    measured: true
+  Capability:
+    stereotype: ArchiMate_Capability
+    kind: element
+    qualified: ArchiMate3::ArchiMate_Capability
+    metaclass: Class
+    tags: []
+    default_diagram_type: ArchiMate3::Motivation
+    measured: true
+  ValueStream:
+    stereotype: ArchiMate_ValueStream
+    kind: element
+    qualified: ArchiMate3::ArchiMate_ValueStream
+    metaclass: Activity
+    tags: []
+    default_diagram_type: ArchiMate3::Motivation
+    measured: true
+  CourseOfAction:
+    stereotype: ArchiMate_CourseOfAction
+    kind: element
+    qualified: ArchiMate3::ArchiMate_CourseOfAction
+    metaclass: Class
+    tags: []
+    default_diagram_type: ArchiMate3::Motivation
+    measured: true
+  BusinessActor:
+    stereotype: ArchiMate_BusinessActor
+    kind: element
+    qualified: ArchiMate3::ArchiMate_BusinessActor
+    metaclass: Class
+    tags: []
+    default_diagram_type: ArchiMate3::Business
+    measured: true
+  BusinessRole:
+    stereotype: ArchiMate_BusinessRole
+    kind: element
+    qualified: ArchiMate3::ArchiMate_BusinessRole
+    metaclass: Class
+    tags: []
+    default_diagram_type: ArchiMate3::Business
+    measured: true
+  BusinessCollaboration:
+    stereotype: ArchiMate_BusinessCollaboration
+    kind: element
+    qualified: ArchiMate3::ArchiMate_BusinessCollaboration
+    metaclass: Class
+    tags: []
+    default_diagram_type: ArchiMate3::Business
+    measured: true
+  BusinessInterface:
+    stereotype: ArchiMate_BusinessInterface
+    kind: element
+    qualified: ArchiMate3::ArchiMate_BusinessInterface
+    metaclass: Interface
+    tags: []
+    default_diagram_type: ArchiMate3::Business
+    measured: true
+  BusinessProcess:
+    stereotype: ArchiMate_BusinessProcess
+    kind: element
+    qualified: ArchiMate3::ArchiMate_BusinessProcess
+    metaclass: Activity
+    tags: []
+    default_diagram_type: ArchiMate3::Business
+    measured: true
+  BusinessFunction:
+    stereotype: ArchiMate_BusinessFunction
+    kind: element
+    qualified: ArchiMate3::ArchiMate_BusinessFunction
+    metaclass: Activity
+    tags: []
+    default_diagram_type: ArchiMate3::Business
+    measured: true
+  BusinessInteraction:
+    stereotype: ArchiMate_BusinessInteraction
+    kind: element
+    qualified: ArchiMate3::ArchiMate_BusinessInteraction
+    metaclass: Activity
+    tags: []
+    default_diagram_type: ArchiMate3::Business
+    measured: true
+  BusinessEvent:
+    stereotype: ArchiMate_BusinessEvent
+    kind: element
+    qualified: ArchiMate3::ArchiMate_BusinessEvent
+    metaclass: Activity
+    tags: []
+    default_diagram_type: ArchiMate3::Business
+    measured: true
+  BusinessService:
+    stereotype: ArchiMate_BusinessService
+    kind: element
+    qualified: ArchiMate3::ArchiMate_BusinessService
+    metaclass: Activity
+    tags: []
+    default_diagram_type: ArchiMate3::Business
+    measured: true
+  BusinessObject:
+    stereotype: ArchiMate_BusinessObject
+    kind: element
+    qualified: ArchiMate3::ArchiMate_BusinessObject
+    metaclass: Class
+    tags: []
+    default_diagram_type: ArchiMate3::Business
+    measured: true
+  Contract:
+    stereotype: ArchiMate_Contract
+    kind: element
+    qualified: ArchiMate3::ArchiMate_Contract
+    metaclass: Class
+    tags: []
+    default_diagram_type: ArchiMate3::Business
+    measured: true
+  Representation:
+    stereotype: ArchiMate_Representation
+    kind: element
+    qualified: ArchiMate3::ArchiMate_Representation
+    metaclass: Class
+    tags: []
+    default_diagram_type: ArchiMate3::Business
+    measured: true
+  Product:
+    stereotype: ArchiMate_Product
+    kind: element
+    qualified: ArchiMate3::ArchiMate_Product
+    metaclass: Class
+    tags: []
+    default_diagram_type: ArchiMate3::Business
+    measured: true
+  ApplicationComponent:
+    stereotype: ArchiMate_ApplicationComponent
+    kind: element
+    qualified: ArchiMate3::ArchiMate_ApplicationComponent
+    metaclass: Component
+    tags: []
+    default_diagram_type: ArchiMate3::Application
+    measured: true
+  ApplicationCollaboration:
+    stereotype: ArchiMate_ApplicationCollaboration
+    kind: element
+    qualified: ArchiMate3::ArchiMate_ApplicationCollaboration
+    metaclass: Class
+    tags: []
+    default_diagram_type: ArchiMate3::Application
+    measured: true
+  ApplicationInterface:
+    stereotype: ArchiMate_ApplicationInterface
+    kind: element
+    qualified: ArchiMate3::ArchiMate_ApplicationInterface
+    metaclass: Interface
+    tags: []
+    default_diagram_type: ArchiMate3::Application
+    measured: true
+  ApplicationFunction:
+    stereotype: ArchiMate_ApplicationFunction
+    kind: element
+    qualified: ArchiMate3::ArchiMate_ApplicationFunction
+    metaclass: Activity
+    tags: []
+    default_diagram_type: ArchiMate3::Application
+    measured: true
+  ApplicationInteraction:
+    stereotype: ArchiMate_ApplicationInteraction
+    kind: element
+    qualified: ArchiMate3::ArchiMate_ApplicationInteraction
+    metaclass: Activity
+    tags: []
+    default_diagram_type: ArchiMate3::Application
+    measured: true
+  ApplicationProcess:
+    stereotype: ArchiMate_ApplicationProcess
+    kind: element
+    qualified: ArchiMate3::ArchiMate_ApplicationProcess
+    metaclass: Activity
+    tags: []
+    default_diagram_type: ArchiMate3::Application
+    measured: true
+  ApplicationEvent:
+    stereotype: ArchiMate_ApplicationEvent
+    kind: element
+    qualified: ArchiMate3::ArchiMate_ApplicationEvent
+    metaclass: Activity
+    tags: []
+    default_diagram_type: ArchiMate3::Application
+    measured: true
+  ApplicationService:
+    stereotype: ArchiMate_ApplicationService
+    kind: element
+    qualified: ArchiMate3::ArchiMate_ApplicationService
+    metaclass: Activity
+    tags: []
+    default_diagram_type: ArchiMate3::Application
+    measured: true
+  DataObject:
+    stereotype: ArchiMate_DataObject
+    kind: element
+    qualified: ArchiMate3::ArchiMate_DataObject
+    metaclass: Class
+    tags: []
+    default_diagram_type: ArchiMate3::Application
+    measured: true
+  Node:
+    stereotype: ArchiMate_Node
+    kind: element
+    qualified: ArchiMate3::ArchiMate_Node
+    metaclass: Class
+    tags: []
+    default_diagram_type: ArchiMate3::Technology
+    measured: true
+  Device:
+    stereotype: ArchiMate_Device
+    kind: element
+    qualified: ArchiMate3::ArchiMate_Device
+    metaclass: Class
+    tags: []
+    default_diagram_type: ArchiMate3::Technology
+    measured: true
+  SystemSoftware:
+    stereotype: ArchiMate_SystemSoftware
+    kind: element
+    qualified: ArchiMate3::ArchiMate_SystemSoftware
+    metaclass: Class
+    tags: []
+    default_diagram_type: ArchiMate3::Technology
+    measured: true
+  TechnologyCollaboration:
+    stereotype: ArchiMate_TechnologyCollaboration
+    kind: element
+    qualified: ArchiMate3::ArchiMate_TechnologyCollaboration
+    metaclass: Class
+    tags: []
+    default_diagram_type: ArchiMate3::Technology
+    measured: true
+  TechnologyInterface:
+    stereotype: ArchiMate_TechnologyInterface
+    kind: element
+    qualified: ArchiMate3::ArchiMate_TechnologyInterface
+    metaclass: Interface
+    tags: []
+    default_diagram_type: ArchiMate3::Technology
+    measured: true
+  Path:
+    stereotype: ArchiMate_Path
+    kind: element
+    qualified: ArchiMate3::ArchiMate_Path
+    metaclass:
+    - Class
+    - Association
+    tags: []
+    default_diagram_type: ArchiMate3::Technology
+    also_a_connector: true
+    element_form:
+      create_with: type ArchiMate3::ArchiMate_Path
+      stored_metaclass: Class
+      measured: true
+    connector_form:
+      create_with: metaclass Association with stereotype ArchiMate3::ArchiMate_Path
+      stored_metaclass: Association
+      measured: true
+      do_not: type ArchiMate3::ArchiMate_Path (stores a plain Dependency with no stereotype)
+    measured: true
+  CommunicationNetwork:
+    stereotype: ArchiMate_CommunicationNetwork
+    kind: element
+    qualified: ArchiMate3::ArchiMate_CommunicationNetwork
+    metaclass:
+    - Class
+    - Association
+    tags: []
+    default_diagram_type: ArchiMate3::Technology
+    also_a_connector: true
+    element_form:
+      create_with: type ArchiMate3::ArchiMate_CommunicationNetwork
+      stored_metaclass: Class
+      measured: true
+    connector_form:
+      create_with: metaclass Association with stereotype ArchiMate3::ArchiMate_CommunicationNetwork
+      stored_metaclass: Association
+      measured: true
+      do_not: type ArchiMate3::ArchiMate_CommunicationNetwork (stores a plain Dependency with no stereotype)
+    measured: true
+  TechnologyFunction:
+    stereotype: ArchiMate_TechnologyFunction
+    kind: element
+    qualified: ArchiMate3::ArchiMate_TechnologyFunction
+    metaclass: Activity
+    tags: []
+    default_diagram_type: ArchiMate3::Technology
+    measured: true
+  TechnologyProcess:
+    stereotype: ArchiMate_TechnologyProcess
+    kind: element
+    qualified: ArchiMate3::ArchiMate_TechnologyProcess
+    metaclass: Activity
+    tags: []
+    default_diagram_type: ArchiMate3::Technology
+    measured: true
+  TechnologyInteraction:
+    stereotype: ArchiMate_TechnologyInteraction
+    kind: element
+    qualified: ArchiMate3::ArchiMate_TechnologyInteraction
+    metaclass: Activity
+    tags: []
+    default_diagram_type: ArchiMate3::Technology
+    measured: true
+  TechnologyEvent:
+    stereotype: ArchiMate_TechnologyEvent
+    kind: element
+    qualified: ArchiMate3::ArchiMate_TechnologyEvent
+    metaclass: Activity
+    tags: []
+    default_diagram_type: ArchiMate3::Technology
+    measured: true
+  TechnologyService:
+    stereotype: ArchiMate_TechnologyService
+    kind: element
+    qualified: ArchiMate3::ArchiMate_TechnologyService
+    metaclass: Activity
+    tags: []
+    default_diagram_type: ArchiMate3::Technology
+    measured: true
+  Artifact:
+    stereotype: ArchiMate_Artifact
+    kind: element
+    qualified: ArchiMate3::ArchiMate_Artifact
+    metaclass: Class
+    tags: []
+    default_diagram_type: ArchiMate3::Technology
+    measured: true
+  Equipment:
+    stereotype: ArchiMate_Equipment
+    kind: element
+    qualified: ArchiMate3::ArchiMate_Equipment
+    metaclass: Class
+    tags: []
+    default_diagram_type: ArchiMate3::Technology
+    measured: true
+  Facility:
+    stereotype: ArchiMate_Facility
+    kind: element
+    qualified: ArchiMate3::ArchiMate_Facility
+    metaclass: Class
+    tags: []
+    default_diagram_type: ArchiMate3::Technology
+    measured: true
+  DistributionNetwork:
+    stereotype: ArchiMate_DistributionNetwork
+    kind: element
+    qualified: ArchiMate3::ArchiMate_DistributionNetwork
+    metaclass:
+    - Class
+    - Association
+    tags: []
+    default_diagram_type: ArchiMate3::Technology
+    also_a_connector: true
+    element_form:
+      create_with: type ArchiMate3::ArchiMate_DistributionNetwork
+      stored_metaclass: Class
+      measured: true
+    connector_form:
+      create_with: metaclass Association with stereotype ArchiMate3::ArchiMate_DistributionNetwork
+      stored_metaclass: Association
+      measured: true
+      do_not: type ArchiMate3::ArchiMate_DistributionNetwork (stores a plain Dependency with no stereotype)
+    measured: true
+  Material:
+    stereotype: ArchiMate_Material
+    kind: element
+    qualified: ArchiMate3::ArchiMate_Material
+    metaclass: Class
+    tags: []
+    default_diagram_type: ArchiMate3::Technology
+    measured: true
+  WorkPackage:
+    stereotype: ArchiMate_WorkPackage
+    kind: element
+    qualified: ArchiMate3::ArchiMate_WorkPackage
+    metaclass: Class
+    tags: []
+    default_diagram_type: ArchiMate3::Implementation
+    measured: true
+  Deliverable:
+    stereotype: ArchiMate_Deliverable
+    kind: element
+    qualified: ArchiMate3::ArchiMate_Deliverable
+    metaclass: Class
+    tags: []
+    default_diagram_type: ArchiMate3::Implementation
+    measured: true
+  ImplementationEvent:
+    stereotype: ArchiMate_ImplementationEvent
+    kind: element
+    qualified: ArchiMate3::ArchiMate_ImplementationEvent
+    metaclass: Activity
+    tags: []
+    default_diagram_type: ArchiMate3::Implementation
+    measured: true
+  Plateau:
+    stereotype: ArchiMate_Plateau
+    kind: element
+    qualified: ArchiMate3::ArchiMate_Plateau
+    metaclass: Class
+    tags: []
+    default_diagram_type: ArchiMate3::Implementation
+    measured: true
+  Gap:
+    stereotype: ArchiMate_Gap
+    kind: element
+    qualified: ArchiMate3::ArchiMate_Gap
+    metaclass: Class
+    tags: []
+    default_diagram_type: ArchiMate3::Implementation
+    measured: true
+  Composition:
+    stereotype: ArchiMate_Composition
+    kind: relationship
+    qualified: ArchiMate3::ArchiMate_Composition
+    metaclass: Association
+    direction: Unspecified
+    meaning_forwards: Composed of
+    meaning_backwards: Composes
+    tags: []
+    measured: true
+    whole_at: Composite at Source
+  Aggregation:
+    stereotype: ArchiMate_Aggregation
+    kind: relationship
+    qualified: ArchiMate3::ArchiMate_Aggregation
+    metaclass: Association
+    direction: Unspecified
+    meaning_forwards: Aggregation of
+    meaning_backwards: Aggregates
+    tags: []
+    measured: true
+    whole_at: Aggregate at Source
+  Assignment:
+    stereotype: ArchiMate_Assignment
+    kind: relationship
+    qualified: ArchiMate3::ArchiMate_Assignment
+    metaclass: Association
+    direction: Source -> Destination
+    meaning_forwards: Assigned to
+    meaning_backwards: Assigned from
+    tags: []
+    measured: true
+  Realization:
+    stereotype: ArchiMate_Realization
+    kind: relationship
+    qualified: ArchiMate3::ArchiMate_Realization
+    metaclass: Dependency
+    direction: not set in the file
+    meaning_forwards: Realizes
+    meaning_backwards: Realized by
+    tags: []
+    measured: true
+  Serving:
+    stereotype: ArchiMate_Serving
+    kind: relationship
+    qualified: ArchiMate3::ArchiMate_Serving
+    metaclass: Association
+    direction: Source -> Destination
+    meaning_forwards: Serving
+    meaning_backwards: Served by
+    tags: []
+    measured: true
+  Access:
+    stereotype: ArchiMate_Access
+    kind: relationship
+    qualified: ArchiMate3::ArchiMate_Access
+    metaclass: Dependency
+    direction: Source -> Destination
+    meaning_forwards: Accesses
+    meaning_backwards: Accessed by
+    tags: []
+    measured: true
+  Influence:
+    stereotype: ArchiMate_Influence
+    kind: relationship
+    qualified: ArchiMate3::ArchiMate_Influence
+    metaclass: ControlFlow
+    direction: not set in the file
+    meaning_forwards: Influences
+    meaning_backwards: Influenced by
+    tags: []
+    measured: true
+  Association:
+    stereotype: ArchiMate_Association
+    kind: relationship
+    qualified: ArchiMate3::ArchiMate_Association
+    metaclass: Association
+    direction: Unspecified
+    meaning_forwards: Associated with
+    meaning_backwards: Associated with
+    tags: []
+    measured: true
+  Triggering:
+    stereotype: ArchiMate_Triggering
+    kind: relationship
+    qualified: ArchiMate3::ArchiMate_Triggering
+    metaclass: ControlFlow
+    direction: not set in the file
+    meaning_forwards: Triggers
+    meaning_backwards: Triggered by
+    tags: []
+    measured: true
+  Flow:
+    stereotype: ArchiMate_Flow
+    kind: relationship
+    qualified: ArchiMate3::ArchiMate_Flow
+    metaclass: ControlFlow
+    direction: not set in the file
+    meaning_forwards: Flows to
+    meaning_backwards: Flows from
+    tags: []
+    measured: true
+  Specialization:
+    stereotype: ArchiMate_Specialization
+    kind: relationship
+    qualified: ArchiMate3::ArchiMate_Specialization
+    metaclass: Generalization
+    direction: not set in the file
+    meaning_forwards: Specializes
+    meaning_backwards: Specialized by
+    tags: []
+    measured: true
+  Junction:
+    stereotype: ArchiMate_Junction
+    kind: junction
+    qualified: ArchiMate3::ArchiMate_Junction
+    metaclass: Decision
+    tags:
+    - name: junctionKind
+      type: enumeration
+      values:
+      - AND
+      - OR
+      default: AND
+    note: One stereotype for the standard's and-junction and or-junction; the kind is the tagged value junctionKind (AND,
+      OR; default AND). EA stores the junction as an element (metaclass Decision), not as a connector.
+    measured: true
+ea_only:
+  ArchiMate_TechnologyObject:
+    kind: element
+    metaclass: Class
+    default_diagram_type: ArchiMate3::Technology
+    measured: true
+    what: The generic passive element of the technology layer, which the standard's text mentions as the parent of Artifact
+      and Material but does not list as a concept of its own. Not in the open exchange schema; the relationship table does
+      not name it, so a relationship ruleset ignores it.
+  diagram_type_stereotypes:
+    names:
+    - Business
+    - Application
+    - Technology
+    - Motivation
+    - Implementation
+    what: One stereotype per diagram type in the technology file (Business, Application, Technology, Motivation, Implementation).
+      They name the diagram types; no element or connector carries them.
+  toolbox_page_stereotypes:
+    names:
+    - Active Structure (Application) Concepts
+    - Behavioral (Application) Concepts
+    - Passive Structure (Application) Concepts
+    - Structural Relationships
+    - Dynamic Relationships
+    - Other Concepts
+    - Active Structure (Business) Concepts
+    - Behavioral (Business) Concepts
+    - Passive Structure (Business) Concepts
+    - Implementation and Migration Concepts
+    - Motivation Concepts
+    - Strategy Concepts
+    - Active Structure (Technology) Concepts
+    - Behavioral (Technology) Concepts
+    - Passive Structure (Technology) Concepts
+    - Physical Extension
+    what: Stereotype names the technology file declares for the toolbox pages. They label pages; no element or connector carries
+      them.
+toolbox:
+  Application:
+    ea_name: ArchiMate3::Application
+    pages:
+      Active Structure (Application) Concepts:
+      - label: Application Component
+        stereotype: ArchiMate3::ArchiMate_ApplicationComponent
+      - label: Application Collaboration
+        stereotype: ArchiMate3::ArchiMate_ApplicationCollaboration(UML::Class)
+      - label: Application Interface
+        stereotype: ArchiMate3::ArchiMate_ApplicationInterface
+      Behavioral (Application) Concepts:
+      - label: Application Process
+        stereotype: ArchiMate3::ArchiMate_ApplicationProcess
+      - label: Application Function
+        stereotype: ArchiMate3::ArchiMate_ApplicationFunction
+      - label: Application Interaction
+        stereotype: ArchiMate3::ArchiMate_ApplicationInteraction
+      - label: Application Service
+        stereotype: ArchiMate3::ArchiMate_ApplicationService
+      - label: Application Event
+        stereotype: ArchiMate3::ArchiMate_ApplicationEvent
+      Passive Structure (Application) Concepts:
+      - label: Data Object
+        stereotype: ArchiMate3::ArchiMate_DataObject
+      Structural Relationships:
+      - label: Composition
+        stereotype: ArchiMate3::ArchiMate_Composition
+      - label: Aggregation
+        stereotype: ArchiMate3::ArchiMate_Aggregation
+      - label: Realization
+        stereotype: ArchiMate3::ArchiMate_Realization
+      - label: Assignment
+        stereotype: ArchiMate3::ArchiMate_Assignment
+      - label: Serving
+        stereotype: ArchiMate3::ArchiMate_Serving
+      - label: Access
+        stereotype: ArchiMate3::ArchiMate_Access
+      - label: Association
+        stereotype: ArchiMate3::ArchiMate_Association
+      - label: Influence
+        stereotype: ArchiMate3::ArchiMate_Influence
+      Dynamic Relationships:
+      - label: Triggering
+        stereotype: ArchiMate3::ArchiMate_Triggering
+      - label: Flow
+        stereotype: ArchiMate3::ArchiMate_Flow
+      Other Concepts:
+      - label: Specialization
+        stereotype: ArchiMate3::ArchiMate_Specialization
+      - label: Junction
+        stereotype: ArchiMate3::ArchiMate_Junction
+      - label: Grouping
+        stereotype: ArchiMate3::ArchiMate_Grouping
+      - label: Location
+        stereotype: ArchiMate3::ArchiMate_Location
+  Business:
+    ea_name: ArchiMate3::Business
+    pages:
+      Active Structure (Business) Concepts:
+      - label: Business Actor
+        stereotype: ArchiMate3::ArchiMate_BusinessActor
+      - label: Business Role
+        stereotype: ArchiMate3::ArchiMate_BusinessRole
+      - label: Business Collaboration
+        stereotype: ArchiMate3::ArchiMate_BusinessCollaboration
+      - label: Business Interface
+        stereotype: ArchiMate3::ArchiMate_BusinessInterface
+      Behavioral (Business) Concepts:
+      - label: Business Process
+        stereotype: ArchiMate3::ArchiMate_BusinessProcess
+      - label: Business Function
+        stereotype: ArchiMate3::ArchiMate_BusinessFunction
+      - label: Business Interaction
+        stereotype: ArchiMate3::ArchiMate_BusinessInteraction
+      - label: Business Service
+        stereotype: ArchiMate3::ArchiMate_BusinessService
+      - label: Business Event
+        stereotype: ArchiMate3::ArchiMate_BusinessEvent
+      Passive Structure (Business) Concepts:
+      - label: Business Object
+        stereotype: ArchiMate3::ArchiMate_BusinessObject
+      - label: Contract
+        stereotype: ArchiMate3::ArchiMate_Contract(UML::Class)
+      - label: Representation
+        stereotype: ArchiMate3::ArchiMate_Representation
+      - label: Product
+        stereotype: ArchiMate3::ArchiMate_Product
+      Structural Relationships:
+      - label: Composition
+        stereotype: ArchiMate3::ArchiMate_Composition
+      - label: Aggregation
+        stereotype: ArchiMate3::ArchiMate_Aggregation
+      - label: Realization
+        stereotype: ArchiMate3::ArchiMate_Realization
+      - label: Assignment
+        stereotype: ArchiMate3::ArchiMate_Assignment
+      - label: Serving
+        stereotype: ArchiMate3::ArchiMate_Serving
+      - label: Access
+        stereotype: ArchiMate3::ArchiMate_Access
+      - label: Association
+        stereotype: ArchiMate3::ArchiMate_Association
+      - label: Influence
+        stereotype: ArchiMate3::ArchiMate_Influence
+      Dynamic Relationships:
+      - label: Triggering
+        stereotype: ArchiMate3::ArchiMate_Triggering
+      - label: Flow
+        stereotype: ArchiMate3::ArchiMate_Flow
+      Other Concepts:
+      - label: Specialization
+        stereotype: ArchiMate3::ArchiMate_Specialization
+      - label: Junction
+        stereotype: ArchiMate3::ArchiMate_Junction
+      - label: Grouping
+        stereotype: ArchiMate3::ArchiMate_Grouping
+      - label: Location
+        stereotype: ArchiMate3::ArchiMate_Location
+  Implementation:
+    ea_name: ArchiMate3::Implementation
+    pages:
+      Implementation and Migration Concepts:
+      - label: Work Package
+        stereotype: ArchiMate3::ArchiMate_WorkPackage
+      - label: Implementation Event
+        stereotype: ArchiMate3::ArchiMate_ImplementationEvent
+      - label: Deliverable
+        stereotype: ArchiMate3::ArchiMate_Deliverable
+      - label: Plateau
+        stereotype: ArchiMate3::ArchiMate_Plateau
+      - label: Gap
+        stereotype: ArchiMate3::ArchiMate_Gap
+      Structural Relationships:
+      - label: Composition
+        stereotype: ArchiMate3::ArchiMate_Composition
+      - label: Aggregation
+        stereotype: ArchiMate3::ArchiMate_Aggregation
+      - label: Realization
+        stereotype: ArchiMate3::ArchiMate_Realization
+      - label: Assignment
+        stereotype: ArchiMate3::ArchiMate_Assignment
+      - label: Serving
+        stereotype: ArchiMate3::ArchiMate_Serving
+      - label: Access
+        stereotype: ArchiMate3::ArchiMate_Access
+      - label: Association
+        stereotype: ArchiMate3::ArchiMate_Association
+      - label: Influence
+        stereotype: ArchiMate3::ArchiMate_Influence
+      Dynamic Relationships:
+      - label: Triggering
+        stereotype: ArchiMate3::ArchiMate_Triggering
+      - label: Flow
+        stereotype: ArchiMate3::ArchiMate_Flow
+      Other Concepts:
+      - label: Specialization
+        stereotype: ArchiMate3::ArchiMate_Specialization
+      - label: Junction
+        stereotype: ArchiMate3::ArchiMate_Junction
+      - label: Grouping
+        stereotype: ArchiMate3::ArchiMate_Grouping
+      - label: Location
+        stereotype: ArchiMate3::ArchiMate_Location
+  Motivation:
+    ea_name: ArchiMate3::Motivation
+    pages:
+      Motivation Concepts:
+      - label: Stakeholder
+        stereotype: ArchiMate3::ArchiMate_Stakeholder
+      - label: Driver
+        stereotype: ArchiMate3::ArchiMate_Driver
+      - label: Assessment
+        stereotype: ArchiMate3::ArchiMate_Assessment
+      - label: Value
+        stereotype: ArchiMate3::ArchiMate_Value
+      - label: Meaning
+        stereotype: ArchiMate3::ArchiMate_Meaning
+      - label: Goal
+        stereotype: ArchiMate3::ArchiMate_Goal
+      - label: Outcome
+        stereotype: ArchiMate3::ArchiMate_Outcome
+      - label: Principle
+        stereotype: ArchiMate3::ArchiMate_Principle
+      - label: Requirement
+        stereotype: ArchiMate3::ArchiMate_Requirement
+      - label: Constraint
+        stereotype: ArchiMate3::ArchiMate_Constraint(UML::Class)
+      Strategy Concepts:
+      - label: Resource
+        stereotype: ArchiMate3::ArchiMate_Resource
+      - label: Capability
+        stereotype: ArchiMate3::ArchiMate_Capability
+      - label: Value Stream
+        stereotype: ArchiMate3::ArchiMate_ValueStream
+      - label: Course of Action
+        stereotype: ArchiMate3::ArchiMate_CourseOfAction
+      Structural Relationships:
+      - label: Composition
+        stereotype: ArchiMate3::ArchiMate_Composition
+      - label: Aggregation
+        stereotype: ArchiMate3::ArchiMate_Aggregation
+      - label: Realization
+        stereotype: ArchiMate3::ArchiMate_Realization
+      - label: Assignment
+        stereotype: ArchiMate3::ArchiMate_Assignment
+      - label: Serving
+        stereotype: ArchiMate3::ArchiMate_Serving
+      - label: Access
+        stereotype: ArchiMate3::ArchiMate_Access
+      - label: Association
+        stereotype: ArchiMate3::ArchiMate_Association
+      - label: Influence
+        stereotype: ArchiMate3::ArchiMate_Influence
+      Dynamic Relationships:
+      - label: Triggering
+        stereotype: ArchiMate3::ArchiMate_Triggering
+      - label: Flow
+        stereotype: ArchiMate3::ArchiMate_Flow
+      Other Concepts:
+      - label: Specialization
+        stereotype: ArchiMate3::ArchiMate_Specialization
+      - label: Junction
+        stereotype: ArchiMate3::ArchiMate_Junction
+      - label: Grouping
+        stereotype: ArchiMate3::ArchiMate_Grouping
+      - label: Location
+        stereotype: ArchiMate3::ArchiMate_Location
+  Technology:
+    ea_name: ArchiMate3::Technology
+    pages:
+      Active Structure (Technology) Concepts:
+      - label: Node
+        stereotype: ArchiMate3::ArchiMate_Node
+      - label: Device
+        stereotype: ArchiMate3::ArchiMate_Device
+      - label: System Software
+        stereotype: ArchiMate3::ArchiMate_SystemSoftware
+      - label: Technology Collaboration
+        stereotype: ArchiMate3::ArchiMate_TechnologyCollaboration
+      - label: Technology Interface
+        stereotype: ArchiMate3::ArchiMate_TechnologyInterface
+      - label: Path (Object)
+        stereotype: ArchiMate3::ArchiMate_Path(UML::Class)
+      - label: Path (Connector)
+        stereotype: ArchiMate3::ArchiMate_Path(UML::Association)
+      - label: Communication Network (Object)
+        stereotype: ArchiMate3::ArchiMate_CommunicationNetwork(UML::Class)
+      - label: Communication Network (Connector)
+        stereotype: ArchiMate3::ArchiMate_CommunicationNetwork(UML::Association)
+      Behavioral (Technology) Concepts:
+      - label: Technology Process
+        stereotype: ArchiMate3::ArchiMate_TechnologyProcess
+      - label: Technology Function
+        stereotype: ArchiMate3::ArchiMate_TechnologyFunction
+      - label: Technology Interaction
+        stereotype: ArchiMate3::ArchiMate_TechnologyInteraction
+      - label: Technology Service
+        stereotype: ArchiMate3::ArchiMate_TechnologyService
+      - label: Technology Event
+        stereotype: ArchiMate3::ArchiMate_TechnologyEvent
+      Passive Structure (Technology) Concepts:
+      - label: Artifact
+        stereotype: ArchiMate3::ArchiMate_Artifact
+      Physical Extension:
+      - label: Facility
+        stereotype: ArchiMate3::ArchiMate_Facility
+      - label: Equipment
+        stereotype: ArchiMate3::ArchiMate_Equipment
+      - label: Distribution Network (Object)
+        stereotype: ArchiMate3::ArchiMate_DistributionNetwork(UML::Class)
+      - label: Distribution Network (Connector)
+        stereotype: ArchiMate3::ArchiMate_DistributionNetwork(UML::Association)
+      - label: Material
+        stereotype: ArchiMate3::ArchiMate_Material
+      - label: Location
+        stereotype: ArchiMate3::ArchiMate_Location
+      Structural Relationships:
+      - label: Composition
+        stereotype: ArchiMate3::ArchiMate_Composition
+      - label: Aggregation
+        stereotype: ArchiMate3::ArchiMate_Aggregation
+      - label: Realization
+        stereotype: ArchiMate3::ArchiMate_Realization
+      - label: Assignment
+        stereotype: ArchiMate3::ArchiMate_Assignment
+      - label: Serving
+        stereotype: ArchiMate3::ArchiMate_Serving
+      - label: Access
+        stereotype: ArchiMate3::ArchiMate_Access
+      - label: Association
+        stereotype: ArchiMate3::ArchiMate_Association
+      - label: Influence
+        stereotype: ArchiMate3::ArchiMate_Influence
+      Dynamic Relationships:
+      - label: Triggering
+        stereotype: ArchiMate3::ArchiMate_Triggering
+      - label: Flow
+        stereotype: ArchiMate3::ArchiMate_Flow
+      Other Concepts:
+      - label: Specialization
+        stereotype: ArchiMate3::ArchiMate_Specialization
+      - label: Junction
+        stereotype: ArchiMate3::ArchiMate_Junction
+      - label: Grouping
+        stereotype: ArchiMate3::ArchiMate_Grouping
+      - label: Location
+        stereotype: ArchiMate3::ArchiMate_Location
+conventions: not-harvested
+harvest:
+  stereotypes:
+    source: shipped-xml
+    what: 'the plain technology file MDGTechnologies\ArchiMate3.xml in the EA install folder: 73 distinct stereotypes with
+      metaclasses (Apply), tagged values, default diagram type, toolbox pages and diagram types; confirmed complete against
+      the Resources tab (76 rows: the three network stereotypes are listed once per metaclass)'
+  metaclass_and_binding:
+    source: model-pattern
+    what: 'one element per element stereotype and one connector per relationship stereotype created in a new model with the
+      qualified type, then t_object.Object_Type, t_object.Stereotype, t_xref (FQName), t_objectproperties and t_connector.Connector_Type
+      read back: 59 element stereotypes (all bound to ArchiMate3), 14 connector stereotypes, 5 diagram types; the Path, Communication
+      Network and Distribution Network element forms in a second small package'
+  diagram_types:
+    source: shipped-xml and model-pattern
+    what: names, base and toolbox from the file; Diagram_Type Logical and MDGDgm=ArchiMate3::<name> read back from t_diagram
+  toolbox:
+    source: shipped-xml
+    what: 5 toolboxes, 28 pages, items in file order
+  quick_links:
+    source: shipped-xml
+    what: 'the technology file''s embedded RelationshipTable: rows are targets and columns sources in the file; here stored
+      as source -> target -> letters, 3,600 concept pairs plus the rows that have a junction or a relationship at one end.
+      Letters a c f g i n o r s t v are the relationships of the standard (rule table in language.yaml); d p w are EA''s network
+      connectors'
+  on_screen_2026_11_04:
+    measured_on: EA 17.1 build 1716, 2026-11-04, read on screen; the profile rows were not recounted
+    resources_tab: the Diagram Types group 'ArchiMate 3.1' lists 5 types (Business Layer Diagram, Application Layer Diagram,
+      Technology Layer Diagram, Motivation Diagram, Implementation and Migration, name cut off); the Toolboxes node lists
+      Application, Business, Implementation, Motivation, Technology; ArchiMate 3.2 is not listed
+    toolbox_pages_of_a_business_layer_diagram: 'Active Structure (Business) Concepts: Business Actor, Business Role, Business
+      Collaboration, Business Interface; Behavioral (Business) Concepts: Business Process, Function, Interaction, Service,
+      Event; Passive Structure (Business) Concepts: Business Object, Contract, Representation, Product; Structural Relationships:
+      Composition, Aggregation, Realization, Assignment, Serving, Access, Association, Influence; Dynamic Relationships: Triggering,
+      Flow; Other Concepts: Specialization, Junction, Grouping, Location. Only the Business layer pages are shown on this
+      diagram type'
+    quick_links_from_a_BusinessActor: 'targets: BusinessActor, BusinessCollaboration, BusinessEvent, BusinessFunction, BusinessInteraction,
+      BusinessInterface, BusinessObject, BusinessProcess, BusinessRole, BusinessService, Contract, Grouping, Junction, Location,
+      Product, Representation (the menu is limited to the Business layer because the diagram is a Business Layer diagram);
+      BusinessRole and BusinessProcess: Assigned to, Flows to, Serving, Triggers, Flows from, Served by, Triggered by; BusinessObject:
+      Accesses; BusinessActor: Aggregation of, Composed of, Flows to, Serving, Specializes, Triggers, Aggregates, Composes,
+      Flows from, Served by, Specialized by, Triggered by. One source, four pairs'
+  values_not_harvested:
+  - conventions (per-diagram-type layout numbers are carried from the existing diagram binding, not re-measured here)
+
+quick_links:
+  # EA's quick linker: the letters it offers when you drag from the source element to the target element.
+  # The standard's table is the language file's relationships.allowed; this is what EA offers, which is wider.
+  letters:
+    a: ArchiMate_Access
+    c: ArchiMate_Composition
+    d: ArchiMate_DistributionNetwork
+    f: ArchiMate_Flow
+    g: ArchiMate_Aggregation
+    i: ArchiMate_Assignment
+    n: ArchiMate_Influence
+    o: ArchiMate_Association
+    p: ArchiMate_Path
+    r: ArchiMate_Realization
+    s: ArchiMate_Specialization
+    t: ArchiMate_Triggering
+    v: ArchiMate_Serving
+    w: ArchiMate_CommunicationNetwork
+  differs_from_standard:
+    summary: >
+      By a plain cell count EA's table holds 3,045 relationship letters (counting a c f g i n o r s t v) that the standard's table
+      does not. 1,386 of those are an artifact of keys: EA keys a relationship end by the relationship's name (Access,
+      Aggregation, ...) and the standard by one Relationship row, so 1,342 association letters the standard also allows, and 44
+      composition and aggregation letters on grouping, location and plateau rows, are counted twice. Like for like, EA offers
+      1,659 letters the standard refuses and omits one it allows. 1,298 are composition and aggregation into a relationship from
+      elements other than grouping, location and plateau; 357 are composition, aggregation and specialization at a junction; 4 are
+      between two concepts, listed below. EA also offers the network letters d, p, w (54 cells). A quick link is therefore not
+      proof that a relationship is valid; validate against the standard's table.
+    counts:
+      plain_cell_count: 3045
+      like_for_like: {total: 1659, relationship_end: 1298, junction_end: 357, concept_pair: 4}
+    concept_pairs_where_ea_offers_more:
+      - {source: CommunicationNetwork, target: TechnologyInterface, extra: c}
+      - {source: Equipment, target: Material, extra: r}
+      - {source: Outcome, target: Plateau, extra: cg}
+    concept_pairs_where_ea_offers_less:
+      - {source: BusinessRole, target: TechnologyEvent, missing: f}
+    network_letters_d_p_w_cells: 54
+  cells:
+    ApplicationCollaboration:
+      ApplicationCollaboration: "scgvtfo"
+      ApplicationComponent: "grvtfo"
+      ApplicationEvent: "irvtfo"
+      ApplicationFunction: "irvtfo"
+      ApplicationInteraction: "irvtfo"
+      ApplicationInterface: "cgrvtfo"
+      ApplicationProcess: "irvtfo"
+      ApplicationService: "irvtfo"
+      Artifact: "ao"
+      Assessment: "no"
+      BusinessActor: "vtfo"
+      BusinessCollaboration: "vtfo"
+      BusinessEvent: "rvtfo"
+      BusinessFunction: "rvtfo"
+      BusinessInteraction: "rvtfo"
+      BusinessInterface: "rvtfo"
+      BusinessObject: "ao"
+      BusinessProcess: "rvtfo"
+      BusinessRole: "vtfo"
+      BusinessService: "rvtfo"
+      Capability: "ro"
+      CommunicationNetwork: "vtfo"
+      Constraint: "rno"
+      Contract: "ao"
+      CourseOfAction: "ro"
+      DataObject: "ao"
+      Deliverable: "o"
+      Device: "vtfo"
+      DistributionNetwork: "vtfo"
+      Driver: "no"
+      Equipment: "vtfo"
+      Facility: "vtfo"
+      Gap: "o"
+      Goal: "rno"
+      Grouping: "scgirvantfo"
+      ImplementationEvent: "o"
+      Location: "vtfo"
+      Material: "ao"
+      Meaning: "no"
+      Node: "vtfo"
+      Outcome: "rno"
+      Path: "vtfo"
+      Plateau: "o"
+      Principle: "rno"
+      Product: "vtfo"
+      Representation: "ao"
+      Requirement: "rno"
+      Resource: "ro"
+      Stakeholder: "no"
+      SystemSoftware: "vtfo"
+      TechnologyCollaboration: "vtfo"
+      TechnologyEvent: "vtfo"
+      TechnologyFunction: "vtfo"
+      TechnologyInteraction: "vtfo"
+      TechnologyInterface: "vtfo"
+      TechnologyProcess: "vtfo"
+      TechnologyService: "vtfo"
+      Value: "no"
+      ValueStream: "ro"
+      WorkPackage: "o"
+    ApplicationComponent:
+      ApplicationCollaboration: "vtfo"
+      ApplicationComponent: "scgrvtfo"
+      ApplicationEvent: "irvtfo"
+      ApplicationFunction: "irvtfo"
+      ApplicationInteraction: "irvtfo"
+      ApplicationInterface: "cgrvtfo"
+      ApplicationProcess: "irvtfo"
+      ApplicationService: "irvtfo"
+      Artifact: "ao"
+      Assessment: "no"
+      BusinessActor: "vtfo"
+      BusinessCollaboration: "vtfo"
+      BusinessEvent: "rvtfo"
+      BusinessFunction: "rvtfo"
+      BusinessInteraction: "rvtfo"
+      BusinessInterface: "rvtfo"
+      BusinessObject: "ao"
+      BusinessProcess: "rvtfo"
+      BusinessRole: "vtfo"
+      BusinessService: "rvtfo"
+      Capability: "ro"
+      CommunicationNetwork: "vtfo"
+      Constraint: "rno"
+      Contract: "ao"
+      CourseOfAction: "ro"
+      DataObject: "ao"
+      Deliverable: "o"
+      Device: "vtfo"
+      DistributionNetwork: "vtfo"
+      Driver: "no"
+      Equipment: "vtfo"
+      Facility: "vtfo"
+      Gap: "o"
+      Goal: "rno"
+      Grouping: "scgirvantfo"
+      ImplementationEvent: "o"
+      Location: "vtfo"
+      Material: "ao"
+      Meaning: "no"
+      Node: "vtfo"
+      Outcome: "rno"
+      Path: "vtfo"
+      Plateau: "o"
+      Principle: "rno"
+      Product: "vtfo"
+      Representation: "ao"
+      Requirement: "rno"
+      Resource: "ro"
+      Stakeholder: "no"
+      SystemSoftware: "vtfo"
+      TechnologyCollaboration: "vtfo"
+      TechnologyEvent: "vtfo"
+      TechnologyFunction: "vtfo"
+      TechnologyInteraction: "vtfo"
+      TechnologyInterface: "vtfo"
+      TechnologyProcess: "vtfo"
+      TechnologyService: "vtfo"
+      Value: "no"
+      ValueStream: "ro"
+      WorkPackage: "o"
+    ApplicationEvent:
+      ApplicationCollaboration: "vtfo"
+      ApplicationComponent: "vtfo"
+      ApplicationEvent: "scgvtfo"
+      ApplicationFunction: "vtfo"
+      ApplicationInteraction: "vtfo"
+      ApplicationInterface: "vtfo"
+      ApplicationProcess: "vtfo"
+      ApplicationService: "vtfo"
+      Artifact: "ao"
+      Assessment: "no"
+      BusinessActor: "vtfo"
+      BusinessCollaboration: "vtfo"
+      BusinessEvent: "rvtfo"
+      BusinessFunction: "vtfo"
+      BusinessInteraction: "vtfo"
+      BusinessInterface: "vtfo"
+      BusinessObject: "ao"
+      BusinessProcess: "vtfo"
+      BusinessRole: "vtfo"
+      BusinessService: "vtfo"
+      Capability: "o"
+      CommunicationNetwork: "vtfo"
+      Constraint: "rno"
+      Contract: "ao"
+      CourseOfAction: "o"
+      DataObject: "ao"
+      Deliverable: "o"
+      Device: "vtfo"
+      DistributionNetwork: "vtfo"
+      Driver: "no"
+      Equipment: "vtfo"
+      Facility: "vtfo"
+      Gap: "o"
+      Goal: "rno"
+      Grouping: "scgrvantfo"
+      ImplementationEvent: "o"
+      Location: "vtfo"
+      Material: "ao"
+      Meaning: "no"
+      Node: "vtfo"
+      Outcome: "rno"
+      Path: "vtfo"
+      Plateau: "o"
+      Principle: "rno"
+      Product: "vtfo"
+      Representation: "ao"
+      Requirement: "rno"
+      Resource: "o"
+      Stakeholder: "no"
+      SystemSoftware: "vtfo"
+      TechnologyCollaboration: "vtfo"
+      TechnologyEvent: "vtfo"
+      TechnologyFunction: "vtfo"
+      TechnologyInteraction: "vtfo"
+      TechnologyInterface: "vtfo"
+      TechnologyProcess: "vtfo"
+      TechnologyService: "vtfo"
+      Value: "no"
+      ValueStream: "o"
+      WorkPackage: "o"
+    ApplicationFunction:
+      ApplicationCollaboration: "vtfo"
+      ApplicationComponent: "vtfo"
+      ApplicationEvent: "vtfo"
+      ApplicationFunction: "scgvtfo"
+      ApplicationInteraction: "cgvtfo"
+      ApplicationInterface: "vtfo"
+      ApplicationProcess: "cgvtfo"
+      ApplicationService: "rvtfo"
+      Artifact: "ao"
+      Assessment: "no"
+      BusinessActor: "vtfo"
+      BusinessCollaboration: "vtfo"
+      BusinessEvent: "vtfo"
+      BusinessFunction: "rvtfo"
+      BusinessInteraction: "rvtfo"
+      BusinessInterface: "vtfo"
+      BusinessObject: "ao"
+      BusinessProcess: "rvtfo"
+      BusinessRole: "vtfo"
+      BusinessService: "rvtfo"
+      Capability: "ro"
+      CommunicationNetwork: "vtfo"
+      Constraint: "rno"
+      Contract: "ao"
+      CourseOfAction: "ro"
+      DataObject: "ao"
+      Deliverable: "o"
+      Device: "vtfo"
+      DistributionNetwork: "vtfo"
+      Driver: "no"
+      Equipment: "vtfo"
+      Facility: "vtfo"
+      Gap: "o"
+      Goal: "rno"
+      Grouping: "scgrvantfo"
+      ImplementationEvent: "o"
+      Location: "vtfo"
+      Material: "ao"
+      Meaning: "no"
+      Node: "vtfo"
+      Outcome: "rno"
+      Path: "vtfo"
+      Plateau: "o"
+      Principle: "rno"
+      Product: "vtfo"
+      Representation: "ao"
+      Requirement: "rno"
+      Resource: "o"
+      Stakeholder: "no"
+      SystemSoftware: "vtfo"
+      TechnologyCollaboration: "vtfo"
+      TechnologyEvent: "vtfo"
+      TechnologyFunction: "vtfo"
+      TechnologyInteraction: "vtfo"
+      TechnologyInterface: "vtfo"
+      TechnologyProcess: "vtfo"
+      TechnologyService: "vtfo"
+      Value: "no"
+      ValueStream: "ro"
+      WorkPackage: "o"
+    ApplicationInteraction:
+      ApplicationCollaboration: "vtfo"
+      ApplicationComponent: "vtfo"
+      ApplicationEvent: "vtfo"
+      ApplicationFunction: "cgvtfo"
+      ApplicationInteraction: "scgvtfo"
+      ApplicationInterface: "vtfo"
+      ApplicationProcess: "cgvtfo"
+      ApplicationService: "rvtfo"
+      Artifact: "ao"
+      Assessment: "no"
+      BusinessActor: "vtfo"
+      BusinessCollaboration: "vtfo"
+      BusinessEvent: "vtfo"
+      BusinessFunction: "rvtfo"
+      BusinessInteraction: "rvtfo"
+      BusinessInterface: "vtfo"
+      BusinessObject: "ao"
+      BusinessProcess: "rvtfo"
+      BusinessRole: "vtfo"
+      BusinessService: "rvtfo"
+      Capability: "ro"
+      CommunicationNetwork: "vtfo"
+      Constraint: "rno"
+      Contract: "ao"
+      CourseOfAction: "ro"
+      DataObject: "ao"
+      Deliverable: "o"
+      Device: "vtfo"
+      DistributionNetwork: "vtfo"
+      Driver: "no"
+      Equipment: "vtfo"
+      Facility: "vtfo"
+      Gap: "o"
+      Goal: "rno"
+      Grouping: "scgrvantfo"
+      ImplementationEvent: "o"
+      Location: "vtfo"
+      Material: "ao"
+      Meaning: "no"
+      Node: "vtfo"
+      Outcome: "rno"
+      Path: "vtfo"
+      Plateau: "o"
+      Principle: "rno"
+      Product: "vtfo"
+      Representation: "ao"
+      Requirement: "rno"
+      Resource: "o"
+      Stakeholder: "no"
+      SystemSoftware: "vtfo"
+      TechnologyCollaboration: "vtfo"
+      TechnologyEvent: "vtfo"
+      TechnologyFunction: "vtfo"
+      TechnologyInteraction: "vtfo"
+      TechnologyInterface: "vtfo"
+      TechnologyProcess: "vtfo"
+      TechnologyService: "vtfo"
+      Value: "no"
+      ValueStream: "ro"
+      WorkPackage: "o"
+    ApplicationInterface:
+      ApplicationCollaboration: "vtfo"
+      ApplicationComponent: "vtfo"
+      ApplicationEvent: "vtfo"
+      ApplicationFunction: "vtfo"
+      ApplicationInteraction: "vtfo"
+      ApplicationInterface: "scgvtfo"
+      ApplicationProcess: "vtfo"
+      ApplicationService: "ivtfo"
+      Artifact: "ao"
+      Assessment: "no"
+      BusinessActor: "vtfo"
+      BusinessCollaboration: "vtfo"
+      BusinessEvent: "vtfo"
+      BusinessFunction: "vtfo"
+      BusinessInteraction: "vtfo"
+      BusinessInterface: "rvtfo"
+      BusinessObject: "ao"
+      BusinessProcess: "vtfo"
+      BusinessRole: "vtfo"
+      BusinessService: "rvtfo"
+      Capability: "ro"
+      CommunicationNetwork: "vtfo"
+      Constraint: "rno"
+      Contract: "ao"
+      CourseOfAction: "ro"
+      DataObject: "ao"
+      Deliverable: "o"
+      Device: "vtfo"
+      DistributionNetwork: "vtfo"
+      Driver: "no"
+      Equipment: "vtfo"
+      Facility: "vtfo"
+      Gap: "o"
+      Goal: "rno"
+      Grouping: "scgirvantfo"
+      ImplementationEvent: "o"
+      Location: "vtfo"
+      Material: "ao"
+      Meaning: "no"
+      Node: "vtfo"
+      Outcome: "rno"
+      Path: "vtfo"
+      Plateau: "o"
+      Principle: "rno"
+      Product: "vtfo"
+      Representation: "ao"
+      Requirement: "rno"
+      Resource: "ro"
+      Stakeholder: "no"
+      SystemSoftware: "vtfo"
+      TechnologyCollaboration: "vtfo"
+      TechnologyEvent: "vtfo"
+      TechnologyFunction: "vtfo"
+      TechnologyInteraction: "vtfo"
+      TechnologyInterface: "vtfo"
+      TechnologyProcess: "vtfo"
+      TechnologyService: "vtfo"
+      Value: "no"
+      ValueStream: "ro"
+      WorkPackage: "o"
+    ApplicationProcess:
+      ApplicationCollaboration: "vtfo"
+      ApplicationComponent: "vtfo"
+      ApplicationEvent: "vtfo"
+      ApplicationFunction: "cgvtfo"
+      ApplicationInteraction: "cgvtfo"
+      ApplicationInterface: "vtfo"
+      ApplicationProcess: "scgvtfo"
+      ApplicationService: "rvtfo"
+      Artifact: "ao"
+      Assessment: "no"
+      BusinessActor: "vtfo"
+      BusinessCollaboration: "vtfo"
+      BusinessEvent: "vtfo"
+      BusinessFunction: "rvtfo"
+      BusinessInteraction: "rvtfo"
+      BusinessInterface: "vtfo"
+      BusinessObject: "ao"
+      BusinessProcess: "rvtfo"
+      BusinessRole: "vtfo"
+      BusinessService: "rvtfo"
+      Capability: "ro"
+      CommunicationNetwork: "vtfo"
+      Constraint: "rno"
+      Contract: "ao"
+      CourseOfAction: "ro"
+      DataObject: "ao"
+      Deliverable: "o"
+      Device: "vtfo"
+      DistributionNetwork: "vtfo"
+      Driver: "no"
+      Equipment: "vtfo"
+      Facility: "vtfo"
+      Gap: "o"
+      Goal: "rno"
+      Grouping: "scgrvantfo"
+      ImplementationEvent: "o"
+      Location: "vtfo"
+      Material: "ao"
+      Meaning: "no"
+      Node: "vtfo"
+      Outcome: "rno"
+      Path: "vtfo"
+      Plateau: "o"
+      Principle: "rno"
+      Product: "vtfo"
+      Representation: "ao"
+      Requirement: "rno"
+      Resource: "o"
+      Stakeholder: "no"
+      SystemSoftware: "vtfo"
+      TechnologyCollaboration: "vtfo"
+      TechnologyEvent: "vtfo"
+      TechnologyFunction: "vtfo"
+      TechnologyInteraction: "vtfo"
+      TechnologyInterface: "vtfo"
+      TechnologyProcess: "vtfo"
+      TechnologyService: "vtfo"
+      Value: "no"
+      ValueStream: "ro"
+      WorkPackage: "o"
+    ApplicationService:
+      ApplicationCollaboration: "vtfo"
+      ApplicationComponent: "vtfo"
+      ApplicationEvent: "vtfo"
+      ApplicationFunction: "vtfo"
+      ApplicationInteraction: "vtfo"
+      ApplicationInterface: "vtfo"
+      ApplicationProcess: "vtfo"
+      ApplicationService: "scgvtfo"
+      Artifact: "ao"
+      Assessment: "no"
+      BusinessActor: "vtfo"
+      BusinessCollaboration: "vtfo"
+      BusinessEvent: "vtfo"
+      BusinessFunction: "vtfo"
+      BusinessInteraction: "vtfo"
+      BusinessInterface: "vtfo"
+      BusinessObject: "ao"
+      BusinessProcess: "vtfo"
+      BusinessRole: "vtfo"
+      BusinessService: "rvtfo"
+      Capability: "ro"
+      CommunicationNetwork: "vtfo"
+      Constraint: "rno"
+      Contract: "ao"
+      CourseOfAction: "ro"
+      DataObject: "ao"
+      Deliverable: "o"
+      Device: "vtfo"
+      DistributionNetwork: "vtfo"
+      Driver: "no"
+      Equipment: "vtfo"
+      Facility: "vtfo"
+      Gap: "o"
+      Goal: "rno"
+      Grouping: "scgrvantfo"
+      ImplementationEvent: "o"
+      Location: "vtfo"
+      Material: "ao"
+      Meaning: "no"
+      Node: "vtfo"
+      Outcome: "rno"
+      Path: "vtfo"
+      Plateau: "o"
+      Principle: "rno"
+      Product: "vtfo"
+      Representation: "ao"
+      Requirement: "rno"
+      Resource: "o"
+      Stakeholder: "no"
+      SystemSoftware: "vtfo"
+      TechnologyCollaboration: "vtfo"
+      TechnologyEvent: "vtfo"
+      TechnologyFunction: "vtfo"
+      TechnologyInteraction: "vtfo"
+      TechnologyInterface: "vtfo"
+      TechnologyProcess: "vtfo"
+      TechnologyService: "vtfo"
+      Value: "no"
+      ValueStream: "ro"
+      WorkPackage: "o"
+    Artifact:
+      ApplicationCollaboration: "ro"
+      ApplicationComponent: "ro"
+      ApplicationEvent: "ro"
+      ApplicationFunction: "ro"
+      ApplicationInteraction: "ro"
+      ApplicationInterface: "ro"
+      ApplicationProcess: "ro"
+      ApplicationService: "ro"
+      Artifact: "scgo"
+      Assessment: "no"
+      BusinessActor: "ro"
+      BusinessCollaboration: "ro"
+      BusinessEvent: "ro"
+      BusinessFunction: "ro"
+      BusinessInteraction: "ro"
+      BusinessInterface: "ro"
+      BusinessObject: "ro"
+      BusinessProcess: "ro"
+      BusinessRole: "ro"
+      BusinessService: "ro"
+      Capability: "ro"
+      CommunicationNetwork: "o"
+      Constraint: "rno"
+      Contract: "ro"
+      CourseOfAction: "ro"
+      DataObject: "ro"
+      Deliverable: "o"
+      Device: "ro"
+      DistributionNetwork: "o"
+      Driver: "no"
+      Equipment: "ro"
+      Facility: "ro"
+      Gap: "o"
+      Goal: "rno"
+      Grouping: "scgrno"
+      ImplementationEvent: "o"
+      Location: "o"
+      Material: "o"
+      Meaning: "no"
+      Node: "ro"
+      Outcome: "rno"
+      Path: "o"
+      Plateau: "o"
+      Principle: "rno"
+      Product: "o"
+      Representation: "o"
+      Requirement: "rno"
+      Resource: "ro"
+      Stakeholder: "rno"
+      SystemSoftware: "ro"
+      TechnologyCollaboration: "o"
+      TechnologyEvent: "ro"
+      TechnologyFunction: "ro"
+      TechnologyInteraction: "ro"
+      TechnologyInterface: "ro"
+      TechnologyProcess: "ro"
+      TechnologyService: "ro"
+      Value: "no"
+      ValueStream: "ro"
+      WorkPackage: "o"
+    Assessment:
+      ApplicationCollaboration: "o"
+      ApplicationComponent: "o"
+      ApplicationEvent: "o"
+      ApplicationFunction: "o"
+      ApplicationInteraction: "o"
+      ApplicationInterface: "o"
+      ApplicationProcess: "o"
+      ApplicationService: "o"
+      Artifact: "o"
+      Assessment: "scgno"
+      BusinessActor: "o"
+      BusinessCollaboration: "o"
+      BusinessEvent: "o"
+      BusinessFunction: "o"
+      BusinessInteraction: "o"
+      BusinessInterface: "o"
+      BusinessObject: "o"
+      BusinessProcess: "o"
+      BusinessRole: "o"
+      BusinessService: "o"
+      Capability: "o"
+      CommunicationNetwork: "o"
+      Constraint: "no"
+      Contract: "o"
+      CourseOfAction: "o"
+      DataObject: "o"
+      Deliverable: "o"
+      Device: "o"
+      DistributionNetwork: "o"
+      Driver: "no"
+      Equipment: "o"
+      Facility: "o"
+      Gap: "o"
+      Goal: "no"
+      Grouping: "scgno"
+      ImplementationEvent: "o"
+      Location: "o"
+      Material: "o"
+      Meaning: "no"
+      Node: "o"
+      Outcome: "no"
+      Path: "o"
+      Plateau: "o"
+      Principle: "no"
+      Product: "o"
+      Representation: "o"
+      Requirement: "no"
+      Resource: "o"
+      Stakeholder: "no"
+      SystemSoftware: "o"
+      TechnologyCollaboration: "o"
+      TechnologyEvent: "o"
+      TechnologyFunction: "o"
+      TechnologyInteraction: "o"
+      TechnologyInterface: "o"
+      TechnologyProcess: "o"
+      TechnologyService: "o"
+      Value: "no"
+      ValueStream: "o"
+      WorkPackage: "o"
+    BusinessActor:
+      ApplicationCollaboration: "vtfo"
+      ApplicationComponent: "vtfo"
+      ApplicationEvent: "vtfo"
+      ApplicationFunction: "vtfo"
+      ApplicationInteraction: "vtfo"
+      ApplicationInterface: "vtfo"
+      ApplicationProcess: "vtfo"
+      ApplicationService: "vtfo"
+      Artifact: "ao"
+      Assessment: "no"
+      BusinessActor: "scgvtfo"
+      BusinessCollaboration: "vtfo"
+      BusinessEvent: "ivtfo"
+      BusinessFunction: "ivtfo"
+      BusinessInteraction: "ivtfo"
+      BusinessInterface: "cgivtfo"
+      BusinessObject: "ao"
+      BusinessProcess: "ivtfo"
+      BusinessRole: "ivtfo"
+      BusinessService: "irvtfo"
+      Capability: "ro"
+      CommunicationNetwork: "vtfo"
+      Constraint: "rno"
+      Contract: "ao"
+      CourseOfAction: "ro"
+      DataObject: "ao"
+      Deliverable: "o"
+      Device: "vtfo"
+      DistributionNetwork: "vtfo"
+      Driver: "no"
+      Equipment: "vtfo"
+      Facility: "vtfo"
+      Gap: "o"
+      Goal: "rno"
+      Grouping: "scgirvantfo"
+      ImplementationEvent: "io"
+      Location: "vtfo"
+      Material: "ao"
+      Meaning: "no"
+      Node: "vtfo"
+      Outcome: "rno"
+      Path: "vtfo"
+      Plateau: "o"
+      Principle: "rno"
+      Product: "vtfo"
+      Representation: "ao"
+      Requirement: "rno"
+      Resource: "ro"
+      Stakeholder: "ino"
+      SystemSoftware: "vtfo"
+      TechnologyCollaboration: "vtfo"
+      TechnologyEvent: "vtfo"
+      TechnologyFunction: "vtfo"
+      TechnologyInteraction: "vtfo"
+      TechnologyInterface: "vtfo"
+      TechnologyProcess: "vtfo"
+      TechnologyService: "vtfo"
+      Value: "no"
+      ValueStream: "ro"
+      WorkPackage: "io"
+    BusinessCollaboration:
+      ApplicationCollaboration: "vtfo"
+      ApplicationComponent: "vtfo"
+      ApplicationEvent: "vtfo"
+      ApplicationFunction: "vtfo"
+      ApplicationInteraction: "vtfo"
+      ApplicationInterface: "vtfo"
+      ApplicationProcess: "vtfo"
+      ApplicationService: "vtfo"
+      Artifact: "ao"
+      Assessment: "no"
+      BusinessActor: "gvtfo"
+      BusinessCollaboration: "scgvtfo"
+      BusinessEvent: "ivtfo"
+      BusinessFunction: "ivtfo"
+      BusinessInteraction: "ivtfo"
+      BusinessInterface: "cgivtfo"
+      BusinessObject: "ao"
+      BusinessProcess: "ivtfo"
+      BusinessRole: "givtfo"
+      BusinessService: "irvtfo"
+      Capability: "ro"
+      CommunicationNetwork: "vtfo"
+      Constraint: "rno"
+      Contract: "ao"
+      CourseOfAction: "ro"
+      DataObject: "ao"
+      Deliverable: "o"
+      Device: "vtfo"
+      DistributionNetwork: "vtfo"
+      Driver: "no"
+      Equipment: "vtfo"
+      Facility: "vtfo"
+      Gap: "o"
+      Goal: "rno"
+      Grouping: "scgirvantfo"
+      ImplementationEvent: "io"
+      Location: "vtfo"
+      Material: "ao"
+      Meaning: "no"
+      Node: "vtfo"
+      Outcome: "rno"
+      Path: "vtfo"
+      Plateau: "o"
+      Principle: "rno"
+      Product: "vtfo"
+      Representation: "ao"
+      Requirement: "rno"
+      Resource: "ro"
+      Stakeholder: "ino"
+      SystemSoftware: "vtfo"
+      TechnologyCollaboration: "vtfo"
+      TechnologyEvent: "vtfo"
+      TechnologyFunction: "vtfo"
+      TechnologyInteraction: "vtfo"
+      TechnologyInterface: "vtfo"
+      TechnologyProcess: "vtfo"
+      TechnologyService: "vtfo"
+      Value: "no"
+      ValueStream: "ro"
+      WorkPackage: "io"
+    BusinessEvent:
+      ApplicationCollaboration: "vtfo"
+      ApplicationComponent: "vtfo"
+      ApplicationEvent: "vtfo"
+      ApplicationFunction: "vtfo"
+      ApplicationInteraction: "vtfo"
+      ApplicationInterface: "vtfo"
+      ApplicationProcess: "vtfo"
+      ApplicationService: "vtfo"
+      Artifact: "ao"
+      Assessment: "no"
+      BusinessActor: "vtfo"
+      BusinessCollaboration: "vtfo"
+      BusinessEvent: "scgvtfo"
+      BusinessFunction: "vtfo"
+      BusinessInteraction: "vtfo"
+      BusinessInterface: "vtfo"
+      BusinessObject: "ao"
+      BusinessProcess: "vtfo"
+      BusinessRole: "vtfo"
+      BusinessService: "vtfo"
+      Capability: "o"
+      CommunicationNetwork: "vtfo"
+      Constraint: "rno"
+      Contract: "ao"
+      CourseOfAction: "o"
+      DataObject: "ao"
+      Deliverable: "o"
+      Device: "vtfo"
+      DistributionNetwork: "vtfo"
+      Driver: "no"
+      Equipment: "vtfo"
+      Facility: "vtfo"
+      Gap: "o"
+      Goal: "rno"
+      Grouping: "scgrvantfo"
+      ImplementationEvent: "o"
+      Location: "vtfo"
+      Material: "ao"
+      Meaning: "no"
+      Node: "vtfo"
+      Outcome: "rno"
+      Path: "vtfo"
+      Plateau: "o"
+      Principle: "rno"
+      Product: "vtfo"
+      Representation: "ao"
+      Requirement: "rno"
+      Resource: "o"
+      Stakeholder: "no"
+      SystemSoftware: "vtfo"
+      TechnologyCollaboration: "vtfo"
+      TechnologyEvent: "vtfo"
+      TechnologyFunction: "vtfo"
+      TechnologyInteraction: "vtfo"
+      TechnologyInterface: "vtfo"
+      TechnologyProcess: "vtfo"
+      TechnologyService: "vtfo"
+      Value: "no"
+      ValueStream: "o"
+      WorkPackage: "o"
+    BusinessFunction:
+      ApplicationCollaboration: "vtfo"
+      ApplicationComponent: "vtfo"
+      ApplicationEvent: "vtfo"
+      ApplicationFunction: "vtfo"
+      ApplicationInteraction: "vtfo"
+      ApplicationInterface: "vtfo"
+      ApplicationProcess: "vtfo"
+      ApplicationService: "vtfo"
+      Artifact: "ao"
+      Assessment: "no"
+      BusinessActor: "vtfo"
+      BusinessCollaboration: "vtfo"
+      BusinessEvent: "vtfo"
+      BusinessFunction: "scgvtfo"
+      BusinessInteraction: "cgvtfo"
+      BusinessInterface: "vtfo"
+      BusinessObject: "ao"
+      BusinessProcess: "cgvtfo"
+      BusinessRole: "vtfo"
+      BusinessService: "rvtfo"
+      Capability: "ro"
+      CommunicationNetwork: "vtfo"
+      Constraint: "rno"
+      Contract: "ao"
+      CourseOfAction: "ro"
+      DataObject: "ao"
+      Deliverable: "o"
+      Device: "vtfo"
+      DistributionNetwork: "vtfo"
+      Driver: "no"
+      Equipment: "vtfo"
+      Facility: "vtfo"
+      Gap: "o"
+      Goal: "rno"
+      Grouping: "scgrvantfo"
+      ImplementationEvent: "o"
+      Location: "vtfo"
+      Material: "ao"
+      Meaning: "no"
+      Node: "vtfo"
+      Outcome: "rno"
+      Path: "vtfo"
+      Plateau: "o"
+      Principle: "rno"
+      Product: "vtfo"
+      Representation: "ao"
+      Requirement: "rno"
+      Resource: "o"
+      Stakeholder: "no"
+      SystemSoftware: "vtfo"
+      TechnologyCollaboration: "vtfo"
+      TechnologyEvent: "vtfo"
+      TechnologyFunction: "vtfo"
+      TechnologyInteraction: "vtfo"
+      TechnologyInterface: "vtfo"
+      TechnologyProcess: "vtfo"
+      TechnologyService: "vtfo"
+      Value: "no"
+      ValueStream: "ro"
+      WorkPackage: "o"
+    BusinessInteraction:
+      ApplicationCollaboration: "vtfo"
+      ApplicationComponent: "vtfo"
+      ApplicationEvent: "vtfo"
+      ApplicationFunction: "vtfo"
+      ApplicationInteraction: "vtfo"
+      ApplicationInterface: "vtfo"
+      ApplicationProcess: "vtfo"
+      ApplicationService: "vtfo"
+      Artifact: "ao"
+      Assessment: "no"
+      BusinessActor: "vtfo"
+      BusinessCollaboration: "vtfo"
+      BusinessEvent: "vtfo"
+      BusinessFunction: "cgvtfo"
+      BusinessInteraction: "scgvtfo"
+      BusinessInterface: "vtfo"
+      BusinessObject: "ao"
+      BusinessProcess: "cgvtfo"
+      BusinessRole: "vtfo"
+      BusinessService: "rvtfo"
+      Capability: "ro"
+      CommunicationNetwork: "vtfo"
+      Constraint: "rno"
+      Contract: "ao"
+      CourseOfAction: "ro"
+      DataObject: "ao"
+      Deliverable: "o"
+      Device: "vtfo"
+      DistributionNetwork: "vtfo"
+      Driver: "no"
+      Equipment: "vtfo"
+      Facility: "vtfo"
+      Gap: "o"
+      Goal: "rno"
+      Grouping: "scgrvantfo"
+      ImplementationEvent: "o"
+      Location: "vtfo"
+      Material: "ao"
+      Meaning: "no"
+      Node: "vtfo"
+      Outcome: "rno"
+      Path: "vtfo"
+      Plateau: "o"
+      Principle: "rno"
+      Product: "vtfo"
+      Representation: "ao"
+      Requirement: "rno"
+      Resource: "o"
+      Stakeholder: "no"
+      SystemSoftware: "vtfo"
+      TechnologyCollaboration: "vtfo"
+      TechnologyEvent: "vtfo"
+      TechnologyFunction: "vtfo"
+      TechnologyInteraction: "vtfo"
+      TechnologyInterface: "vtfo"
+      TechnologyProcess: "vtfo"
+      TechnologyService: "vtfo"
+      Value: "no"
+      ValueStream: "ro"
+      WorkPackage: "o"
+    BusinessInterface:
+      ApplicationCollaboration: "vtfo"
+      ApplicationComponent: "vtfo"
+      ApplicationEvent: "vtfo"
+      ApplicationFunction: "vtfo"
+      ApplicationInteraction: "vtfo"
+      ApplicationInterface: "vtfo"
+      ApplicationProcess: "vtfo"
+      ApplicationService: "vtfo"
+      Artifact: "ao"
+      Assessment: "no"
+      BusinessActor: "vtfo"
+      BusinessCollaboration: "vtfo"
+      BusinessEvent: "vtfo"
+      BusinessFunction: "vtfo"
+      BusinessInteraction: "vtfo"
+      BusinessInterface: "scgvtfo"
+      BusinessObject: "ao"
+      BusinessProcess: "vtfo"
+      BusinessRole: "vtfo"
+      BusinessService: "ivtfo"
+      Capability: "ro"
+      CommunicationNetwork: "vtfo"
+      Constraint: "rno"
+      Contract: "ao"
+      CourseOfAction: "ro"
+      DataObject: "ao"
+      Deliverable: "o"
+      Device: "vtfo"
+      DistributionNetwork: "vtfo"
+      Driver: "no"
+      Equipment: "vtfo"
+      Facility: "vtfo"
+      Gap: "o"
+      Goal: "rno"
+      Grouping: "scgirvantfo"
+      ImplementationEvent: "o"
+      Location: "vtfo"
+      Material: "ao"
+      Meaning: "no"
+      Node: "vtfo"
+      Outcome: "rno"
+      Path: "vtfo"
+      Plateau: "o"
+      Principle: "rno"
+      Product: "vtfo"
+      Representation: "ao"
+      Requirement: "rno"
+      Resource: "ro"
+      Stakeholder: "no"
+      SystemSoftware: "vtfo"
+      TechnologyCollaboration: "vtfo"
+      TechnologyEvent: "vtfo"
+      TechnologyFunction: "vtfo"
+      TechnologyInteraction: "vtfo"
+      TechnologyInterface: "vtfo"
+      TechnologyProcess: "vtfo"
+      TechnologyService: "vtfo"
+      Value: "no"
+      ValueStream: "ro"
+      WorkPackage: "o"
+    BusinessObject:
+      ApplicationCollaboration: "o"
+      ApplicationComponent: "o"
+      ApplicationEvent: "o"
+      ApplicationFunction: "o"
+      ApplicationInteraction: "o"
+      ApplicationInterface: "o"
+      ApplicationProcess: "o"
+      ApplicationService: "o"
+      Artifact: "o"
+      Assessment: "no"
+      BusinessActor: "o"
+      BusinessCollaboration: "o"
+      BusinessEvent: "o"
+      BusinessFunction: "o"
+      BusinessInteraction: "o"
+      BusinessInterface: "o"
+      BusinessObject: "scgo"
+      BusinessProcess: "o"
+      BusinessRole: "o"
+      BusinessService: "o"
+      Capability: "ro"
+      CommunicationNetwork: "o"
+      Constraint: "rno"
+      Contract: "scgo"
+      CourseOfAction: "ro"
+      DataObject: "o"
+      Deliverable: "o"
+      Device: "o"
+      DistributionNetwork: "o"
+      Driver: "no"
+      Equipment: "o"
+      Facility: "o"
+      Gap: "o"
+      Goal: "rno"
+      Grouping: "scgrno"
+      ImplementationEvent: "o"
+      Location: "o"
+      Material: "o"
+      Meaning: "no"
+      Node: "o"
+      Outcome: "rno"
+      Path: "o"
+      Plateau: "o"
+      Principle: "rno"
+      Product: "o"
+      Representation: "o"
+      Requirement: "rno"
+      Resource: "ro"
+      Stakeholder: "no"
+      SystemSoftware: "o"
+      TechnologyCollaboration: "o"
+      TechnologyEvent: "o"
+      TechnologyFunction: "o"
+      TechnologyInteraction: "o"
+      TechnologyInterface: "o"
+      TechnologyProcess: "o"
+      TechnologyService: "o"
+      Value: "no"
+      ValueStream: "ro"
+      WorkPackage: "o"
+    BusinessProcess:
+      ApplicationCollaboration: "vtfo"
+      ApplicationComponent: "vtfo"
+      ApplicationEvent: "vtfo"
+      ApplicationFunction: "vtfo"
+      ApplicationInteraction: "vtfo"
+      ApplicationInterface: "vtfo"
+      ApplicationProcess: "vtfo"
+      ApplicationService: "vtfo"
+      Artifact: "ao"
+      Assessment: "no"
+      BusinessActor: "vtfo"
+      BusinessCollaboration: "vtfo"
+      BusinessEvent: "vtfo"
+      BusinessFunction: "cgvtfo"
+      BusinessInteraction: "cgvtfo"
+      BusinessInterface: "vtfo"
+      BusinessObject: "ao"
+      BusinessProcess: "scgvtfo"
+      BusinessRole: "vtfo"
+      BusinessService: "rvtfo"
+      Capability: "ro"
+      CommunicationNetwork: "vtfo"
+      Constraint: "rno"
+      Contract: "ao"
+      CourseOfAction: "ro"
+      DataObject: "ao"
+      Deliverable: "o"
+      Device: "vtfo"
+      DistributionNetwork: "vtfo"
+      Driver: "no"
+      Equipment: "vtfo"
+      Facility: "vtfo"
+      Gap: "o"
+      Goal: "rno"
+      Grouping: "scgrvantfo"
+      ImplementationEvent: "o"
+      Location: "vtfo"
+      Material: "ao"
+      Meaning: "no"
+      Node: "vtfo"
+      Outcome: "rno"
+      Path: "vtfo"
+      Plateau: "o"
+      Principle: "rno"
+      Product: "vtfo"
+      Representation: "ao"
+      Requirement: "rno"
+      Resource: "o"
+      Stakeholder: "no"
+      SystemSoftware: "vtfo"
+      TechnologyCollaboration: "vtfo"
+      TechnologyEvent: "vtfo"
+      TechnologyFunction: "vtfo"
+      TechnologyInteraction: "vtfo"
+      TechnologyInterface: "vtfo"
+      TechnologyProcess: "vtfo"
+      TechnologyService: "vtfo"
+      Value: "no"
+      ValueStream: "ro"
+      WorkPackage: "o"
+    BusinessRole:
+      ApplicationCollaboration: "vtfo"
+      ApplicationComponent: "vtfo"
+      ApplicationEvent: "vtfo"
+      ApplicationFunction: "vtfo"
+      ApplicationInteraction: "vtfo"
+      ApplicationInterface: "vtfo"
+      ApplicationProcess: "vtfo"
+      ApplicationService: "vtfo"
+      Artifact: "ao"
+      Assessment: "no"
+      BusinessActor: "vtfo"
+      BusinessCollaboration: "vtfo"
+      BusinessEvent: "ivtfo"
+      BusinessFunction: "ivtfo"
+      BusinessInteraction: "ivtfo"
+      BusinessInterface: "cgvtfo"
+      BusinessObject: "ao"
+      BusinessProcess: "ivtfo"
+      BusinessRole: "scgvtfo"
+      BusinessService: "irvtfo"
+      Capability: "ro"
+      CommunicationNetwork: "vtfo"
+      Constraint: "rno"
+      Contract: "ao"
+      CourseOfAction: "ro"
+      DataObject: "ao"
+      Deliverable: "o"
+      Device: "vtfo"
+      DistributionNetwork: "vtfo"
+      Driver: "no"
+      Equipment: "vtfo"
+      Facility: "vtfo"
+      Gap: "o"
+      Goal: "rno"
+      Grouping: "scgirvantfo"
+      ImplementationEvent: "io"
+      Location: "vtfo"
+      Material: "ao"
+      Meaning: "no"
+      Node: "vtfo"
+      Outcome: "rno"
+      Path: "vtfo"
+      Plateau: "o"
+      Principle: "rno"
+      Product: "vtfo"
+      Representation: "ao"
+      Requirement: "rno"
+      Resource: "ro"
+      Stakeholder: "ino"
+      SystemSoftware: "vtfo"
+      TechnologyCollaboration: "vtfo"
+      TechnologyEvent: "vto"
+      TechnologyFunction: "vtfo"
+      TechnologyInteraction: "vtfo"
+      TechnologyInterface: "vtfo"
+      TechnologyProcess: "vtfo"
+      TechnologyService: "vtfo"
+      Value: "no"
+      ValueStream: "ro"
+      WorkPackage: "io"
+    BusinessService:
+      ApplicationCollaboration: "vtfo"
+      ApplicationComponent: "vtfo"
+      ApplicationEvent: "vtfo"
+      ApplicationFunction: "vtfo"
+      ApplicationInteraction: "vtfo"
+      ApplicationInterface: "vtfo"
+      ApplicationProcess: "vtfo"
+      ApplicationService: "vtfo"
+      Artifact: "ao"
+      Assessment: "no"
+      BusinessActor: "vtfo"
+      BusinessCollaboration: "vtfo"
+      BusinessEvent: "vtfo"
+      BusinessFunction: "vtfo"
+      BusinessInteraction: "vtfo"
+      BusinessInterface: "vtfo"
+      BusinessObject: "ao"
+      BusinessProcess: "vtfo"
+      BusinessRole: "vtfo"
+      BusinessService: "scgvtfo"
+      Capability: "ro"
+      CommunicationNetwork: "vtfo"
+      Constraint: "rno"
+      Contract: "ao"
+      CourseOfAction: "ro"
+      DataObject: "ao"
+      Deliverable: "o"
+      Device: "vtfo"
+      DistributionNetwork: "vtfo"
+      Driver: "no"
+      Equipment: "vtfo"
+      Facility: "vtfo"
+      Gap: "o"
+      Goal: "rno"
+      Grouping: "scgrvantfo"
+      ImplementationEvent: "o"
+      Location: "vtfo"
+      Material: "ao"
+      Meaning: "no"
+      Node: "vtfo"
+      Outcome: "rno"
+      Path: "vtfo"
+      Plateau: "o"
+      Principle: "rno"
+      Product: "vtfo"
+      Representation: "ao"
+      Requirement: "rno"
+      Resource: "o"
+      Stakeholder: "no"
+      SystemSoftware: "vtfo"
+      TechnologyCollaboration: "vtfo"
+      TechnologyEvent: "vtfo"
+      TechnologyFunction: "vtfo"
+      TechnologyInteraction: "vtfo"
+      TechnologyInterface: "vtfo"
+      TechnologyProcess: "vtfo"
+      TechnologyService: "vtfo"
+      Value: "no"
+      ValueStream: "ro"
+      WorkPackage: "o"
+    Capability:
+      ApplicationCollaboration: "o"
+      ApplicationComponent: "o"
+      ApplicationEvent: "o"
+      ApplicationFunction: "o"
+      ApplicationInteraction: "o"
+      ApplicationInterface: "o"
+      ApplicationProcess: "o"
+      ApplicationService: "o"
+      Artifact: "o"
+      Assessment: "no"
+      BusinessActor: "o"
+      BusinessCollaboration: "o"
+      BusinessEvent: "o"
+      BusinessFunction: "o"
+      BusinessInteraction: "o"
+      BusinessInterface: "o"
+      BusinessObject: "o"
+      BusinessProcess: "o"
+      BusinessRole: "o"
+      BusinessService: "o"
+      Capability: "scgvtfo"
+      CommunicationNetwork: "o"
+      Constraint: "rno"
+      Contract: "o"
+      CourseOfAction: "rvtfo"
+      DataObject: "o"
+      Deliverable: "o"
+      Device: "o"
+      DistributionNetwork: "o"
+      Driver: "no"
+      Equipment: "o"
+      Facility: "o"
+      Gap: "o"
+      Goal: "rno"
+      Grouping: "scgrvntfo"
+      ImplementationEvent: "o"
+      Location: "o"
+      Material: "o"
+      Meaning: "no"
+      Node: "o"
+      Outcome: "rno"
+      Path: "o"
+      Plateau: "o"
+      Principle: "rno"
+      Product: "o"
+      Representation: "o"
+      Requirement: "rno"
+      Resource: "vtfo"
+      Stakeholder: "no"
+      SystemSoftware: "o"
+      TechnologyCollaboration: "o"
+      TechnologyEvent: "o"
+      TechnologyFunction: "o"
+      TechnologyInteraction: "o"
+      TechnologyInterface: "o"
+      TechnologyProcess: "o"
+      TechnologyService: "o"
+      Value: "no"
+      ValueStream: "vtfo"
+      WorkPackage: "o"
+    CommunicationNetwork:
+      ApplicationCollaboration: "rvtfo"
+      ApplicationComponent: "rvtfo"
+      ApplicationEvent: "rvtfo"
+      ApplicationFunction: "rvtfo"
+      ApplicationInteraction: "rvtfo"
+      ApplicationInterface: "rvtfo"
+      ApplicationProcess: "rvtfo"
+      ApplicationService: "rvtfo"
+      Artifact: "iao"
+      Assessment: "no"
+      BusinessActor: "irvtfo"
+      BusinessCollaboration: "irvtfo"
+      BusinessEvent: "irvtfo"
+      BusinessFunction: "irvtfo"
+      BusinessInteraction: "irvtfo"
+      BusinessInterface: "irvtfo"
+      BusinessObject: "ao"
+      BusinessProcess: "irvtfo"
+      BusinessRole: "irvtfo"
+      BusinessService: "irvtfo"
+      Capability: "ro"
+      CommunicationNetwork: "scgvtfo"
+      Constraint: "rno"
+      Contract: "ao"
+      CourseOfAction: "ro"
+      DataObject: "ao"
+      Deliverable: "o"
+      Device: "girvtfo"
+      DistributionNetwork: "vtfo"
+      Driver: "no"
+      Equipment: "girvtfo"
+      Facility: "girvtfo"
+      Gap: "o"
+      Goal: "rno"
+      Grouping: "scgirvantfo"
+      ImplementationEvent: "o"
+      Location: "vtfo"
+      Material: "iao"
+      Meaning: "no"
+      Node: "girvtfo"
+      Outcome: "rno"
+      Path: "rvtfo"
+      Plateau: "o"
+      Principle: "rno"
+      Product: "vtfo"
+      Representation: "ao"
+      Requirement: "rno"
+      Resource: "ro"
+      Stakeholder: "rno"
+      SystemSoftware: "girvtfo"
+      TechnologyCollaboration: "rvtfo"
+      TechnologyEvent: "irvtfo"
+      TechnologyFunction: "irvtfo"
+      TechnologyInteraction: "irvtfo"
+      TechnologyInterface: "cgirvtfo"
+      TechnologyProcess: "irvtfo"
+      TechnologyService: "irvtfo"
+      Value: "no"
+      ValueStream: "ro"
+      WorkPackage: "o"
+    Constraint:
+      ApplicationCollaboration: "o"
+      ApplicationComponent: "o"
+      ApplicationEvent: "o"
+      ApplicationFunction: "o"
+      ApplicationInteraction: "o"
+      ApplicationInterface: "o"
+      ApplicationProcess: "o"
+      ApplicationService: "o"
+      Artifact: "o"
+      Assessment: "no"
+      BusinessActor: "o"
+      BusinessCollaboration: "o"
+      BusinessEvent: "o"
+      BusinessFunction: "o"
+      BusinessInteraction: "o"
+      BusinessInterface: "o"
+      BusinessObject: "o"
+      BusinessProcess: "o"
+      BusinessRole: "o"
+      BusinessService: "o"
+      Capability: "o"
+      CommunicationNetwork: "o"
+      Constraint: "scgno"
+      Contract: "o"
+      CourseOfAction: "o"
+      DataObject: "o"
+      Deliverable: "o"
+      Device: "o"
+      DistributionNetwork: "o"
+      Driver: "no"
+      Equipment: "o"
+      Facility: "o"
+      Gap: "o"
+      Goal: "rno"
+      Grouping: "scgrno"
+      ImplementationEvent: "o"
+      Location: "o"
+      Material: "o"
+      Meaning: "no"
+      Node: "o"
+      Outcome: "rno"
+      Path: "o"
+      Plateau: "o"
+      Principle: "rno"
+      Product: "o"
+      Representation: "o"
+      Requirement: "scgno"
+      Resource: "o"
+      Stakeholder: "no"
+      SystemSoftware: "o"
+      TechnologyCollaboration: "o"
+      TechnologyEvent: "o"
+      TechnologyFunction: "o"
+      TechnologyInteraction: "o"
+      TechnologyInterface: "o"
+      TechnologyProcess: "o"
+      TechnologyService: "o"
+      Value: "no"
+      ValueStream: "o"
+      WorkPackage: "o"
+    Contract:
+      ApplicationCollaboration: "o"
+      ApplicationComponent: "o"
+      ApplicationEvent: "o"
+      ApplicationFunction: "o"
+      ApplicationInteraction: "o"
+      ApplicationInterface: "o"
+      ApplicationProcess: "o"
+      ApplicationService: "o"
+      Artifact: "o"
+      Assessment: "no"
+      BusinessActor: "o"
+      BusinessCollaboration: "o"
+      BusinessEvent: "o"
+      BusinessFunction: "o"
+      BusinessInteraction: "o"
+      BusinessInterface: "o"
+      BusinessObject: "scgo"
+      BusinessProcess: "o"
+      BusinessRole: "o"
+      BusinessService: "o"
+      Capability: "ro"
+      CommunicationNetwork: "o"
+      Constraint: "rno"
+      Contract: "scgo"
+      CourseOfAction: "ro"
+      DataObject: "o"
+      Deliverable: "o"
+      Device: "o"
+      DistributionNetwork: "o"
+      Driver: "no"
+      Equipment: "o"
+      Facility: "o"
+      Gap: "o"
+      Goal: "rno"
+      Grouping: "scgrno"
+      ImplementationEvent: "o"
+      Location: "o"
+      Material: "o"
+      Meaning: "no"
+      Node: "o"
+      Outcome: "rno"
+      Path: "o"
+      Plateau: "o"
+      Principle: "rno"
+      Product: "o"
+      Representation: "o"
+      Requirement: "rno"
+      Resource: "ro"
+      Stakeholder: "no"
+      SystemSoftware: "o"
+      TechnologyCollaboration: "o"
+      TechnologyEvent: "o"
+      TechnologyFunction: "o"
+      TechnologyInteraction: "o"
+      TechnologyInterface: "o"
+      TechnologyProcess: "o"
+      TechnologyService: "o"
+      Value: "no"
+      ValueStream: "ro"
+      WorkPackage: "o"
+    CourseOfAction:
+      ApplicationCollaboration: "o"
+      ApplicationComponent: "o"
+      ApplicationEvent: "o"
+      ApplicationFunction: "o"
+      ApplicationInteraction: "o"
+      ApplicationInterface: "o"
+      ApplicationProcess: "o"
+      ApplicationService: "o"
+      Artifact: "o"
+      Assessment: "no"
+      BusinessActor: "o"
+      BusinessCollaboration: "o"
+      BusinessEvent: "o"
+      BusinessFunction: "o"
+      BusinessInteraction: "o"
+      BusinessInterface: "o"
+      BusinessObject: "o"
+      BusinessProcess: "o"
+      BusinessRole: "o"
+      BusinessService: "o"
+      Capability: "vtfo"
+      CommunicationNetwork: "o"
+      Constraint: "rno"
+      Contract: "o"
+      CourseOfAction: "scgvtfo"
+      DataObject: "o"
+      Deliverable: "o"
+      Device: "o"
+      DistributionNetwork: "o"
+      Driver: "no"
+      Equipment: "o"
+      Facility: "o"
+      Gap: "o"
+      Goal: "rno"
+      Grouping: "scgrvntfo"
+      ImplementationEvent: "o"
+      Location: "o"
+      Material: "o"
+      Meaning: "no"
+      Node: "o"
+      Outcome: "rno"
+      Path: "o"
+      Plateau: "o"
+      Principle: "rno"
+      Product: "o"
+      Representation: "o"
+      Requirement: "rno"
+      Resource: "vtfo"
+      Stakeholder: "no"
+      SystemSoftware: "o"
+      TechnologyCollaboration: "o"
+      TechnologyEvent: "o"
+      TechnologyFunction: "o"
+      TechnologyInteraction: "o"
+      TechnologyInterface: "o"
+      TechnologyProcess: "o"
+      TechnologyService: "o"
+      Value: "no"
+      ValueStream: "vtfo"
+      WorkPackage: "o"
+    DataObject:
+      ApplicationCollaboration: "o"
+      ApplicationComponent: "o"
+      ApplicationEvent: "o"
+      ApplicationFunction: "o"
+      ApplicationInteraction: "o"
+      ApplicationInterface: "o"
+      ApplicationProcess: "o"
+      ApplicationService: "o"
+      Artifact: "o"
+      Assessment: "no"
+      BusinessActor: "o"
+      BusinessCollaboration: "o"
+      BusinessEvent: "o"
+      BusinessFunction: "o"
+      BusinessInteraction: "o"
+      BusinessInterface: "o"
+      BusinessObject: "ro"
+      BusinessProcess: "o"
+      BusinessRole: "o"
+      BusinessService: "o"
+      Capability: "ro"
+      CommunicationNetwork: "o"
+      Constraint: "rno"
+      Contract: "ro"
+      CourseOfAction: "ro"
+      DataObject: "scgo"
+      Deliverable: "o"
+      Device: "o"
+      DistributionNetwork: "o"
+      Driver: "no"
+      Equipment: "o"
+      Facility: "o"
+      Gap: "o"
+      Goal: "rno"
+      Grouping: "scgrno"
+      ImplementationEvent: "o"
+      Location: "o"
+      Material: "o"
+      Meaning: "no"
+      Node: "o"
+      Outcome: "rno"
+      Path: "o"
+      Plateau: "o"
+      Principle: "rno"
+      Product: "o"
+      Representation: "o"
+      Requirement: "rno"
+      Resource: "ro"
+      Stakeholder: "no"
+      SystemSoftware: "o"
+      TechnologyCollaboration: "o"
+      TechnologyEvent: "o"
+      TechnologyFunction: "o"
+      TechnologyInteraction: "o"
+      TechnologyInterface: "o"
+      TechnologyProcess: "o"
+      TechnologyService: "o"
+      Value: "no"
+      ValueStream: "ro"
+      WorkPackage: "o"
+    Deliverable:
+      ApplicationCollaboration: "ro"
+      ApplicationComponent: "ro"
+      ApplicationEvent: "ro"
+      ApplicationFunction: "ro"
+      ApplicationInteraction: "ro"
+      ApplicationInterface: "ro"
+      ApplicationProcess: "ro"
+      ApplicationService: "ro"
+      Artifact: "ro"
+      Assessment: "no"
+      BusinessActor: "ro"
+      BusinessCollaboration: "ro"
+      BusinessEvent: "ro"
+      BusinessFunction: "ro"
+      BusinessInteraction: "ro"
+      BusinessInterface: "ro"
+      BusinessObject: "ro"
+      BusinessProcess: "ro"
+      BusinessRole: "ro"
+      BusinessService: "ro"
+      Capability: "ro"
+      CommunicationNetwork: "ro"
+      Constraint: "rno"
+      Contract: "ro"
+      CourseOfAction: "ro"
+      DataObject: "ro"
+      Deliverable: "scgo"
+      Device: "ro"
+      DistributionNetwork: "ro"
+      Driver: "no"
+      Equipment: "ro"
+      Facility: "ro"
+      Gap: "o"
+      Goal: "rno"
+      Grouping: "scgrno"
+      ImplementationEvent: "o"
+      Location: "ro"
+      Material: "ro"
+      Meaning: "no"
+      Node: "ro"
+      Outcome: "rno"
+      Path: "ro"
+      Plateau: "ro"
+      Principle: "rno"
+      Product: "ro"
+      Representation: "ro"
+      Requirement: "rno"
+      Resource: "ro"
+      Stakeholder: "no"
+      SystemSoftware: "ro"
+      TechnologyCollaboration: "ro"
+      TechnologyEvent: "ro"
+      TechnologyFunction: "ro"
+      TechnologyInteraction: "ro"
+      TechnologyInterface: "ro"
+      TechnologyProcess: "ro"
+      TechnologyService: "ro"
+      Value: "no"
+      ValueStream: "ro"
+      WorkPackage: "o"
+    Device:
+      ApplicationCollaboration: "rvtfo"
+      ApplicationComponent: "rvtfo"
+      ApplicationEvent: "rvtfo"
+      ApplicationFunction: "rvtfo"
+      ApplicationInteraction: "rvtfo"
+      ApplicationInterface: "rvtfo"
+      ApplicationProcess: "rvtfo"
+      ApplicationService: "rvtfo"
+      Artifact: "iao"
+      Assessment: "no"
+      BusinessActor: "irvtfo"
+      BusinessCollaboration: "irvtfo"
+      BusinessEvent: "irvtfo"
+      BusinessFunction: "irvtfo"
+      BusinessInteraction: "irvtfo"
+      BusinessInterface: "irvtfo"
+      BusinessObject: "ao"
+      BusinessProcess: "irvtfo"
+      BusinessRole: "irvtfo"
+      BusinessService: "irvtfo"
+      Capability: "ro"
+      CommunicationNetwork: "vtfo"
+      Constraint: "rno"
+      Contract: "ao"
+      CourseOfAction: "ro"
+      DataObject: "ao"
+      Deliverable: "o"
+      Device: "scgirvtfopw"
+      DistributionNetwork: "vtfo"
+      Driver: "no"
+      Equipment: "scgirvtfopw"
+      Facility: "scgirvtfopw"
+      Gap: "o"
+      Goal: "rno"
+      Grouping: "scgirvantfo"
+      ImplementationEvent: "o"
+      Location: "vtfo"
+      Material: "iao"
+      Meaning: "no"
+      Node: "scgirvtfopw"
+      Outcome: "rno"
+      Path: "vtfo"
+      Plateau: "o"
+      Principle: "rno"
+      Product: "vtfo"
+      Representation: "ao"
+      Requirement: "rno"
+      Resource: "ro"
+      Stakeholder: "rno"
+      SystemSoftware: "scgirvtfopw"
+      TechnologyCollaboration: "vtfo"
+      TechnologyEvent: "irvtfo"
+      TechnologyFunction: "irvtfo"
+      TechnologyInteraction: "irvtfo"
+      TechnologyInterface: "cgirvtfo"
+      TechnologyProcess: "irvtfo"
+      TechnologyService: "irvtfo"
+      Value: "no"
+      ValueStream: "ro"
+      WorkPackage: "o"
+    DistributionNetwork:
+      ApplicationCollaboration: "rvtfo"
+      ApplicationComponent: "rvtfo"
+      ApplicationEvent: "rvtfo"
+      ApplicationFunction: "rvtfo"
+      ApplicationInteraction: "rvtfo"
+      ApplicationInterface: "rvtfo"
+      ApplicationProcess: "rvtfo"
+      ApplicationService: "rvtfo"
+      Artifact: "iao"
+      Assessment: "no"
+      BusinessActor: "irvtfo"
+      BusinessCollaboration: "irvtfo"
+      BusinessEvent: "irvtfo"
+      BusinessFunction: "irvtfo"
+      BusinessInteraction: "irvtfo"
+      BusinessInterface: "irvtfo"
+      BusinessObject: "ao"
+      BusinessProcess: "irvtfo"
+      BusinessRole: "irvtfo"
+      BusinessService: "irvtfo"
+      Capability: "ro"
+      CommunicationNetwork: "vtfo"
+      Constraint: "rno"
+      Contract: "ao"
+      CourseOfAction: "ro"
+      DataObject: "ao"
+      Deliverable: "o"
+      Device: "girvtfo"
+      DistributionNetwork: "scgvtfo"
+      Driver: "no"
+      Equipment: "girvtfo"
+      Facility: "girvtfo"
+      Gap: "o"
+      Goal: "rno"
+      Grouping: "scgirvantfo"
+      ImplementationEvent: "o"
+      Location: "vtfo"
+      Material: "iao"
+      Meaning: "no"
+      Node: "girvtfo"
+      Outcome: "rno"
+      Path: "rvtfo"
+      Plateau: "o"
+      Principle: "rno"
+      Product: "vtfo"
+      Representation: "ao"
+      Requirement: "rno"
+      Resource: "ro"
+      Stakeholder: "rno"
+      SystemSoftware: "girvtfo"
+      TechnologyCollaboration: "rvtfo"
+      TechnologyEvent: "irvtfo"
+      TechnologyFunction: "irvtfo"
+      TechnologyInteraction: "irvtfo"
+      TechnologyInterface: "girvtfo"
+      TechnologyProcess: "irvtfo"
+      TechnologyService: "irvtfo"
+      Value: "no"
+      ValueStream: "ro"
+      WorkPackage: "o"
+    Driver:
+      ApplicationCollaboration: "o"
+      ApplicationComponent: "o"
+      ApplicationEvent: "o"
+      ApplicationFunction: "o"
+      ApplicationInteraction: "o"
+      ApplicationInterface: "o"
+      ApplicationProcess: "o"
+      ApplicationService: "o"
+      Artifact: "o"
+      Assessment: "no"
+      BusinessActor: "o"
+      BusinessCollaboration: "o"
+      BusinessEvent: "o"
+      BusinessFunction: "o"
+      BusinessInteraction: "o"
+      BusinessInterface: "o"
+      BusinessObject: "o"
+      BusinessProcess: "o"
+      BusinessRole: "o"
+      BusinessService: "o"
+      Capability: "o"
+      CommunicationNetwork: "o"
+      Constraint: "no"
+      Contract: "o"
+      CourseOfAction: "o"
+      DataObject: "o"
+      Deliverable: "o"
+      Device: "o"
+      DistributionNetwork: "o"
+      Driver: "scgno"
+      Equipment: "o"
+      Facility: "o"
+      Gap: "o"
+      Goal: "no"
+      Grouping: "scgno"
+      ImplementationEvent: "o"
+      Location: "o"
+      Material: "o"
+      Meaning: "no"
+      Node: "o"
+      Outcome: "no"
+      Path: "o"
+      Plateau: "o"
+      Principle: "no"
+      Product: "o"
+      Representation: "o"
+      Requirement: "no"
+      Resource: "o"
+      Stakeholder: "no"
+      SystemSoftware: "o"
+      TechnologyCollaboration: "o"
+      TechnologyEvent: "o"
+      TechnologyFunction: "o"
+      TechnologyInteraction: "o"
+      TechnologyInterface: "o"
+      TechnologyProcess: "o"
+      TechnologyService: "o"
+      Value: "no"
+      ValueStream: "o"
+      WorkPackage: "o"
+    Equipment:
+      ApplicationCollaboration: "rvtfo"
+      ApplicationComponent: "rvtfo"
+      ApplicationEvent: "rvtfo"
+      ApplicationFunction: "rvtfo"
+      ApplicationInteraction: "rvtfo"
+      ApplicationInterface: "rvtfo"
+      ApplicationProcess: "rvtfo"
+      ApplicationService: "rvtfo"
+      Artifact: "iao"
+      Assessment: "no"
+      BusinessActor: "irvtfo"
+      BusinessCollaboration: "irvtfo"
+      BusinessEvent: "irvtfo"
+      BusinessFunction: "irvtfo"
+      BusinessInteraction: "irvtfo"
+      BusinessInterface: "irvtfo"
+      BusinessObject: "ao"
+      BusinessProcess: "irvtfo"
+      BusinessRole: "irvtfo"
+      BusinessService: "irvtfo"
+      Capability: "ro"
+      CommunicationNetwork: "vtfo"
+      Constraint: "rno"
+      Contract: "ao"
+      CourseOfAction: "ro"
+      DataObject: "ao"
+      Deliverable: "o"
+      Device: "scgirvtfopw"
+      DistributionNetwork: "vtfo"
+      Driver: "no"
+      Equipment: "scgirvtfopwd"
+      Facility: "scgirvtfopwd"
+      Gap: "o"
+      Goal: "rno"
+      Grouping: "scgirvantfo"
+      ImplementationEvent: "o"
+      Location: "vtfo"
+      Material: "iaro"
+      Meaning: "no"
+      Node: "scgirvtfopw"
+      Outcome: "rno"
+      Path: "vtfo"
+      Plateau: "o"
+      Principle: "rno"
+      Product: "vtfo"
+      Representation: "ao"
+      Requirement: "rno"
+      Resource: "ro"
+      Stakeholder: "rno"
+      SystemSoftware: "scgirvtfopw"
+      TechnologyCollaboration: "vtfo"
+      TechnologyEvent: "irvtfo"
+      TechnologyFunction: "irvtfo"
+      TechnologyInteraction: "irvtfo"
+      TechnologyInterface: "cgirvtfo"
+      TechnologyProcess: "irvtfo"
+      TechnologyService: "irvtfo"
+      Value: "no"
+      ValueStream: "ro"
+      WorkPackage: "o"
+    Facility:
+      ApplicationCollaboration: "rvtfo"
+      ApplicationComponent: "rvtfo"
+      ApplicationEvent: "rvtfo"
+      ApplicationFunction: "rvtfo"
+      ApplicationInteraction: "rvtfo"
+      ApplicationInterface: "rvtfo"
+      ApplicationProcess: "rvtfo"
+      ApplicationService: "rvtfo"
+      Artifact: "iao"
+      Assessment: "no"
+      BusinessActor: "irvtfo"
+      BusinessCollaboration: "irvtfo"
+      BusinessEvent: "irvtfo"
+      BusinessFunction: "irvtfo"
+      BusinessInteraction: "irvtfo"
+      BusinessInterface: "irvtfo"
+      BusinessObject: "ao"
+      BusinessProcess: "irvtfo"
+      BusinessRole: "irvtfo"
+      BusinessService: "irvtfo"
+      Capability: "ro"
+      CommunicationNetwork: "vtfo"
+      Constraint: "rno"
+      Contract: "ao"
+      CourseOfAction: "ro"
+      DataObject: "ao"
+      Deliverable: "o"
+      Device: "scgirvtfopw"
+      DistributionNetwork: "vtfo"
+      Driver: "no"
+      Equipment: "scgirvtfopwd"
+      Facility: "scgirvtfopwd"
+      Gap: "o"
+      Goal: "rno"
+      Grouping: "scgirvantfo"
+      ImplementationEvent: "o"
+      Location: "vtfo"
+      Material: "iao"
+      Meaning: "no"
+      Node: "scgirvtfopw"
+      Outcome: "rno"
+      Path: "vtfo"
+      Plateau: "o"
+      Principle: "rno"
+      Product: "vtfo"
+      Representation: "ao"
+      Requirement: "rno"
+      Resource: "ro"
+      Stakeholder: "rno"
+      SystemSoftware: "scgirvtfopw"
+      TechnologyCollaboration: "vtfo"
+      TechnologyEvent: "irvtfo"
+      TechnologyFunction: "irvtfo"
+      TechnologyInteraction: "irvtfo"
+      TechnologyInterface: "cgirvtfo"
+      TechnologyProcess: "irvtfo"
+      TechnologyService: "irvtfo"
+      Value: "no"
+      ValueStream: "ro"
+      WorkPackage: "o"
+    Gap:
+      ApplicationCollaboration: "o"
+      ApplicationComponent: "o"
+      ApplicationEvent: "o"
+      ApplicationFunction: "o"
+      ApplicationInteraction: "o"
+      ApplicationInterface: "o"
+      ApplicationProcess: "o"
+      ApplicationService: "o"
+      Artifact: "o"
+      Assessment: "o"
+      BusinessActor: "o"
+      BusinessCollaboration: "o"
+      BusinessEvent: "o"
+      BusinessFunction: "o"
+      BusinessInteraction: "o"
+      BusinessInterface: "o"
+      BusinessObject: "o"
+      BusinessProcess: "o"
+      BusinessRole: "o"
+      BusinessService: "o"
+      Capability: "o"
+      CommunicationNetwork: "o"
+      Constraint: "o"
+      Contract: "o"
+      CourseOfAction: "o"
+      DataObject: "o"
+      Deliverable: "o"
+      Device: "o"
+      DistributionNetwork: "o"
+      Driver: "o"
+      Equipment: "o"
+      Facility: "o"
+      Gap: "scgo"
+      Goal: "o"
+      Grouping: "scgo"
+      ImplementationEvent: "o"
+      Location: "o"
+      Material: "o"
+      Meaning: "o"
+      Node: "o"
+      Outcome: "o"
+      Path: "o"
+      Plateau: "o"
+      Principle: "o"
+      Product: "o"
+      Representation: "o"
+      Requirement: "o"
+      Resource: "o"
+      Stakeholder: "o"
+      SystemSoftware: "o"
+      TechnologyCollaboration: "o"
+      TechnologyEvent: "o"
+      TechnologyFunction: "o"
+      TechnologyInteraction: "o"
+      TechnologyInterface: "o"
+      TechnologyProcess: "o"
+      TechnologyService: "o"
+      Value: "o"
+      ValueStream: "o"
+      WorkPackage: "o"
+    Goal:
+      ApplicationCollaboration: "o"
+      ApplicationComponent: "o"
+      ApplicationEvent: "o"
+      ApplicationFunction: "o"
+      ApplicationInteraction: "o"
+      ApplicationInterface: "o"
+      ApplicationProcess: "o"
+      ApplicationService: "o"
+      Artifact: "o"
+      Assessment: "no"
+      BusinessActor: "o"
+      BusinessCollaboration: "o"
+      BusinessEvent: "o"
+      BusinessFunction: "o"
+      BusinessInteraction: "o"
+      BusinessInterface: "o"
+      BusinessObject: "o"
+      BusinessProcess: "o"
+      BusinessRole: "o"
+      BusinessService: "o"
+      Capability: "o"
+      CommunicationNetwork: "o"
+      Constraint: "no"
+      Contract: "o"
+      CourseOfAction: "o"
+      DataObject: "o"
+      Deliverable: "o"
+      Device: "o"
+      DistributionNetwork: "o"
+      Driver: "no"
+      Equipment: "o"
+      Facility: "o"
+      Gap: "o"
+      Goal: "scgno"
+      Grouping: "scgno"
+      ImplementationEvent: "o"
+      Location: "o"
+      Material: "o"
+      Meaning: "no"
+      Node: "o"
+      Outcome: "no"
+      Path: "o"
+      Plateau: "o"
+      Principle: "no"
+      Product: "o"
+      Representation: "o"
+      Requirement: "no"
+      Resource: "o"
+      Stakeholder: "no"
+      SystemSoftware: "o"
+      TechnologyCollaboration: "o"
+      TechnologyEvent: "o"
+      TechnologyFunction: "o"
+      TechnologyInteraction: "o"
+      TechnologyInterface: "o"
+      TechnologyProcess: "o"
+      TechnologyService: "o"
+      Value: "no"
+      ValueStream: "o"
+      WorkPackage: "o"
+    Grouping:
+      ApplicationCollaboration: "scgrvtfo"
+      ApplicationComponent: "scgrvtfo"
+      ApplicationEvent: "scgirvtfo"
+      ApplicationFunction: "scgirvtfo"
+      ApplicationInteraction: "scgirvtfo"
+      ApplicationInterface: "scgrvtfo"
+      ApplicationProcess: "scgirvtfo"
+      ApplicationService: "scgirvtfo"
+      Artifact: "scgirao"
+      Assessment: "scgno"
+      BusinessActor: "scgirvtfo"
+      BusinessCollaboration: "scgirvtfo"
+      BusinessEvent: "scgirvtfo"
+      BusinessFunction: "scgirvtfo"
+      BusinessInteraction: "scgirvtfo"
+      BusinessInterface: "scgirvtfo"
+      BusinessObject: "scgrao"
+      BusinessProcess: "scgirvtfo"
+      BusinessRole: "scgirvtfo"
+      BusinessService: "scgirvtfo"
+      Capability: "scgirvtfo"
+      CommunicationNetwork: "scgrvtfo"
+      Constraint: "scgrno"
+      Contract: "scgrao"
+      CourseOfAction: "scgrvtfo"
+      DataObject: "scgrao"
+      Deliverable: "scgrao"
+      Device: "scgirvtfo"
+      DistributionNetwork: "scgrvtfo"
+      Driver: "scgno"
+      Equipment: "scgirvtfo"
+      Facility: "scgirvtfo"
+      Gap: "scgo"
+      Goal: "scgrno"
+      Grouping: "scgirvantfo"
+      ImplementationEvent: "scgitfo"
+      Location: "scgrvtfo"
+      Material: "scgirao"
+      Meaning: "scgno"
+      Node: "scgirvtfo"
+      Outcome: "scgrno"
+      Path: "scgrvtfo"
+      Plateau: "scgrtfo"
+      Principle: "scgrno"
+      Product: "scgrvtfo"
+      Representation: "scgrao"
+      Requirement: "scgrno"
+      Resource: "scgrvtfo"
+      Stakeholder: "scgirno"
+      SystemSoftware: "scgirvtfo"
+      TechnologyCollaboration: "scgrvtfo"
+      TechnologyEvent: "scgirvtfo"
+      TechnologyFunction: "scgirvtfo"
+      TechnologyInteraction: "scgirvtfo"
+      TechnologyInterface: "scgirvtfo"
+      TechnologyProcess: "scgirvtfo"
+      TechnologyService: "scgirvtfo"
+      Value: "scgno"
+      ValueStream: "scgirvtfo"
+      WorkPackage: "scgitfo"
+    ImplementationEvent:
+      ApplicationCollaboration: "o"
+      ApplicationComponent: "o"
+      ApplicationEvent: "o"
+      ApplicationFunction: "o"
+      ApplicationInteraction: "o"
+      ApplicationInterface: "o"
+      ApplicationProcess: "o"
+      ApplicationService: "o"
+      Artifact: "o"
+      Assessment: "no"
+      BusinessActor: "o"
+      BusinessCollaboration: "o"
+      BusinessEvent: "o"
+      BusinessFunction: "o"
+      BusinessInteraction: "o"
+      BusinessInterface: "o"
+      BusinessObject: "o"
+      BusinessProcess: "o"
+      BusinessRole: "o"
+      BusinessService: "o"
+      Capability: "o"
+      CommunicationNetwork: "o"
+      Constraint: "no"
+      Contract: "o"
+      CourseOfAction: "o"
+      DataObject: "o"
+      Deliverable: "ao"
+      Device: "o"
+      DistributionNetwork: "o"
+      Driver: "no"
+      Equipment: "o"
+      Facility: "o"
+      Gap: "o"
+      Goal: "no"
+      Grouping: "scgantfo"
+      ImplementationEvent: "scgtfo"
+      Location: "o"
+      Material: "o"
+      Meaning: "no"
+      Node: "o"
+      Outcome: "no"
+      Path: "o"
+      Plateau: "tfo"
+      Principle: "no"
+      Product: "o"
+      Representation: "o"
+      Requirement: "no"
+      Resource: "o"
+      Stakeholder: "no"
+      SystemSoftware: "o"
+      TechnologyCollaboration: "o"
+      TechnologyEvent: "o"
+      TechnologyFunction: "o"
+      TechnologyInteraction: "o"
+      TechnologyInterface: "o"
+      TechnologyProcess: "o"
+      TechnologyService: "o"
+      Value: "no"
+      ValueStream: "o"
+      WorkPackage: "tfo"
+    Location:
+      ApplicationCollaboration: "cgrvtfo"
+      ApplicationComponent: "cgrvtfo"
+      ApplicationEvent: "cgirvtfo"
+      ApplicationFunction: "cgirvtfo"
+      ApplicationInteraction: "cgirvtfo"
+      ApplicationInterface: "cgrvtfo"
+      ApplicationProcess: "cgirvtfo"
+      ApplicationService: "cgirvtfo"
+      Artifact: "cgiao"
+      Assessment: "cgno"
+      BusinessActor: "cgirvtfo"
+      BusinessCollaboration: "cgirvtfo"
+      BusinessEvent: "cgirvtfo"
+      BusinessFunction: "cgirvtfo"
+      BusinessInteraction: "cgirvtfo"
+      BusinessInterface: "cgirvtfo"
+      BusinessObject: "cgao"
+      BusinessProcess: "cgirvtfo"
+      BusinessRole: "cgirvtfo"
+      BusinessService: "cgirvtfo"
+      Capability: "cgro"
+      CommunicationNetwork: "cgvtfo"
+      Constraint: "cgrno"
+      Contract: "cgao"
+      CourseOfAction: "cgro"
+      DataObject: "cgao"
+      Deliverable: "cgo"
+      Device: "cgirvtfo"
+      DistributionNetwork: "cgvtfo"
+      Driver: "cgno"
+      Equipment: "cgirvtfo"
+      Facility: "cgirvtfo"
+      Gap: "cgo"
+      Goal: "cgrno"
+      Grouping: "scgirvantfo"
+      ImplementationEvent: "cgo"
+      Location: "scgvtfo"
+      Material: "cgiao"
+      Meaning: "cgno"
+      Node: "cgirvtfo"
+      Outcome: "cgrno"
+      Path: "cgrvtfo"
+      Plateau: "cgo"
+      Principle: "cgrno"
+      Product: "cgvtfo"
+      Representation: "cgao"
+      Requirement: "cgrno"
+      Resource: "cgro"
+      Stakeholder: "cgrno"
+      SystemSoftware: "cgirvtfo"
+      TechnologyCollaboration: "cgrvtfo"
+      TechnologyEvent: "cgirvtfo"
+      TechnologyFunction: "cgirvtfo"
+      TechnologyInteraction: "cgirvtfo"
+      TechnologyInterface: "cgirvtfo"
+      TechnologyProcess: "cgirvtfo"
+      TechnologyService: "cgirvtfo"
+      Value: "cgno"
+      ValueStream: "cgro"
+      WorkPackage: "cgo"
+    Material:
+      ApplicationCollaboration: "o"
+      ApplicationComponent: "o"
+      ApplicationEvent: "o"
+      ApplicationFunction: "o"
+      ApplicationInteraction: "o"
+      ApplicationInterface: "o"
+      ApplicationProcess: "o"
+      ApplicationService: "o"
+      Artifact: "o"
+      Assessment: "no"
+      BusinessActor: "o"
+      BusinessCollaboration: "o"
+      BusinessEvent: "o"
+      BusinessFunction: "o"
+      BusinessInteraction: "o"
+      BusinessInterface: "o"
+      BusinessObject: "ro"
+      BusinessProcess: "o"
+      BusinessRole: "o"
+      BusinessService: "o"
+      Capability: "ro"
+      CommunicationNetwork: "o"
+      Constraint: "rno"
+      Contract: "ro"
+      CourseOfAction: "ro"
+      DataObject: "o"
+      Deliverable: "o"
+      Device: "o"
+      DistributionNetwork: "o"
+      Driver: "no"
+      Equipment: "o"
+      Facility: "o"
+      Gap: "o"
+      Goal: "rno"
+      Grouping: "scgrno"
+      ImplementationEvent: "o"
+      Location: "o"
+      Material: "scgo"
+      Meaning: "no"
+      Node: "o"
+      Outcome: "rno"
+      Path: "o"
+      Plateau: "o"
+      Principle: "rno"
+      Product: "o"
+      Representation: "o"
+      Requirement: "rno"
+      Resource: "ro"
+      Stakeholder: "no"
+      SystemSoftware: "o"
+      TechnologyCollaboration: "o"
+      TechnologyEvent: "o"
+      TechnologyFunction: "o"
+      TechnologyInteraction: "o"
+      TechnologyInterface: "o"
+      TechnologyProcess: "o"
+      TechnologyService: "o"
+      Value: "no"
+      ValueStream: "ro"
+      WorkPackage: "o"
+    Meaning:
+      ApplicationCollaboration: "o"
+      ApplicationComponent: "o"
+      ApplicationEvent: "o"
+      ApplicationFunction: "o"
+      ApplicationInteraction: "o"
+      ApplicationInterface: "o"
+      ApplicationProcess: "o"
+      ApplicationService: "o"
+      Artifact: "o"
+      Assessment: "no"
+      BusinessActor: "o"
+      BusinessCollaboration: "o"
+      BusinessEvent: "o"
+      BusinessFunction: "o"
+      BusinessInteraction: "o"
+      BusinessInterface: "o"
+      BusinessObject: "o"
+      BusinessProcess: "o"
+      BusinessRole: "o"
+      BusinessService: "o"
+      Capability: "o"
+      CommunicationNetwork: "o"
+      Constraint: "no"
+      Contract: "o"
+      CourseOfAction: "o"
+      DataObject: "o"
+      Deliverable: "o"
+      Device: "o"
+      DistributionNetwork: "o"
+      Driver: "no"
+      Equipment: "o"
+      Facility: "o"
+      Gap: "o"
+      Goal: "no"
+      Grouping: "scgno"
+      ImplementationEvent: "o"
+      Location: "o"
+      Material: "o"
+      Meaning: "scgno"
+      Node: "o"
+      Outcome: "no"
+      Path: "o"
+      Plateau: "o"
+      Principle: "no"
+      Product: "o"
+      Representation: "o"
+      Requirement: "no"
+      Resource: "o"
+      Stakeholder: "no"
+      SystemSoftware: "o"
+      TechnologyCollaboration: "o"
+      TechnologyEvent: "o"
+      TechnologyFunction: "o"
+      TechnologyInteraction: "o"
+      TechnologyInterface: "o"
+      TechnologyProcess: "o"
+      TechnologyService: "o"
+      Value: "no"
+      ValueStream: "o"
+      WorkPackage: "o"
+    Node:
+      ApplicationCollaboration: "rvtfo"
+      ApplicationComponent: "rvtfo"
+      ApplicationEvent: "rvtfo"
+      ApplicationFunction: "rvtfo"
+      ApplicationInteraction: "rvtfo"
+      ApplicationInterface: "rvtfo"
+      ApplicationProcess: "rvtfo"
+      ApplicationService: "rvtfo"
+      Artifact: "iao"
+      Assessment: "no"
+      BusinessActor: "irvtfo"
+      BusinessCollaboration: "irvtfo"
+      BusinessEvent: "irvtfo"
+      BusinessFunction: "irvtfo"
+      BusinessInteraction: "irvtfo"
+      BusinessInterface: "irvtfo"
+      BusinessObject: "ao"
+      BusinessProcess: "irvtfo"
+      BusinessRole: "irvtfo"
+      BusinessService: "irvtfo"
+      Capability: "ro"
+      CommunicationNetwork: "vtfo"
+      Constraint: "rno"
+      Contract: "ao"
+      CourseOfAction: "ro"
+      DataObject: "ao"
+      Deliverable: "o"
+      Device: "scgirvtfopw"
+      DistributionNetwork: "vtfo"
+      Driver: "no"
+      Equipment: "scgirvtfopw"
+      Facility: "scgirvtfopw"
+      Gap: "o"
+      Goal: "rno"
+      Grouping: "scgirvantfo"
+      ImplementationEvent: "o"
+      Location: "vtfo"
+      Material: "iao"
+      Meaning: "no"
+      Node: "scgirvtfopw"
+      Outcome: "rno"
+      Path: "vtfo"
+      Plateau: "o"
+      Principle: "rno"
+      Product: "vtfo"
+      Representation: "ao"
+      Requirement: "rno"
+      Resource: "ro"
+      Stakeholder: "rno"
+      SystemSoftware: "scgirvtfopw"
+      TechnologyCollaboration: "vtfo"
+      TechnologyEvent: "irvtfo"
+      TechnologyFunction: "irvtfo"
+      TechnologyInteraction: "irvtfo"
+      TechnologyInterface: "cgirvtfo"
+      TechnologyProcess: "irvtfo"
+      TechnologyService: "irvtfo"
+      Value: "no"
+      ValueStream: "ro"
+      WorkPackage: "o"
+    Outcome:
+      ApplicationCollaboration: "o"
+      ApplicationComponent: "o"
+      ApplicationEvent: "o"
+      ApplicationFunction: "o"
+      ApplicationInteraction: "o"
+      ApplicationInterface: "o"
+      ApplicationProcess: "o"
+      ApplicationService: "o"
+      Artifact: "o"
+      Assessment: "no"
+      BusinessActor: "o"
+      BusinessCollaboration: "o"
+      BusinessEvent: "o"
+      BusinessFunction: "o"
+      BusinessInteraction: "o"
+      BusinessInterface: "o"
+      BusinessObject: "o"
+      BusinessProcess: "o"
+      BusinessRole: "o"
+      BusinessService: "o"
+      Capability: "o"
+      CommunicationNetwork: "o"
+      Constraint: "no"
+      Contract: "o"
+      CourseOfAction: "o"
+      DataObject: "o"
+      Deliverable: "o"
+      Device: "o"
+      DistributionNetwork: "o"
+      Driver: "no"
+      Equipment: "o"
+      Facility: "o"
+      Gap: "o"
+      Goal: "rno"
+      Grouping: "scgrno"
+      ImplementationEvent: "o"
+      Location: "o"
+      Material: "o"
+      Meaning: "no"
+      Node: "o"
+      Outcome: "scgno"
+      Path: "o"
+      Plateau: "cgo"
+      Principle: "no"
+      Product: "o"
+      Representation: "o"
+      Requirement: "no"
+      Resource: "o"
+      Stakeholder: "no"
+      SystemSoftware: "o"
+      TechnologyCollaboration: "o"
+      TechnologyEvent: "o"
+      TechnologyFunction: "o"
+      TechnologyInteraction: "o"
+      TechnologyInterface: "o"
+      TechnologyProcess: "o"
+      TechnologyService: "o"
+      Value: "no"
+      ValueStream: "o"
+      WorkPackage: "o"
+    Path:
+      ApplicationCollaboration: "rvtfo"
+      ApplicationComponent: "rvtfo"
+      ApplicationEvent: "rvtfo"
+      ApplicationFunction: "rvtfo"
+      ApplicationInteraction: "rvtfo"
+      ApplicationInterface: "rvtfo"
+      ApplicationProcess: "rvtfo"
+      ApplicationService: "rvtfo"
+      Artifact: "iao"
+      Assessment: "no"
+      BusinessActor: "irvtfo"
+      BusinessCollaboration: "irvtfo"
+      BusinessEvent: "irvtfo"
+      BusinessFunction: "irvtfo"
+      BusinessInteraction: "irvtfo"
+      BusinessInterface: "irvtfo"
+      BusinessObject: "ao"
+      BusinessProcess: "irvtfo"
+      BusinessRole: "irvtfo"
+      BusinessService: "irvtfo"
+      Capability: "ro"
+      CommunicationNetwork: "vtfo"
+      Constraint: "rno"
+      Contract: "ao"
+      CourseOfAction: "ro"
+      DataObject: "ao"
+      Deliverable: "o"
+      Device: "girvtfo"
+      DistributionNetwork: "vtfo"
+      Driver: "no"
+      Equipment: "girvtfo"
+      Facility: "girvtfo"
+      Gap: "o"
+      Goal: "rno"
+      Grouping: "scgirvantfo"
+      ImplementationEvent: "o"
+      Location: "vtfo"
+      Material: "iao"
+      Meaning: "no"
+      Node: "girvtfo"
+      Outcome: "rno"
+      Path: "scgvtfo"
+      Plateau: "o"
+      Principle: "rno"
+      Product: "vtfo"
+      Representation: "ao"
+      Requirement: "rno"
+      Resource: "ro"
+      Stakeholder: "rno"
+      SystemSoftware: "girvtfo"
+      TechnologyCollaboration: "gvtfo"
+      TechnologyEvent: "irvtfo"
+      TechnologyFunction: "irvtfo"
+      TechnologyInteraction: "irvtfo"
+      TechnologyInterface: "girvtfo"
+      TechnologyProcess: "irvtfo"
+      TechnologyService: "irvtfo"
+      Value: "no"
+      ValueStream: "ro"
+      WorkPackage: "o"
+    Plateau:
+      ApplicationCollaboration: "cgro"
+      ApplicationComponent: "cgro"
+      ApplicationEvent: "cgro"
+      ApplicationFunction: "cgro"
+      ApplicationInteraction: "cgro"
+      ApplicationInterface: "cgro"
+      ApplicationProcess: "cgro"
+      ApplicationService: "cgro"
+      Artifact: "cgro"
+      Assessment: "no"
+      BusinessActor: "cgro"
+      BusinessCollaboration: "cgro"
+      BusinessEvent: "cgro"
+      BusinessFunction: "cgro"
+      BusinessInteraction: "cgro"
+      BusinessInterface: "cgro"
+      BusinessObject: "cgro"
+      BusinessProcess: "cgro"
+      BusinessRole: "cgro"
+      BusinessService: "cgro"
+      Capability: "cgro"
+      CommunicationNetwork: "cgro"
+      Constraint: "cgrno"
+      Contract: "cgro"
+      CourseOfAction: "cgro"
+      DataObject: "cgro"
+      Deliverable: "ao"
+      Device: "cgro"
+      DistributionNetwork: "cgro"
+      Driver: "no"
+      Equipment: "cgro"
+      Facility: "cgro"
+      Gap: "o"
+      Goal: "cgrno"
+      Grouping: "scgrantfo"
+      ImplementationEvent: "tfo"
+      Location: "cgro"
+      Material: "cgro"
+      Meaning: "no"
+      Node: "cgro"
+      Outcome: "rno"
+      Path: "cgro"
+      Plateau: "scgtfo"
+      Principle: "rno"
+      Product: "cgro"
+      Representation: "cgro"
+      Requirement: "cgrno"
+      Resource: "cgro"
+      Stakeholder: "no"
+      SystemSoftware: "cgro"
+      TechnologyCollaboration: "cgro"
+      TechnologyEvent: "cgro"
+      TechnologyFunction: "cgro"
+      TechnologyInteraction: "cgro"
+      TechnologyInterface: "cgro"
+      TechnologyProcess: "cgro"
+      TechnologyService: "cgro"
+      Value: "no"
+      ValueStream: "cgro"
+      WorkPackage: "tfo"
+    Principle:
+      ApplicationCollaboration: "o"
+      ApplicationComponent: "o"
+      ApplicationEvent: "o"
+      ApplicationFunction: "o"
+      ApplicationInteraction: "o"
+      ApplicationInterface: "o"
+      ApplicationProcess: "o"
+      ApplicationService: "o"
+      Artifact: "o"
+      Assessment: "no"
+      BusinessActor: "o"
+      BusinessCollaboration: "o"
+      BusinessEvent: "o"
+      BusinessFunction: "o"
+      BusinessInteraction: "o"
+      BusinessInterface: "o"
+      BusinessObject: "o"
+      BusinessProcess: "o"
+      BusinessRole: "o"
+      BusinessService: "o"
+      Capability: "o"
+      CommunicationNetwork: "o"
+      Constraint: "no"
+      Contract: "o"
+      CourseOfAction: "o"
+      DataObject: "o"
+      Deliverable: "o"
+      Device: "o"
+      DistributionNetwork: "o"
+      Driver: "no"
+      Equipment: "o"
+      Facility: "o"
+      Gap: "o"
+      Goal: "rno"
+      Grouping: "scgrno"
+      ImplementationEvent: "o"
+      Location: "o"
+      Material: "o"
+      Meaning: "no"
+      Node: "o"
+      Outcome: "rno"
+      Path: "o"
+      Plateau: "o"
+      Principle: "scgno"
+      Product: "o"
+      Representation: "o"
+      Requirement: "no"
+      Resource: "o"
+      Stakeholder: "no"
+      SystemSoftware: "o"
+      TechnologyCollaboration: "o"
+      TechnologyEvent: "o"
+      TechnologyFunction: "o"
+      TechnologyInteraction: "o"
+      TechnologyInterface: "o"
+      TechnologyProcess: "o"
+      TechnologyService: "o"
+      Value: "no"
+      ValueStream: "o"
+      WorkPackage: "o"
+    Product:
+      ApplicationCollaboration: "rvtfo"
+      ApplicationComponent: "rvtfo"
+      ApplicationEvent: "rvtfo"
+      ApplicationFunction: "rvtfo"
+      ApplicationInteraction: "rvtfo"
+      ApplicationInterface: "rvtfo"
+      ApplicationProcess: "rvtfo"
+      ApplicationService: "cgrvtfo"
+      Artifact: "cgao"
+      Assessment: "no"
+      BusinessActor: "rvtfo"
+      BusinessCollaboration: "rvtfo"
+      BusinessEvent: "rvtfo"
+      BusinessFunction: "rvtfo"
+      BusinessInteraction: "rvtfo"
+      BusinessInterface: "rvtfo"
+      BusinessObject: "cgao"
+      BusinessProcess: "rvtfo"
+      BusinessRole: "rvtfo"
+      BusinessService: "cgrvtfo"
+      Capability: "ro"
+      CommunicationNetwork: "vtfo"
+      Constraint: "rno"
+      Contract: "cgao"
+      CourseOfAction: "ro"
+      DataObject: "cgao"
+      Deliverable: "o"
+      Device: "rvtfo"
+      DistributionNetwork: "vtfo"
+      Driver: "no"
+      Equipment: "rvtfo"
+      Facility: "rvtfo"
+      Gap: "o"
+      Goal: "rno"
+      Grouping: "scgrvantfo"
+      ImplementationEvent: "o"
+      Location: "vtfo"
+      Material: "cgao"
+      Meaning: "no"
+      Node: "rvtfo"
+      Outcome: "rno"
+      Path: "vtfo"
+      Plateau: "o"
+      Principle: "rno"
+      Product: "scgvtfo"
+      Representation: "cgao"
+      Requirement: "rno"
+      Resource: "ro"
+      Stakeholder: "rno"
+      SystemSoftware: "rvtfo"
+      TechnologyCollaboration: "vtfo"
+      TechnologyEvent: "rvtfo"
+      TechnologyFunction: "rvtfo"
+      TechnologyInteraction: "rvtfo"
+      TechnologyInterface: "rvtfo"
+      TechnologyProcess: "rvtfo"
+      TechnologyService: "cgrvtfo"
+      Value: "no"
+      ValueStream: "ro"
+      WorkPackage: "o"
+    Representation:
+      ApplicationCollaboration: "o"
+      ApplicationComponent: "o"
+      ApplicationEvent: "o"
+      ApplicationFunction: "o"
+      ApplicationInteraction: "o"
+      ApplicationInterface: "o"
+      ApplicationProcess: "o"
+      ApplicationService: "o"
+      Artifact: "o"
+      Assessment: "no"
+      BusinessActor: "o"
+      BusinessCollaboration: "o"
+      BusinessEvent: "o"
+      BusinessFunction: "o"
+      BusinessInteraction: "o"
+      BusinessInterface: "o"
+      BusinessObject: "ro"
+      BusinessProcess: "o"
+      BusinessRole: "o"
+      BusinessService: "o"
+      Capability: "ro"
+      CommunicationNetwork: "o"
+      Constraint: "rno"
+      Contract: "ro"
+      CourseOfAction: "ro"
+      DataObject: "o"
+      Deliverable: "o"
+      Device: "o"
+      DistributionNetwork: "o"
+      Driver: "no"
+      Equipment: "o"
+      Facility: "o"
+      Gap: "o"
+      Goal: "rno"
+      Grouping: "scgrno"
+      ImplementationEvent: "o"
+      Location: "o"
+      Material: "o"
+      Meaning: "no"
+      Node: "o"
+      Outcome: "rno"
+      Path: "o"
+      Plateau: "o"
+      Principle: "rno"
+      Product: "o"
+      Representation: "scgo"
+      Requirement: "rno"
+      Resource: "ro"
+      Stakeholder: "no"
+      SystemSoftware: "o"
+      TechnologyCollaboration: "o"
+      TechnologyEvent: "o"
+      TechnologyFunction: "o"
+      TechnologyInteraction: "o"
+      TechnologyInterface: "o"
+      TechnologyProcess: "o"
+      TechnologyService: "o"
+      Value: "no"
+      ValueStream: "ro"
+      WorkPackage: "o"
+    Requirement:
+      ApplicationCollaboration: "o"
+      ApplicationComponent: "o"
+      ApplicationEvent: "o"
+      ApplicationFunction: "o"
+      ApplicationInteraction: "o"
+      ApplicationInterface: "o"
+      ApplicationProcess: "o"
+      ApplicationService: "o"
+      Artifact: "o"
+      Assessment: "no"
+      BusinessActor: "o"
+      BusinessCollaboration: "o"
+      BusinessEvent: "o"
+      BusinessFunction: "o"
+      BusinessInteraction: "o"
+      BusinessInterface: "o"
+      BusinessObject: "o"
+      BusinessProcess: "o"
+      BusinessRole: "o"
+      BusinessService: "o"
+      Capability: "o"
+      CommunicationNetwork: "o"
+      Constraint: "scgno"
+      Contract: "o"
+      CourseOfAction: "o"
+      DataObject: "o"
+      Deliverable: "o"
+      Device: "o"
+      DistributionNetwork: "o"
+      Driver: "no"
+      Equipment: "o"
+      Facility: "o"
+      Gap: "o"
+      Goal: "rno"
+      Grouping: "scgrno"
+      ImplementationEvent: "o"
+      Location: "o"
+      Material: "o"
+      Meaning: "no"
+      Node: "o"
+      Outcome: "rno"
+      Path: "o"
+      Plateau: "o"
+      Principle: "rno"
+      Product: "o"
+      Representation: "o"
+      Requirement: "scgno"
+      Resource: "o"
+      Stakeholder: "no"
+      SystemSoftware: "o"
+      TechnologyCollaboration: "o"
+      TechnologyEvent: "o"
+      TechnologyFunction: "o"
+      TechnologyInteraction: "o"
+      TechnologyInterface: "o"
+      TechnologyProcess: "o"
+      TechnologyService: "o"
+      Value: "no"
+      ValueStream: "o"
+      WorkPackage: "o"
+    Resource:
+      ApplicationCollaboration: "o"
+      ApplicationComponent: "o"
+      ApplicationEvent: "o"
+      ApplicationFunction: "o"
+      ApplicationInteraction: "o"
+      ApplicationInterface: "o"
+      ApplicationProcess: "o"
+      ApplicationService: "o"
+      Artifact: "o"
+      Assessment: "no"
+      BusinessActor: "o"
+      BusinessCollaboration: "o"
+      BusinessEvent: "o"
+      BusinessFunction: "o"
+      BusinessInteraction: "o"
+      BusinessInterface: "o"
+      BusinessObject: "o"
+      BusinessProcess: "o"
+      BusinessRole: "o"
+      BusinessService: "o"
+      Capability: "ivtfo"
+      CommunicationNetwork: "o"
+      Constraint: "rno"
+      Contract: "o"
+      CourseOfAction: "rvtfo"
+      DataObject: "o"
+      Deliverable: "o"
+      Device: "o"
+      DistributionNetwork: "o"
+      Driver: "no"
+      Equipment: "o"
+      Facility: "o"
+      Gap: "o"
+      Goal: "rno"
+      Grouping: "scgirvntfo"
+      ImplementationEvent: "o"
+      Location: "o"
+      Material: "o"
+      Meaning: "no"
+      Node: "o"
+      Outcome: "rno"
+      Path: "o"
+      Plateau: "o"
+      Principle: "rno"
+      Product: "o"
+      Representation: "o"
+      Requirement: "rno"
+      Resource: "scgvtfo"
+      Stakeholder: "no"
+      SystemSoftware: "o"
+      TechnologyCollaboration: "o"
+      TechnologyEvent: "o"
+      TechnologyFunction: "o"
+      TechnologyInteraction: "o"
+      TechnologyInterface: "o"
+      TechnologyProcess: "o"
+      TechnologyService: "o"
+      Value: "no"
+      ValueStream: "ivtfo"
+      WorkPackage: "o"
+    Stakeholder:
+      ApplicationCollaboration: "o"
+      ApplicationComponent: "o"
+      ApplicationEvent: "o"
+      ApplicationFunction: "o"
+      ApplicationInteraction: "o"
+      ApplicationInterface: "o"
+      ApplicationProcess: "o"
+      ApplicationService: "o"
+      Artifact: "o"
+      Assessment: "no"
+      BusinessActor: "o"
+      BusinessCollaboration: "o"
+      BusinessEvent: "o"
+      BusinessFunction: "o"
+      BusinessInteraction: "o"
+      BusinessInterface: "o"
+      BusinessObject: "o"
+      BusinessProcess: "o"
+      BusinessRole: "o"
+      BusinessService: "o"
+      Capability: "o"
+      CommunicationNetwork: "o"
+      Constraint: "no"
+      Contract: "o"
+      CourseOfAction: "o"
+      DataObject: "o"
+      Deliverable: "o"
+      Device: "o"
+      DistributionNetwork: "o"
+      Driver: "no"
+      Equipment: "o"
+      Facility: "o"
+      Gap: "o"
+      Goal: "no"
+      Grouping: "scgno"
+      ImplementationEvent: "o"
+      Location: "o"
+      Material: "o"
+      Meaning: "no"
+      Node: "o"
+      Outcome: "no"
+      Path: "o"
+      Plateau: "o"
+      Principle: "no"
+      Product: "o"
+      Representation: "o"
+      Requirement: "no"
+      Resource: "o"
+      Stakeholder: "scgno"
+      SystemSoftware: "o"
+      TechnologyCollaboration: "o"
+      TechnologyEvent: "o"
+      TechnologyFunction: "o"
+      TechnologyInteraction: "o"
+      TechnologyInterface: "o"
+      TechnologyProcess: "o"
+      TechnologyService: "o"
+      Value: "no"
+      ValueStream: "o"
+      WorkPackage: "o"
+    SystemSoftware:
+      ApplicationCollaboration: "rvtfo"
+      ApplicationComponent: "rvtfo"
+      ApplicationEvent: "rvtfo"
+      ApplicationFunction: "rvtfo"
+      ApplicationInteraction: "rvtfo"
+      ApplicationInterface: "rvtfo"
+      ApplicationProcess: "rvtfo"
+      ApplicationService: "rvtfo"
+      Artifact: "iao"
+      Assessment: "no"
+      BusinessActor: "irvtfo"
+      BusinessCollaboration: "irvtfo"
+      BusinessEvent: "irvtfo"
+      BusinessFunction: "irvtfo"
+      BusinessInteraction: "irvtfo"
+      BusinessInterface: "irvtfo"
+      BusinessObject: "ao"
+      BusinessProcess: "irvtfo"
+      BusinessRole: "irvtfo"
+      BusinessService: "irvtfo"
+      Capability: "ro"
+      CommunicationNetwork: "vtfo"
+      Constraint: "rno"
+      Contract: "ao"
+      CourseOfAction: "ro"
+      DataObject: "ao"
+      Deliverable: "o"
+      Device: "scgirvtfopw"
+      DistributionNetwork: "vtfo"
+      Driver: "no"
+      Equipment: "scgirvtfopw"
+      Facility: "scgirvtfopw"
+      Gap: "o"
+      Goal: "rno"
+      Grouping: "scgirvantfo"
+      ImplementationEvent: "o"
+      Location: "vtfo"
+      Material: "iao"
+      Meaning: "no"
+      Node: "scgirvtfopw"
+      Outcome: "rno"
+      Path: "vtfo"
+      Plateau: "o"
+      Principle: "rno"
+      Product: "vtfo"
+      Representation: "ao"
+      Requirement: "rno"
+      Resource: "ro"
+      Stakeholder: "rno"
+      SystemSoftware: "scgirvtfopw"
+      TechnologyCollaboration: "vtfo"
+      TechnologyEvent: "irvtfo"
+      TechnologyFunction: "irvtfo"
+      TechnologyInteraction: "irvtfo"
+      TechnologyInterface: "cgirvtfo"
+      TechnologyProcess: "irvtfo"
+      TechnologyService: "irvtfo"
+      Value: "no"
+      ValueStream: "ro"
+      WorkPackage: "o"
+    TechnologyCollaboration:
+      ApplicationCollaboration: "rvtfo"
+      ApplicationComponent: "rvtfo"
+      ApplicationEvent: "rvtfo"
+      ApplicationFunction: "rvtfo"
+      ApplicationInteraction: "rvtfo"
+      ApplicationInterface: "rvtfo"
+      ApplicationProcess: "rvtfo"
+      ApplicationService: "rvtfo"
+      Artifact: "iao"
+      Assessment: "no"
+      BusinessActor: "irvtfo"
+      BusinessCollaboration: "irvtfo"
+      BusinessEvent: "irvtfo"
+      BusinessFunction: "irvtfo"
+      BusinessInteraction: "irvtfo"
+      BusinessInterface: "irvtfo"
+      BusinessObject: "ao"
+      BusinessProcess: "irvtfo"
+      BusinessRole: "irvtfo"
+      BusinessService: "irvtfo"
+      Capability: "ro"
+      CommunicationNetwork: "vtfo"
+      Constraint: "rno"
+      Contract: "ao"
+      CourseOfAction: "ro"
+      DataObject: "ao"
+      Deliverable: "o"
+      Device: "girvtfo"
+      DistributionNetwork: "vtfo"
+      Driver: "no"
+      Equipment: "girvtfo"
+      Facility: "girvtfo"
+      Gap: "o"
+      Goal: "rno"
+      Grouping: "scgirvantfo"
+      ImplementationEvent: "o"
+      Location: "vtfo"
+      Material: "iao"
+      Meaning: "no"
+      Node: "girvtfo"
+      Outcome: "rno"
+      Path: "vtfo"
+      Plateau: "o"
+      Principle: "rno"
+      Product: "vtfo"
+      Representation: "ao"
+      Requirement: "rno"
+      Resource: "ro"
+      Stakeholder: "rno"
+      SystemSoftware: "girvtfo"
+      TechnologyCollaboration: "scgvtfo"
+      TechnologyEvent: "irvtfo"
+      TechnologyFunction: "irvtfo"
+      TechnologyInteraction: "irvtfo"
+      TechnologyInterface: "cgirvtfo"
+      TechnologyProcess: "irvtfo"
+      TechnologyService: "irvtfo"
+      Value: "no"
+      ValueStream: "ro"
+      WorkPackage: "o"
+    TechnologyEvent:
+      ApplicationCollaboration: "vtfo"
+      ApplicationComponent: "vtfo"
+      ApplicationEvent: "rvtfo"
+      ApplicationFunction: "vtfo"
+      ApplicationInteraction: "vtfo"
+      ApplicationInterface: "vtfo"
+      ApplicationProcess: "vtfo"
+      ApplicationService: "vtfo"
+      Artifact: "ao"
+      Assessment: "no"
+      BusinessActor: "vtfo"
+      BusinessCollaboration: "vtfo"
+      BusinessEvent: "rvtfo"
+      BusinessFunction: "vtfo"
+      BusinessInteraction: "vtfo"
+      BusinessInterface: "vtfo"
+      BusinessObject: "ao"
+      BusinessProcess: "vtfo"
+      BusinessRole: "vtfo"
+      BusinessService: "vtfo"
+      Capability: "o"
+      CommunicationNetwork: "vtfo"
+      Constraint: "rno"
+      Contract: "ao"
+      CourseOfAction: "o"
+      DataObject: "ao"
+      Deliverable: "o"
+      Device: "vtfo"
+      DistributionNetwork: "vtfo"
+      Driver: "no"
+      Equipment: "vtfo"
+      Facility: "vtfo"
+      Gap: "o"
+      Goal: "rno"
+      Grouping: "scgrvantfo"
+      ImplementationEvent: "o"
+      Location: "vtfo"
+      Material: "ao"
+      Meaning: "no"
+      Node: "vtfo"
+      Outcome: "rno"
+      Path: "vtfo"
+      Plateau: "o"
+      Principle: "rno"
+      Product: "vtfo"
+      Representation: "ao"
+      Requirement: "rno"
+      Resource: "o"
+      Stakeholder: "no"
+      SystemSoftware: "vtfo"
+      TechnologyCollaboration: "vtfo"
+      TechnologyEvent: "scgvtfo"
+      TechnologyFunction: "vtfo"
+      TechnologyInteraction: "vtfo"
+      TechnologyInterface: "vtfo"
+      TechnologyProcess: "vtfo"
+      TechnologyService: "vtfo"
+      Value: "no"
+      ValueStream: "o"
+      WorkPackage: "o"
+    TechnologyFunction:
+      ApplicationCollaboration: "vtfo"
+      ApplicationComponent: "vtfo"
+      ApplicationEvent: "vtfo"
+      ApplicationFunction: "rvtfo"
+      ApplicationInteraction: "rvtfo"
+      ApplicationInterface: "vtfo"
+      ApplicationProcess: "rvtfo"
+      ApplicationService: "rvtfo"
+      Artifact: "ao"
+      Assessment: "no"
+      BusinessActor: "vtfo"
+      BusinessCollaboration: "vtfo"
+      BusinessEvent: "vtfo"
+      BusinessFunction: "rvtfo"
+      BusinessInteraction: "rvtfo"
+      BusinessInterface: "vtfo"
+      BusinessObject: "ao"
+      BusinessProcess: "rvtfo"
+      BusinessRole: "vtfo"
+      BusinessService: "rvtfo"
+      Capability: "ro"
+      CommunicationNetwork: "vtfo"
+      Constraint: "rno"
+      Contract: "ao"
+      CourseOfAction: "ro"
+      DataObject: "ao"
+      Deliverable: "o"
+      Device: "vtfo"
+      DistributionNetwork: "vtfo"
+      Driver: "no"
+      Equipment: "vtfo"
+      Facility: "vtfo"
+      Gap: "o"
+      Goal: "rno"
+      Grouping: "scgrvantfo"
+      ImplementationEvent: "o"
+      Location: "vtfo"
+      Material: "ao"
+      Meaning: "no"
+      Node: "vtfo"
+      Outcome: "rno"
+      Path: "vtfo"
+      Plateau: "o"
+      Principle: "rno"
+      Product: "vtfo"
+      Representation: "ao"
+      Requirement: "rno"
+      Resource: "o"
+      Stakeholder: "no"
+      SystemSoftware: "vtfo"
+      TechnologyCollaboration: "vtfo"
+      TechnologyEvent: "vtfo"
+      TechnologyFunction: "scgvtfo"
+      TechnologyInteraction: "cgvtfo"
+      TechnologyInterface: "vtfo"
+      TechnologyProcess: "cgvtfo"
+      TechnologyService: "rvtfo"
+      Value: "no"
+      ValueStream: "ro"
+      WorkPackage: "o"
+    TechnologyInteraction:
+      ApplicationCollaboration: "vtfo"
+      ApplicationComponent: "vtfo"
+      ApplicationEvent: "vtfo"
+      ApplicationFunction: "rvtfo"
+      ApplicationInteraction: "rvtfo"
+      ApplicationInterface: "vtfo"
+      ApplicationProcess: "rvtfo"
+      ApplicationService: "rvtfo"
+      Artifact: "ao"
+      Assessment: "no"
+      BusinessActor: "vtfo"
+      BusinessCollaboration: "vtfo"
+      BusinessEvent: "vtfo"
+      BusinessFunction: "rvtfo"
+      BusinessInteraction: "rvtfo"
+      BusinessInterface: "vtfo"
+      BusinessObject: "ao"
+      BusinessProcess: "rvtfo"
+      BusinessRole: "vtfo"
+      BusinessService: "rvtfo"
+      Capability: "ro"
+      CommunicationNetwork: "vtfo"
+      Constraint: "rno"
+      Contract: "ao"
+      CourseOfAction: "ro"
+      DataObject: "ao"
+      Deliverable: "o"
+      Device: "vtfo"
+      DistributionNetwork: "vtfo"
+      Driver: "no"
+      Equipment: "vtfo"
+      Facility: "vtfo"
+      Gap: "o"
+      Goal: "rno"
+      Grouping: "scgrvantfo"
+      ImplementationEvent: "o"
+      Location: "vtfo"
+      Material: "ao"
+      Meaning: "no"
+      Node: "vtfo"
+      Outcome: "rno"
+      Path: "vtfo"
+      Plateau: "o"
+      Principle: "rno"
+      Product: "vtfo"
+      Representation: "ao"
+      Requirement: "rno"
+      Resource: "o"
+      Stakeholder: "no"
+      SystemSoftware: "vtfo"
+      TechnologyCollaboration: "vtfo"
+      TechnologyEvent: "vtfo"
+      TechnologyFunction: "cgvtfo"
+      TechnologyInteraction: "scgvtfo"
+      TechnologyInterface: "vtfo"
+      TechnologyProcess: "cgvtfo"
+      TechnologyService: "rvtfo"
+      Value: "no"
+      ValueStream: "ro"
+      WorkPackage: "o"
+    TechnologyInterface:
+      ApplicationCollaboration: "vtfo"
+      ApplicationComponent: "vtfo"
+      ApplicationEvent: "vtfo"
+      ApplicationFunction: "vtfo"
+      ApplicationInteraction: "vtfo"
+      ApplicationInterface: "rvtfo"
+      ApplicationProcess: "vtfo"
+      ApplicationService: "rvtfo"
+      Artifact: "ao"
+      Assessment: "no"
+      BusinessActor: "vtfo"
+      BusinessCollaboration: "vtfo"
+      BusinessEvent: "vtfo"
+      BusinessFunction: "vtfo"
+      BusinessInteraction: "vtfo"
+      BusinessInterface: "rvtfo"
+      BusinessObject: "ao"
+      BusinessProcess: "vtfo"
+      BusinessRole: "vtfo"
+      BusinessService: "rvtfo"
+      Capability: "ro"
+      CommunicationNetwork: "vtfo"
+      Constraint: "rno"
+      Contract: "ao"
+      CourseOfAction: "ro"
+      DataObject: "ao"
+      Deliverable: "o"
+      Device: "vtfo"
+      DistributionNetwork: "vtfo"
+      Driver: "no"
+      Equipment: "vtfo"
+      Facility: "vtfo"
+      Gap: "o"
+      Goal: "rno"
+      Grouping: "scgirvantfo"
+      ImplementationEvent: "o"
+      Location: "vtfo"
+      Material: "ao"
+      Meaning: "no"
+      Node: "vtfo"
+      Outcome: "rno"
+      Path: "vtfo"
+      Plateau: "o"
+      Principle: "rno"
+      Product: "vtfo"
+      Representation: "ao"
+      Requirement: "rno"
+      Resource: "ro"
+      Stakeholder: "no"
+      SystemSoftware: "vtfo"
+      TechnologyCollaboration: "vtfo"
+      TechnologyEvent: "vtfo"
+      TechnologyFunction: "vtfo"
+      TechnologyInteraction: "vtfo"
+      TechnologyInterface: "scgvtfo"
+      TechnologyProcess: "vtfo"
+      TechnologyService: "ivtfo"
+      Value: "no"
+      ValueStream: "ro"
+      WorkPackage: "o"
+    TechnologyProcess:
+      ApplicationCollaboration: "vtfo"
+      ApplicationComponent: "vtfo"
+      ApplicationEvent: "vtfo"
+      ApplicationFunction: "rvtfo"
+      ApplicationInteraction: "rvtfo"
+      ApplicationInterface: "vtfo"
+      ApplicationProcess: "rvtfo"
+      ApplicationService: "rvtfo"
+      Artifact: "ao"
+      Assessment: "no"
+      BusinessActor: "vtfo"
+      BusinessCollaboration: "vtfo"
+      BusinessEvent: "vtfo"
+      BusinessFunction: "rvtfo"
+      BusinessInteraction: "rvtfo"
+      BusinessInterface: "vtfo"
+      BusinessObject: "ao"
+      BusinessProcess: "rvtfo"
+      BusinessRole: "vtfo"
+      BusinessService: "rvtfo"
+      Capability: "ro"
+      CommunicationNetwork: "vtfo"
+      Constraint: "rno"
+      Contract: "ao"
+      CourseOfAction: "ro"
+      DataObject: "ao"
+      Deliverable: "o"
+      Device: "vtfo"
+      DistributionNetwork: "vtfo"
+      Driver: "no"
+      Equipment: "vtfo"
+      Facility: "vtfo"
+      Gap: "o"
+      Goal: "rno"
+      Grouping: "scgrvantfo"
+      ImplementationEvent: "o"
+      Location: "vtfo"
+      Material: "ao"
+      Meaning: "no"
+      Node: "vtfo"
+      Outcome: "rno"
+      Path: "vtfo"
+      Plateau: "o"
+      Principle: "rno"
+      Product: "vtfo"
+      Representation: "ao"
+      Requirement: "rno"
+      Resource: "o"
+      Stakeholder: "no"
+      SystemSoftware: "vtfo"
+      TechnologyCollaboration: "vtfo"
+      TechnologyEvent: "vtfo"
+      TechnologyFunction: "cgvtfo"
+      TechnologyInteraction: "cgvtfo"
+      TechnologyInterface: "vtfo"
+      TechnologyProcess: "scgvtfo"
+      TechnologyService: "rvtfo"
+      Value: "no"
+      ValueStream: "ro"
+      WorkPackage: "o"
+    TechnologyService:
+      ApplicationCollaboration: "vtfo"
+      ApplicationComponent: "vtfo"
+      ApplicationEvent: "vtfo"
+      ApplicationFunction: "vtfo"
+      ApplicationInteraction: "vtfo"
+      ApplicationInterface: "vtfo"
+      ApplicationProcess: "vtfo"
+      ApplicationService: "rvtfo"
+      Artifact: "ao"
+      Assessment: "no"
+      BusinessActor: "vtfo"
+      BusinessCollaboration: "vtfo"
+      BusinessEvent: "vtfo"
+      BusinessFunction: "vtfo"
+      BusinessInteraction: "vtfo"
+      BusinessInterface: "vtfo"
+      BusinessObject: "ao"
+      BusinessProcess: "vtfo"
+      BusinessRole: "vtfo"
+      BusinessService: "rvtfo"
+      Capability: "ro"
+      CommunicationNetwork: "vtfo"
+      Constraint: "rno"
+      Contract: "ao"
+      CourseOfAction: "ro"
+      DataObject: "ao"
+      Deliverable: "o"
+      Device: "vtfo"
+      DistributionNetwork: "vtfo"
+      Driver: "no"
+      Equipment: "vtfo"
+      Facility: "vtfo"
+      Gap: "o"
+      Goal: "rno"
+      Grouping: "scgrvantfo"
+      ImplementationEvent: "o"
+      Location: "vtfo"
+      Material: "ao"
+      Meaning: "no"
+      Node: "vtfo"
+      Outcome: "rno"
+      Path: "vtfo"
+      Plateau: "o"
+      Principle: "rno"
+      Product: "vtfo"
+      Representation: "ao"
+      Requirement: "rno"
+      Resource: "o"
+      Stakeholder: "no"
+      SystemSoftware: "vtfo"
+      TechnologyCollaboration: "vtfo"
+      TechnologyEvent: "vtfo"
+      TechnologyFunction: "vtfo"
+      TechnologyInteraction: "vtfo"
+      TechnologyInterface: "vtfo"
+      TechnologyProcess: "vtfo"
+      TechnologyService: "scgvtfo"
+      Value: "no"
+      ValueStream: "ro"
+      WorkPackage: "o"
+    Value:
+      ApplicationCollaboration: "o"
+      ApplicationComponent: "o"
+      ApplicationEvent: "o"
+      ApplicationFunction: "o"
+      ApplicationInteraction: "o"
+      ApplicationInterface: "o"
+      ApplicationProcess: "o"
+      ApplicationService: "o"
+      Artifact: "o"
+      Assessment: "no"
+      BusinessActor: "o"
+      BusinessCollaboration: "o"
+      BusinessEvent: "o"
+      BusinessFunction: "o"
+      BusinessInteraction: "o"
+      BusinessInterface: "o"
+      BusinessObject: "o"
+      BusinessProcess: "o"
+      BusinessRole: "o"
+      BusinessService: "o"
+      Capability: "o"
+      CommunicationNetwork: "o"
+      Constraint: "no"
+      Contract: "o"
+      CourseOfAction: "o"
+      DataObject: "o"
+      Deliverable: "o"
+      Device: "o"
+      DistributionNetwork: "o"
+      Driver: "no"
+      Equipment: "o"
+      Facility: "o"
+      Gap: "o"
+      Goal: "no"
+      Grouping: "scgno"
+      ImplementationEvent: "o"
+      Location: "o"
+      Material: "o"
+      Meaning: "no"
+      Node: "o"
+      Outcome: "no"
+      Path: "o"
+      Plateau: "o"
+      Principle: "no"
+      Product: "o"
+      Representation: "o"
+      Requirement: "no"
+      Resource: "o"
+      Stakeholder: "no"
+      SystemSoftware: "o"
+      TechnologyCollaboration: "o"
+      TechnologyEvent: "o"
+      TechnologyFunction: "o"
+      TechnologyInteraction: "o"
+      TechnologyInterface: "o"
+      TechnologyProcess: "o"
+      TechnologyService: "o"
+      Value: "scgno"
+      ValueStream: "o"
+      WorkPackage: "o"
+    ValueStream:
+      ApplicationCollaboration: "o"
+      ApplicationComponent: "o"
+      ApplicationEvent: "o"
+      ApplicationFunction: "o"
+      ApplicationInteraction: "o"
+      ApplicationInterface: "o"
+      ApplicationProcess: "o"
+      ApplicationService: "o"
+      Artifact: "o"
+      Assessment: "no"
+      BusinessActor: "o"
+      BusinessCollaboration: "o"
+      BusinessEvent: "o"
+      BusinessFunction: "o"
+      BusinessInteraction: "o"
+      BusinessInterface: "o"
+      BusinessObject: "o"
+      BusinessProcess: "o"
+      BusinessRole: "o"
+      BusinessService: "o"
+      Capability: "vtfo"
+      CommunicationNetwork: "o"
+      Constraint: "rno"
+      Contract: "o"
+      CourseOfAction: "rvtfo"
+      DataObject: "o"
+      Deliverable: "o"
+      Device: "o"
+      DistributionNetwork: "o"
+      Driver: "no"
+      Equipment: "o"
+      Facility: "o"
+      Gap: "o"
+      Goal: "rno"
+      Grouping: "scgrvntfo"
+      ImplementationEvent: "o"
+      Location: "o"
+      Material: "o"
+      Meaning: "no"
+      Node: "o"
+      Outcome: "rno"
+      Path: "o"
+      Plateau: "o"
+      Principle: "rno"
+      Product: "o"
+      Representation: "o"
+      Requirement: "rno"
+      Resource: "vtfo"
+      Stakeholder: "no"
+      SystemSoftware: "o"
+      TechnologyCollaboration: "o"
+      TechnologyEvent: "o"
+      TechnologyFunction: "o"
+      TechnologyInteraction: "o"
+      TechnologyInterface: "o"
+      TechnologyProcess: "o"
+      TechnologyService: "o"
+      Value: "no"
+      ValueStream: "scgvtfo"
+      WorkPackage: "o"
+    WorkPackage:
+      ApplicationCollaboration: "ro"
+      ApplicationComponent: "ro"
+      ApplicationEvent: "ro"
+      ApplicationFunction: "ro"
+      ApplicationInteraction: "ro"
+      ApplicationInterface: "ro"
+      ApplicationProcess: "ro"
+      ApplicationService: "ro"
+      Artifact: "ro"
+      Assessment: "no"
+      BusinessActor: "ro"
+      BusinessCollaboration: "ro"
+      BusinessEvent: "ro"
+      BusinessFunction: "ro"
+      BusinessInteraction: "ro"
+      BusinessInterface: "ro"
+      BusinessObject: "ro"
+      BusinessProcess: "ro"
+      BusinessRole: "ro"
+      BusinessService: "ro"
+      Capability: "ro"
+      CommunicationNetwork: "ro"
+      Constraint: "rno"
+      Contract: "ro"
+      CourseOfAction: "ro"
+      DataObject: "ro"
+      Deliverable: "rao"
+      Device: "ro"
+      DistributionNetwork: "ro"
+      Driver: "no"
+      Equipment: "ro"
+      Facility: "ro"
+      Gap: "o"
+      Goal: "rno"
+      Grouping: "scgrantfo"
+      ImplementationEvent: "tfo"
+      Location: "ro"
+      Material: "ro"
+      Meaning: "no"
+      Node: "ro"
+      Outcome: "rno"
+      Path: "ro"
+      Plateau: "rtfo"
+      Principle: "rno"
+      Product: "ro"
+      Representation: "ro"
+      Requirement: "rno"
+      Resource: "ro"
+      Stakeholder: "no"
+      SystemSoftware: "ro"
+      TechnologyCollaboration: "ro"
+      TechnologyEvent: "ro"
+      TechnologyFunction: "ro"
+      TechnologyInteraction: "ro"
+      TechnologyInterface: "ro"
+      TechnologyProcess: "ro"
+      TechnologyService: "ro"
+      Value: "no"
+      ValueStream: "ro"
+      WorkPackage: "scgtfo"
+  junction_ends:
+    ApplicationCollaboration:
+      Junction: "scgirvantfo"
+    ApplicationComponent:
+      Junction: "scgirvantfo"
+    ApplicationEvent:
+      Junction: "scgrvantfo"
+    ApplicationFunction:
+      Junction: "scgrvantfo"
+    ApplicationInteraction:
+      Junction: "scgrvantfo"
+    ApplicationInterface:
+      Junction: "scgirvantfo"
+    ApplicationProcess:
+      Junction: "scgrvantfo"
+    ApplicationService:
+      Junction: "scgrvantfo"
+    Artifact:
+      Junction: "scgrno"
+    Assessment:
+      Junction: "scgno"
+    BusinessActor:
+      Junction: "scgirvantfo"
+    BusinessCollaboration:
+      Junction: "scgirvantfo"
+    BusinessEvent:
+      Junction: "scgrvantfo"
+    BusinessFunction:
+      Junction: "scgrvantfo"
+    BusinessInteraction:
+      Junction: "scgrvantfo"
+    BusinessInterface:
+      Junction: "scgirvantfo"
+    BusinessObject:
+      Junction: "scgrno"
+    BusinessProcess:
+      Junction: "scgrvantfo"
+    BusinessRole:
+      Junction: "scgirvantfo"
+    BusinessService:
+      Junction: "scgrvantfo"
+    Capability:
+      Junction: "scgrvntfo"
+    CommunicationNetwork:
+      Junction: "scgirvantfo"
+    Constraint:
+      Junction: "scgrno"
+    Contract:
+      Junction: "scgrno"
+    CourseOfAction:
+      Junction: "scgrvntfo"
+    DataObject:
+      Junction: "scgrno"
+    Deliverable:
+      Junction: "scgrno"
+    Device:
+      Junction: "scgirvantfo"
+    DistributionNetwork:
+      Junction: "scgirvantfo"
+    Driver:
+      Junction: "scgno"
+    Equipment:
+      Junction: "scgirvantfo"
+    Facility:
+      Junction: "scgirvantfo"
+    Gap:
+      Junction: "scgo"
+    Goal:
+      Junction: "scgno"
+    Grouping:
+      Junction: "scgirvantfo"
+    ImplementationEvent:
+      Junction: "scgantfo"
+    Junction:
+      ApplicationCollaboration: "scgrvtfo"
+      ApplicationComponent: "scgrvtfo"
+      ApplicationEvent: "scgirvtfo"
+      ApplicationFunction: "scgirvtfo"
+      ApplicationInteraction: "scgirvtfo"
+      ApplicationInterface: "scgrvtfo"
+      ApplicationProcess: "scgirvtfo"
+      ApplicationService: "scgirvtfo"
+      Artifact: "scgirao"
+      Assessment: "scgno"
+      BusinessActor: "scgirvtfo"
+      BusinessCollaboration: "scgirvtfo"
+      BusinessEvent: "scgirvtfo"
+      BusinessFunction: "scgirvtfo"
+      BusinessInteraction: "scgirvtfo"
+      BusinessInterface: "scgirvtfo"
+      BusinessObject: "scgrao"
+      BusinessProcess: "scgirvtfo"
+      BusinessRole: "scgirvtfo"
+      BusinessService: "scgirvtfo"
+      Capability: "scgirvtfo"
+      CommunicationNetwork: "scgrvtfo"
+      Constraint: "scgrno"
+      Contract: "scgrao"
+      CourseOfAction: "scgrvtfo"
+      DataObject: "scgrao"
+      Deliverable: "scgrao"
+      Device: "scgirvtfo"
+      DistributionNetwork: "scgrvtfo"
+      Driver: "scgno"
+      Equipment: "scgirvtfo"
+      Facility: "scgirvtfo"
+      Gap: "scgo"
+      Goal: "scgrno"
+      Grouping: "scgirvantfo"
+      ImplementationEvent: "scgitfo"
+      Junction: "scgirvantfo"
+      Location: "scgrvtfo"
+      Material: "scgirao"
+      Meaning: "scgno"
+      Node: "scgirvtfo"
+      Outcome: "scgrno"
+      Path: "scgrvtfo"
+      Plateau: "scgrtfo"
+      Principle: "scgrno"
+      Product: "scgrvtfo"
+      Representation: "scgrao"
+      Requirement: "scgrno"
+      Resource: "scgrvtfo"
+      Stakeholder: "scgirno"
+      SystemSoftware: "scgirvtfo"
+      TechnologyCollaboration: "scgrvtfo"
+      TechnologyEvent: "scgirvtfo"
+      TechnologyFunction: "scgirvtfo"
+      TechnologyInteraction: "scgirvtfo"
+      TechnologyInterface: "scgirvtfo"
+      TechnologyProcess: "scgirvtfo"
+      TechnologyService: "scgirvtfo"
+      Value: "scgno"
+      ValueStream: "scgirvtfo"
+      WorkPackage: "scgitfo"
+    Location:
+      Junction: "scgirvantfo"
+    Material:
+      Junction: "scgrno"
+    Meaning:
+      Junction: "scgno"
+    Node:
+      Junction: "scgirvantfo"
+    Outcome:
+      Junction: "scgrno"
+    Path:
+      Junction: "scgirvantfo"
+    Plateau:
+      Junction: "scgrantfo"
+    Principle:
+      Junction: "scgrno"
+    Product:
+      Junction: "scgrvantfo"
+    Representation:
+      Junction: "scgrno"
+    Requirement:
+      Junction: "scgrno"
+    Resource:
+      Junction: "scgirvntfo"
+    Stakeholder:
+      Junction: "scgno"
+    SystemSoftware:
+      Junction: "scgirvantfo"
+    TechnologyCollaboration:
+      Junction: "scgirvantfo"
+    TechnologyEvent:
+      Junction: "scgrvantfo"
+    TechnologyFunction:
+      Junction: "scgrvantfo"
+    TechnologyInteraction:
+      Junction: "scgrvantfo"
+    TechnologyInterface:
+      Junction: "scgirvantfo"
+    TechnologyProcess:
+      Junction: "scgrvantfo"
+    TechnologyService:
+      Junction: "scgrvantfo"
+    Value:
+      Junction: "scgno"
+    ValueStream:
+      Junction: "scgrvntfo"
+    WorkPackage:
+      Junction: "scgrantfo"
+  relationship_ends:
+    Access:
+      ApplicationCollaboration: "o"
+      ApplicationComponent: "o"
+      ApplicationEvent: "o"
+      ApplicationFunction: "o"
+      ApplicationInteraction: "o"
+      ApplicationInterface: "o"
+      ApplicationProcess: "o"
+      ApplicationService: "o"
+      Artifact: "o"
+      Assessment: "o"
+      BusinessActor: "o"
+      BusinessCollaboration: "o"
+      BusinessEvent: "o"
+      BusinessFunction: "o"
+      BusinessInteraction: "o"
+      BusinessInterface: "o"
+      BusinessObject: "o"
+      BusinessProcess: "o"
+      BusinessRole: "o"
+      BusinessService: "o"
+      Capability: "o"
+      CommunicationNetwork: "o"
+      Constraint: "o"
+      Contract: "o"
+      CourseOfAction: "o"
+      DataObject: "o"
+      Deliverable: "o"
+      Device: "o"
+      DistributionNetwork: "o"
+      Driver: "o"
+      Equipment: "o"
+      Facility: "o"
+      Gap: "o"
+      Goal: "o"
+      Grouping: "o"
+      ImplementationEvent: "o"
+      Junction: "o"
+      Location: "o"
+      Material: "o"
+      Meaning: "o"
+      Node: "o"
+      Outcome: "o"
+      Path: "o"
+      Plateau: "o"
+      Principle: "o"
+      Product: "o"
+      Representation: "o"
+      Requirement: "o"
+      Resource: "o"
+      Stakeholder: "o"
+      SystemSoftware: "o"
+      TechnologyCollaboration: "o"
+      TechnologyEvent: "o"
+      TechnologyFunction: "o"
+      TechnologyInteraction: "o"
+      TechnologyInterface: "o"
+      TechnologyProcess: "o"
+      TechnologyService: "o"
+      Value: "o"
+      ValueStream: "o"
+      WorkPackage: "o"
+    Aggregation:
+      ApplicationCollaboration: "o"
+      ApplicationComponent: "o"
+      ApplicationEvent: "o"
+      ApplicationFunction: "o"
+      ApplicationInteraction: "o"
+      ApplicationInterface: "o"
+      ApplicationProcess: "o"
+      ApplicationService: "o"
+      Artifact: "o"
+      Assessment: "o"
+      BusinessActor: "o"
+      BusinessCollaboration: "o"
+      BusinessEvent: "o"
+      BusinessFunction: "o"
+      BusinessInteraction: "o"
+      BusinessInterface: "o"
+      BusinessObject: "o"
+      BusinessProcess: "o"
+      BusinessRole: "o"
+      BusinessService: "o"
+      Capability: "o"
+      CommunicationNetwork: "o"
+      Constraint: "o"
+      Contract: "o"
+      CourseOfAction: "o"
+      DataObject: "o"
+      Deliverable: "o"
+      Device: "o"
+      DistributionNetwork: "o"
+      Driver: "o"
+      Equipment: "o"
+      Facility: "o"
+      Gap: "o"
+      Goal: "o"
+      Grouping: "o"
+      ImplementationEvent: "o"
+      Junction: "o"
+      Location: "o"
+      Material: "o"
+      Meaning: "o"
+      Node: "o"
+      Outcome: "o"
+      Path: "o"
+      Plateau: "o"
+      Principle: "o"
+      Product: "o"
+      Representation: "o"
+      Requirement: "o"
+      Resource: "o"
+      Stakeholder: "o"
+      SystemSoftware: "o"
+      TechnologyCollaboration: "o"
+      TechnologyEvent: "o"
+      TechnologyFunction: "o"
+      TechnologyInteraction: "o"
+      TechnologyInterface: "o"
+      TechnologyProcess: "o"
+      TechnologyService: "o"
+      Value: "o"
+      ValueStream: "o"
+      WorkPackage: "o"
+    ApplicationCollaboration:
+      Access: "cgo"
+      Aggregation: "cgo"
+      Assignment: "cgo"
+      Association: "cgo"
+      Composition: "cgo"
+      Flow: "cgo"
+      Influence: "cgo"
+      Realization: "cgo"
+      Serving: "cgo"
+      Specialization: "cgo"
+      Triggering: "cgo"
+    ApplicationComponent:
+      Access: "cgo"
+      Aggregation: "cgo"
+      Assignment: "cgo"
+      Association: "cgo"
+      Composition: "cgo"
+      Flow: "cgo"
+      Influence: "cgo"
+      Realization: "cgo"
+      Serving: "cgo"
+      Specialization: "cgo"
+      Triggering: "cgo"
+    ApplicationEvent:
+      Access: "cgo"
+      Aggregation: "cgo"
+      Assignment: "cgo"
+      Association: "cgo"
+      Composition: "cgo"
+      Flow: "cgo"
+      Influence: "cgo"
+      Realization: "cgo"
+      Serving: "cgo"
+      Specialization: "cgo"
+      Triggering: "cgo"
+    ApplicationFunction:
+      Access: "cgo"
+      Aggregation: "cgo"
+      Assignment: "cgo"
+      Association: "cgo"
+      Composition: "cgo"
+      Flow: "cgo"
+      Influence: "cgo"
+      Realization: "cgo"
+      Serving: "cgo"
+      Specialization: "cgo"
+      Triggering: "cgo"
+    ApplicationInteraction:
+      Access: "cgo"
+      Aggregation: "cgo"
+      Assignment: "cgo"
+      Association: "cgo"
+      Composition: "cgo"
+      Flow: "cgo"
+      Influence: "cgo"
+      Realization: "cgo"
+      Serving: "cgo"
+      Specialization: "cgo"
+      Triggering: "cgo"
+    ApplicationInterface:
+      Access: "cgo"
+      Aggregation: "cgo"
+      Assignment: "cgo"
+      Association: "cgo"
+      Composition: "cgo"
+      Flow: "cgo"
+      Influence: "cgo"
+      Realization: "cgo"
+      Serving: "cgo"
+      Specialization: "cgo"
+      Triggering: "cgo"
+    ApplicationProcess:
+      Access: "cgo"
+      Aggregation: "cgo"
+      Assignment: "cgo"
+      Association: "cgo"
+      Composition: "cgo"
+      Flow: "cgo"
+      Influence: "cgo"
+      Realization: "cgo"
+      Serving: "cgo"
+      Specialization: "cgo"
+      Triggering: "cgo"
+    ApplicationService:
+      Access: "cgo"
+      Aggregation: "cgo"
+      Assignment: "cgo"
+      Association: "cgo"
+      Composition: "cgo"
+      Flow: "cgo"
+      Influence: "cgo"
+      Realization: "cgo"
+      Serving: "cgo"
+      Specialization: "cgo"
+      Triggering: "cgo"
+    Artifact:
+      Access: "cgo"
+      Aggregation: "cgo"
+      Assignment: "cgo"
+      Association: "cgo"
+      Composition: "cgo"
+      Flow: "cgo"
+      Influence: "cgo"
+      Realization: "cgo"
+      Serving: "cgo"
+      Specialization: "cgo"
+      Triggering: "cgo"
+    Assessment:
+      Access: "cgo"
+      Aggregation: "cgo"
+      Assignment: "cgo"
+      Association: "cgo"
+      Composition: "cgo"
+      Flow: "cgo"
+      Influence: "cgo"
+      Realization: "cgo"
+      Serving: "cgo"
+      Specialization: "cgo"
+      Triggering: "cgo"
+    Assignment:
+      ApplicationCollaboration: "o"
+      ApplicationComponent: "o"
+      ApplicationEvent: "o"
+      ApplicationFunction: "o"
+      ApplicationInteraction: "o"
+      ApplicationInterface: "o"
+      ApplicationProcess: "o"
+      ApplicationService: "o"
+      Artifact: "o"
+      Assessment: "o"
+      BusinessActor: "o"
+      BusinessCollaboration: "o"
+      BusinessEvent: "o"
+      BusinessFunction: "o"
+      BusinessInteraction: "o"
+      BusinessInterface: "o"
+      BusinessObject: "o"
+      BusinessProcess: "o"
+      BusinessRole: "o"
+      BusinessService: "o"
+      Capability: "o"
+      CommunicationNetwork: "o"
+      Constraint: "o"
+      Contract: "o"
+      CourseOfAction: "o"
+      DataObject: "o"
+      Deliverable: "o"
+      Device: "o"
+      DistributionNetwork: "o"
+      Driver: "o"
+      Equipment: "o"
+      Facility: "o"
+      Gap: "o"
+      Goal: "o"
+      Grouping: "o"
+      ImplementationEvent: "o"
+      Junction: "o"
+      Location: "o"
+      Material: "o"
+      Meaning: "o"
+      Node: "o"
+      Outcome: "o"
+      Path: "o"
+      Plateau: "o"
+      Principle: "o"
+      Product: "o"
+      Representation: "o"
+      Requirement: "o"
+      Resource: "o"
+      Stakeholder: "o"
+      SystemSoftware: "o"
+      TechnologyCollaboration: "o"
+      TechnologyEvent: "o"
+      TechnologyFunction: "o"
+      TechnologyInteraction: "o"
+      TechnologyInterface: "o"
+      TechnologyProcess: "o"
+      TechnologyService: "o"
+      Value: "o"
+      ValueStream: "o"
+      WorkPackage: "o"
+    Association:
+      ApplicationCollaboration: "o"
+      ApplicationComponent: "o"
+      ApplicationEvent: "o"
+      ApplicationFunction: "o"
+      ApplicationInteraction: "o"
+      ApplicationInterface: "o"
+      ApplicationProcess: "o"
+      ApplicationService: "o"
+      Artifact: "o"
+      Assessment: "o"
+      BusinessActor: "o"
+      BusinessCollaboration: "o"
+      BusinessEvent: "o"
+      BusinessFunction: "o"
+      BusinessInteraction: "o"
+      BusinessInterface: "o"
+      BusinessObject: "o"
+      BusinessProcess: "o"
+      BusinessRole: "o"
+      BusinessService: "o"
+      Capability: "o"
+      CommunicationNetwork: "o"
+      Constraint: "o"
+      Contract: "o"
+      CourseOfAction: "o"
+      DataObject: "o"
+      Deliverable: "o"
+      Device: "o"
+      DistributionNetwork: "o"
+      Driver: "o"
+      Equipment: "o"
+      Facility: "o"
+      Gap: "o"
+      Goal: "o"
+      Grouping: "o"
+      ImplementationEvent: "o"
+      Junction: "o"
+      Location: "o"
+      Material: "o"
+      Meaning: "o"
+      Node: "o"
+      Outcome: "o"
+      Path: "o"
+      Plateau: "o"
+      Principle: "o"
+      Product: "o"
+      Representation: "o"
+      Requirement: "o"
+      Resource: "o"
+      Stakeholder: "o"
+      SystemSoftware: "o"
+      TechnologyCollaboration: "o"
+      TechnologyEvent: "o"
+      TechnologyFunction: "o"
+      TechnologyInteraction: "o"
+      TechnologyInterface: "o"
+      TechnologyProcess: "o"
+      TechnologyService: "o"
+      Value: "o"
+      ValueStream: "o"
+      WorkPackage: "o"
+    BusinessActor:
+      Access: "cgo"
+      Aggregation: "cgo"
+      Assignment: "cgo"
+      Association: "cgo"
+      Composition: "cgo"
+      Flow: "cgo"
+      Influence: "cgo"
+      Realization: "cgo"
+      Serving: "cgo"
+      Specialization: "cgo"
+      Triggering: "cgo"
+    BusinessCollaboration:
+      Access: "cgo"
+      Aggregation: "cgo"
+      Assignment: "cgo"
+      Association: "cgo"
+      Composition: "cgo"
+      Flow: "cgo"
+      Influence: "cgo"
+      Realization: "cgo"
+      Serving: "cgo"
+      Specialization: "cgo"
+      Triggering: "cgo"
+    BusinessEvent:
+      Access: "cgo"
+      Aggregation: "cgo"
+      Assignment: "cgo"
+      Association: "cgo"
+      Composition: "cgo"
+      Flow: "cgo"
+      Influence: "cgo"
+      Realization: "cgo"
+      Serving: "cgo"
+      Specialization: "cgo"
+      Triggering: "cgo"
+    BusinessFunction:
+      Access: "cgo"
+      Aggregation: "cgo"
+      Assignment: "cgo"
+      Association: "cgo"
+      Composition: "cgo"
+      Flow: "cgo"
+      Influence: "cgo"
+      Realization: "cgo"
+      Serving: "cgo"
+      Specialization: "cgo"
+      Triggering: "cgo"
+    BusinessInteraction:
+      Access: "cgo"
+      Aggregation: "cgo"
+      Assignment: "cgo"
+      Association: "cgo"
+      Composition: "cgo"
+      Flow: "cgo"
+      Influence: "cgo"
+      Realization: "cgo"
+      Serving: "cgo"
+      Specialization: "cgo"
+      Triggering: "cgo"
+    BusinessInterface:
+      Access: "cgo"
+      Aggregation: "cgo"
+      Assignment: "cgo"
+      Association: "cgo"
+      Composition: "cgo"
+      Flow: "cgo"
+      Influence: "cgo"
+      Realization: "cgo"
+      Serving: "cgo"
+      Specialization: "cgo"
+      Triggering: "cgo"
+    BusinessObject:
+      Access: "cgo"
+      Aggregation: "cgo"
+      Assignment: "cgo"
+      Association: "cgo"
+      Composition: "cgo"
+      Flow: "cgo"
+      Influence: "cgo"
+      Realization: "cgo"
+      Serving: "cgo"
+      Specialization: "cgo"
+      Triggering: "cgo"
+    BusinessProcess:
+      Access: "cgo"
+      Aggregation: "cgo"
+      Assignment: "cgo"
+      Association: "cgo"
+      Composition: "cgo"
+      Flow: "cgo"
+      Influence: "cgo"
+      Realization: "cgo"
+      Serving: "cgo"
+      Specialization: "cgo"
+      Triggering: "cgo"
+    BusinessRole:
+      Access: "cgo"
+      Aggregation: "cgo"
+      Assignment: "cgo"
+      Association: "cgo"
+      Composition: "cgo"
+      Flow: "cgo"
+      Influence: "cgo"
+      Realization: "cgo"
+      Serving: "cgo"
+      Specialization: "cgo"
+      Triggering: "cgo"
+    BusinessService:
+      Access: "cgo"
+      Aggregation: "cgo"
+      Assignment: "cgo"
+      Association: "cgo"
+      Composition: "cgo"
+      Flow: "cgo"
+      Influence: "cgo"
+      Realization: "cgo"
+      Serving: "cgo"
+      Specialization: "cgo"
+      Triggering: "cgo"
+    Capability:
+      Access: "cgo"
+      Aggregation: "cgo"
+      Assignment: "cgo"
+      Association: "cgo"
+      Composition: "cgo"
+      Flow: "cgo"
+      Influence: "cgo"
+      Realization: "cgo"
+      Serving: "cgo"
+      Specialization: "cgo"
+      Triggering: "cgo"
+    CommunicationNetwork:
+      Access: "cgo"
+      Aggregation: "cgo"
+      Assignment: "cgo"
+      Association: "cgo"
+      Composition: "cgo"
+      Flow: "cgo"
+      Influence: "cgo"
+      Realization: "cgo"
+      Serving: "cgo"
+      Specialization: "cgo"
+      Triggering: "cgo"
+    Composition:
+      ApplicationCollaboration: "o"
+      ApplicationComponent: "o"
+      ApplicationEvent: "o"
+      ApplicationFunction: "o"
+      ApplicationInteraction: "o"
+      ApplicationInterface: "o"
+      ApplicationProcess: "o"
+      ApplicationService: "o"
+      Artifact: "o"
+      Assessment: "o"
+      BusinessActor: "o"
+      BusinessCollaboration: "o"
+      BusinessEvent: "o"
+      BusinessFunction: "o"
+      BusinessInteraction: "o"
+      BusinessInterface: "o"
+      BusinessObject: "o"
+      BusinessProcess: "o"
+      BusinessRole: "o"
+      BusinessService: "o"
+      Capability: "o"
+      CommunicationNetwork: "o"
+      Constraint: "o"
+      Contract: "o"
+      CourseOfAction: "o"
+      DataObject: "o"
+      Deliverable: "o"
+      Device: "o"
+      DistributionNetwork: "o"
+      Driver: "o"
+      Equipment: "o"
+      Facility: "o"
+      Gap: "o"
+      Goal: "o"
+      Grouping: "o"
+      ImplementationEvent: "o"
+      Junction: "o"
+      Location: "o"
+      Material: "o"
+      Meaning: "o"
+      Node: "o"
+      Outcome: "o"
+      Path: "o"
+      Plateau: "o"
+      Principle: "o"
+      Product: "o"
+      Representation: "o"
+      Requirement: "o"
+      Resource: "o"
+      Stakeholder: "o"
+      SystemSoftware: "o"
+      TechnologyCollaboration: "o"
+      TechnologyEvent: "o"
+      TechnologyFunction: "o"
+      TechnologyInteraction: "o"
+      TechnologyInterface: "o"
+      TechnologyProcess: "o"
+      TechnologyService: "o"
+      Value: "o"
+      ValueStream: "o"
+      WorkPackage: "o"
+    Constraint:
+      Access: "cgo"
+      Aggregation: "cgo"
+      Assignment: "cgo"
+      Association: "cgo"
+      Composition: "cgo"
+      Flow: "cgo"
+      Influence: "cgo"
+      Realization: "cgo"
+      Serving: "cgo"
+      Specialization: "cgo"
+      Triggering: "cgo"
+    Contract:
+      Access: "cgo"
+      Aggregation: "cgo"
+      Assignment: "cgo"
+      Association: "cgo"
+      Composition: "cgo"
+      Flow: "cgo"
+      Influence: "cgo"
+      Realization: "cgo"
+      Serving: "cgo"
+      Specialization: "cgo"
+      Triggering: "cgo"
+    CourseOfAction:
+      Access: "cgo"
+      Aggregation: "cgo"
+      Assignment: "cgo"
+      Association: "cgo"
+      Composition: "cgo"
+      Flow: "cgo"
+      Influence: "cgo"
+      Realization: "cgo"
+      Serving: "cgo"
+      Specialization: "cgo"
+      Triggering: "cgo"
+    DataObject:
+      Access: "cgo"
+      Aggregation: "cgo"
+      Assignment: "cgo"
+      Association: "cgo"
+      Composition: "cgo"
+      Flow: "cgo"
+      Influence: "cgo"
+      Realization: "cgo"
+      Serving: "cgo"
+      Specialization: "cgo"
+      Triggering: "cgo"
+    Deliverable:
+      Access: "cgo"
+      Aggregation: "cgo"
+      Assignment: "cgo"
+      Association: "cgo"
+      Composition: "cgo"
+      Flow: "cgo"
+      Influence: "cgo"
+      Realization: "cgo"
+      Serving: "cgo"
+      Specialization: "cgo"
+      Triggering: "cgo"
+    Device:
+      Access: "cgo"
+      Aggregation: "cgo"
+      Assignment: "cgo"
+      Association: "cgo"
+      Composition: "cgo"
+      Flow: "cgo"
+      Influence: "cgo"
+      Realization: "cgo"
+      Serving: "cgo"
+      Specialization: "cgo"
+      Triggering: "cgo"
+    DistributionNetwork:
+      Access: "cgo"
+      Aggregation: "cgo"
+      Assignment: "cgo"
+      Association: "cgo"
+      Composition: "cgo"
+      Flow: "cgo"
+      Influence: "cgo"
+      Realization: "cgo"
+      Serving: "cgo"
+      Specialization: "cgo"
+      Triggering: "cgo"
+    Driver:
+      Access: "cgo"
+      Aggregation: "cgo"
+      Assignment: "cgo"
+      Association: "cgo"
+      Composition: "cgo"
+      Flow: "cgo"
+      Influence: "cgo"
+      Realization: "cgo"
+      Serving: "cgo"
+      Specialization: "cgo"
+      Triggering: "cgo"
+    Equipment:
+      Access: "cgo"
+      Aggregation: "cgo"
+      Assignment: "cgo"
+      Association: "cgo"
+      Composition: "cgo"
+      Flow: "cgo"
+      Influence: "cgo"
+      Realization: "cgo"
+      Serving: "cgo"
+      Specialization: "cgo"
+      Triggering: "cgo"
+    Facility:
+      Access: "cgo"
+      Aggregation: "cgo"
+      Assignment: "cgo"
+      Association: "cgo"
+      Composition: "cgo"
+      Flow: "cgo"
+      Influence: "cgo"
+      Realization: "cgo"
+      Serving: "cgo"
+      Specialization: "cgo"
+      Triggering: "cgo"
+    Flow:
+      ApplicationCollaboration: "o"
+      ApplicationComponent: "o"
+      ApplicationEvent: "o"
+      ApplicationFunction: "o"
+      ApplicationInteraction: "o"
+      ApplicationInterface: "o"
+      ApplicationProcess: "o"
+      ApplicationService: "o"
+      Artifact: "o"
+      Assessment: "o"
+      BusinessActor: "o"
+      BusinessCollaboration: "o"
+      BusinessEvent: "o"
+      BusinessFunction: "o"
+      BusinessInteraction: "o"
+      BusinessInterface: "o"
+      BusinessObject: "o"
+      BusinessProcess: "o"
+      BusinessRole: "o"
+      BusinessService: "o"
+      Capability: "o"
+      CommunicationNetwork: "o"
+      Constraint: "o"
+      Contract: "o"
+      CourseOfAction: "o"
+      DataObject: "o"
+      Deliverable: "o"
+      Device: "o"
+      DistributionNetwork: "o"
+      Driver: "o"
+      Equipment: "o"
+      Facility: "o"
+      Gap: "o"
+      Goal: "o"
+      Grouping: "o"
+      ImplementationEvent: "o"
+      Junction: "o"
+      Location: "o"
+      Material: "o"
+      Meaning: "o"
+      Node: "o"
+      Outcome: "o"
+      Path: "o"
+      Plateau: "o"
+      Principle: "o"
+      Product: "o"
+      Representation: "o"
+      Requirement: "o"
+      Resource: "o"
+      Stakeholder: "o"
+      SystemSoftware: "o"
+      TechnologyCollaboration: "o"
+      TechnologyEvent: "o"
+      TechnologyFunction: "o"
+      TechnologyInteraction: "o"
+      TechnologyInterface: "o"
+      TechnologyProcess: "o"
+      TechnologyService: "o"
+      Value: "o"
+      ValueStream: "o"
+      WorkPackage: "o"
+    Gap:
+      Access: "cgo"
+      Aggregation: "cgo"
+      Assignment: "cgo"
+      Association: "cgo"
+      Composition: "cgo"
+      Flow: "cgo"
+      Influence: "cgo"
+      Realization: "cgo"
+      Serving: "cgo"
+      Specialization: "cgo"
+      Triggering: "cgo"
+    Goal:
+      Access: "cgo"
+      Aggregation: "cgo"
+      Assignment: "cgo"
+      Association: "cgo"
+      Composition: "cgo"
+      Flow: "cgo"
+      Influence: "cgo"
+      Realization: "cgo"
+      Serving: "cgo"
+      Specialization: "cgo"
+      Triggering: "cgo"
+    Grouping:
+      Access: "cgo"
+      Aggregation: "cgo"
+      Assignment: "cgo"
+      Association: "cgo"
+      Composition: "cgo"
+      Flow: "cgo"
+      Influence: "cgo"
+      Realization: "cgo"
+      Serving: "cgo"
+      Specialization: "cgo"
+      Triggering: "cgo"
+    ImplementationEvent:
+      Access: "cgo"
+      Aggregation: "cgo"
+      Assignment: "cgo"
+      Association: "cgo"
+      Composition: "cgo"
+      Flow: "cgo"
+      Influence: "cgo"
+      Realization: "cgo"
+      Serving: "cgo"
+      Specialization: "cgo"
+      Triggering: "cgo"
+    Influence:
+      ApplicationCollaboration: "o"
+      ApplicationComponent: "o"
+      ApplicationEvent: "o"
+      ApplicationFunction: "o"
+      ApplicationInteraction: "o"
+      ApplicationInterface: "o"
+      ApplicationProcess: "o"
+      ApplicationService: "o"
+      Artifact: "o"
+      Assessment: "o"
+      BusinessActor: "o"
+      BusinessCollaboration: "o"
+      BusinessEvent: "o"
+      BusinessFunction: "o"
+      BusinessInteraction: "o"
+      BusinessInterface: "o"
+      BusinessObject: "o"
+      BusinessProcess: "o"
+      BusinessRole: "o"
+      BusinessService: "o"
+      Capability: "o"
+      CommunicationNetwork: "o"
+      Constraint: "o"
+      Contract: "o"
+      CourseOfAction: "o"
+      DataObject: "o"
+      Deliverable: "o"
+      Device: "o"
+      DistributionNetwork: "o"
+      Driver: "o"
+      Equipment: "o"
+      Facility: "o"
+      Gap: "o"
+      Goal: "o"
+      Grouping: "o"
+      ImplementationEvent: "o"
+      Junction: "o"
+      Location: "o"
+      Material: "o"
+      Meaning: "o"
+      Node: "o"
+      Outcome: "o"
+      Path: "o"
+      Plateau: "o"
+      Principle: "o"
+      Product: "o"
+      Representation: "o"
+      Requirement: "o"
+      Resource: "o"
+      Stakeholder: "o"
+      SystemSoftware: "o"
+      TechnologyCollaboration: "o"
+      TechnologyEvent: "o"
+      TechnologyFunction: "o"
+      TechnologyInteraction: "o"
+      TechnologyInterface: "o"
+      TechnologyProcess: "o"
+      TechnologyService: "o"
+      Value: "o"
+      ValueStream: "o"
+      WorkPackage: "o"
+    Junction:
+      Access: "cgo"
+      Aggregation: "cgo"
+      Assignment: "cgo"
+      Association: "cgo"
+      Composition: "cgo"
+      Flow: "cgo"
+      Influence: "cgo"
+      Realization: "cgo"
+      Serving: "cgo"
+      Specialization: "cgo"
+      Triggering: "cgo"
+    Location:
+      Access: "cgo"
+      Aggregation: "cgo"
+      Assignment: "cgo"
+      Association: "cgo"
+      Composition: "cgo"
+      Flow: "cgo"
+      Influence: "cgo"
+      Realization: "cgo"
+      Serving: "cgo"
+      Specialization: "cgo"
+      Triggering: "cgo"
+    Material:
+      Access: "cgo"
+      Aggregation: "cgo"
+      Assignment: "cgo"
+      Association: "cgo"
+      Composition: "cgo"
+      Flow: "cgo"
+      Influence: "cgo"
+      Realization: "cgo"
+      Serving: "cgo"
+      Specialization: "cgo"
+      Triggering: "cgo"
+    Meaning:
+      Access: "cgo"
+      Aggregation: "cgo"
+      Assignment: "cgo"
+      Association: "cgo"
+      Composition: "cgo"
+      Flow: "cgo"
+      Influence: "cgo"
+      Realization: "cgo"
+      Serving: "cgo"
+      Specialization: "cgo"
+      Triggering: "cgo"
+    Node:
+      Access: "cgo"
+      Aggregation: "cgo"
+      Assignment: "cgo"
+      Association: "cgo"
+      Composition: "cgo"
+      Flow: "cgo"
+      Influence: "cgo"
+      Realization: "cgo"
+      Serving: "cgo"
+      Specialization: "cgo"
+      Triggering: "cgo"
+    Outcome:
+      Access: "cgo"
+      Aggregation: "cgo"
+      Assignment: "cgo"
+      Association: "cgo"
+      Composition: "cgo"
+      Flow: "cgo"
+      Influence: "cgo"
+      Realization: "cgo"
+      Serving: "cgo"
+      Specialization: "cgo"
+      Triggering: "cgo"
+    Path:
+      Access: "cgo"
+      Aggregation: "cgo"
+      Assignment: "cgo"
+      Association: "cgo"
+      Composition: "cgo"
+      Flow: "cgo"
+      Influence: "cgo"
+      Realization: "cgo"
+      Serving: "cgo"
+      Specialization: "cgo"
+      Triggering: "cgo"
+    Plateau:
+      Access: "cgo"
+      Aggregation: "cgo"
+      Assignment: "cgo"
+      Association: "cgo"
+      Composition: "cgo"
+      Flow: "cgo"
+      Influence: "cgo"
+      Realization: "cgo"
+      Serving: "cgo"
+      Specialization: "cgo"
+      Triggering: "cgo"
+    Principle:
+      Access: "cgo"
+      Aggregation: "cgo"
+      Assignment: "cgo"
+      Association: "cgo"
+      Composition: "cgo"
+      Flow: "cgo"
+      Influence: "cgo"
+      Realization: "cgo"
+      Serving: "cgo"
+      Specialization: "cgo"
+      Triggering: "cgo"
+    Product:
+      Access: "cgo"
+      Aggregation: "cgo"
+      Assignment: "cgo"
+      Association: "cgo"
+      Composition: "cgo"
+      Flow: "cgo"
+      Influence: "cgo"
+      Realization: "cgo"
+      Serving: "cgo"
+      Specialization: "cgo"
+      Triggering: "cgo"
+    Realization:
+      ApplicationCollaboration: "o"
+      ApplicationComponent: "o"
+      ApplicationEvent: "o"
+      ApplicationFunction: "o"
+      ApplicationInteraction: "o"
+      ApplicationInterface: "o"
+      ApplicationProcess: "o"
+      ApplicationService: "o"
+      Artifact: "o"
+      Assessment: "o"
+      BusinessActor: "o"
+      BusinessCollaboration: "o"
+      BusinessEvent: "o"
+      BusinessFunction: "o"
+      BusinessInteraction: "o"
+      BusinessInterface: "o"
+      BusinessObject: "o"
+      BusinessProcess: "o"
+      BusinessRole: "o"
+      BusinessService: "o"
+      Capability: "o"
+      CommunicationNetwork: "o"
+      Constraint: "o"
+      Contract: "o"
+      CourseOfAction: "o"
+      DataObject: "o"
+      Deliverable: "o"
+      Device: "o"
+      DistributionNetwork: "o"
+      Driver: "o"
+      Equipment: "o"
+      Facility: "o"
+      Gap: "o"
+      Goal: "o"
+      Grouping: "o"
+      ImplementationEvent: "o"
+      Junction: "o"
+      Location: "o"
+      Material: "o"
+      Meaning: "o"
+      Node: "o"
+      Outcome: "o"
+      Path: "o"
+      Plateau: "o"
+      Principle: "o"
+      Product: "o"
+      Representation: "o"
+      Requirement: "o"
+      Resource: "o"
+      Stakeholder: "o"
+      SystemSoftware: "o"
+      TechnologyCollaboration: "o"
+      TechnologyEvent: "o"
+      TechnologyFunction: "o"
+      TechnologyInteraction: "o"
+      TechnologyInterface: "o"
+      TechnologyProcess: "o"
+      TechnologyService: "o"
+      Value: "o"
+      ValueStream: "o"
+      WorkPackage: "o"
+    Representation:
+      Access: "cgo"
+      Aggregation: "cgo"
+      Assignment: "cgo"
+      Association: "cgo"
+      Composition: "cgo"
+      Flow: "cgo"
+      Influence: "cgo"
+      Realization: "cgo"
+      Serving: "cgo"
+      Specialization: "cgo"
+      Triggering: "cgo"
+    Requirement:
+      Access: "cgo"
+      Aggregation: "cgo"
+      Assignment: "cgo"
+      Association: "cgo"
+      Composition: "cgo"
+      Flow: "cgo"
+      Influence: "cgo"
+      Realization: "cgo"
+      Serving: "cgo"
+      Specialization: "cgo"
+      Triggering: "cgo"
+    Resource:
+      Access: "cgo"
+      Aggregation: "cgo"
+      Assignment: "cgo"
+      Association: "cgo"
+      Composition: "cgo"
+      Flow: "cgo"
+      Influence: "cgo"
+      Realization: "cgo"
+      Serving: "cgo"
+      Specialization: "cgo"
+      Triggering: "cgo"
+    Serving:
+      ApplicationCollaboration: "o"
+      ApplicationComponent: "o"
+      ApplicationEvent: "o"
+      ApplicationFunction: "o"
+      ApplicationInteraction: "o"
+      ApplicationInterface: "o"
+      ApplicationProcess: "o"
+      ApplicationService: "o"
+      Artifact: "o"
+      Assessment: "o"
+      BusinessActor: "o"
+      BusinessCollaboration: "o"
+      BusinessEvent: "o"
+      BusinessFunction: "o"
+      BusinessInteraction: "o"
+      BusinessInterface: "o"
+      BusinessObject: "o"
+      BusinessProcess: "o"
+      BusinessRole: "o"
+      BusinessService: "o"
+      Capability: "o"
+      CommunicationNetwork: "o"
+      Constraint: "o"
+      Contract: "o"
+      CourseOfAction: "o"
+      DataObject: "o"
+      Deliverable: "o"
+      Device: "o"
+      DistributionNetwork: "o"
+      Driver: "o"
+      Equipment: "o"
+      Facility: "o"
+      Gap: "o"
+      Goal: "o"
+      Grouping: "o"
+      ImplementationEvent: "o"
+      Junction: "o"
+      Location: "o"
+      Material: "o"
+      Meaning: "o"
+      Node: "o"
+      Outcome: "o"
+      Path: "o"
+      Plateau: "o"
+      Principle: "o"
+      Product: "o"
+      Representation: "o"
+      Requirement: "o"
+      Resource: "o"
+      Stakeholder: "o"
+      SystemSoftware: "o"
+      TechnologyCollaboration: "o"
+      TechnologyEvent: "o"
+      TechnologyFunction: "o"
+      TechnologyInteraction: "o"
+      TechnologyInterface: "o"
+      TechnologyProcess: "o"
+      TechnologyService: "o"
+      Value: "o"
+      ValueStream: "o"
+      WorkPackage: "o"
+    Specialization:
+      ApplicationCollaboration: "o"
+      ApplicationComponent: "o"
+      ApplicationEvent: "o"
+      ApplicationFunction: "o"
+      ApplicationInteraction: "o"
+      ApplicationInterface: "o"
+      ApplicationProcess: "o"
+      ApplicationService: "o"
+      Artifact: "o"
+      Assessment: "o"
+      BusinessActor: "o"
+      BusinessCollaboration: "o"
+      BusinessEvent: "o"
+      BusinessFunction: "o"
+      BusinessInteraction: "o"
+      BusinessInterface: "o"
+      BusinessObject: "o"
+      BusinessProcess: "o"
+      BusinessRole: "o"
+      BusinessService: "o"
+      Capability: "o"
+      CommunicationNetwork: "o"
+      Constraint: "o"
+      Contract: "o"
+      CourseOfAction: "o"
+      DataObject: "o"
+      Deliverable: "o"
+      Device: "o"
+      DistributionNetwork: "o"
+      Driver: "o"
+      Equipment: "o"
+      Facility: "o"
+      Gap: "o"
+      Goal: "o"
+      Grouping: "o"
+      ImplementationEvent: "o"
+      Junction: "o"
+      Location: "o"
+      Material: "o"
+      Meaning: "o"
+      Node: "o"
+      Outcome: "o"
+      Path: "o"
+      Plateau: "o"
+      Principle: "o"
+      Product: "o"
+      Representation: "o"
+      Requirement: "o"
+      Resource: "o"
+      Stakeholder: "o"
+      SystemSoftware: "o"
+      TechnologyCollaboration: "o"
+      TechnologyEvent: "o"
+      TechnologyFunction: "o"
+      TechnologyInteraction: "o"
+      TechnologyInterface: "o"
+      TechnologyProcess: "o"
+      TechnologyService: "o"
+      Value: "o"
+      ValueStream: "o"
+      WorkPackage: "o"
+    Stakeholder:
+      Access: "cgo"
+      Aggregation: "cgo"
+      Assignment: "cgo"
+      Association: "cgo"
+      Composition: "cgo"
+      Flow: "cgo"
+      Influence: "cgo"
+      Realization: "cgo"
+      Serving: "cgo"
+      Specialization: "cgo"
+      Triggering: "cgo"
+    SystemSoftware:
+      Access: "cgo"
+      Aggregation: "cgo"
+      Assignment: "cgo"
+      Association: "cgo"
+      Composition: "cgo"
+      Flow: "cgo"
+      Influence: "cgo"
+      Realization: "cgo"
+      Serving: "cgo"
+      Specialization: "cgo"
+      Triggering: "cgo"
+    TechnologyCollaboration:
+      Access: "cgo"
+      Aggregation: "cgo"
+      Assignment: "cgo"
+      Association: "cgo"
+      Composition: "cgo"
+      Flow: "cgo"
+      Influence: "cgo"
+      Realization: "cgo"
+      Serving: "cgo"
+      Specialization: "cgo"
+      Triggering: "cgo"
+    TechnologyEvent:
+      Access: "cgo"
+      Aggregation: "cgo"
+      Assignment: "cgo"
+      Association: "cgo"
+      Composition: "cgo"
+      Flow: "cgo"
+      Influence: "cgo"
+      Realization: "cgo"
+      Serving: "cgo"
+      Specialization: "cgo"
+      Triggering: "cgo"
+    TechnologyFunction:
+      Access: "cgo"
+      Aggregation: "cgo"
+      Assignment: "cgo"
+      Association: "cgo"
+      Composition: "cgo"
+      Flow: "cgo"
+      Influence: "cgo"
+      Realization: "cgo"
+      Serving: "cgo"
+      Specialization: "cgo"
+      Triggering: "cgo"
+    TechnologyInteraction:
+      Access: "cgo"
+      Aggregation: "cgo"
+      Assignment: "cgo"
+      Association: "cgo"
+      Composition: "cgo"
+      Flow: "cgo"
+      Influence: "cgo"
+      Realization: "cgo"
+      Serving: "cgo"
+      Specialization: "cgo"
+      Triggering: "cgo"
+    TechnologyInterface:
+      Access: "cgo"
+      Aggregation: "cgo"
+      Assignment: "cgo"
+      Association: "cgo"
+      Composition: "cgo"
+      Flow: "cgo"
+      Influence: "cgo"
+      Realization: "cgo"
+      Serving: "cgo"
+      Specialization: "cgo"
+      Triggering: "cgo"
+    TechnologyProcess:
+      Access: "cgo"
+      Aggregation: "cgo"
+      Assignment: "cgo"
+      Association: "cgo"
+      Composition: "cgo"
+      Flow: "cgo"
+      Influence: "cgo"
+      Realization: "cgo"
+      Serving: "cgo"
+      Specialization: "cgo"
+      Triggering: "cgo"
+    TechnologyService:
+      Access: "cgo"
+      Aggregation: "cgo"
+      Assignment: "cgo"
+      Association: "cgo"
+      Composition: "cgo"
+      Flow: "cgo"
+      Influence: "cgo"
+      Realization: "cgo"
+      Serving: "cgo"
+      Specialization: "cgo"
+      Triggering: "cgo"
+    Triggering:
+      ApplicationCollaboration: "o"
+      ApplicationComponent: "o"
+      ApplicationEvent: "o"
+      ApplicationFunction: "o"
+      ApplicationInteraction: "o"
+      ApplicationInterface: "o"
+      ApplicationProcess: "o"
+      ApplicationService: "o"
+      Artifact: "o"
+      Assessment: "o"
+      BusinessActor: "o"
+      BusinessCollaboration: "o"
+      BusinessEvent: "o"
+      BusinessFunction: "o"
+      BusinessInteraction: "o"
+      BusinessInterface: "o"
+      BusinessObject: "o"
+      BusinessProcess: "o"
+      BusinessRole: "o"
+      BusinessService: "o"
+      Capability: "o"
+      CommunicationNetwork: "o"
+      Constraint: "o"
+      Contract: "o"
+      CourseOfAction: "o"
+      DataObject: "o"
+      Deliverable: "o"
+      Device: "o"
+      DistributionNetwork: "o"
+      Driver: "o"
+      Equipment: "o"
+      Facility: "o"
+      Gap: "o"
+      Goal: "o"
+      Grouping: "o"
+      ImplementationEvent: "o"
+      Junction: "o"
+      Location: "o"
+      Material: "o"
+      Meaning: "o"
+      Node: "o"
+      Outcome: "o"
+      Path: "o"
+      Plateau: "o"
+      Principle: "o"
+      Product: "o"
+      Representation: "o"
+      Requirement: "o"
+      Resource: "o"
+      Stakeholder: "o"
+      SystemSoftware: "o"
+      TechnologyCollaboration: "o"
+      TechnologyEvent: "o"
+      TechnologyFunction: "o"
+      TechnologyInteraction: "o"
+      TechnologyInterface: "o"
+      TechnologyProcess: "o"
+      TechnologyService: "o"
+      Value: "o"
+      ValueStream: "o"
+      WorkPackage: "o"
+    Value:
+      Access: "cgo"
+      Aggregation: "cgo"
+      Assignment: "cgo"
+      Association: "cgo"
+      Composition: "cgo"
+      Flow: "cgo"
+      Influence: "cgo"
+      Realization: "cgo"
+      Serving: "cgo"
+      Specialization: "cgo"
+      Triggering: "cgo"
+    ValueStream:
+      Access: "cgo"
+      Aggregation: "cgo"
+      Assignment: "cgo"
+      Association: "cgo"
+      Composition: "cgo"
+      Flow: "cgo"
+      Influence: "cgo"
+      Realization: "cgo"
+      Serving: "cgo"
+      Specialization: "cgo"
+      Triggering: "cgo"
+    WorkPackage:
+      Access: "cgo"
+      Aggregation: "cgo"
+      Assignment: "cgo"
+      Association: "cgo"
+      Composition: "cgo"
+      Flow: "cgo"
+      Influence: "cgo"
+      Realization: "cgo"
+      Serving: "cgo"
+      Specialization: "cgo"
+      Triggering: "cgo"
+
+# EA's names for this language's layout. tools/gen_conventions.py reads layout_map.
+layout_map:
+  technology: ArchiMate3
+  display_name: ArchiMate 3
+  extends: UML
+  stereotype_prefix: ArchiMate_
+  notes: |
+    EA's ArchiMate3 MDG declares five diagram types, all based on Logical. There is no Strategy diagram type: strategy concepts (Capability, Resource, CourseOfAction, ValueStream) are stereotypes drawn on a Business diagram.
+
+    FILL IS NOT MERELY CLAIMED HERE, IT IS SOMETIMES UNAVAILABLE. Measured on EA 17.1 build 1716: Node and Grouping ignore a per-diagram fill outright. The write succeeds, the property reads back, and EA draws the element in its own colors -- Node's shape script paints the faces of a 3D box, and a Grouping is a dashed container ArchiMate gives no fill. Seven other concepts tested (ApplicationComponent, Device, SystemSoftware, Equipment, Facility, BusinessService, Artifact) honor it. Nine concepts is a sample, not a sweep, so the answer is a note here rather than data a consumer could trust; the full sweep and a per-concept schema field are filed separately. If you need a color-coded technology layer, reach for Device or SystemSoftware rather than Node, or use a free channel.
+
+    `ArchiMate3` is the id EA reports, measured on EA 17.1 build 1716.
+  diagram_types:
+    Business:
+      guide: Business Layer
+      base: Logical
+      size_keys:
+        Junction: small-node
+    Application:
+      guide: Application Layer
+      base: Logical
+      size_keys:
+        Junction: small-node
+    Technology:
+      guide: Technology Layer
+      base: Logical
+      size_keys:
+        Junction: small-node
+    Motivation:
+      guide: Motivation
+      base: Logical
+      size_keys:
+        Junction: small-node
+    Implementation:
+      guide: Implementation and Migration
+      base: Logical
+      size_keys:
+        Junction: small-node
+  viewpoints:
+    ApplicationCooperation:
+      guide: Application Cooperation
+      diagram_type: Application
+    ApplicationUsage:
+      guide: Application Usage
+      diagram_type: Application
+    ApplicationStructure:
+      guide: Application Structure
+      diagram_type: Application
+    InformationStructure:
+      guide: Information Structure
+      diagram_type: Application
+    BusinessProcessCooperation:
+      guide: Business Process Cooperation
+      diagram_type: Business
+    Organization:
+      guide: Organization
+      diagram_type: Business
+    ServiceRealization:
+      guide: Service Realization
+      diagram_type: Business
+    ProductViewpoint:
+      guide: Product
+      diagram_type: Business
+    Capability:
+      guide: Capability Map
+      diagram_type: Business
+    StrategyViewpoint:
+      guide: Strategy
+      diagram_type: Business
+    TechnologyViewpoint:
+      guide: Technology
+      diagram_type: Technology
+    TechnologyUsage:
+      guide: Technology Usage
+      diagram_type: Technology
+    LayeredViewpoint:
+      guide: Layered
+      diagram_type: Business
+    MotivationViewpoint:
+      guide: Motivation
+      diagram_type: Motivation
+    RequirementsRealization:
+      guide: Requirements Realization
+      diagram_type: Motivation
+    Principles:
+      guide: Principles
+      diagram_type: Motivation
+    ImplementationAndMigration:
+      guide: Implementation and Migration
+      diagram_type: Implementation
+    MigrationViewpoint:
+      guide: Migration
+      diagram_type: Implementation
+    ImplementationAndDeployment:
+      guide: Implementation and Deployment
+      diagram_type: Implementation
+  presentation_profiles:
+    detail:
+      description: Everything. The working view, for people building the model.
+    review:
+      description: For a design review. Keeps relationship names, drops the notation furniture that a
+        reviewer already knows.
+    executive:
+      description: 'For an audience reading the shape, not the detail. Collapsing hides relationships,
+        so this profile REQUIRES an annotation saying what was summarized: an executive view that hides
+        complexity without saying so is misleading.'

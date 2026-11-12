@@ -97,6 +97,29 @@ ea_repository(operation="compare_baseline", params={
 })
 ```
 
+The full response, trimmed:
+
+```python
+{"status": "comparison_opened", "package_id": 5, "baseline_guid": "{...}",
+ "structured_diff_available": True,
+ "diff": {
+   "has_changes": True,
+   "item_status_counts": {"Identical": 1, "Model only": 1, "Baseline only": 1},
+   "item_count": 3,
+   "include_identical": False,
+   "items": [
+     {"name": "PaymentGateway", "type": "", "status": "Model only",
+      "guid": "{C0CA1B4C-F674-4652-A180-F283DF5D06C6}",
+      "parent_guid": "{CE22A172-94A8-4c09-9979-B67BD05C8279}", "depth": 1,
+      "properties": [{"name": "Name", "model": "PaymentGateway",
+                      "baseline": None, "status": "Model only"}]},
+   ],
+   "compared_packages": [{"name": "Payments", "guid_form": "underscore",
+                          "guid": "EAID_CE22A172_94A8_4c09_9979_B67BD05C8279",
+                          "compared_on": "2026-09-23 10:14:21", "has_changes": True}],
+   "log_bytes": 5465}}
+```
+
 `diff.items` lists the new element with `"status": "Model only"` and the edited element with
 `"status": "Changed"`, whose `properties` carry the `lifecycle` value on the `model` side and on
 the `baseline` side. Unchanged elements are counted in `diff.item_status_counts` but withheld
@@ -112,7 +135,7 @@ happened and who did it — a different question, and often the more useful one.
 
 ```python
 ea_analyze(operation="get_updates_in_range", params={
-    "start": "2026-09-23",              # ISO-8601 with T and Z is also accepted
+    "start": "2026-09-23",              # ISO-8601 with T and Z is also accepted (server 2.3.0+)
     "end": "2026-09-23",                # a bare end date covers the whole day
     "kind": "elements",
 })
@@ -164,3 +187,38 @@ SELECT Object_ID, Name FROM t_object WHERE Package_ID = 5 AND Name = 'Consumer L
 ```
 
 An empty result confirms the clean-up held.
+
+## 8. Before deleting a package
+
+`delete_package` deletes the package's own baselines along with it, so a baseline of the package
+you are about to delete is gone the moment the delete runs. Take the restore point somewhere that
+survives: a baseline of the **parent** package, or an XMI export of the package.
+
+```python
+# The package to delete is 41 ("Legacy Integrations"); its parent is 7.
+ea_repository(operation="create_baseline", params={
+    "package_id": 7,
+    "version": "2026-09-24-pre-delete",
+    "notes": "Snapshot of the parent before deleting Legacy Integrations",
+})
+ea_repository(operation="list_baselines", params={"package_id": 7})   # confirm it exists
+
+# Or, to keep just that package so it can be brought back on its own:
+ea_repository(operation="export_xmi", params={
+    "package_id": 41,
+    "path": "<export-dir>/Legacy-Integrations.xmi",
+})
+```
+
+Check the export's `elements_in_package` against `elements_in_export` before relying on it.
+Applying the parent baseline later rewinds everything under the parent, so for one package the
+XMI export is the more precise way back. Then delete:
+
+```python
+ea_model(operation="delete_package", params={"package_id": 41})
+```
+
+If the package or one below it already has baselines, the call is refused with
+`package_has_baselines` (or `baselines_unreadable` when they cannot be read). Tell the person
+those baselines will be lost, and only after they agree repeat the call with
+`allow_baseline_loss: true`; the result lists `baselines_removed`.

@@ -93,6 +93,24 @@ repository type; `SL3` means SQLite.
 EA's **System Output** panel keeps warnings that never become dialogs. When a result looks
 wrong but nothing is blocking, read it — it often explains a silent partial failure.
 
+The panel keeps old lines across model switches and EA restarts. Before an action whose
+diagnostics you will read there (import, generate, install, open), right-click the panel and
+choose **Clear**, so every line afterwards belongs to that action. If you cannot clear it,
+treat the lines that were there before the action as old.
+
+### Typing into EA with computer use
+
+Typing through computer use can go by way of the clipboard, and the clipboard is shared with
+the user and with any other session running on the machine. A field can end up holding
+someone else's text.
+
+1. Before typing into a dialog field, save the clipboard contents, set the clipboard to the
+   text you want, paste with Ctrl+V, then restore the saved contents.
+2. Zoom in on the field to check what it holds before you confirm the dialog.
+3. Ask the user not to move or click the mouse during the step; clicks land wrongly otherwise.
+4. Keep long text out of `type` when several sessions run. Use the API or COM for the
+   change where one exists, instead of typing it into the UI.
+
 ---
 
 ## Part 2 — Verifying a diagram actually looks right
@@ -110,7 +128,10 @@ are not crossing the whole page.
 2. Open the diagram in EA: `ea_diagram(operation="open_diagram", params={"diagram_id": N})`.
 3. Reload it if you wrote directly to the tables:
    `ea_diagram(operation="reload_diagram", params={"diagram_id": N})`. Without this, EA can
-   keep showing a cached render and you will verify the *old* picture.
+   keep showing a cached render and you will verify the *old* picture. If the diagram is open in
+   EA with unsaved changes, the call is refused with `open_with_unsaved_changes`; ask the person
+   to save in EA, then call again. `tab_state_unreadable` means EA could not say whether it is
+   open: ask the same.
 4. Wait per [`latency.md`](latency.md), then **screenshot**.
 5. Compare against what you intended, not against whether the call succeeded.
 
@@ -120,7 +141,7 @@ are not crossing the whole page.
 |---|---|
 | Every element you placed is visible | A placement can be written and still land off-canvas |
 | Nothing overlaps or is stacked | Overlap usually means positions were ignored and a layout ran instead |
-| Connectors you expected are shown, and ones you suppressed are not | EA adds connectors on reload regardless of `auto_connectors=False` (`APT-2026-0069`) |
+| Connectors you expected are shown, and ones you suppressed are not | EA adds connectors on reload regardless of `auto_connectors=False` |
 | Styling applied | Colors and sizes set through the wrong route are silently dropped |
 | Nesting is real containment, not visual overlap | For drill-down diagrams, children must sit inside the parent |
 | The layout is readable at normal zoom | "Correct" and "usable" are different results |
@@ -142,7 +163,8 @@ For a blocked call:
 
 > "The call has not returned. EA reports errors as a dialog box that blocks everything until
 > it is dismissed, so please check the Enterprise Architect window. If a dialog is showing,
-> tell me what it says and click OK."
+> paste a screenshot of it here so I can read the cause. Then click OK to dismiss it, and tell
+> me when it is gone so I can retry."
 
 For a diagram:
 

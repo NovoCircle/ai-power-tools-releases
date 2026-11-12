@@ -80,8 +80,8 @@ The response again claimed success. Direct SQL against the target package immedi
 confirmed nothing was actually created:
 
 ```sql
-SELECT COUNT(*) FROM t_object  WHERE Package_ID = <scratch_package_id>;   -- 0
-SELECT COUNT(*) FROM t_package WHERE Parent_ID  = <scratch_package_id>;   -- 0
+SELECT COUNT(*) AS n FROM t_object  WHERE Package_ID = <scratch_package_id>;   -- 0
+SELECT COUNT(*) AS n FROM t_package WHERE Parent_ID  = <scratch_package_id>;   -- 0
 ```
 
 `ea_model(operation="list_elements_in_package")` and `list_child_packages` against the same
@@ -91,7 +91,7 @@ package both returned empty results, consistent with the SQL counts.
 
 The scratch package (`_sl41_scratch`, created under the model's `_scenario_tests` root
 specifically for this test) was deleted with `ea_model(operation="delete_package")` immediately
-after the import test. A follow-up `SELECT COUNT(*) FROM t_package WHERE Package_ID =
+after the import test. A follow-up `SELECT COUNT(*) AS n FROM t_package WHERE Package_ID =
 <scratch_package_id>` returned `0`, confirming removal. Nothing outside that scratch package was
 touched.
 

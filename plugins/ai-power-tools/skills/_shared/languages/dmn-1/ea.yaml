@@ -1,0 +1,661 @@
+# EA facts for Decision Model and Notation 1.2 (language file dmn-1). Generated from elements created in EA and read back.
+# Measured on EA 17.1 build 1716; see `harvest` for the source of each fact. Examples elsewhere use Westbrook Bank (fictitious).
+language: dmn-1
+technology: DMN1.1
+display_name: DMN 1.2
+profile: DMN1.2
+stereotype_prefix: ''
+stereotype_storage: t_object.Stereotype and t_connector.Stereotype hold the bare name (Decision, InformationRequirement); the qualified
+  form DMN1.1::<name> is the FQName in the t_xref row named Stereotypes. Create with type DMN1.1::<name>; DMN1.2::<name> is refused
+  (Invalid type) although EA shows the node as DMN1.2.
+measured_on: EA 17.1 build 1716, 2026-10-21
+diagram_types:
+  DecisionRequirementsDiagram:
+    ea_name: DMN1.1::DMNDiagram
+    shown_by_ea_as: DMN 1.2
+    base: Analysis
+    stereotype_prefix: ''
+    layout_style: not-harvested
+    stored_as: t_diagram.Diagram_Type = Analysis; StyleEx contains MDGDgm=DMN1.1::DMNDiagram
+    trap: An unknown diagram type (including the name EA shows, DMN1.1::DMN 1.2) raises no error and creates a plain Class diagram.
+    opens_with: the DMN 1.2 toolbox (one page, DMN Components; see toolbox)
+    resources_tab: a group named DMN 1.2 holds one type, named Decision Requirements Diagram; the diagram's Properties show the type
+      as Decision Requirements (EA 17.1 build 1716, 2026-11-04)
+  BoxedExpression:
+    ea_name: null
+    note: The standard's boxed expression notation has no EA diagram type. EA keeps the kind of a Decision's or Business Knowledge Model's
+      logic in the tagged value expressionType; the editor and the stored logic were not harvested.
+concepts:
+  elements:
+    DMNElement:
+      stereotype: null
+      metaclass: null
+      tags: []
+      ea_note: 'No stereotype: EA refused DMN1.1::DMNElement as an element type.'
+    NamedElement:
+      stereotype: null
+      metaclass: null
+      tags: []
+      ea_note: 'No stereotype: EA refused DMN1.1::NamedElement as an element type.'
+    Expression:
+      stereotype: null
+      metaclass: null
+      tags: []
+      ea_note: 'No stereotype: EA refused DMN1.1::Expression as an element type.'
+    UnaryTests:
+      stereotype: null
+      metaclass: null
+      tags: []
+      ea_note: 'No stereotype: EA refused DMN1.1::UnaryTests as an element type.'
+    Definitions:
+      stereotype: Definitions
+      metaclass: Class
+      also_stored_on: null
+      tags:
+      - name: collection
+        type: free text
+        allowed_values: null
+        default: null
+      - name: exporter
+        type: free text
+        allowed_values: null
+        default: null
+      - name: exporterVersion
+        type: free text
+        allowed_values: null
+        default: null
+      - name: expressionLanguage
+        type: free text
+        allowed_values: null
+        default: null
+      - name: itemDefinition
+        type: free text
+        allowed_values: null
+        default: null
+      - name: namespace
+        type: free text
+        allowed_values: null
+        default: null
+      - name: typeLanguage
+        type: free text
+        allowed_values: null
+        default: null
+    Import:
+      stereotype: null
+      metaclass: null
+      tags: []
+      ea_note: 'No stereotype: EA refused DMN1.1::Import as an element type.'
+    ImportedValues:
+      stereotype: null
+      metaclass: null
+      tags: []
+      ea_note: 'No stereotype: EA refused DMN1.1::ImportedValues as an element type.'
+    ElementCollection:
+      stereotype: ElementCollection
+      metaclass: Class
+      also_stored_on: null
+      tags: []
+    DRGElement:
+      stereotype: null
+      metaclass: null
+      tags: []
+      ea_note: 'No stereotype: EA refused DMN1.1::DRGElement as an element type.'
+    Decision:
+      stereotype: Decision
+      metaclass: Activity
+      also_stored_on:
+      - Class
+      tags:
+      - name: allowedAnswers
+        type: free text
+        allowed_values: null
+        default: null
+      - name: decisionLogic
+        type: free text
+        allowed_values: null
+        default: null
+      - name: decisionMaker
+        type: free text
+        allowed_values: null
+        default: null
+      - name: decisionOwner
+        type: free text
+        allowed_values: null
+        default: null
+      - name: decisionService
+        type: free text
+        allowed_values: null
+        default: null
+      - name: element
+        type: memo
+        allowed_values: null
+        default: <memo>
+      - name: expressionType
+        type: enumeration
+        allowed_values:
+        - DecisionTable
+        - Invocation
+        - Context
+        - LiteralExpression
+        - List
+        - Relation
+        default: DecisionTable
+      - name: impactedPerformanceIndicator
+        type: free text
+        allowed_values: null
+        default: null
+      - name: isUsingLibrary
+        type: enumeration
+        allowed_values:
+        - 'true'
+        - 'false'
+        default: 'false'
+      - name: question
+        type: free text
+        allowed_values: null
+        default: null
+      - name: variableType
+        type: enumeration
+        allowed_values:
+        - number
+        - string
+        - boolean
+        - time
+        - date
+        - date-time
+        - duration
+        - custom
+        default: number
+      - name: variableTypeRef
+        type: free text
+        allowed_values: null
+        default: null
+    Invocable:
+      stereotype: null
+      metaclass: null
+      tags: []
+      ea_note: 'No stereotype: EA refused DMN1.1::Invocable as an element type.'
+    BusinessKnowledgeModel:
+      stereotype: BusinessKnowledgeModel
+      metaclass: Activity
+      also_stored_on: null
+      tags:
+      - name: encapsulatedLogic
+        type: free text
+        allowed_values: null
+        default: null
+      - name: expressionType
+        type: enumeration
+        allowed_values:
+        - DecisionTable
+        - Invocation
+        - Context
+        - LiteralExpression
+        - List
+        - Relation
+        default: DecisionTable
+      - name: isUsingLibrary
+        type: enumeration
+        allowed_values:
+        - 'true'
+        - 'false'
+        default: 'false'
+      - name: testLabInvocation
+        type: memo
+        allowed_values: null
+        default: <memo>
+    DecisionService:
+      stereotype: DecisionService
+      metaclass: Activity
+      also_stored_on: null
+      tags:
+      - name: DMNDecisionServiceData
+        type: memo
+        allowed_values: null
+        default: <memo>
+    InputData:
+      stereotype: InputData
+      metaclass: Class
+      also_stored_on:
+      - Activity
+      - Component
+      - Requirement
+      tags:
+      - name: defaultDataSet
+        type: free text
+        allowed_values: null
+        default: null
+      - name: typeRef
+        type: free text
+        allowed_values: null
+        default: null
+    KnowledgeSource:
+      stereotype: KnowledgeSource
+      metaclass: Class
+      also_stored_on: null
+      tags:
+      - name: locationURI
+        type: free text
+        allowed_values: null
+        default: null
+      - name: owner
+        type: free text
+        allowed_values: null
+        default: null
+      - name: type
+        type: free text
+        allowed_values: null
+        default: null
+      - name: typeRef
+        type: free text
+        allowed_values: null
+        default: null
+    Artifact:
+      stereotype: null
+      metaclass: null
+      tags: []
+      ea_note: 'No stereotype: EA refused DMN1.1::Artifact as an element type.'
+    TextAnnotation:
+      stereotype: TextAnnotation
+      metaclass: Class
+      also_stored_on: null
+      tags:
+      - name: definitions
+        type: free text
+        allowed_values: null
+        default: null
+      - name: text
+        type: free text
+        allowed_values: null
+        default: null
+      - name: textFormat
+        type: free text
+        allowed_values: null
+        default: '"text/plain"'
+      - name: unnamed2
+        type: free text
+        allowed_values: null
+        default: null
+    BusinessContextElement:
+      stereotype: null
+      metaclass: null
+      tags: []
+      ea_note: 'No stereotype: EA refused DMN1.1::BusinessContextElement as an element type.'
+    OrganisationalUnit:
+      stereotype: OrganisationalUnit
+      metaclass: Class
+      also_stored_on: null
+      tags:
+      - name: definitions
+        type: free text
+        allowed_values: null
+        default: null
+      - name: URI
+        type: free text
+        allowed_values: null
+        default: null
+    PerformanceIndicator:
+      stereotype: PerformanceIndicator
+      metaclass: Class
+      also_stored_on: null
+      tags:
+      - name: definitions
+        type: free text
+        allowed_values: null
+        default: null
+      - name: URI
+        type: free text
+        allowed_values: null
+        default: null
+    ItemDefinition:
+      stereotype: ItemDefinition
+      metaclass: Class
+      also_stored_on: null
+      tags:
+      - name: allowedValues
+        type: free text
+        allowed_values: null
+        default: null
+      - name: data
+        type: memo
+        allowed_values: null
+        default: <memo>
+      - name: isCollection
+        type: enumeration
+        allowed_values:
+        - 'true'
+        - 'false'
+        default: 'false'
+      - name: type
+        type: free text
+        allowed_values: null
+        default: null
+      - name: typeLanguage
+        type: free text
+        allowed_values: null
+        default: null
+    InformationItem:
+      stereotype: InformationItem
+      metaclass: Class
+      also_stored_on:
+      - Activity
+      - Component
+      - Requirement
+      tags:
+      - name: inputData
+        type: free text
+        allowed_values: null
+        default: null
+      - name: type
+        type: free text
+        allowed_values: null
+        default: null
+      - name: typeRef
+        type: free text
+        allowed_values: null
+        default: null
+    LiteralExpression:
+      stereotype: LiteralExpression
+      metaclass: Operation
+      tags: []
+      ea_note: Refused as an element (Invalid type); binds on an operation of a class. Never stored in t_object.Stereotype.
+    Invocation:
+      stereotype: Invocation
+      metaclass: Operation
+      tags: []
+      ea_note: Refused as an element (Invalid type); binds on an operation of a class. Never stored in t_object.Stereotype.
+    Binding:
+      stereotype: null
+      metaclass: null
+      tags: []
+      ea_note: 'No stereotype: EA refused DMN1.1::Binding as an element type.'
+    Context:
+      stereotype: Context
+      metaclass: Operation
+      tags: []
+      ea_note: Refused as an element (Invalid type); binds on an operation of a class. Never stored in t_object.Stereotype.
+    ContextEntry:
+      stereotype: ContextEntry
+      metaclass: Class
+      also_stored_on:
+      - Activity
+      - Component
+      - Requirement
+      tags:
+      - name: variable
+        type: free text
+        allowed_values: null
+        default: null
+    FunctionDefinition:
+      stereotype: FunctionDefinition
+      metaclass: Operation
+      tags: []
+      ea_note: Refused as an element (Invalid type); binds on an operation of a class. Never stored in t_object.Stereotype.
+    List:
+      stereotype: null
+      metaclass: null
+      tags: []
+      ea_note: 'No stereotype: EA refused DMN1.1::List as an element type.'
+    Relation:
+      stereotype: null
+      metaclass: null
+      tags: []
+      ea_note: 'No stereotype: EA refused DMN1.1::Relation as an element type.'
+    DecisionTable:
+      stereotype: DecisionTable
+      metaclass: Operation
+      tags: []
+      ea_note: Refused as an element (Invalid type); binds on an operation of a class. Never stored in t_object.Stereotype.
+    InputClause:
+      stereotype: null
+      metaclass: null
+      tags: []
+      ea_note: 'No stereotype: EA refused DMN1.1::InputClause as an element type.'
+    OutputClause:
+      stereotype: null
+      metaclass: null
+      tags: []
+      ea_note: 'No stereotype: EA refused DMN1.1::OutputClause as an element type.'
+    RuleAnnotationClause:
+      stereotype: null
+      metaclass: null
+      tags: []
+      ea_note: 'No stereotype: EA refused DMN1.1::RuleAnnotationClause as an element type.'
+    DecisionRule:
+      stereotype: null
+      metaclass: null
+      tags: []
+      ea_note: 'No stereotype: EA refused DMN1.1::DecisionRule as an element type.'
+    RuleAnnotation:
+      stereotype: null
+      metaclass: null
+      tags: []
+      ea_note: 'No stereotype: EA refused DMN1.1::RuleAnnotation as an element type.'
+    ExtensionElements:
+      stereotype: null
+      metaclass: null
+      tags: []
+      ea_note: 'No stereotype: EA refused DMN1.1::ExtensionElements as an element type.'
+    ExtensionAttribute:
+      stereotype: null
+      metaclass: null
+      tags: []
+      ea_note: 'No stereotype: EA refused DMN1.1::ExtensionAttribute as an element type.'
+    DMNDI:
+      stereotype: null
+      metaclass: null
+      tags: []
+      ea_note: 'No stereotype: EA refused DMN1.1::DMNDI as an element type.'
+    DMNDiagram:
+      stereotype: null
+      metaclass: null
+      tags: []
+      ea_note: 'No stereotype: EA refused DMN1.1::DMNDiagram as an element type.'
+    DMNDiagramElement:
+      stereotype: null
+      metaclass: null
+      tags: []
+      ea_note: 'No stereotype: EA refused DMN1.1::DMNDiagramElement as an element type.'
+    DMNShape:
+      stereotype: null
+      metaclass: null
+      tags: []
+      ea_note: 'No stereotype: EA refused DMN1.1::DMNShape as an element type.'
+    DMNEdge:
+      stereotype: null
+      metaclass: null
+      tags: []
+      ea_note: 'No stereotype: EA refused DMN1.1::DMNEdge as an element type.'
+    DMNDecisionServiceDividerLine:
+      stereotype: null
+      metaclass: null
+      tags: []
+      ea_note: 'No stereotype: EA refused DMN1.1::DMNDecisionServiceDividerLine as an element type.'
+    DMNLabel:
+      stereotype: null
+      metaclass: null
+      tags: []
+      ea_note: 'No stereotype: EA refused DMN1.1::DMNLabel as an element type.'
+    DMNStyle:
+      stereotype: null
+      metaclass: null
+      tags: []
+      ea_note: 'No stereotype: EA refused DMN1.1::DMNStyle as an element type.'
+  relationships:
+    InformationRequirement:
+      stereotype: InformationRequirement
+      metaclass: Dependency
+      direction: Source -> Destination
+      source_is: the requiring element (the holder of the requirement)
+      target_is: the required element
+      pairs:
+      - source: Decision
+        target: Decision
+      - source: Decision
+        target: InputData
+      tags: []
+    KnowledgeRequirement:
+      stereotype: KnowledgeRequirement
+      metaclass: Dependency
+      direction: Source -> Destination
+      source_is: the requiring element (the holder of the requirement)
+      target_is: the required element
+      pairs:
+      - source: BusinessKnowledgeModel
+        target: BusinessKnowledgeModel
+      - source: BusinessKnowledgeModel
+        target: DecisionService
+      - source: Decision
+        target: BusinessKnowledgeModel
+      - source: Decision
+        target: DecisionService
+      tags: []
+    AuthorityRequirement:
+      stereotype: AuthorityRequirement
+      metaclass: Dependency
+      direction: Source -> Destination
+      source_is: the requiring element (the holder of the requirement)
+      target_is: the required element
+      pairs:
+      - source: BusinessKnowledgeModel
+        target: KnowledgeSource
+      - source: Decision
+        target: KnowledgeSource
+      - source: KnowledgeSource
+        target: Decision
+      - source: KnowledgeSource
+        target: InputData
+      - source: KnowledgeSource
+        target: KnowledgeSource
+      tags: []
+    Association:
+      stereotype: Association
+      metaclass: Dependency
+      direction: Unspecified
+      source_is: the artifact (a TextAnnotation)
+      target_is: any DMN element
+      pairs: any
+      tags:
+      - name: associationDirection
+        type: enumeration
+        allowed_values:
+        - None
+        - One
+        - Both
+        default: null
+      - name: targetRef
+        type: free text
+        allowed_values: null
+        default: null
+      - name: sourceRef
+        type: free text
+        allowed_values: null
+        default: null
+      - name: definitions
+        type: free text
+        allowed_values: null
+        default: null
+ea_only:
+- stereotype: DMNSimConfiguration
+  metaclass: Artifact
+  tags:
+  - DMNArtifactSimData
+  for: 'EA''s decision-model simulation: holds the simulation configuration (tag DMNArtifactSimData). Not a concept of the standard.
+    Seen in 10 of EA''s dm1.1 sample files and 12 of its dm1.2 files.'
+toolbox:
+  status: read on screen, measured on EA 17.1 build 1716, 2026-11-04; one DMN diagram opened
+  toolboxes:
+  - DMN 1.2
+  pages:
+    DMN Components:
+    - Decision
+    - Business Knowledge Model
+    - Knowledge Source
+    - Input Data
+    - Item Definition
+    - Decision Service
+    - Information Requirement
+    - Knowledge Requirement
+    - Authority Requirement
+    - Text Annotation
+    - Association
+    - Simulation Configuration
+  other_pages: 'EA''s generic pages follow: Common Elements, Common Relationships, Documents, Governance, Dynamic Viewpoints, Charts,
+    Simulation'
+  not_on_the_toolbox:
+  - Definitions
+  - ElementCollection
+  - ContextEntry
+  - OrganisationalUnit
+  - PerformanceIndicator
+  - InformationItem
+  - the five operation stereotypes
+quick_links:
+  status: read on screen, measured on EA 17.1 build 1716, 2026-11-04; one source, a Decision
+  pairs_offered:
+  - 'Decision: Information Requirement to, Information Requirement from'
+  - 'Business Knowledge Model: Knowledge Requirement from'
+  - 'Input Data: Information Requirement from'
+  - 'Knowledge Source: Authority Requirement from'
+  - 'DecisionService: Knowledge Requirement from'
+  - 'Text Annotation: Association to'
+  direction: 'choosing ''Authority Requirement from'' on the Decision made a Knowledge Source with a Dependency stereotyped DMN1.2::AuthorityRequirement,
+    source = the Decision, target = the Knowledge Source: the stored direction is requiring to required, so the menu''s ''from'' is
+    worded for the information flow, not the stored direction'
+samples_in_ea:
+  source: 'EA ModelPatterns, 15 dm1.1 files, 12 dm1.2 files, 2 BPMN-with-DMN files'
+  technology_id_in_samples: DMN1.1 for both the dm1.1 and the dm1.2 patterns
+  element_stereotypes_used:
+  - Decision
+  - BusinessKnowledgeModel
+  - DecisionService
+  - InputData
+  - KnowledgeSource
+  - ItemDefinition
+  - DMNSimConfiguration
+  connector_pairs_used:
+  - 'InformationRequirement: Decision to Decision, Decision to InputData'
+  - 'KnowledgeRequirement: Decision to BusinessKnowledgeModel, BusinessKnowledgeModel to BusinessKnowledgeModel, BusinessKnowledgeModel
+    to DecisionService, Decision to DecisionService'
+  - 'AuthorityRequirement: BusinessKnowledgeModel to KnowledgeSource, Decision to KnowledgeSource'
+  direction: In every sample the connector's client (source) end is the requiring element and the supplier end the required one.
+conventions: not-harvested
+harvest:
+  stereotype_names: 'ui: Resources tab > MDG Technologies > System Technologies > DMN1.2 > UML Profiles (23 distinct names, 24 rows),
+    computer use 2026-10-20'
+  prefix: 'sample-content: every name tried as DMN1.1:: and DMN1.2:: in a test model; only DMN1.1:: binds'
+  metaclass_and_tags: 'sample-content: elements created with type DMN1.1::<name> and read from t_object, t_xref,
+    t_objectproperties'
+  other_metaclasses: 'sample-content: (16 element types; attribute, operation, parameter)'
+  connector_metaclass: 'sample-content: t_connector.Connector_Type and Direction of connectors created in a test model'
+  unbound_candidates: 'sample-content: EA refused DMN1.1::<name> with ''Invalid type'' for 28 concept names
+    of the language file'
+  diagram_type: 'sample-content: t_diagram.Diagram_Type and StyleEx of diagrams created with five type spellings'
+  requirement_direction: 'model-pattern: EA''s sample models; sample-content: the requirement connectors
+    created in a test model use it'
+  requirement_pairs: 'standard: language.yaml relationships.connection_tables.Requirements (Table 2), flipped to source = requiring
+    element'
+  decision_service_members: 'model-pattern: tag DMNDecisionServiceData in EA''s dm1.2-simple-decision-service sample'
+  toolbox: 'ui: one DMN diagram''s Toolbox window, EA 17.1 build 1716, 2026-11-04'
+  quick_links: 'ui: one source (a Decision), EA 17.1 build 1716, 2026-11-04'
+  on_screen_2026_11_04: the DMN1.2 profile lists 24 rows and 23 distinct names, in the order of the stored list (EA 17.1 build 1716)
+  build: EA 17.1 build 1716
+
+# EA's names for this language's layout. tools/gen_conventions.py reads layout_map.
+layout_map:
+  technology: DMN1.1
+  display_name: DMN 1.1
+  extends: UML
+  stereotype_prefix: ''
+  notes: |
+    CLASSIFICATION (b). `DMNDiagram` is a decision requirements diagram: a directed acyclic graph of decisions, input data, business knowledge models and knowledge sources, joined by requirement links. It is an ordinary graph where EA's own layout is acceptable and we tidy afterwards. It has a real top-down convention: on 307 requirement links the requiring element is drawn higher than the element it requires in 253, level with it in 21 and lower in 33: but the corpus describes these diagrams as a DAG with heavy edge crossing, and a layered composition would not minimize crossings or center a parent over its inputs. The largest in the model has 26 elements and 40 links.
+
+    CONTAINMENT EXISTS AND IS NOT THE STRUCTURE, which is what refuses nested-grid. 36 of the 287 objects across the 31 diagrams sit inside another (12.5%), and every one of the parents is a `DecisionService`. So the enclosure is a real feature on the diagrams that have one, and it is a minority of one concept while the requirement links are the content everywhere: nested-grid's own test asks whether an arrow between two boxes would add anything, and here it always would, because the arrow is which requirement it is.
+
+    SPACING IS NOW STATED, REVERSING AN EARLIER DRAFT OF THIS FILE. The draft left both gaps unset on the argument that in a graph these distances follow edge density rather than a convention of the notation. That argument is true and it is equally true of every `graph` diagram type in the parent binding, all of which state both axes: a `graph` layout takes them as its column and layer spacing, so they are read rather than inert, and the alternative is the engine's 20, which nobody measured. What the rules ask of a gap is that it clear ten observations and that no single diagram supply more than half of the population, and these two clear both by a wider margin than any other gap in the tree: 25 and 23 diagrams contribute and the densest supplies 13%. Each figure below is the median of its population, with its spread disclosed, and is a fact about that population rather than a convention.
+
+    `DMN1.1` is the id EA reports, measured on EA 17.1 build 1716.
+  diagram_types:
+    DMNDiagram:
+      guide: DecisionRequirementsDiagram
+      base: Analysis

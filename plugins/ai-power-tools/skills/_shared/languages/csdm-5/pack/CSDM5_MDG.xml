@@ -1,0 +1,845 @@
+<?xml version="1.0" encoding="utf-8" standalone="no" ?>
+<MDG.Technology version="1.0"><Documentation id="CSDM5" name="CSDM 5 for EA" version="1.0.0" notes="CSDM5 (CSDM 5 for EA) 1.0.0. Written from ServiceNow's CSDM 5 white paper and documentation. Not affiliated with or endorsed by ServiceNow. Model-driven: this package is the source of truth, and hand edits to the generated file are lost on the next build."/><UMLProfiles><UMLProfile profiletype="uml2"><Documentation id="DEC7096078" name="CSDM5" version="" notes="CSDM5"/><Content><Stereotypes><Stereotype name="CSDMAIApplication" alias="AI Application" metatype="AI Application" notes="" cx="0" cy="0" bgcolor="2856441" fontcolor="-1" bordercolor="-1" borderwidth="-1" hideicon="0"><stereotypedrelationships><stereotypedrelationship stereotype="CSDM5::CSDMModel" constraint="CSDM5::CSDMProductModel"/></stereotypedrelationships><Image type="EAShapeScript 1.0" xmlns:dt="urn:schemas-microsoft-com:datatypes" dt:dt="bin.base64">UEsDBBQAAAAIAPqVZF372qqfGwEAAPACAAAHAAAAc3RyLmRhdK2SPU7DQBCF
+X80pVkljpBSBhiJKESEKmhSIHoFtiIWzidY2ESBOxBG4HN+s48gWAqVAq5l9
+mn1v/rSVVrrXVrmc1qBCXid6x9z+eG1URVYG2mmuWkENilmPVfL+ynvDaw2y
+jHON9EAsoMzxo4HCYo9kLvQGSnSmKWeiC/zpgBliXo8iwEzJn0SmWafq360f
+5rDuM6o1dFQdZk7o6TnOnIEm2BI7VunBa3CrvNQV6lv8zY8cVW/LXT3Hlh2x
+EPdg+zGUwcxhPHHXbPCcSWbwVrojQxlffNxsCs/D6Tbr9HIEx+oVMbYDWU/b
+WNXm+dRC13AWMWp5Uhg19wbF134qp49fJuv20U72Xx3bDyrpsP/v/p5jfOhk
+POjZ7BtQSwECFAAUAAAACAD6lWRd+9qqnxsBAADwAgAABwAAAAAAAAAAAAAA
+gAEAAAAAc3RyLmRhdFBLBQYAAAAAAQABADUAAABAAQAAAAA=
+</Image><AppliesTo><Apply type="Component"><Property name="_HideUmlLinks" value="True"/></Apply></AppliesTo><TaggedValues><Tag name="Life Cycle Stage" type="enumeration" description="" unit="" values="Ideation,Design,Purchase,Inventory,Deploy,Operational,End of Operation,End of Life" default=""/><Tag name="Life Cycle Stage Status" type="enumeration" description="" unit="" values="Under Evaluation,Pilot,Design,Chartered,Build,On Order,Pre-Allocated,Available,Legal Hold,Test,Pending Fulfillment,In Use,In Maintenance,End of Support,Pending Retirement,On Hold,Obsolete,Retired" default=""/><Tag name="ServiceNow link" type="URL" description="" unit="" values="" default=""/><Tag name="ServiceNow record id" type="String" description="" unit="" values="" default=""/></TaggedValues></Stereotype><Stereotype name="CSDMAIContentProductModel" alias="AI Content Product Model" metatype="AI Content Product Model" notes="" cx="0" cy="0" bgcolor="15196895" fontcolor="-1" bordercolor="-1" borderwidth="-1" hideicon="0"><Image type="EAShapeScript 1.0" xmlns:dt="urn:schemas-microsoft-com:datatypes" dt:dt="bin.base64">UEsDBBQAAAAIAJCVZF3IeEiBJgEAAAQDAAAHAAAAc3RyLmRhdK2SzUrDUBCF
+z9qnuLSbCF0oLlyULqS4cKGIuBdNog2mseTHouIT+Qi+nN9MmpIgli7kMnMn
+9575OSe30kL3WilV0JIoU6EDfWBhswq9qHJUQrTWTLVKNWRMe6ic+zfuG25r
+Iqs400gPnJVkpvjRIMPOHqmc6Z0o0rGOWBOd4g8HyNLrFmSUIGPqR44067L6
+e+uHNWz6hG4NE1VbzhEzPTvnhGiCXWH7ZhbES+I2c65zsm/xN79qVD2Vu34B
+lQNnpetg+liUgExBPLHXKHgCkym4he6okPtN4crG4AownbJBr3tgrF/mZ2si
+m2nlXY3Pl850AWaO3m2W+aBr/wMJCsT+felfKZ2+N0yDPv9g22nUsv0vFvaq
+cmbov8Xd3MbbScaDmc1+AFBLAQIUABQAAAAIAJCVZF3IeEiBJgEAAAQDAAAH
+AAAAAAAAAAAAAACAAQAAAABzdHIuZGF0UEsFBgAAAAABAAEANQAAAEsBAAAA
+AA==
+</Image><AppliesTo><Apply type="Class"><Property name="_HideUmlLinks" value="True"/></Apply></AppliesTo><TaggedValues><Tag name="End-of-life date" type="Date" description="" unit="" values="" default=""/><Tag name="Life Cycle Stage" type="enumeration" description="" unit="" values="Ideation,Design,Build &amp; Integrate,Operational,End of Life" default=""/><Tag name="Life Cycle Stage Status" type="enumeration" description="" unit="" values="Under Evaluation,Pilot,Design,Chartered,Planning,Build,In production,In Use,Available,End of Support,Pending Retirement,Obsolete,Retired,Sold" default=""/><Tag name="Product owner" type="String" description="" unit="" values="" default=""/><Tag name="ServiceNow link" type="URL" description="" unit="" values="" default=""/><Tag name="ServiceNow record id" type="String" description="" unit="" values="" default=""/></TaggedValues></Stereotype><Stereotype name="CSDMAIDatasetDigitalAsset" alias="AI Dataset Digital Asset" metatype="AI Dataset Digital Asset" notes="" cx="0" cy="0" bgcolor="6576895" fontcolor="-1" bordercolor="-1" borderwidth="-1" hideicon="0"><Image type="EAShapeScript 1.0" xmlns:dt="urn:schemas-microsoft-com:datatypes" dt:dt="bin.base64">UEsDBBQAAAAIANiVZF1GSBvoJAEAAAQDAAAHAAAAc3RyLmRhdK2SPU7DQBCF
+X80pVkljpBQgCoooRQQUNBSIHkFsiIWzRP4hAsSJOAKX45txHNlCoBRoNbtv
+Z97MzhttpaXutFamoBUoV9SB3rGwXVHPqpyVgjaaqVaphoxpj1UQfyXeEK1B
+VnGmke7xlWRm7KNBhvkeqJzrDZToWEesiU7ZDwfM0utGMkqYC+onzjTrsvpn
+uw9rWPcprzV0VO00J/T05JpT0AS7wvbNjOAVuM080wXZN+zXP2pUvSl37wWm
+HPCVPgebj6EUZgbjkbNmgicomcJb6pYKhUeiT3YBL8LpJhv0sgfH3svdtwFZ
+T2t/1fR8aq5LOOf4a6wiUvvdKubuK7jPibSxr63SoI9f1HYzatX+lwr7VQVd
+9//i39rGu07Gg57NvgFQSwECFAAUAAAACADYlWRdRkgb6CQBAAAEAwAABwAA
+AAAAAAAAAAAAgAEAAAAAc3RyLmRhdFBLBQYAAAAAAQABADUAAABJAQAAAAA=
+</Image><AppliesTo><Apply type="Artifact"><Property name="_HideUmlLinks" value="True"/></Apply></AppliesTo><TaggedValues><Tag name="ServiceNow link" type="URL" description="" unit="" values="" default=""/><Tag name="ServiceNow record id" type="String" description="" unit="" values="" default=""/></TaggedValues></Stereotype><Stereotype name="CSDMAIFunction" alias="AI Function" metatype="AI Function" notes="" cx="0" cy="0" bgcolor="2856441" fontcolor="-1" bordercolor="-1" borderwidth="-1" hideicon="0"><stereotypedrelationships><stereotypedrelationship stereotype="CSDM5::CSDMModel" constraint="CSDM5::CSDMProductModel"/></stereotypedrelationships><Image type="EAShapeScript 1.0" xmlns:dt="urn:schemas-microsoft-com:datatypes" dt:dt="bin.base64">UEsDBBQAAAAIAPqVZF23wBOaGQEAAOoCAAAHAAAAc3RyLmRhdK2STUoDQRCF
+39pTNMlmhCzUjYuQhYiCGxfiXjQzmsFJG+bHoOKJPIKX86uaTJhBlCxCU9WP
+6ld/j6600L1WyhS0BOWKOtAHFjYn6kWVs1LQWjPVKtWQMe2xCt7feG94rUFW
+caaRHoiVZGb40SDDYo9UzvUOSnSsI85Ep/jDAbP0upGMEuac+okzzbqs/t36
+YQ2bPqVbw0TVdueEmZ595xQ0wa6xXTMjeAluM891QfYt/uZXjaqnctcvoHIg
+VroOpo+hFGYG44m7RsETNpnCW+iOCoW/RFd2Di/C6ZQNet2BY/1yj61BNtPK
+u9o+XzrTFZxLV9t0zlE+6nuzT9DnHzt1SrQ77WtW+zsFs/V/3P8bjLeTjAcz
+m/0AUEsBAhQAFAAAAAgA+pVkXbfAE5oZAQAA6gIAAAcAAAAAAAAAAAAAAIAB
+AAAAAHN0ci5kYXRQSwUGAAAAAAEAAQA1AAAAPgEAAAAA
+</Image><AppliesTo><Apply type="Component"><Property name="_HideUmlLinks" value="True"/></Apply></AppliesTo><TaggedValues><Tag name="Life Cycle Stage" type="enumeration" description="" unit="" values="Ideation,Design,Purchase,Inventory,Deploy,Operational,End of Operation,End of Life" default=""/><Tag name="Life Cycle Stage Status" type="enumeration" description="" unit="" values="Under Evaluation,Pilot,Design,Chartered,Build,On Order,Pre-Allocated,Available,Legal Hold,Test,Pending Fulfillment,In Use,In Maintenance,End of Support,Pending Retirement,On Hold,Obsolete,Retired" default=""/><Tag name="ServiceNow link" type="URL" description="" unit="" values="" default=""/><Tag name="ServiceNow record id" type="String" description="" unit="" values="" default=""/></TaggedValues></Stereotype><Stereotype name="CSDMAIModelDigitalAsset" alias="AI Model Digital Asset" metatype="AI Model Digital Asset" notes="" cx="0" cy="0" bgcolor="6576895" fontcolor="-1" bordercolor="-1" borderwidth="-1" hideicon="0"><Image type="EAShapeScript 1.0" xmlns:dt="urn:schemas-microsoft-com:datatypes" dt:dt="bin.base64">UEsDBBQAAAAIANiVZF26lzdSJQEAAAADAAAHAAAAc3RyLmRhdK2SsU7DQBBE
+p+YrTkljpBQgCoooRQQUFFAgehRiQyycI7IdIkB8EZ/Az/F2HUe2ECgFsvY8
+vp3d2xlfpYVmWilT0BKUK+pA70TYPlHPqpyVgjaaqFapNRXjDqsg/0p+TbYG
+WceJBrpnr6QyYx30Kmzvgc653kCJjnXEM9Ip62GPWXrfSEUJc07/xJkWbVX3
+3az9HjZ9ymlrJqp2mhNmenLNKWhEXBP7VkbwEtxUnumC6lvWmx89qo7L7XkB
+lwN7pftg/hhKYWYwHnnXOHiCkjG8he7oUHgmurNzeBFO62zQyx4cOy/3vQ3I
+Zlr5qabnU1NdwrnCb/s7Bfjcu+XwZ/49RUtFrtbXVmXQxy9KW38apf+lwG5U
+wXzde/i3ruFukmFvZotvUEsBAhQAFAAAAAgA2JVkXbqXN1IlAQAAAAMAAAcA
+AAAAAAAAAAAAAIABAAAAAHN0ci5kYXRQSwUGAAAAAAEAAQA1AAAASgEAAAAA
+</Image><AppliesTo><Apply type="Artifact"><Property name="_HideUmlLinks" value="True"/></Apply></AppliesTo><TaggedValues><Tag name="ServiceNow link" type="URL" description="" unit="" values="" default=""/><Tag name="ServiceNow record id" type="String" description="" unit="" values="" default=""/></TaggedValues></Stereotype><Stereotype name="CSDMAIPromptDigitalAsset" alias="AI Prompt Digital Asset" metatype="AI Prompt Digital Asset" notes="" cx="0" cy="0" bgcolor="6576895" fontcolor="-1" bordercolor="-1" borderwidth="-1" hideicon="0"><Image type="EAShapeScript 1.0" xmlns:dt="urn:schemas-microsoft-com:datatypes" dt:dt="bin.base64">UEsDBBQAAAAIANqVZF0MdKbrJAEAAAIDAAAHAAAAc3RyLmRhdK2SQUvDQBCF
+39lfsbSXCD0oHjyUHkQ9eBER76JNtMFkLUlqUfEX+RP8c34zaUqCKD3IMpuX
+nTez8x5ba6E7LZUpqATlitrTOxE2K+pZtbNS0FozNaq0omLaYxXkX8mvyDYg
+6zjTSPecVVRm7KNBhZ090DnXGyjRoQ5YEx2z7w+YlfeNVFQw5/RPnGnRVfW/
+7T7sYdOn3LZionqrOWGmJ9ecgibEJbFrZQSX4LbyVOdU37Bf/+hR91zu7gu4
+HDir3Afzx1AKM4PxyLfBwSOUTOEtdEuHwjPRnZ3Di3A6Z4NeduDYfbmfrUE2
+09JvNT2fOtEFnCt3vCTT8Hfm/XKw9Q5walbG/9dGZ9DHL1o7h1qt/6XB3lTB
+zP2X+Ley8XaS8WBmi29QSwECFAAUAAAACADalWRdDHSm6yQBAAACAwAABwAA
+AAAAAAAAAAAAgAEAAAAAc3RyLmRhdFBLBQYAAAAAAQABADUAAABJAQAAAAA=
+</Image><AppliesTo><Apply type="Artifact"><Property name="_HideUmlLinks" value="True"/></Apply></AppliesTo><TaggedValues><Tag name="ServiceNow link" type="URL" description="" unit="" values="" default=""/><Tag name="ServiceNow record id" type="String" description="" unit="" values="" default=""/></TaggedValues></Stereotype><Stereotype name="CSDMAISystemDigitalAsset" alias="AI System Digital Asset" metatype="AI System Digital Asset" notes="" cx="0" cy="0" bgcolor="6576895" fontcolor="-1" bordercolor="-1" borderwidth="-1" hideicon="0"><Image type="EAShapeScript 1.0" xmlns:dt="urn:schemas-microsoft-com:datatypes" dt:dt="bin.base64">UEsDBBQAAAAIANiVZF1bA9ijJQEAAAIDAAAHAAAAc3RyLmRhdK2SsU7DMBRF
+78xXWO0SpA4gBoaqAwKGLgzAjqAJNCJxqzihAsQX8Qn8HOc5TZUIgTog6znP
+9r3X7744aKl7rZXJqSTL5XWgd8Jth9dKIaJSso1mqlWpgTHtoQrOXzlvOK3J
+THGmkR7Yq2BmzKMBw/YeUc71RpboWEeMiU6ZDwfIKup6GBXIBfpJRFp0rP63
+nYcaVn3KbQ0VhZ3nhJqeo+eUbEJcEfsyPXlJ3jLPdQn7lvn6h0bodbm7z9Fl
+x14V+2D9sSwFmYF44lvTwROcTMEtdYdCEU987OwCnAfTddbpZQ+M3ZfHvQ2Z
+1bSOt5qfT51pDuaG/xciq2R1EfVy1qbtwARGxvpr69Pp4xevXYdar//lwd5U
+Qc39l/i3s/GukvGgZotvUEsBAhQAFAAAAAgA2JVkXVsD2KMlAQAAAgMAAAcA
+AAAAAAAAAAAAAIABAAAAAHN0ci5kYXRQSwUGAAAAAAEAAQA1AAAASgEAAAAA
+</Image><AppliesTo><Apply type="Artifact"><Property name="_HideUmlLinks" value="True"/></Apply></AppliesTo><TaggedValues><Tag name="ServiceNow link" type="URL" description="" unit="" values="" default=""/><Tag name="ServiceNow record id" type="String" description="" unit="" values="" default=""/></TaggedValues></Stereotype><Stereotype name="CSDMAISystemProductModel" alias="AI System Product Model" metatype="AI System Product Model" notes="" cx="0" cy="0" bgcolor="15196895" fontcolor="-1" bordercolor="-1" borderwidth="-1" hideicon="0"><Image type="EAShapeScript 1.0" xmlns:dt="urn:schemas-microsoft-com:datatypes" dt:dt="bin.base64">UEsDBBQAAAAIAIiVZF1+0jCeJgEAAAIDAAAHAAAAc3RyLmRhdK2SzUrDQBSF
+z9qnGNpNhC4UFy5KFyIuXCii7kWb2AaTWPJjUfGJfARfzu/eNCVBlC4k3MnJ
+zLk/52QqLXWvlRIF5aBUhfb0ToTNU+hZlbNi0Foz1SrVkDHtsTLOXzlvOK1B
+VnGmkR7YK8lMWEeDDNt7pHKqN1CkQx3wTHTMuj9gll63IKOEOad+5EyLLqv/
+btdhDZs+plvDRNVWc8RMT645Bk2IS2LXzAKcg9vMU52Rfct6/aNG1XO56xdw
+ObBXug/mj6EYZgJjwbvGwSOUTOEtdUeFzE8Kd3YOr4DTORv0sgPH+qW+twbZ
+TCvvano+daJzODf8v8qzcr6u3P8Y/eZ80IV/JfT52ugM+vhFa+dQq/W/NNid
+ypihfxP/VjbeTjIezGzxDVBLAQIUABQAAAAIAIiVZF1+0jCeJgEAAAIDAAAH
+AAAAAAAAAAAAAACAAQAAAABzdHIuZGF0UEsFBgAAAAABAAEANQAAAEsBAAAA
+AA==
+</Image><AppliesTo><Apply type="Class"><Property name="_HideUmlLinks" value="True"/></Apply></AppliesTo><TaggedValues><Tag name="End-of-life date" type="Date" description="" unit="" values="" default=""/><Tag name="Life Cycle Stage" type="enumeration" description="" unit="" values="Ideation,Design,Build &amp; Integrate,Operational,End of Life" default=""/><Tag name="Life Cycle Stage Status" type="enumeration" description="" unit="" values="Under Evaluation,Pilot,Design,Chartered,Planning,Build,In production,In Use,Available,End of Support,Pending Retirement,Obsolete,Retired,Sold" default=""/><Tag name="Product owner" type="String" description="" unit="" values="" default=""/><Tag name="ServiceNow link" type="URL" description="" unit="" values="" default=""/><Tag name="ServiceNow record id" type="String" description="" unit="" values="" default=""/></TaggedValues></Stereotype><Stereotype name="CSDMAlignedTo" alias="Aligned to" metatype="Aligned to" notes="" cx="0" cy="0" bgcolor="-1" fontcolor="-1" bordercolor="-1" borderwidth="-1" hideicon="0"><Image type="EAShapeScript 1.0" xmlns:dt="urn:schemas-microsoft-com:datatypes" dt:dt="bin.base64">UEsDBBQAAAAIAIuWZF26cUv1TAAAAGoAAAAHAAAAc3RyLmRhdD2MQQqAMBAD
+5+wrlp70DZ58SotFCltbxJv4d4OIDDlkN4kTSWQco1JYhcsnGqdouvqfGbgk
+++gcauxKjQQW/QubfNaGvd3AxKzGLT1QSwECFAAUAAAACACLlmRdunFL9UwA
+AABqAAAABwAAAAAAAAAAAAAAgAEAAAAAc3RyLmRhdFBLBQYAAAAAAQABADUA
+AABxAAAAAAA=
+</Image><AppliesTo><Apply type="Dependency"/></AppliesTo></Stereotype><Stereotype name="CSDMAPI" alias="API" metatype="API" notes="" cx="0" cy="0" bgcolor="2856441" fontcolor="-1" bordercolor="-1" borderwidth="-1" hideicon="0"><stereotypedrelationships><stereotypedrelationship stereotype="CSDM5::CSDMModel" constraint="CSDM5::CSDMProductModel"/><stereotypedrelationship stereotype="CSDM5::CSDMProvidedBy" constraint="CSDM5::CSDMApplication"/><stereotypedrelationship stereotype="CSDM5::CSDMReceivesDataFrom" constraint="CSDM5::CSDMApplicationService;CSDM5::CSDMBusinessServiceOffering"/></stereotypedrelationships><Image type="EAShapeScript 1.0" xmlns:dt="urn:schemas-microsoft-com:datatypes" dt:dt="bin.base64">UEsDBBQAAAAIAPiVZF2xNO3qEwEAANoCAAAHAAAAc3RyLmRhdK2SwUrDQBCG
+/7NPsbSXCD1YLx5KDyIevIhI76JNtMF0LZvE0opP5CP4cn6zaUqCKD2UZWZ/
+Zv+Z+WfYUgs9aqVMTktQLq8TfWBud7zeVEZWClprqkpBNRmTDqvgfcN7zWsF
+sopTDfRELJCZ4Qe9DIs9UznXFpRorDPOSBf40x4zxLqejABzTv0kMs3arO7d
++H4NU5/SrUZRuZ85QdNrnDkFjbBb7NBMD16Cm8wrXZM9w9//qlF2ttz2c2zZ
+EQtxD7YfQynMDMYLd8UGz5lkAm+hByoU8cXHzc7heTjtZp3eD+BYvzzG1iDT
+tIpdbZ4vXepON/re6Xf6/GOGdvJmhmNps79SoKX7w/5XPNwrGfY0m/0AUEsB
+AhQAFAAAAAgA+JVkXbE07eoTAQAA2gIAAAcAAAAAAAAAAAAAAIABAAAAAHN0
+ci5kYXRQSwUGAAAAAAEAAQA1AAAAOAEAAAAA
+</Image><AppliesTo><Apply type="Component"><Property name="_HideUmlLinks" value="True"/></Apply></AppliesTo><TaggedValues><Tag name="Life Cycle Stage" type="enumeration" description="" unit="" values="Ideation,Design,Purchase,Inventory,Deploy,Operational,End of Operation,End of Life" default=""/><Tag name="Life Cycle Stage Status" type="enumeration" description="" unit="" values="Under Evaluation,Pilot,Design,Chartered,Build,On Order,Pre-Allocated,Available,Legal Hold,Test,Pending Fulfillment,In Use,In Maintenance,End of Support,Pending Retirement,On Hold,Obsolete,Retired" default=""/><Tag name="ServiceNow link" type="URL" description="" unit="" values="" default=""/><Tag name="ServiceNow record id" type="String" description="" unit="" values="" default=""/></TaggedValues></Stereotype><Stereotype name="CSDMApplication" alias="Application" metatype="Application" notes="" cx="0" cy="0" bgcolor="2856441" fontcolor="-1" bordercolor="-1" borderwidth="-1" hideicon="0"><stereotypedrelationships><stereotypedrelationship stereotype="CSDM5::CSDMModel" constraint="CSDM5::CSDMProductModel"/><stereotypedrelationship stereotype="CSDM5::CSDMRunsOn" constraint="CSDM5::CSDMInfrastructureCI"/></stereotypedrelationships><Image type="EAShapeScript 1.0" xmlns:dt="urn:schemas-microsoft-com:datatypes" dt:dt="bin.base64">UEsDBBQAAAAIAPmVZF1W0n/ZFgEAAOoCAAAHAAAAc3RyLmRhdK2SPU7DQBCF
+X80pVkljpBRAQxGlQIiWAtEjsA2xcDaRf4gAcSKOwOX4ZhxHthAoBbJm9nnn
+zd/T1lrqXhvlClqBCkUd6R0Luy9qrdpZGWirhRpVasmYD1gl8VfiLdEGZBUX
+muiBu4rMHD8ZZdjdI5ULvYESneqEb6Zz/PGIWXndSEYFM6V+4kyzPmt4dn5c
+w6bP6NYyUb3fOWGmZ985A82wa+zQzAhegbvMS12RfYu/+VGjHqjc9wuoHLir
+XAfTx1AGM4fxxNmg4BmbzOEtdUeF0iPRlU3hRTi9skEvB3CsX+F3W5DNtPGu
+ts+nLvzfKqTEGs413K/dPkEfv+zUK9Ht9F+z2tspmW344v7eYLqfZDqa2ewb
+UEsBAhQAFAAAAAgA+ZVkXVbSf9kWAQAA6gIAAAcAAAAAAAAAAAAAAIABAAAA
+AHN0ci5kYXRQSwUGAAAAAAEAAQA1AAAAOwEAAAAA
+</Image><AppliesTo><Apply type="Component"><Property name="_HideUmlLinks" value="True"/></Apply></AppliesTo><TaggedValues><Tag name="Life Cycle Stage" type="enumeration" description="" unit="" values="Ideation,Design,Purchase,Inventory,Deploy,Operational,End of Operation,End of Life" default=""/><Tag name="Life Cycle Stage Status" type="enumeration" description="" unit="" values="Under Evaluation,Pilot,Design,Chartered,Build,On Order,Pre-Allocated,Available,Legal Hold,Test,Pending Fulfillment,In Use,In Maintenance,End of Support,Pending Retirement,On Hold,Obsolete,Retired" default=""/><Tag name="ServiceNow link" type="URL" description="" unit="" values="" default=""/><Tag name="ServiceNow record id" type="String" description="" unit="" values="" default=""/></TaggedValues></Stereotype><Stereotype name="CSDMApplicationModel" alias="Application Model" metatype="Application Model" notes="" cx="0" cy="0" bgcolor="15196895" fontcolor="-1" bordercolor="-1" borderwidth="-1" hideicon="0"><Image type="EAShapeScript 1.0" xmlns:dt="urn:schemas-microsoft-com:datatypes" dt:dt="bin.base64">UEsDBBQAAAAIAHCVZF1E3dZWHgEAAPYCAAAHAAAAc3RyLmRhdK2SPU7DQBCF
+X80pVkljpBRBFBRRCoQooYjoEdiGWHE20domAsSJOAKX45t1HNlCoBRoNTPP
+O29+vZWWetBWuZzWoEJeJ3pH3P54bVRFVgbaaa5aQQ0Rsx6rxP+Kv8Fbgyzj
+XCM9cheIzNGjQYTdPZG50Bso0ZmmnIku0KcDZoh5PREBZkr+JDJNuqi+bfUw
+h3WfUa2ho+owc0JPqzhzBpogt8ixkR68BreRV7om+g69+JGj6m25q+fYsuMu
+xD3YfgxlMHMYz9iaDZ4zyQzeUvdkKKPHx82m8DycbrNOL0dwrF4R73Yg62kb
+q9o8n7qM35YhxVdjN3CdbrD2v0p97Wdz+vhlvm4r7Xz/1be9o5Ie+q/v72nG
+h07Gg55NvgFQSwECFAAUAAAACABwlWRdRN3WVh4BAAD2AgAABwAAAAAAAAAA
+AAAAgAEAAAAAc3RyLmRhdFBLBQYAAAAAAQABADUAAABDAQAAAAA=
+</Image><AppliesTo><Apply type="Class"><Property name="_HideUmlLinks" value="True"/></Apply></AppliesTo><TaggedValues><Tag name="End-of-life date" type="Date" description="" unit="" values="" default=""/><Tag name="Life Cycle Stage" type="enumeration" description="" unit="" values="Ideation,Design,Build &amp; Integrate,Operational,End of Life" default=""/><Tag name="Life Cycle Stage Status" type="enumeration" description="" unit="" values="Under Evaluation,Pilot,Design,Chartered,Planning,Build,In production,In Use,Available,End of Support,Pending Retirement,Obsolete,Retired,Sold" default=""/><Tag name="Product owner" type="String" description="" unit="" values="" default=""/><Tag name="ServiceNow link" type="URL" description="" unit="" values="" default=""/><Tag name="ServiceNow record id" type="String" description="" unit="" values="" default=""/></TaggedValues></Stereotype><Stereotype name="CSDMApplicationService" alias="Application Service" metatype="Application Service" notes="" cx="0" cy="0" bgcolor="2856441" fontcolor="-1" bordercolor="-1" borderwidth="-1" hideicon="0"><stereotypedrelationships><stereotypedrelationship stereotype="CSDM5::CSDMConnectedBy" constraint="CSDM5::CSDMConnectionServiceInstance"/><stereotypedrelationship stereotype="CSDM5::CSDMDependsOn" constraint="CSDM5::CSDMApplication;CSDM5::CSDMApplicationService;CSDM5::CSDMConnectionServiceInstance;CSDM5::CSDMDataServiceInstance;CSDM5::CSDMFacilityServiceInstance;CSDM5::CSDMNetworkServiceInstance;CSDM5::CSDMOperationalProcessServiceInstance;CSDM5::CSDMServiceInstance"/><stereotypedrelationship stereotype="CSDM5::CSDMModel" constraint="CSDM5::CSDMProductModel"/></stereotypedrelationships><Image type="EAShapeScript 1.0" xmlns:dt="urn:schemas-microsoft-com:datatypes" dt:dt="bin.base64">UEsDBBQAAAAIAOSVZF1zqjinHgEAAPoCAAAHAAAAc3RyLmRhdK2SPU7DQBCF
+X80pVkljpBQgCoooBUK0FECPwDYkwtlE/kkEiBNxBC7HN+M4soVAKZA1u88z
+b978aCvN9aC1cgUtQQtFHekdC7svaqXKWRloq5lqlWrImPZYBfFX4g3RGmSK
+M430iK8kM+ccDTLM94TyQm+gRKc64ZvonPN4wCxdN5JRwkzRT5xp1mX17/Yc
+alj3GdUaOqr2Myf09OIzZ6AJdo0dmhnBS3Cbeakrsu84b35oVL0td/UCWw74
+St+D7cdQBjOH8cxds8EzJpnCm+sehcIj0Tebwotwus0GbQ7gWL2F+7Yg62nt
+VW2eT134vymkxGruFdygW1fYuD/X126+oI9fZuw20874X73bWyrotf8C/55o
+vO9kPOjZ7BtQSwECFAAUAAAACADklWRdc6o4px4BAAD6AgAABwAAAAAAAAAA
+AAAAgAEAAAAAc3RyLmRhdFBLBQYAAAAAAQABADUAAABDAQAAAAA=
+</Image><AppliesTo><Apply type="Class"><Property name="_HideUmlLinks" value="True"/></Apply></AppliesTo><TaggedValues><Tag name="Business criticality" type="enumeration" description="" unit="" values="High,Medium,Low" default=""/><Tag name="Environment" type="String" description="" unit="" values="" default=""/><Tag name="Life Cycle Stage" type="enumeration" description="" unit="" values="Ideation,Design,Purchase,Inventory,Deploy,Operational,End of Operation,End of Life" default=""/><Tag name="Life Cycle Stage Status" type="enumeration" description="" unit="" values="Under Evaluation,Pilot,Design,Chartered,Build,On Order,Pre-Allocated,Available,Legal Hold,Test,Pending Fulfillment,In Use,In Maintenance,End of Support,Pending Retirement,On Hold,Obsolete,Retired" default=""/><Tag name="Population method" type="enumeration" description="" unit="" values="Mapping,Manual,Tags,Calculated,Query" default=""/><Tag name="Region" type="String" description="" unit="" values="" default=""/><Tag name="ServiceNow link" type="URL" description="" unit="" values="" default=""/><Tag name="ServiceNow record id" type="String" description="" unit="" values="" default=""/><Tag name="Used for" type="enumeration" description="" unit="" values="Production,Staging,QA,Test,Development,Demonstration,Training,Disaster recovery" default=""/></TaggedValues></Stereotype><Stereotype name="CSDMAsset" alias="Asset" metatype="Asset" notes="" cx="0" cy="0" bgcolor="2856441" fontcolor="-1" bordercolor="-1" borderwidth="-1" hideicon="0"><Image type="EAShapeScript 1.0" xmlns:dt="urn:schemas-microsoft-com:datatypes" dt:dt="bin.base64">UEsDBBQAAAAIAAiWZF0UQ63pEwEAAN4CAAAHAAAAc3RyLmRhdK2SMU7DQBBF
+f80pVkljpBSBhiJKgSJaCkSPIDbEwlmiXTsRIE7EEbgcb9ZxZAuBUiBrZr93
+/sz8GW3USvfaqJDTGlTK60TvmNt/Xi+KiZWDdpqrVlBDxqzHqoi/Em+I1iCr
+ONdID9wFMgv8aJBhd49ULvUGynSmKd9EF/jTATOkup6MAHNJ/Swxzbqs/tn6
+YQ1Tn9OtQVE8zJyh6TnNnIMm2DV2bKYHr8Ft5kJXZN/ib37UiL0td/0cW3bc
+hbQH24+hHGYB44mzZoPnTDKDt9IdFaoU8WmzS3geTrdZp+0RHOtXprsdyDRt
+Uleb51OXKI381/raz+D08csc3fTtHP+lz95LhZ7+K/tb9figZDzQbPYNUEsB
+AhQAFAAAAAgACJZkXRRDrekTAQAA3gIAAAcAAAAAAAAAAAAAAIABAAAAAHN0
+ci5kYXRQSwUGAAAAAAEAAQA1AAAAOAEAAAAA
+</Image><AppliesTo><Apply type="Class"><Property name="_HideUmlLinks" value="True"/></Apply></AppliesTo><TaggedValues><Tag name="Life Cycle Stage" type="enumeration" description="" unit="" values="Ideation,Design,Purchase,Inventory,Deploy,Operational,End of Operation,Defective,Missing,End of Life" default=""/><Tag name="Life Cycle Stage Status" type="enumeration" description="" unit="" values="Under Evaluation,Pilot,Design,Chartered,Build,On Order,Pre-Allocated,Available,Reserved,Pending Repair,Legal Hold,Quarantine,In Stock,Pending Transfer,In Transit,Test,Pending Fulfillment,In Use,In Maintenance,End of Support,Pending Retirement,Pending Certificate,Pending Disposal,Pending Donation,Pending Evaluation,Pending Resale,Pending Return,On Hold,Lost,Stolen,Obsolete,Retired,Disposed,Donated,Sold,RMA,Vendor Credit,Buy-out,Lease Return" default=""/><Tag name="ServiceNow link" type="URL" description="" unit="" values="" default=""/><Tag name="ServiceNow record id" type="String" description="" unit="" values="" default=""/></TaggedValues></Stereotype><Stereotype name="CSDMAssigns" alias="Assigns" metatype="Assigns" notes="" cx="0" cy="0" bgcolor="-1" fontcolor="-1" bordercolor="-1" borderwidth="-1" hideicon="0"><Image type="EAShapeScript 1.0" xmlns:dt="urn:schemas-microsoft-com:datatypes" dt:dt="bin.base64">UEsDBBQAAAAIALCWZF1qWOquRwAAAGQAAAAHAAAAc3RyLmRhdD2LMQqAMADE
+MvuK4qRvcPIpFkUK1Yp1E/9uBpFwwx25zERkIRPYSMyS7ZHCJcU1/07DbcLH
+welj1+poGamSWF2qvWfQfcwLUEsBAhQAFAAAAAgAsJZkXWpY6q5HAAAAZAAA
+AAcAAAAAAAAAAAAAAIABAAAAAHN0ci5kYXRQSwUGAAAAAAEAAQA1AAAAbAAA
+AAAA
+</Image><AppliesTo><Apply type="Dependency"/></AppliesTo></Stereotype><Stereotype name="CSDMBillOfMaterials" alias="Bill of materials" metatype="Bill of materials" notes="" cx="0" cy="0" bgcolor="-1" fontcolor="-1" bordercolor="-1" borderwidth="-1" hideicon="0"><Image type="EAShapeScript 1.0" xmlns:dt="urn:schemas-microsoft-com:datatypes" dt:dt="bin.base64">UEsDBBQAAAAIAGmWZF23qQJ3UgAAAHgAAAAHAAAAc3RyLmRhdD2MQQqAQAwD
+5+wrFk/6Bm/+ZBdXEKoV9Sb+3VBEQqBNpzEyhYqRWFmYJNNecC7JldrPNNxy
++rRz6GMT1dEyarboceZoy7rUYLLyU0zPoP9HfgFQSwECFAAUAAAACABplmRd
+t6kCd1IAAAB4AAAABwAAAAAAAAAAAAAAgAEAAAAAc3RyLmRhdFBLBQYAAAAA
+AQABADUAAAB3AAAAAAA=
+</Image><AppliesTo><Apply type="Dependency"/></AppliesTo></Stereotype><Stereotype name="CSDMBuilding" alias="Building" metatype="Building" notes="" cx="0" cy="0" bgcolor="15196895" fontcolor="-1" bordercolor="-1" borderwidth="-1" hideicon="0"><Image type="EAShapeScript 1.0" xmlns:dt="urn:schemas-microsoft-com:datatypes" dt:dt="bin.base64">UEsDBBQAAAAIAKmVZF3ddi+sFAEAAOQCAAAHAAAAc3RyLmRhdK2SsU7DQAyG
+/5mnOLVLkDoAC0PVBcTKgNgRNKGNaI/qklAB4ol4BF6Oz05TJUKgDuhk3y/f
+b/u3dZWWutdGhYLWoFJRR3rHwu5EPatyVg7aaqZaSQ0Z0x5rxfsr7w2vNcgq
+zjTSA7FEZoEfDTIs9kjlUm+gTKc64Ux0jj8eMJPXjWQkmHPqZ84067L6d+uH
+NUx9TrcGRdV+5gxNTz5zDppg19ihmRG8BreZl7oi+xZ/86NG1dty1y+w5UAs
++R5sP4ZymAWMBXfNBs+YZApvqTsqrPwl+mbn8CKcbrNBLwdwrF/psS3ING28
+q83zqQumLKmQO2ehr90kQR+/TNPtoJ3mv1TarzEV/b/2t/bxXsl4oNnsG1BL
+AQIUABQAAAAIAKmVZF3ddi+sFAEAAOQCAAAHAAAAAAAAAAAAAACAAQAAAABz
+dHIuZGF0UEsFBgAAAAABAAEANQAAADkBAAAAAA==
+</Image><AppliesTo><Apply type="Class"><Property name="_HideUmlLinks" value="True"/></Apply></AppliesTo><TaggedValues><Tag name="ServiceNow link" type="URL" description="" unit="" values="" default=""/><Tag name="ServiceNow record id" type="String" description="" unit="" values="" default=""/></TaggedValues></Stereotype><Stereotype name="CSDMBusinessApplication" alias="Business Application" metatype="Business Application" notes="" cx="0" cy="0" bgcolor="11838315" fontcolor="-1" bordercolor="-1" borderwidth="-1" hideicon="0"><stereotypedrelationships><stereotypedrelationship stereotype="CSDM5::CSDMConnectedTo" constraint="CSDM5::CSDMBusinessApplication"/><stereotypedrelationship stereotype="CSDM5::CSDMConsumes" constraint="CSDM5::CSDMApplicationService"/><stereotypedrelationship stereotype="CSDM5::CSDMContains" constraint="CSDM5::CSDMSDLCComponent"/><stereotypedrelationship stereotype="CSDM5::CSDMModel" constraint="CSDM5::CSDMProductModel"/><stereotypedrelationship stereotype="CSDM5::CSDMProcessReference" constraint="CSDM5::CSDMBusinessProcess"/><stereotypedrelationship stereotype="CSDM5::CSDMUses" constraint="CSDM5::CSDMApplicationService;CSDM5::CSDMInformationObject"/></stereotypedrelationships><Image type="EAShapeScript 1.0" xmlns:dt="urn:schemas-microsoft-com:datatypes" dt:dt="bin.base64">UEsDBBQAAAAIAMmVZF2+2cUWIAEAAPwCAAAHAAAAc3RyLmRhdK2SwUrDQBCG
+/7NPsbSXCD1UPHgoPah49VC8iybRhqbbkk0sKj6Rj+DL+c2mKQmi9CDLzP7M
+/DM7/7BBSz1oq1xOa1AhrxO9Y25/vDYKkZWBdpqrVqWGilmPVZJ/Jd+QrUHW
+ca6RHolVVOb40aDCYk90LvQGSnSmKWeiC/zpgFnFvp6KCmZK/yQyzbqq/t36
+YQ+bPuO1honCQXPCTKuoOQNNsFvs2EoPXoPbymvdUH2HX/zoEXpb7t5zbNkR
+q+IebD+GMpg5jGfumg2eo2QGb6l7OpQx4+NmU3geTrdZp5cjOPZeEWM7kM20
+ja+ank9doTLEfM4d4F9GhvVMYdfcG7Jfe4VOH7+o7HbTqvyv6e03lUzb/4N/
+axofJhkPZjb7BlBLAQIUABQAAAAIAMmVZF2+2cUWIAEAAPwCAAAHAAAAAAAA
+AAAAAACAAQAAAABzdHIuZGF0UEsFBgAAAAABAAEANQAAAEUBAAAAAA==
+</Image><AppliesTo><Apply type="Component"><Property name="_HideUmlLinks" value="True"/></Apply></AppliesTo><TaggedValues><Tag name="Architecture type" type="enumeration" description="" unit="" values="Client Server,N-Tier,Web Based,Other,Platform Host,Platform Application" default=""/><Tag name="Business criticality" type="enumeration" description="" unit="" values="High,Medium,Low" default=""/><Tag name="Data classification" type="enumeration" description="" unit="" values="Internal,Public,Confidential,Highly Sensitive" default=""/><Tag name="Install type" type="enumeration" description="" unit="" values="On Premise,Cloud,Hybrid,Third Party Hosted" default=""/><Tag name="IT Application owner" type="String" description="" unit="" values="" default=""/><Tag name="Life Cycle Stage" type="enumeration" description="" unit="" values="Ideation,Design,Operational,End of Life" default=""/><Tag name="Life Cycle Stage Status" type="enumeration" description="" unit="" values="Under Evaluation,Pilot,Design,Chartered,Build,Pending Fulfillment,In Use,In Maintenance,End of Support,Pending Retirement,Obsolete,Retired" default=""/><Tag name="Managed by group" type="String" description="" unit="" values="" default=""/><Tag name="Platform" type="enumeration" description="" unit="" values="Android,AS400,AWS,iOS,Mainframe,Microsoft Azure,Unix,Windows,SAP,Oracle,ServiceNow" default=""/><Tag name="ServiceNow link" type="URL" description="" unit="" values="" default=""/><Tag name="ServiceNow record id" type="String" description="" unit="" values="" default=""/><Tag name="Support group" type="String" description="" unit="" values="" default=""/><Tag name="Technology stack" type="enumeration" description="" unit="" values=".net,Apex,Cobol,Java,Netweaver,Open Source,PL/SQL,SQL" default=""/><Tag name="User base" type="enumeration" description="" unit="" values="0-49,50-99,100-499,500-999,1000+" default=""/></TaggedValues></Stereotype><Stereotype name="CSDMBusinessCapability" alias="Business Capability" metatype="Business Capability" notes="" cx="0" cy="0" bgcolor="11838315" fontcolor="-1" bordercolor="-1" borderwidth="-1" hideicon="0"><stereotypedrelationships><stereotypedrelationship stereotype="CSDM5::CSDMModel" constraint="CSDM5::CSDMProductModel"/><stereotypedrelationship stereotype="CSDM5::CSDMParentOf" constraint="CSDM5::CSDMBusinessCapability"/><stereotypedrelationship stereotype="CSDM5::CSDMProvidedBy" constraint="CSDM5::CSDMBusinessApplication;CSDM5::CSDMBusinessService"/></stereotypedrelationships><Image type="EAShapeScript 1.0" xmlns:dt="urn:schemas-microsoft-com:datatypes" dt:dt="bin.base64">UEsDBBQAAAAIAMmVZF3m8XAqHgEAAPoCAAAHAAAAc3RyLmRhdK2SPU7DQBCF
+X80prKQxUgoQBUWUhoiWAtGjEBti4Wwir00EiBNxBC7HN+M4soVAKZA1u08z
+b37eeKNWWmirXInWoEJBJ3rHkv0XtFF0VgbaaaZalRoypj1WSfyVeEO0BlnF
+mUZ6wFeRmXOOBhnme6RyoTdQqnOd8U10yXk6YFZeN5BRwVxSP3WmWZfVv9tz
+WMOmz+jWMFE8aE6Z6dk1Z6AJdoMdmxnAa3CbOdc12Xectz9qxN6Wu34JW07w
+Vb4H24+hDGYO44m7ZoMXKJnCW+meCqVHgm92CS/A6Tab6OUIjvUr3LcD2Uxb
+72p6PnWFyujxnDvCnztngfbCK9u//drrS/Txi8ZuM63G/5rd3lLJrP0X+Lei
+8WGS8WBms29QSwECFAAUAAAACADJlWRd5vFwKh4BAAD6AgAABwAAAAAAAAAA
+AAAAgAEAAAAAc3RyLmRhdFBLBQYAAAAAAQABADUAAABDAQAAAAA=
+</Image><AppliesTo><Apply type="Class"><Property name="_HideUmlLinks" value="True"/></Apply></AppliesTo><TaggedValues><Tag name="Life Cycle Stage" type="enumeration" description="" unit="" values="Ideation,Design,Purchase,Inventory,Deploy,Operational,End of Operation,End of Life" default=""/><Tag name="Life Cycle Stage Status" type="enumeration" description="" unit="" values="Under Evaluation,Pilot,Design,Chartered,Build,On Order,Pre-Allocated,Available,Legal Hold,Test,Pending Fulfillment,In Use,In Maintenance,End of Support,Pending Retirement,On Hold,Obsolete,Retired" default=""/><Tag name="ServiceNow link" type="URL" description="" unit="" values="" default=""/><Tag name="ServiceNow record id" type="String" description="" unit="" values="" default=""/></TaggedValues></Stereotype><Stereotype name="CSDMBusinessProcess" alias="Business Process" metatype="Business Process" notes="" cx="0" cy="0" bgcolor="15196895" fontcolor="-1" bordercolor="-1" borderwidth="-1" hideicon="0"><stereotypedrelationships><stereotypedrelationship stereotype="CSDM5::CSDMModel" constraint="CSDM5::CSDMProductModel"/><stereotypedrelationship stereotype="CSDM5::CSDMOperationalizes" constraint="CSDM5::CSDMBusinessCapability"/><stereotypedrelationship stereotype="CSDM5::CSDMParentOf" constraint="CSDM5::CSDMBusinessProcess"/></stereotypedrelationships><Image type="EAShapeScript 1.0" xmlns:dt="urn:schemas-microsoft-com:datatypes" dt:dt="bin.base64">UEsDBBQAAAAIAGaVZF1bHAs1GwEAAPQCAAAHAAAAc3RyLmRhdK2SQUvDQBCF
+39lfsbSXCD0oHjyUXhSvpYh30STaYLqWbGJR8Rf5E/xzfrNJSoIoPUiY3Zed
+N7PzHhu01p22yuW0ARXyOtI74brP61khsjLQTgvVqtRQMR+wSvKv5BuyNcg6
+LjTRPWcVlTnrZFRhZw90LvQGSnSqE76ZzlmPR8wq9vVUVDBT+ieRadFXDfd2
+Hfew6TNua5go7DUnzPQUNWegGbEkDq304A24rbzUFdU3rNc/eoSBy/19Dpcd
+Z1X0wfwxlMHMYTyy1zh4hpI5vLVu6VDGjI/OpvA8nN5Zp5cDOHZfEc92IJtp
+G281PZ+6QGWI+Zw9wF9F99Pu/6tT5vTxi7rek1bdf01tr6hkyuHb+1vLdD/J
+dDSzxTdQSwECFAAUAAAACABmlWRdWxwLNRsBAAD0AgAABwAAAAAAAAAAAAAA
+gAEAAAAAc3RyLmRhdFBLBQYAAAAAAQABADUAAABAAQAAAAA=
+</Image><AppliesTo><Apply type="Class"><Property name="_HideUmlLinks" value="True"/></Apply></AppliesTo><TaggedValues><Tag name="Availability impact" type="String" description="" unit="" values="" default=""/><Tag name="Confidentiality impact" type="String" description="" unit="" values="" default=""/><Tag name="Declared criticality" type="String" description="" unit="" values="" default=""/><Tag name="Integrity impact" type="String" description="" unit="" values="" default=""/><Tag name="Life Cycle Stage" type="enumeration" description="" unit="" values="Ideation,Operational,End of Life" default=""/><Tag name="Life Cycle Stage Status" type="enumeration" description="" unit="" values="Draft,Under Evaluation,In Use,Published,Renewal in Process,Renewed,Pending Retirement,Expired,Retired" default=""/><Tag name="Review frequency" type="enumeration" description="" unit="" values="Monthly,Quarterly,Semi Annual / Half Yearly,Annually,none" default=""/><Tag name="ServiceNow link" type="URL" description="" unit="" values="" default=""/><Tag name="ServiceNow record id" type="String" description="" unit="" values="" default=""/></TaggedValues></Stereotype><Stereotype name="CSDMBusinessService" alias="Business Service" metatype="Business Service" notes="" cx="0" cy="0" bgcolor="6079574" fontcolor="-1" bordercolor="-1" borderwidth="-1" hideicon="0"><stereotypedrelationships><stereotypedrelationship stereotype="CSDM5::CSDMIsPartOf" constraint="CSDM5::CSDMServicePortfolio"/><stereotypedrelationship stereotype="CSDM5::CSDMModel" constraint="CSDM5::CSDMProductModel"/><stereotypedrelationship stereotype="CSDM5::CSDMPublishedAs" constraint="CSDM5::CSDMBusinessServiceOffering"/></stereotypedrelationships><Image type="EAShapeScript 1.0" xmlns:dt="urn:schemas-microsoft-com:datatypes" dt:dt="bin.base64">UEsDBBQAAAAIACyWZF1lLNC9GwEAAPQCAAAHAAAAc3RyLmRhdK2SsU7DQBBE
+p+YrTkljpBQgCoooDYiWAugRxIZYcY7ozk4EiC/iE/g53p7jyBYCpUDW3o12
+Z/Z2Vo5a6EFrFXJagUp5HemdcLvP60UxsXLQVjPVCmpQTHusivor9YZqDbKO
+M430SC6gLDhHA4Xlnuhc6g2U6VQnfBOdcx4PmCH19SgCzDn9s8S06FT9uz2H
+PWz6nNcaJop7zxkzLZPnHDQhrolDlR68ArfKS12hvuO8+dEj9rbcvefYsiMX
+0h5sP4ZymAWMZ+6aDZ7hZApvoXs6VKni02bn8DycbrNOmwM49l6ZcluQzbRO
+r5qfT13gMqZ6wR3h3ybthpz1+to5c/r4xV23k9bdf01tf1HFlP1/728v4/0k
+48HMFt9QSwECFAAUAAAACAAslmRdZSzQvRsBAAD0AgAABwAAAAAAAAAAAAAA
+gAEAAAAAc3RyLmRhdFBLBQYAAAAAAQABADUAAABAAQAAAAA=
+</Image><AppliesTo><Apply type="Class"><Property name="_HideUmlLinks" value="True"/></Apply></AppliesTo><TaggedValues><Tag name="Business criticality" type="enumeration" description="" unit="" values="High,Medium,Low" default=""/><Tag name="Life Cycle Stage" type="enumeration" description="" unit="" values="Ideation,Design,Purchase,Inventory,Deploy,Operational,End of Operation,End of Life" default=""/><Tag name="Life Cycle Stage Status" type="enumeration" description="" unit="" values="Under Evaluation,Pilot,Design,Chartered,Build,On Order,Pre-Allocated,Available,Legal Hold,Test,Pending Fulfillment,In Use,In Maintenance,End of Support,Pending Retirement,On Hold,Obsolete,Retired" default=""/><Tag name="Service owner" type="String" description="" unit="" values="" default=""/><Tag name="ServiceNow link" type="URL" description="" unit="" values="" default=""/><Tag name="ServiceNow record id" type="String" description="" unit="" values="" default=""/></TaggedValues></Stereotype><Stereotype name="CSDMBusinessServiceOffering" alias="Business Service Offering" metatype="Business Service Offering" notes="" cx="0" cy="0" bgcolor="6079574" fontcolor="-1" bordercolor="-1" borderwidth="-1" hideicon="0"><stereotypedrelationships><stereotypedrelationship stereotype="CSDM5::CSDMDependsOn" constraint="CSDM5::CSDMApplicationService;CSDM5::CSDMConnectionServiceInstance;CSDM5::CSDMDataServiceInstance;CSDM5::CSDMFacilityServiceInstance;CSDM5::CSDMNetworkServiceInstance;CSDM5::CSDMOperationalProcessServiceInstance;CSDM5::CSDMServiceInstance"/><stereotypedrelationship stereotype="CSDM5::CSDMModel" constraint="CSDM5::CSDMProductModel"/></stereotypedrelationships><Image type="EAShapeScript 1.0" xmlns:dt="urn:schemas-microsoft-com:datatypes" dt:dt="bin.base64">UEsDBBQAAAAIAC2WZF30IHtWJAEAAAYDAAAHAAAAc3RyLmRhdK2SQUvDQBCF
+39lfsbSXCD0oHjyUXhSvCupdNIltMF1LNmlR8Rf5E/xzfjtpSoIoPZQwu8PM
+e7PvDQla6FEr5XJakhXyOtIH4baf16uCoTKyjWaqVamBMe2hSvpv9Bu6NVmc
+ONNIT9QqmDnnaMCItWcmF3onS3SqE76JzjmPB8jK5noYFciU+YkhY3Ss/t2e
+wxlRfcZrDYrCznOCphfznJFNiGtiX6YnX5K3zEtdwb7nvP01I/S23L3n2LKj
+Vtke4n5iloHMQcy5azZ4hpMpuIUemFBax9tmU3AeTLdZp/UemPheYbUNWdS0
+slejny9d4DJYP+cO4O+Mu6aWmvobtLZqI2qu761Xp88//HZbav0eykf8r0p0
+9//G/92Nd0rGA80xfgBQSwECFAAUAAAACAAtlmRd9CB7ViQBAAAGAwAABwAA
+AAAAAAAAAAAAgAEAAAAAc3RyLmRhdFBLBQYAAAAAAQABADUAAABJAQAAAAA=
+</Image><AppliesTo><Apply type="Class"><Property name="_HideUmlLinks" value="True"/></Apply></AppliesTo><TaggedValues><Tag name="Availability" type="String" description="" unit="" values="" default=""/><Tag name="Capability" type="String" description="" unit="" values="" default=""/><Tag name="Environment" type="String" description="" unit="" values="" default=""/><Tag name="Life Cycle Stage" type="enumeration" description="" unit="" values="Ideation,Design,Purchase,Inventory,Deploy,Operational,End of Operation,End of Life" default=""/><Tag name="Life Cycle Stage Status" type="enumeration" description="" unit="" values="Under Evaluation,Pilot,Design,Chartered,Build,On Order,Pre-Allocated,Available,Legal Hold,Test,Pending Fulfillment,In Use,In Maintenance,End of Support,Pending Retirement,On Hold,Obsolete,Retired" default=""/><Tag name="Location or geography" type="String" description="" unit="" values="" default=""/><Tag name="Packaging" type="String" description="" unit="" values="" default=""/><Tag name="Pricing" type="String" description="" unit="" values="" default=""/><Tag name="ServiceNow link" type="URL" description="" unit="" values="" default=""/><Tag name="ServiceNow record id" type="String" description="" unit="" values="" default=""/></TaggedValues></Stereotype><Stereotype name="CSDMBusinessUnit" alias="Business Unit" metatype="Business Unit" notes="" cx="0" cy="0" bgcolor="15196895" fontcolor="-1" bordercolor="-1" borderwidth="-1" hideicon="0"><stereotypedrelationships><stereotypedrelationship stereotype="CSDM5::CSDMParentOf" constraint="CSDM5::CSDMBusinessUnit"/><stereotypedrelationship stereotype="CSDM5::CSDMPartOf" constraint="CSDM5::CSDMCompany"/></stereotypedrelationships><Image type="EAShapeScript 1.0" xmlns:dt="urn:schemas-microsoft-com:datatypes" dt:dt="bin.base64">UEsDBBQAAAAIAKeVZF07n2p2GQEAAO4CAAAHAAAAc3RyLmRhdK2SPU7DQBCF
+X80pVkljpBRAQxGlAdGmiKBGEBti4SzRrk0EiBNxBC7HN+s4soVAKdBqdp9m
+3vy80UatdKeNCjmtQaW8jvSOud3xelZMrBy01Uy1ghoypj1WRfyVeEO0BlnF
+mUa6xxfILLhHgwzzPVC51Bso06lOOBOdcx8PmCHV9WQEmEvqZ4lp1mX13/Ye
+1rDpc7o1TBT3mjNmekqac9AEm2OHZnrwGtxmXuqK7GvuxY8asbflrp9jyw5f
+SHuw/RjKYRYwHnlrNniGkim8lW6pUKWIT5tdwvNwus06vRzAsX5l8m1BNtMm
+dTU9n7pAZUzxgjfCvwGXsL92mpw+ftHVbaPV9V/z2v+pmK//6/5WMd5PMh7M
+bPYNUEsBAhQAFAAAAAgAp5VkXTufanYZAQAA7gIAAAcAAAAAAAAAAAAAAIAB
+AAAAAHN0ci5kYXRQSwUGAAAAAAEAAQA1AAAAPgEAAAAA
+</Image><AppliesTo><Apply type="Class"><Property name="_HideUmlLinks" value="True"/></Apply></AppliesTo><TaggedValues><Tag name="ServiceNow link" type="URL" description="" unit="" values="" default=""/><Tag name="ServiceNow record id" type="String" description="" unit="" values="" default=""/></TaggedValues></Stereotype><Stereotype name="CSDMCatalogItem" alias="Catalog Item" metatype="Catalog Item" notes="" cx="0" cy="0" bgcolor="6079574" fontcolor="-1" bordercolor="-1" borderwidth="-1" hideicon="0"><stereotypedrelationships><stereotypedrelationship stereotype="CSDM5::CSDMRepresents" constraint="CSDM5::CSDMBusinessServiceOffering;CSDM5::CSDMTechnologyManagementServiceOffering"/></stereotypedrelationships><Image type="EAShapeScript 1.0" xmlns:dt="urn:schemas-microsoft-com:datatypes" dt:dt="bin.base64">UEsDBBQAAAAIAD2WZF2eDWwhGgEAAOwCAAAHAAAAc3RyLmRhdK2SsU7DQBBE
+p+YrTkljpBSBhiJKhVLQUET0KMSGWNiX6GwTAeKL+AR+jrfnOLKFQCnQae9G
+tzN7O6urtNFKO2VyKkG5vM70TrjD8tqqiqwUtNdctYIaFLMeqyD/Sr4hW4Os
+4lwjPXAXUGbso4HC7h6pnOsNlOhCU9ZEV+znA2aIdT2KAHNN/SQyLTpV/2z3
+YQ3rPuW1ho6qo+eEnp6j5xQ0IW6JU5UeXIJb5bUWqO/Ylz9qVL0pd+85puy4
+C3EONh9DKcwMxhNnzQQvcTKDt9E9FYqY8XGya3geTjdZp5cTOPZeHu/2IOtp
+F181P594WJGxGltqON1EbamvgyOnj19cdbNoXf1Xt/Z7Crrr/7m/PYyPnYwH
+PVt8A1BLAQIUABQAAAAIAD2WZF2eDWwhGgEAAOwCAAAHAAAAAAAAAAAAAACA
+AQAAAABzdHIuZGF0UEsFBgAAAAABAAEANQAAAD8BAAAAAA==
+</Image><AppliesTo><Apply type="Class"><Property name="_HideUmlLinks" value="True"/></Apply></AppliesTo><TaggedValues><Tag name="ServiceNow link" type="URL" description="" unit="" values="" default=""/><Tag name="ServiceNow record id" type="String" description="" unit="" values="" default=""/></TaggedValues></Stereotype><Stereotype name="CSDMCMDBGroup" alias="CMDB Group" metatype="CMDB Group" notes="" cx="0" cy="0" bgcolor="15196895" fontcolor="-1" bordercolor="-1" borderwidth="-1" hideicon="0"><Image type="EAShapeScript 1.0" xmlns:dt="urn:schemas-microsoft-com:datatypes" dt:dt="bin.base64">UEsDBBQAAAAIAKWVZF3lqjtUGAEAAOgCAAAHAAAAc3RyLmRhdK2SvU7DQBCE
+p+YpTkljpBRAQxGl4UdUUCB6BLEhFs5hnW0iQDwRj8DL8e3ZjmwhUAp02rvR
+3ezu7OgqrXSnUpmc1qBcXnt6J1y3vJ5VRVYK2mihWkENGfMBq+D9lfeG1xpk
+FRea6J67QGbGPhll2N0DlXO9gRId6oA10zH7/ogZYl1PRoC5pH4SmRZ91vBs
+93ENU5/SrUFRtZ05QdNTnDkFzYgrYtdMD16D28xTnZN9w379o0Y1cLnv53DZ
+cReiD+aPoRRmBuORs8bBIyaZw1vplgpFfPHR2SU8D6d31ullB471y+PdBmSa
+ytjV5vlkhkud6QTeRed6qa9uGqePXybqfWgn+i+l9nMKlA3/29/6p1sl05Fm
+i29QSwECFAAUAAAACACllWRd5ao7VBgBAADoAgAABwAAAAAAAAAAAAAAgAEA
+AAAAc3RyLmRhdFBLBQYAAAAAAQABADUAAAA9AQAAAAA=
+</Image><AppliesTo><Apply type="Class"><Property name="_HideUmlLinks" value="True"/></Apply></AppliesTo><TaggedValues><Tag name="ServiceNow link" type="URL" description="" unit="" values="" default=""/><Tag name="ServiceNow record id" type="String" description="" unit="" values="" default=""/></TaggedValues></Stereotype><Stereotype name="CSDMCompany" alias="Company" metatype="Company" notes="" cx="0" cy="0" bgcolor="15196895" fontcolor="-1" bordercolor="-1" borderwidth="-1" hideicon="0"><stereotypedrelationships><stereotypedrelationship stereotype="CSDM5::CSDMParentOf" constraint="CSDM5::CSDMCompany"/></stereotypedrelationships><Image type="EAShapeScript 1.0" xmlns:dt="urn:schemas-microsoft-com:datatypes" dt:dt="bin.base64">UEsDBBQAAAAIAKaVZF0v9L6aFQEAAOICAAAHAAAAc3RyLmRhdK2SsU7DQBBE
+p85XnJLGSCmAhiJKhdJSIHoEsSEWzsU620QQ5Yv4BH4ub89xZAuBUiBr70Z7
+s3sz66u00pNKZXJag3J5jbQj3PHz2qiKrBS01Vy1ghoqZj1WwfkH5w2nNcg6
+zjXWM7lAZcY6HlRY7oXOuT5Bia50yTfVDevFgBliX09FgLmkfxKZFl1Vf2/X
+YQ9Tn3Jbg6Lq5DlB01v0nIKmxB1xbqUHr8Ft5a0WVD+w3v/oUfWm3N3nmLIj
+F+IcbD6GUpgZjFf2mgle42QGb6VHOhTxxMfJLuF5ON1knd7P4Nh9ecxtQaap
+jLeany88bHBUkvf8w++jD6f9L166CbRe/kujvZkCTf2X9rfyyUnJZKDZ4gBQ
+SwECFAAUAAAACACmlWRdL/S+mhUBAADiAgAABwAAAAAAAAAAAAAAgAEAAAAA
+c3RyLmRhdFBLBQYAAAAAAQABADUAAAA6AQAAAAA=
+</Image><AppliesTo><Apply type="Class"><Property name="_HideUmlLinks" value="True"/></Apply></AppliesTo><TaggedValues><Tag name="Customer" type="enumeration" description="" unit="" values="true,false" default=""/><Tag name="Manufacturer" type="enumeration" description="" unit="" values="true,false" default=""/><Tag name="ServiceNow link" type="URL" description="" unit="" values="" default=""/><Tag name="ServiceNow record id" type="String" description="" unit="" values="" default=""/><Tag name="Vendor" type="enumeration" description="" unit="" values="true,false" default=""/></TaggedValues></Stereotype><Stereotype name="CSDMConnectedBy" alias="Connected by" metatype="Connected by" notes="" cx="0" cy="0" bgcolor="-1" fontcolor="-1" bordercolor="-1" borderwidth="-1" hideicon="0"><Image type="EAShapeScript 1.0" xmlns:dt="urn:schemas-microsoft-com:datatypes" dt:dt="bin.base64">UEsDBBQAAAAIAFWWZF1kv6YqTgAAAG4AAAAHAAAAc3RyLmRhdD2MMQqAMBAE
+p/YVwUrfYOlLjKYQYiJiI+LfnUJk2OL2djczEUlkAhsri2TvSOWUqpv/TMOt
+wsfOYaOY6mgZzRZJzDrJnWDr8tMz2HrUC1BLAQIUABQAAAAIAFWWZF1kv6Yq
+TgAAAG4AAAAHAAAAAAAAAAAAAACAAQAAAABzdHIuZGF0UEsFBgAAAAABAAEA
+NQAAAHMAAAAAAA==
+</Image><AppliesTo><Apply type="Dependency"/></AppliesTo></Stereotype><Stereotype name="CSDMConnectedDevice" alias="Connected Device" metatype="Connected Device" notes="" cx="0" cy="0" bgcolor="2856441" fontcolor="-1" bordercolor="-1" borderwidth="-1" hideicon="0"><stereotypedrelationships><stereotypedrelationship stereotype="CSDM5::CSDMConnectedBy" constraint="CSDM5::CSDMConnectionServiceInstance"/></stereotypedrelationships><Image type="EAShapeScript 1.0" xmlns:dt="urn:schemas-microsoft-com:datatypes" dt:dt="bin.base64">UEsDBBQAAAAIAA2WZF1Hce4hGwEAAPQCAAAHAAAAc3RyLmRhdK2SsU7DQBBE
+p+YrTkljpBQgCoooFaGlQPQIYkOsOJfobCcCxBfxCfwcb892ZAuBUkSnvRvd
+zuztrK7UUk/aKpPTGpTL60wfhGuX10ZlZKWgvWaqFFSjmPZYBfk38jXZCmQV
+ZxrpmbuAMmMfDRR290LlXO+gRJe6YE10zX4+YIZY16MIMBfUTyLTolP1z2Yf
+1rDuU16r6ag8eE7oaRU9p6AJcUccq/TgNbhR3ugW9QP7/a8aZW/K3XuOKTvu
+QpyDzcdQCjOD8cpZMcErnEzhLfVIhSJmfJzsAp6H003WaXcEx97L490eZD1t
+46vm5wsPG3K+nXIWu5xz7tBYre/WmdPnH+66mTTuTtW1/aKCbvp/738v40Mn
+40HPFj9QSwECFAAUAAAACAANlmRdR3HuIRsBAAD0AgAABwAAAAAAAAAAAAAA
+gAEAAAAAc3RyLmRhdFBLBQYAAAAAAQABADUAAABAAQAAAAA=
+</Image><AppliesTo><Apply type="Node"><Property name="_HideUmlLinks" value="True"/></Apply></AppliesTo><TaggedValues><Tag name="Kind" type="String" description="" unit="" values="" default=""/><Tag name="Life Cycle Stage" type="enumeration" description="" unit="" values="Ideation,Design,Purchase,Inventory,Deploy,Operational,End of Operation,Defective,Missing,End of Life" default=""/><Tag name="Life Cycle Stage Status" type="enumeration" description="" unit="" values="Under Evaluation,Pilot,Design,Chartered,Build,On Order,Pre-Allocated,Available,Reserved,Pending Repair,Legal Hold,Quarantine,In Stock,Pending Transfer,In Transit,Test,Pending Fulfillment,In Use,In Maintenance,End of Support,Pending Retirement,Pending Certificate,Pending Disposal,Pending Donation,Pending Evaluation,Pending Resale,Pending Return,On Hold,Lost,Stolen,Obsolete,Retired,Disposed,Donated,Sold,RMA,Vendor Credit,Buy-out,Lease Return" default=""/><Tag name="ServiceNow link" type="URL" description="" unit="" values="" default=""/><Tag name="ServiceNow record id" type="String" description="" unit="" values="" default=""/></TaggedValues></Stereotype><Stereotype name="CSDMConnectedTo" alias="Connected to" metatype="Connected to" notes="" cx="0" cy="0" bgcolor="-1" fontcolor="-1" bordercolor="-1" borderwidth="-1" hideicon="0"><Image type="EAShapeScript 1.0" xmlns:dt="urn:schemas-microsoft-com:datatypes" dt:dt="bin.base64">UEsDBBQAAAAIAFOWZF3En2ABTQAAAG4AAAAHAAAAc3RyLmRhdD2MMQqAQAwE
+p/YV4Sp9g6Uv8TSFkLsTsRP/7iIiwxZZZhPMZJzAKGysInRnGqdoauN3Oi7F
+PnYOLaqsnsQktwpnUeP6Y+8+MTBqdSsPUEsBAhQAFAAAAAgAU5ZkXcSfYAFN
+AAAAbgAAAAcAAAAAAAAAAAAAAIABAAAAAHN0ci5kYXRQSwUGAAAAAAEAAQA1
+AAAAcgAAAAAA
+</Image><AppliesTo><Apply type="Dependency"/></AppliesTo></Stereotype><Stereotype name="CSDMConnectionServiceInstance" alias="Connection Service Instance" metatype="Connection Service Instance" notes="" cx="0" cy="0" bgcolor="2856441" fontcolor="-1" bordercolor="-1" borderwidth="-1" hideicon="0"><stereotypedrelationships><stereotypedrelationship stereotype="CSDM5::CSDMConnectedBy" constraint="CSDM5::CSDMConnectionServiceInstance"/><stereotypedrelationship stereotype="CSDM5::CSDMModel" constraint="CSDM5::CSDMProductModel"/><stereotypedrelationship stereotype="CSDM5::CSDMProvidedBy" constraint="CSDM5::CSDMNetworkServiceInstance"/></stereotypedrelationships><Image type="EAShapeScript 1.0" xmlns:dt="urn:schemas-microsoft-com:datatypes" dt:dt="bin.base64">UEsDBBQAAAAIAOuVZF32TVMNJgEAAAoDAAAHAAAAc3RyLmRhdK2SPU4DQQyF
+X80pRkmzSClAFBRRKkRBQwH0KGQDWWUzifYnESBOxBG4HJ+92WhXCJQCjTzj
+sZ89fk9TaqGpNporaIWXKepE71jYr6i1SkeleDtNVKlQTcW4g8rJv5KvyVZ4
+1nGigZ6IFVTO2Qe9Cos90znTG16ic52xRrpkP+0hC+8bqShAzuifONKsreqe
+zd7vYdOnvFYzUXngnDDT0jmneCPsFju2MuKv8JvKK11T/cB+96NH2VG5fS+g
+ciBWuA6mj3kpyDmIF84KBS9gMga30CMdcs9EV3YGLoJplQ3aHoGx9zKP7fBs
+po2/anw+4bAmF/cqZ34Luvf6LfeZM7ghWpKfclrka8836OMXzq1SDef/4mJ/
+K2f27o/8m+HwMMmwN7PZN1BLAQIUABQAAAAIAOuVZF32TVMNJgEAAAoDAAAH
+AAAAAAAAAAAAAACAAQAAAABzdHIuZGF0UEsFBgAAAAABAAEANQAAAEsBAAAA
+AA==
+</Image><AppliesTo><Apply type="Class"><Property name="_HideUmlLinks" value="True"/></Apply></AppliesTo><TaggedValues><Tag name="Environment" type="String" description="" unit="" values="" default=""/><Tag name="Life Cycle Stage" type="enumeration" description="" unit="" values="Ideation,Design,Purchase,Inventory,Deploy,Operational,End of Operation,End of Life" default=""/><Tag name="Life Cycle Stage Status" type="enumeration" description="" unit="" values="Under Evaluation,Pilot,Design,Chartered,Build,On Order,Pre-Allocated,Available,Legal Hold,Test,Pending Fulfillment,In Use,In Maintenance,End of Support,Pending Retirement,On Hold,Obsolete,Retired" default=""/><Tag name="Region" type="String" description="" unit="" values="" default=""/><Tag name="ServiceNow link" type="URL" description="" unit="" values="" default=""/><Tag name="ServiceNow record id" type="String" description="" unit="" values="" default=""/></TaggedValues></Stereotype><Stereotype name="CSDMConsumableModel" alias="Consumable Model" metatype="Consumable Model" notes="" cx="0" cy="0" bgcolor="15196895" fontcolor="-1" bordercolor="-1" borderwidth="-1" hideicon="0"><Image type="EAShapeScript 1.0" xmlns:dt="urn:schemas-microsoft-com:datatypes" dt:dt="bin.base64">UEsDBBQAAAAIAJyVZF1XFLDyHgEAAPQCAAAHAAAAc3RyLmRhdK2SPU7DQBCF
+X80pVkljpBQgCoooFUoJBaJHSWyIFWcTrW0iiDgRR+ByfLOOI1sIlCKyZvdp
+5s3PG2+ppWbaKpPTGpTL60J7zB0+r43KyEpBO01UKagmY9xhFcTfiddEK5BV
+nGigOb5AZsY56GWY74XKuT5Aia51xTfSLedljxliXU9GgLmgfhKZZm1W927O
+fg2bPqVbzUTlUXPCTKuoOQWNsAfs1EwPXoObzDtNyX7ifPxVo+xsue3n2LLD
+F+IebD+GUpgZjFfuig3eoGQMb6lnKhQx4uNmF/A8nHazTm8ncKxfHn07kM20
+jV1NzxcaNsRMq72FObVs4nu89rcKfR+UOX3+oa7dSaPuXFPbKyqYofv2/tcy
+PE4y7M1s9gNQSwECFAAUAAAACACclWRdVxSw8h4BAAD0AgAABwAAAAAAAAAA
+AAAAgAEAAAAAc3RyLmRhdFBLBQYAAAAAAQABADUAAABDAQAAAAA=
+</Image><AppliesTo><Apply type="Class"><Property name="_HideUmlLinks" value="True"/></Apply></AppliesTo><TaggedValues><Tag name="End-of-life date" type="Date" description="" unit="" values="" default=""/><Tag name="Life Cycle Stage" type="enumeration" description="" unit="" values="Ideation,Design,Build &amp; Integrate,Operational,End of Life" default=""/><Tag name="Life Cycle Stage Status" type="enumeration" description="" unit="" values="Under Evaluation,Pilot,Design,Chartered,Planning,Build,In production,In Use,Available,End of Support,Pending Retirement,Obsolete,Retired,Sold" default=""/><Tag name="Product owner" type="String" description="" unit="" values="" default=""/><Tag name="ServiceNow link" type="URL" description="" unit="" values="" default=""/><Tag name="ServiceNow record id" type="String" description="" unit="" values="" default=""/></TaggedValues></Stereotype><Stereotype name="CSDMConsumes" alias="Consumes" metatype="Consumes" notes="" cx="0" cy="0" bgcolor="-1" fontcolor="-1" bordercolor="-1" borderwidth="-1" hideicon="0"><Image type="EAShapeScript 1.0" xmlns:dt="urn:schemas-microsoft-com:datatypes" dt:dt="bin.base64">UEsDBBQAAAAIAFGWZF1Qd+zYSgAAAGYAAAAHAAAAc3RyLmRhdD2LOwqAMBQE
+p/YUkkrPYOlJDKYQYiJ+KvHuTiEyLI99zGYmIolMy8rCLNkeqZxS/ebfabhN
++7GxuyhaHYFRt3BwuUjeQM+g/ZgXUEsBAhQAFAAAAAgAUZZkXVB37NhKAAAA
+ZgAAAAcAAAAAAAAAAAAAAIABAAAAAHN0ci5kYXRQSwUGAAAAAAEAAQA1AAAA
+bwAAAAAA
+</Image><AppliesTo><Apply type="Dependency"/></AppliesTo></Stereotype><Stereotype name="CSDMContains" alias="Contains" metatype="Contains" notes="" cx="0" cy="0" bgcolor="-1" fontcolor="-1" bordercolor="-1" borderwidth="-1" hideicon="0"><Image type="EAShapeScript 1.0" xmlns:dt="urn:schemas-microsoft-com:datatypes" dt:dt="bin.base64">UEsDBBQAAAAIAFCWZF3X9W1CSAAAAGYAAAAHAAAAc3RyLmRhdMthSGRIYkhl
+yGFQYMhlyGRIAcIcID+JIZ+hBAjzgaI5cDVcDNVArACFBQxFQB15QFUaDEoM
+zkC1IHYiWKwYKKLJYA1UXQvEAFBLAQIUABQAAAAIAFCWZF3X9W1CSAAAAGYA
+AAAHAAAAAAAAAAAAAACAAQAAAABzdHIuZGF0UEsFBgAAAAABAAEANQAAAG0A
+AAAAAA==
+</Image><AppliesTo><Apply type="Dependency"/></AppliesTo></Stereotype><Stereotype name="CSDMContentProductModel" alias="Content Product Model" metatype="Content Product Model" notes="" cx="0" cy="0" bgcolor="15196895" fontcolor="-1" bordercolor="-1" borderwidth="-1" hideicon="0"><Image type="EAShapeScript 1.0" xmlns:dt="urn:schemas-microsoft-com:datatypes" dt:dt="bin.base64">UEsDBBQAAAAIAI+VZF1e2RFrHgEAAP4CAAAHAAAAc3RyLmRhdK2SzUrDUBCF
+z9qnuLSbCF0oLlyUrsSlIuJeNIk2NE1LfiwqPpGP4Mv5zSQpCaJ0IWEmJ/ee
++TmHVFrqQVulClqDMhU60jsRuqfQRpWzEtBOC9Uq1VAxH7By7l+5b7itQdZx
+oYkeOSupTMmTUYWdPdE50xso0qlOeGY6Jx+PmKX3LagoYcb0j5xp0VcN320e
+97DtE6Y1bFTtNUfstHLNCWhGXBOHVhbgNbitvNAl1Xfk2x89qoHL/byAy4Gz
+0n0wfwwlMFMYz7xrHDxDyRzeUvd0yP2mcGdjeAWc3tmglwM4Ni/zsx3Idtr6
+VNPziYZNx7ccdOPeJ2iP/fvKv1JmfHUagz5+0dm70+r8r/3tf8rZYfgX/q1q
+ut9kOtrZ4htQSwECFAAUAAAACACPlWRdXtkRax4BAAD+AgAABwAAAAAAAAAA
+AAAAgAEAAAAAc3RyLmRhdFBLBQYAAAAAAQABADUAAABDAQAAAAA=
+</Image><AppliesTo><Apply type="Class"><Property name="_HideUmlLinks" value="True"/></Apply></AppliesTo><TaggedValues><Tag name="End-of-life date" type="Date" description="" unit="" values="" default=""/><Tag name="Life Cycle Stage" type="enumeration" description="" unit="" values="Ideation,Design,Build &amp; Integrate,Operational,End of Life" default=""/><Tag name="Life Cycle Stage Status" type="enumeration" description="" unit="" values="Under Evaluation,Pilot,Design,Chartered,Planning,Build,In production,In Use,Available,End of Support,Pending Retirement,Obsolete,Retired,Sold" default=""/><Tag name="Product owner" type="String" description="" unit="" values="" default=""/><Tag name="ServiceNow link" type="URL" description="" unit="" values="" default=""/><Tag name="ServiceNow record id" type="String" description="" unit="" values="" default=""/></TaggedValues></Stereotype><Stereotype name="CSDMContract" alias="Contract" metatype="Contract" notes="" cx="0" cy="0" bgcolor="15196895" fontcolor="-1" bordercolor="-1" borderwidth="-1" hideicon="0"><stereotypedrelationships><stereotypedrelationship stereotype="CSDM5::CSDMModel" constraint="CSDM5::CSDMContractModel"/></stereotypedrelationships><Image type="EAShapeScript 1.0" xmlns:dt="urn:schemas-microsoft-com:datatypes" dt:dt="bin.base64">UEsDBBQAAAAIAGiVZF2QKzYdEwEAAOQCAAAHAAAAc3RyLmRhdK2SvU7DQBCE
+p+YpTkljpBRAQxGlQmkpED0isSEWziXyDxEgniiPwMvx7TqObCFQCnTau9Ht
+7N7s6Cqt9KitMgWtQbmizvRBhMOK2qhyVgraaaZapRoqpj1WQf6NfEO2BlnH
+mUZacFdSmbGPBhV290TnXO+gRJe6YE10zX4+YJbeN1JRwlzSP3GmRVfVP9t9
+2MPUp7zWoKg6zpyg6cVnTkET4pY4tTKC1+C28kZzqu/Z7370qHoud+8FXA7c
+le6D+WMohZnBeOascfCKSabwVnqgQ+GZ6M4u4UU4nbNBrydw7L3c73Yg07T1
+V22ePTNsPGcZ8/nrMEnQ5y/TdB600/yXSvs1Bar6f+1v7eOjkvFAs8U3UEsB
+AhQAFAAAAAgAaJVkXZArNh0TAQAA5AIAAAcAAAAAAAAAAAAAAIABAAAAAHN0
+ci5kYXRQSwUGAAAAAAEAAQA1AAAAOAEAAAAA
+</Image><AppliesTo><Apply type="Artifact"><Property name="_HideUmlLinks" value="True"/></Apply></AppliesTo><TaggedValues><Tag name="Contract number" type="String" description="" unit="" values="" default=""/><Tag name="End date" type="Date" description="" unit="" values="" default=""/><Tag name="Life Cycle Stage" type="enumeration" description="" unit="" values="Ideation,Operational,End of Life" default=""/><Tag name="Life Cycle Stage Status" type="enumeration" description="" unit="" values="Draft,Under Evaluation,In Use,Published,Renewal in Process,Renewed,Pending Retirement,Expired,Retired" default=""/><Tag name="ServiceNow link" type="URL" description="" unit="" values="" default=""/><Tag name="ServiceNow record id" type="String" description="" unit="" values="" default=""/><Tag name="Start date" type="Date" description="" unit="" values="" default=""/></TaggedValues></Stereotype><Stereotype name="CSDMContractModel" alias="Contract Model" metatype="Contract Model" notes="" cx="0" cy="0" bgcolor="15196895" fontcolor="-1" bordercolor="-1" borderwidth="-1" hideicon="0"><Image type="EAShapeScript 1.0" xmlns:dt="urn:schemas-microsoft-com:datatypes" dt:dt="bin.base64">UEsDBBQAAAAIAJKVZF0Hc6nRGgEAAPACAAAHAAAAc3RyLmRhdK2SvU7DQBCE
+p+YpTkljpBSBhiJKhSihQPQIYkMsnEvkn0SAeCIegZfj23Uc2UKgFMja82h3
+dm9n7EpLPWijTEErUK6oE70TYf9ErVU5KwXtNFetUg0dsx6roP5KvaFag2zi
+XCM9kivpzDhHgw7LPTE51xso0ZmmPBNdcJ4OmKXPjXSUMBfMT5xp0XX13+05
+nGHbp9zWsFF10Jyw04trTkET4oY4tjOCV+C281JXdN9x3v6YUfVc7u4LuBzI
+le6D+WMohZnBeOZd4+A5SmbwlrpnQuGV6M4u4EU4nbNB2yM4dl/uuR3Idtr4
+rabnEw1rr1nFfA66JmNfqtDXXlXQxy/KOj9aZf+1sf1BBTv0/7u/dYwPm4wH
+O1t8A1BLAQIUABQAAAAIAJKVZF0Hc6nRGgEAAPACAAAHAAAAAAAAAAAAAACA
+AQAAAABzdHIuZGF0UEsFBgAAAAABAAEANQAAAD8BAAAAAA==
+</Image><AppliesTo><Apply type="Class"><Property name="_HideUmlLinks" value="True"/></Apply></AppliesTo><TaggedValues><Tag name="End-of-life date" type="Date" description="" unit="" values="" default=""/><Tag name="Life Cycle Stage" type="enumeration" description="" unit="" values="Ideation,Design,Build &amp; Integrate,Operational,End of Life" default=""/><Tag name="Life Cycle Stage Status" type="enumeration" description="" unit="" values="Under Evaluation,Pilot,Design,Chartered,Planning,Build,In production,In Use,Available,End of Support,Pending Retirement,Obsolete,Retired,Sold" default=""/><Tag name="Product owner" type="String" description="" unit="" values="" default=""/><Tag name="ServiceNow link" type="URL" description="" unit="" values="" default=""/><Tag name="ServiceNow record id" type="String" description="" unit="" values="" default=""/></TaggedValues></Stereotype><Stereotype name="CSDMCovers" alias="Covers" metatype="Covers" notes="" cx="0" cy="0" bgcolor="-1" fontcolor="-1" bordercolor="-1" borderwidth="-1" hideicon="0"><Image type="EAShapeScript 1.0" xmlns:dt="urn:schemas-microsoft-com:datatypes" dt:dt="bin.base64">UEsDBBQAAAAIAHuWZF1/D5juRwAAAGIAAAAHAAAAc3RyLmRhdD2LMQ5AUBQE
+p3YKUXEGpZP4oZA8vnyiEXc3hchki93MBiOJmaBmZWGSsCcyp2TX+J2K29Qf
+O8XHptXSMOheWoXD1tFrPuYFUEsBAhQAFAAAAAgAe5ZkXX8PmO5HAAAAYgAA
+AAcAAAAAAAAAAAAAAIABAAAAAHN0ci5kYXRQSwUGAAAAAAEAAQA1AAAAbAAA
+AAAA
+</Image><AppliesTo><Apply type="Dependency"/></AppliesTo></Stereotype><Stereotype name="CSDMDataServiceInstance" alias="Data Service Instance" metatype="Data Service Instance" notes="" cx="0" cy="0" bgcolor="2856441" fontcolor="-1" bordercolor="-1" borderwidth="-1" hideicon="0"><stereotypedrelationships><stereotypedrelationship stereotype="CSDM5::CSDMConnectedBy" constraint="CSDM5::CSDMConnectionServiceInstance"/><stereotypedrelationship stereotype="CSDM5::CSDMDependsOn" constraint="CSDM5::CSDMApplicationService;CSDM5::CSDMConnectionServiceInstance;CSDM5::CSDMDataServiceInstance;CSDM5::CSDMFacilityServiceInstance;CSDM5::CSDMNetworkServiceInstance;CSDM5::CSDMOperationalProcessServiceInstance;CSDM5::CSDMServiceInstance"/><stereotypedrelationship stereotype="CSDM5::CSDMModel" constraint="CSDM5::CSDMProductModel"/></stereotypedrelationships><Image type="EAShapeScript 1.0" xmlns:dt="urn:schemas-microsoft-com:datatypes" dt:dt="bin.base64">UEsDBBQAAAAIAOmVZF3x19ghHwEAAP4CAAAHAAAAc3RyLmRhdK2SvU7DQBCE
+p+YpTkljpBQgCoooFVDQUAA9AtuQCOeI/JMIEE/EI/ByfLuOI1sIlAJZezfa
+ndmbXbnSXPdaKVfQErRQ1IHeibD9ol5UOSsDbTRTrVINimmPVVB/pd5QrUHW
+caaRHsiVKHPO0UBhuUc6L/QGSnSsI76JTjkPB8zS+0YUJcyU/okzLTpV/27P
+YQ9zn/Fag6NqN3OCp2efOQNNiCtiX2UEL8Gt8kwXqG85r3/0qHpb7t4LbDmQ
+K30Pth9DGcwcxhN3zQZPmGQKb647OhReib7ZFF6E0202aL0Hx95beG4DMk8r
+f9Xm+dQ5mZoIunHNGm7qri/RVF6Lnvnazhj08cuc3XbaOf/Lv/1PBX77f+Hf
+U413TsYDzxbfUEsBAhQAFAAAAAgA6ZVkXfHX2CEfAQAA/gIAAAcAAAAAAAAA
+AAAAAIABAAAAAHN0ci5kYXRQSwUGAAAAAAEAAQA1AAAARAEAAAAA
+</Image><AppliesTo><Apply type="Class"><Property name="_HideUmlLinks" value="True"/></Apply></AppliesTo><TaggedValues><Tag name="Environment" type="String" description="" unit="" values="" default=""/><Tag name="Life Cycle Stage" type="enumeration" description="" unit="" values="Ideation,Design,Purchase,Inventory,Deploy,Operational,End of Operation,End of Life" default=""/><Tag name="Life Cycle Stage Status" type="enumeration" description="" unit="" values="Under Evaluation,Pilot,Design,Chartered,Build,On Order,Pre-Allocated,Available,Legal Hold,Test,Pending Fulfillment,In Use,In Maintenance,End of Support,Pending Retirement,On Hold,Obsolete,Retired" default=""/><Tag name="Region" type="String" description="" unit="" values="" default=""/><Tag name="ServiceNow link" type="URL" description="" unit="" values="" default=""/><Tag name="ServiceNow record id" type="String" description="" unit="" values="" default=""/></TaggedValues></Stereotype><Stereotype name="CSDMDepartment" alias="Department" metatype="Department" notes="" cx="0" cy="0" bgcolor="15196895" fontcolor="-1" bordercolor="-1" borderwidth="-1" hideicon="0"><stereotypedrelationships><stereotypedrelationship stereotype="CSDM5::CSDMPartOf" constraint="CSDM5::CSDMBusinessUnit"/></stereotypedrelationships><Image type="EAShapeScript 1.0" xmlns:dt="urn:schemas-microsoft-com:datatypes" dt:dt="bin.base64">UEsDBBQAAAAIAKiVZF1cNHigFAEAAOgCAAAHAAAAc3RyLmRhdK2SsU7DQBBE
+p+YrTkljpBRAQxGlIrQUiB5BbIiFfVhnmwgQX8Qn8HO8PduRLQRKgay9G+3O
+7M2uXGurO1XK5FSCcnkd6Z1w/ef1rDqyUtBOKzUKalEsR6yC+iv1lmoDso4r
+zXRPLqDMOGcTheUe6JzrDZToVCd8C51zHk+YIfb1KALMDf2TyLQYVOO7O6c9
+zH3Kay2O6v3MCZ6e4swpaEFcEYcqPbgEd8oLXaK+4bz+0aMebXl4z7FlRy7E
+Pdh+DKUwMxiP3A0bPGOSJbytbulQxIqPm93A83CGzTq9HMCx9/KY24HMUxVf
+tXk+tQZXZAP1std+9dM4ffwy0bCHbqL/cmp/ToGz8f/2t//53sl84tniG1BL
+AQIUABQAAAAIAKiVZF1cNHigFAEAAOgCAAAHAAAAAAAAAAAAAACAAQAAAABz
+dHIuZGF0UEsFBgAAAAABAAEANQAAADkBAAAAAA==
+</Image><AppliesTo><Apply type="Class"><Property name="_HideUmlLinks" value="True"/></Apply></AppliesTo><TaggedValues><Tag name="ServiceNow link" type="URL" description="" unit="" values="" default=""/><Tag name="ServiceNow record id" type="String" description="" unit="" values="" default=""/></TaggedValues></Stereotype><Stereotype name="CSDMDependsOn" alias="Depends on" metatype="Depends on" notes="" cx="0" cy="0" bgcolor="-1" fontcolor="-1" bordercolor="-1" borderwidth="-1" hideicon="0"><Image type="EAShapeScript 1.0" xmlns:dt="urn:schemas-microsoft-com:datatypes" dt:dt="bin.base64">UEsDBBQAAAAIAFWWZF1agVtETAAAAGoAAAAHAAAAc3RyLmRhdD2MMQqAMBAE
+p/YVIZW+wdaPGLQQYhLUTvy7U4gsC7d3s5eZSaxkAjsbi8rmROVS1W3+mY5b
+h0+Nw0aR6olMEk0XP5xeq1NkYLTx6BdQSwECFAAUAAAACABVlmRdWoFbREwA
+AABqAAAABwAAAAAAAAAAAAAAgAEAAAAAc3RyLmRhdFBLBQYAAAAAAQABADUA
+AABxAAAAAAA=
+</Image><AppliesTo><Apply type="Dependency"/></AppliesTo></Stereotype><Stereotype name="CSDMDeployedAs" alias="Deployed as" metatype="Deployed as" notes="" cx="0" cy="0" bgcolor="-1" fontcolor="-1" bordercolor="-1" borderwidth="-1" hideicon="0"><Image type="EAShapeScript 1.0" xmlns:dt="urn:schemas-microsoft-com:datatypes" dt:dt="bin.base64">UEsDBBQAAAAIAK6WZF3scvHsTQAAAGwAAAAHAAAAc3RyLmRhdD2LMQqAMBAE
+p/YVYqVvsPUjCbEQoglqI+LfnUJkWbjdm80EIjOZlpWFpLI5UjhVsc0/03Dr
+9lNld7FJ9XRMElWmcHkl/4HDfmB08+gXUEsBAhQAFAAAAAgArpZkXexy8exN
+AAAAbAAAAAcAAAAAAAAAAAAAAIABAAAAAHN0ci5kYXRQSwUGAAAAAAEAAQA1
+AAAAcgAAAAAA
+</Image><AppliesTo><Apply type="Dependency"/></AppliesTo></Stereotype><Stereotype name="CSDMDynamicCIGroup" alias="Dynamic CI Group" metatype="Dynamic CI Group" notes="" cx="0" cy="0" bgcolor="2856441" fontcolor="-1" bordercolor="-1" borderwidth="-1" hideicon="0"><stereotypedrelationships><stereotypedrelationship stereotype="CSDM5::CSDMMember" constraint="CSDM5::CSDMAIApplication;CSDM5::CSDMAIFunction;CSDM5::CSDMAPI;CSDM5::CSDMApplication;CSDM5::CSDMApplicationService;CSDM5::CSDMBusinessApplication;CSDM5::CSDMBusinessCapability;CSDM5::CSDMBusinessProcess;CSDM5::CSDMBusinessService;CSDM5::CSDMBusinessServiceOffering;CSDM5::CSDMConnectionServiceInstance;CSDM5::CSDMDataServiceInstance;CSDM5::CSDMFacilityServiceInstance;CSDM5::CSDMInformationObject;CSDM5::CSDMInfrastructureCI;CSDM5::CSDMNetworkFunction;CSDM5::CSDMNetworkFunctionApplication;CSDM5::CSDMNetworkServiceInstance;CSDM5::CSDMOperationalProcessServiceInstance;CSDM5::CSDMOperationalTechnology;CSDM5::CSDMSDLCComponent;CSDM5::CSDMServiceInstance;CSDM5::CSDMTechnologyManagementService;CSDM5::CSDMTechnologyManagementServiceOffering"/><stereotypedrelationship stereotype="CSDM5::CSDMModel" constraint="CSDM5::CSDMProductModel"/><stereotypedrelationship stereotype="CSDM5::CSDMReferences" constraint="CSDM5::CSDMCMDBGroup"/></stereotypedrelationships><Image type="EAShapeScript 1.0" xmlns:dt="urn:schemas-microsoft-com:datatypes" dt:dt="bin.base64">UEsDBBQAAAAIACqWZF1rqEjwHgEAAPQCAAAHAAAAc3RyLmRhdK2SsU7DQBBE
+p+YrTkljpBQgCoooFSBEQ4HoEcSGWDiHdbaJAPFFfAI/x9uzHdlCoBTRadej
+u5m9nT1XWulepTI5rUG5vA70Qbhueb2oiqwUtNFCtYIaFPMBq+D8jfOG0xpk
+FRea6IG9gDIjT0YK23ukcq53UKJjHbFmOiUfjpgh1vUoAswl9ZPItOhVw2+b
+xzWs+5TbGjqqtp4TenqOnlPQjLgmdlV68BrcKs90gfqWfPOrRjWYcn+fY8qO
+vRDnYPMxlMLMYDzxrZngCU7m8Fa6o0IRT3yc7BKeh9NP1ul1B47dl8e9Dch6
+KuOt5udL57xc6ypH6/B0Rb7sXqDUd+fM6fMPd/1MWnf76tr+ooIuh//e/16m
+206mo54tfgBQSwECFAAUAAAACAAqlmRda6hI8B4BAAD0AgAABwAAAAAAAAAA
+AAAAgAEAAAAAc3RyLmRhdFBLBQYAAAAAAQABADUAAABDAQAAAAA=
+</Image><AppliesTo><Apply type="Class"><Property name="_HideUmlLinks" value="True"/></Apply></AppliesTo><TaggedValues><Tag name="Life Cycle Stage" type="enumeration" description="" unit="" values="Ideation,Design,Purchase,Inventory,Deploy,Operational,End of Operation,End of Life" default=""/><Tag name="Life Cycle Stage Status" type="enumeration" description="" unit="" values="Under Evaluation,Pilot,Design,Chartered,Build,On Order,Pre-Allocated,Available,Legal Hold,Test,Pending Fulfillment,In Use,In Maintenance,End of Support,Pending Retirement,On Hold,Obsolete,Retired" default=""/><Tag name="Service classification" type="enumeration" description="" unit="" values="Application Service,Technical Service" default=""/><Tag name="ServiceNow link" type="URL" description="" unit="" values="" default=""/><Tag name="ServiceNow record id" type="String" description="" unit="" values="" default=""/></TaggedValues></Stereotype><Stereotype name="CSDMEnterpriseGoodModel" alias="Enterprise Good Model" metatype="Enterprise Good Model" notes="" cx="0" cy="0" bgcolor="15196895" fontcolor="-1" bordercolor="-1" borderwidth="-1" hideicon="0"><Image type="EAShapeScript 1.0" xmlns:dt="urn:schemas-microsoft-com:datatypes" dt:dt="bin.base64">UEsDBBQAAAAIAKCVZF23jOEmHgEAAP4CAAAHAAAAc3RyLmRhdK2SzUoDQRCE
+6+xTDMllhRwUDx5CTiKe9CDeRbOrWbKZhP0xqPhEPoIv59e92bCLKDnI0DPF
+THV3dTGVFnrQRpmCVqBcUUd6J8JuRa1VOSsFbTVTrVINGdMeq+D9lfeG1xpk
+FWca6ZG7ksyMfTTIsLsnKud6AyU61QlronP24wGz9LqRjBLmnPqJMy26rP7Z
+7sMapj6lW4Oiaj9zgqalz5yCJsQNcWhmBK/AbeaFLsm+Y7/9UaPqudz1C7gc
+uCvdB/PHUAozg/HMWePgGZNM4S10T4XCX6I7O4cX4XTOBr0cwLF+ud9tQaZp
+411tnk+0d+yWV7niK/xfu+JrPzN6fO1mDPr4Zc7OnXbO/9Jv/6lAQ/8X/j3V
+eK9kPNBs8Q1QSwECFAAUAAAACACglWRdt4zhJh4BAAD+AgAABwAAAAAAAAAA
+AAAAgAEAAAAAc3RyLmRhdFBLBQYAAAAAAQABADUAAABDAQAAAAA=
+</Image><AppliesTo><Apply type="Class"><Property name="_HideUmlLinks" value="True"/></Apply></AppliesTo><TaggedValues><Tag name="End-of-life date" type="Date" description="" unit="" values="" default=""/><Tag name="Life Cycle Stage" type="enumeration" description="" unit="" values="Ideation,Design,Build &amp; Integrate,Operational,End of Life" default=""/><Tag name="Life Cycle Stage Status" type="enumeration" description="" unit="" values="Under Evaluation,Pilot,Design,Chartered,Planning,Build,In production,In Use,Available,End of Support,Pending Retirement,Obsolete,Retired,Sold" default=""/><Tag name="Product owner" type="String" description="" unit="" values="" default=""/><Tag name="ServiceNow link" type="URL" description="" unit="" values="" default=""/><Tag name="ServiceNow record id" type="String" description="" unit="" values="" default=""/></TaggedValues></Stereotype><Stereotype name="CSDMFacilityModel" alias="Facility Model" metatype="Facility Model" notes="" cx="0" cy="0" bgcolor="15196895" fontcolor="-1" bordercolor="-1" borderwidth="-1" hideicon="0"><Image type="EAShapeScript 1.0" xmlns:dt="urn:schemas-microsoft-com:datatypes" dt:dt="bin.base64">UEsDBBQAAAAIAJeVZF1YUN2FHAEAAPACAAAHAAAAc3RyLmRhdK2SsU7DMBCG
+/5mnsNolSB2AhaHqhOgGA+qOIAk0InUrJ2kFiCfiEXg5vnOaKhECdUDW2b/u
+/jvf/XalpR60US6nFaiQ14neMbdfXmtVkZWBdpqpVlBDxrTHKom/Em+I1iCr
+ONNIj/gCmTn7aJBhvicqF3oDJTrXGWuiS/bTATPEup6MADOlfhKZZl1W/2z3
+YQ3rPuO2ho6qw8wJPb3EmTPQBLvFjs304BW4zbzSNdkL9rsfNaqeyt19DpUd
+vhB1MH0MZTBzGM+cNQpeMMkU3lL3VChjxEdlU3geTqes0/YIjt1XRN8OZD1t
+4q02z6fmeFLiVsNe0ekG7e2lSn3tp3L6+GWyTo92sv/q2H5QSQ/9f/f3HOND
+J+NBz2bfUEsBAhQAFAAAAAgAl5VkXVhQ3YUcAQAA8AIAAAcAAAAAAAAAAAAA
+AIABAAAAAHN0ci5kYXRQSwUGAAAAAAEAAQA1AAAAQQEAAAAA
+</Image><AppliesTo><Apply type="Class"><Property name="_HideUmlLinks" value="True"/></Apply></AppliesTo><TaggedValues><Tag name="End-of-life date" type="Date" description="" unit="" values="" default=""/><Tag name="Life Cycle Stage" type="enumeration" description="" unit="" values="Ideation,Design,Build &amp; Integrate,Operational,End of Life" default=""/><Tag name="Life Cycle Stage Status" type="enumeration" description="" unit="" values="Under Evaluation,Pilot,Design,Chartered,Planning,Build,In production,In Use,Available,End of Support,Pending Retirement,Obsolete,Retired,Sold" default=""/><Tag name="Product owner" type="String" description="" unit="" values="" default=""/><Tag name="ServiceNow link" type="URL" description="" unit="" values="" default=""/><Tag name="ServiceNow record id" type="String" description="" unit="" values="" default=""/></TaggedValues></Stereotype><Stereotype name="CSDMFacilityServiceInstance" alias="Facility Service Instance" metatype="Facility Service Instance" notes="" cx="0" cy="0" bgcolor="2856441" fontcolor="-1" bordercolor="-1" borderwidth="-1" hideicon="0"><stereotypedrelationships><stereotypedrelationship stereotype="CSDM5::CSDMConnectedBy" constraint="CSDM5::CSDMConnectionServiceInstance"/><stereotypedrelationship stereotype="CSDM5::CSDMDependsOn" constraint="CSDM5::CSDMApplicationService;CSDM5::CSDMConnectionServiceInstance;CSDM5::CSDMDataServiceInstance;CSDM5::CSDMFacilityServiceInstance;CSDM5::CSDMNetworkServiceInstance;CSDM5::CSDMOperationalProcessServiceInstance;CSDM5::CSDMServiceInstance"/><stereotypedrelationship stereotype="CSDM5::CSDMModel" constraint="CSDM5::CSDMProductModel"/></stereotypedrelationships><Image type="EAShapeScript 1.0" xmlns:dt="urn:schemas-microsoft-com:datatypes" dt:dt="bin.base64">UEsDBBQAAAAIAPSVZF3jOQ9pJgEAAAYDAAAHAAAAc3RyLmRhdK2SMU7DQBBF
+f80pVkljpBQgCoooFQKJhgLoUbANsXCWaG0nAsSJOAKX4806jmwhUIpoNbvf
+M//Pzoy30kJzrZTLaQkq5HWkD8xtl9erqsjKQBvNVCuoQTHtsUrib8QbojXI
+Ms400iO+gDJnHw0U5nsic6F3UKJTnbAmOmc/HjBDzOtRBJgp+ZPINOtU/bPd
+hzms+ozbGiqqdj0n1PQSe85AE+wG21fpwUtwq7zQJep79ttfOarelLv7HFN2
++EKcg83HUAYzh/HMWTPBMzqZwlvogQxljPg42RSeh9NN1mm9B8fuK6JvA7Ka
+VvFW6+dLV3hS4pbD/qLTXdSu+U5j9ddoK2JzTvN8b3t1+vyj325Kbb+H6sPe
+VUnd/df4f3fjXSXjQc1mP1BLAQIUABQAAAAIAPSVZF3jOQ9pJgEAAAYDAAAH
+AAAAAAAAAAAAAACAAQAAAABzdHIuZGF0UEsFBgAAAAABAAEANQAAAEsBAAAA
+AA==
+</Image><AppliesTo><Apply type="Class"><Property name="_HideUmlLinks" value="True"/></Apply></AppliesTo><TaggedValues><Tag name="Environment" type="String" description="" unit="" values="" default=""/><Tag name="Life Cycle Stage" type="enumeration" description="" unit="" values="Ideation,Design,Purchase,Inventory,Deploy,Operational,End of Operation,End of Life" default=""/><Tag name="Life Cycle Stage Status" type="enumeration" description="" unit="" values="Under Evaluation,Pilot,Design,Chartered,Build,On Order,Pre-Allocated,Available,Legal Hold,Test,Pending Fulfillment,In Use,In Maintenance,End of Support,Pending Retirement,On Hold,Obsolete,Retired" default=""/><Tag name="Region" type="String" description="" unit="" values="" default=""/><Tag name="ServiceNow link" type="URL" description="" unit="" values="" default=""/><Tag name="ServiceNow record id" type="String" description="" unit="" values="" default=""/></TaggedValues></Stereotype><Stereotype name="CSDMFirmwareModel" alias="Firmware Model" metatype="Firmware Model" notes="" cx="0" cy="0" bgcolor="15196895" fontcolor="-1" bordercolor="-1" borderwidth="-1" hideicon="0"><Image type="EAShapeScript 1.0" xmlns:dt="urn:schemas-microsoft-com:datatypes" dt:dt="bin.base64">UEsDBBQAAAAIAIeVZF2AUfb4HAEAAPACAAAHAAAAc3RyLmRhdK2SsU7DQBBE
+p+YrTkljpBRAQxGlQqSDAqVHEBti4Vyisx0LEF/EJ/BzvD3HkS0ESoGsvVvd
+zu7NjK/USg/aKpPTmiyX14neCbf/vDYqIyolazRTpaCajmkPVVB/pV5Trchs
+4kwjPXIW6MxYR4MOO3ticq43skTnOuOb6JL1dIAMca6nI4BcMj+JSIuuq7+3
+63CGsU+5rYZRedCcwOklak7JJsQtcWynJ1+Tt51XuqZ7wXr3Y0bZc7m7z+Gy
+4yxEH8wfy1KQGYhn9goHL1AyBbfSPROKWPHR2SU4D6Zz1ml3BMbuy+NZQ2ac
+tvFW0/OpObWApoZKiGxv8N7+VKGvvSqnj1+UdX60yv6Lsb2gAg79d/e3jvGB
+yXjA2eIbUEsBAhQAFAAAAAgAh5VkXYBR9vgcAQAA8AIAAAcAAAAAAAAAAAAA
+AIABAAAAAHN0ci5kYXRQSwUGAAAAAAEAAQA1AAAAQQEAAAAA
+</Image><AppliesTo><Apply type="Class"><Property name="_HideUmlLinks" value="True"/></Apply></AppliesTo><TaggedValues><Tag name="End-of-life date" type="Date" description="" unit="" values="" default=""/><Tag name="Life Cycle Stage" type="enumeration" description="" unit="" values="Ideation,Design,Build &amp; Integrate,Operational,End of Life" default=""/><Tag name="Life Cycle Stage Status" type="enumeration" description="" unit="" values="Under Evaluation,Pilot,Design,Chartered,Planning,Build,In production,In Use,Available,End of Support,Pending Retirement,Obsolete,Retired,Sold" default=""/><Tag name="Product owner" type="String" description="" unit="" values="" default=""/><Tag name="ServiceNow link" type="URL" description="" unit="" values="" default=""/><Tag name="ServiceNow record id" type="String" description="" unit="" values="" default=""/></TaggedValues></Stereotype><Stereotype name="CSDMGoal" alias="Goal" metatype="Goal" notes="" cx="0" cy="0" bgcolor="6084844" fontcolor="-1" bordercolor="-1" borderwidth="-1" hideicon="0"><stereotypedrelationships><stereotypedrelationship stereotype="CSDM5::CSDMServes" constraint="CSDM5::CSDMStrategicPriority"/></stereotypedrelationships><Image type="EAShapeScript 1.0" xmlns:dt="urn:schemas-microsoft-com:datatypes" dt:dt="bin.base64">UEsDBBQAAAAIAMWVZF0E+xcHEgEAANwCAAAHAAAAc3RyLmRhdK2SwUrDQBCG
+/7NPsbSXCD1ULx5KT1K8eZDeRZtog+laNklLW3wiH8GX85tNUxJE6UGWmf2Z
+/Wfmn2FLLfWktTI5rUC5vC50wNzxeL2rjKwUtNVUlYJqMiYdVsH7jvea1wpk
+Faca6JlYIDPDD3oZFnuhcq49KNGVxpyRbvCXPWaIdT0ZAeaC+klkmrVZ3bvx
+/RqmPqVbjaLyNHOCprc4cwoaYffYuZkevAI3mbeakT3HP/yoUXa23PZzbNkR
+C3EPth9DKcwMxit3xQavmWQCb6lHKhTxxcfNLuB5OO1mnTZncKxfHmNbkGla
+x642z6fu2LRV+DpO4PTxyxTt7M0U/6XOfkuBmu4f+1vz8KRk2NNs9g1QSwEC
+FAAUAAAACADFlWRdBPsXBxIBAADcAgAABwAAAAAAAAAAAAAAgAEAAAAAc3Ry
+LmRhdFBLBQYAAAAAAQABADUAAAA3AQAAAAA=
+</Image><AppliesTo><Apply type="Class"><Property name="_HideUmlLinks" value="True"/></Apply></AppliesTo><TaggedValues><Tag name="ServiceNow link" type="URL" description="" unit="" values="" default=""/><Tag name="ServiceNow record id" type="String" description="" unit="" values="" default=""/></TaggedValues></Stereotype><Stereotype name="CSDMGroup" alias="Group" metatype="Group" notes="" cx="0" cy="0" bgcolor="15196895" fontcolor="-1" bordercolor="-1" borderwidth="-1" hideicon="0"><Image type="EAShapeScript 1.0" xmlns:dt="urn:schemas-microsoft-com:datatypes" dt:dt="bin.base64">UEsDBBQAAAAIAKqVZF1dqrnVEQEAAN4CAAAHAAAAc3RyLmRhdK2SwUrDQBCG
+/7NPsbSXCD1ULx5KT1K8eRDvok20wXQNm6RFxSfyEXw5v9kkJUGUHmSZ2Z/Z
+f2b+GbbSRvcqlclpC8rldaJ3zHXH60VVZKWgvZaqFdSQsRiwCt5feW94rUFW
+camJHogFMjP8ZJRhsUcq53oDJTrTnDPTBf50xAyxricjwFxTP4lMsz5reLd+
+XMPUp3RrUFQdZk7Q9BxnTkEz7Bo7NtODt+A281Irsm/xNz9qVIMt9/0cW3bE
+QtyD7cdQCjOD8cRds8FzJlnA2+iOCkV88XGza3geTr9Zp90RHOuXx9geZJrK
+2NXm+dRVt+tSX90MTh+/zNFP387xX/rsvxToGf6yv1VPD0qmI81m31BLAQIU
+ABQAAAAIAKqVZF1dqrnVEQEAAN4CAAAHAAAAAAAAAAAAAACAAQAAAABzdHIu
+ZGF0UEsFBgAAAAABAAEANQAAADYBAAAAAA==
+</Image><AppliesTo><Apply type="Class"><Property name="_HideUmlLinks" value="True"/></Apply></AppliesTo><TaggedValues><Tag name="ServiceNow link" type="URL" description="" unit="" values="" default=""/><Tag name="ServiceNow record id" type="String" description="" unit="" values="" default=""/></TaggedValues></Stereotype><Stereotype name="CSDMHardwareModel" alias="Hardware Model" metatype="Hardware Model" notes="" cx="0" cy="0" bgcolor="15196895" fontcolor="-1" bordercolor="-1" borderwidth="-1" hideicon="0"><Image type="EAShapeScript 1.0" xmlns:dt="urn:schemas-microsoft-com:datatypes" dt:dt="bin.base64">UEsDBBQAAAAIAJmVZF1x3dFrHAEAAPACAAAHAAAAc3RyLmRhdK2SvU7DQBCE
+p+YpTkljpBRAQxGlQkg0UCB6BLEhFs4R+QcLEE/EI/ByfLuOI1sIlAJZezfa
+m92bHV+lle60UaagNShX1IHeibD9op5VOSsFtVqoVqmGivmAVXD+ynnDaQ2y
+jgtNdE+upDJjnYwqLPdA51xvoETHOuKb6ZT1cMQsvW+kooS5pH/iTIu+arh3
+67iHqU+5rUFRtZs5QdOTz5yCZsQVsW9lBK/BXeWZzqm+Yb3+0aMauNzfF3A5
+kCvdB/PHUAozg/HIXuPgCZPM4a10S4fCT6I7u4QX4fTOBr3swbH7cs+1INO0
+8Vttnk9dkLG/1fpuai/x3v5Uoa/tVEEfv0zW+9FN9l+K7QUVaBi+u7/nmO6U
+TEeaLb4BUEsBAhQAFAAAAAgAmZVkXXHd0WscAQAA8AIAAAcAAAAAAAAAAAAA
+AIABAAAAAHN0ci5kYXRQSwUGAAAAAAEAAQA1AAAAQQEAAAAA
+</Image><AppliesTo><Apply type="Class"><Property name="_HideUmlLinks" value="True"/></Apply></AppliesTo><TaggedValues><Tag name="End-of-life date" type="Date" description="" unit="" values="" default=""/><Tag name="Life Cycle Stage" type="enumeration" description="" unit="" values="Ideation,Design,Build &amp; Integrate,Operational,End of Life" default=""/><Tag name="Life Cycle Stage Status" type="enumeration" description="" unit="" values="Under Evaluation,Pilot,Design,Chartered,Planning,Build,In production,In Use,Available,End of Support,Pending Retirement,Obsolete,Retired,Sold" default=""/><Tag name="Product owner" type="String" description="" unit="" values="" default=""/><Tag name="ServiceNow link" type="URL" description="" unit="" values="" default=""/><Tag name="ServiceNow record id" type="String" description="" unit="" values="" default=""/></TaggedValues></Stereotype><Stereotype name="CSDMHas" alias="Has" metatype="Has" notes="" cx="0" cy="0" bgcolor="-1" fontcolor="-1" bordercolor="-1" borderwidth="-1" hideicon="0"><Image type="EAShapeScript 1.0" xmlns:dt="urn:schemas-microsoft-com:datatypes" dt:dt="bin.base64">UEsDBBQAAAAIAImWZF0VcuctQwAAAFwAAAAHAAAAc3RyLmRhdMthSGRIYkhl
+yGFQYMhlyGRIAcIcID+JIZ+hBAjzgaI5cDVcDNVArACFBQxFQB15QFUaDEoM
+HkBVxUBak8EaqKYWiAFQSwECFAAUAAAACACJlmRdFXLnLUMAAABcAAAABwAA
+AAAAAAAAAAAAgAEAAAAAc3RyLmRhdFBLBQYAAAAAAQABADUAAABoAAAAAAA=
+</Image><AppliesTo><Apply type="Dependency"/></AppliesTo></Stereotype><Stereotype name="CSDMInformationObject" alias="Information Object" metatype="Information Object" notes="" cx="0" cy="0" bgcolor="11838315" fontcolor="-1" bordercolor="-1" borderwidth="-1" hideicon="0"><stereotypedrelationships><stereotypedrelationship stereotype="CSDM5::CSDMModel" constraint="CSDM5::CSDMProductModel"/></stereotypedrelationships><Image type="EAShapeScript 1.0" xmlns:dt="urn:schemas-microsoft-com:datatypes" dt:dt="bin.base64">UEsDBBQAAAAIANKVZF2glfNdIAEAAPgCAAAHAAAAc3RyLmRhdK2SPU7DQBCF
+X80pVkljpBQgCoooFaKgAQnRI4gd4uBsorVNBIgTcQQuxzdrO7KFQCmQNbtP
+M29+3nhLLfWgrTI5rUG5vI70jrn289qojKwUtNNMlYJqMqY9VkH8lXhNtAJZ
+xZlGesQXyMw4R4MM8y2onOsNlOhUJ3wTnXMeD5gh1vVkBJhz6ieRadZl9e/m
+HNaw6VO61UxU7jUnzPQcNaegCXaNHZrpwWtwk3mhS7LvOG9/1Ch7W+76Obbs
+8IW4B9uPoRRmBuOJu2KDZyiZwlvqngpFjPi42Tk8D6fbrNPLARzrl0ffDmQz
+bWNX0/OpKyKL+MfsLVQwN3icbtC+anf/1apz+vhFYbeXRuF/TW4vqWDS/vv7
+W894P8l4MLPZN1BLAQIUABQAAAAIANKVZF2glfNdIAEAAPgCAAAHAAAAAAAA
+AAAAAACAAQAAAABzdHIuZGF0UEsFBgAAAAABAAEANQAAAEUBAAAAAA==
+</Image><AppliesTo><Apply type="Class"><Property name="_HideUmlLinks" value="True"/></Apply></AppliesTo><TaggedValues><Tag name="Confidentiality" type="String" description="" unit="" values="" default=""/><Tag name="Data classification" type="enumeration" description="" unit="" values="Internal,Public,Confidential,Highly Sensitive" default=""/><Tag name="Data sensitivity" type="String" description="" unit="" values="" default=""/><Tag name="Data type" type="String" description="" unit="" values="" default=""/><Tag name="Life Cycle Stage" type="enumeration" description="" unit="" values="Ideation,Design,Purchase,Inventory,Deploy,Operational,End of Operation,End of Life" default=""/><Tag name="Life Cycle Stage Status" type="enumeration" description="" unit="" values="Under Evaluation,Pilot,Design,Chartered,Build,On Order,Pre-Allocated,Available,Legal Hold,Test,Pending Fulfillment,In Use,In Maintenance,End of Support,Pending Retirement,On Hold,Obsolete,Retired" default=""/><Tag name="ServiceNow link" type="URL" description="" unit="" values="" default=""/><Tag name="ServiceNow record id" type="String" description="" unit="" values="" default=""/></TaggedValues></Stereotype><Stereotype name="CSDMInfrastructureCI" alias="Infrastructure CI" metatype="Infrastructure CI" notes="" cx="0" cy="0" bgcolor="2856441" fontcolor="-1" bordercolor="-1" borderwidth="-1" hideicon="0"><stereotypedrelationships><stereotypedrelationship stereotype="CSDM5::CSDMModel" constraint="CSDM5::CSDMProductModel"/></stereotypedrelationships><Image type="EAShapeScript 1.0" xmlns:dt="urn:schemas-microsoft-com:datatypes" dt:dt="bin.base64">UEsDBBQAAAAIAAaWZF3psdslHQEAAPYCAAAHAAAAc3RyLmRhdK2SvU7DQBCE
+p+YpTkkTpBQgCoooFUqRhgLRI4gdYuEckX+IAPFEPAIvx7drO7KFQCmQtefR
+7uzezNqlNrrXTqmCtqBMUSd6J0L7RD2rdFYC2muuSoVqOmY9Vk79lXpNtQLZ
+xLlGeiBX0JlyjgYdllszOdMbaKJznfFMdcl5OmAWPjfSUcBcMX/iTIuuq/9u
+zuEMU59wW42i8uB5gqYn95yApsQ1cWxnBG/BTeeVFnTfct78mFH2ttzdF9hy
+IFf4Hmw/hhKYKYxH3hUbvMDJDN5Gd0zIvRJ9syt4EU632aCXIzh2X+a5Pcg0
+7fxW8/OpJZW158v2K9u2a1cWcLjUV+st6OMXf91WGn//pdv+oxyd/b/vbzfj
+g5LxQLPFN1BLAQIUABQAAAAIAAaWZF3psdslHQEAAPYCAAAHAAAAAAAAAAAA
+AACAAQAAAABzdHIuZGF0UEsFBgAAAAABAAEANQAAAEIBAAAAAA==
+</Image><AppliesTo><Apply type="Node"><Property name="_HideUmlLinks" value="True"/></Apply></AppliesTo><TaggedValues><Tag name="Kind" type="String" description="" unit="" values="" default=""/><Tag name="Life Cycle Stage" type="enumeration" description="" unit="" values="Ideation,Design,Purchase,Inventory,Deploy,Operational,End of Operation,Defective,Missing,End of Life" default=""/><Tag name="Life Cycle Stage Status" type="enumeration" description="" unit="" values="Under Evaluation,Pilot,Design,Chartered,Build,On Order,Pre-Allocated,Available,Reserved,Pending Repair,Legal Hold,Quarantine,In Stock,Pending Transfer,In Transit,Test,Pending Fulfillment,In Use,In Maintenance,End of Support,Pending Retirement,Pending Certificate,Pending Disposal,Pending Donation,Pending Evaluation,Pending Resale,Pending Return,On Hold,Lost,Stolen,Obsolete,Retired,Disposed,Donated,Sold,RMA,Vendor Credit,Buy-out,Lease Return" default=""/><Tag name="ServiceNow link" type="URL" description="" unit="" values="" default=""/><Tag name="ServiceNow record id" type="String" description="" unit="" values="" default=""/></TaggedValues></Stereotype><Stereotype name="CSDMInstallBaseItem" alias="Install Base Item" metatype="Install Base Item" notes="" cx="0" cy="0" bgcolor="2856441" fontcolor="-1" bordercolor="-1" borderwidth="-1" hideicon="0"><Image type="EAShapeScript 1.0" xmlns:dt="urn:schemas-microsoft-com:datatypes" dt:dt="bin.base64">UEsDBBQAAAAIAAuWZF2Urv5PHgEAAPYCAAAHAAAAc3RyLmRhdK2SsU7DQBBE
+p+YrTkljpBRBFBRRGhBFGoqIHkFsiBX7iHw2ESC+iE/g53h7jiNbCJQCnfZu
+dDs7N7u6oLXutVUmpxKUy+tE74TbL69nhchKQTvNVatSQ8WsxyrIv5JvyNYg
+U5xrpAfuKioz9tGgwu4eUc71Bkp0pilrogv20wGzirqeigrmCv0kMi26qv7Z
+7kMNc5/yWoOjcOg5wdMm9pyCJsQNcWylB5fgtvJK11Tfsi9/aITelLv3HFN2
+3FVxDjYfQynMDMYTZ80Ez+lkBm+tOxSKmPFxsit4Hk43WaeXIzj2Xh7vdiDz
+tI2vWj+fWpAJ5EylgH0JCtH1IqqU+tr35vTxS3/dVNr+/su3/aMCn/3f93c3
+44OT8cCzxTdQSwECFAAUAAAACAALlmRdlK7+Tx4BAAD2AgAABwAAAAAAAAAA
+AAAAgAEAAAAAc3RyLmRhdFBLBQYAAAAAAQABADUAAABDAQAAAAA=
+</Image><AppliesTo><Apply type="Class"><Property name="_HideUmlLinks" value="True"/></Apply></AppliesTo><TaggedValues><Tag name="Life Cycle Stage" type="enumeration" description="" unit="" values="Ideation,Design,Purchase,Inventory,Deploy,Operational,End of Operation,Defective,Missing,End of Life" default=""/><Tag name="Life Cycle Stage Status" type="enumeration" description="" unit="" values="Under Evaluation,Pilot,Design,Chartered,Build,On Order,Pre-Allocated,Available,Reserved,Pending Repair,Legal Hold,Quarantine,In Stock,Pending Transfer,In Transit,Test,Pending Fulfillment,In Use,In Maintenance,End of Support,Pending Retirement,Pending Certificate,Pending Disposal,Pending Donation,Pending Evaluation,Pending Resale,Pending Return,On Hold,Lost,Stolen,Obsolete,Retired,Disposed,Donated,Sold,RMA,Vendor Credit,Buy-out,Lease Return" default=""/><Tag name="ServiceNow link" type="URL" description="" unit="" values="" default=""/><Tag name="ServiceNow record id" type="String" description="" unit="" values="" default=""/></TaggedValues></Stereotype><Stereotype name="CSDMIsPartOf" alias="Is part of" metatype="Is part of" notes="" cx="0" cy="0" bgcolor="-1" fontcolor="-1" bordercolor="-1" borderwidth="-1" hideicon="0"><Image type="EAShapeScript 1.0" xmlns:dt="urn:schemas-microsoft-com:datatypes" dt:dt="bin.base64">UEsDBBQAAAAIAGSWZF2wgkQlTAAAAGoAAAAHAAAAc3RyLmRhdD2LwQmAMBAE
+520VIS+twQosI0EF4eIFzU/s3UVEhoW7YddIZBaMQGFjFqY/4zThsvZ3Oi4l
+fFQOLXa1eiIT5+uSbNPlrLIDoxa38gBQSwECFAAUAAAACABklmRdsIJEJUwA
+AABqAAAABwAAAAAAAAAAAAAAgAEAAAAAc3RyLmRhdFBLBQYAAAAAAQABADUA
+AABxAAAAAAA=
+</Image><AppliesTo><Apply type="Dependency"/></AppliesTo></Stereotype><Stereotype name="CSDMKnowledge" alias="Knowledge" metatype="Knowledge" notes="" cx="0" cy="0" bgcolor="15196895" fontcolor="-1" bordercolor="-1" borderwidth="-1" hideicon="0"><Image type="EAShapeScript 1.0" xmlns:dt="urn:schemas-microsoft-com:datatypes" dt:dt="bin.base64">UEsDBBQAAAAIALCVZF1MVRoRFgEAAOYCAAAHAAAAc3RyLmRhdK2SvU7DUAyF
+z8xTXLVLkDoAC0PVCTEhMSB2BE1oI9JLlR8iQDwRj8DL8dlpqkQI1AFF9j3y
+PbaPnVtprXttlSloA8oVdaR3LOy+qGdVzkpBrRaqVaohYz5gFdy/ct9wW4Os
+4kITPRAryczwk1GGxR6pnOsNlOhUJ3wzneOPR8zS60YySphL6ifONOuzhmfn
+xzVMfUq3BkXVfuYETU8+cwqaYdfYoZkRvAF3mRe6JPsWf/OjRjXYct8vsOVA
+rPQ92H4MpTAzGCvOmg2eMckc3lp3VCj8Jvpml/AinH6zQS8HcKxf7rEWZJq2
+3tXm+dSV/+2WGhZb4b92swR9/DJPv4Vunv/Sae+mQMPwtf2tfrpXMh1pNvsG
+UEsBAhQAFAAAAAgAsJVkXUxVGhEWAQAA5gIAAAcAAAAAAAAAAAAAAIABAAAA
+AHN0ci5kYXRQSwUGAAAAAAEAAQA1AAAAOwEAAAAA
+</Image><AppliesTo><Apply type="Artifact"><Property name="_HideUmlLinks" value="True"/></Apply></AppliesTo><TaggedValues><Tag name="ServiceNow link" type="URL" description="" unit="" values="" default=""/><Tag name="ServiceNow record id" type="String" description="" unit="" values="" default=""/></TaggedValues></Stereotype><Stereotype name="CSDMLocation" alias="Location" metatype="Location" notes="" cx="0" cy="0" bgcolor="15196895" fontcolor="-1" bordercolor="-1" borderwidth="-1" hideicon="0"><stereotypedrelationships><stereotypedrelationship stereotype="CSDM5::CSDMParentOf" constraint="CSDM5::CSDMLocation"/></stereotypedrelationships><Image type="EAShapeScript 1.0" xmlns:dt="urn:schemas-microsoft-com:datatypes" dt:dt="bin.base64">UEsDBBQAAAAIAKiVZF2SPfHGFgEAAOQCAAAHAAAAc3RyLmRhdK2SsU7DQBBE
+p+YrTkljpBRAQxGlQnSIAtGjYBti4Vyis01EonwRn8DP8fYcR7YQKAU67d1o
+b3ZvdnSVFpprrVxOS1AhrzPtCHdYXitVkZWBNpqpVlBDxbTHKrn/4L7htgZZ
+x5lGeiYXqMzZR4MKy73QudAWlOhSF6yJrtnPB8wQ+3oqAsyU/klkWnRV/bPd
+hz1MfcZrDYqq48wJmt7izBloQtwTp1Z68BLcVt7olupH9ocfPaqey917Dpcd
+uRB9MH8MZTBzGK+cNQ5eMckU3kJPdCjjjY/OpvA8nM5Zp/cTOPZeEXMbkGla
+x1dtnk/d4XRKtoazgvV1mMRp/8s0nQftNP+l0n5Niar+X/tb+/ioZDzQbPEN
+UEsBAhQAFAAAAAgAqJVkXZI98cYWAQAA5AIAAAcAAAAAAAAAAAAAAIABAAAA
+AHN0ci5kYXRQSwUGAAAAAAEAAQA1AAAAOwEAAAAA
+</Image><AppliesTo><Apply type="Class"><Property name="_HideUmlLinks" value="True"/></Apply></AppliesTo><TaggedValues><Tag name="Life Cycle Stage" type="enumeration" description="" unit="" values="Design,Operational,End of Life" default=""/><Tag name="Life Cycle Stage Status" type="enumeration" description="" unit="" values="Chartered,Build,Available,In Use,Pending Retirement,Sold,Lease Return,Obsolete" default=""/><Tag name="Location type" type="enumeration" description="" unit="" values="Region,Country,State/Province,City,Site,Building/Structure,Floor,Room" default=""/><Tag name="ServiceNow link" type="URL" description="" unit="" values="" default=""/><Tag name="ServiceNow record id" type="String" description="" unit="" values="" default=""/></TaggedValues></Stereotype><Stereotype name="CSDMMaps" alias="Maps" metatype="Maps" notes="" cx="0" cy="0" bgcolor="-1" fontcolor="-1" bordercolor="-1" borderwidth="-1" hideicon="0"><Image type="EAShapeScript 1.0" xmlns:dt="urn:schemas-microsoft-com:datatypes" dt:dt="bin.base64">UEsDBBQAAAAIAEaWZF30bK9xRgAAAF4AAAAHAAAAc3RyLmRhdMthSGRIYkhl
+yGFQYMhlyGRIAcIcID+JIZ+hBAjzgaI5cDVcDNVArACFBQxFQB15QFUaDEoM
+vkBVBQzFQJYmgzVQVS0QAwBQSwECFAAUAAAACABGlmRd9GyvcUYAAABeAAAA
+BwAAAAAAAAAAAAAAgAEAAAAAc3RyLmRhdFBLBQYAAAAAAQABADUAAABrAAAA
+AAA=
+</Image><AppliesTo><Apply type="Association"/></AppliesTo></Stereotype><Stereotype name="CSDMMeasures" alias="Measures" metatype="Measures" notes="" cx="0" cy="0" bgcolor="-1" fontcolor="-1" bordercolor="-1" borderwidth="-1" hideicon="0"><Image type="EAShapeScript 1.0" xmlns:dt="urn:schemas-microsoft-com:datatypes" dt:dt="bin.base64">UEsDBBQAAAAIAJOWZF2cBFWrSwAAAGYAAAAHAAAAc3RyLmRhdD2LywmAMBQE
+52wVkpPWYA0WkWAOQjTi5yT27hxEhuWxy7xCJJEptCzMTFLsicop1bX8TsNt
+2o+N3Y9VqyMwakQOLtfsDfQM2o95AVBLAQIUABQAAAAIAJOWZF2cBFWrSwAA
+AGYAAAAHAAAAAAAAAAAAAACAAQAAAABzdHIuZGF0UEsFBgAAAAABAAEANQAA
+AHAAAAAAAA==
+</Image><AppliesTo><Apply type="Dependency"/></AppliesTo></Stereotype><Stereotype name="CSDMMember" alias="Member" metatype="Member" notes="" cx="0" cy="0" bgcolor="-1" fontcolor="-1" bordercolor="-1" borderwidth="-1" hideicon="0"><Image type="EAShapeScript 1.0" xmlns:dt="urn:schemas-microsoft-com:datatypes" dt:dt="bin.base64">UEsDBBQAAAAIAHWWZF21k/CuRwAAAGIAAAAHAAAAc3RyLmRhdMthSGRIYkhl
+yGFQYMhlyGRIAcIcID+JIZ+hBAjzgaI5cDVcDNVArACFBQxFQB15QFUaDEoM
+vkAVuWB1RUCeJoM1UGUtEAMAUEsBAhQAFAAAAAgAdZZkXbWT8K5HAAAAYgAA
+AAcAAAAAAAAAAAAAAIABAAAAAHN0ci5kYXRQSwUGAAAAAAEAAQA1AAAAbAAA
+AAAA
+</Image><AppliesTo><Apply type="Dependency"/></AppliesTo></Stereotype><Stereotype name="CSDMModel" alias="Model" metatype="Model" notes="" cx="0" cy="0" bgcolor="-1" fontcolor="-1" bordercolor="-1" borderwidth="-1" hideicon="0"><Image type="EAShapeScript 1.0" xmlns:dt="urn:schemas-microsoft-com:datatypes" dt:dt="bin.base64">UEsDBBQAAAAIAGeWZF0GtOR3RgAAAGAAAAAHAAAAc3RyLmRhdMthSGRIYkhl
+yGFQYMhlyGRIAcIcID+JIZ+hBAjzgaI5cDVcDNVArACFBQxFQB15QFUaDEoM
+vkC1KWBVSgyaDNZAdbVADABQSwECFAAUAAAACABnlmRdBrTkd0YAAABgAAAA
+BwAAAAAAAAAAAAAAgAEAAAAAc3RyLmRhdFBLBQYAAAAAAQABADUAAABrAAAA
+AAA=
+</Image><AppliesTo><Apply type="Dependency"/></AppliesTo></Stereotype><Stereotype name="CSDMNetworkFunction" alias="Network Function" metatype="Network Function" notes="" cx="0" cy="0" bgcolor="2856441" fontcolor="-1" bordercolor="-1" borderwidth="-1" hideicon="0"><stereotypedrelationships><stereotypedrelationship stereotype="CSDM5::CSDMDependsOn" constraint="CSDM5::CSDMNetworkFunctionApplication"/><stereotypedrelationship stereotype="CSDM5::CSDMModel" constraint="CSDM5::CSDMProductModel"/></stereotypedrelationships><Image type="EAShapeScript 1.0" xmlns:dt="urn:schemas-microsoft-com:datatypes" dt:dt="bin.base64">UEsDBBQAAAAIAPaVZF1CG0D/HAEAAPQCAAAHAAAAc3RyLmRhdK2SvU7DQBCE
+p+YpTkljpBRBFBRRKgQlRUSPIDbEinNE/iECxBPxCLwc367jyBYCpUDWnke7
+s3uzY1da6V5bZQragHJFneidCPsn6lmVs1LQTnPVKtXQMeuxCuqv1BuqNcgm
+zjXSA7mSzoxzNOiw3COTc72BEp1pyjPRBefpgFn63EhHCXPJ/MSZFl1X/92e
+wxmmPuW2BkXVYecETWvfOQVNiBvi2M4I3oDbzktd0X3Lufgxo+q53N0XcDmQ
+K90H88dQCjOD8cS7xsFzNpnBW+mOCYVXoju7hBfhdM4GvRzBsftyz+1Apmnr
+t9o+n+jPvGLfbA372n03x3NyUV/7zYI+ftmu86Td7r9U219UoLL/7/29y/ig
+ZDzQbPENUEsBAhQAFAAAAAgA9pVkXUIbQP8cAQAA9AIAAAcAAAAAAAAAAAAA
+AIABAAAAAHN0ci5kYXRQSwUGAAAAAAEAAQA1AAAAQQEAAAAA
+</Image><AppliesTo><Apply type="Component"><Property name="_HideUmlLinks" value="True"/></Apply></AppliesTo><TaggedValues><Tag name="Life Cycle Stage" type="enumeration" description="" unit="" values="Ideation,Design,Purchase,Inventory,Deploy,Operational,End of Operation,End of Life" default=""/><Tag name="Life Cycle Stage Status" type="enumeration" description="" unit="" values="Under Evaluation,Pilot,Design,Chartered,Build,On Order,Pre-Allocated,Available,Legal Hold,Test,Pending Fulfillment,In Use,In Maintenance,End of Support,Pending Retirement,On Hold,Obsolete,Retired" default=""/><Tag name="ServiceNow link" type="URL" description="" unit="" values="" default=""/><Tag name="ServiceNow record id" type="String" description="" unit="" values="" default=""/></TaggedValues></Stereotype><Stereotype name="CSDMNetworkFunctionApplication" alias="Network Function Application" metatype="Network Function Application" notes="" cx="0" cy="0" bgcolor="2856441" fontcolor="-1" bordercolor="-1" borderwidth="-1" hideicon="0"><stereotypedrelationships><stereotypedrelationship stereotype="CSDM5::CSDMModel" constraint="CSDM5::CSDMProductModel"/><stereotypedrelationship stereotype="CSDM5::CSDMRunsOn" constraint="CSDM5::CSDMInfrastructureCI"/></stereotypedrelationships><Image type="EAShapeScript 1.0" xmlns:dt="urn:schemas-microsoft-com:datatypes" dt:dt="bin.base64">UEsDBBQAAAAIAPqVZF3ADDuUJQEAAAwDAAAHAAAAc3RyLmRhdK2SzUrDUBCF
+z9qnuLSbCF0oLlyULkR06ULciybRhqbXkqQWFZ/IR/Dl/GbSlARRuihh7h1m
+zpmfk1trrgetlCtoiVco6kgfWNh+US+qHZXhbTRTo0prGNMeqiT/Rn5NtsGz
+ijON9EisgplzjgYMiz1RudA7XqJTnfBNdM55PEBWXjfCqECm1E8cadax+nd7
+DmvY9Bnd1kxU73ZOmGnhO2d4E+wG25cZ8Zf4LfNSV7DvOG9/1ah7Knf9AioH
+YpXrYPqYl4HMQTxzNyh4xiZTcHPdU6H0THRlU3ARTKds0OseGOtXeGyDZzOt
+vKvt88X8uWfsny1AX7vupnhBLBK5cIb1SGF38e/txkGff2zdadVufaht7HWV
+TN9/k//vON5NMh7MbPYDUEsBAhQAFAAAAAgA+pVkXcAMO5QlAQAADAMAAAcA
+AAAAAAAAAAAAAIABAAAAAHN0ci5kYXRQSwUGAAAAAAEAAQA1AAAASgEAAAAA
+</Image><AppliesTo><Apply type="Component"><Property name="_HideUmlLinks" value="True"/></Apply></AppliesTo><TaggedValues><Tag name="Life Cycle Stage" type="enumeration" description="" unit="" values="Ideation,Design,Purchase,Inventory,Deploy,Operational,End of Operation,End of Life" default=""/><Tag name="Life Cycle Stage Status" type="enumeration" description="" unit="" values="Under Evaluation,Pilot,Design,Chartered,Build,On Order,Pre-Allocated,Available,Legal Hold,Test,Pending Fulfillment,In Use,In Maintenance,End of Support,Pending Retirement,On Hold,Obsolete,Retired" default=""/><Tag name="ServiceNow link" type="URL" description="" unit="" values="" default=""/><Tag name="ServiceNow record id" type="String" description="" unit="" values="" default=""/></TaggedValues></Stereotype><Stereotype name="CSDMNetworkServiceInstance" alias="Network Service Instance" metatype="Network Service Instance" notes="" cx="0" cy="0" bgcolor="2856441" fontcolor="-1" bordercolor="-1" borderwidth="-1" hideicon="0"><stereotypedrelationships><stereotypedrelationship stereotype="CSDM5::CSDMConnectedBy" constraint="CSDM5::CSDMConnectionServiceInstance"/><stereotypedrelationship stereotype="CSDM5::CSDMDependsOn" constraint="CSDM5::CSDMApplicationService;CSDM5::CSDMConnectionServiceInstance;CSDM5::CSDMDataServiceInstance;CSDM5::CSDMFacilityServiceInstance;CSDM5::CSDMNetworkServiceInstance;CSDM5::CSDMOperationalProcessServiceInstance;CSDM5::CSDMServiceInstance"/><stereotypedrelationship stereotype="CSDM5::CSDMModel" constraint="CSDM5::CSDMProductModel"/></stereotypedrelationships><Image type="EAShapeScript 1.0" xmlns:dt="urn:schemas-microsoft-com:datatypes" dt:dt="bin.base64">UEsDBBQAAAAIAO6VZF2grW0OJAEAAAQDAAAHAAAAc3RyLmRhdK2SvU7DUAyF
+z8xTRO0SpA4gBoaqE2JgYQB2VJJAo6aXKj+tAPFEPAIvx2enqRIhUIcq8r2W
+fY597NxKC821VqZIK7xcQSf6wKLdF/SqylEp3lYz1SrVwJj2UAX5N/IN2RrP
+Ks400hOxEmbGORowLPZM5VzveLHOdcY30SXn6QBZet0AowSZUD92pFnH6t/t
+Oaxh6lO6NSiq9jPHaFr6zCneBLvFDmUG/BV+y7zSNewHzrtfNarelrt+EVuO
+iJW+B9uPeSnIDMQLd80GL5hkCm6hRyoUngm+2QRcANNtNtLmAIz1yz22xTNN
+a+9q83yhP/OM/bMl6HtnbmAkrv0GZgVizm2R792kkT7/mLbbUTvtsaawV1Wg
+uv8W/59tvFcyHmg2+wFQSwECFAAUAAAACADulWRdoK1tDiQBAAAEAwAABwAA
+AAAAAAAAAAAAgAEAAAAAc3RyLmRhdFBLBQYAAAAAAQABADUAAABJAQAAAAA=
+</Image><AppliesTo><Apply type="Class"><Property name="_HideUmlLinks" value="True"/></Apply></AppliesTo><TaggedValues><Tag name="Environment" type="String" description="" unit="" values="" default=""/><Tag name="Life Cycle Stage" type="enumeration" description="" unit="" values="Ideation,Design,Purchase,Inventory,Deploy,Operational,End of Operation,End of Life" default=""/><Tag name="Life Cycle Stage Status" type="enumeration" description="" unit="" values="Under Evaluation,Pilot,Design,Chartered,Build,On Order,Pre-Allocated,Available,Legal Hold,Test,Pending Fulfillment,In Use,In Maintenance,End of Support,Pending Retirement,On Hold,Obsolete,Retired" default=""/><Tag name="Region" type="String" description="" unit="" values="" default=""/><Tag name="ServiceNow link" type="URL" description="" unit="" values="" default=""/><Tag name="ServiceNow record id" type="String" description="" unit="" values="" default=""/></TaggedValues></Stereotype><Stereotype name="CSDMOperationalizes" alias="Operationalizes" metatype="Operationalizes" notes="" cx="0" cy="0" bgcolor="-1" fontcolor="-1" bordercolor="-1" borderwidth="-1" hideicon="0"><Image type="EAShapeScript 1.0" xmlns:dt="urn:schemas-microsoft-com:datatypes" dt:dt="bin.base64">UEsDBBQAAAAIAEmWZF0Jt0QHTgAAAHQAAAAHAAAAc3RyLmRhdD2LzQ1AQBhE
+31kV4kQNilCDjT1IPktwInr3DiKTSeY3GElkgpqFmUmEPrFyitU0/k3FLesP
+G7uP4qqlYdBnk1E/+yuqUF2mh31H7/eRL1BLAQIUABQAAAAIAEmWZF0Jt0QH
+TgAAAHQAAAAHAAAAAAAAAAAAAACAAQAAAABzdHIuZGF0UEsFBgAAAAABAAEA
+NQAAAHMAAAAAAA==
+</Image><AppliesTo><Apply type="Dependency"/></AppliesTo></Stereotype><Stereotype name="CSDMOperationalProcessServiceInstance" alias="Operational Process Service Instance" metatype="Operational Process Service Instance" notes="" cx="0" cy="0" bgcolor="2856441" fontcolor="-1" bordercolor="-1" borderwidth="-1" hideicon="0"><stereotypedrelationships><stereotypedrelationship stereotype="CSDM5::CSDMConnectedBy" constraint="CSDM5::CSDMConnectionServiceInstance"/><stereotypedrelationship stereotype="CSDM5::CSDMDependsOn" constraint="CSDM5::CSDMApplicationService;CSDM5::CSDMConnectionServiceInstance;CSDM5::CSDMDataServiceInstance;CSDM5::CSDMFacilityServiceInstance;CSDM5::CSDMNetworkServiceInstance;CSDM5::CSDMOperationalProcessServiceInstance;CSDM5::CSDMServiceInstance"/><stereotypedrelationship stereotype="CSDM5::CSDMModel" constraint="CSDM5::CSDMProductModel"/></stereotypedrelationships><Image type="EAShapeScript 1.0" xmlns:dt="urn:schemas-microsoft-com:datatypes" dt:dt="bin.base64">UEsDBBQAAAAIAPGVZF0KvuHALwEAABwDAAAHAAAAc3RyLmRhdK2SzUrDUBCF
+z9qnuLSbCF0oCi6kK3HhRkXdS02iBtO05KdFxSfyEXw5v5k0JUGULuQy905m
+zpk7c3IrPWumpVIFzfEyFdrTOxY2q9BClaMSvLWmqlWqgXHaQ+XkX8k3ZGs8
+qzjVSA/ESpgp+2jAsNgjlTO94UU61AFrohP2/QGy9LoFjBJkTP3IkWYdq3+2
++7CGdZ9wW0NH1XbmiJ5efOYEb4JdYrsyC/w5fss80znsO/abHzWqnsrdfQGV
+A7HSdTB9zEtApiCeOGsUPNYRlQJf91TIPVO4sjG4AkynbNBqB4zdl3lsjWc9
+Lf1Wm+dTV/5l8RrUwifMYV37P7BqFSvo1lErMLHPdAGygjPjtMjXRoGgj19U
+6LRrVfiv6ey15UzTf6N/zzzedjIe9Gz2DVBLAQIUABQAAAAIAPGVZF0KvuHA
+LwEAABwDAAAHAAAAAAAAAAAAAACAAQAAAABzdHIuZGF0UEsFBgAAAAABAAEA
+NQAAAFQBAAAAAA==
+</Image><AppliesTo><Apply type="Class"><Property name="_HideUmlLinks" value="True"/></Apply></AppliesTo><TaggedValues><Tag name="Environment" type="String" description="" unit="" values="" default=""/><Tag name="Life Cycle Stage" type="enumeration" description="" unit="" values="Ideation,Design,Purchase,Inventory,Deploy,Operational,End of Operation,End of Life" default=""/><Tag name="Life Cycle Stage Status" type="enumeration" description="" unit="" values="Under Evaluation,Pilot,Design,Chartered,Build,On Order,Pre-Allocated,Available,Legal Hold,Test,Pending Fulfillment,In Use,In Maintenance,End of Support,Pending Retirement,On Hold,Obsolete,Retired" default=""/><Tag name="Region" type="String" description="" unit="" values="" default=""/><Tag name="ServiceNow link" type="URL" description="" unit="" values="" default=""/><Tag name="ServiceNow record id" type="String" description="" unit="" values="" default=""/></TaggedValues></Stereotype><Stereotype name="CSDMOperationalTechnology" alias="Operational Technology (OT) CI" metatype="Operational Technology (OT) CI" notes="" cx="0" cy="0" bgcolor="2856441" fontcolor="-1" bordercolor="-1" borderwidth="-1" hideicon="0"><stereotypedrelationships><stereotypedrelationship stereotype="CSDM5::CSDMModel" constraint="CSDM5::CSDMProductModel"/></stereotypedrelationships><Image type="EAShapeScript 1.0" xmlns:dt="urn:schemas-microsoft-com:datatypes" dt:dt="bin.base64">UEsDBBQAAAAIAPyVZF08TwjbKwEAABADAAAHAAAAc3RyLmRhdK2Sz07CQBDG
+v7NPsYFLSThgNPFgOBEPXiQx3I3QCo1lIf0DUeMT+Qi+nL+dUtLGaDiQzex+
+nfm+2ZnpFlrpWVslclqDUnld6ANzh+W1UWGsGLTXWKVyVShuW6yM+BvximgJ
+ChnH6mmOL0eZsPc6iuB7IXOqd1CkS41YQ92wDzrM3PJ6FDnMBfkjYwZrVO2z
+3rs5QvUxt1VUVBx7jqjp1XqOQUPsATtV6cFrcK2c6A71jP3xV46iNeXmPseU
+Hb7c5hDmE1AMM4Gx5CyZ4LWuyOT4eiJDZhFvk13A83CayTrtTuCE+1Lz7UGh
+pq3dGvr50tS+gr+EtbEOM1Qzm/vK3kKGLfnDDs2UyAA00b2+D107ff7ReTOv
+uvNzdTS3muLOu/y/z/6xkn6n5mA/UEsBAhQAFAAAAAgA/JVkXTxPCNsrAQAA
+EAMAAAcAAAAAAAAAAAAAAIABAAAAAHN0ci5kYXRQSwUGAAAAAAEAAQA1AAAA
+UAEAAAAA
+</Image><AppliesTo><Apply type="Node"><Property name="_HideUmlLinks" value="True"/></Apply></AppliesTo><TaggedValues><Tag name="Kind" type="String" description="" unit="" values="" default=""/><Tag name="Life Cycle Stage" type="enumeration" description="" unit="" values="Ideation,Design,Purchase,Inventory,Deploy,Operational,End of Operation,Defective,Missing,End of Life" default=""/><Tag name="Life Cycle Stage Status" type="enumeration" description="" unit="" values="Under Evaluation,Pilot,Design,Chartered,Build,On Order,Pre-Allocated,Available,Reserved,Pending Repair,Legal Hold,Quarantine,In Stock,Pending Transfer,In Transit,Test,Pending Fulfillment,In Use,In Maintenance,End of Support,Pending Retirement,Pending Certificate,Pending Disposal,Pending Donation,Pending Evaluation,Pending Resale,Pending Return,On Hold,Lost,Stolen,Obsolete,Retired,Disposed,Donated,Sold,RMA,Vendor Credit,Buy-out,Lease Return" default=""/><Tag name="ServiceNow link" type="URL" description="" unit="" values="" default=""/><Tag name="ServiceNow record id" type="String" description="" unit="" values="" default=""/></TaggedValues></Stereotype><Stereotype name="CSDMParentOf" alias="Parent of" metatype="Parent of" notes="" cx="0" cy="0" bgcolor="-1" fontcolor="-1" bordercolor="-1" borderwidth="-1" hideicon="0"><Image type="EAShapeScript 1.0" xmlns:dt="urn:schemas-microsoft-com:datatypes" dt:dt="bin.base64">UEsDBBQAAAAIALSWZF0WqbtkSQAAAGgAAAAHAAAAc3RyLmRhdD2LUQpAUBQF
+59sqXr5Yg03YAqHU5enlT/ZulDSdj3OaEwyMzASJjZVJwj6SOSW7xu9UXCZ9
+HBQfu1ZDTa9VtN6e/C1uLZ3+bR5QSwECFAAUAAAACAC0lmRdFqm7ZEkAAABo
+AAAABwAAAAAAAAAAAAAAgAEAAAAAc3RyLmRhdFBLBQYAAAAAAQABADUAAABu
+AAAAAAA=
+</Image><AppliesTo><Apply type="Dependency"/></AppliesTo></Stereotype><Stereotype name="CSDMPartOf" alias="Part of" metatype="Part of" notes="" cx="0" cy="0" bgcolor="-1" fontcolor="-1" bordercolor="-1" borderwidth="-1" hideicon="0"><Image type="EAShapeScript 1.0" xmlns:dt="urn:schemas-microsoft-com:datatypes" dt:dt="bin.base64">UEsDBBQAAAAIAIaWZF1rZpATSAAAAGQAAAAHAAAAc3RyLmRhdD2LwQmAQBDE
+8raKw5fWYBO24KGCsHpy+BN7Nw+RMLCzZIKJzEKQ2NmYJeyZwiXFb/xOw23S
+x0l1cWh1tIxa1Tu5We09g+5jXlBLAQIUABQAAAAIAIaWZF1rZpATSAAAAGQA
+AAAHAAAAAAAAAAAAAACAAQAAAABzdHIuZGF0UEsFBgAAAAABAAEANQAAAG0A
+AAAAAA==
+</Image><AppliesTo><Apply type="Dependency"/></AppliesTo></Stereotype><Stereotype name="CSDMPlanningItem" alias="Planning Item" metatype="Planning Item" notes="" cx="0" cy="0" bgcolor="6084844" fontcolor="-1" bordercolor="-1" borderwidth="-1" hideicon="0"><stereotypedrelationships><stereotypedrelationship stereotype="CSDM5::CSDMAlignedTo" constraint="CSDM5::CSDMGoal;CSDM5::CSDMTarget"/><stereotypedrelationship stereotype="CSDM5::CSDMRelatesTo" constraint="CSDM5::CSDMProductModel"/></stereotypedrelationships><Image type="EAShapeScript 1.0" xmlns:dt="urn:schemas-microsoft-com:datatypes" dt:dt="bin.base64">UEsDBBQAAAAIALaVZF1q7YuGGQEAAO4CAAAHAAAAc3RyLmRhdK2SzUrDUBCF
+z9qnuLSbCF2oGxelK3HhRkTcizaxDU2uJT8WFZ/IR/Dl/GbalARRupDLTA5z
+z5m/3FpLPWitTEElKFfUkd6xsDtRz6qdlYI2mqlRpRbFtMcquH/lvuW2AVnG
+mUZ6JFahzPCjgcJiT2TO9QZKdKoTzkTn+OMBs/K8EUUFc07+xJlmnar/3fph
+Dus+pVpLR/V+5oSeVj5zCppg19ihygguwVvlhS5R3+Fvf+Soe1vu6gW2HIhV
+vgfbj6EUZgZjwbdhg2dMMoW31D0ZCr+Jvtk5vAin22zQywEcq5d7bAOyntZe
+1eb51I3/x8gxzgL+latLfe1mCvr4Za5uG9u5/qtfez8F/fVf3d9TjPedjAc9
+m30DUEsBAhQAFAAAAAgAtpVkXWrti4YZAQAA7gIAAAcAAAAAAAAAAAAAAIAB
+AAAAAHN0ci5kYXRQSwUGAAAAAAEAAQA1AAAAPgEAAAAA
+</Image><AppliesTo><Apply type="Class"><Property name="_HideUmlLinks" value="True"/></Apply></AppliesTo><TaggedValues><Tag name="ServiceNow link" type="URL" description="" unit="" values="" default=""/><Tag name="ServiceNow record id" type="String" description="" unit="" values="" default=""/><Tag name="Type" type="enumeration" description="" unit="" values="Demand,Project,Epic,Custom" default=""/></TaggedValues></Stereotype><Stereotype name="CSDMPortfolio" alias="Portfolio" metatype="Portfolio" notes="" cx="0" cy="0" bgcolor="16777215" fontcolor="-1" bordercolor="-1" borderwidth="-1" hideicon="0"><Image type="EAShapeScript 1.0" xmlns:dt="urn:schemas-microsoft-com:datatypes" dt:dt="bin.base64">UEsDBBQAAAAIAEKWZF2lsa+VFQEAAOYCAAAHAAAAc3RyLmRhdK2SwUrDQBCG
+/7NPsbSXCD2oFw+lJ+lVRLyL7UYbbDdlk1hUfCIfwZfz20lTEkTpQZbZ/Zn5
+Z+afSSqt9KCtcjltQIWCTvSOuf0JKlUZy4N2mqlWVEPGtMdaE38l3hCtQani
+TCMt8EUyc+7RICP5Hqlc6A2U6VxnnIkuuU8HzGh1AxkR5pL6mTGTdVn9t72H
+NZJ6T7cGRdVh5gxNzzazB02wa+zYzADegNvMK83JvuO+/VGj6m256+fYssMX
+bQ9pPwl5mDmMJ96aDV4wyRTeSvdUWFsk2GaX8AKcbrNOL0dwUr/CfDtQ0rS1
+rmmeT93Y16rRU1qdUl/7WZw+fpmn20I7z3/pXJgCP/jb/lY/PigZDzQn+wZQ
+SwECFAAUAAAACABClmRdpbGvlRUBAADmAgAABwAAAAAAAAAAAAAAgAEAAAAA
+c3RyLmRhdFBLBQYAAAAAAQABADUAAAA6AQAAAAA=
+</Image><AppliesTo><Apply type="Class"><Property name="_HideUmlLinks" value="True"/></Apply></AppliesTo><TaggedValues><Tag name="ServiceNow link" type="URL" description="" unit="" values="" default=""/><Tag name="ServiceNow record id" type="String" description="" unit="" values="" default=""/></TaggedValues></Stereotype><Stereotype name="CSDMProcessReference" alias="Process reference" metatype="Process reference" notes="" cx="0" cy="0" bgcolor="-1" fontcolor="-1" bordercolor="-1" borderwidth="-1" hideicon="0"><Image type="EAShapeScript 1.0" xmlns:dt="urn:schemas-microsoft-com:datatypes" dt:dt="bin.base64">UEsDBBQAAAAIAE2WZF0nYKm8UAAAAHgAAAAHAAAAc3RyLmRhdD2LwQmAMBRD
+39kpSk86g0u4gtUKwrdf1Ju4u1FEHiEkJEZPImMEFmZGYcoJ5xCu1v5NxSmF
+j5VNj6JVTaRTcgbtdhGUMpP0eHn7SEOr/yXdUEsBAhQAFAAAAAgATZZkXSdg
+qbxQAAAAeAAAAAcAAAAAAAAAAAAAAIABAAAAAHN0ci5kYXRQSwUGAAAAAAEA
+AQA1AAAAdQAAAAAA
+</Image><AppliesTo><Apply type="Dependency"/></AppliesTo></Stereotype><Stereotype name="CSDMProductFeature" alias="Product Feature" metatype="Product Feature" notes="" cx="0" cy="0" bgcolor="15196895" fontcolor="-1" bordercolor="-1" borderwidth="-1" hideicon="0"><Image type="EAShapeScript 1.0" xmlns:dt="urn:schemas-microsoft-com:datatypes" dt:dt="bin.base64">UEsDBBQAAAAIAKKVZF3CCu8JGwEAAPICAAAHAAAAc3RyLmRhdK2SzUoDQRCE
+6+xTDMllhRzUi4eQk+hRRLxLzK5myWYM+2NQ8Yl8BF/Or3uzYRdRcpChZ4rp
+6p6uYiotNddGmYLWoFxRR3onwm5FPatyVgraaqZapRoqpj1WQf6VfEO2BlnH
+mUZ64K6kMmMfDSrs7pHOud5AiU51wpronP14wCy9b6SihLmgf+JMi66qf7b7
+sIdNn/Jaw0TVXnPCTCvXnIImxDVxaGUEr8Ft5YUuqb5jv/3Ro+q53L0XcDlw
+V7oP5o+hFGYG44mzxsEzlEzhLXVPh8Iz0Z1dwItwOmeDXg7g2Hu5321BNtPG
+XzU9n7pxr1O0mstBV+TmoMZn+9rpCvr4RVvnSKvtv2a2P1QwVf/n/a1kvJ9k
+PJjZ4htQSwECFAAUAAAACACilWRdwgrvCRsBAADyAgAABwAAAAAAAAAAAAAA
+gAEAAAAAc3RyLmRhdFBLBQYAAAAAAQABADUAAABAAQAAAAA=
+</Image><AppliesTo><Apply type="Class"><Property name="_HideUmlLinks" value="True"/></Apply></AppliesTo><TaggedValues><Tag name="ServiceNow link" type="URL" description="" unit="" values="" default=""/><Tag name="ServiceNow record id" type="String" description="" unit="" values="" default=""/></TaggedValues></Stereotype><Stereotype name="CSDMProductIdea" alias="Product Idea" metatype="Product Idea" notes="" cx="0" cy="0" bgcolor="6084844" fontcolor="-1" bordercolor="-1" borderwidth="-1" hideicon="0"><stereotypedrelationships><stereotypedrelationship stereotype="CSDM5::CSDMRelatesTo" constraint="CSDM5::CSDMProductModel"/></stereotypedrelationships><Image type="EAShapeScript 1.0" xmlns:dt="urn:schemas-microsoft-com:datatypes" dt:dt="bin.base64">UEsDBBQAAAAIALOVZF3rv3HdGgEAAOwCAAAHAAAAc3RyLmRhdK2SzUrDQBSF
+z9qnGNpNhC7UjYvSlbhwIyLupTbRhqZjyY9FxSfyEXw5v3vTlARRupBwZw4z
+5/6ck6m01FwbZQpag3JFHemdCLsv6lmVs1LQVjPVKtWQMe2xCu5fuW+4rUFW
+caaRHjgrycxYR4MMO3ukcq43UKJTnfBNdM56PGCWXjeSUcJcUD9xpkWX1d/b
+dVjDpk/p1jBRtdecMNPKNaegCXFNHJoZwWtwm3mhS7LvWG9/1Kh6Lnf9Ai4H
+zkr3wfwxlMLMYDyx1zh4hpIpvKXuqVD4TXRnF/AinM7ZoJcDONYv97MtyGba
+eFfT86kb9zpFq7kcdOV/aa6vnaKgj19UdV60qv5rWns9BTP039zfGsb7ScaD
+mS2+AVBLAQIUABQAAAAIALOVZF3rv3HdGgEAAOwCAAAHAAAAAAAAAAAAAACA
+AQAAAABzdHIuZGF0UEsFBgAAAAABAAEANQAAAD8BAAAAAA==
+</Image><AppliesTo><Apply type="Class"><Property name="_HideUmlLinks" value="True"/></Apply></AppliesTo><TaggedValues><Tag name="ServiceNow link" type="URL" description="" unit="" values="" default=""/><Tag name="ServiceNow record id" type="String" description="" unit="" values="" default=""/></TaggedValues></Stereotype><Stereotype name="CSDMProductModel" alias="Product Model" metatype="Product Model" notes="" cx="0" cy="0" bgcolor="15196895" fontcolor="-1" bordercolor="-1" borderwidth="-1" hideicon="0"><stereotypedrelationships><stereotypedrelationship stereotype="CSDM5::CSDMBillOfMaterials" constraint="CSDM5::CSDMProductModel"/></stereotypedrelationships><Image type="EAShapeScript 1.0" xmlns:dt="urn:schemas-microsoft-com:datatypes" dt:dt="bin.base64">UEsDBBQAAAAIAG2VZF0TqnRQGgEAAO4CAAAHAAAAc3RyLmRhdK2SvU7DQBCE
+p+YpTkljpBRAQxGlQpREEaJHEBti4RyRf4gA8UQ8Ai/Ht+s4soVAKZC1d+Pb
+2b2d0VVa6U4bZQpag3JFHemdCLsv6lmVs1LQVjPVKtVQMe2xCvKv5BuyNcg6
+zjTSPWcllRnraFBhZw90zvUGSnSqE76JzlmPB8zS+0YqSphL+ifOtOiq+nu7
+DnvY9Cm3NUxU7TUnzPTkmlPQhJgTh1ZG8BrcVl7okuob1usfPaqey919AZcD
+Z6X7YP4YSmFmMB7Zaxw8Q8kU3kq3dCg8E93ZJbwIp3M26OUAjt2X+9kWZDNt
+/FbT86mFe52i1VwOuvK/jJ5fO01BH7/o6txodf3XvPZ+Cmbov7q/VYz3k4wH
+M1t8A1BLAQIUABQAAAAIAG2VZF0TqnRQGgEAAO4CAAAHAAAAAAAAAAAAAACA
+AQAAAABzdHIuZGF0UEsFBgAAAAABAAEANQAAAD8BAAAAAA==
+</Image><AppliesTo><Apply type="Class"><Property name="_HideUmlLinks" value="True"/></Apply></AppliesTo><TaggedValues><Tag name="End-of-life date" type="Date" description="" unit="" values="" default=""/><Tag name="Life Cycle Stage" type="enumeration" description="" unit="" values="Ideation,Design,Build &amp; Integrate,Operational,End of Life" default=""/><Tag name="Life Cycle Stage Status" type="enumeration" description="" unit="" values="Under Evaluation,Pilot,Design,Chartered,Planning,Build,In production,In Use,Available,End of Support,Pending Retirement,Obsolete,Retired,Sold" default=""/><Tag name="Product owner" type="String" description="" unit="" values="" default=""/><Tag name="ServiceNow link" type="URL" description="" unit="" values="" default=""/><Tag name="ServiceNow record id" type="String" description="" unit="" values="" default=""/></TaggedValues></Stereotype><Stereotype name="CSDMProvidedBy" alias="Provided by" metatype="Provided by" notes="" cx="0" cy="0" bgcolor="-1" fontcolor="-1" bordercolor="-1" borderwidth="-1" hideicon="0"><Image type="EAShapeScript 1.0" xmlns:dt="urn:schemas-microsoft-com:datatypes" dt:dt="bin.base64">UEsDBBQAAAAIAEyWZF3xEMWXTAAAAGwAAAAHAAAAc3RyLmRhdD2MwQmAMAAD
+7+0UxZfO4BKuYLEPoVoREUTc3UNEQh4JuWQGIolMYGZiVNkcKeyq2OZ/U3Hp
+8Gllk1hcNdT0psLxfiQdZE77lk7m1g9QSwECFAAUAAAACABMlmRd8RDFl0wA
+AABsAAAABwAAAAAAAAAAAAAAgAEAAAAAc3RyLmRhdFBLBQYAAAAAAQABADUA
+AABxAAAAAAA=
+</Image><AppliesTo><Apply type="Dependency"/></AppliesTo></Stereotype><Stereotype name="CSDMPublishedAs" alias="Published as" metatype="Published as" notes="" cx="0" cy="0" bgcolor="-1" fontcolor="-1" bordercolor="-1" borderwidth="-1" hideicon="0"><Image type="EAShapeScript 1.0" xmlns:dt="urn:schemas-microsoft-com:datatypes" dt:dt="bin.base64">UEsDBBQAAAAIAGKWZF3HjjxITgAAAG4AAAAHAAAAc3RyLmRhdD2LyQmAQBAE
+620Uiy+NwSRMQVlBYTzweIm5Ww+RomGmqQ46egaCxMxElvDvWTlltY3fKbhN
++tjYXSxaFSUtl1bYHIzaWaPzLqlpXD3mBVBLAQIUABQAAAAIAGKWZF3HjjxI
+TgAAAG4AAAAHAAAAAAAAAAAAAACAAQAAAABzdHIuZGF0UEsFBgAAAAABAAEA
+NQAAAHMAAAAAAA==
+</Image><AppliesTo><Apply type="Dependency"/></AppliesTo></Stereotype><Stereotype name="CSDMReceivesDataFrom" alias="Receives data from" metatype="Receives data from" notes="" cx="0" cy="0" bgcolor="-1" fontcolor="-1" bordercolor="-1" borderwidth="-1" hideicon="0"><Image type="EAShapeScript 1.0" xmlns:dt="urn:schemas-microsoft-com:datatypes" dt:dt="bin.base64">UEsDBBQAAAAIAFmWZF1MMI59VAAAAHoAAAAHAAAAc3RyLmRhdD2MyQmAQBAE
+620Uy740BrMwA08Q1gMVP2LuliDS9MDMVHeipqEnEZgY6VRyb1g41OI1/UzG
+pcOnlc3ELJUTqSRaPXI6d/+duUMHBsm3KVJQ2nDrB1BLAQIUABQAAAAIAFmW
+ZF1MMI59VAAAAHoAAAAHAAAAAAAAAAAAAACAAQAAAABzdHIuZGF0UEsFBgAA
+AAABAAEANQAAAHkAAAAAAA==
+</Image><AppliesTo><Apply type="Dependency"/></AppliesTo></Stereotype><Stereotype name="CSDMReferences" alias="References" metatype="References" notes="" cx="0" cy="0" bgcolor="-1" fontcolor="-1" bordercolor="-1" borderwidth="-1" hideicon="0"><Image type="EAShapeScript 1.0" xmlns:dt="urn:schemas-microsoft-com:datatypes" dt:dt="bin.base64">UEsDBBQAAAAIAHGWZF2faIH+SwAAAGoAAAAHAAAAc3RyLmRhdD2LywmAMBQE
+52wV4klrsAs7MH5AiIlEb2LvzkFkmQdvmY2MBBYiNTsbs4n+gcxlsm38nYpb
+6i8HxUXSamkYNFYpkpi8p21H7+KRF1BLAQIUABQAAAAIAHGWZF2faIH+SwAA
+AGoAAAAHAAAAAAAAAAAAAACAAQAAAABzdHIuZGF0UEsFBgAAAAABAAEANQAA
+AHAAAAAAAA==
+</Image><AppliesTo><Apply type="Dependency"/></AppliesTo></Stereotype><Stereotype name="CSDMRelatesTo" alias="Relates to" metatype="Relates to" notes="" cx="0" cy="0" bgcolor="-1" fontcolor="-1" bordercolor="-1" borderwidth="-1" hideicon="0"><Image type="EAShapeScript 1.0" xmlns:dt="urn:schemas-microsoft-com:datatypes" dt:dt="bin.base64">UEsDBBQAAAAIAKuWZF0HvHhoTAAAAGoAAAAHAAAAc3RyLmRhdMthSGRIYkhl
+yGFQYMhlyGRIAcIcID+JIZ+hBAjzgaI5cDVcDNVArACFBQxFQB15QFUaDEoM
+QWAViUBeKkMxUBakV4lBk8EaqKMWiAFQSwECFAAUAAAACACrlmRdB7x4aEwA
+AABqAAAABwAAAAAAAAAAAAAAgAEAAAAAc3RyLmRhdFBLBQYAAAAAAQABADUA
+AABxAAAAAAA=
+</Image><AppliesTo><Apply type="Dependency"/></AppliesTo></Stereotype><Stereotype name="CSDMRepresents" alias="Represents" metatype="Represents" notes="" cx="0" cy="0" bgcolor="-1" fontcolor="-1" bordercolor="-1" borderwidth="-1" hideicon="0"><Image type="EAShapeScript 1.0" xmlns:dt="urn:schemas-microsoft-com:datatypes" dt:dt="bin.base64">UEsDBBQAAAAIAHqWZF1INBCOSgAAAGoAAAAHAAAAc3RyLmRhdD2LsQmAMAAE
+r3YKsdIZ3MINDKYQohFjJ+7uBUSeK/74T8wEIomWjZXFJHsgc5msTf+m4Zb2
+y8HpY3fV0zG5qCZSpNqiHRh9PPICUEsBAhQAFAAAAAgAepZkXUg0EI5KAAAA
+agAAAAcAAAAAAAAAAAAAAIABAAAAAHN0ci5kYXRQSwUGAAAAAAEAAQA1AAAA
+bwAAAAAA
+</Image><AppliesTo><Apply type="Dependency"/></AppliesTo></Stereotype><Stereotype name="CSDMRequestCatalog" alias="Request Catalog" metatype="Request Catalog" notes="" cx="0" cy="0" bgcolor="6079574" fontcolor="-1" bordercolor="-1" borderwidth="-1" hideicon="0"><stereotypedrelationships><stereotypedrelationship stereotype="CSDM5::CSDMMember" constraint="CSDM5::CSDMCatalogItem"/></stereotypedrelationships><Image type="EAShapeScript 1.0" xmlns:dt="urn:schemas-microsoft-com:datatypes" dt:dt="bin.base64">UEsDBBQAAAAIADyWZF2c0XOrHgEAAPICAAAHAAAAc3RyLmRhdK2SsU7DQBBE
+p+YrTkljpBQEiQJFqRBtiogehdgQC+cSfDYRIL6IT+DneHuOIxsESoGs3Rvd
+ze7NrC9opYW2yuS0BuXyOtEb4faf10YhslLQTlNVKlVTMemwCs5fOK85rUDW
+caqB7tgrqczIg16F7d3TOdcrKNFYFzrTSJfk0x6zjH09FSXMJf2TyLQYk7+v
+Te73MPUpt9UoCgfPCZoeo+cUNCJmxLGVHrwGN5VXuqb6hjz/0SN0ptze55iy
+Y6+Mc7D5GEphZjAeWCsmeI6TCbyVbulQxBMfJ7uE5+G0k3V6PoJj9+Vxbwcy
+Tdt4q/n5QHmmp/hvAwyHpwWr9dzQ83Pvy+n9F2/tRBpv/6XZ3lCBxu7L+9vJ
+8KBk2NNs8QVQSwECFAAUAAAACAA8lmRdnNFzqx4BAADyAgAABwAAAAAAAAAA
+AAAAgAEAAAAAc3RyLmRhdFBLBQYAAAAAAQABADUAAABDAQAAAAA=
+</Image><AppliesTo><Apply type="Class"><Property name="_HideUmlLinks" value="True"/></Apply></AppliesTo><TaggedValues><Tag name="ServiceNow link" type="URL" description="" unit="" values="" default=""/><Tag name="ServiceNow record id" type="String" description="" unit="" values="" default=""/></TaggedValues></Stereotype><Stereotype name="CSDMRunsOn" alias="Runs on" metatype="Runs on" notes="" cx="0" cy="0" bgcolor="-1" fontcolor="-1" bordercolor="-1" borderwidth="-1" hideicon="0"><Image type="EAShapeScript 1.0" xmlns:dt="urn:schemas-microsoft-com:datatypes" dt:dt="bin.base64">UEsDBBQAAAAIAF2WZF2Ci7+OSQAAAGQAAAAHAAAAc3RyLmRhdD2LOwqAQAwF
+p/YUspWewVt4AxcthOiKn0q8u1OIDI8kj0kwkJkIahZmRgnvTOGUYhu/U3Gb
++mNj92PVakj0XO6HfXEmWjrdx7xQSwECFAAUAAAACABdlmRdgou/jkkAAABk
+AAAABwAAAAAAAAAAAAAAgAEAAAAAc3RyLmRhdFBLBQYAAAAAAQABADUAAABu
+AAAAAAA=
+</Image><AppliesTo><Apply type="Dependency"/></AppliesTo></Stereotype><Stereotype name="CSDMSDLCComponent" alias="SDLC Component" metatype="SDLC Component" notes="" cx="0" cy="0" bgcolor="6576895" fontcolor="-1" bordercolor="-1" borderwidth="-1" hideicon="0"><stereotypedrelationships><stereotypedrelationship stereotype="CSDM5::CSDMContains" constraint="CSDM5::CSDMApplicationService"/><stereotypedrelationship stereotype="CSDM5::CSDMDeployedAs" constraint="CSDM5::CSDMInfrastructureCI"/><stereotypedrelationship stereotype="CSDM5::CSDMModel" constraint="CSDM5::CSDMProductModel"/></stereotypedrelationships><Image type="EAShapeScript 1.0" xmlns:dt="urn:schemas-microsoft-com:datatypes" dt:dt="bin.base64">UEsDBBQAAAAIANeVZF2BvoVWGgEAAPACAAAHAAAAc3RyLmRhdK2SPU7DQBCF
+X80pVkljpBRAQxGlAjpEAfQIYkMsnI21tokAcSKOwOX4Zm1HthAoBVrN7NPs
+m5832kor3atUJqc1KJfXgd4x1x2vjarISkFbLVQrqCFjPmAVvL/y3vBag6zi
+QhM9EAtkZvjJKMNij1TO9QZKdKwjzkyn+MMRM8S6nowAc0n9JDLN+qzh3fpx
+DZs+pVvDRNVOc8JMz1FzCpphV9i+mR68BreZZ7og+xZ//aNGNdhy38+xZUcs
+xD3YfgylMDMYT9w1GzxByRzeSndUKOKLj5tdwvNw+s06vezBsX55jG1BNlMZ
+u5qeT93oXJcocdgGbSXedzW+OlVOH78o6/fRKvuvie0HFUw4/Hd/65juJpmO
+Zjb7BlBLAQIUABQAAAAIANeVZF2BvoVWGgEAAPACAAAHAAAAAAAAAAAAAACA
+AQAAAABzdHIuZGF0UEsFBgAAAAABAAEANQAAAD8BAAAAAA==
+</Image><AppliesTo><Apply type="Component"><Property name="_HideUmlLinks" value="True"/></Apply></AppliesTo><TaggedValues><Tag name="Component type" type="enumeration" description="" unit="" values="Application,Infrastructure" default=""/><Tag name="Life Cycle Stage" type="enumeration" description="" unit="" values="Ideation,Design,Purchase,Inventory,Deploy,Operational,End of Operation,End of Life" default=""/><Tag name="Life Cycle Stage Status" type="enumeration" description="" unit="" values="Under Evaluation,Pilot,Design,Chartered,Build,On Order,Pre-Allocated,Available,Legal Hold,Test,Pending Fulfillment,In Use,In Maintenance,End of Support,Pending Retirement,On Hold,Obsolete,Retired" default=""/><Tag name="ServiceNow link" type="URL" description="" unit="" values="" default=""/><Tag name="ServiceNow record id" type="String" description="" unit="" values="" default=""/></TaggedValues></Stereotype><Stereotype name="CSDMServes" alias="Serves" metatype="Serves" notes="" cx="0" cy="0" bgcolor="-1" fontcolor="-1" bordercolor="-1" borderwidth="-1" hideicon="0"><Image type="EAShapeScript 1.0" xmlns:dt="urn:schemas-microsoft-com:datatypes" dt:dt="bin.base64">UEsDBBQAAAAIAJyWZF0KM/aXSAAAAGIAAAAHAAAAc3RyLmRhdMthSGRIYkhl
+yGFQYMhlyGRIAcIcID+JIZ+hBAjzgaI5cDVcDNVArACFBQxFQB15QFUaDEoM
+wUAVRQxlQLIYyNNksAaqrAViAFBLAQIUABQAAAAIAJyWZF0KM/aXSAAAAGIA
+AAAHAAAAAAAAAAAAAACAAQAAAABzdHIuZGF0UEsFBgAAAAABAAEANQAAAG0A
+AAAAAA==
+</Image><AppliesTo><Apply type="Dependency"/></AppliesTo></Stereotype><Stereotype name="CSDMServiceCommitment" alias="Service Commitment" metatype="Service Commitment" notes="" cx="0" cy="0" bgcolor="6079574" fontcolor="-1" bordercolor="-1" borderwidth="-1" hideicon="0"><Image type="EAShapeScript 1.0" xmlns:dt="urn:schemas-microsoft-com:datatypes" dt:dt="bin.base64">UEsDBBQAAAAIADCWZF2CTUOMHQEAAPgCAAAHAAAAc3RyLmRhdK2SvU7DQBCE
+p+YpTkljpBRBFBRRqigtBaRHYBtiYR+RfxIB4ol4BF6O79Z2ZAuBUqDT3o3u
+ZndnR1dpq3vtlMqpAGXyOtM74brl9aLKWAnooKVqlWrIWAxYOe+vvDe81qBQ
+camJHrgryUzZJ6OMcPdI5UxvoEgXmrNmumI/HzFLq+vJKGHG1I+MGaLPGp7t
+Pq4R1Cd0a1BUHWeO0PRsMyegGXFNnJrpwQW4zVxpTfaG/eZHjWrgct/P4bLj
+rjQfgj8BJTBTGE+cNQ5eMskC3lZ3VMjtxZuzMTwPp3fWaX8CJ/TL7O4ACpp2
+1jXM86lbY+5hxKZ1hfMFK4NfdLW+uumcPn6ZsPelnfC/lIeflKN0+P/+nmd6
+VDIdaQ7xDVBLAQIUABQAAAAIADCWZF2CTUOMHQEAAPgCAAAHAAAAAAAAAAAA
+AACAAQAAAABzdHIuZGF0UEsFBgAAAAABAAEANQAAAEIBAAAAAA==
+</Image><AppliesTo><Apply type="Class"><Property name="_HideUmlLinks" value="True"/></Apply></AppliesTo><TaggedValues><Tag name="Availability" type="String" description="" unit="" values="" default=""/><Tag name="Criticality" type="String" description="" unit="" values="" default=""/><Tag name="Pricing" type="String" description="" unit="" values="" default=""/><Tag name="Response" type="String" description="" unit="" values="" default=""/><Tag name="Scope" type="String" description="" unit="" values="" default=""/><Tag name="ServiceNow link" type="URL" description="" unit="" values="" default=""/><Tag name="ServiceNow record id" type="String" description="" unit="" values="" default=""/></TaggedValues></Stereotype><Stereotype name="CSDMServiceInstance" alias="Service Instance" metatype="Service Instance" notes="" cx="0" cy="0" bgcolor="2856441" fontcolor="-1" bordercolor="-1" borderwidth="-1" hideicon="0"><stereotypedrelationships><stereotypedrelationship stereotype="CSDM5::CSDMConnectedBy" constraint="CSDM5::CSDMConnectionServiceInstance"/><stereotypedrelationship stereotype="CSDM5::CSDMModel" constraint="CSDM5::CSDMProductModel"/></stereotypedrelationships><Image type="EAShapeScript 1.0" xmlns:dt="urn:schemas-microsoft-com:datatypes" dt:dt="bin.base64">UEsDBBQAAAAIAN2VZF0dbn5kHAEAAPQCAAAHAAAAc3RyLmRhdK2SsU7DQAyG
+/5mnOLVLkDqAGBiqToiBhQHYUUkCjUiPKmlaAeKJeARejs9OUyVCoA7oZN8v
+32/7t3W1FpprpVxBS1ChqCO9Y2F3ol5UOysDbTXTWpUaMqY9Vsn7K+8Nr2uQ
+VZxppAdiFZk5fjTIsNgjlQu9gRKd6oQz0Tn+eMCsvG4ko4KZUj9xplmX1b9b
+P6xh6jO6NSiq9zMnaHr2mTPQBLvGDs2M4CW4zbzQJdl3+JsfNerelrt+gS0H
+YpXvwfZjKIOZw3jiXrPBMyaZwlvongqlv0TfbAovwuk2G7Q5gGP9Co9tQaZp
+5V1tnk/dOnMDI3WtVzBruHNui3ztJgv6+GW6biftdP+l2n5Ricr+3/t7lvFe
+yXig2ewbUEsBAhQAFAAAAAgA3ZVkXR1ufmQcAQAA9AIAAAcAAAAAAAAAAAAA
+AIABAAAAAHN0ci5kYXRQSwUGAAAAAAEAAQA1AAAAQQEAAAAA
+</Image><AppliesTo><Apply type="Class"><Property name="_HideUmlLinks" value="True"/></Apply></AppliesTo><TaggedValues><Tag name="Environment" type="String" description="" unit="" values="" default=""/><Tag name="Life Cycle Stage" type="enumeration" description="" unit="" values="Ideation,Design,Purchase,Inventory,Deploy,Operational,End of Operation,End of Life" default=""/><Tag name="Life Cycle Stage Status" type="enumeration" description="" unit="" values="Under Evaluation,Pilot,Design,Chartered,Build,On Order,Pre-Allocated,Available,Legal Hold,Test,Pending Fulfillment,In Use,In Maintenance,End of Support,Pending Retirement,On Hold,Obsolete,Retired" default=""/><Tag name="Region" type="String" description="" unit="" values="" default=""/><Tag name="ServiceNow link" type="URL" description="" unit="" values="" default=""/><Tag name="ServiceNow record id" type="String" description="" unit="" values="" default=""/></TaggedValues></Stereotype><Stereotype name="CSDMServiceModel" alias="Service Model" metatype="Service Model" notes="" cx="0" cy="0" bgcolor="15196895" fontcolor="-1" bordercolor="-1" borderwidth="-1" hideicon="0"><Image type="EAShapeScript 1.0" xmlns:dt="urn:schemas-microsoft-com:datatypes" dt:dt="bin.base64">UEsDBBQAAAAIAIqVZF1/H4vwGgEAAO4CAAAHAAAAc3RyLmRhdK2SsU7DQBBE
+p+YrTkljpBRAQxGlQpRQAD0C2xArzhHZcSJAfBGfwM/xdh1HthAoBbL2bnQ3
+uzs7vlpzPWilXEFLUKGoI70TYfdFvah2Vgbaaqa1KjVkTHuskvtX7htu1yCr
+ONNIj5xVZOaso0GGnT1RudAbKNGpTvgmOmc9HjArrxvJqGCm1E+cadFl9fd2
+HdYw9RndGhTV+5kTNC185gw0Ia6JQzMjeAluMy90SfYd682PGnXP5a5fwOXA
+WeU+mD+GMpg5jGf2NQ6eMckU3lz3VCj9JrqzKbwIp3M2aHMAx/oVfrYFmaaV
+d7V5PnXrzA2M1LVe4bz9p1Jfu5mCPn6Zq3Ojneu/9Nr7KdHQf3V/TzHeKxkP
+NFt8A1BLAQIUABQAAAAIAIqVZF1/H4vwGgEAAO4CAAAHAAAAAAAAAAAAAACA
+AQAAAABzdHIuZGF0UEsFBgAAAAABAAEANQAAAD8BAAAAAA==
+</Image><AppliesTo><Apply type="Class"><Property name="_HideUmlLinks" value="True"/></Apply></AppliesTo><TaggedValues><Tag name="End-of-life date" type="Date" description="" unit="" values="" default=""/><Tag name="Life Cycle Stage" type="enumeration" description="" unit="" values="Ideation,Design,Build &amp; Integrate,Operational,End of Life" default=""/><Tag name="Life Cycle Stage Status" type="enumeration" description="" unit="" values="Under Evaluation,Pilot,Design,Chartered,Planning,Build,In production,In Use,Available,End of Support,Pending Retirement,Obsolete,Retired,Sold" default=""/><Tag name="Product owner" type="String" description="" unit="" values="" default=""/><Tag name="ServiceNow link" type="URL" description="" unit="" values="" default=""/><Tag name="ServiceNow record id" type="String" description="" unit="" values="" default=""/></TaggedValues></Stereotype><Stereotype name="CSDMServiceOfferingModel" alias="Service Offering Model" metatype="Service Offering Model" notes="" cx="0" cy="0" bgcolor="15196895" fontcolor="-1" bordercolor="-1" borderwidth="-1" hideicon="0"><Image type="EAShapeScript 1.0" xmlns:dt="urn:schemas-microsoft-com:datatypes" dt:dt="bin.base64">UEsDBBQAAAAIAISVZF3JxY+TIwEAAAADAAAHAAAAc3RyLmRhdK2SQUvDQBCF
+39lfsbSXCD0oHjyUnsSjCupdNIltMF3LJmlR8Rf5E/xzfrNpSoIoPZRlNo/Z
+92bfzKbSQo9aKZfTElTI60gfhNsur1dVkZWBNpqpVlCDYtpjlZy/cd5wWoOs
+4kwjPZELKHP20UBhuWcqF3oHJTrVCWuic/bjATPEuh5FgJlSP4lMi07V/7b7
+sIa5z7itwVG16znB00vsOQNNiGtiX6UHL8Gt8kKXqO/Zb3/VqHpT7u5zTNmR
+C3EONh9DGcwcxpxvzQTP6GQKb6EHKpTxxMfJpvA8nG6yTus9OHZfEXMbkHla
+xVutny/dReYaRhq93uCs9WaaOZkr3sJertT3tkunzz867ebTdnqoDuyPKvHQ
+/w//72u8czIeeLb4AVBLAQIUABQAAAAIAISVZF3JxY+TIwEAAAADAAAHAAAA
+AAAAAAAAAACAAQAAAABzdHIuZGF0UEsFBgAAAAABAAEANQAAAEgBAAAAAA==
+</Image><AppliesTo><Apply type="Class"><Property name="_HideUmlLinks" value="True"/></Apply></AppliesTo><TaggedValues><Tag name="End-of-life date" type="Date" description="" unit="" values="" default=""/><Tag name="Life Cycle Stage" type="enumeration" description="" unit="" values="Ideation,Design,Build &amp; Integrate,Operational,End of Life" default=""/><Tag name="Life Cycle Stage Status" type="enumeration" description="" unit="" values="Under Evaluation,Pilot,Design,Chartered,Planning,Build,In production,In Use,Available,End of Support,Pending Retirement,Obsolete,Retired,Sold" default=""/><Tag name="Product owner" type="String" description="" unit="" values="" default=""/><Tag name="ServiceNow link" type="URL" description="" unit="" values="" default=""/><Tag name="ServiceNow record id" type="String" description="" unit="" values="" default=""/></TaggedValues></Stereotype><Stereotype name="CSDMServiceOfferingSubscription" alias="Service Offering Subscription" metatype="Service Offering Subscription" notes="" cx="0" cy="0" bgcolor="6079574" fontcolor="-1" bordercolor="-1" borderwidth="-1" hideicon="0"><stereotypedrelationships><stereotypedrelationship stereotype="CSDM5::CSDMCovers" constraint="CSDM5::CSDMBusinessServiceOffering;CSDM5::CSDMTechnologyManagementServiceOffering"/><stereotypedrelationship stereotype="CSDM5::CSDMSubscriber" constraint="CSDM5::CSDMCompany;CSDM5::CSDMDepartment;CSDM5::CSDMGroup;CSDM5::CSDMLocation;CSDM5::CSDMUser"/></stereotypedrelationships><Image type="EAShapeScript 1.0" xmlns:dt="urn:schemas-microsoft-com:datatypes" dt:dt="bin.base64">UEsDBBQAAAAIADaWZF3lsFvOKAEAAA4DAAAHAAAAc3RyLmRhdK2SvU7DQBCE
+p+YpTkljpBQgCoooFaIFidAjsE1ixTks/yQCxBPxCLwc363tyBYCpUDW3q32
+ZvdmxldprUcVSuW0JcvkdaJ3wnWf14sqQyVkey1Uq1RDx3yAyjl/5bzhtCYL
+Exea6IlaSWfKOhl1hNozkzO9kUU61xnfTJespyNkaXM9HSXImPmRIUP0XcO9
+XcczAvuE2xoYVQfNEZw2pjkhmxE3xLGdnnxL3nZe6Zrue9a7HzOqgcv9fQ6X
+HbXSfAj+hCwBmYJYsdc4eIGSObi1HpiQ24k3Z2NwHkzvrNPuCEy4L7Panixw
+KuzWoOdTS0PuQMTG9RZmLbfQs6Ky7HyIrVYwJ+PveH11mp0+ftHdu9Xq/i89
+4X3l8B++yr9VTg9MpiPOIb4BUEsBAhQAFAAAAAgANpZkXeWwW84oAQAADgMA
+AAcAAAAAAAAAAAAAAIABAAAAAHN0ci5kYXRQSwUGAAAAAAEAAQA1AAAATQEA
+AAAA
+</Image><AppliesTo><Apply type="Class"><Property name="_HideUmlLinks" value="True"/></Apply></AppliesTo><TaggedValues><Tag name="ServiceNow link" type="URL" description="" unit="" values="" default=""/><Tag name="ServiceNow record id" type="String" description="" unit="" values="" default=""/></TaggedValues></Stereotype><Stereotype name="CSDMServicePortfolio" alias="Service Portfolio" metatype="Service Portfolio" notes="" cx="0" cy="0" bgcolor="16777215" fontcolor="-1" bordercolor="-1" borderwidth="-1" hideicon="0"><stereotypedrelationships><stereotypedrelationship stereotype="CSDM5::CSDMParentOf" constraint="CSDM5::CSDMServicePortfolio"/></stereotypedrelationships><Image type="EAShapeScript 1.0" xmlns:dt="urn:schemas-microsoft-com:datatypes" dt:dt="bin.base64">UEsDBBQAAAAIAEWWZF31VJCWHAEAAPYCAAAHAAAAc3RyLmRhdK2SwUrDQBCG
+/7NPsbSXCD0oHjyUnsSriHoXm0Qb2m7KJmlR8Yl8BF/ObydNSRClB1lm92fm
+n5l/Jqm00JM2yuW0BhXyOtE75vbHq1RlrAy000y1ghoypj3Wivgr8YZoDYoV
+Zxppji+QmXOPBhnR90zlQm+gROc640x0yX06YAar68kIMFPqJ8aM1mX13/Ye
+1ojqM7o1KKoOMydoWtrMGWiC3WDHZnrwGtxmXuma7Afuux81qt6Wu36OLTt8
+wfYQ9xNRBjOH8cJbs8ELJpnCW+iRCiuLeNtsCs/D6TbrtD2CE/sV5tuBoqaN
+dY3zfOremFsYqWm9ta9Xo6+0uqW+9rM5ffwyX7eVdr7/0j03Bdng7/t7mvFB
+yXigOdo3UEsBAhQAFAAAAAgARZZkXfVUkJYcAQAA9gIAAAcAAAAAAAAAAAAA
+AIABAAAAAHN0ci5kYXRQSwUGAAAAAAEAAQA1AAAAQQEAAAAA
+</Image><AppliesTo><Apply type="Class"><Property name="_HideUmlLinks" value="True"/></Apply></AppliesTo><TaggedValues><Tag name="ServiceNow link" type="URL" description="" unit="" values="" default=""/><Tag name="ServiceNow record id" type="String" description="" unit="" values="" default=""/></TaggedValues></Stereotype><Stereotype name="CSDMSoftwareBillOfMaterials" alias="Software Bill of Materials (SBOM)" metatype="Software Bill of Materials (SBOM)" notes="" cx="0" cy="0" bgcolor="15196895" fontcolor="-1" bordercolor="-1" borderwidth="-1" hideicon="0"><Image type="EAShapeScript 1.0" xmlns:dt="urn:schemas-microsoft-com:datatypes" dt:dt="bin.base64">UEsDBBQAAAAIAKSVZF32qeq4LAEAABYDAAAHAAAAc3RyLmRhdK2SwUrDQBCG
+/7NPsbSXFHpQPHgovVQ8qqDepTapDaZr2SQWFZ/IR/Dl/HbSlARRepBldoeZ
+/5+Zf9hSK821USanNV4uryO9Y253vJ5VGirF22qqSkE1jEkHVZB/JV+TrfBi
+xakGeiAWYGbcgx4jxpZUzvWGl+hEx5yxzrhHPWSwuh5GALmgfmLIaC2r+zZ3
+v0acPqVbzUTlXnPCTE+mOcUbY1fYoUyPv8ZvmOe6gH3HffOjRtnZctvPsWVH
+LNge4n6il4LMQDzyVmzwFCUTcCvdU6GwjLfNLsB5MO1mnV4OwMR+ucW2eHGm
+jXWNej51y6aXlpvbNE4z0AXHWcbpkkxTL7deJbEE3kzX5Eb62ml3+vhFf7u1
+Rv9/6Yr/rEBH93f+rXa4n2TYmznaN1BLAQIUABQAAAAIAKSVZF32qeq4LAEA
+ABYDAAAHAAAAAAAAAAAAAACAAQAAAABzdHIuZGF0UEsFBgAAAAABAAEANQAA
+AFEBAAAAAA==
+</Image><AppliesTo><Apply type="Artifact"><Property name="_HideUmlLinks" value="True"/></Apply></AppliesTo><TaggedValues><Tag name="ServiceNow link" type="URL" description="" unit="" values="" default=""/><Tag name="ServiceNow record id" type="String" description="" unit="" values="" default=""/></TaggedValues></Stereotype><Stereotype name="CSDMSoftwareComponentModel" alias="Software Component Model" metatype="Software Component Model" notes="" cx="0" cy="0" bgcolor="15196895" fontcolor="-1" bordercolor="-1" borderwidth="-1" hideicon="0"><Image type="EAShapeScript 1.0" xmlns:dt="urn:schemas-microsoft-com:datatypes" dt:dt="bin.base64">UEsDBBQAAAAIAICVZF0HD5hvJAEAAAQDAAAHAAAAc3RyLmRhdK2SvU7DQBCE
+p+YpTkljpBRBFBRRKkQJBaFHIXaIFedi+YcIEE/EI/ByfHu2I1sIlAJZu57c
+zu7tTFxqo6VyJXLagVJ5nemdcO3jtVcZWDHooLkqFarpmPVYGfVX6jXVCmQT
+5xrpibOCzoQ8GnTY2ZrJqd5AkS405Znoinw+YBZhrqejgLlifhSYFl1X/93k
+4QzbPua2mo3Ko+aInbZBcwyaEHfEqZ0evAM3nde6ofuBfP9jRtlzubvP4bLj
+rAg+mD+GYpgJjGfeFQ5eomQGb6NHJmSh4oOzK3geTues08sJHLsvDWcHkO2U
+h1tNz6cWOL0OtWXYxqFqj8ac7NtZTrf8sn8v01er1OnjF7WdR43a/1JhX1XG
+Dv1v8W9t4+Mm48HOFt9QSwECFAAUAAAACACAlWRdBw+YbyQBAAAEAwAABwAA
+AAAAAAAAAAAAgAEAAAAAc3RyLmRhdFBLBQYAAAAAAQABADUAAABJAQAAAAA=
+</Image><AppliesTo><Apply type="Class"><Property name="_HideUmlLinks" value="True"/></Apply></AppliesTo><TaggedValues><Tag name="End-of-life date" type="Date" description="" unit="" values="" default=""/><Tag name="Life Cycle Stage" type="enumeration" description="" unit="" values="Ideation,Design,Build &amp; Integrate,Operational,End of Life" default=""/><Tag name="Life Cycle Stage Status" type="enumeration" description="" unit="" values="Under Evaluation,Pilot,Design,Chartered,Planning,Build,In production,In Use,Available,End of Support,Pending Retirement,Obsolete,Retired,Sold" default=""/><Tag name="Product owner" type="String" description="" unit="" values="" default=""/><Tag name="ServiceNow link" type="URL" description="" unit="" values="" default=""/><Tag name="ServiceNow record id" type="String" description="" unit="" values="" default=""/></TaggedValues></Stereotype><Stereotype name="CSDMSoftwareModel" alias="Software Model" metatype="Software Model" notes="" cx="0" cy="0" bgcolor="15196895" fontcolor="-1" bordercolor="-1" borderwidth="-1" hideicon="0"><Image type="EAShapeScript 1.0" xmlns:dt="urn:schemas-microsoft-com:datatypes" dt:dt="bin.base64">UEsDBBQAAAAIAI2VZF1wak/rGgEAAPACAAAHAAAAc3RyLmRhdK2SvU7DQBCE
+p+YpTkljpBRAQxGlQpRQAD0KsUMsnCPyDxEgnohH4OX4dh1HthAoBbL2PNqd
+3Zsdu9JKc22UKWgNyhV1pHci7J6oZ1XOSkFbzVSrVEPHtMcqqL9Sb6jWIJs4
+00gP5Eo6M87RoMNySybnegMlOtUJz0TnnMcDZulzIx0lzAXzE2dadF39d3sO
+Z5j6lNsaFFX7nRM0PfnOKWhCXBOHdkbwGtx2XuiS7jvOmx8zqp7L3X0BlwO5
+0n0wfwylMDMYj7xrHDxjkym8le6ZUHglurMLeBFO52zQywEcuy/33BZkmjZ+
+q+3zqVucXnpt7mqCrsjYlyr0tdsq6OOXzTo/2s3+S7H9QQUa+v/d33uM90rG
+A80W31BLAQIUABQAAAAIAI2VZF1wak/rGgEAAPACAAAHAAAAAAAAAAAAAACA
+AQAAAABzdHIuZGF0UEsFBgAAAAABAAEANQAAAD8BAAAAAA==
+</Image><AppliesTo><Apply type="Class"><Property name="_HideUmlLinks" value="True"/></Apply></AppliesTo><TaggedValues><Tag name="End-of-life date" type="Date" description="" unit="" values="" default=""/><Tag name="Life Cycle Stage" type="enumeration" description="" unit="" values="Ideation,Design,Build &amp; Integrate,Operational,End of Life" default=""/><Tag name="Life Cycle Stage Status" type="enumeration" description="" unit="" values="Under Evaluation,Pilot,Design,Chartered,Planning,Build,In production,In Use,Available,End of Support,Pending Retirement,Obsolete,Retired,Sold" default=""/><Tag name="Product owner" type="String" description="" unit="" values="" default=""/><Tag name="ServiceNow link" type="URL" description="" unit="" values="" default=""/><Tag name="ServiceNow record id" type="String" description="" unit="" values="" default=""/></TaggedValues></Stereotype><Stereotype name="CSDMStrategicPlan" alias="Strategic Plan" metatype="Strategic Plan" notes="" cx="0" cy="0" bgcolor="6084844" fontcolor="-1" bordercolor="-1" borderwidth="-1" hideicon="0"><Image type="EAShapeScript 1.0" xmlns:dt="urn:schemas-microsoft-com:datatypes" dt:dt="bin.base64">UEsDBBQAAAAIALyVZF1P3Bu2GgEAAPACAAAHAAAAc3RyLmRhdK2SzUrDQBSF
+z9qnGNpNhC7UjYvSlbgVUfdSk9gG07EkjUXFJ/IRfDm/e9OUBFG6kOHOHO6c
+c/9mai0111q5glagQlFHesfCbkU9q3ZWBtpqpo0qNSimPVbJ/Sv3DbcbkEWc
+aaQHfBXKnH00UJjvkciF3kCJTnXCmuic/XjArDxuRFHBTImfONOsU/XPdh/G
+sOozsjVUVO97TqjpyXvOQBPsCjtUGcErcKu80CXqO/abHzHq3pS7fIEpB3yV
+z8HmYyiDmcNYcG6Y4BmdTOEtdU+E0m+iTzaFF+F0kw16OYBj+Qr3bUFW09qz
+Wj+fuvW3nbtiAS9Fce1vG/W16yro45fOunm0nf1XxfaDSirs/7u/+xjvKxkP
+ajb7BlBLAQIUABQAAAAIALyVZF1P3Bu2GgEAAPACAAAHAAAAAAAAAAAAAACA
+AQAAAABzdHIuZGF0UEsFBgAAAAABAAEANQAAAD8BAAAAAA==
+</Image><AppliesTo><Apply type="Class"><Property name="_HideUmlLinks" value="True"/></Apply></AppliesTo><TaggedValues><Tag name="Mission" type="String" description="" unit="" values="" default=""/><Tag name="ServiceNow link" type="URL" description="" unit="" values="" default=""/><Tag name="ServiceNow record id" type="String" description="" unit="" values="" default=""/><Tag name="Value statement" type="String" description="" unit="" values="" default=""/><Tag name="Vision" type="String" description="" unit="" values="" default=""/></TaggedValues></Stereotype><Stereotype name="CSDMStrategicPriority" alias="Strategic Priority" metatype="Strategic Priority" notes="" cx="0" cy="0" bgcolor="6084844" fontcolor="-1" bordercolor="-1" borderwidth="-1" hideicon="0"><Image type="EAShapeScript 1.0" xmlns:dt="urn:schemas-microsoft-com:datatypes" dt:dt="bin.base64">UEsDBBQAAAAIAMOVZF0jtwVhHQEAAPgCAAAHAAAAc3RyLmRhdK2SzUrDQBSF
+z9qnCO0mQheKCxelK3Erou6lJrENTaclPxYVn8hH8OX87k1TEkTpQoZ75zBz
+zv2bqbTUXFtlirQG5Qo60TsW7VfQRpWzUtBOM9Uq1aCY9lgF96/cN9zWIIs4
+00hPnJUoM/xooLCzZyLnegPFOtcZa6JL/OmAWXrcgKKEmRA/dqZZp+rvrR/G
+sOpTsjVUVB16jqlp5T2noAl2gx2rDOA1uFVe6Rr1A/7uR4yqN+UuX8SUI85K
+n4PNx1AKM4OxYK+Z4AWdTOEt9UiEwm+CTzaBF+B0k430cgTH8uV+tgNZTVvP
+av186t7fdu6KBbwExa0rNu7tZb/23UX6+KXDbi5th/9Vuf2kgkr7/+/vfsaH
+SsaDms2+AVBLAQIUABQAAAAIAMOVZF0jtwVhHQEAAPgCAAAHAAAAAAAAAAAA
+AACAAQAAAABzdHIuZGF0UEsFBgAAAAABAAEANQAAAEIBAAAAAA==
+</Image><AppliesTo><Apply type="Class"><Property name="_HideUmlLinks" value="True"/></Apply></AppliesTo><TaggedValues><Tag name="ServiceNow link" type="URL" description="" unit="" values="" default=""/><Tag name="ServiceNow record id" type="String" description="" unit="" values="" default=""/></TaggedValues></Stereotype><Stereotype name="CSDMSubscriber" alias="Subscriber" metatype="Subscriber" notes="" cx="0" cy="0" bgcolor="-1" fontcolor="-1" bordercolor="-1" borderwidth="-1" hideicon="0"><Image type="EAShapeScript 1.0" xmlns:dt="urn:schemas-microsoft-com:datatypes" dt:dt="bin.base64">UEsDBBQAAAAIAIGWZF2VvJVNTAAAAGoAAAAHAAAAc3RyLmRhdD2LwQmAMBRD
+39kpiiedwTGcwKqHwm8rVU/i7kYpEnLI48WY8KwYjkhgUUzbkzmULGq/03Cp
+rmaj6JFkdbSMnLJ25o++fhHtGfS41QdQSwECFAAUAAAACACBlmRdlbyVTUwA
+AABqAAAABwAAAAAAAAAAAAAAgAEAAAAAc3RyLmRhdFBLBQYAAAAAAQABADUA
+AABxAAAAAAA=
+</Image><AppliesTo><Apply type="Dependency"/></AppliesTo></Stereotype><Stereotype name="CSDMSystemComponentModel" alias="System Component Model" metatype="System Component Model" notes="" cx="0" cy="0" bgcolor="15196895" fontcolor="-1" bordercolor="-1" borderwidth="-1" hideicon="0"><Image type="EAShapeScript 1.0" xmlns:dt="urn:schemas-microsoft-com:datatypes" dt:dt="bin.base64">UEsDBBQAAAAIAHeVZF2YuuW6IwEAAAADAAAHAAAAc3RyLmRhdK2SsU7DQBBE
+p+YrTkljpBRBFBRRqogSikCPIDbEwr5EZ5sIEF/EJ/BzvD3HkS0ESoGsPY9v
+Z/d25lxprXttlcmpBOXyOtE74faP10ZVZKWgneaqFdRQMeuxCvKv5BuyNcg6
+zjXSA3uByox1NKiwvUc653oDJTrTlGeiC9bTATPEvp6KAHNF/yQyLbqq/rtd
+hz1s+pTTGiaqDpoTZnqOmlPQhLgmjq304BLcVi50SfUt6/JHj6rncneew2XH
+Xog+mD+GUpgZjCfeNQ6eo2QGb607OhQx46OzK3geTues08sRHDsvj3s7kM20
+jaeank/dcHNV5JdwF/hekt/Ab/s4XfFlN1foa6/S6eMXpZ0/rdL/UmB/VMEM
+/f/wb13jwyTjwcwW31BLAQIUABQAAAAIAHeVZF2YuuW6IwEAAAADAAAHAAAA
+AAAAAAAAAACAAQAAAABzdHIuZGF0UEsFBgAAAAABAAEANQAAAEgBAAAAAA==
+</Image><AppliesTo><Apply type="Class"><Property name="_HideUmlLinks" value="True"/></Apply></AppliesTo><TaggedValues><Tag name="End-of-life date" type="Date" description="" unit="" values="" default=""/><Tag name="Life Cycle Stage" type="enumeration" description="" unit="" values="Ideation,Design,Build &amp; Integrate,Operational,End of Life" default=""/><Tag name="Life Cycle Stage Status" type="enumeration" description="" unit="" values="Under Evaluation,Pilot,Design,Chartered,Planning,Build,In production,In Use,Available,End of Support,Pending Retirement,Obsolete,Retired,Sold" default=""/><Tag name="Product owner" type="String" description="" unit="" values="" default=""/><Tag name="ServiceNow link" type="URL" description="" unit="" values="" default=""/><Tag name="ServiceNow record id" type="String" description="" unit="" values="" default=""/></TaggedValues></Stereotype><Stereotype name="CSDMTarget" alias="Target" metatype="Target" notes="" cx="0" cy="0" bgcolor="6084844" fontcolor="-1" bordercolor="-1" borderwidth="-1" hideicon="0"><stereotypedrelationships><stereotypedrelationship stereotype="CSDM5::CSDMMeasures" constraint="CSDM5::CSDMGoal"/></stereotypedrelationships><Image type="EAShapeScript 1.0" xmlns:dt="urn:schemas-microsoft-com:datatypes" dt:dt="bin.base64">UEsDBBQAAAAIAMiVZF0dVfDhEwEAAOACAAAHAAAAc3RyLmRhdK2SwU7CQBCG
+/7NPsYFLTTiAFw+Ek/HqwXA3QCs0lpVsW4kSnshH8OX8ZktJG6PhYDYz+2f2
+n5l/Jltqo4V2yuS0BeXyutIBc6fj9aoyslLQXjNVCqrJmHZYBe/vvNe8ViCr
+ONNAS2KBzAw/6GVY7JnKuT5AiSYac0a6xV/3mCHW9WQEmCvqJ5Fp1mZ178b3
+a5j6lG41isrzzAmaXuLMKWiEPWCXZnrwFtxk3ume7Dn+8UeNsrPltp9jy45Y
+iHuw/RhKYWYw1twVG7xhkim8jZ6oUMQXHze7gufhtJt1eruAY/3yGNuDTNMu
+drV5PlG/ILomUunrNIXT8ZdJ2vmbSf5Lof2YAkXdf/a37uFZybCn2ewbUEsB
+AhQAFAAAAAgAyJVkXR1V8OETAQAA4AIAAAcAAAAAAAAAAAAAAIABAAAAAHN0
+ci5kYXRQSwUGAAAAAAEAAQA1AAAAOAEAAAAA
+</Image><AppliesTo><Apply type="Class"><Property name="_HideUmlLinks" value="True"/></Apply></AppliesTo><TaggedValues><Tag name="Measure" type="String" description="" unit="" values="" default=""/><Tag name="ServiceNow link" type="URL" description="" unit="" values="" default=""/><Tag name="ServiceNow record id" type="String" description="" unit="" values="" default=""/></TaggedValues></Stereotype><Stereotype name="CSDMTeam" alias="Team" metatype="Team" notes="" cx="0" cy="0" bgcolor="15196895" fontcolor="-1" bordercolor="-1" borderwidth="-1" hideicon="0"><stereotypedrelationships><stereotypedrelationship stereotype="CSDM5::CSDMAssigns" constraint="CSDM5::CSDMAIApplication;CSDM5::CSDMAIFunction;CSDM5::CSDMAPI;CSDM5::CSDMApplication;CSDM5::CSDMApplicationService;CSDM5::CSDMBusinessApplication;CSDM5::CSDMBusinessCapability;CSDM5::CSDMBusinessProcess;CSDM5::CSDMBusinessService;CSDM5::CSDMBusinessServiceOffering;CSDM5::CSDMConnectionServiceInstance;CSDM5::CSDMDataServiceInstance;CSDM5::CSDMDynamicCIGroup;CSDM5::CSDMFacilityServiceInstance;CSDM5::CSDMGroup;CSDM5::CSDMInformationObject;CSDM5::CSDMInfrastructureCI;CSDM5::CSDMNetworkFunction;CSDM5::CSDMNetworkFunctionApplication;CSDM5::CSDMNetworkServiceInstance;CSDM5::CSDMOperationalProcessServiceInstance;CSDM5::CSDMOperationalTechnology;CSDM5::CSDMSDLCComponent;CSDM5::CSDMServiceInstance;CSDM5::CSDMTechnologyManagementService;CSDM5::CSDMTechnologyManagementServiceOffering"/></stereotypedrelationships><Image type="EAShapeScript 1.0" xmlns:dt="urn:schemas-microsoft-com:datatypes" dt:dt="bin.base64">UEsDBBQAAAAIAK2VZF1mdcDUDwEAANwCAAAHAAAAc3RyLmRhdK2SsU7DQBBE
+p+YrTkljpBRAQxGlQrQUiB5BbIiFc0RnmwgQX8Qn8HO8XceRLQRKgU57N7qb
+3Z1ZXa2V7rRRoaA1qFTUkd6JsFtRz6qdlYO2WqhRUkvGfMCqeH/lveW1AVnF
+hSa65y6RWbBPRhl290DlUm+gTKc6Yc10zn48YiavG8lIMJfUz5xp0WcNz24f
+1zD1Od1aFNV7zxmantxzDpoRV8ShmRG8BneZF7ok+4b9+keNejDlvl9gyoG7
+5HOw+RjKYRYwHjkbJniGkzm8lW6pUPlL9Mku4UU4/WSDXg7gWL/S77Yg07Tx
+rubnE/WFe/raOQj6+MVF771z8V/q7LdUqBn+sb81T/dKpiPNFt9QSwECFAAU
+AAAACACtlWRdZnXA1A8BAADcAgAABwAAAAAAAAAAAAAAgAEAAAAAc3RyLmRh
+dFBLBQYAAAAAAQABADUAAAA0AQAAAAA=
+</Image><AppliesTo><Apply type="Class"><Property name="_HideUmlLinks" value="True"/></Apply></AppliesTo><TaggedValues><Tag name="ServiceNow link" type="URL" description="" unit="" values="" default=""/><Tag name="ServiceNow record id" type="String" description="" unit="" values="" default=""/></TaggedValues></Stereotype><Stereotype name="CSDMTechnologyManagementService" alias="Technology Management Service" metatype="Technology Management Service" notes="" cx="0" cy="0" bgcolor="2856441" fontcolor="-1" bordercolor="-1" borderwidth="-1" hideicon="0"><stereotypedrelationships><stereotypedrelationship stereotype="CSDM5::CSDMIsPartOf" constraint="CSDM5::CSDMServicePortfolio"/><stereotypedrelationship stereotype="CSDM5::CSDMModel" constraint="CSDM5::CSDMProductModel"/><stereotypedrelationship stereotype="CSDM5::CSDMPublishedAs" constraint="CSDM5::CSDMTechnologyManagementServiceOffering"/></stereotypedrelationships><Image type="EAShapeScript 1.0" xmlns:dt="urn:schemas-microsoft-com:datatypes" dt:dt="bin.base64">UEsDBBQAAAAIABKWZF0hZpiLKAEAAA4DAAAHAAAAc3RyLmRhdK2SvU7DQBCE
+p+YpTkljpBQgkChQKkQJBdAjEhvHwj4i/yQCxBPxCLwc357tyBYCpYisPU9u
+Z2d31qm00pPWSuRUgDJ5HemDcN3j9aoqsGLQVnPVKtVQcTlg5eTfyDdka5Ap
+zjXRgruSyoRzMqqwu2eUM72DIp3qhGemC87jEbMMup6KEuYS/SgwLfqq4bs9
+xxo2fUy3homqneeImV6C5xg0I26JfSs9uAC3lVe6pvqB8+6XRjXYct/PsWXH
+XRn2YPsxFMNMYKS8azZ4rjOUHL8eUchDxofNLuF5OP1mnTZ7cKxfFu62IJtp
+Hbqany+mt/2uwjfPiZQv6XQDz7ymZItO0ek+qG5Qsy7fnWenzz9899tqfR/K
+zyJMGo/+lf+7nO4mmY5mtvgBUEsBAhQAFAAAAAgAEpZkXSFmmIsoAQAADgMA
+AAcAAAAAAAAAAAAAAIABAAAAAHN0ci5kYXRQSwUGAAAAAAEAAQA1AAAATQEA
+AAAA
+</Image><AppliesTo><Apply type="Class"><Property name="_HideUmlLinks" value="True"/></Apply></AppliesTo><TaggedValues><Tag name="Business criticality" type="enumeration" description="" unit="" values="High,Medium,Low" default=""/><Tag name="Life Cycle Stage" type="enumeration" description="" unit="" values="Ideation,Design,Purchase,Inventory,Deploy,Operational,End of Operation,End of Life" default=""/><Tag name="Life Cycle Stage Status" type="enumeration" description="" unit="" values="Under Evaluation,Pilot,Design,Chartered,Build,On Order,Pre-Allocated,Available,Legal Hold,Test,Pending Fulfillment,In Use,In Maintenance,End of Support,Pending Retirement,On Hold,Obsolete,Retired" default=""/><Tag name="Service owner" type="String" description="" unit="" values="" default=""/><Tag name="ServiceNow link" type="URL" description="" unit="" values="" default=""/><Tag name="ServiceNow record id" type="String" description="" unit="" values="" default=""/></TaggedValues></Stereotype><Stereotype name="CSDMTechnologyManagementServiceOffering" alias="Technology Management Service Offering" metatype="Technology Management Service Offering" notes="" cx="0" cy="0" bgcolor="2856441" fontcolor="-1" bordercolor="-1" borderwidth="-1" hideicon="0"><stereotypedrelationships><stereotypedrelationship stereotype="CSDM5::CSDMContains" constraint="CSDM5::CSDMApplicationService;CSDM5::CSDMConnectionServiceInstance;CSDM5::CSDMDataServiceInstance;CSDM5::CSDMDynamicCIGroup;CSDM5::CSDMFacilityServiceInstance;CSDM5::CSDMNetworkServiceInstance;CSDM5::CSDMOperationalProcessServiceInstance;CSDM5::CSDMServiceInstance"/><stereotypedrelationship stereotype="CSDM5::CSDMModel" constraint="CSDM5::CSDMProductModel"/></stereotypedrelationships><Image type="EAShapeScript 1.0" xmlns:dt="urn:schemas-microsoft-com:datatypes" dt:dt="bin.base64">UEsDBBQAAAAIACCWZF2pIQQ7MAEAACADAAAHAAAAc3RyLmRhdK2SwUrDUBBF
+79qveLSbCF0oCi6kK3GpgroXm8S0mMSSNC0qfpGf4M95ZpKUBlG6kDAvN2/u
+3DdzX2rN9ailUgUVoIVKHeidCN1T6kW1sxLQRlOtVKmh4nyHlZN/Jd+QXYFM
+caqRZuxVVKaso0GF7T2hvNAbKNKxjngmOmM9HDAr1y2pqGDG6EfOtOirdt/t
+OtSw7hNOa+io3s4c0dOzz5yAJsQ1sW9lCS7AbeWFLqm+Z739oVHvuNyfF3A5
+sFe5D+aPoQRmCiPjvcLBU52gFPh6QCH3TOnOxvBKOL2zQes9OHbewvc2IOtp
+6afaPJ90b/7O/c5zIuMmg67g2awZ2aJTDLpz1TVqsc91wxTtHKaf6atzIejj
+Fyd6/1on/mvCmfeeDP7Tv+cebzsZD3q2+AZQSwECFAAUAAAACAAglmRdqSEE
+OzABAAAgAwAABwAAAAAAAAAAAAAAgAEAAAAAc3RyLmRhdFBLBQYAAAAAAQAB
+ADUAAABVAQAAAAA=
+</Image><AppliesTo><Apply type="Class"><Property name="_HideUmlLinks" value="True"/></Apply></AppliesTo><TaggedValues><Tag name="Availability" type="String" description="" unit="" values="" default=""/><Tag name="Capability" type="String" description="" unit="" values="" default=""/><Tag name="Environment" type="String" description="" unit="" values="" default=""/><Tag name="Life Cycle Stage" type="enumeration" description="" unit="" values="Ideation,Design,Purchase,Inventory,Deploy,Operational,End of Operation,End of Life" default=""/><Tag name="Life Cycle Stage Status" type="enumeration" description="" unit="" values="Under Evaluation,Pilot,Design,Chartered,Build,On Order,Pre-Allocated,Available,Legal Hold,Test,Pending Fulfillment,In Use,In Maintenance,End of Support,Pending Retirement,On Hold,Obsolete,Retired" default=""/><Tag name="Location or geography" type="String" description="" unit="" values="" default=""/><Tag name="Packaging" type="String" description="" unit="" values="" default=""/><Tag name="Pricing" type="String" description="" unit="" values="" default=""/><Tag name="ServiceNow link" type="URL" description="" unit="" values="" default=""/><Tag name="ServiceNow record id" type="String" description="" unit="" values="" default=""/></TaggedValues></Stereotype><Stereotype name="CSDMUser" alias="User" metatype="User" notes="" cx="0" cy="0" bgcolor="15196895" fontcolor="-1" bordercolor="-1" borderwidth="-1" hideicon="0"><Image type="EAShapeScript 1.0" xmlns:dt="urn:schemas-microsoft-com:datatypes" dt:dt="bin.base64">UEsDBBQAAAAIAKyVZF0KCjk4EQEAANwCAAAHAAAAc3RyLmRhdK2SwU7CQBCG
+/7NPsYFLTTigFw+Ek+HqwcjZKK3SWFaybSFAfCIfwZfzmy0lbYyGg9nM7J/Z
+f2b+mWyppZ60VianFSiX14UOmDser3eVkZWCtpqqUlBNxqTDKnjf8V7zWoGs
+4lQDPRMLZGb4QS/DYi9UzrUHJbrSmDPSDf6yxwyxricjwFxQP4lMszareze+
+X8PUp3SrUVSeZk7Q9BZnTkEj7A47N9ODV+Am81Yzsh/w9z9qlJ0tt/0cW3bE
+QtyD7cdQCjOD8cpdscFrJpnAW+qRCkV88XGzC3geTrtZp80ZHOuXx9gWZJrW
+savN86k5So37dZzA6eOXKdrZmyn+S539lgI13T/2t+bhScmwp9nsG1BLAQIU
+ABQAAAAIAKyVZF0KCjk4EQEAANwCAAAHAAAAAAAAAAAAAACAAQAAAABzdHIu
+ZGF0UEsFBgAAAAABAAEANQAAADYBAAAAAA==
+</Image><AppliesTo><Apply type="Class"><Property name="_HideUmlLinks" value="True"/></Apply></AppliesTo><TaggedValues><Tag name="ServiceNow link" type="URL" description="" unit="" values="" default=""/><Tag name="ServiceNow record id" type="String" description="" unit="" values="" default=""/></TaggedValues></Stereotype><Stereotype name="CSDMUses" alias="Uses" metatype="Uses" notes="" cx="0" cy="0" bgcolor="-1" fontcolor="-1" bordercolor="-1" borderwidth="-1" hideicon="0"><Image type="EAShapeScript 1.0" xmlns:dt="urn:schemas-microsoft-com:datatypes" dt:dt="bin.base64">UEsDBBQAAAAIAFCWZF1wxbu7RgAAAF4AAAAHAAAAc3RyLmRhdMthSGRIYkhl
+yGFQYMhlyGRIAcIcID+JIZ+hBAjzgaI5cDVcDNVArACFBQxFQB15QFUaDEoM
+oQzFQDXFQJYmgzVQVS0QAwBQSwECFAAUAAAACABQlmRdcMW7u0YAAABeAAAA
+BwAAAAAAAAAAAAAAgAEAAAAAc3RyLmRhdFBLBQYAAAAAAQABADUAAABrAAAA
+AAA=
+</Image><AppliesTo><Apply type="Dependency"/></AppliesTo></Stereotype><Stereotype name="CSDMValueStream" alias="Value Stream" metatype="Value Stream" notes="" cx="0" cy="0" bgcolor="15196895" fontcolor="-1" bordercolor="-1" borderwidth="-1" hideicon="0"><stereotypedrelationships><stereotypedrelationship stereotype="CSDM5::CSDMHas" constraint="CSDM5::CSDMValueStreamCategory"/><stereotypedrelationship stereotype="CSDM5::CSDMMaps" constraint="CSDM5::CSDMBusinessCapability;CSDM5::CSDMBusinessProcess"/></stereotypedrelationships><Image type="EAShapeScript 1.0" xmlns:dt="urn:schemas-microsoft-com:datatypes" dt:dt="bin.base64">UEsDBBQAAAAIAFuVZF2QeLVsFwEAAOwCAAAHAAAAc3RyLmRhdK2SvU7DQBCE
+p+YpTkljpBRAQxGlQrQUCaJFEBti4RyRf4gA8UQ8Ai/Ht+s4soVAKZC159Hd
+zN7M2pVWutNGmYLWoFxRR3qnwu6JelblrBS01Uy1SjUopj1Wwfkr5w2nNcg6
+zjTSPXslyox1NFDY3gOdc72BEp3qhGeic9bjAbP0vhFFCXNJ/8SZVp2q/27X
+YQ9zn3Jbg6NqnznB05NnTkET6oo6VBnBa3CrvNAl6mvW+Y8eVW/K3X2BKQf2
+Sp+DzcdQCjOD8ci7ZoJnJJnCW+mWDoWfRJ/sEl6E00026OUAjt2X+94WZJ42
+fqvl+dSN6xv3ufDvnHnGr12ioI9fUnWzaFP9l1v7ewrc9f+5vzOM907GA89W
+31BLAQIUABQAAAAIAFuVZF2QeLVsFwEAAOwCAAAHAAAAAAAAAAAAAACAAQAA
+AABzdHIuZGF0UEsFBgAAAAABAAEANQAAADwBAAAAAA==
+</Image><AppliesTo><Apply type="Class"><Property name="_HideUmlLinks" value="True"/></Apply></AppliesTo><TaggedValues><Tag name="ServiceNow link" type="URL" description="" unit="" values="" default=""/><Tag name="ServiceNow record id" type="String" description="" unit="" values="" default=""/></TaggedValues></Stereotype><Stereotype name="CSDMValueStreamCategory" alias="Value Stream Category" metatype="Value Stream Category" notes="" cx="0" cy="0" bgcolor="15196895" fontcolor="-1" bordercolor="-1" borderwidth="-1" hideicon="0"><Image type="EAShapeScript 1.0" xmlns:dt="urn:schemas-microsoft-com:datatypes" dt:dt="bin.base64">UEsDBBQAAAAIAGOVZF3GRpyTIQEAAP4CAAAHAAAAc3RyLmRhdK2SvU7DQBCE
+p+YpTkljpBQgCoooFaKlAESLQmySKM4R+YcoIJ6IR+Dl+HYdR7YQKAWy9jy6
+m9mbWbvUQlNtlCloDVoq6kTvVNg/US8qnZWCtpqoUqEaxbjDyjnfcV5zWoGs
+40QDPbFXoMxYBz2F7T3Teak3UKJznfGMdMl62mMW3jeiKGDO6J8406pVdd/N
+2u9h7lNuq3FUHjIneFp55hQ0om6oY5URvAY3yitdo75nvf3Ro+xMub0vMOXA
+XuFzsPkYSmFmMOa8KyZ4QZIxvIUe6ZD7SfTJzuBFOO1kg16P4Nh9S9/bgszT
+xm+1PJ96cH3tPu/8O2eeMZBu6n3m/j13+tpnDPr4JWc7nSbnf/m3/ynHb/cv
+/DvV8OBk2PNs9Q1QSwECFAAUAAAACABjlWRdxkackyEBAAD+AgAABwAAAAAA
+AAAAAAAAgAEAAAAAc3RyLmRhdFBLBQYAAAAAAQABADUAAABGAQAAAAA=
+</Image><AppliesTo><Apply type="Class"><Property name="_HideUmlLinks" value="True"/></Apply></AppliesTo><TaggedValues><Tag name="ServiceNow link" type="URL" description="" unit="" values="" default=""/><Tag name="ServiceNow record id" type="String" description="" unit="" values="" default=""/></TaggedValues></Stereotype><Stereotype name="CSDMValueStreamStage" alias="Value Stream Stage" metatype="Value Stream Stage" notes="" cx="0" cy="0" bgcolor="15196895" fontcolor="-1" bordercolor="-1" borderwidth="-1" hideicon="0"><stereotypedrelationships><stereotypedrelationship stereotype="CSDM5::CSDMMaps" constraint="CSDM5::CSDMBusinessCapability;CSDM5::CSDMBusinessProcess"/><stereotypedrelationship stereotype="CSDM5::CSDMPartOf" constraint="CSDM5::CSDMValueStream"/></stereotypedrelationships><Image type="EAShapeScript 1.0" xmlns:dt="urn:schemas-microsoft-com:datatypes" dt:dt="bin.base64">UEsDBBQAAAAIAGaVZF12v3e/HQEAAPgCAAAHAAAAc3RyLmRhdK2SvU7DQBCE
+p+YpTkljpBQgCoooFaKlAESLQmyIFeeI/EMEiCfiEXg5vl3HkS0ESoGsPU/u
+ZvZmNq601FwbZQpag3JFHemdCrsn6lmVs1LQVjPVKtWgmPZYBeevnDec1iDr
+ONNID+yVKDPW0UBhe490zvUGSnSqE56JzlmPB8zS+0YUJcwF/RNnWnWq/rtd
+hz3MfcptDY6qfeYETyvPnIIm1BV1qDKC1+BWeaFL1Les1z96VL0pd/cFphzY
+K30ONh9DKcwMxhPvmgmekWQKb6l7OhR+En2yC3gRTjfZoJcDOHZf7ntbkHna
++K2W51N3rm/c543/z5lnbH/N6Zvpa5cu6OOXhN1c2oT/5dy+pAKn/e/v7zzj
+vZPxwLPVN1BLAQIUABQAAAAIAGaVZF12v3e/HQEAAPgCAAAHAAAAAAAAAAAA
+AACAAQAAAABzdHIuZGF0UEsFBgAAAAABAAEANQAAAEIBAAAAAA==
+</Image><AppliesTo><Apply type="Class"><Property name="_HideUmlLinks" value="True"/></Apply></AppliesTo><TaggedValues><Tag name="ServiceNow link" type="URL" description="" unit="" values="" default=""/><Tag name="ServiceNow record id" type="String" description="" unit="" values="" default=""/></TaggedValues></Stereotype></Stereotypes><TaggedValueTypes/><ViewDefinitions/><Metamodel/></Content></UMLProfile></UMLProfiles><DiagramProfile><UMLProfile profiletype="uml2"><Documentation id="2447FEB208" name="CSDM5" version="" notes="CSDM5"/><Content><Stereotypes><Stereotype name="CSDMDiagram" alias="CSDM Diagram" notes="" cx="0" cy="0" bgcolor="-1" fontcolor="-1" bordercolor="-1" borderwidth="-1" hideicon="0"><AppliesTo><Apply type="Diagram_Logical"><Property name="alias" value="CSDM Diagram"/><Property name="diagramID" value="CSDM5-D"/><Property name="toolbox" value="CSDM5::CSDM5 Toolbox"/></Apply></AppliesTo></Stereotype></Stereotypes><TaggedValueTypes/><ViewDefinitions/><Metamodel/></Content></UMLProfile></DiagramProfile><UIToolboxes><UMLProfile profiletype="uml2"><Documentation id="C8BB4DE33C" name="CSDM5 Toolbox" version="" notes="CSDM5 Toolbox"/><Content><Stereotypes><Stereotype name="CSDM - Build and Integration" notes="" cx="0" cy="0" bgcolor="-1" fontcolor="-1" bordercolor="-1" borderwidth="-1" hideicon="0"><AppliesTo><Apply type="ToolboxPage"/></AppliesTo><TaggedValues><Tag name="CSDM5::CSDMAIDatasetDigitalAsset(UML::Artifact)" type="" description="" unit="" values="" default="AI Dataset Digital Asset"/><Tag name="CSDM5::CSDMAIModelDigitalAsset(UML::Artifact)" type="" description="" unit="" values="" default="AI Model Digital Asset"/><Tag name="CSDM5::CSDMAIPromptDigitalAsset(UML::Artifact)" type="" description="" unit="" values="" default="AI Prompt Digital Asset"/><Tag name="CSDM5::CSDMAISystemDigitalAsset(UML::Artifact)" type="" description="" unit="" values="" default="AI System Digital Asset"/><Tag name="CSDM5::CSDMSDLCComponent(UML::Component)" type="" description="" unit="" values="" default="SDLC Component"/></TaggedValues></Stereotype><Stereotype name="CSDM - Design and Planning" notes="" cx="0" cy="0" bgcolor="-1" fontcolor="-1" bordercolor="-1" borderwidth="-1" hideicon="0"><AppliesTo><Apply type="ToolboxPage"/></AppliesTo><TaggedValues><Tag name="CSDM5::CSDMBusinessApplication(UML::Component)" type="" description="" unit="" values="" default="Business Application"/><Tag name="CSDM5::CSDMBusinessCapability(UML::Class)" type="" description="" unit="" values="" default="Business Capability"/><Tag name="CSDM5::CSDMInformationObject(UML::Class)" type="" description="" unit="" values="" default="Information Object"/></TaggedValues></Stereotype><Stereotype name="CSDM - Foundation" notes="" cx="0" cy="0" bgcolor="-1" fontcolor="-1" bordercolor="-1" borderwidth="-1" hideicon="0"><AppliesTo><Apply type="ToolboxPage"/></AppliesTo><TaggedValues><Tag name="CSDM5::CSDMAIContentProductModel(UML::Class)" type="" description="" unit="" values="" default="AI Content Product Model"/><Tag name="CSDM5::CSDMAISystemProductModel(UML::Class)" type="" description="" unit="" values="" default="AI System Product Model"/><Tag name="CSDM5::CSDMApplicationModel(UML::Class)" type="" description="" unit="" values="" default="Application Model"/><Tag name="CSDM5::CSDMBuilding(UML::Class)" type="" description="" unit="" values="" default="Building"/><Tag name="CSDM5::CSDMBusinessProcess(UML::Class)" type="" description="" unit="" values="" default="Business Process"/><Tag name="CSDM5::CSDMBusinessUnit(UML::Class)" type="" description="" unit="" values="" default="Business Unit"/><Tag name="CSDM5::CSDMCMDBGroup(UML::Class)" type="" description="" unit="" values="" default="CMDB Group"/><Tag name="CSDM5::CSDMCompany(UML::Class)" type="" description="" unit="" values="" default="Company"/><Tag name="CSDM5::CSDMConsumableModel(UML::Class)" type="" description="" unit="" values="" default="Consumable Model"/><Tag name="CSDM5::CSDMContentProductModel(UML::Class)" type="" description="" unit="" values="" default="Content Product Model"/><Tag name="CSDM5::CSDMContract(UML::Artifact)" type="" description="" unit="" values="" default="Contract"/><Tag name="CSDM5::CSDMContractModel(UML::Class)" type="" description="" unit="" values="" default="Contract Model"/><Tag name="CSDM5::CSDMDepartment(UML::Class)" type="" description="" unit="" values="" default="Department"/><Tag name="CSDM5::CSDMEnterpriseGoodModel(UML::Class)" type="" description="" unit="" values="" default="Enterprise Good Model"/><Tag name="CSDM5::CSDMFacilityModel(UML::Class)" type="" description="" unit="" values="" default="Facility Model"/><Tag name="CSDM5::CSDMFirmwareModel(UML::Class)" type="" description="" unit="" values="" default="Firmware Model"/><Tag name="CSDM5::CSDMGroup(UML::Class)" type="" description="" unit="" values="" default="Group"/><Tag name="CSDM5::CSDMHardwareModel(UML::Class)" type="" description="" unit="" values="" default="Hardware Model"/><Tag name="CSDM5::CSDMKnowledge(UML::Artifact)" type="" description="" unit="" values="" default="Knowledge"/><Tag name="CSDM5::CSDMLocation(UML::Class)" type="" description="" unit="" values="" default="Location"/><Tag name="CSDM5::CSDMProductFeature(UML::Class)" type="" description="" unit="" values="" default="Product Feature"/><Tag name="CSDM5::CSDMProductModel(UML::Class)" type="" description="" unit="" values="" default="Product Model"/><Tag name="CSDM5::CSDMServiceModel(UML::Class)" type="" description="" unit="" values="" default="Service Model"/><Tag name="CSDM5::CSDMServiceOfferingModel(UML::Class)" type="" description="" unit="" values="" default="Service Offering Model"/><Tag name="CSDM5::CSDMSoftwareBillOfMaterials(UML::Artifact)" type="" description="" unit="" values="" default="Software Bill of Materials (SBOM)"/><Tag name="CSDM5::CSDMSoftwareComponentModel(UML::Class)" type="" description="" unit="" values="" default="Software Component Model"/><Tag name="CSDM5::CSDMSoftwareModel(UML::Class)" type="" description="" unit="" values="" default="Software Model"/><Tag name="CSDM5::CSDMSystemComponentModel(UML::Class)" type="" description="" unit="" values="" default="System Component Model"/><Tag name="CSDM5::CSDMTeam(UML::Class)" type="" description="" unit="" values="" default="Team"/><Tag name="CSDM5::CSDMUser(UML::Class)" type="" description="" unit="" values="" default="User"/><Tag name="CSDM5::CSDMValueStream(UML::Class)" type="" description="" unit="" values="" default="Value Stream"/><Tag name="CSDM5::CSDMValueStreamCategory(UML::Class)" type="" description="" unit="" values="" default="Value Stream Category"/><Tag name="CSDM5::CSDMValueStreamStage(UML::Class)" type="" description="" unit="" values="" default="Value Stream Stage"/></TaggedValues></Stereotype><Stereotype name="CSDM - Ideation and Strategy" notes="" cx="0" cy="0" bgcolor="-1" fontcolor="-1" bordercolor="-1" borderwidth="-1" hideicon="0"><AppliesTo><Apply type="ToolboxPage"/></AppliesTo><TaggedValues><Tag name="CSDM5::CSDMGoal(UML::Class)" type="" description="" unit="" values="" default="Goal"/><Tag name="CSDM5::CSDMPlanningItem(UML::Class)" type="" description="" unit="" values="" default="Planning Item"/><Tag name="CSDM5::CSDMProductIdea(UML::Class)" type="" description="" unit="" values="" default="Product Idea"/><Tag name="CSDM5::CSDMStrategicPlan(UML::Class)" type="" description="" unit="" values="" default="Strategic Plan"/><Tag name="CSDM5::CSDMStrategicPriority(UML::Class)" type="" description="" unit="" values="" default="Strategic Priority"/><Tag name="CSDM5::CSDMTarget(UML::Class)" type="" description="" unit="" values="" default="Target"/></TaggedValues></Stereotype><Stereotype name="CSDM - Manage Portfolios" notes="" cx="0" cy="0" bgcolor="-1" fontcolor="-1" bordercolor="-1" borderwidth="-1" hideicon="0"><AppliesTo><Apply type="ToolboxPage"/></AppliesTo><TaggedValues><Tag name="CSDM5::CSDMPortfolio(UML::Class)" type="" description="" unit="" values="" default="Portfolio"/><Tag name="CSDM5::CSDMServicePortfolio(UML::Class)" type="" description="" unit="" values="" default="Service Portfolio"/></TaggedValues></Stereotype><Stereotype name="CSDM - Relationships" notes="" cx="0" cy="0" bgcolor="-1" fontcolor="-1" bordercolor="-1" borderwidth="-1" hideicon="0"><AppliesTo><Apply type="ToolboxPage"/></AppliesTo><TaggedValues><Tag name="CSDM5::CSDMAlignedTo(UML::Dependency)" type="" description="" unit="" values="" default="Aligned to"/><Tag name="CSDM5::CSDMAssigns(UML::Dependency)" type="" description="" unit="" values="" default="Assigns"/><Tag name="CSDM5::CSDMBillOfMaterials(UML::Dependency)" type="" description="" unit="" values="" default="Bill of materials"/><Tag name="CSDM5::CSDMConnectedBy(UML::Dependency)" type="" description="" unit="" values="" default="Connected by"/><Tag name="CSDM5::CSDMConnectedTo(UML::Dependency)" type="" description="" unit="" values="" default="Connected to"/><Tag name="CSDM5::CSDMConsumes(UML::Dependency)" type="" description="" unit="" values="" default="Consumes"/><Tag name="CSDM5::CSDMContains(UML::Dependency)" type="" description="" unit="" values="" default="Contains"/><Tag name="CSDM5::CSDMCovers(UML::Dependency)" type="" description="" unit="" values="" default="Covers"/><Tag name="CSDM5::CSDMDependsOn(UML::Dependency)" type="" description="" unit="" values="" default="Depends on"/><Tag name="CSDM5::CSDMDeployedAs(UML::Dependency)" type="" description="" unit="" values="" default="Deployed as"/><Tag name="CSDM5::CSDMHas(UML::Dependency)" type="" description="" unit="" values="" default="Has"/><Tag name="CSDM5::CSDMIsPartOf(UML::Dependency)" type="" description="" unit="" values="" default="Is part of"/><Tag name="CSDM5::CSDMMaps(UML::Association)" type="" description="" unit="" values="" default="Maps"/><Tag name="CSDM5::CSDMMeasures(UML::Dependency)" type="" description="" unit="" values="" default="Measures"/><Tag name="CSDM5::CSDMMember(UML::Dependency)" type="" description="" unit="" values="" default="Member"/><Tag name="CSDM5::CSDMModel(UML::Dependency)" type="" description="" unit="" values="" default="Model"/><Tag name="CSDM5::CSDMOperationalizes(UML::Dependency)" type="" description="" unit="" values="" default="Operationalizes"/><Tag name="CSDM5::CSDMParentOf(UML::Dependency)" type="" description="" unit="" values="" default="Parent of"/><Tag name="CSDM5::CSDMPartOf(UML::Dependency)" type="" description="" unit="" values="" default="Part of"/><Tag name="CSDM5::CSDMProcessReference(UML::Dependency)" type="" description="" unit="" values="" default="Process reference"/><Tag name="CSDM5::CSDMProvidedBy(UML::Dependency)" type="" description="" unit="" values="" default="Provided by"/><Tag name="CSDM5::CSDMPublishedAs(UML::Dependency)" type="" description="" unit="" values="" default="Published as"/><Tag name="CSDM5::CSDMReceivesDataFrom(UML::Dependency)" type="" description="" unit="" values="" default="Receives data from"/><Tag name="CSDM5::CSDMReferences(UML::Dependency)" type="" description="" unit="" values="" default="References"/><Tag name="CSDM5::CSDMRelatesTo(UML::Dependency)" type="" description="" unit="" values="" default="Relates to"/><Tag name="CSDM5::CSDMRepresents(UML::Dependency)" type="" description="" unit="" values="" default="Represents"/><Tag name="CSDM5::CSDMRunsOn(UML::Dependency)" type="" description="" unit="" values="" default="Runs on"/><Tag name="CSDM5::CSDMServes(UML::Dependency)" type="" description="" unit="" values="" default="Serves"/><Tag name="CSDM5::CSDMSubscriber(UML::Dependency)" type="" description="" unit="" values="" default="Subscriber"/><Tag name="CSDM5::CSDMUses(UML::Dependency)" type="" description="" unit="" values="" default="Uses"/></TaggedValues></Stereotype><Stereotype name="CSDM - Service Consumption" notes="" cx="0" cy="0" bgcolor="-1" fontcolor="-1" bordercolor="-1" borderwidth="-1" hideicon="0"><AppliesTo><Apply type="ToolboxPage"/></AppliesTo><TaggedValues><Tag name="CSDM5::CSDMBusinessService(UML::Class)" type="" description="" unit="" values="" default="Business Service"/><Tag name="CSDM5::CSDMBusinessServiceOffering(UML::Class)" type="" description="" unit="" values="" default="Business Service Offering"/><Tag name="CSDM5::CSDMCatalogItem(UML::Class)" type="" description="" unit="" values="" default="Catalog Item"/><Tag name="CSDM5::CSDMRequestCatalog(UML::Class)" type="" description="" unit="" values="" default="Request Catalog"/><Tag name="CSDM5::CSDMServiceCommitment(UML::Class)" type="" description="" unit="" values="" default="Service Commitment"/><Tag name="CSDM5::CSDMServiceOfferingSubscription(UML::Class)" type="" description="" unit="" values="" default="Service Offering Subscription"/></TaggedValues></Stereotype><Stereotype name="CSDM - Service Delivery" notes="" cx="0" cy="0" bgcolor="-1" fontcolor="-1" bordercolor="-1" borderwidth="-1" hideicon="0"><AppliesTo><Apply type="ToolboxPage"/></AppliesTo><TaggedValues><Tag name="CSDM5::CSDMAIApplication(UML::Component)" type="" description="" unit="" values="" default="AI Application"/><Tag name="CSDM5::CSDMAIFunction(UML::Component)" type="" description="" unit="" values="" default="AI Function"/><Tag name="CSDM5::CSDMAPI(UML::Component)" type="" description="" unit="" values="" default="API"/><Tag name="CSDM5::CSDMApplication(UML::Component)" type="" description="" unit="" values="" default="Application"/><Tag name="CSDM5::CSDMApplicationService(UML::Class)" type="" description="" unit="" values="" default="Application Service"/><Tag name="CSDM5::CSDMAsset(UML::Class)" type="" description="" unit="" values="" default="Asset"/><Tag name="CSDM5::CSDMConnectedDevice(UML::Node)" type="" description="" unit="" values="" default="Connected Device"/><Tag name="CSDM5::CSDMConnectionServiceInstance(UML::Class)" type="" description="" unit="" values="" default="Connection Service Instance"/><Tag name="CSDM5::CSDMDataServiceInstance(UML::Class)" type="" description="" unit="" values="" default="Data Service Instance"/><Tag name="CSDM5::CSDMDynamicCIGroup(UML::Class)" type="" description="" unit="" values="" default="Dynamic CI Group"/><Tag name="CSDM5::CSDMFacilityServiceInstance(UML::Class)" type="" description="" unit="" values="" default="Facility Service Instance"/><Tag name="CSDM5::CSDMInfrastructureCI(UML::Node)" type="" description="" unit="" values="" default="Infrastructure CI"/><Tag name="CSDM5::CSDMInstallBaseItem(UML::Class)" type="" description="" unit="" values="" default="Install Base Item"/><Tag name="CSDM5::CSDMNetworkFunction(UML::Component)" type="" description="" unit="" values="" default="Network Function"/><Tag name="CSDM5::CSDMNetworkFunctionApplication(UML::Component)" type="" description="" unit="" values="" default="Network Function Application"/><Tag name="CSDM5::CSDMNetworkServiceInstance(UML::Class)" type="" description="" unit="" values="" default="Network Service Instance"/><Tag name="CSDM5::CSDMOperationalProcessServiceInstance(UML::Class)" type="" description="" unit="" values="" default="Operational Process Service Instance"/><Tag name="CSDM5::CSDMOperationalTechnology(UML::Node)" type="" description="" unit="" values="" default="Operational Technology (OT) CI"/><Tag name="CSDM5::CSDMServiceInstance(UML::Class)" type="" description="" unit="" values="" default="Service Instance"/><Tag name="CSDM5::CSDMTechnologyManagementService(UML::Class)" type="" description="" unit="" values="" default="Technology Management Service"/><Tag name="CSDM5::CSDMTechnologyManagementServiceOffering(UML::Class)" type="" description="" unit="" values="" default="Technology Management Service Offering"/></TaggedValues></Stereotype></Stereotypes><TaggedValueTypes/><ViewDefinitions/><Metamodel/></Content></UMLProfile></UIToolboxes><ModelTemplates/></MDG.Technology>

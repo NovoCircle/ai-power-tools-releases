@@ -348,14 +348,17 @@ def census_elements(
 # two base types is two different modeling choices. So the key is the
 # stereotype identity AND the base type, for profile-bound and ad hoc alike.
 
-#: EA `Connector_Type` values. Used only to tell a connector stereotype from an
-#: element one when an MDG lists both under `stereotypes`.
+#: EA `Connector_Type` values that are relationships and never elements. Used
+#: only to tell a connector stereotype from an element one when an MDG lists both
+#: under `stereotypes`. `Collaboration` is deliberately absent: it is also an
+#: element metaclass, so a stereotype on it is compared on the element side.
 CONNECTOR_BASE_TYPES = frozenset({
-    "Abstraction", "Aggregation", "Assembly", "Association", "Collaboration",
+    "Abstraction", "Aggregation", "Assembly", "Association", "CommunicationPath",
     "Composition", "Connector", "ControlFlow", "Delegate", "Dependency",
-    "Deployment", "Extension", "Generalization", "InformationFlow", "Manifest",
-    "Nesting", "NoteLink", "ObjectFlow", "Realisation", "Realization",
-    "Sequence", "StateFlow", "Substitution", "Usage",
+    "Deployment", "ERLink", "Extension", "Generalization", "InformationFlow",
+    "Instantiation", "InterruptFlow", "Manifest", "Nesting", "NoteLink",
+    "ObjectFlow", "ProtocolConformance", "ProtocolTransition", "Realisation",
+    "Realization", "Sequence", "StateFlow", "Substitution", "Usage",
 })
 
 
@@ -722,11 +725,17 @@ class Suggestion:
 
 
 def declared_shapes(mdg: dict) -> dict[str, Shape]:
-    """The shape each declared stereotype implies, from the technology."""
+    """The shape each declared ELEMENT stereotype implies, from the technology.
+
+    Connector stereotypes are left out: they cannot be applied to an element, so
+    offering one as a misassignment suggestion would be an invalid answer.
+    """
     out: dict[str, Shape] = {}
     for spec in mdg.get("stereotypes", []):
         name = spec.get("name")
         if not name:
+            continue
+        if (spec.get("base_metaclass") or "").strip() in CONNECTOR_BASE_TYPES:
             continue
         tags = frozenset(t["name"] for t in spec.get("tagged_values", []) if t.get("name"))
         out[name] = Shape(metaclass=(spec.get("base_metaclass") or "").strip(),
@@ -846,19 +855,25 @@ def _tag_drift(census, declared: dict, tag_stats, noun: str) -> list[Drift]:
     return out
 
 
-def _multiple_declared(census: ElementCensus, declared: set[str]) -> list[Drift]:
+def _multiple_declared(census: ElementCensus, declared: set[str],
+                       namespace: str = "") -> list[Drift]:
     """Elements carrying two or more DISTINCT declared stereotypes.
 
     `multi_stereotype_guids` already counts any element with several
     stereotypes, which is mostly benign (a declared one plus a shipped
     language's). Two stereotypes from the declared set is a data error: the
     element lands in both tables of a reporting build. Grouped by combination.
+
+    A stereotype counts as declared only when it is bound to the technology's
+    `namespace`: the same name carried ad hoc, or bound to another language, is
+    not the technology's stereotype and does not make a second one.
     """
     by_key = {e.key: e for e in census.entities}
     groups: dict[tuple[str, ...], list[str]] = defaultdict(list)
     for guid, keys in census.placement.items():
         names = {by_key[k].stereotype for k in keys
-                 if k in by_key and by_key[k].stereotype in declared}
+                 if k in by_key and by_key[k].stereotype in declared
+                 and by_key[k].is_profile_bound and by_key[k].profile == namespace}
         if len(names) > 1:
             groups[tuple(sorted(names))].append(guid)
     return [
@@ -962,7 +977,7 @@ def compare_declared_observed(census: ElementCensus, mdg: dict,
                 f"{top.stereotype!r}: {top.detail}"))
 
     out.extend(_tag_drift(census, declared, tag_stats, "element"))
-    out.extend(_multiple_declared(census, set(declared)))
+    out.extend(_multiple_declared(census, set(declared), namespace))
 
     return sorted(out, key=lambda d: (d.kind, d.subject, d.detail))
 
@@ -1015,8 +1030,11 @@ def compare_connectors_declared_observed(
     for name, spec in sorted(declared.items()):
         ents = by_name.get(name)
         if not ents:
-            out.append(Drift(DRIFT_DECLARED_UNUSED, name,
-                             "declared in the technology, no connectors in the repository"))
+            # Carried only as a qualified name bound to no profile: that is
+            # reported once below, as unbound, not also as never used.
+            if not any(q.rsplit("::", 1)[-1] == name for q in census.unbound_qualified):
+                out.append(Drift(DRIFT_DECLARED_UNUSED, name,
+                                 "declared in the technology, no connectors in the repository"))
             continue
         loose = [e for e in ents
                  if not e.is_profile_bound or (namespace and e.profile != namespace)]

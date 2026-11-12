@@ -1,14 +1,13 @@
 # Installed, embedded, and loaded — three different questions
 
-Every one of these payloads was captured live against the Westbrook Bank demo repository
-(`<model-dir>\WestbrookBank.qea`), with EA already running and the model open.
-Nothing here was constructed from the spec — where a call's answer looks incomplete or odd,
-that's what it actually returned.
-
-The WBA payloads were captured while the model held WBA 1.0 at Location: Project. The model now
-holds WBA 1.1.1 at Location: Model (`t_trxtypes` empty): `get_mdg_from_runtime` answers 18
-stereotypes (15 element and 3 connector), 3 diagram types and 3 toolbox pages, and Manage
-Technology lists one enabled `WBA` with the two older builds disabled.
+The `get_embedded_mdgs` and `get_mdg_from_runtime` payloads were captured live against the
+Westbrook Bank demo repository (`<model-dir>\WestbrookBank.qea`), with EA already running and the
+model open, while it held WBA 1.0 at Location: Project; the `list_registered_technologies` payload
+is an illustration with placeholders. Where a call's answer looks incomplete or odd, that is what it
+returned. **Your repository will answer differently**: the technology id, versions, locations and
+counts below are Westbrook's, shown to teach the shape, and nothing here is a state you will see.
+For orientation only: in the Westbrook example with WBA 1.1.1 at Location: Model, a call answers 18 stereotypes
+(15 element and 3 connector), 3 diagram types and 3 toolbox pages.
 
 ---
 
@@ -18,29 +17,33 @@ Technology lists one enabled `WBA` with the two older builds disabled.
 ea_mdg(operation="list_registered_technologies", params={})
 ```
 
-Relevant rows out of 26 returned:
+An illustration of the rows for one technology (the id `WBA` and the `<version>` values stand in for
+yours):
 
 ```
-{ "name": "WBA", "version": "1.0",
-  "location": "Workstation file (exact path not exposed by EA's COM API)",
+{ "name": "WBA", "version": "<version>",
+  "location": "Model",
   "enabled": true },
-{ "name": "WestbrookBankArchitecture", "version": "",
-  "location": "Workstation file (exact path not exposed by EA's COM API)",
+{ "name": "WBA", "version": "<older version>",
+  "location": "Project",
   "enabled": false }
 ```
 
-Two rows, same underlying organization, different identifiers, different `enabled` state. This is
-not a bug — the response's own `completeness_note` says as much: the same technology can appear
-under more than one registration at once. What it means in practice: asking "is Westbrook Bank's
-technology registered?" doesn't have a single yes/no answer. Ask about a specific `name` string,
-and read `enabled` for that row specifically. A technology disabled purely by an unticked box in
+One row per registration, not per technology: the same id can be listed more than once, for
+example a Project copy and a Model copy, or older builds left disabled, each with its own
+`version`, `location` and `enabled`. The id is the technology id (`WBA`); the display name
+(`WestbrookBankArchitecture`) is not a registration id and does not appear as a second row. What it
+means in practice: asking "is the technology registered?" doesn't have a single yes/no answer. Ask
+about a specific `name` string, and read `enabled` for that row specifically. The response's own
+`completeness_note` explains why the list can be incomplete: it is built from a fixed probe list of
+shipped technologies plus session and model-stored entries, EA's COM interface cannot enumerate
+arbitrary registered technologies, and a technology loaded under an id the probe does not know is
+absent from the list although it is loaded. A technology disabled purely by an unticked box in
 Manage Technology, with no separate embedded copy, cannot be told apart from "not registered at
-all" through this call — see the `completeness_note` field for the exact limitation.
+all" through this call; use `get_mdg_from_runtime` with the exact id.
 
-Every other row in the 26 was a Sparx-shipped language (ArchiMate2/3, BPMN family, TOGAF, UAF,
-SysML variants, and so on), all `enabled: true`, all `location: "Sparx-installed"`. One
-exception: `UML` was present with `enabled: false` and an empty `version` — a Sparx-shipped
-language can be disabled too, not just custom ones.
+The other rows are Sparx-shipped languages (ArchiMate, BPMN, TOGAF, UAF, SysML and so on),
+normally `enabled: true`. A Sparx-shipped language can be disabled too, not just custom ones.
 
 ---
 
@@ -146,8 +149,7 @@ kind of nothing it found:
   unknown, not absent.
 - `{"error": "mdg_loaded_no_definition", "loaded": true, ...}` — EA confirms the technology is
   loaded, but its XML is in neither a technology folder nor the model, so there is nothing to
-  read. Export it from Specialize > Technologies > Manage Technology and run `parse_mdg_xml` on
-  the file.
+  read. If the technology is one EA ships with the product (for example BMM or an ArchiMate version), EA has no export for it in Manage Technology. Read its stereotypes from the static language tables of this server, which is what the server's message names. If it is your own or a third party's technology, export it from Specialize > Technologies > Manage Technology and run `parse_mdg_xml` on the file. For a technology EA ships, the result also carries `builtin: true`.
 - `{"error": "unknown_mdg", "loaded": false, ...}` — a verified negative for that exact id string,
   not a guess. EA's COM surface can't enumerate custom technology ids, so this only confirms the
   one string you passed; the real registration may exist under a different id.

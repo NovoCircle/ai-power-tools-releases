@@ -1,0 +1,177 @@
+# Business Modeling (the OMG UML Profile for Business Modeling) Conformance Ruleset
+# Language:     business-modeling (OMG UML 1.3, 1.4 and 1.5 chapter 4; no newer version exists)
+# Enforced by:  AI Power Tools for Sparx EA -- validate_model tool
+#
+# Needs an engine with selection by EA type and containment (the `type:` ends of a relationship table and contains_count).
+#
+# WHAT EA STORES, MEASURED (EA 17.1 build 1716).
+# EA has no Business Modeling profile of its own. Its 10 Business Modeling stereotypes are rows of the EAUML profile of Core
+# Extensions: an element created with the type `EAUML::business actor` stores `t_object.Stereotype = business actor` (spaces kept,
+# no prefix) and a t_xref row `FQName=EAUML::business actor`. validate_model selects with `Stereotype IN (...)`, exact and case
+# sensitive, so the selectors below use the bare stored names. Business actor is an Actor, business use case a UseCase, business
+# use-case realization a Collaboration; the other eight are EA type Object.
+#
+# THE OMG KINDS THAT EA DOES NOT BIND. Use case model, use case system, use case package, object model, object system,
+# organization unit and work unit have no EA stereotype (all refused as `EAUML::<name>`, in every spelling tried), and neither
+# do the association keywords communicate and subscribe. The OMG profile marks them with a keyword, so a modeler types the OMG
+# keyword (camel case, as the profile writes it: useCaseModel, objectModel, objectSystem, organizationUnit, workUnit,
+# communicate, subscribe) into the Stereotype field of the package or the association. EA stores it as typed (t_object.Stereotype,
+# t_connector.Stereotype). The rules below key on those keywords; a model that does not type them has nothing for these rules to
+# select, and they report nothing.
+#
+# WHAT THE GRAMMAR CANNOT SAY HERE. BIZMOD-GEN-001 (all elements in a generalization have the same kind) compares the two ends of
+# a Generalization, which has no stereotype, and a relationship table is keyed by connector stereotype. BIZMOD-STR-004 holds by
+# construction (an EA element sits in exactly one package). The other rules.md ids are not checkable.
+#
+# Sources:
+#   [S1] OMG UML 1.3 (formal/00-03-01), chapter 4 part 2, sections 4.7 and 4.8, Table 4-4
+#   [S2] OMG UML 1.4 (formal/01-09-67) and UML 1.5, chapter 4 example profile, sections 4.7.1 to 4.7.4
+#
+# Rule ids: `BMOD-<CAT>-nnn` here, `implements: BIZMOD-<CAT>-nnn` names the rule of references/rules.md.
+
+meta:
+  version: "1.0"
+  language: business-modeling
+  organization: "(your organization)"
+  mdg_family: "EAUML (Core Extensions)"
+  description: >
+    Conformance rules for business models built with the OMG UML business modeling extensions in Sparx EA: which pairs of
+    elements the communicate and subscribe associations may join (the UML 1.3 table), that an object model's top-level package is
+    an object system, and that a work unit holds an entity. The profile is historical (UML 1.3 to 1.5, dropped from UML 2) and
+    thin; most of what it says is a definition, not a checkable property.
+  severity_levels:
+    error:   The source states it as a requirement (a must).
+    warning: The source gives it as guidance (a should).
+    info:    Advisory note; not a conformance violation.
+
+tables:
+  business-modeling-communicate-subscribe:
+    source: "OMG UML 1.3 Table 4-4, pp. 4-13 to 4-14 (communicate and subscribe between the business modeling kinds); the language file's relationships_allowed.Communicate_and_Subscribe, mapped to the names EA stores. Present in UML 1.3 only; permissive."
+    connectors:
+      "c": communicate
+      "s": subscribe
+    cells:
+      "business actor":
+        "case worker": "c"
+        "workUnit": "cs"
+      "type:Actor":
+        "case worker": "c"
+        "workUnit": "cs"
+      "case worker":
+        "business actor": "c"
+        "type:Actor": "c"
+        "case worker": "c"
+        "business entity": "cs"
+        "entity": "cs"
+        "workUnit": "cs"
+        "internal worker": "c"
+      "business entity":
+        "business entity": "cs"
+        "entity": "cs"
+        "workUnit": "c"
+      "entity":
+        "business entity": "cs"
+        "entity": "cs"
+        "workUnit": "c"
+      "workUnit":
+        "business actor": "c"
+        "type:Actor": "c"
+        "case worker": "c"
+        "business entity": "cs"
+        "entity": "cs"
+        "workUnit": "cs"
+        "internal worker": "c"
+      "internal worker":
+        "case worker": "c"
+        "business entity": "cs"
+        "entity": "cs"
+        "workUnit": "cs"
+        "internal worker": "c"
+
+rules:
+
+  # --------------------------------------------------------------------------
+  # LNK -- the communicate and subscribe associations
+  # --------------------------------------------------------------------------
+  - id: BMOD-LNK-001
+    implements: BIZMOD-LNK-001
+    name: "Communicate and subscribe join only the pairs of the UML 1.3 table"
+    description: >
+      Besides the associations UML allows, the keywords communicate and subscribe may be used between actors, case workers, entities,
+      work units and internal workers, and only between the pairs of Table 4-4 of UML 1.3 [S1 4.8.2]. The wording is permissive
+      ("may also be used"), so a pair outside the table is a warning, not an error. The table is not symmetric: actor to work unit
+      allows subscribe, work unit to actor does not. EA binds no stereotype for the two keywords; the rule reads them as typed
+      stereotypes of an association. An end is read by its stereotype (business actor, case worker, internal worker, business
+      entity, entity, workUnit) or, for the plain UML actor the OMG table names, by its EA type (type:Actor). An end of any other
+      kind (a use case, a plain worker, a business control) is reported as not in the table. The table exists in UML 1.3 only.
+    category: lnk
+    severity: warning
+    demo_trigger: true
+
+    selector:
+      type: connector
+      connector_stereotypes: any_of_table
+
+    condition:
+      type: relationship_table
+      table: business-modeling-communicate-subscribe
+      unknown_endpoint: warn
+
+    remediation:
+      short: "Use communicate or subscribe only between the pairs of the UML 1.3 table, or draw an ordinary association with no keyword."
+      auto_fixable: false
+
+  # --------------------------------------------------------------------------
+  # STR -- where an element sits
+  # --------------------------------------------------------------------------
+  - id: BMOD-STR-005
+    implements: BIZMOD-STR-005
+    name: "The top-level package of an object model is an object system"
+    description: >
+      An object model is a model whose top-level package is an object system [S2 4.7.2.1]. The rule reads the object model as a
+      package typed objectModel and requires that it hold an objectSystem package. Partial: it does not report a second top-level
+      package that is not an object system.
+    category: str
+    severity: error
+    demo_trigger: true
+
+    selector:
+      type: element
+      stereotypes:
+        any_of: [objectModel]
+
+    condition:
+      type: contains_count
+      child:
+        stereotype_one_of: [objectSystem]
+      min: 1
+
+    remediation:
+      short: "Put an object system (a package typed objectSystem) at the top of the object model."
+      auto_fixable: false
+
+  - id: BMOD-STR-007
+    implements: BIZMOD-STR-007
+    name: "A work unit holds one or more entities"
+    description: >
+      A work unit is a task-oriented set of objects that holds one or more entities [S1 4.7.1.4, S2 4.7.2.4]. UML 1.3 says "contains",
+      UML 1.4 says "may contain", so the weaker reading governs and a work unit with no entity is a warning. The rule reads the
+      work unit as a package typed workUnit and counts the business entity and entity elements it holds directly.
+    category: str
+    severity: warning
+    demo_trigger: true
+
+    selector:
+      type: element
+      stereotypes:
+        any_of: [workUnit]
+
+    condition:
+      type: contains_count
+      child:
+        stereotype_one_of: ["business entity", "entity"]
+      min: 1
+
+    remediation:
+      short: "Add the entities the work unit is built around, or remove the work unit stereotype if the package is not one."
+      auto_fixable: false

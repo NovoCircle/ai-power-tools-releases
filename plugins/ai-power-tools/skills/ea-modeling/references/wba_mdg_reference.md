@@ -21,14 +21,14 @@ ea_mdg(operation="get_mdg_from_runtime", params={"tech_id": "WBA"})
 Do not test for it with SQL against `t_document` `DocType='MDGXml'`: none of EA 17.1's import routes writes that
 document type, so the query is empty whether or not the technology is in the model. An in-model
 technology is a `t_document` row with `DocType='TECHNOLOGY'` (Location: Model) or rows in
-`t_trxtypes` (Location: Project). WBA in the Westbrook Bank model is at Location: Model since 1.1.1 was deployed
-(it was at Location: Project under 1.0).
+`t_trxtypes` (Location: Project). In the Westbrook example, WBA 1.1.1 is held at Location: Model (1.0 was at Location: Project).
+Where your technology sits is what `get_embedded_mdgs` and `get_mdg_from_runtime` report, not this.
 
 ## Tagged value namespace confirmation
 
-The first successful `ea_model(operation="set_tagged_value", ...)` response will include the fully-qualified tag name,
-e.g. `WestbrookBankArchitecture::WBAVendorSystem::criticality`. This confirms the MDG is
-active and the tag schema is being honored.
+The first successful `ea_model(operation="set_tagged_value", ...)` response will include the fully-qualified tag name
+(technology profile, stereotype, then tag). This confirms the MDG is active and the tag schema
+is being honored.
 
 ## MDG stereotype → allowed tags
 

@@ -10,8 +10,9 @@ Look at EA's screen before retrying. See
 **`missing_rights` on direct access.** Nothing was changed. The message names each right the
 account lacks; ask the database administrator for it, or use path B or C.
 
-**`preflight_blocked`.** The preflight found unbound connectors. Nothing was written. Fix them in
-EA (`SKILL.md` §5.3) and run the preflight again.
+**`preflight_blocked`.** The preflight found unbound connectors. Nothing was written. Fix them, with
+a baseline first (`SKILL.md` §5.3: `update_connector`, or re-apply the stereotype in EA), and run the
+preflight again.
 
 **`target_is_an_ea_repository` / `not_an_ea_database`.** The first: the reporting database named
 in the profile holds an EA repository's tables; name a separate one. The second: the direct-access
@@ -41,7 +42,7 @@ paused. [`the-cloud-database.md`](the-cloud-database.md).
 connector outside every allowed combination is a connector the technology does not allow between
 those two stereotypes; it is reported, not dropped.
 
-- **Only `outside_every_allowed_combination` is non-zero:** the build is correct. Those connectors
+- **Only `outside_every_allowed_combination` is non-zero:** the build is correct, even though `alignment.aligned` is `false` (the verdict counts these connectors). Those connectors
   use a declared connector stereotype between two element stereotypes the technology does not allow
   together, so they stay in EA's physical tables and no business table shows them. Proceed, and tell
   the user which combinations they are (source stereotype, connector stereotype, target stereotype,

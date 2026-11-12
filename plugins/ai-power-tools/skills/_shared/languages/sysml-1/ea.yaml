@@ -1,0 +1,1840 @@
+# EA facts for SysML 1.5 as Sparx Enterprise Architect's built-in SysML technology (id SysML1.4) stores it.
+# Every stereotype and tag below was created in EA and read back. `concepts` maps a concept of the language skill to the stored
+# stereotypes (and the metaclass rows each has); the tags of each stereotype are under `stereotypes`.
+# Westbrook Bank appears only in howto.md, as an illustration.
+
+language: sysml-1
+technology: SysML1.4
+display_name: SysML 1.5
+stereotype_prefix: ''
+stereotype_storage: 'bare name in t_object.Stereotype, t_attribute.Stereotype, t_operation.Stereotype and t_connector.Stereotype,
+  in EA''s own case (block, requirement, satisfy; Expose, FlowProperty, ProxyPort, FullPort, Stakeholder start with a capital);
+  the qualified form SysML1.4::<name> is in the t_xref row named Stereotypes (FQName) and is what AddNew and StereotypeEx take.
+  EA matches the name after SysML1.4:: without regard to case, and a name with a space (Flow Property) does not match. When an
+  element carries two stereotypes, t_object.Stereotype holds only the first and t_xref holds both'
+measured_on:
+  ea: 17.1 build 1716
+  date: '2026-10-21'
+  technology_version: '1.5'
+  technology_file: 'none: InternalTechnologies\SysML1_4 Tech.xml is encrypted; measured by creating objects'
+  standard_version: SysML 1.5 (OMG formal/17-05-01); OMG has 1.6 (2019), 1.7 (2024) and SysML v2 (2025, a new language),
+    not described
+older_technologies: SysML1.1, SysML1.2 and SysML1.3 are installed beside it and were never bound; the names unit and quantityKind
+  bind only under SysML1.3
+counts:
+  stereotype_names_bound: 63
+  resources_tab_rows: 86
+  diagram_types: 9
+  concepts_with_a_stereotype: 50
+  concepts_without_a_stereotype: 129
+diagram_types:
+  BlockDefinition:
+    ea_name: BlockDefinition
+    token: SysML1.4::BlockDefinition
+    stored_diagram_type: Logical
+    style_ex: MDGDgm=SysML1.4::BlockDefinition;
+    standard_views:
+    - block definition diagram
+    note: the spaced spelling (SysML1.4::Block Definition) also binds; EA ignores the space
+  InternalBlock:
+    ea_name: InternalBlock
+    token: SysML1.4::InternalBlock
+    stored_diagram_type: CompositeStructure
+    style_ex: MDGDgm=SysML1.4::InternalBlock;
+    standard_views:
+    - internal block diagram
+  Parametric:
+    ea_name: Parametric
+    token: SysML1.4::Parametric
+    stored_diagram_type: CompositeStructure
+    style_ex: MDGDgm=SysML1.4::Parametric;
+    standard_views:
+    - parametric diagram
+    note: stored as a Composite Structure diagram, like the internal block diagram; only MDGDgm tells them apart
+  Requirement:
+    ea_name: Requirement
+    token: SysML1.4::Requirement
+    stored_diagram_type: Custom
+    style_ex: MDGDgm=SysML1.4::Requirement;
+    standard_views:
+    - requirement diagram
+    note: stored as a Custom diagram
+  Package:
+    ea_name: Package
+    token: SysML1.4::Package
+    stored_diagram_type: Package
+    style_ex: MDGDgm=SysML1.4::Package;
+    standard_views:
+    - package diagram
+  Activity:
+    ea_name: Activity
+    token: SysML1.4::Activity
+    stored_diagram_type: Activity
+    style_ex: MDGDgm=SysML1.4::Activity;
+    standard_views:
+    - activity diagram
+  Sequence:
+    ea_name: Sequence
+    token: SysML1.4::Sequence
+    stored_diagram_type: Sequence
+    style_ex: MDGDgm=SysML1.4::Sequence;
+    standard_views:
+    - sequence diagram
+  StateMachine:
+    ea_name: StateMachine
+    token: SysML1.4::StateMachine
+    stored_diagram_type: Statechart
+    style_ex: MDGDgm=SysML1.4::StateMachine;
+    standard_views:
+    - state machine diagram
+  UseCase:
+    ea_name: UseCase
+    token: SysML1.4::UseCase
+    stored_diagram_type: Use Case
+    style_ex: MDGDgm=SysML1.4::UseCase;
+    standard_views:
+    - use case diagram
+concepts:
+  Rationale:
+    stereotypes:
+    - rationale
+    metaclass:
+    - Note (default)
+    note: a Note
+  Problem:
+    stereotypes:
+    - problem
+    metaclass:
+    - Note (default)
+    note: a Note
+  ElementGroup:
+    stereotypes:
+    - ElementGroup
+    metaclass:
+    - Note (default)
+    note: a Note
+  Stakeholder:
+    stereotypes:
+    - Stakeholder
+    metaclass:
+    - Class (default)
+    tags:
+      concernList: {}
+      concern: {}
+    note: a Class; tags concernList, concern
+  Viewpoint:
+    stereotypes:
+    - viewpoint
+    metaclass:
+    - Class (default)
+    tags:
+      stakeholder: {}
+      purpose: {}
+      concernList: {}
+      concern: {}
+      language: {}
+      method: {}
+      presentation: {}
+    note: a Class; tags stakeholder, purpose, concernList, concern, language, method, presentation
+  View:
+    stereotypes:
+    - view
+    metaclass:
+    - Class (default)
+    tags:
+      viewpoint: {}
+      stakeholder: {}
+    note: a Class; tags viewpoint, stakeholder
+  Conform:
+    stereotypes:
+    - conform
+    metaclass:
+    - Generalization (connector)
+    note: a Generalization from the view to the viewpoint
+  Expose:
+    stereotypes:
+    - Expose
+    metaclass:
+    - Dependency (connector)
+    note: a Dependency-family connector; stored with a capital E
+  Block:
+    stereotypes:
+    - block
+    metaclass:
+    - Class (default)
+    tags:
+      isEncapsulated:
+        values:
+        - 'true'
+        - 'false'
+    note: a Class; EA's Class family (Component, Requirement, Node, Activity, StateMachine, Change, Interaction) accepts it too,
+      so a block can be put on the wrong metaclass
+  PartProperty:
+    status: not-in-ea
+    reason: Sparx's SysML technology has no stereotype for it (tried as SysML1.4::PartProperty in four forms)
+  ReferenceProperty:
+    status: not-in-ea
+    reason: Sparx's SysML technology has no stereotype for it (tried as SysML1.4::ReferenceProperty in four forms)
+  ValueProperty:
+    status: not-in-ea
+    reason: Sparx's SysML technology has no stereotype for it (tried as SysML1.4::ValueProperty in four forms)
+  AssociationBlock:
+    status: not-in-ea
+    reason: Sparx's SysML technology has no stereotype for it (tried as SysML1.4::AssociationBlock in four forms)
+  BindingConnector:
+    stereotypes:
+    - BindingConnector
+    metaclass:
+    - Connector (connector)
+    note: a Connector (also Assembly, Delegate); stored `BindingConnector`
+  ConnectorProperty:
+    stereotypes:
+    - connectorProperty
+    metaclass:
+    - Part (child of a class)
+  ParticipantProperty:
+    stereotypes:
+    - participantProperty
+    metaclass:
+    - Part (child of a class)
+    tags:
+      end: {}
+  AdjunctProperty:
+    stereotypes:
+    - AdjunctProperty
+    metaclass:
+    - Part (child of a class)
+    - Port (child of a class)
+    - attribute (measured)
+    tags:
+      principal: {}
+  ClassifierBehaviorProperty:
+    stereotypes:
+    - ClassifierBehaviorProperty
+    metaclass:
+    - Part (child of a class)
+    - Port (child of a class)
+    - attribute (measured)
+  EndPathMultiplicity:
+    stereotypes:
+    - EndPathMultiplicity
+    metaclass:
+    - Part (child of a class)
+  BoundReference:
+    stereotypes:
+    - BoundReference
+    metaclass:
+    - Part (child of a class)
+    tags:
+      boundEnd: {}
+  ElementPropertyPath:
+    status: not-in-ea
+    reason: Sparx's SysML technology has no stereotype for it (tried as SysML1.4::ElementPropertyPath in four forms)
+  DirectedRelationshipPropertyPath:
+    status: not-in-ea
+    reason: Sparx's SysML technology has no stereotype for it (tried as SysML1.4::DirectedRelationshipPropertyPath in four forms)
+  NestedConnectorEnd:
+    stereotypes:
+    - NestedConnectorEnd
+    metaclass:
+    - Part (child of a class)
+    - Port (child of a class)
+    - attribute (measured)
+    tags:
+      propertyPath: {}
+  PropertySpecificType:
+    stereotypes:
+    - PropertySpecificType
+    metaclass:
+    - Class (default)
+  DistributedProperty:
+    stereotypes:
+    - distributedProperty
+    metaclass:
+    - Part (child of a class)
+  ValueType:
+    stereotypes:
+    - ValueType
+    metaclass:
+    - DataType (default)
+    - Enumeration (measured)
+    - PrimitiveType (measured)
+    tags:
+      quantityKind: {}
+      unit: {}
+    note: a DataType (also Enumeration, PrimitiveType); tags unit and quantityKind hold references
+  Unit:
+    status: not-in-ea
+    reason: Sparx's SysML technology has no stereotype for it (tried as SysML1.4::Unit in four forms)
+  QuantityKind:
+    status: not-in-ea
+    reason: Sparx's SysML technology has no stereotype for it (tried as SysML1.4::QuantityKind in four forms)
+  Boolean:
+    status: not-in-ea
+    reason: Sparx's SysML technology has no stereotype for it (tried as SysML1.4::Boolean in four forms)
+  Number:
+    status: not-in-ea
+    reason: Sparx's SysML technology has no stereotype for it (tried as SysML1.4::Number in four forms)
+  Integer:
+    status: not-in-ea
+    reason: Sparx's SysML technology has no stereotype for it (tried as SysML1.4::Integer in four forms)
+  Real:
+    status: not-in-ea
+    reason: Sparx's SysML technology has no stereotype for it (tried as SysML1.4::Real in four forms)
+  Complex:
+    status: not-in-ea
+    reason: Sparx's SysML technology has no stereotype for it (tried as SysML1.4::Complex in four forms)
+  String:
+    status: not-in-ea
+    reason: Sparx's SysML technology has no stereotype for it (tried as SysML1.4::String in four forms)
+  InterfaceBlock:
+    stereotypes:
+    - InterfaceBlock
+    metaclass:
+    - Class (default)
+    tags:
+      isEncapsulated:
+        values:
+        - 'true'
+        - 'false'
+  ProxyPort:
+    stereotypes:
+    - ProxyPort
+    metaclass:
+    - Port (child of a class)
+    note: a Port element, child of the block (ParentID); EA lists it as `Proxy Port` in the Resources tab, and stores and binds
+      `ProxyPort`
+  FullPort:
+    stereotypes:
+    - FullPort
+    metaclass:
+    - Port (child of a class)
+    note: a Port element, child of the block; the tab shows `Full Port`, EA stores `FullPort`
+  FlowDirection:
+    status: not-in-ea
+    reason: Sparx's SysML technology has no stereotype for it (tried as SysML1.4::FlowDirection in four forms)
+  FlowProperty:
+    stereotypes:
+    - FlowProperty
+    metaclass:
+    - Part (child of a class)
+    tags:
+      direction:
+        values:
+        - in
+        - out
+        - inout
+        - none
+        default: inout
+    note: a Part element, child of the block; the tab shows `Flow Property`, EA stores `FlowProperty`; direction defaults to inout
+  FeatureDirection:
+    status: not-in-ea
+    reason: Sparx's SysML technology has no stereotype for it (tried as SysML1.4::FeatureDirection in four forms)
+  DirectedFeature:
+    stereotypes:
+    - DirectedFeature
+    metaclass:
+    - Port (child of a class)
+    - Part (child of a class)
+    - attribute (measured)
+    - operation (measured)
+    tags:
+      featuredirection:
+        values:
+        - provided
+        - required
+        - providedrequired
+        default: provided
+  ItemFlow:
+    stereotypes:
+    - itemFlow
+    metaclass:
+    - InformationFlow (connector)
+    tags:
+      itemProperty: {}
+    note: an InformationFlow connector with the tag itemProperty
+  InvocationOnNestedPortAction:
+    status: not-in-ea
+    reason: Sparx's SysML technology has no stereotype for it (tried as SysML1.4::InvocationOnNestedPortAction in four forms)
+  TriggerOnNestedPort:
+    status: not-in-ea
+    reason: Sparx's SysML technology has no stereotype for it (tried as SysML1.4::TriggerOnNestedPort in four forms)
+  ChangeStructuralFeatureEvent:
+    status: not-in-ea
+    reason: Sparx's SysML technology has no stereotype for it (tried as SysML1.4::ChangeStructuralFeatureEvent in four forms)
+  AcceptChangeStructuralFeatureEventAction:
+    status: not-in-ea
+    reason: Sparx's SysML technology has no stereotype for it (tried as SysML1.4::AcceptChangeStructuralFeatureEventAction in four
+      forms)
+  ConstraintBlock:
+    stereotypes:
+    - constraintBlock
+    metaclass:
+    - Class (default)
+    tags:
+      isEncapsulated:
+        values:
+        - 'true'
+        - 'false'
+  ConstraintProperty:
+    stereotypes:
+    - constraintProperty
+    metaclass:
+    - Part (child of a class)
+  ConstraintParameter:
+    status: not-in-ea
+    reason: Sparx's SysML technology has no stereotype for it (tried as SysML1.4::ConstraintParameter in four forms)
+  ControlOperator:
+    stereotypes:
+    - controlOperator
+    metaclass:
+    - Activity (default)
+    - Class (measured)
+    - Interaction (measured)
+    - operation (measured)
+    note: an Activity (also Interaction, Class, an operation)
+  ControlValue:
+    status: not-in-ea
+    reason: Sparx's SysML technology has no stereotype for it (tried as SysML1.4::ControlValue in four forms)
+  Rate:
+    stereotypes:
+    - rate
+    metaclass:
+    - ObjectNode (child of an activity)
+    - ActivityParameter (child of an activity)
+    - ControlFlow (connector)
+    - ObjectFlow (connector)
+    tags:
+      rate: {}
+    note: ControlFlow and ObjectFlow connectors, and the ObjectNode and ActivityParameter elements of an activity; the qualified
+      type is refused
+  Continuous:
+    stereotypes:
+    - continuous
+    metaclass:
+    - ObjectNode (child of an activity)
+    - ActivityParameter (child of an activity)
+    - ControlFlow (connector)
+    - ObjectFlow (connector)
+    tags:
+      rate: {}
+    note: same places as Rate; carries the tag rate on a flow
+  Discrete:
+    stereotypes:
+    - discrete
+    metaclass:
+    - ObjectNode (child of an activity)
+    - ActivityParameter (child of an activity)
+    - ControlFlow (connector)
+    - ObjectFlow (connector)
+    tags:
+      rate: {}
+    note: same places as Rate
+  Probability:
+    stereotypes:
+    - probability
+    metaclass:
+    - ObjectNode (child of an activity)
+    - ActivityParameter (child of an activity)
+    - ControlFlow (connector)
+    - ObjectFlow (connector)
+    tags:
+      probability: {}
+    note: same places as Rate; carries the tag probability
+  NoBuffer:
+    stereotypes:
+    - noBuffer
+    metaclass:
+    - ObjectNode (child of an activity)
+    - ActivityParameter (child of an activity)
+    - CentralBufferNode (child of an activity)
+    - ExpansionNode (child of an activity)
+    note: ObjectNode, ActivityParameter, CentralBufferNode, ExpansionNode (activity nodes created as children of an activity)
+  Overwrite:
+    stereotypes:
+    - overwrite
+    metaclass:
+    - ObjectNode (child of an activity)
+    - ActivityParameter (child of an activity)
+    - CentralBufferNode (child of an activity)
+    - ExpansionNode (child of an activity)
+    note: same as NoBuffer
+  Optional:
+    stereotypes:
+    - optional
+    metaclass:
+    - ObjectNode (child of an activity)
+    - ActivityParameter (child of an activity)
+    note: ObjectNode and ActivityParameter
+  Allocate:
+    stereotypes:
+    - allocate
+    metaclass:
+    - Abstraction (connector)
+    - Realisation (connector)
+    note: an Abstraction by default; not kept on a Usage or Nesting
+  AllocateActivityPartition:
+    stereotypes:
+    - allocateActivityPartition
+    metaclass:
+    - ActivityPartition (default)
+  AbstractRequirement:
+    status: not-in-ea
+    reason: Sparx's SysML technology has no stereotype for it (tried as SysML1.4::AbstractRequirement in four forms)
+  Requirement:
+    stereotypes:
+    - requirement
+    metaclass:
+    - Requirement (default)
+    - Class (measured)
+    tags:
+      id: {}
+      text: {}
+    note: a Requirement element (also accepted on a Class); the tagged values are `id` and `text` (lower case), stored empty
+  TestCase:
+    stereotypes:
+    - testCase
+    metaclass:
+    - Activity (default)
+    - Class (measured)
+    - StateMachine (measured)
+    - Interaction (measured)
+    - operation (measured)
+    tags:
+      Verdict:
+        values:
+        - pass
+        - fail
+        - inconclusive
+        - error
+    note: an Activity by default (also Interaction, StateMachine, Class and an operation); tag Verdict
+  VerdictKind:
+    status: not-in-ea
+    reason: Sparx's SysML technology has no stereotype for it (tried as SysML1.4::VerdictKind in four forms)
+  Satisfy:
+    stereotypes:
+    - satisfy
+    metaclass:
+    - Dependency (connector)
+    - Abstraction (connector)
+    - Realisation (connector)
+    - Usage (connector)
+    note: a Dependency-family connector; the qualified type gives a Dependency
+  Verify:
+    stereotypes:
+    - verify
+    metaclass:
+    - Dependency (connector)
+    note: a Dependency-family connector; the qualified type gives a Dependency
+  DeriveReqt:
+    stereotypes:
+    - deriveReqt
+    metaclass:
+    - Dependency (connector)
+    note: a Dependency-family connector; the qualified type gives a Dependency
+  Refine:
+    stereotypes:
+    - refine
+    metaclass:
+    - Dependency (connector)
+    tags:
+      sourcePropertyPath: {}
+      targetPropertyPath: {}
+      sourceContext: {}
+      targetContext: {}
+    note: a Dependency-family connector with four property-path tags
+  Trace:
+    stereotypes:
+    - trace
+    metaclass:
+    - Dependency (connector)
+    note: a Dependency-family connector; the standard's Trace (no tag in EA)
+  Copy:
+    stereotypes:
+    - copy
+    metaclass:
+    - Dependency (connector)
+    note: a Dependency-family connector; the qualified type gives a Dependency
+  SysMLDiagramElement:
+    status: not-in-ea
+    reason: Sparx's SysML technology has no stereotype for it (tried as SysML1.4::SysMLDiagramElement in four forms)
+  SysMLDiagram:
+    status: not-in-ea
+    reason: Sparx's SysML technology has no stereotype for it (tried as SysML1.4::SysMLDiagram in four forms)
+  SysMLDiagramWithAssociations:
+    status: not-in-ea
+    reason: Sparx's SysML technology has no stereotype for it (tried as SysML1.4::SysMLDiagramWithAssociations in four forms)
+  SysMLStructureDiagram:
+    status: not-in-ea
+    reason: Sparx's SysML technology has no stereotype for it (tried as SysML1.4::SysMLStructureDiagram in four forms)
+  SysMLBlockDefinitionDiagram:
+    status: not-in-ea
+    reason: Sparx's SysML technology has no stereotype for it (tried as SysML1.4::SysMLBlockDefinitionDiagram in four forms)
+  SysMLInternalBlockDiagram:
+    status: not-in-ea
+    reason: Sparx's SysML technology has no stereotype for it (tried as SysML1.4::SysMLInternalBlockDiagram in four forms)
+  SysMLParametricDiagram:
+    status: not-in-ea
+    reason: Sparx's SysML technology has no stereotype for it (tried as SysML1.4::SysMLParametricDiagram in four forms)
+  SysMLRequirementDiagram:
+    status: not-in-ea
+    reason: Sparx's SysML technology has no stereotype for it (tried as SysML1.4::SysMLRequirementDiagram in four forms)
+  SysMLPackageDiagram:
+    status: not-in-ea
+    reason: Sparx's SysML technology has no stereotype for it (tried as SysML1.4::SysMLPackageDiagram in four forms)
+  SysMLBehaviorDiagram:
+    status: not-in-ea
+    reason: Sparx's SysML technology has no stereotype for it (tried as SysML1.4::SysMLBehaviorDiagram in four forms)
+  SysMLActivityDiagram:
+    status: not-in-ea
+    reason: Sparx's SysML technology has no stereotype for it (tried as SysML1.4::SysMLActivityDiagram in four forms)
+  SysMLInteractionDiagram:
+    status: not-in-ea
+    reason: Sparx's SysML technology has no stereotype for it (tried as SysML1.4::SysMLInteractionDiagram in four forms)
+  SysMLStateMachineDiagram:
+    status: not-in-ea
+    reason: Sparx's SysML technology has no stereotype for it (tried as SysML1.4::SysMLStateMachineDiagram in four forms)
+  SysMLUseCaseDiagram:
+    status: not-in-ea
+    reason: Sparx's SysML technology has no stereotype for it (tried as SysML1.4::SysMLUseCaseDiagram in four forms)
+  FlowPort:
+    stereotypes:
+    - FlowPort
+    metaclass:
+    - Port (child of a class)
+    tags:
+      direction:
+        values:
+        - in
+        - out
+        - inout
+        - none
+        default: inout
+    note: deprecated (Annex C); a Port element with the tag direction
+  FlowSpecification:
+    stereotypes:
+    - flowSpecification
+    metaclass:
+    - Interface (default)
+    note: deprecated (Annex C); stored as `flowSpecification`, on an Interface
+  Package:
+    status: not-in-ea
+    reason: a UML element or connector type that EA provides; the technology has no stereotype for it (tried as SysML1.4::Package
+      in four forms)
+  Model:
+    stereotypes:
+    - model
+    metaclass:
+    - Package (package)
+    note: an element of type Package, or a package itself (the stereotype is stored on the package's own t_object row)
+  Comment:
+    status: not-in-ea
+    reason: a UML element or connector type that EA provides; the technology has no stereotype for it (tried as SysML1.4::Comment
+      in four forms)
+  Constraint:
+    status: not-in-ea
+    reason: a UML element or connector type that EA provides; the technology has no stereotype for it (tried as SysML1.4::Constraint
+      in four forms)
+  Dependency:
+    status: not-in-ea
+    reason: a UML element or connector type that EA provides; the technology has no stereotype for it (tried as SysML1.4::Dependency
+      in four forms)
+  Abstraction:
+    status: not-in-ea
+    reason: a UML element or connector type that EA provides; the technology has no stereotype for it (tried as SysML1.4::Abstraction
+      in four forms)
+  Realization:
+    status: not-in-ea
+    reason: a UML element or connector type that EA provides; the technology has no stereotype for it (tried as SysML1.4::Realization
+      in four forms)
+  PackageImport:
+    status: not-in-ea
+    reason: a UML element or connector type that EA provides; the technology has no stereotype for it (tried as SysML1.4::PackageImport
+      in four forms)
+  ElementImport:
+    stereotypes:
+    - ElementImport
+    metaclass:
+    - Dependency (connector)
+    tags:
+      visibility:
+        values:
+        - public
+        - private
+        default: public
+  Generalization:
+    status: not-in-ea
+    reason: a UML element or connector type that EA provides; the technology has no stereotype for it (tried as SysML1.4::Generalization
+      in four forms)
+  GeneralizationSet:
+    status: not-in-ea
+    reason: a UML element or connector type that EA provides; the technology has no stereotype for it (tried as SysML1.4::GeneralizationSet
+      in four forms)
+  Association:
+    status: not-in-ea
+    reason: a UML element or connector type that EA provides; the technology has no stereotype for it (tried as SysML1.4::Association
+      in four forms)
+  Class:
+    status: not-in-ea
+    reason: a UML element or connector type that EA provides; the technology has no stereotype for it (tried as SysML1.4::Class
+      in four forms)
+  Classifier:
+    status: not-in-ea
+    reason: a UML element or connector type that EA provides; the technology has no stereotype for it (tried as SysML1.4::Classifier
+      in four forms)
+  Property:
+    status: not-in-ea
+    reason: a UML element or connector type that EA provides; the technology has no stereotype for it (tried as SysML1.4::Property
+      in four forms)
+  Port:
+    status: not-in-ea
+    reason: a UML element or connector type that EA provides; the technology has no stereotype for it (tried as SysML1.4::Port
+      in four forms)
+  Connector:
+    status: not-in-ea
+    reason: a UML element or connector type that EA provides; the technology has no stereotype for it (tried as SysML1.4::Connector
+      in four forms)
+  ConnectorEnd:
+    status: not-in-ea
+    reason: a UML element or connector type that EA provides; the technology has no stereotype for it (tried as SysML1.4::ConnectorEnd
+      in four forms)
+  Operation:
+    status: not-in-ea
+    reason: a UML element or connector type that EA provides; the technology has no stereotype for it (tried as SysML1.4::Operation
+      in four forms)
+  Reception:
+    status: not-in-ea
+    reason: a UML element or connector type that EA provides; the technology has no stereotype for it (tried as SysML1.4::Reception
+      in four forms)
+  Signal:
+    status: not-in-ea
+    reason: a UML element or connector type that EA provides; the technology has no stereotype for it (tried as SysML1.4::Signal
+      in four forms)
+  Enumeration:
+    status: not-in-ea
+    reason: a UML element or connector type that EA provides; the technology has no stereotype for it (tried as SysML1.4::Enumeration
+      in four forms)
+  Actor:
+    status: not-in-ea
+    reason: a UML element or connector type that EA provides; the technology has no stereotype for it (tried as SysML1.4::Actor
+      in four forms)
+  InstanceSpecification:
+    status: not-in-ea
+    reason: a UML element or connector type that EA provides; the technology has no stereotype for it (tried as SysML1.4::InstanceSpecification
+      in four forms)
+  Interface:
+    status: not-in-ea
+    reason: a UML element or connector type that EA provides; the technology has no stereotype for it (tried as SysML1.4::Interface
+      in four forms)
+  InterfaceRealization:
+    status: not-in-ea
+    reason: a UML element or connector type that EA provides; the technology has no stereotype for it (tried as SysML1.4::InterfaceRealization
+      in four forms)
+  NamedElement:
+    status: not-in-ea
+    reason: a UML element or connector type that EA provides; the technology has no stereotype for it (tried as SysML1.4::NamedElement
+      in four forms)
+  Element:
+    status: not-in-ea
+    reason: a UML element or connector type that EA provides; the technology has no stereotype for it (tried as SysML1.4::Element
+      in four forms)
+  DirectedRelationship:
+    status: not-in-ea
+    reason: a UML element or connector type that EA provides; the technology has no stereotype for it (tried as SysML1.4::DirectedRelationship
+      in four forms)
+  DataType:
+    status: not-in-ea
+    reason: a UML element or connector type that EA provides; the technology has no stereotype for it (tried as SysML1.4::DataType
+      in four forms)
+  Behavior:
+    status: not-in-ea
+    reason: a UML element or connector type that EA provides; the technology has no stereotype for it (tried as SysML1.4::Behavior
+      in four forms)
+  Feature:
+    status: not-in-ea
+    reason: a UML element or connector type that EA provides; the technology has no stereotype for it (tried as SysML1.4::Feature
+      in four forms)
+  Event:
+    status: not-in-ea
+    reason: a UML element or connector type that EA provides; the technology has no stereotype for it (tried as SysML1.4::Event
+      in four forms)
+  ChangeEvent:
+    status: not-in-ea
+    reason: a UML element or connector type that EA provides; the technology has no stereotype for it (tried as SysML1.4::ChangeEvent
+      in four forms)
+  Trigger:
+    status: not-in-ea
+    reason: a UML element or connector type that EA provides; the technology has no stereotype for it (tried as SysML1.4::Trigger
+      in four forms)
+  InformationFlow:
+    status: not-in-ea
+    reason: a UML element or connector type that EA provides; the technology has no stereotype for it (tried as SysML1.4::InformationFlow
+      in four forms)
+  Activity:
+    status: not-in-ea
+    reason: a UML element or connector type that EA provides; the technology has no stereotype for it (tried as SysML1.4::Activity
+      in four forms)
+  Action:
+    status: not-in-ea
+    reason: a UML element or connector type that EA provides; the technology has no stereotype for it (tried as SysML1.4::Action
+      in four forms)
+  CallBehaviorAction:
+    status: not-in-ea
+    reason: a UML element or connector type that EA provides; the technology has no stereotype for it (tried as SysML1.4::CallBehaviorAction
+      in four forms)
+  AcceptEventAction:
+    status: not-in-ea
+    reason: a UML element or connector type that EA provides; the technology has no stereotype for it (tried as SysML1.4::AcceptEventAction
+      in four forms)
+  SendSignalAction:
+    status: not-in-ea
+    reason: a UML element or connector type that EA provides; the technology has no stereotype for it (tried as SysML1.4::SendSignalAction
+      in four forms)
+  ActivityFinalNode:
+    status: not-in-ea
+    reason: a UML element or connector type that EA provides; the technology has no stereotype for it (tried as SysML1.4::ActivityFinalNode
+      in four forms)
+  FlowFinalNode:
+    status: not-in-ea
+    reason: a UML element or connector type that EA provides; the technology has no stereotype for it (tried as SysML1.4::FlowFinalNode
+      in four forms)
+  InitialNode:
+    status: not-in-ea
+    reason: a UML element or connector type that EA provides; the technology has no stereotype for it (tried as SysML1.4::InitialNode
+      in four forms)
+  DecisionNode:
+    status: not-in-ea
+    reason: a UML element or connector type that EA provides; the technology has no stereotype for it (tried as SysML1.4::DecisionNode
+      in four forms)
+  MergeNode:
+    status: not-in-ea
+    reason: a UML element or connector type that EA provides; the technology has no stereotype for it (tried as SysML1.4::MergeNode
+      in four forms)
+  ForkNode:
+    status: not-in-ea
+    reason: a UML element or connector type that EA provides; the technology has no stereotype for it (tried as SysML1.4::ForkNode
+      in four forms)
+  JoinNode:
+    status: not-in-ea
+    reason: a UML element or connector type that EA provides; the technology has no stereotype for it (tried as SysML1.4::JoinNode
+      in four forms)
+  ActivityParameterNode:
+    status: not-in-ea
+    reason: a UML element or connector type that EA provides; the technology has no stereotype for it (tried as SysML1.4::ActivityParameterNode
+      in four forms)
+  ObjectNode:
+    status: not-in-ea
+    reason: a UML element or connector type that EA provides; the technology has no stereotype for it (tried as SysML1.4::ObjectNode
+      in four forms)
+  Pin:
+    status: not-in-ea
+    reason: a UML element or connector type that EA provides; the technology has no stereotype for it (tried as SysML1.4::Pin in
+      four forms)
+  ParameterSet:
+    status: not-in-ea
+    reason: a UML element or connector type that EA provides; the technology has no stereotype for it (tried as SysML1.4::ParameterSet
+      in four forms)
+  Parameter:
+    status: not-in-ea
+    reason: a UML element or connector type that EA provides; the technology has no stereotype for it (tried as SysML1.4::Parameter
+      in four forms)
+  ControlFlow:
+    status: not-in-ea
+    reason: a UML element or connector type that EA provides; the technology has no stereotype for it (tried as SysML1.4::ControlFlow
+      in four forms)
+  ObjectFlow:
+    status: not-in-ea
+    reason: a UML element or connector type that EA provides; the technology has no stereotype for it (tried as SysML1.4::ObjectFlow
+      in four forms)
+  ActivityPartition:
+    status: not-in-ea
+    reason: a UML element or connector type that EA provides; the technology has no stereotype for it (tried as SysML1.4::ActivityPartition
+      in four forms)
+  InterruptibleActivityRegion:
+    status: not-in-ea
+    reason: a UML element or connector type that EA provides; the technology has no stereotype for it (tried as SysML1.4::InterruptibleActivityRegion
+      in four forms)
+  StructuredActivityNode:
+    status: not-in-ea
+    reason: a UML element or connector type that EA provides; the technology has no stereotype for it (tried as SysML1.4::StructuredActivityNode
+      in four forms)
+  Interaction:
+    status: not-in-ea
+    reason: a UML element or connector type that EA provides; the technology has no stereotype for it (tried as SysML1.4::Interaction
+      in four forms)
+  Lifeline:
+    status: not-in-ea
+    reason: a UML element or connector type that EA provides; the technology has no stereotype for it (tried as SysML1.4::Lifeline
+      in four forms)
+  ExecutionSpecification:
+    status: not-in-ea
+    reason: a UML element or connector type that EA provides; the technology has no stereotype for it (tried as SysML1.4::ExecutionSpecification
+      in four forms)
+  InteractionUse:
+    status: not-in-ea
+    reason: a UML element or connector type that EA provides; the technology has no stereotype for it (tried as SysML1.4::InteractionUse
+      in four forms)
+  CombinedFragment:
+    status: not-in-ea
+    reason: a UML element or connector type that EA provides; the technology has no stereotype for it (tried as SysML1.4::CombinedFragment
+      in four forms)
+  StateInvariant:
+    status: not-in-ea
+    reason: a UML element or connector type that EA provides; the technology has no stereotype for it (tried as SysML1.4::StateInvariant
+      in four forms)
+  Continuation:
+    status: not-in-ea
+    reason: a UML element or connector type that EA provides; the technology has no stereotype for it (tried as SysML1.4::Continuation
+      in four forms)
+  CreationEvent:
+    status: not-in-ea
+    reason: a UML element or connector type that EA provides; the technology has no stereotype for it (tried as SysML1.4::CreationEvent
+      in four forms)
+  DestructionEvent:
+    status: not-in-ea
+    reason: a UML element or connector type that EA provides; the technology has no stereotype for it (tried as SysML1.4::DestructionEvent
+      in four forms)
+  DurationConstraint:
+    status: not-in-ea
+    reason: a UML element or connector type that EA provides; the technology has no stereotype for it (tried as SysML1.4::DurationConstraint
+      in four forms)
+  DurationObservation:
+    status: not-in-ea
+    reason: a UML element or connector type that EA provides; the technology has no stereotype for it (tried as SysML1.4::DurationObservation
+      in four forms)
+  TimeConstraint:
+    status: not-in-ea
+    reason: a UML element or connector type that EA provides; the technology has no stereotype for it (tried as SysML1.4::TimeConstraint
+      in four forms)
+  TimeObservation:
+    status: not-in-ea
+    reason: a UML element or connector type that EA provides; the technology has no stereotype for it (tried as SysML1.4::TimeObservation
+      in four forms)
+  Message:
+    status: not-in-ea
+    reason: a UML element or connector type that EA provides; the technology has no stereotype for it (tried as SysML1.4::Message
+      in four forms)
+  GeneralOrdering:
+    status: not-in-ea
+    reason: a UML element or connector type that EA provides; the technology has no stereotype for it (tried as SysML1.4::GeneralOrdering
+      in four forms)
+  StateMachine:
+    status: not-in-ea
+    reason: a UML element or connector type that EA provides; the technology has no stereotype for it (tried as SysML1.4::StateMachine
+      in four forms)
+  State:
+    status: not-in-ea
+    reason: a UML element or connector type that EA provides; the technology has no stereotype for it (tried as SysML1.4::State
+      in four forms)
+  Region:
+    status: not-in-ea
+    reason: a UML element or connector type that EA provides; the technology has no stereotype for it (tried as SysML1.4::Region
+      in four forms)
+  Pseudostate:
+    status: not-in-ea
+    reason: a UML element or connector type that EA provides; the technology has no stereotype for it (tried as SysML1.4::Pseudostate
+      in four forms)
+  FinalState:
+    status: not-in-ea
+    reason: a UML element or connector type that EA provides; the technology has no stereotype for it (tried as SysML1.4::FinalState
+      in four forms)
+  Transition:
+    status: not-in-ea
+    reason: a UML element or connector type that EA provides; the technology has no stereotype for it (tried as SysML1.4::Transition
+      in four forms)
+  ConnectionPointReference:
+    status: not-in-ea
+    reason: a UML element or connector type that EA provides; the technology has no stereotype for it (tried as SysML1.4::ConnectionPointReference
+      in four forms)
+  UseCase:
+    status: not-in-ea
+    reason: a UML element or connector type that EA provides; the technology has no stereotype for it (tried as SysML1.4::UseCase
+      in four forms)
+  Subject:
+    status: not-in-ea
+    reason: a UML element or connector type that EA provides; the technology has no stereotype for it (tried as SysML1.4::Subject
+      in four forms)
+  ExtensionPoint:
+    status: not-in-ea
+    reason: a UML element or connector type that EA provides; the technology has no stereotype for it (tried as SysML1.4::ExtensionPoint
+      in four forms)
+  Include:
+    status: not-in-ea
+    reason: a UML element or connector type that EA provides; the technology has no stereotype for it (tried as SysML1.4::Include
+      in four forms)
+  Extend:
+    status: not-in-ea
+    reason: a UML element or connector type that EA provides; the technology has no stereotype for it (tried as SysML1.4::Extend
+      in four forms)
+  ConnectableElement:
+    status: not-in-ea
+    reason: a UML element or connector type that EA provides; the technology has no stereotype for it (tried as SysML1.4::ConnectableElement
+      in four forms)
+  ActivityNode:
+    status: not-in-ea
+    reason: a UML element or connector type that EA provides; the technology has no stereotype for it (tried as SysML1.4::ActivityNode
+      in four forms)
+  Vertex:
+    status: not-in-ea
+    reason: a UML element or connector type that EA provides; the technology has no stereotype for it (tried as SysML1.4::Vertex
+      in four forms)
+  Usage:
+    status: not-in-ea
+    reason: a UML element or connector type that EA provides; the technology has no stereotype for it (tried as SysML1.4::Usage
+      in four forms)
+  Profile:
+    status: not-in-ea
+    reason: a UML element or connector type that EA provides; the technology has no stereotype for it (tried as SysML1.4::Profile
+      in four forms)
+  Extension:
+    status: not-in-ea
+    reason: a UML element or connector type that EA provides; the technology has no stereotype for it (tried as SysML1.4::Extension
+      in four forms)
+  ProfileApplication:
+    status: not-in-ea
+    reason: a UML element or connector type that EA provides; the technology has no stereotype for it (tried as SysML1.4::ProfileApplication
+      in four forms)
+  ModelLibrary:
+    status: not-in-ea
+    reason: a UML element or connector type that EA provides; the technology has no stereotype for it (tried as SysML1.4::ModelLibrary
+      in four forms)
+stereotypes:
+  AdjunctProperty:
+    resources_rows: 1
+    catalog_rows:
+    - Part (child of a class)
+    - Port (child of a class)
+    - attribute (measured)
+    accepted:
+    - 'element types: Part, Port, Property'
+    - attribute
+    tags:
+      principal: {}
+  allocate:
+    resources_rows: 1
+    catalog_rows:
+    - Abstraction (connector)
+    - Realisation (connector)
+    accepted:
+    - 'connector types: Abstraction, Containment, Dependency, Import, Merge, ProtocolTransition, Realization, Substitution, Transition'
+  allocateActivityPartition:
+    resources_rows: 1
+    catalog_rows:
+    - ActivityPartition (default)
+    accepted:
+    - 'element types: ActivityPartition'
+  allocated:
+    resources_rows: 2
+    catalog_rows:
+    - Note (default)
+    - attribute (measured)
+    - operation (measured)
+    accepted:
+    - every element, attribute, operation, parameter and connector type tried (generic)
+    tags:
+      allocatedFrom: {}
+      allocatedTo: {}
+  BindingConnector:
+    resources_rows: 1
+    catalog_rows:
+    - Connector (connector)
+    accepted:
+    - 'connector types: Assembly, Connector, Delegate'
+  block:
+    resources_rows: 1
+    catalog_rows:
+    - Class (default)
+    accepted:
+    - Class family (Class, Component, Requirement, Node, Activity, StateMachine, Change, Interaction)
+    tags:
+      isEncapsulated:
+        values:
+        - 'true'
+        - 'false'
+  BoundReference:
+    resources_rows: 1
+    catalog_rows:
+    - Part (child of a class)
+    accepted:
+    - 'element types: Part, Property'
+    tags:
+      boundEnd: {}
+  ClassifierBehaviorProperty:
+    resources_rows: 1
+    catalog_rows:
+    - Part (child of a class)
+    - Port (child of a class)
+    - attribute (measured)
+    accepted:
+    - 'element types: Part, Port, Property'
+    - attribute
+  conform:
+    resources_rows: 1
+    catalog_rows:
+    - Generalization (connector)
+    accepted:
+    - 'connector types: Generalization'
+  connectorProperty:
+    resources_rows: 1
+    catalog_rows:
+    - Part (child of a class)
+    accepted:
+    - 'element types: Part, Property'
+  constraintBlock:
+    resources_rows: 1
+    catalog_rows:
+    - Class (default)
+    accepted:
+    - Class family (Class, Component, Requirement, Node, Activity, StateMachine, Change, Interaction)
+    tags:
+      isEncapsulated:
+        values:
+        - 'true'
+        - 'false'
+  constraintProperty:
+    resources_rows: 1
+    catalog_rows:
+    - Part (child of a class)
+    accepted:
+    - 'element types: Part, Property'
+  continuous:
+    resources_rows: 4
+    catalog_rows:
+    - ObjectNode (child of an activity)
+    - ActivityParameter (child of an activity)
+    - ControlFlow (connector)
+    - ObjectFlow (connector)
+    accepted:
+    - 'activity nodes: ActivityParameter, ObjectNode'
+    - 'connector types: ControlFlow, ObjectFlow'
+    tags:
+      rate: {}
+  controlOperator:
+    resources_rows: 3
+    catalog_rows:
+    - Activity (default)
+    - Class (measured)
+    - Interaction (measured)
+    - operation (measured)
+    accepted:
+    - 'element types: Activity, Class, Interaction'
+    - operation
+  copy:
+    resources_rows: 1
+    catalog_rows:
+    - Dependency (connector)
+    accepted:
+    - 'connector types: Abstraction, Containment, Dependency, Import, Merge, Nesting, ProtocolTransition, Realization, Substitution,
+      Transition, Usage'
+  deriveReqt:
+    resources_rows: 1
+    catalog_rows:
+    - Dependency (connector)
+    accepted:
+    - 'connector types: Abstraction, Containment, Dependency, Import, Merge, Nesting, ProtocolTransition, Realization, Substitution,
+      Transition, Usage'
+  designConstraint:
+    resources_rows: 1
+    catalog_rows:
+    - Requirement (default)
+    - Class (measured)
+    accepted:
+    - 'element types: Class, Requirement'
+    tags:
+      source: {}
+      risk:
+        values:
+        - High
+        - Medium
+        - Low
+      verifyMethod:
+        values:
+        - Analysis
+        - Demonstration
+        - Inspection
+        - Test
+      id: {}
+      text: {}
+  DirectedFeature:
+    resources_rows: 3
+    catalog_rows:
+    - Port (child of a class)
+    - Part (child of a class)
+    - attribute (measured)
+    - operation (measured)
+    accepted:
+    - 'element types: Part, Port, Property'
+    - attribute
+    - operation
+    tags:
+      featuredirection:
+        values:
+        - provided
+        - required
+        - providedrequired
+        default: provided
+  discrete:
+    resources_rows: 4
+    catalog_rows:
+    - ObjectNode (child of an activity)
+    - ActivityParameter (child of an activity)
+    - ControlFlow (connector)
+    - ObjectFlow (connector)
+    accepted:
+    - 'activity nodes: ActivityParameter, ObjectNode'
+    - 'connector types: ControlFlow, ObjectFlow'
+    tags:
+      rate: {}
+  distributedProperty:
+    resources_rows: 1
+    catalog_rows:
+    - Part (child of a class)
+    accepted:
+    - 'element types: Part, Property'
+  effbd:
+    resources_rows: 1
+    catalog_rows:
+    - Activity (default)
+    - Class (measured)
+    accepted:
+    - 'element types: Activity, Class'
+  ElementGroup:
+    resources_rows: 1
+    catalog_rows:
+    - Note (default)
+    accepted:
+    - 'element types: Note'
+  ElementImport:
+    resources_rows: 1
+    catalog_rows:
+    - Dependency (connector)
+    accepted:
+    - 'connector types: Abstraction, Containment, Dependency, Import, Merge, Nesting, ProtocolTransition, Realization, Substitution,
+      Transition, Usage'
+    tags:
+      visibility:
+        values:
+        - public
+        - private
+        default: public
+  EndPathMultiplicity:
+    resources_rows: 1
+    catalog_rows:
+    - Part (child of a class)
+    accepted:
+    - 'element types: Part, Property'
+  Expose:
+    resources_rows: 1
+    catalog_rows:
+    - Dependency (connector)
+    accepted:
+    - 'connector types: Abstraction, Containment, Dependency, Import, Merge, Nesting, ProtocolTransition, Realization, Substitution,
+      Transition, Usage'
+  extendedRequirement:
+    resources_rows: 1
+    catalog_rows:
+    - Requirement (default)
+    - Class (measured)
+    accepted:
+    - 'element types: Class, Requirement'
+    tags:
+      source: {}
+      risk:
+        values:
+        - High
+        - Medium
+        - Low
+      verifyMethod:
+        values:
+        - Analysis
+        - Demonstration
+        - Inspection
+        - Test
+      id: {}
+      text: {}
+  FlowPort:
+    resources_rows: 1
+    catalog_rows:
+    - Port (child of a class)
+    accepted:
+    - 'element types: Port'
+    tags:
+      direction:
+        values:
+        - in
+        - out
+        - inout
+        - none
+        default: inout
+  FlowProperty:
+    resources_rows: 1
+    catalog_rows:
+    - Part (child of a class)
+    accepted:
+    - 'element types: Part, Property'
+    tags:
+      direction:
+        values:
+        - in
+        - out
+        - inout
+        - none
+        default: inout
+  flowSpecification:
+    resources_rows: 1
+    catalog_rows:
+    - Interface (default)
+    accepted:
+    - 'element types: Interface'
+  FullPort:
+    resources_rows: 1
+    catalog_rows:
+    - Port (child of a class)
+    accepted:
+    - 'element types: Port'
+  functionalRequirement:
+    resources_rows: 1
+    catalog_rows:
+    - Requirement (default)
+    - Class (measured)
+    accepted:
+    - 'element types: Class, Requirement'
+    tags:
+      source: {}
+      risk:
+        values:
+        - High
+        - Medium
+        - Low
+      verifyMethod:
+        values:
+        - Analysis
+        - Demonstration
+        - Inspection
+        - Test
+      id: {}
+      text: {}
+  InterfaceBlock:
+    resources_rows: 1
+    catalog_rows:
+    - Class (default)
+    accepted:
+    - Class family (Class, Component, Requirement, Node, Activity, StateMachine, Change, Interaction)
+    tags:
+      isEncapsulated:
+        values:
+        - 'true'
+        - 'false'
+  interfaceRequirement:
+    resources_rows: 1
+    catalog_rows:
+    - Requirement (default)
+    - Class (measured)
+    accepted:
+    - 'element types: Class, Requirement'
+    tags:
+      source: {}
+      risk:
+        values:
+        - High
+        - Medium
+        - Low
+      verifyMethod:
+        values:
+        - Analysis
+        - Demonstration
+        - Inspection
+        - Test
+      id: {}
+      text: {}
+  itemFlow:
+    resources_rows: 1
+    catalog_rows:
+    - InformationFlow (connector)
+    accepted:
+    - 'connector types: InformationFlow'
+    tags:
+      itemProperty: {}
+  model:
+    resources_rows: 1
+    catalog_rows:
+    - Package (package)
+    accepted:
+    - 'element types: Package'
+  moe:
+    resources_rows: 1
+    catalog_rows:
+    - Part (child of a class)
+    accepted:
+    - 'element types: Part, Property'
+  NestedConnectorEnd:
+    resources_rows: 1
+    catalog_rows:
+    - Part (child of a class)
+    - Port (child of a class)
+    - attribute (measured)
+    accepted:
+    - 'element types: Part, Port, Property'
+    - attribute
+    tags:
+      propertyPath: {}
+  noBuffer:
+    resources_rows: 3
+    catalog_rows:
+    - ObjectNode (child of an activity)
+    - ActivityParameter (child of an activity)
+    - CentralBufferNode (child of an activity)
+    - ExpansionNode (child of an activity)
+    accepted:
+    - 'element types: Collaboration, Component, Node, Object, Sequence'
+    - 'activity nodes: ActivityParameter, CentralBufferNode, ExpansionNode, ObjectNode'
+  nonStreaming:
+    resources_rows: 1
+    catalog_rows:
+    - Activity (default)
+    - Class (measured)
+    accepted:
+    - 'element types: Activity, Class'
+  objectiveFunction:
+    resources_rows: 2
+    catalog_rows:
+    - Class (measured)
+    - Part (child of a class)
+    accepted:
+    - Class family (Class, Component, Requirement, Node, Activity, StateMachine, Change, Interaction)
+    - 'element types: Part, Property'
+    tags:
+      isEncapsulated:
+        values:
+        - 'true'
+        - 'false'
+  optional:
+    resources_rows: 1
+    catalog_rows:
+    - ObjectNode (child of an activity)
+    - ActivityParameter (child of an activity)
+    accepted:
+    - 'activity nodes: ActivityParameter, ObjectNode'
+  overwrite:
+    resources_rows: 3
+    catalog_rows:
+    - ObjectNode (child of an activity)
+    - ActivityParameter (child of an activity)
+    - CentralBufferNode (child of an activity)
+    - ExpansionNode (child of an activity)
+    accepted:
+    - 'element types: Collaboration, Component, Node, Object, Sequence'
+    - 'activity nodes: ActivityParameter, CentralBufferNode, ExpansionNode, ObjectNode'
+  participantProperty:
+    resources_rows: 1
+    catalog_rows:
+    - Part (child of a class)
+    accepted:
+    - 'element types: Part, Property'
+    tags:
+      end: {}
+  performanceRequirement:
+    resources_rows: 1
+    catalog_rows:
+    - Requirement (default)
+    - Class (measured)
+    accepted:
+    - 'element types: Class, Requirement'
+    tags:
+      source: {}
+      risk:
+        values:
+        - High
+        - Medium
+        - Low
+      verifyMethod:
+        values:
+        - Analysis
+        - Demonstration
+        - Inspection
+        - Test
+      id: {}
+      text: {}
+  physicalRequirement:
+    resources_rows: 1
+    catalog_rows:
+    - Requirement (default)
+    - Class (measured)
+    accepted:
+    - 'element types: Class, Requirement'
+    tags:
+      source: {}
+      risk:
+        values:
+        - High
+        - Medium
+        - Low
+      verifyMethod:
+        values:
+        - Analysis
+        - Demonstration
+        - Inspection
+        - Test
+      id: {}
+      text: {}
+  probability:
+    resources_rows: 3
+    catalog_rows:
+    - ObjectNode (child of an activity)
+    - ActivityParameter (child of an activity)
+    - ControlFlow (connector)
+    - ObjectFlow (connector)
+    accepted:
+    - 'activity nodes: ActivityParameter, ObjectNode'
+    - 'connector types: ControlFlow, ObjectFlow'
+    tags:
+      probability: {}
+  problem:
+    resources_rows: 1
+    catalog_rows:
+    - Note (default)
+    accepted:
+    - 'element types: Note'
+  PropertySpecificType:
+    resources_rows: 1
+    catalog_rows:
+    - Class (default)
+    accepted:
+    - Class family (Class, Component, Requirement, Node, Activity, StateMachine, Change, Interaction)
+  ProxyPort:
+    resources_rows: 1
+    catalog_rows:
+    - Port (child of a class)
+    accepted:
+    - 'element types: Port'
+  rate:
+    resources_rows: 3
+    catalog_rows:
+    - ObjectNode (child of an activity)
+    - ActivityParameter (child of an activity)
+    - ControlFlow (connector)
+    - ObjectFlow (connector)
+    accepted:
+    - 'activity nodes: ActivityParameter, ObjectNode'
+    - 'connector types: ControlFlow, ObjectFlow'
+    tags:
+      rate: {}
+  rationale:
+    resources_rows: 1
+    catalog_rows:
+    - Note (default)
+    accepted:
+    - 'element types: Note'
+  refine:
+    resources_rows: 1
+    catalog_rows:
+    - Dependency (connector)
+    accepted:
+    - 'connector types: Abstraction, Containment, Dependency, Import, Merge, Nesting, ProtocolTransition, Realization, Substitution,
+      Transition, Usage'
+    tags:
+      sourcePropertyPath: {}
+      targetPropertyPath: {}
+      sourceContext: {}
+      targetContext: {}
+  requirement:
+    resources_rows: 1
+    catalog_rows:
+    - Requirement (default)
+    - Class (measured)
+    accepted:
+    - 'element types: Class, Requirement'
+    tags:
+      id: {}
+      text: {}
+  RequirementRelated:
+    resources_rows: 1
+    catalog_rows:
+    - Element (default)
+    - attribute (measured)
+    - operation (measured)
+    accepted:
+    - every element, attribute, operation, parameter and connector type tried (generic)
+  satisfy:
+    resources_rows: 1
+    catalog_rows:
+    - Dependency (connector)
+    - Abstraction (connector)
+    - Realisation (connector)
+    - Usage (connector)
+    accepted:
+    - 'connector types: Abstraction, Containment, Dependency, Import, Merge, Nesting, ProtocolTransition, Realization, Substitution,
+      Transition, Usage'
+  Stakeholder:
+    resources_rows: 1
+    catalog_rows:
+    - Class (default)
+    accepted:
+    - Class family (Class, Component, Requirement, Node, Activity, StateMachine, Change, Interaction)
+    tags:
+      concernList: {}
+      concern: {}
+  streaming:
+    resources_rows: 1
+    catalog_rows:
+    - Activity (default)
+    - Class (measured)
+    accepted:
+    - 'element types: Activity, Class'
+  testCase:
+    resources_rows: 4
+    catalog_rows:
+    - Activity (default)
+    - Class (measured)
+    - StateMachine (measured)
+    - Interaction (measured)
+    - operation (measured)
+    accepted:
+    - 'element types: Activity, Class, Interaction, StateMachine'
+    - operation
+    tags:
+      Verdict:
+        values:
+        - pass
+        - fail
+        - inconclusive
+        - error
+  trace:
+    resources_rows: 1
+    catalog_rows:
+    - Dependency (connector)
+    accepted:
+    - 'connector types: Abstraction, Containment, Dependency, Import, Merge, Nesting, ProtocolTransition, Realization, Substitution,
+      Transition, Usage'
+  ValueType:
+    resources_rows: 1
+    catalog_rows:
+    - DataType (default)
+    - Enumeration (measured)
+    - PrimitiveType (measured)
+    accepted:
+    - 'element types: DataType, Enumeration, PrimitiveType'
+    tags:
+      quantityKind: {}
+      unit: {}
+  verify:
+    resources_rows: 1
+    catalog_rows:
+    - Dependency (connector)
+    accepted:
+    - 'connector types: Abstraction, Containment, Dependency, Import, Merge, Nesting, ProtocolTransition, Realization, Substitution,
+      Transition, Usage'
+  view:
+    resources_rows: 1
+    catalog_rows:
+    - Class (default)
+    accepted:
+    - Class family (Class, Component, Requirement, Node, Activity, StateMachine, Change, Interaction)
+    tags:
+      viewpoint: {}
+      stakeholder: {}
+  viewpoint:
+    resources_rows: 1
+    catalog_rows:
+    - Class (default)
+    accepted:
+    - Class family (Class, Component, Requirement, Node, Activity, StateMachine, Change, Interaction)
+    tags:
+      stakeholder: {}
+      purpose: {}
+      concernList: {}
+      concern: {}
+      language: {}
+      method: {}
+      presentation: {}
+ea_only:
+  stereotypes:
+    RequirementRelated: 'generic: EA applies it to every element, attribute, operation and connector type (a helper of the requirements
+      profile)'
+    allocated: 'generic: EA applies it to everything; tags allocatedFrom, allocatedTo (the standard''s Annex B Allocated)'
+    functionalRequirement: a Requirement or Class; tags id, text, source, risk, verifyMethod
+    interfaceRequirement: same
+    performanceRequirement: same
+    physicalRequirement: same
+    designConstraint: same
+    extendedRequirement: same
+    moe: a Part (measure of effectiveness; Annex E trade-study profile)
+    objectiveFunction: a Part or a Class family element (Annex E trade-study profile)
+    effbd: an Activity (enhanced functional flow block diagram); creating one makes EA add a child activity diagram
+    streaming: an Activity (Annex E)
+    nonStreaming: an Activity (Annex E)
+  samples: EA's model patterns sysml_pvt1.3.xml and sysml_pvt.xml (SysML 1.3 and 1.2 primitive value types and profile), procg-sysml_*
+    (checklists, no SysML content)
+toolbox:
+  status: read on screen, measured on EA 17.1 build 1716, 2026-11-04; a block definition diagram was opened
+  toolboxes:
+  - SysML 1.5 Activity
+  - Block Definition
+  - Interaction
+  - Internal Block
+  - Model Elements
+  - Parametrics
+  - Requirements
+  - State Machine
+  - Use Case
+  pages_of_a_block_definition_diagram:
+    SysML Block Definition:
+    - Block
+    - Actor
+    - Interface Block
+    - Constraint Block
+    - Value Type
+    - Enumeration
+    - Interface
+    - Signal
+    - Instance Specification
+    - Unit
+    - Quantity Kind
+    - Property
+    - Flow Property
+    - Directed Feature
+    - Port
+    - Proxy Port
+    - Full Port
+    SysML Block Relationships:
+    - Item Flow
+    - Dependency
+    - Generalization
+    - Realization
+    - Containment
+    - Part Association
+    - Reference Association
+    - Shared Association
+    - Association Block
+    - Allocate
+    - Connector
+    SysML Patterns:
+    - Composite Block
+    - Block with Properties
+    SysML Deprecated:
+    - Flow Port
+    - Flow Specification
+    SysML Common:
+    - Comment
+    - Document Artifact
+    - Element Group
+    - Problem
+    - Rationale
+    - Boundary
+    - Allocate Partition
+    - Requirement
+    - Allocated
+    - Allocate
+    - Containment
+    - Dependency
+    - Binding Connector
+    - Item Flow
+  note: Unit and Quantity Kind are on the toolbox, although the stereotypes unit and quantityKind bind only under SysML1.3; the
+    toolbox items may create the 1.3 element or a UML element. Not tested
+  not_done: the other eight toolboxes were not opened
+quick_links:
+  status: read on screen, measured on EA 17.1 build 1716, 2026-11-04; one source, the block 'Cash Dispenser' (three target types
+    opened)
+  target_types:
+  - Actor
+  - AllocateActivityPartition
+  - Allocated
+  - Artifact
+  - Block
+  - Boundary
+  - Change
+  - Constraint
+  - ConstraintBlock
+  - DirectedFeature
+  - ElementGroup
+  - Enumeration
+  - Flow Property
+  - FlowSpecification
+  - InformationItem
+  - InstanceSpecification
+  - Interface
+  - InterfaceBlock
+  - Issue
+  - Object
+  - Problem
+  - Property
+  - Rationale
+  - Requirement
+  - Signal
+  - Text
+  - ValueType
+  - Common
+  submenus_opened:
+    Block:
+    - Aggregation to Whole
+    - Allocate to
+    - Association
+    - Composition to Whole
+    - Generalization
+    - Nesting
+    - Aggregation to Part
+    - Allocate from
+    - Composition to Part
+    - Specialization
+    Requirement:
+    - Allocate to
+    - Allocate from
+    Interface:
+    - Allocate to
+    - Allocate from
+tags_of_note:
+  id/text: 'requirement and its six kinds: lower case, stored empty (a requirement''s text is the tag text, not only the element
+    notes)'
+  direction: 'FlowProperty and FlowPort: in, out, inout, none; default inout'
+  featuredirection: 'DirectedFeature: provided, required, providedrequired; default provided'
+  Verdict: 'testCase: pass, fail, inconclusive, error'
+  isEncapsulated: 'block, constraintBlock, InterfaceBlock, objectiveFunction: true or false, stored empty'
+conventions:
+  ports_and_parts_need_a_parent: 'a Port cannot be created in a package (EA: Invalid parent for Port (Package)); create ProxyPort,
+    FullPort and FlowPort as children of a block (ParentID). A Part can be created in a package, but a property belongs under its
+    block, so create FlowProperty and the other property stereotypes as Part children of the block'
+  activity_nodes: rate, continuous, discrete, probability, optional, noBuffer, overwrite apply to ObjectNode and ActivityParameter
+    elements (children of an activity) and, for the first four, to ControlFlow and ObjectFlow connectors
+  metaclass_not_checked: EA accepts a Class-family stereotype on any of Class, Component, Requirement, Node, Activity, StateMachine,
+    Change and Interaction
+  second_stereotype: a second stereotype is held only in t_xref; t_object.Stereotype and a validator selector see the first
+  dependency_family: 'satisfy, copy, deriveReqt, refine, trace, verify, Expose, ElementImport: eleven connector types accepted;
+    the qualified type creates a Dependency'
+harvest:
+  shipped-xml: not available (encrypted internal technology)
+  sample-content:
+  - stored metaclass (Object_Type) per stereotype and per extra metaclass, binding (t_xref FQName), tagged values with Values and
+    Default notes, attribute, operation, Part, Port and activity node forms, connector types, diagram types (t_diagram, StyleEx
+    MDGDgm)
+  binding-matrix: every name set with StereotypeEx on 38 element types, attributes, operations, parameters, 30 connector types
+    and as a qualified type; activity nodes; two stereotypes on one element; the 57 names of the SysML 1.3 sample under 1.4 and
+    1.3
+  ui: 'the Resources tab (read 2026-10-20) gives 63 names and 86 rows; the metaclass per row was not recorded there.
+    Measured on EA 17.1 build 1716, 2026-11-04: the profile SysML 1.5 matched the stored names and repeat counts; the tab prints
+    no metaclass per row (each row has only an icon); Diagram Types (9) and Toolboxes (9) were read, with one diagram''s toolbox
+    pages and one quick-link source.'
+  ea_build: 17.1 build 1716
+
+# EA's names for this language's layout. tools/gen_conventions.py reads layout_map.
+layout_map:
+  technology: SysML1.4
+  display_name: SysML 1.4
+  extends: UML
+  stereotype_prefix: ''
+  notes: |
+    EA's SysML1.4 MDG declares nine diagram types. Only two are bound here, and the other seven are left out on purpose. Each is classified below as (b) an ordinary graph where EA's own layout is acceptable, or (c) EA-semantic, where the diagram type dictates the arrangement and we should not be placing coordinates at all. A caller resolving an unbound type gets no binding and should fall back to a plain graph layout: EXCEPT for the two classified (c), where it must not. Handing a sequence diagram or a state machine to a graph layout places the participants and ignores the order, which is worse than not drawing it because it looks like the diagram it is not. For those two, say the type is classified and not producible, and stop.
+
+    BOUND. BlockDefinition and Requirement are hierarchies: a generalization or composition tree, and a requirement containment tree. They are composed as layered bands with one band per level of the hierarchy, following the ArchiMate Motivation precedent of a tree composed as bands. This is an approximation and the binding says so: a parent is not centered over its children, and each band carries a label strip that a hand-drawn tree does not have, so level-to-level distance runs larger than the corpus shows. Band container rectangles are geometry the caller may leave unplaced.
+
+    UNBOUND, GRAPH (b). InternalBlock and UseCase are free graphs. Parametric is constraint blocks nested two deep with binding connectors, so the arrows are the point and a nested grid would contradict it. Package mixes a grid of package tabs, nested containers with dependencies, and a generalization tree across its three corpus rows. Activity is lanes in 2 of its 6 corpus rows (allocation partitions) and fork-join or free graph in the other 4. No single grammar represents every row of any of these five types, and the schema requires a grammar, so recording one would be a lie stored as data.
+
+    UNBOUND, EA-SEMANTIC (c). Sequence and StateMachine. A sequence diagram is lifeline order and message order, and a state machine is transition topology with composite states and orthogonal regions that EA owns as containment. Neither is coordinates we compute. Each needs a separate design, and no grammar is invented for them here.
+
+    `SysML1.4` is the id EA reports, measured on EA 17.1 build 1716.
+  diagram_types:
+    BlockDefinition:
+      guide: block definition
+      base: Logical
+    Requirement:
+      guide: requirement
+      base: Custom

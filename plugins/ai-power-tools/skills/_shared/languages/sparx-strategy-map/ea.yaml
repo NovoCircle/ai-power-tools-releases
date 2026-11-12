@@ -1,0 +1,113 @@
+# EA's names for this language's layout. `tools/gen_conventions.py` reads `layout_map`.
+# This family is EA's own, with no guide in the Modeling Languages plugin, so the map holds everything.
+language: sparx-strategy-map
+layout_map:
+  technology: StrategyMap
+  extends: UML
+  stereotype_prefix: ''
+  notes: |
+    BOUND: StrategyMap, DecisionTree, OrgChart, ValueChain.
+
+    NOT BOUND - BalancedScorecard. One diagram carrying four BS_Perspective classes, all 150x150, joined by eight SM_Effect dependencies. The size is unanimous and it is n=4, which rule 1 refuses: MIN_SAMPLE is 10. There is no second figure to fall back on either, since both gap populations are n=0, so the type has no `sizing.default` that could be stated and `sizing.default` is mandatory. This is the same omission UML records for Collaboration and InteractionOverview, and it needs data rather than design. The corpus row is a four-perspective cycle with curved arcs, so `radial` is very likely its grammar; that is an expectation, not a measurement, and it is not recorded as one.
+
+    NOT BOUND - FlowChart. 28 elements over 3 diagrams and NO unique pooled modal size: 74x45 and 100x70 each occur 6 times, so rule 1 refuses the default on the tie rather than on n. FC_Process alone does reach a dominant mode (100x70, 6 of n=11, 55%), but a per-concept size cannot stand in for the mandatory default. It is also the one declared diagram type with NO corpus row, so its title convention and its route would have to be invented rather than read - two independent reasons, and either would be enough.
+
+    ROUTE NAMES ARE CONVENTIONAL, AND HERE THERE IS MEASURED EVIDENCE THAT THEY DIFFER BY DIAGRAM TYPE. `t_diagramlinks.Style` carries a per-connector route integer, and across this technology it splits cleanly and unanimously: Mode=8 on StrategyMap (32 of 32) and BalancedScorecard (8 of 8), Mode=3 on DecisionTree (29 of 29), OrgChart (26 of 26) and FlowChart (29 of 30). The split tracks the corpus's own curved-against-straight distinction - the two Mode=8 types are the two the corpus calls CURVED-ARC or arc-routed. What is missing is the mapping from that integer to a route NAME, which lives in the server's `_ROUTE_STYLES` and is deliberately not imported here, so every `routing.default` below is this file's convention taken from the corpus row. Confirming the mapping would settle all five in one step, and would be worth doing before anyone trusts a route from this file.
+
+    GRAMMARS. `layered-bands` and `chevron-stack` are the notation's own figures and both are implemented. OrgChart and DecisionTree are recorded as `graph`, which is the honest producible answer for a tree EA's own layout places: the corpus calls them `tree-td` and `tree-lr`, and neither name is in the vocabulary. They are named as a finding rather than added here.
+  diagram_types:
+    StrategyMap:
+      base: Logical
+      stereotype_prefix: SM_
+      arrangement: layered-bands
+      title: frame-header
+      route: straight
+      channels:
+        fill: Perspective. The corpus row encodes perspective in fill across five colors, and the four
+          ActivityPartition bands carry the perspective vocabulary, so recoloring a strategy map breaks
+          what it says.
+        claimed:
+          position: Perspective, again and independently. Which band an objective sits in is which perspective
+            it belongs to, so its vertical position is not available to carry anything else.
+          size: 'Content, and the spread says so: 18 distinct sizes across 63 content elements, from a
+            90x60 attribute box to a 780x121 value-proposition banner and a 500x39 full-width capital
+            strip. Size here is the role the element plays, not a free channel.'
+          line_style: 'Normative in UML and inherited unchanged: every connector here is a Dependency,
+            which UML draws dashed. Overwriting the dash pattern changes what the connector means.'
+        free:
+        - border
+        - border_width
+        - line_color
+        - font_color
+        - opacity
+        - icon
+    DecisionTree:
+      base: Analysis
+      stereotype_prefix: DT_
+      arrangement: graph
+      title: drawn
+      route: straight
+      channels:
+        fill: Node kind. The corpus row reads "yellow=test orange=outcome", and that is the DT_Test /
+          DT_Outcome* split, so fill is the notation's own.
+        claimed:
+          position: Depth is the order decisions are taken in, and for a `graph` type the coordinates
+            are EA's to compute in any case, so position is not available either way.
+          line_style: 'Normative in UML: a dashed line here is a dependency and not a control flow.'
+        free:
+        - border
+        - border_width
+        - line_color
+        - font_color
+        - opacity
+        - icon
+        - size
+    OrgChart:
+      base: Logical
+      stereotype_prefix: OC_
+      arrangement: graph
+      title: drawn
+      route: orthogonal
+      trunk:
+        for:
+        - Generalization
+      channels:
+        fill: Reporting level. The corpus row uses two fills by level, so fill is spoken for - lightly,
+          on one row, and treated as claimed because recoloring a chart whose fill already encodes level
+          breaks it while leaving a channel unused costs nothing.
+        claimed:
+          position: Reporting level. Depth in the tree is who reports to whom, and for a `graph` type
+            EA computes the coordinates regardless.
+          line_style: Normative in UML. Every connector here is a Generalization, drawn solid with a hollow
+            arrowhead; a dashed one would read as a dependency.
+        free:
+        - border
+        - border_width
+        - line_color
+        - font_color
+        - opacity
+        - icon
+        - size
+    ValueChain:
+      base: Logical
+      stereotype_prefix: VC_
+      size_keys:
+        PrimaryActivity: box
+      arrangement: chevron-stack
+      title: drawn
+      route: straight
+      channels:
+        fill: 'Activity kind. The corpus row encodes kind in fill, and the vocabulary is the kind: a primary
+          stage against a support activity.'
+        claimed:
+          position: Order along the chain. A stage's place in the row is its place in the value chain,
+            and the chevron composer owns the coordinates.
+          size: Role. An 80x100 chevron is a primary stage and a 400x50 strip is a support activity -
+            measured at 100% of each - so size distinguishes the two rather than being free to carry something
+            else.
+        free:
+        - border
+        - border_width
+        - font_color
+        - opacity
+        - icon

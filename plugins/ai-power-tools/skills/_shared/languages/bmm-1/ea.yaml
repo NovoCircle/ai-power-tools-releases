@@ -1,0 +1,606 @@
+# EA facts for the Business Motivation Model 1.3 (language file bmm-1).
+# Measured on EA 17.1 build 1716; see `harvest` for the source of each fact. Examples elsewhere use Westbrook Bank (fictitious).
+language: bmm-1
+technology: BMM
+display_name: Business Motivation Model
+profile: BMM
+stereotype_prefix: ''
+stereotype_storage: t_object.Stereotype and t_connector.Stereotype hold the bare name (Goal, Governs); the qualified form BMM::<name>
+  is the FQName in the t_xref row named Stereotypes. Create with type BMM::<name>.
+measured_on: EA 17.1 build 1716, 2026-10-20
+diagram_types:
+  none-in-standard:
+    note: BMM defines no diagram types or notation (language.yaml diagram_types). EA's one diagram type is below.
+  BMM Diagram:
+    ea_name: BMM::BMM Diagram
+    base: Custom
+    stereotype_prefix: ''
+    layout_style: not-harvested
+    stored_as: t_diagram.Diagram_Type = Custom; StyleEx contains MDGDgm=BMM::BMM Diagram
+    opens_with: the BMM toolbox pages (the toolbox switch was observed in a probe)
+concepts:
+  elements:
+    Vision:
+      stereotype: Vision
+      metaclass: Requirement
+      tags: []
+    End:
+      stereotype: End
+      metaclass: Requirement
+      tags: []
+    DesiredResult:
+      stereotype: DesiredResult
+      metaclass: Requirement
+      tags: []
+    Goal:
+      stereotype: Goal
+      metaclass: Requirement
+      tags: []
+    Objective:
+      stereotype: Objective
+      metaclass: Requirement
+      tags: []
+    DesiredResultCategory:
+      stereotype: DesiredResultCategory
+      metaclass: Class
+      tags: []
+    Means:
+      stereotype: Means
+      metaclass: Requirement
+      tags: []
+    Mission:
+      stereotype: Mission
+      metaclass: Requirement
+      tags: []
+    CourseOfAction:
+      stereotype: CourseOfAction
+      metaclass: Requirement
+      tags: []
+    Strategy:
+      stereotype: Strategy
+      metaclass: Requirement
+      tags: []
+    Tactic:
+      stereotype: Tactic
+      metaclass: Requirement
+      tags: []
+    Directive:
+      stereotype: Directive
+      metaclass: Requirement
+      tags: []
+    BusinessPolicy:
+      stereotype: BusinessPolicy
+      metaclass: Requirement
+      tags: []
+    BusinessRule:
+      stereotype: BusinessRule
+      metaclass: Requirement
+      tags:
+      - name: EnforcementLevel
+        type: free text
+        allowed_values: null
+        default: null
+    Influencer:
+      stereotype: Influencer
+      metaclass: Requirement
+      tags: []
+    InternalInfluencer:
+      stereotype: null
+      metaclass: null
+      tags: []
+      ea_note: Use an Influencer placed in an InfluencerCategory instance named Internal (Annex G.3 allows either mechanism).
+    ExternalInfluencer:
+      stereotype: null
+      metaclass: null
+      tags: []
+      ea_note: Use an Influencer placed in an InfluencerCategory instance named External (Annex G.3 allows either mechanism).
+    Regulation:
+      stereotype: Regulation
+      metaclass: Requirement
+      tags: []
+    InfluencerCategory:
+      stereotype: InfluencerCategory
+      metaclass: Class
+      tags: []
+    InfluencingOrganization:
+      stereotype: InfluencingOrganization
+      metaclass: Requirement
+      tags: []
+    OrganizationCategory:
+      stereotype: OrganizationCategory
+      metaclass: Class
+      tags: []
+    Assessment:
+      stereotype: Assessment
+      metaclass: Requirement
+      tags: []
+    AssessmentCategory:
+      stereotype: AssessmentCategory
+      metaclass: Class
+      tags: []
+    PotentialImpact:
+      stereotype: PotentialImpact
+      metaclass: Requirement
+      tags: []
+    Risk:
+      stereotype: null
+      metaclass: null
+      tags: []
+      ea_note: Use PotentialImpact; EA does not separate a risk from a reward.
+    PotentialReward:
+      stereotype: null
+      metaclass: null
+      tags: []
+      ea_note: Use PotentialImpact; EA does not separate a risk from a reward.
+    OrganizationUnit:
+      stereotype: OrganizationUnit
+      metaclass: Requirement
+      tags: []
+    BusinessProcess:
+      stereotype: BusinessProcess
+      metaclass: Requirement
+      tags: []
+    Asset:
+      stereotype: Asset
+      metaclass: Artifact
+      tags: []
+    FixedAsset:
+      stereotype: FixedAsset
+      metaclass: Artifact
+      tags: []
+    Resource:
+      stereotype: Resource
+      metaclass: Artifact
+      tags: []
+    Offering:
+      stereotype: Offering
+      metaclass: Artifact
+      tags: []
+    Liability:
+      stereotype: Liability
+      metaclass: Artifact
+      tags: []
+  relationships:
+    AssessmentAffectsAchievementOfEnd:
+      stereotype: AffectsAchievementOf
+      metaclass: Dependency
+      source: Assessment
+      target: End
+    AssessmentAffectsEmploymentOfMeans:
+      stereotype: AffectsEmploymentOf
+      metaclass: Dependency
+      source: Assessment
+      target: Means
+    AssessmentsJudgmentOfInfluencer:
+      stereotype: IsJudgmentOf
+      metaclass: Dependency
+      source: Assessment
+      target: Influencer
+    AssessmentIdentifiesPotentialImpact:
+      stereotype: Identifies
+      metaclass: Dependency
+      source: Assessment
+      target: PotentialImpact
+    AssessmentProvidesImpetusForDirective:
+      stereotype: ProvidesImpetusFor
+      metaclass: Dependency
+      source: Assessment
+      target: Directive
+    PotentialImpactProvidesImpetusForDirective:
+      stereotype: ProvidesImpetusFor
+      metaclass: Dependency
+      source: PotentialImpact
+      target: Directive
+    UsingAssessmentUsesUsedAssessment:
+      stereotype: Uses
+      metaclass: Dependency
+      source: Assessment
+      target: Assessment
+    AssessmentCategoryCategorizesAssessment:
+      stereotype: Categorizes
+      metaclass: Dependency
+      source: AssessmentCategory
+      target: Assessment
+    BroaderAssessmentCategoryCategorizesNarrowerAssessmentCategory:
+      stereotype: Categorizes
+      metaclass: Dependency
+      source: AssessmentCategory
+      target: AssessmentCategory
+    InfluencerCategoryCategorizesInfluencer:
+      stereotype: Categorizes
+      metaclass: Dependency
+      source: InfluencerCategory
+      target: Influencer
+    BroaderInfluencerCategoryCategorizesNarrowerInfluencerCategory:
+      stereotype: Categorizes
+      metaclass: Dependency
+      source: InfluencerCategory
+      target: InfluencerCategory
+    InfluencingOrganizationIsSourceOfInfluencer:
+      stereotype: IsSourceOf
+      metaclass: Dependency
+      source: InfluencingOrganization
+      target: Influencer
+    OrganizationCategoryCategorizesInfluencingOrganization:
+      stereotype: Categorizes
+      metaclass: Dependency
+      source: OrganizationCategory
+      target: InfluencingOrganization
+    BroaderOrganizationCategoryCategorizesNarrowerOrganizationCategory:
+      stereotype: Categorizes
+      metaclass: Dependency
+      source: OrganizationCategory
+      target: OrganizationCategory
+    OrganizationUnitActsAsInfluencingOrganization:
+      stereotype: ActsAs
+      metaclass: Dependency
+      source: OrganizationUnit
+      target: InfluencingOrganization
+    OrganizationUnitRecognizesInfluencer:
+      stereotype: Recognizes
+      metaclass: Dependency
+      source: OrganizationUnit
+      target: Influencer
+    OrganizationUnitMakesAssessment:
+      stereotype: Makes
+      metaclass: Dependency
+      source: OrganizationUnit
+      target: Assessment
+    OrganizationUnitDefinesEnd:
+      stereotype: Defines
+      metaclass: Dependency
+      source: OrganizationUnit
+      target: End
+    OrganizationUnitEstablishesMeans:
+      stereotype: Establishes
+      metaclass: Dependency
+      source: OrganizationUnit
+      target: Means
+    StrategyDeterminesOrganizationUnit:
+      stereotype: Determines
+      metaclass: Dependency
+      source: Strategy
+      target: OrganizationUnit
+    OrganizationUnitIsResponsibleForBusinessProcess:
+      stereotype: IsResponsibleFor
+      metaclass: Dependency
+      source: OrganizationUnit
+      target: BusinessProcess
+    OrganizationUnitIsResponsibleForAsset:
+      stereotype: IsResponsibleFor
+      metaclass: Dependency
+      source: OrganizationUnit
+      target: Asset
+    OrganizationUnitIsResponsibleForLiability:
+      stereotype: IsResponsibleFor
+      metaclass: Dependency
+      source: OrganizationUnit
+      target: Liability
+    GoalAmplifiesVision:
+      stereotype: Amplifies
+      metaclass: Dependency
+      source: Goal
+      target: Vision
+    ObjectiveQuantifiesGoal:
+      stereotype: Quantifies
+      metaclass: Dependency
+      source: Objective
+      target: Goal
+    MissionMakesOperativeVision:
+      stereotype: MakesOperative
+      metaclass: Dependency
+      source: Mission
+      target: Vision
+    StrategyIsAComponentOfThePlanForMission:
+      stereotype: IsAComponentOfThePlanFor
+      metaclass: Dependency
+      source: Strategy
+      target: Mission
+    TacticImplementsStrategy:
+      stereotype: Implements
+      metaclass: Dependency
+      source: Tactic
+      target: Strategy
+    BroaderCourseOfActionIncludesMoreSpecificCourseOfAction:
+      stereotype: Includes
+      metaclass: Dependency
+      source: CourseOfAction
+      target: CourseOfAction
+    EnablingCourseOfActionEnablesEnabledCourseOfAction:
+      stereotype: Enables
+      metaclass: Dependency
+      source: CourseOfAction
+      target: CourseOfAction
+    CourseOfActionChannelsEffortsTowardsDesiredResult:
+      stereotype: ChannelsEffortsTowards
+      metaclass: Dependency
+      source: CourseOfAction
+      target: DesiredResult
+    DirectiveGovernsCourseOfAction:
+      stereotype: Governs
+      metaclass: Dependency
+      source: Directive
+      target: CourseOfAction
+    CourseOfActionIsFormulatedBasedOnDirective:
+      stereotype: IsFormulatedBasedOn
+      metaclass: Dependency
+      source: CourseOfAction
+      target: Directive
+    DirectiveSupportsAchievementOfDesiredResult:
+      stereotype: SupportsAchievementOf
+      metaclass: Dependency
+      source: Directive
+      target: DesiredResult
+    BroaderDesiredResultIncludesMoreSpecificDesiredResult:
+      stereotype: Includes
+      metaclass: Dependency
+      source: DesiredResult
+      target: DesiredResult
+    DesiredResultCategoryCategorizesDesiredResult:
+      stereotype: Categorizes
+      metaclass: Dependency
+      source: DesiredResultCategory
+      target: DesiredResult
+    BroaderDesiredResultCategoryIncludesMoreSpecificDesiredResultCategory:
+      stereotype: Includes
+      metaclass: Dependency
+      source: DesiredResultCategory
+      target: DesiredResultCategory
+    BusinessPolicyIsBasisForBusinessRule:
+      stereotype: null
+      metaclass: null
+      source: BusinessPolicy
+      target: BusinessRule
+      ea_note: No connector stereotype of this name in EA's list; how Sparx expects the link to be drawn was not harvested.
+    BroaderBusinessPolicyIncludesMoreSpecificBusinessPolicy:
+      stereotype: Includes
+      metaclass: Dependency
+      source: BusinessPolicy
+      target: BusinessPolicy
+    BusinessPolicyGovernsBusinessProcess:
+      stereotype: Governs
+      metaclass: Dependency
+      source: BusinessPolicy
+      target: BusinessProcess
+    BusinessRuleGuidesBusinessProcess:
+      stereotype: Guides
+      metaclass: Dependency
+      source: BusinessRule
+      target: BusinessProcess
+    TacticEffectsEnforcementLevelOfBusinessRule:
+      stereotype: EffectsEnforcementLevelOf
+      metaclass: Dependency
+      source: Tactic
+      target: BusinessRule
+    DirectiveActsAsRegulation:
+      stereotype: ActsAs
+      metaclass: Dependency
+      source: Directive
+      target: Regulation
+    BusinessProcessRealizesCourseOfAction:
+      stereotype: Realizes
+      metaclass: Dependency
+      source: BusinessProcess
+      target: CourseOfAction
+    BusinessProcessDeliversOffering:
+      stereotype: Delivers
+      metaclass: Dependency
+      source: BusinessProcess
+      target: Offering
+    BusinessProcessManagesAsset:
+      stereotype: Manages
+      metaclass: Dependency
+      source: BusinessProcess
+      target: Asset
+    CourseOfActionDeploysAsset:
+      stereotype: Deploys
+      metaclass: Dependency
+      source: CourseOfAction
+      target: Asset
+    CourseOfActionDefinesOffering:
+      stereotype: Defines
+      metaclass: Dependency
+      source: CourseOfAction
+      target: Offering
+    CourseOfActionDischargesLiability:
+      stereotype: Discharges
+      metaclass: Dependency
+      source: CourseOfAction
+      target: Liability
+    DirectiveGovernsUseOfAsset:
+      stereotype: GovernsUseOf
+      metaclass: Dependency
+      source: Directive
+      target: Asset
+    FixedAssetProvidesResource:
+      stereotype: Provides
+      metaclass: Dependency
+      source: FixedAsset
+      target: Resource
+    LiabilityClaimsResource:
+      stereotype: Claims
+      metaclass: Dependency
+      source: Liability
+      target: Resource
+    OfferingRequiresResource:
+      stereotype: Requires
+      metaclass: Dependency
+      source: Offering
+      target: Resource
+    OfferingUsesFixedAsset:
+      stereotype: Uses
+      metaclass: Dependency
+      source: Offering
+      target: FixedAsset
+ea_only: []
+ea_only_note: Every one of the 29 element and 37 connector stereotypes on the Resources tab is a concept or a relationship of the standard,
+  so nothing is listed here. 'BMM Diagram' is the diagram type, recorded under diagram_types.
+toolbox:
+  source: Toolbox window > Business Motivation Model (view setting only), read on screen 2026-10-20
+  complete: false
+  pages:
+  - name: BMM - Ends
+    items:
+    - End
+    - Desired Result
+    - Goal
+    - Objective
+    - Vision
+  - name: BMM - Means
+    items:
+    - Means
+    - Mission
+    - Course of Action
+    - Strategy
+    - Tactic
+    - Directive
+    - Business Rule
+    - Business Policy
+  - name: BMM - Influencers
+    items:
+    - Influencer
+    - Influencing Organization
+    - Organization Unit
+    - Regulation
+    - Business Process
+  - name: BMM - Assessments
+    items:
+    - Assessment
+    - Potential Impact
+  - name: BMM - Categories
+    items:
+    - Desired Result Category
+    - Influencer Category
+    - Organization Category
+    - Assessment Category
+  - name: BMM - Asset and Liability
+    items:
+    - Asset
+    - Fixed Asset
+    - Offering
+    - Liability
+    - Resource
+  - name: BMM - Relationships
+    items:
+    - Acts As
+    - Affects Achievement Of
+    - Affects Employment Of
+    - Amplifies
+    - Categorizes
+    - Channels Efforts Towards
+    - Claims
+    - Defines
+    - Delivers
+    - Deploys
+    - Determines
+    - Discharges
+    - Effects Enforcement Level Of
+    - Enables
+    note: the page has 37 items (read on screen, EA 17.1 build 1716, 2026-11-04), from Acts As to Uses, in alphabetical order ending
+      Supports Achievement Of, Uses; 14 are listed here. The 37 match the 37 connector stereotypes
+  note: Every element and connector stereotype also appears in the Resources tab list; the toolbox pages group them. All seven pages
+    were read, with the same items (checked again on screen, EA 17.1 build 1716, 2026-11-04).
+quick_links:
+  status: 'partly harvested: three pairs in a probe, and a fourth source on screen (EA 17.1 build 1716, 2026-11-04)'
+  from_a_Goal_on_screen:
+    targets:
+    - DesiredResult
+    - Goal
+    - Objective
+    - Vision
+    - Assessment
+    - BusinessPolicy
+    - BusinessRule
+    - CourseOfAction
+    - DesiredResultCategory
+    - Directive
+    - OrganizationUnit
+    - Strategy
+    - Tactic
+    pairs:
+    - 'Objective: includes, is included by, is quantified by'
+    - 'Strategy: has efforts towards channeled by'
+    - 'Assessment: has achievement affected by'
+    note: the labels are the standard's phrases, not the stereotype names
+  spot_checked:
+  - source: Strategy
+    target: Goal
+    offered:
+    - ChannelsEffortsTowards
+    matches_standard: true
+  - source: Assessment
+    target: Influencer
+    offered:
+    - IsJudgmentOf
+    matches_standard: true
+  - source: Objective
+    target: Goal
+    offered:
+    - Includes
+    - Quantifies
+    - IsIncludedBy (reverse reading of Includes)
+    matches_standard: 'partly: Quantifies matches; Includes between an Objective and a Goal is permitted by the association on Desired
+      Result but refused by the like-kind rule BMM-HIER-001'
+  note: Only these three pairs were read, by hand, in a probe. Allowed pairs for the ruleset come from the standard, not from EA's quick
+    linker.
+samples_in_ea:
+  source: EA Model Wizard templates listed in the Resources tab; three XMI samples read from EA's sample models
+  templates:
+  - BMM Categories
+  - two worked BMM examples
+  sample_usage:
+    element_stereotypes_used: 15
+    connector_stereotypes_used: 8
+    connectors_in_samples:
+    - Amplifies
+    - Categorizes
+    - ChannelsEffortsTowards
+    - Identifies
+    - Implements
+    - MakesOperative
+    - Quantifies
+    - SupportsAchievementOf
+conventions: not-harvested
+harvest:
+  stereotype_names_and_kinds: 'ui: Resources tab > MDG Technologies > System Technologies > Business Motivation Model > UML Profiles
+    > BMM (66 names), computer use 2026-10-20'
+  metaclass_and_tags: 'sample-content: elements created with type BMM::<name> in a test model and read from t_object,
+    t_xref, t_objectproperties'
+  connector_metaclass: 'sample-content: t_connector.Connector_Type'
+  unbound_candidates: 'sample-content: EA refused type BMM::<name> with ''Invalid type'' for InternalInfluencer, ExternalInfluencer,
+    Risk, PotentialReward, MotivationElement'
+  diagram_type: 'sample-content: t_diagram.Diagram_Type and StyleEx of a diagram created with type BMM::BMM Diagram'
+  toolbox: 'ui: Toolbox window, computer use 2026-10-20'
+  quick_links: ui, three pairs in a probe and one source (a Goal) on screen, EA 17.1 build 1716, 2026-11-04
+  association_to_connector_mapping: inference [I] from the verb phrase of the association name; 37 EA names equal the 37 distinct verb
+    phrases of 53 of the 54 associations
+  connector_direction: 'model-pattern: EA''s three BMM samples use Source -> Destination in the standard''s active reading for 8 stereotypes;
+    assumed for the other 29'
+  build: EA 17.1 build 1716
+
+# EA's names for this language's layout. tools/gen_conventions.py reads layout_map.
+layout_map:
+  technology: BMM
+  display_name: Business Motivation Model
+  extends: UML
+  stereotype_prefix: ''
+  notes: |
+    The standard defines no diagram type, so this one is EA's own. Its arrangement and route are the shared defaults, not measurements.
+
+    `BMM` is the id EA reports, measured on EA 17.1 build 1716.
+  diagram_types:
+    BMM Diagram:
+      base: Custom
+      arrangement: graph
+      title: frame-header
+      route: straight
+      channels:
+        fill: null
+        free:
+        - fill
+        - border
+        - border_width
+        - line_color
+        - font_color
+        - opacity
+        - icon

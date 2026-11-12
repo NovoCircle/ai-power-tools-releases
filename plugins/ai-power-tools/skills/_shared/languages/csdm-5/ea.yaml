@@ -1,0 +1,2429 @@
+# CSDM 5 in Sparx EA: the EA references
+language: csdm-5
+technology: CSDM5
+version: 1.0.0
+display_name: CSDM 5 for EA
+profile: CSDM5
+stereotype_prefix: CSDM
+stereotype_storage:
+  stored: CSDM<ConceptId>, such as CSDMBusinessApplication
+  stored_in: t_object.Stereotype and t_connector.Stereotype (what a ruleset selector matches)
+  qualified: CSDM5::<stored>, in t_xref
+  create_with: the qualified form as the element type; for a line, the EA type with StereotypeEx set to the qualified form
+basis: Written from ServiceNow's CSDM 5 white paper and documentation. Not affiliated with or endorsed by ServiceNow.
+measured_on:
+  ea: 17.1 build 1716
+  date: '2026-11-04'
+sources:
+  facts: The stored file and the Catalog package in the master model were read back on the build above.
+  tag source values:
+    source: named by CSDM's paper or documentation
+    unconfirmed: from an earlier ServiceNow integration's 2023 technology file, not checked against a current platform
+    proposal: this pack's own choice; no source names it as a field
+    requirement: the pack's link to a ServiceNow record
+diagram_types:
+  CSDM Diagram:
+    ea_name: CSDM5::CSDMDiagram
+    base: Diagram_Logical
+    toolbox: CSDM5::CSDM5 Toolbox
+    stored:
+      t_diagram.Diagram_Type: Logical
+concepts:
+  CSDMValueStream:
+    name: Value Stream
+    concept: ValueStream
+    stereotype: CSDMValueStream
+    qualified: CSDM5::CSDMValueStream
+    metaclass: Class
+    toolbox_page: CSDM - Foundation
+    servicenow_table: cmn_value_stream
+    tags:
+    - name: ServiceNow link
+      type: URL
+      source: requirement
+    - name: ServiceNow record id
+      type: String
+      source: requirement
+  CSDMValueStreamCategory:
+    name: Value Stream Category
+    concept: ValueStreamCategory
+    stereotype: CSDMValueStreamCategory
+    qualified: CSDM5::CSDMValueStreamCategory
+    metaclass: Class
+    toolbox_page: CSDM - Foundation
+    servicenow_table: cmn_value_stream_categories
+    tags:
+    - name: ServiceNow link
+      type: URL
+      source: requirement
+    - name: ServiceNow record id
+      type: String
+      source: requirement
+  CSDMValueStreamStage:
+    name: Value Stream Stage
+    concept: ValueStreamStage
+    stereotype: CSDMValueStreamStage
+    qualified: CSDM5::CSDMValueStreamStage
+    metaclass: Class
+    toolbox_page: CSDM - Foundation
+    servicenow_table: cmn_value_stream_stage
+    tags:
+    - name: ServiceNow link
+      type: URL
+      source: requirement
+    - name: ServiceNow record id
+      type: String
+      source: requirement
+  CSDMBusinessProcess:
+    name: Business Process
+    concept: BusinessProcess
+    stereotype: CSDMBusinessProcess
+    qualified: CSDM5::CSDMBusinessProcess
+    metaclass: Class
+    toolbox_page: CSDM - Foundation
+    servicenow_table: cmdb_ci_business_process
+    tags:
+    - name: ServiceNow link
+      type: URL
+      source: requirement
+    - name: ServiceNow record id
+      type: String
+      source: requirement
+    - name: Declared criticality
+      type: String
+      source: source
+    - name: Confidentiality impact
+      type: String
+      source: source
+    - name: Integrity impact
+      type: String
+      source: source
+    - name: Availability impact
+      type: String
+      source: source
+    - name: Review frequency
+      type: enumeration
+      values:
+      - Monthly
+      - Quarterly
+      - Semi Annual / Half Yearly
+      - Annually
+      - none
+      source: source
+    - name: Life Cycle Stage
+      type: enumeration
+      values: &id001
+      - Ideation
+      - Operational
+      - End of Life
+      source: source
+    - name: Life Cycle Stage Status
+      type: enumeration
+      values: &id002
+      - Draft
+      - Under Evaluation
+      - In Use
+      - Published
+      - Renewal in Process
+      - Renewed
+      - Pending Retirement
+      - Expired
+      - Retired
+      source: source
+  CSDMContract:
+    name: Contract
+    concept: Contract
+    stereotype: CSDMContract
+    qualified: CSDM5::CSDMContract
+    metaclass: Artifact
+    toolbox_page: CSDM - Foundation
+    servicenow_table: ast_contract
+    tags:
+    - name: ServiceNow link
+      type: URL
+      source: requirement
+    - name: ServiceNow record id
+      type: String
+      source: requirement
+    - name: Contract number
+      type: String
+      source: source
+    - name: Start date
+      type: Date
+      source: source
+    - name: End date
+      type: Date
+      source: source
+    - name: Life Cycle Stage
+      type: enumeration
+      values: *id001
+      source: source
+    - name: Life Cycle Stage Status
+      type: enumeration
+      values: *id002
+      source: source
+  CSDMProductModel:
+    name: Product Model
+    concept: ProductModel
+    stereotype: CSDMProductModel
+    qualified: CSDM5::CSDMProductModel
+    metaclass: Class
+    toolbox_page: CSDM - Foundation
+    servicenow_table: cmdb_model
+    tags:
+    - name: ServiceNow link
+      type: URL
+      source: requirement
+    - name: ServiceNow record id
+      type: String
+      source: requirement
+    - name: Product owner
+      type: String
+      source: proposal
+    - name: End-of-life date
+      type: Date
+      source: proposal
+    - name: Life Cycle Stage
+      type: enumeration
+      values: &id003
+      - Ideation
+      - Design
+      - Build & Integrate
+      - Operational
+      - End of Life
+      source: source
+    - name: Life Cycle Stage Status
+      type: enumeration
+      values: &id004
+      - Under Evaluation
+      - Pilot
+      - Design
+      - Chartered
+      - Planning
+      - Build
+      - In production
+      - In Use
+      - Available
+      - End of Support
+      - Pending Retirement
+      - Obsolete
+      - Retired
+      - Sold
+      source: source
+  CSDMApplicationModel:
+    name: Application Model
+    concept: ApplicationModel
+    stereotype: CSDMApplicationModel
+    qualified: CSDM5::CSDMApplicationModel
+    metaclass: Class
+    toolbox_page: CSDM - Foundation
+    servicenow_table: cmdb_application_product_model
+    tags:
+    - name: ServiceNow link
+      type: URL
+      source: requirement
+    - name: ServiceNow record id
+      type: String
+      source: requirement
+    - name: Product owner
+      type: String
+      source: proposal
+    - name: End-of-life date
+      type: Date
+      source: proposal
+    - name: Life Cycle Stage
+      type: enumeration
+      values: *id003
+      source: source
+    - name: Life Cycle Stage Status
+      type: enumeration
+      values: *id004
+      source: source
+  CSDMSystemComponentModel:
+    name: System Component Model
+    concept: SystemComponentModel
+    stereotype: CSDMSystemComponentModel
+    qualified: CSDM5::CSDMSystemComponentModel
+    metaclass: Class
+    toolbox_page: CSDM - Foundation
+    servicenow_table: cmdb_sw_component_model
+    tags:
+    - name: ServiceNow link
+      type: URL
+      source: requirement
+    - name: ServiceNow record id
+      type: String
+      source: requirement
+    - name: Product owner
+      type: String
+      source: proposal
+    - name: End-of-life date
+      type: Date
+      source: proposal
+    - name: Life Cycle Stage
+      type: enumeration
+      values: *id003
+      source: source
+    - name: Life Cycle Stage Status
+      type: enumeration
+      values: *id004
+      source: source
+  CSDMSoftwareComponentModel:
+    name: Software Component Model
+    concept: SoftwareComponentModel
+    stereotype: CSDMSoftwareComponentModel
+    qualified: CSDM5::CSDMSoftwareComponentModel
+    metaclass: Class
+    toolbox_page: CSDM - Foundation
+    servicenow_table: cmdb_software_component_model
+    tags:
+    - name: ServiceNow link
+      type: URL
+      source: requirement
+    - name: ServiceNow record id
+      type: String
+      source: requirement
+    - name: Product owner
+      type: String
+      source: proposal
+    - name: End-of-life date
+      type: Date
+      source: proposal
+    - name: Life Cycle Stage
+      type: enumeration
+      values: *id003
+      source: source
+    - name: Life Cycle Stage Status
+      type: enumeration
+      values: *id004
+      source: source
+  CSDMServiceOfferingModel:
+    name: Service Offering Model
+    concept: ServiceOfferingModel
+    stereotype: CSDMServiceOfferingModel
+    qualified: CSDM5::CSDMServiceOfferingModel
+    metaclass: Class
+    toolbox_page: CSDM - Foundation
+    servicenow_table: cmdb_service_offering_model
+    tags:
+    - name: ServiceNow link
+      type: URL
+      source: requirement
+    - name: ServiceNow record id
+      type: String
+      source: requirement
+    - name: Product owner
+      type: String
+      source: proposal
+    - name: End-of-life date
+      type: Date
+      source: proposal
+    - name: Life Cycle Stage
+      type: enumeration
+      values: *id003
+      source: source
+    - name: Life Cycle Stage Status
+      type: enumeration
+      values: *id004
+      source: source
+  CSDMFirmwareModel:
+    name: Firmware Model
+    concept: FirmwareModel
+    stereotype: CSDMFirmwareModel
+    qualified: CSDM5::CSDMFirmwareModel
+    metaclass: Class
+    toolbox_page: CSDM - Foundation
+    servicenow_table: sn_ent_firmware_model
+    tags:
+    - name: ServiceNow link
+      type: URL
+      source: requirement
+    - name: ServiceNow record id
+      type: String
+      source: requirement
+    - name: Product owner
+      type: String
+      source: proposal
+    - name: End-of-life date
+      type: Date
+      source: proposal
+    - name: Life Cycle Stage
+      type: enumeration
+      values: *id003
+      source: source
+    - name: Life Cycle Stage Status
+      type: enumeration
+      values: *id004
+      source: source
+  CSDMAISystemProductModel:
+    name: AI System Product Model
+    concept: AISystemProductModel
+    stereotype: CSDMAISystemProductModel
+    qualified: CSDM5::CSDMAISystemProductModel
+    metaclass: Class
+    toolbox_page: CSDM - Foundation
+    servicenow_table: cmdb_ai_system_product_model
+    tags:
+    - name: ServiceNow link
+      type: URL
+      source: requirement
+    - name: ServiceNow record id
+      type: String
+      source: requirement
+    - name: Product owner
+      type: String
+      source: proposal
+    - name: End-of-life date
+      type: Date
+      source: proposal
+    - name: Life Cycle Stage
+      type: enumeration
+      values: *id003
+      source: source
+    - name: Life Cycle Stage Status
+      type: enumeration
+      values: *id004
+      source: source
+  CSDMServiceModel:
+    name: Service Model
+    concept: ServiceModel
+    stereotype: CSDMServiceModel
+    qualified: CSDM5::CSDMServiceModel
+    metaclass: Class
+    toolbox_page: CSDM - Foundation
+    servicenow_table: cmdb_service_product_model
+    tags:
+    - name: ServiceNow link
+      type: URL
+      source: requirement
+    - name: ServiceNow record id
+      type: String
+      source: requirement
+    - name: Product owner
+      type: String
+      source: proposal
+    - name: End-of-life date
+      type: Date
+      source: proposal
+    - name: Life Cycle Stage
+      type: enumeration
+      values: *id003
+      source: source
+    - name: Life Cycle Stage Status
+      type: enumeration
+      values: *id004
+      source: source
+  CSDMSoftwareModel:
+    name: Software Model
+    concept: SoftwareModel
+    stereotype: CSDMSoftwareModel
+    qualified: CSDM5::CSDMSoftwareModel
+    metaclass: Class
+    toolbox_page: CSDM - Foundation
+    servicenow_table: cmdb_software_product_model
+    tags:
+    - name: ServiceNow link
+      type: URL
+      source: requirement
+    - name: ServiceNow record id
+      type: String
+      source: requirement
+    - name: Product owner
+      type: String
+      source: proposal
+    - name: End-of-life date
+      type: Date
+      source: proposal
+    - name: Life Cycle Stage
+      type: enumeration
+      values: *id003
+      source: source
+    - name: Life Cycle Stage Status
+      type: enumeration
+      values: *id004
+      source: source
+  CSDMContentProductModel:
+    name: Content Product Model
+    concept: ContentProductModel
+    stereotype: CSDMContentProductModel
+    qualified: CSDM5::CSDMContentProductModel
+    metaclass: Class
+    toolbox_page: CSDM - Foundation
+    servicenow_table: cmdb_content_product_model
+    tags:
+    - name: ServiceNow link
+      type: URL
+      source: requirement
+    - name: ServiceNow record id
+      type: String
+      source: requirement
+    - name: Product owner
+      type: String
+      source: proposal
+    - name: End-of-life date
+      type: Date
+      source: proposal
+    - name: Life Cycle Stage
+      type: enumeration
+      values: *id003
+      source: source
+    - name: Life Cycle Stage Status
+      type: enumeration
+      values: *id004
+      source: source
+  CSDMAIContentProductModel:
+    name: AI Content Product Model
+    concept: AIContentProductModel
+    stereotype: CSDMAIContentProductModel
+    qualified: CSDM5::CSDMAIContentProductModel
+    metaclass: Class
+    toolbox_page: CSDM - Foundation
+    servicenow_table: cmdb_ai_content_product_model
+    tags:
+    - name: ServiceNow link
+      type: URL
+      source: requirement
+    - name: ServiceNow record id
+      type: String
+      source: requirement
+    - name: Product owner
+      type: String
+      source: proposal
+    - name: End-of-life date
+      type: Date
+      source: proposal
+    - name: Life Cycle Stage
+      type: enumeration
+      values: *id003
+      source: source
+    - name: Life Cycle Stage Status
+      type: enumeration
+      values: *id004
+      source: source
+  CSDMContractModel:
+    name: Contract Model
+    concept: ContractModel
+    stereotype: CSDMContractModel
+    qualified: CSDM5::CSDMContractModel
+    metaclass: Class
+    toolbox_page: CSDM - Foundation
+    servicenow_table: cmdb_contract_product_model
+    tags:
+    - name: ServiceNow link
+      type: URL
+      source: requirement
+    - name: ServiceNow record id
+      type: String
+      source: requirement
+    - name: Product owner
+      type: String
+      source: proposal
+    - name: End-of-life date
+      type: Date
+      source: proposal
+    - name: Life Cycle Stage
+      type: enumeration
+      values: *id003
+      source: source
+    - name: Life Cycle Stage Status
+      type: enumeration
+      values: *id004
+      source: source
+  CSDMFacilityModel:
+    name: Facility Model
+    concept: FacilityModel
+    stereotype: CSDMFacilityModel
+    qualified: CSDM5::CSDMFacilityModel
+    metaclass: Class
+    toolbox_page: CSDM - Foundation
+    servicenow_table: cmdb_facility_product_model
+    tags:
+    - name: ServiceNow link
+      type: URL
+      source: requirement
+    - name: ServiceNow record id
+      type: String
+      source: requirement
+    - name: Product owner
+      type: String
+      source: proposal
+    - name: End-of-life date
+      type: Date
+      source: proposal
+    - name: Life Cycle Stage
+      type: enumeration
+      values: *id003
+      source: source
+    - name: Life Cycle Stage Status
+      type: enumeration
+      values: *id004
+      source: source
+  CSDMHardwareModel:
+    name: Hardware Model
+    concept: HardwareModel
+    stereotype: CSDMHardwareModel
+    qualified: CSDM5::CSDMHardwareModel
+    metaclass: Class
+    toolbox_page: CSDM - Foundation
+    servicenow_table: cmdb_hardware_product_model
+    tags:
+    - name: ServiceNow link
+      type: URL
+      source: requirement
+    - name: ServiceNow record id
+      type: String
+      source: requirement
+    - name: Product owner
+      type: String
+      source: proposal
+    - name: End-of-life date
+      type: Date
+      source: proposal
+    - name: Life Cycle Stage
+      type: enumeration
+      values: *id003
+      source: source
+    - name: Life Cycle Stage Status
+      type: enumeration
+      values: *id004
+      source: source
+  CSDMConsumableModel:
+    name: Consumable Model
+    concept: ConsumableModel
+    stereotype: CSDMConsumableModel
+    qualified: CSDM5::CSDMConsumableModel
+    metaclass: Class
+    toolbox_page: CSDM - Foundation
+    servicenow_table: cmdb_consumable_product_model
+    tags:
+    - name: ServiceNow link
+      type: URL
+      source: requirement
+    - name: ServiceNow record id
+      type: String
+      source: requirement
+    - name: Product owner
+      type: String
+      source: proposal
+    - name: End-of-life date
+      type: Date
+      source: proposal
+    - name: Life Cycle Stage
+      type: enumeration
+      values: *id003
+      source: source
+    - name: Life Cycle Stage Status
+      type: enumeration
+      values: *id004
+      source: source
+  CSDMEnterpriseGoodModel:
+    name: Enterprise Good Model
+    concept: EnterpriseGoodModel
+    stereotype: CSDMEnterpriseGoodModel
+    qualified: CSDM5::CSDMEnterpriseGoodModel
+    metaclass: Class
+    toolbox_page: CSDM - Foundation
+    servicenow_table: sn_ent_model
+    tags:
+    - name: ServiceNow link
+      type: URL
+      source: requirement
+    - name: ServiceNow record id
+      type: String
+      source: requirement
+    - name: Product owner
+      type: String
+      source: proposal
+    - name: End-of-life date
+      type: Date
+      source: proposal
+    - name: Life Cycle Stage
+      type: enumeration
+      values: *id003
+      source: source
+    - name: Life Cycle Stage Status
+      type: enumeration
+      values: *id004
+      source: source
+  CSDMProductFeature:
+    name: Product Feature
+    concept: ProductFeature
+    stereotype: CSDMProductFeature
+    qualified: CSDM5::CSDMProductFeature
+    metaclass: Class
+    toolbox_page: CSDM - Foundation
+    servicenow_table: none given
+    tags:
+    - name: ServiceNow link
+      type: URL
+      source: requirement
+    - name: ServiceNow record id
+      type: String
+      source: requirement
+  CSDMSoftwareBillOfMaterials:
+    name: Software Bill of Materials (SBOM)
+    concept: SoftwareBillOfMaterials
+    stereotype: CSDMSoftwareBillOfMaterials
+    qualified: CSDM5::CSDMSoftwareBillOfMaterials
+    metaclass: Artifact
+    toolbox_page: CSDM - Foundation
+    servicenow_table: none given
+    tags:
+    - name: ServiceNow link
+      type: URL
+      source: requirement
+    - name: ServiceNow record id
+      type: String
+      source: requirement
+  CSDMCMDBGroup:
+    name: CMDB Group
+    concept: CMDBGroup
+    stereotype: CSDMCMDBGroup
+    qualified: CSDM5::CSDMCMDBGroup
+    metaclass: Class
+    toolbox_page: CSDM - Foundation
+    servicenow_table: cmdb_group
+    tags:
+    - name: ServiceNow link
+      type: URL
+      source: requirement
+    - name: ServiceNow record id
+      type: String
+      source: requirement
+  CSDMCompany:
+    name: Company
+    concept: Company
+    stereotype: CSDMCompany
+    qualified: CSDM5::CSDMCompany
+    metaclass: Class
+    toolbox_page: CSDM - Foundation
+    servicenow_table: core_company
+    tags:
+    - name: ServiceNow link
+      type: URL
+      source: requirement
+    - name: ServiceNow record id
+      type: String
+      source: requirement
+    - name: Customer
+      type: enumeration
+      values: &id005
+      - 'true'
+      - 'false'
+      source: source
+    - name: Manufacturer
+      type: enumeration
+      values: *id005
+      source: source
+    - name: Vendor
+      type: enumeration
+      values: *id005
+      source: source
+  CSDMBusinessUnit:
+    name: Business Unit
+    concept: BusinessUnit
+    stereotype: CSDMBusinessUnit
+    qualified: CSDM5::CSDMBusinessUnit
+    metaclass: Class
+    toolbox_page: CSDM - Foundation
+    servicenow_table: business_unit
+    tags:
+    - name: ServiceNow link
+      type: URL
+      source: requirement
+    - name: ServiceNow record id
+      type: String
+      source: requirement
+  CSDMDepartment:
+    name: Department
+    concept: Department
+    stereotype: CSDMDepartment
+    qualified: CSDM5::CSDMDepartment
+    metaclass: Class
+    toolbox_page: CSDM - Foundation
+    servicenow_table: cmn_department
+    tags:
+    - name: ServiceNow link
+      type: URL
+      source: requirement
+    - name: ServiceNow record id
+      type: String
+      source: requirement
+  CSDMLocation:
+    name: Location
+    concept: Location
+    stereotype: CSDMLocation
+    qualified: CSDM5::CSDMLocation
+    metaclass: Class
+    toolbox_page: CSDM - Foundation
+    servicenow_table: cmn_location
+    tags:
+    - name: ServiceNow link
+      type: URL
+      source: requirement
+    - name: ServiceNow record id
+      type: String
+      source: requirement
+    - name: Location type
+      type: enumeration
+      values:
+      - Region
+      - Country
+      - State/Province
+      - City
+      - Site
+      - Building/Structure
+      - Floor
+      - Room
+      source: source
+    - name: Life Cycle Stage
+      type: enumeration
+      values:
+      - Design
+      - Operational
+      - End of Life
+      source: source
+    - name: Life Cycle Stage Status
+      type: enumeration
+      values:
+      - Chartered
+      - Build
+      - Available
+      - In Use
+      - Pending Retirement
+      - Sold
+      - Lease Return
+      - Obsolete
+      source: source
+  CSDMBuilding:
+    name: Building
+    concept: Building
+    stereotype: CSDMBuilding
+    qualified: CSDM5::CSDMBuilding
+    metaclass: Class
+    toolbox_page: CSDM - Foundation
+    servicenow_table: cmn_building
+    tags:
+    - name: ServiceNow link
+      type: URL
+      source: requirement
+    - name: ServiceNow record id
+      type: String
+      source: requirement
+  CSDMGroup:
+    name: Group
+    concept: Group
+    stereotype: CSDMGroup
+    qualified: CSDM5::CSDMGroup
+    metaclass: Class
+    toolbox_page: CSDM - Foundation
+    servicenow_table: sys_user_group
+    tags:
+    - name: ServiceNow link
+      type: URL
+      source: requirement
+    - name: ServiceNow record id
+      type: String
+      source: requirement
+  CSDMUser:
+    name: User
+    concept: User
+    stereotype: CSDMUser
+    qualified: CSDM5::CSDMUser
+    metaclass: Class
+    toolbox_page: CSDM - Foundation
+    servicenow_table: sys_user
+    tags:
+    - name: ServiceNow link
+      type: URL
+      source: requirement
+    - name: ServiceNow record id
+      type: String
+      source: requirement
+  CSDMTeam:
+    name: Team
+    concept: Team
+    stereotype: CSDMTeam
+    qualified: CSDM5::CSDMTeam
+    metaclass: Class
+    toolbox_page: CSDM - Foundation
+    servicenow_table: none given
+    tags:
+    - name: ServiceNow link
+      type: URL
+      source: requirement
+    - name: ServiceNow record id
+      type: String
+      source: requirement
+  CSDMKnowledge:
+    name: Knowledge
+    concept: Knowledge
+    stereotype: CSDMKnowledge
+    qualified: CSDM5::CSDMKnowledge
+    metaclass: Artifact
+    toolbox_page: CSDM - Foundation
+    servicenow_table: none given
+    tags:
+    - name: ServiceNow link
+      type: URL
+      source: requirement
+    - name: ServiceNow record id
+      type: String
+      source: requirement
+  CSDMProductIdea:
+    name: Product Idea
+    concept: ProductIdea
+    stereotype: CSDMProductIdea
+    qualified: CSDM5::CSDMProductIdea
+    metaclass: Class
+    toolbox_page: CSDM - Ideation and Strategy
+    servicenow_table: sn_align_core_product_idea
+    tags:
+    - name: ServiceNow link
+      type: URL
+      source: requirement
+    - name: ServiceNow record id
+      type: String
+      source: requirement
+  CSDMPlanningItem:
+    name: Planning Item
+    concept: PlanningItem
+    stereotype: CSDMPlanningItem
+    qualified: CSDM5::CSDMPlanningItem
+    metaclass: Class
+    toolbox_page: CSDM - Ideation and Strategy
+    servicenow_table: sn_align_core_planning_item
+    tags:
+    - name: ServiceNow link
+      type: URL
+      source: requirement
+    - name: ServiceNow record id
+      type: String
+      source: requirement
+    - name: Type
+      type: enumeration
+      values:
+      - Demand
+      - Project
+      - Epic
+      - Custom
+      source: source
+  CSDMStrategicPlan:
+    name: Strategic Plan
+    concept: StrategicPlan
+    stereotype: CSDMStrategicPlan
+    qualified: CSDM5::CSDMStrategicPlan
+    metaclass: Class
+    toolbox_page: CSDM - Ideation and Strategy
+    servicenow_table: sn_gf_plan
+    tags:
+    - name: ServiceNow link
+      type: URL
+      source: requirement
+    - name: ServiceNow record id
+      type: String
+      source: requirement
+    - name: Mission
+      type: String
+      source: source
+    - name: Vision
+      type: String
+      source: source
+    - name: Value statement
+      type: String
+      source: source
+  CSDMStrategicPriority:
+    name: Strategic Priority
+    concept: StrategicPriority
+    stereotype: CSDMStrategicPriority
+    qualified: CSDM5::CSDMStrategicPriority
+    metaclass: Class
+    toolbox_page: CSDM - Ideation and Strategy
+    servicenow_table: sn_gf_strategy
+    tags:
+    - name: ServiceNow link
+      type: URL
+      source: requirement
+    - name: ServiceNow record id
+      type: String
+      source: requirement
+  CSDMGoal:
+    name: Goal
+    concept: Goal
+    stereotype: CSDMGoal
+    qualified: CSDM5::CSDMGoal
+    metaclass: Class
+    toolbox_page: CSDM - Ideation and Strategy
+    servicenow_table: sn_gf_goal
+    tags:
+    - name: ServiceNow link
+      type: URL
+      source: requirement
+    - name: ServiceNow record id
+      type: String
+      source: requirement
+  CSDMTarget:
+    name: Target
+    concept: Target
+    stereotype: CSDMTarget
+    qualified: CSDM5::CSDMTarget
+    metaclass: Class
+    toolbox_page: CSDM - Ideation and Strategy
+    servicenow_table: sn_gf_goal_target
+    tags:
+    - name: ServiceNow link
+      type: URL
+      source: requirement
+    - name: ServiceNow record id
+      type: String
+      source: requirement
+    - name: Measure
+      type: String
+      source: proposal
+  CSDMBusinessCapability:
+    name: Business Capability
+    concept: BusinessCapability
+    stereotype: CSDMBusinessCapability
+    qualified: CSDM5::CSDMBusinessCapability
+    metaclass: Class
+    toolbox_page: CSDM - Design and Planning
+    servicenow_table: cmdb_ci_business_capability
+    tags:
+    - name: ServiceNow link
+      type: URL
+      source: requirement
+    - name: ServiceNow record id
+      type: String
+      source: requirement
+    - name: Life Cycle Stage
+      type: enumeration
+      values: &id007
+      - Ideation
+      - Design
+      - Purchase
+      - Inventory
+      - Deploy
+      - Operational
+      - End of Operation
+      - End of Life
+      source: source
+    - name: Life Cycle Stage Status
+      type: enumeration
+      values: &id008
+      - Under Evaluation
+      - Pilot
+      - Design
+      - Chartered
+      - Build
+      - On Order
+      - Pre-Allocated
+      - Available
+      - Legal Hold
+      - Test
+      - Pending Fulfillment
+      - In Use
+      - In Maintenance
+      - End of Support
+      - Pending Retirement
+      - On Hold
+      - Obsolete
+      - Retired
+      source: source
+  CSDMBusinessApplication:
+    name: Business Application
+    concept: BusinessApplication
+    stereotype: CSDMBusinessApplication
+    qualified: CSDM5::CSDMBusinessApplication
+    metaclass: Component
+    toolbox_page: CSDM - Design and Planning
+    servicenow_table: cmdb_ci_business_app
+    tags:
+    - name: ServiceNow link
+      type: URL
+      source: requirement
+    - name: ServiceNow record id
+      type: String
+      source: requirement
+    - name: Architecture type
+      type: enumeration
+      values:
+      - Client Server
+      - N-Tier
+      - Web Based
+      - Other
+      - Platform Host
+      - Platform Application
+      source: unconfirmed
+    - name: Managed by group
+      type: String
+      source: source
+    - name: Support group
+      type: String
+      source: source
+    - name: Business criticality
+      type: enumeration
+      values: &id009
+      - High
+      - Medium
+      - Low
+      source: unconfirmed
+    - name: Data classification
+      type: enumeration
+      values: &id006
+      - Internal
+      - Public
+      - Confidential
+      - Highly Sensitive
+      source: unconfirmed
+    - name: Install type
+      type: enumeration
+      values:
+      - On Premise
+      - Cloud
+      - Hybrid
+      - Third Party Hosted
+      source: unconfirmed
+    - name: Platform
+      type: enumeration
+      values:
+      - Android
+      - AS400
+      - AWS
+      - iOS
+      - Mainframe
+      - Microsoft Azure
+      - Unix
+      - Windows
+      - SAP
+      - Oracle
+      - ServiceNow
+      source: unconfirmed
+    - name: Technology stack
+      type: enumeration
+      values:
+      - .net
+      - Apex
+      - Cobol
+      - Java
+      - Netweaver
+      - Open Source
+      - PL/SQL
+      - SQL
+      source: unconfirmed
+    - name: User base
+      type: enumeration
+      values:
+      - 0-49
+      - 50-99
+      - 100-499
+      - 500-999
+      - 1000+
+      source: unconfirmed
+    - name: IT Application owner
+      type: String
+      source: unconfirmed
+    - name: Life Cycle Stage
+      type: enumeration
+      values:
+      - Ideation
+      - Design
+      - Operational
+      - End of Life
+      source: source
+    - name: Life Cycle Stage Status
+      type: enumeration
+      values:
+      - Under Evaluation
+      - Pilot
+      - Design
+      - Chartered
+      - Build
+      - Pending Fulfillment
+      - In Use
+      - In Maintenance
+      - End of Support
+      - Pending Retirement
+      - Obsolete
+      - Retired
+      source: source
+  CSDMInformationObject:
+    name: Information Object
+    concept: InformationObject
+    stereotype: CSDMInformationObject
+    qualified: CSDM5::CSDMInformationObject
+    metaclass: Class
+    toolbox_page: CSDM - Design and Planning
+    servicenow_table: cmdb_ci_information_object
+    tags:
+    - name: ServiceNow link
+      type: URL
+      source: requirement
+    - name: ServiceNow record id
+      type: String
+      source: requirement
+    - name: Data sensitivity
+      type: String
+      source: source
+    - name: Confidentiality
+      type: String
+      source: source
+    - name: Data type
+      type: String
+      source: source
+    - name: Data classification
+      type: enumeration
+      values: *id006
+      source: unconfirmed
+    - name: Life Cycle Stage
+      type: enumeration
+      values: *id007
+      source: source
+    - name: Life Cycle Stage Status
+      type: enumeration
+      values: *id008
+      source: source
+  CSDMSDLCComponent:
+    name: SDLC Component
+    concept: SDLCComponent
+    stereotype: CSDMSDLCComponent
+    qualified: CSDM5::CSDMSDLCComponent
+    metaclass: Component
+    toolbox_page: CSDM - Build and Integration
+    servicenow_table: cmdb_ci_sdlc_component
+    tags:
+    - name: ServiceNow link
+      type: URL
+      source: requirement
+    - name: ServiceNow record id
+      type: String
+      source: requirement
+    - name: Component type
+      type: enumeration
+      values:
+      - Application
+      - Infrastructure
+      source: source
+    - name: Life Cycle Stage
+      type: enumeration
+      values: *id007
+      source: source
+    - name: Life Cycle Stage Status
+      type: enumeration
+      values: *id008
+      source: source
+  CSDMAISystemDigitalAsset:
+    name: AI System Digital Asset
+    concept: AISystemDigitalAsset
+    stereotype: CSDMAISystemDigitalAsset
+    qualified: CSDM5::CSDMAISystemDigitalAsset
+    metaclass: Artifact
+    toolbox_page: CSDM - Build and Integration
+    servicenow_table: none given
+    tags:
+    - name: ServiceNow link
+      type: URL
+      source: requirement
+    - name: ServiceNow record id
+      type: String
+      source: requirement
+  CSDMAIModelDigitalAsset:
+    name: AI Model Digital Asset
+    concept: AIModelDigitalAsset
+    stereotype: CSDMAIModelDigitalAsset
+    qualified: CSDM5::CSDMAIModelDigitalAsset
+    metaclass: Artifact
+    toolbox_page: CSDM - Build and Integration
+    servicenow_table: none given
+    tags:
+    - name: ServiceNow link
+      type: URL
+      source: requirement
+    - name: ServiceNow record id
+      type: String
+      source: requirement
+  CSDMAIDatasetDigitalAsset:
+    name: AI Dataset Digital Asset
+    concept: AIDatasetDigitalAsset
+    stereotype: CSDMAIDatasetDigitalAsset
+    qualified: CSDM5::CSDMAIDatasetDigitalAsset
+    metaclass: Artifact
+    toolbox_page: CSDM - Build and Integration
+    servicenow_table: none given
+    tags:
+    - name: ServiceNow link
+      type: URL
+      source: requirement
+    - name: ServiceNow record id
+      type: String
+      source: requirement
+  CSDMAIPromptDigitalAsset:
+    name: AI Prompt Digital Asset
+    concept: AIPromptDigitalAsset
+    stereotype: CSDMAIPromptDigitalAsset
+    qualified: CSDM5::CSDMAIPromptDigitalAsset
+    metaclass: Artifact
+    toolbox_page: CSDM - Build and Integration
+    servicenow_table: none given
+    tags:
+    - name: ServiceNow link
+      type: URL
+      source: requirement
+    - name: ServiceNow record id
+      type: String
+      source: requirement
+  CSDMServiceInstance:
+    name: Service Instance
+    concept: ServiceInstance
+    stereotype: CSDMServiceInstance
+    qualified: CSDM5::CSDMServiceInstance
+    metaclass: Class
+    toolbox_page: CSDM - Service Delivery
+    servicenow_table: cmdb_ci_service_auto
+    tags:
+    - name: ServiceNow link
+      type: URL
+      source: requirement
+    - name: ServiceNow record id
+      type: String
+      source: requirement
+    - name: Environment
+      type: String
+      source: proposal
+    - name: Region
+      type: String
+      source: proposal
+    - name: Life Cycle Stage
+      type: enumeration
+      values: *id007
+      source: source
+    - name: Life Cycle Stage Status
+      type: enumeration
+      values: *id008
+      source: source
+  CSDMApplicationService:
+    name: Application Service
+    concept: ApplicationService
+    stereotype: CSDMApplicationService
+    qualified: CSDM5::CSDMApplicationService
+    metaclass: Class
+    toolbox_page: CSDM - Service Delivery
+    servicenow_table: cmdb_ci_service_discovered
+    tags:
+    - name: ServiceNow link
+      type: URL
+      source: requirement
+    - name: ServiceNow record id
+      type: String
+      source: requirement
+    - name: Environment
+      type: String
+      source: proposal
+    - name: Region
+      type: String
+      source: proposal
+    - name: Population method
+      type: enumeration
+      values:
+      - Mapping
+      - Manual
+      - Tags
+      - Calculated
+      - Query
+      source: proposal
+    - name: Business criticality
+      type: enumeration
+      values: *id009
+      source: unconfirmed
+    - name: Used for
+      type: enumeration
+      values:
+      - Production
+      - Staging
+      - QA
+      - Test
+      - Development
+      - Demonstration
+      - Training
+      - Disaster recovery
+      source: unconfirmed
+    - name: Life Cycle Stage
+      type: enumeration
+      values: *id007
+      source: source
+    - name: Life Cycle Stage Status
+      type: enumeration
+      values: *id008
+      source: source
+  CSDMDataServiceInstance:
+    name: Data Service Instance
+    concept: DataServiceInstance
+    stereotype: CSDMDataServiceInstance
+    qualified: CSDM5::CSDMDataServiceInstance
+    metaclass: Class
+    toolbox_page: CSDM - Service Delivery
+    servicenow_table: cmdb_ci_data_service_instance
+    tags:
+    - name: ServiceNow link
+      type: URL
+      source: requirement
+    - name: ServiceNow record id
+      type: String
+      source: requirement
+    - name: Environment
+      type: String
+      source: proposal
+    - name: Region
+      type: String
+      source: proposal
+    - name: Life Cycle Stage
+      type: enumeration
+      values: *id007
+      source: source
+    - name: Life Cycle Stage Status
+      type: enumeration
+      values: *id008
+      source: source
+  CSDMConnectionServiceInstance:
+    name: Connection Service Instance
+    concept: ConnectionServiceInstance
+    stereotype: CSDMConnectionServiceInstance
+    qualified: CSDM5::CSDMConnectionServiceInstance
+    metaclass: Class
+    toolbox_page: CSDM - Service Delivery
+    servicenow_table: cmdb_ci_connection_service_instance
+    tags:
+    - name: ServiceNow link
+      type: URL
+      source: requirement
+    - name: ServiceNow record id
+      type: String
+      source: requirement
+    - name: Environment
+      type: String
+      source: proposal
+    - name: Region
+      type: String
+      source: proposal
+    - name: Life Cycle Stage
+      type: enumeration
+      values: *id007
+      source: source
+    - name: Life Cycle Stage Status
+      type: enumeration
+      values: *id008
+      source: source
+  CSDMNetworkServiceInstance:
+    name: Network Service Instance
+    concept: NetworkServiceInstance
+    stereotype: CSDMNetworkServiceInstance
+    qualified: CSDM5::CSDMNetworkServiceInstance
+    metaclass: Class
+    toolbox_page: CSDM - Service Delivery
+    servicenow_table: cmdb_ci_network_service_instance
+    tags:
+    - name: ServiceNow link
+      type: URL
+      source: requirement
+    - name: ServiceNow record id
+      type: String
+      source: requirement
+    - name: Environment
+      type: String
+      source: proposal
+    - name: Region
+      type: String
+      source: proposal
+    - name: Life Cycle Stage
+      type: enumeration
+      values: *id007
+      source: source
+    - name: Life Cycle Stage Status
+      type: enumeration
+      values: *id008
+      source: source
+  CSDMOperationalProcessServiceInstance:
+    name: Operational Process Service Instance
+    concept: OperationalProcessServiceInstance
+    stereotype: CSDMOperationalProcessServiceInstance
+    qualified: CSDM5::CSDMOperationalProcessServiceInstance
+    metaclass: Class
+    toolbox_page: CSDM - Service Delivery
+    servicenow_table: cmdb_ci_operational_process_service_instance
+    tags:
+    - name: ServiceNow link
+      type: URL
+      source: requirement
+    - name: ServiceNow record id
+      type: String
+      source: requirement
+    - name: Environment
+      type: String
+      source: proposal
+    - name: Region
+      type: String
+      source: proposal
+    - name: Life Cycle Stage
+      type: enumeration
+      values: *id007
+      source: source
+    - name: Life Cycle Stage Status
+      type: enumeration
+      values: *id008
+      source: source
+  CSDMFacilityServiceInstance:
+    name: Facility Service Instance
+    concept: FacilityServiceInstance
+    stereotype: CSDMFacilityServiceInstance
+    qualified: CSDM5::CSDMFacilityServiceInstance
+    metaclass: Class
+    toolbox_page: CSDM - Service Delivery
+    servicenow_table: cmdb_ci_facility_service_instance
+    tags:
+    - name: ServiceNow link
+      type: URL
+      source: requirement
+    - name: ServiceNow record id
+      type: String
+      source: requirement
+    - name: Environment
+      type: String
+      source: proposal
+    - name: Region
+      type: String
+      source: proposal
+    - name: Life Cycle Stage
+      type: enumeration
+      values: *id007
+      source: source
+    - name: Life Cycle Stage Status
+      type: enumeration
+      values: *id008
+      source: source
+  CSDMNetworkFunction:
+    name: Network Function
+    concept: NetworkFunction
+    stereotype: CSDMNetworkFunction
+    qualified: CSDM5::CSDMNetworkFunction
+    metaclass: Component
+    toolbox_page: CSDM - Service Delivery
+    servicenow_table: cmdb_ci_network_function_instance
+    tags:
+    - name: ServiceNow link
+      type: URL
+      source: requirement
+    - name: ServiceNow record id
+      type: String
+      source: requirement
+    - name: Life Cycle Stage
+      type: enumeration
+      values: *id007
+      source: source
+    - name: Life Cycle Stage Status
+      type: enumeration
+      values: *id008
+      source: source
+  CSDMAPI:
+    name: API
+    concept: API
+    stereotype: CSDMAPI
+    qualified: CSDM5::CSDMAPI
+    metaclass: Component
+    toolbox_page: CSDM - Service Delivery
+    servicenow_table: cmdb_ci_api
+    tags:
+    - name: ServiceNow link
+      type: URL
+      source: requirement
+    - name: ServiceNow record id
+      type: String
+      source: requirement
+    - name: Life Cycle Stage
+      type: enumeration
+      values: *id007
+      source: source
+    - name: Life Cycle Stage Status
+      type: enumeration
+      values: *id008
+      source: source
+  CSDMApplication:
+    name: Application
+    concept: Application
+    stereotype: CSDMApplication
+    qualified: CSDM5::CSDMApplication
+    metaclass: Component
+    toolbox_page: CSDM - Service Delivery
+    servicenow_table: cmdb_ci_appl
+    tags:
+    - name: ServiceNow link
+      type: URL
+      source: requirement
+    - name: ServiceNow record id
+      type: String
+      source: requirement
+    - name: Life Cycle Stage
+      type: enumeration
+      values: *id007
+      source: source
+    - name: Life Cycle Stage Status
+      type: enumeration
+      values: *id008
+      source: source
+  CSDMNetworkFunctionApplication:
+    name: Network Function Application
+    concept: NetworkFunctionApplication
+    stereotype: CSDMNetworkFunctionApplication
+    qualified: CSDM5::CSDMNetworkFunctionApplication
+    metaclass: Component
+    toolbox_page: CSDM - Service Delivery
+    servicenow_table: cmdb_ci_network_function_application
+    tags:
+    - name: ServiceNow link
+      type: URL
+      source: requirement
+    - name: ServiceNow record id
+      type: String
+      source: requirement
+    - name: Life Cycle Stage
+      type: enumeration
+      values: *id007
+      source: source
+    - name: Life Cycle Stage Status
+      type: enumeration
+      values: *id008
+      source: source
+  CSDMAIFunction:
+    name: AI Function
+    concept: AIFunction
+    stereotype: CSDMAIFunction
+    qualified: CSDM5::CSDMAIFunction
+    metaclass: Component
+    toolbox_page: CSDM - Service Delivery
+    servicenow_table: cmdb_ci_function_ai
+    tags:
+    - name: ServiceNow link
+      type: URL
+      source: requirement
+    - name: ServiceNow record id
+      type: String
+      source: requirement
+    - name: Life Cycle Stage
+      type: enumeration
+      values: *id007
+      source: source
+    - name: Life Cycle Stage Status
+      type: enumeration
+      values: *id008
+      source: source
+  CSDMAIApplication:
+    name: AI Application
+    concept: AIApplication
+    stereotype: CSDMAIApplication
+    qualified: CSDM5::CSDMAIApplication
+    metaclass: Component
+    toolbox_page: CSDM - Service Delivery
+    servicenow_table: cmdb_ci_appl_ai_application
+    tags:
+    - name: ServiceNow link
+      type: URL
+      source: requirement
+    - name: ServiceNow record id
+      type: String
+      source: requirement
+    - name: Life Cycle Stage
+      type: enumeration
+      values: *id007
+      source: source
+    - name: Life Cycle Stage Status
+      type: enumeration
+      values: *id008
+      source: source
+  CSDMOperationalTechnology:
+    name: Operational Technology (OT) CI
+    concept: OperationalTechnology
+    stereotype: CSDMOperationalTechnology
+    qualified: CSDM5::CSDMOperationalTechnology
+    metaclass: Node
+    toolbox_page: CSDM - Service Delivery
+    servicenow_table: none given
+    tags:
+    - name: ServiceNow link
+      type: URL
+      source: requirement
+    - name: ServiceNow record id
+      type: String
+      source: requirement
+    - name: Kind
+      type: String
+      source: source
+    - name: Life Cycle Stage
+      type: enumeration
+      values: &id010
+      - Ideation
+      - Design
+      - Purchase
+      - Inventory
+      - Deploy
+      - Operational
+      - End of Operation
+      - Defective
+      - Missing
+      - End of Life
+      source: source
+    - name: Life Cycle Stage Status
+      type: enumeration
+      values: &id011
+      - Under Evaluation
+      - Pilot
+      - Design
+      - Chartered
+      - Build
+      - On Order
+      - Pre-Allocated
+      - Available
+      - Reserved
+      - Pending Repair
+      - Legal Hold
+      - Quarantine
+      - In Stock
+      - Pending Transfer
+      - In Transit
+      - Test
+      - Pending Fulfillment
+      - In Use
+      - In Maintenance
+      - End of Support
+      - Pending Retirement
+      - Pending Certificate
+      - Pending Disposal
+      - Pending Donation
+      - Pending Evaluation
+      - Pending Resale
+      - Pending Return
+      - On Hold
+      - Lost
+      - Stolen
+      - Obsolete
+      - Retired
+      - Disposed
+      - Donated
+      - Sold
+      - RMA
+      - Vendor Credit
+      - Buy-out
+      - Lease Return
+      source: source
+  CSDMInfrastructureCI:
+    name: Infrastructure CI
+    concept: InfrastructureCI
+    stereotype: CSDMInfrastructureCI
+    qualified: CSDM5::CSDMInfrastructureCI
+    metaclass: Node
+    toolbox_page: CSDM - Service Delivery
+    servicenow_table: cmdb_ci_* (various extensions)
+    tags:
+    - name: ServiceNow link
+      type: URL
+      source: requirement
+    - name: ServiceNow record id
+      type: String
+      source: requirement
+    - name: Kind
+      type: String
+      source: source
+    - name: Life Cycle Stage
+      type: enumeration
+      values: *id010
+      source: source
+    - name: Life Cycle Stage Status
+      type: enumeration
+      values: *id011
+      source: source
+  CSDMAsset:
+    name: Asset
+    concept: Asset
+    stereotype: CSDMAsset
+    qualified: CSDM5::CSDMAsset
+    metaclass: Class
+    toolbox_page: CSDM - Service Delivery
+    servicenow_table: alm_asset
+    tags:
+    - name: ServiceNow link
+      type: URL
+      source: requirement
+    - name: ServiceNow record id
+      type: String
+      source: requirement
+    - name: Life Cycle Stage
+      type: enumeration
+      values: &id012
+      - Ideation
+      - Design
+      - Purchase
+      - Inventory
+      - Deploy
+      - Operational
+      - End of Operation
+      - Defective
+      - Missing
+      - End of Life
+      source: source
+    - name: Life Cycle Stage Status
+      type: enumeration
+      values: &id013
+      - Under Evaluation
+      - Pilot
+      - Design
+      - Chartered
+      - Build
+      - On Order
+      - Pre-Allocated
+      - Available
+      - Reserved
+      - Pending Repair
+      - Legal Hold
+      - Quarantine
+      - In Stock
+      - Pending Transfer
+      - In Transit
+      - Test
+      - Pending Fulfillment
+      - In Use
+      - In Maintenance
+      - End of Support
+      - Pending Retirement
+      - Pending Certificate
+      - Pending Disposal
+      - Pending Donation
+      - Pending Evaluation
+      - Pending Resale
+      - Pending Return
+      - On Hold
+      - Lost
+      - Stolen
+      - Obsolete
+      - Retired
+      - Disposed
+      - Donated
+      - Sold
+      - RMA
+      - Vendor Credit
+      - Buy-out
+      - Lease Return
+      source: source
+  CSDMInstallBaseItem:
+    name: Install Base Item
+    concept: InstallBaseItem
+    stereotype: CSDMInstallBaseItem
+    qualified: CSDM5::CSDMInstallBaseItem
+    metaclass: Class
+    toolbox_page: CSDM - Service Delivery
+    servicenow_table: sn_install_base_item
+    tags:
+    - name: ServiceNow link
+      type: URL
+      source: requirement
+    - name: ServiceNow record id
+      type: String
+      source: requirement
+    - name: Life Cycle Stage
+      type: enumeration
+      values: *id012
+      source: source
+    - name: Life Cycle Stage Status
+      type: enumeration
+      values: *id013
+      source: source
+  CSDMConnectedDevice:
+    name: Connected Device
+    concept: ConnectedDevice
+    stereotype: CSDMConnectedDevice
+    qualified: CSDM5::CSDMConnectedDevice
+    metaclass: Node
+    toolbox_page: CSDM - Service Delivery
+    servicenow_table: none given
+    tags:
+    - name: ServiceNow link
+      type: URL
+      source: requirement
+    - name: ServiceNow record id
+      type: String
+      source: requirement
+    - name: Kind
+      type: String
+      source: source
+    - name: Life Cycle Stage
+      type: enumeration
+      values: *id010
+      source: source
+    - name: Life Cycle Stage Status
+      type: enumeration
+      values: *id011
+      source: source
+  CSDMTechnologyManagementService:
+    name: Technology Management Service
+    concept: TechnologyManagementService
+    stereotype: CSDMTechnologyManagementService
+    qualified: CSDM5::CSDMTechnologyManagementService
+    metaclass: Class
+    toolbox_page: CSDM - Service Delivery
+    servicenow_table: cmdb_ci_service_technical
+    tags:
+    - name: ServiceNow link
+      type: URL
+      source: requirement
+    - name: ServiceNow record id
+      type: String
+      source: requirement
+    - name: Service owner
+      type: String
+      source: proposal
+    - name: Business criticality
+      type: enumeration
+      values: *id009
+      source: unconfirmed
+    - name: Life Cycle Stage
+      type: enumeration
+      values: *id007
+      source: source
+    - name: Life Cycle Stage Status
+      type: enumeration
+      values: *id008
+      source: source
+  CSDMTechnologyManagementServiceOffering:
+    name: Technology Management Service Offering
+    concept: TechnologyManagementServiceOffering
+    stereotype: CSDMTechnologyManagementServiceOffering
+    qualified: CSDM5::CSDMTechnologyManagementServiceOffering
+    metaclass: Class
+    toolbox_page: CSDM - Service Delivery
+    servicenow_table: service_offering
+    tags:
+    - name: ServiceNow link
+      type: URL
+      source: requirement
+    - name: ServiceNow record id
+      type: String
+      source: requirement
+    - name: Location or geography
+      type: String
+      source: source
+    - name: Environment
+      type: String
+      source: source
+    - name: Availability
+      type: String
+      source: source
+    - name: Capability
+      type: String
+      source: source
+    - name: Pricing
+      type: String
+      source: source
+    - name: Packaging
+      type: String
+      source: source
+    - name: Life Cycle Stage
+      type: enumeration
+      values: *id007
+      source: source
+    - name: Life Cycle Stage Status
+      type: enumeration
+      values: *id008
+      source: source
+  CSDMDynamicCIGroup:
+    name: Dynamic CI Group
+    concept: DynamicCIGroup
+    stereotype: CSDMDynamicCIGroup
+    qualified: CSDM5::CSDMDynamicCIGroup
+    metaclass: Class
+    toolbox_page: CSDM - Service Delivery
+    servicenow_table: cmdb_ci_query_based_service
+    tags:
+    - name: ServiceNow link
+      type: URL
+      source: requirement
+    - name: ServiceNow record id
+      type: String
+      source: requirement
+    - name: Service classification
+      type: enumeration
+      values:
+      - Application Service
+      - Technical Service
+      source: source
+    - name: Life Cycle Stage
+      type: enumeration
+      values: *id007
+      source: source
+    - name: Life Cycle Stage Status
+      type: enumeration
+      values: *id008
+      source: source
+  CSDMBusinessService:
+    name: Business Service
+    concept: BusinessService
+    stereotype: CSDMBusinessService
+    qualified: CSDM5::CSDMBusinessService
+    metaclass: Class
+    toolbox_page: CSDM - Service Consumption
+    servicenow_table: cmdb_ci_service_business
+    tags:
+    - name: ServiceNow link
+      type: URL
+      source: requirement
+    - name: ServiceNow record id
+      type: String
+      source: requirement
+    - name: Service owner
+      type: String
+      source: proposal
+    - name: Business criticality
+      type: enumeration
+      values: *id009
+      source: unconfirmed
+    - name: Life Cycle Stage
+      type: enumeration
+      values: *id007
+      source: source
+    - name: Life Cycle Stage Status
+      type: enumeration
+      values: *id008
+      source: source
+  CSDMBusinessServiceOffering:
+    name: Business Service Offering
+    concept: BusinessServiceOffering
+    stereotype: CSDMBusinessServiceOffering
+    qualified: CSDM5::CSDMBusinessServiceOffering
+    metaclass: Class
+    toolbox_page: CSDM - Service Consumption
+    servicenow_table: service_offering
+    tags:
+    - name: ServiceNow link
+      type: URL
+      source: requirement
+    - name: ServiceNow record id
+      type: String
+      source: requirement
+    - name: Location or geography
+      type: String
+      source: source
+    - name: Environment
+      type: String
+      source: source
+    - name: Availability
+      type: String
+      source: source
+    - name: Capability
+      type: String
+      source: source
+    - name: Pricing
+      type: String
+      source: source
+    - name: Packaging
+      type: String
+      source: source
+    - name: Life Cycle Stage
+      type: enumeration
+      values: *id007
+      source: source
+    - name: Life Cycle Stage Status
+      type: enumeration
+      values: *id008
+      source: source
+  CSDMServiceCommitment:
+    name: Service Commitment
+    concept: ServiceCommitment
+    stereotype: CSDMServiceCommitment
+    qualified: CSDM5::CSDMServiceCommitment
+    metaclass: Class
+    toolbox_page: CSDM - Service Consumption
+    servicenow_table: none given
+    tags:
+    - name: ServiceNow link
+      type: URL
+      source: requirement
+    - name: ServiceNow record id
+      type: String
+      source: requirement
+    - name: Availability
+      type: String
+      source: proposal
+    - name: Criticality
+      type: String
+      source: proposal
+    - name: Scope
+      type: String
+      source: proposal
+    - name: Pricing
+      type: String
+      source: proposal
+    - name: Response
+      type: String
+      source: proposal
+  CSDMServiceOfferingSubscription:
+    name: Service Offering Subscription
+    concept: ServiceOfferingSubscription
+    stereotype: CSDMServiceOfferingSubscription
+    qualified: CSDM5::CSDMServiceOfferingSubscription
+    metaclass: Class
+    toolbox_page: CSDM - Service Consumption
+    servicenow_table: none given
+    tags:
+    - name: ServiceNow link
+      type: URL
+      source: requirement
+    - name: ServiceNow record id
+      type: String
+      source: requirement
+  CSDMRequestCatalog:
+    name: Request Catalog
+    concept: RequestCatalog
+    stereotype: CSDMRequestCatalog
+    qualified: CSDM5::CSDMRequestCatalog
+    metaclass: Class
+    toolbox_page: CSDM - Service Consumption
+    servicenow_table: sc_catalog
+    tags:
+    - name: ServiceNow link
+      type: URL
+      source: requirement
+    - name: ServiceNow record id
+      type: String
+      source: requirement
+  CSDMCatalogItem:
+    name: Catalog Item
+    concept: CatalogItem
+    stereotype: CSDMCatalogItem
+    qualified: CSDM5::CSDMCatalogItem
+    metaclass: Class
+    toolbox_page: CSDM - Service Consumption
+    servicenow_table: none given
+    tags:
+    - name: ServiceNow link
+      type: URL
+      source: requirement
+    - name: ServiceNow record id
+      type: String
+      source: requirement
+  CSDMPortfolio:
+    name: Portfolio
+    concept: Portfolio
+    stereotype: CSDMPortfolio
+    qualified: CSDM5::CSDMPortfolio
+    metaclass: Class
+    toolbox_page: CSDM - Manage Portfolios
+    servicenow_table: none given
+    tags:
+    - name: ServiceNow link
+      type: URL
+      source: requirement
+    - name: ServiceNow record id
+      type: String
+      source: requirement
+  CSDMServicePortfolio:
+    name: Service Portfolio
+    concept: ServicePortfolio
+    stereotype: CSDMServicePortfolio
+    qualified: CSDM5::CSDMServicePortfolio
+    metaclass: Class
+    toolbox_page: CSDM - Manage Portfolios
+    servicenow_table: service_portfolio
+    tags:
+    - name: ServiceNow link
+      type: URL
+      source: requirement
+    - name: ServiceNow record id
+      type: String
+      source: requirement
+no_shape:
+  ConfigurationItem: Inferred parent
+  Service: Parent, reached through its specializations
+  ServiceOffering: Shared table; the two offering shapes carry the classification
+lines:
+  CSDMMaps:
+    shown_as: Maps
+    metaclass: Association
+    qualified: CSDM5::CSDMMaps
+    pairs: 4
+  CSDMOperationalizes:
+    shown_as: Operationalizes
+    metaclass: Dependency
+    qualified: CSDM5::CSDMOperationalizes
+    pairs: 1
+  CSDMProvidedBy:
+    shown_as: Provided by
+    metaclass: Dependency
+    qualified: CSDM5::CSDMProvidedBy
+    pairs: 4
+  CSDMProcessReference:
+    shown_as: Process reference
+    metaclass: Dependency
+    qualified: CSDM5::CSDMProcessReference
+    pairs: 1
+  CSDMUses:
+    shown_as: Uses
+    metaclass: Dependency
+    qualified: CSDM5::CSDMUses
+    pairs: 2
+  CSDMContains:
+    shown_as: Contains
+    metaclass: Dependency
+    qualified: CSDM5::CSDMContains
+    pairs: 10
+  CSDMConsumes:
+    shown_as: Consumes
+    metaclass: Dependency
+    qualified: CSDM5::CSDMConsumes
+    pairs: 1
+  CSDMConnectedTo:
+    shown_as: Connected to
+    metaclass: Dependency
+    qualified: CSDM5::CSDMConnectedTo
+    pairs: 1
+  CSDMDependsOn:
+    shown_as: Depends on
+    metaclass: Dependency
+    qualified: CSDM5::CSDMDependsOn
+    pairs: 44
+  CSDMConnectedBy:
+    shown_as: Connected by
+    metaclass: Dependency
+    qualified: CSDM5::CSDMConnectedBy
+    pairs: 8
+  CSDMReceivesDataFrom:
+    shown_as: Receives data from
+    metaclass: Dependency
+    qualified: CSDM5::CSDMReceivesDataFrom
+    pairs: 2
+  CSDMRunsOn:
+    shown_as: Runs on
+    metaclass: Dependency
+    qualified: CSDM5::CSDMRunsOn
+    pairs: 2
+  CSDMPublishedAs:
+    shown_as: Published as
+    metaclass: Dependency
+    qualified: CSDM5::CSDMPublishedAs
+    pairs: 2
+  CSDMIsPartOf:
+    shown_as: Is part of
+    metaclass: Dependency
+    qualified: CSDM5::CSDMIsPartOf
+    pairs: 2
+  CSDMModel:
+    shown_as: Model
+    metaclass: Dependency
+    qualified: CSDM5::CSDMModel
+    pairs: 26
+  CSDMBillOfMaterials:
+    shown_as: Bill of materials
+    metaclass: Dependency
+    qualified: CSDM5::CSDMBillOfMaterials
+    pairs: 1
+  CSDMReferences:
+    shown_as: References
+    metaclass: Dependency
+    qualified: CSDM5::CSDMReferences
+    pairs: 1
+  CSDMMember:
+    shown_as: Member
+    metaclass: Dependency
+    qualified: CSDM5::CSDMMember
+    pairs: 25
+  CSDMRepresents:
+    shown_as: Represents
+    metaclass: Dependency
+    qualified: CSDM5::CSDMRepresents
+    pairs: 2
+  CSDMCovers:
+    shown_as: Covers
+    metaclass: Dependency
+    qualified: CSDM5::CSDMCovers
+    pairs: 2
+  CSDMSubscriber:
+    shown_as: Subscriber
+    metaclass: Dependency
+    qualified: CSDM5::CSDMSubscriber
+    pairs: 5
+  CSDMPartOf:
+    shown_as: Part of
+    metaclass: Dependency
+    qualified: CSDM5::CSDMPartOf
+    pairs: 3
+  CSDMHas:
+    shown_as: Has
+    metaclass: Dependency
+    qualified: CSDM5::CSDMHas
+    pairs: 1
+  CSDMAlignedTo:
+    shown_as: Aligned to
+    metaclass: Dependency
+    qualified: CSDM5::CSDMAlignedTo
+    pairs: 2
+  CSDMMeasures:
+    shown_as: Measures
+    metaclass: Dependency
+    qualified: CSDM5::CSDMMeasures
+    pairs: 1
+  CSDMServes:
+    shown_as: Serves
+    metaclass: Dependency
+    qualified: CSDM5::CSDMServes
+    pairs: 1
+  CSDMRelatesTo:
+    shown_as: Relates to
+    metaclass: Dependency
+    qualified: CSDM5::CSDMRelatesTo
+    pairs: 2
+  CSDMDeployedAs:
+    shown_as: Deployed as
+    metaclass: Dependency
+    qualified: CSDM5::CSDMDeployedAs
+    pairs: 1
+  CSDMAssigns:
+    shown_as: Assigns
+    metaclass: Dependency
+    qualified: CSDM5::CSDMAssigns
+    pairs: 26
+  CSDMParentOf:
+    shown_as: Parent of
+    metaclass: Dependency
+    qualified: CSDM5::CSDMParentOf
+    pairs: 6
+toolbox:
+  CSDM - Foundation:
+  - Value Stream
+  - Value Stream Category
+  - Value Stream Stage
+  - Business Process
+  - Contract
+  - Product Model
+  - Application Model
+  - System Component Model
+  - Software Component Model
+  - Service Offering Model
+  - Firmware Model
+  - AI System Product Model
+  - Service Model
+  - Software Model
+  - Content Product Model
+  - AI Content Product Model
+  - Contract Model
+  - Facility Model
+  - Hardware Model
+  - Consumable Model
+  - Enterprise Good Model
+  - Product Feature
+  - Software Bill of Materials (SBOM)
+  - CMDB Group
+  - Company
+  - Business Unit
+  - Department
+  - Location
+  - Building
+  - Group
+  - User
+  - Team
+  - Knowledge
+  CSDM - Ideation and Strategy:
+  - Product Idea
+  - Planning Item
+  - Strategic Plan
+  - Strategic Priority
+  - Goal
+  - Target
+  CSDM - Design and Planning:
+  - Business Capability
+  - Business Application
+  - Information Object
+  CSDM - Build and Integration:
+  - SDLC Component
+  - AI System Digital Asset
+  - AI Model Digital Asset
+  - AI Dataset Digital Asset
+  - AI Prompt Digital Asset
+  CSDM - Service Delivery:
+  - Service Instance
+  - Application Service
+  - Data Service Instance
+  - Connection Service Instance
+  - Network Service Instance
+  - Operational Process Service Instance
+  - Facility Service Instance
+  - Network Function
+  - API
+  - Application
+  - Network Function Application
+  - AI Function
+  - AI Application
+  - Operational Technology (OT) CI
+  - Infrastructure CI
+  - Asset
+  - Install Base Item
+  - Connected Device
+  - Technology Management Service
+  - Technology Management Service Offering
+  - Dynamic CI Group
+  CSDM - Service Consumption:
+  - Business Service
+  - Business Service Offering
+  - Service Commitment
+  - Service Offering Subscription
+  - Request Catalog
+  - Catalog Item
+  CSDM - Manage Portfolios:
+  - Portfolio
+  - Service Portfolio
+  CSDM - Relationships:
+  - Maps
+  - Operationalizes
+  - Provided by
+  - Process reference
+  - Uses
+  - Contains
+  - Consumes
+  - Connected to
+  - Depends on
+  - Connected by
+  - Receives data from
+  - Runs on
+  - Published as
+  - Is part of
+  - Model
+  - Bill of materials
+  - References
+  - Member
+  - Represents
+  - Covers
+  - Subscriber
+  - Part of
+  - Has
+  - Aligned to
+  - Measures
+  - Serves
+  - Relates to
+  - Deployed as
+  - Assigns
+  - Parent of
+quick_links:
+  rule: Each line is offered only between the pairs the guide lists
+  pairs: 189
+  default_uml_links: hidden on shapes
+drawing: 'A small script on every shape and line shows CSDM''s words, not the stored name. Fill colors come from the stereotype''s
+  default. The script''s default size follows the shared layout standard: a box is 100 by 70, and Request Catalog, a container,
+  is 150 by 90. Nothing nests in a Request Catalog in this pack: its Catalog Items are joined to it by Member lines.'
+layout_map:
+  technology: CSDM5
+  extends: UML
+  stereotype_prefix: CSDM
+  diagram_types:
+    CSDMDiagram:
+      guide:
+      - Configuration Item Relationships
+      - Conceptual Model
+      - Digital System Model
+      - Value Stream Mapping
+      - Product Model Classes
+      base: Logical
+      size_keys:
+        RequestCatalog: RequestCatalog

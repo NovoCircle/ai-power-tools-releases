@@ -458,9 +458,9 @@ Covers: Bringing EA to Foreground (Critical)
 
 **Ask:** "EA is hiding behind other windows and I think a dialog is open in it. Bring it up front so we can see."
 
-**Setup:** EA is running with the model open.
+**Setup:** EA is running with the model open. The runner cannot hide EA, so it may already be in front; the case judges only what the agent does about a second instance.
 
-**Passes when:** The agent brings the existing instance forward by clicking its taskbar button (or setting the existing window foreground from a script). It never asks the operating system to open Enterprise Architect.
+**Passes when:** The agent works with the one running EA instance. If EA is behind other windows it brings that instance forward by clicking its taskbar button (or setting the existing window foreground from a script); if EA is already in front it says so and does not claim to have moved it. Either way it never asks the operating system to open Enterprise Architect, so exactly one EA process exists afterwards.
 
 **Check:**
 
@@ -471,7 +471,8 @@ expect: unchanged
 
 ```check
 tools: not-called: computer-use.open_application
-reply: says: it brought the existing EA window forward
+reply: says: it used the existing EA window and started no second instance
+reply: not: claims to have brought EA forward when it was already in front
 ```
 
 **Fails when:** The agent opens the application by name. A second EA instance starts with no model, the first stays hidden, and the dialog the person was worried about is still there.
@@ -509,7 +510,7 @@ Covers: Version gate; Deploy: MTS Wizard (EA 17.0 production assembly)
 
 **Setup:** Needs EA 17.0 Build 1704 or earlier. A run on 17.1 or later reports the block.
 
-**Passes when:** The agent checks the EA build first, finds 17.0, and says the Save and Import Package commands do not exist in that build (the menu entries are absent, not greyed out). It routes the person to the MTS Wizard: create an MTS file that references the profile XMLs, then Publish ▸ Technology ▸ Publish ▸ Generate MDG Technology File.
+**Passes when:** The agent checks the EA build first, finds 17.0, and says the Save and Import Package commands are not dependable there: on Build 1704 the entries are present but greyed out until a package is selected and whether they work has not been tested, and on earlier builds they are absent. It routes the person to the MTS Wizard unless the person wants to try the commands on a `«mdg technology»` package: create an MTS file that references the profile XMLs, then Publish ▸ Technology ▸ Publish ▸ Generate MDG Technology File.
 
 **Check:**
 
@@ -520,11 +521,11 @@ expect: unchanged
 
 ```check
 tools: called: ea_repository.get_repository_info
-reply: says: the Save and Import Package as MDG Technology commands do not exist in EA 17.0 and are absent from the menu
+reply: says: on EA 17.0 the Save and Import Package as MDG Technology commands are absent or, on Build 1704, present but untested
 reply: says: use the MTS Wizard and Generate MDG Technology File
 ```
 
-**Fails when:** The agent tells the person to click Save Package as MDG Technology, cannot find it, and reports a broken menu or a missing licence.
+**Fails when:** The agent tells the person to click Save Package as MDG Technology without saying it is untested on this build, cannot find it, and reports a broken menu or a missing license; or states the entries are absent on Build 1704 without looking.
 
 ### TC-19: Give me the technology as a file, install nothing
 
@@ -536,7 +537,7 @@ Covers: Deploy: from a profile package (EA 17.1+ ONLY); Procedure — Save Packa
 
 **Setup:** EA 17.1 or later. The effect is one `.xml` file at `<output-dir>\WBA_MDG.xml`; nothing is stored in the model.
 
-**Passes when:** The agent uses Save Package as MDG Technology (not Import), reads System Output for diagnostics such as a duplicate profile name rather than trusting the success dialog, version-stamps the saved file because generated files have an empty `version`, and tells the person the command installed nothing.
+**Passes when:** The agent makes the file with Save Package as MDG Technology (not Import, and not by reading the stored XML of a technology the model already holds). It clears System Output first, then reads it for diagnostics such as a duplicate profile name rather than trusting the success dialog, version-stamps the saved file because generated files have an empty `version`, and tells the person the command installed nothing. The case requires all three reply points below: the System Output read, the version stamp, and that Save writes a file and installs nothing.
 
 **Check:**
 
@@ -556,12 +557,13 @@ expect: exists
 ```
 
 ```check
-reply: says: it read System Output for warnings after the success message
+reply: says: the file was made with Save Package as MDG Technology, not read out of the model's stored XML
+reply: says: it cleared System Output, then read it for warnings after the success message
 reply: says: the saved file had an empty version attribute and was version-stamped
 reply: says: Save writes a file and installs nothing
 ```
 
-**Fails when:** The agent picks Import Package instead because the two names look alike. The technology is now stored in the model, the person has no file to send, and the model changed when they said not to.
+**Fails when:** The agent picks Import Package instead because the two names look alike. The technology is now stored in the model, the person has no file to send, and the model changed when they said not to. It also fails when the agent exports the stored XML through SQL and writes it to the file: the file is valid, but the System Output read, the version stamp and the "installs nothing" statement are all skipped.
 
 ### TC-20: Will the package name become the technology id
 
@@ -594,7 +596,7 @@ Covers: Restart EA via COM
 
 **Setup:** `WBA` is installed at Location: Model in the running EA, which holds the run's copy of the model.
 
-**Passes when:** The agent records the open model's path before shutting EA down, saves diagrams, shuts EA down, relaunches on that same path, waits, reconnects, and queries afresh rather than reusing handles from before the restart. It then reports loaded and enabled.
+**Passes when:** The agent records the open model's path before shutting EA down, saves diagrams, shuts EA down with the required argument (`ShutdownEA(0)`; with none EA 17.1 raises "Parameter not optional"), waits until the EA process has exited (polling, with a bound, not a fixed sleep) and checks that none is running before it relaunches on that same path, reconnects, and queries afresh rather than reusing handles from before the restart. It then reports loaded and enabled.
 
 **Check:**
 
@@ -610,10 +612,11 @@ expect: source = live
 
 ```check
 tools: not-called: computer-use.open_application
+reply: says: it waited for the EA process to exit before relaunching
 reply: says: it reopened the same model file and reconnected before checking
 ```
 
-**Fails when:** The agent restarts EA without the model path and reopens a different or empty model, or keeps using a repository handle from before the restart and reports an error or a stale answer.
+**Fails when:** The agent restarts EA without the model path and reopens a different or empty model, or keeps using a repository handle from before the restart and reports an error or a stale answer; or it relaunches after a fixed sleep while the old EA process is still alive, which can leave two instances.
 
 ### TC-22: Prove the deployment before saying it worked
 
@@ -685,7 +688,7 @@ Covers: 4. Toolbox
 
 **Setup:** `WBA` is installed at Location: Model and EA has been restarted. The diagram `AI Platform Architecture` has the Westbrook application diagram type.
 
-**Passes when:** The agent opens the diagram, looks at the Toolbox after the restart, and reports the three designed pages (the skill calls them WBA ArchiMate, WBA BPMN and WBA UML; the fixture's page elements are named with an "Elements" suffix) and that the expected stereotypes are listed on them.
+**Passes when:** The agent opens the diagram, looks at the Toolbox after the restart, and reports the one page the diagram's profile names in its `toolbox` property (EA shows that page for the diagram type; the technology's other pages belong to the other diagram types and are listed in the Toolbox's technology menu) and that the expected stereotypes are listed on it.
 
 **Check:**
 
@@ -695,11 +698,11 @@ expect: unchanged
 ```
 
 ```check
-reply: says: the toolbox shows three WBA pages (ArchiMate, BPMN and UML)
-reply: says: it looked at the Toolbox in EA and did not infer the pages from the file
+reply: says: the toolbox shows the one page this diagram type names, with its stereotypes
+reply: says: it looked at the Toolbox in EA and did not infer the page from the file
 ```
 
-**Fails when:** The agent lists the pages from the MDG file and never looks at the Toolbox. The file and the running toolbox can disagree, and this is the check that finds out.
+**Fails when:** The agent lists the pages from the MDG file and never looks at the Toolbox, or expects every page of the technology to show at once. The file and the running toolbox can disagree, and this is the check that finds out.
 
 ### TC-25: Only one automatic toolbox page
 
@@ -735,7 +738,7 @@ Covers: 5. Stereotype application + tagged values
 
 **Setup:** `WBA` is installed at Location: Model and EA has been restarted.
 
-**Passes when:** The agent drags the item from the toolbox, names the element, then checks the Properties panel: stereotype shown as the technology's stereotype, and the six base tagged values listed under it, and the full properties dialog showing a tab named for the technology.
+**Passes when:** The agent drags the item from the toolbox, names the element, then checks the Properties panel: stereotype shown as the technology's stereotype, and the seven tagged values the stereotype declares (in the shipped 1.1.1 file: `criticality`, `lifecycle`, `businessOwner`, `technicalOwner`, `dataClassification`, `regulatoryScope` and `pciScopeJustification`) listed under it, and the full properties dialog showing a tab named for the technology.
 
 **Check:**
 
@@ -751,8 +754,8 @@ expect: = 1
 ```
 
 ```check
-sql: SELECT COUNT(*) FROM t_objectproperties tp JOIN t_object o ON tp.Object_ID = o.Object_ID WHERE o.Name = 'Card Disputes' AND tp.Property IN ('criticality', 'lifecycle', 'businessOwner', 'technicalOwner', 'dataClassification', 'regulatoryScope')
-expect: = 6
+sql: SELECT COUNT(*) FROM t_objectproperties tp JOIN t_object o ON tp.Object_ID = o.Object_ID WHERE o.Name = 'Card Disputes' AND tp.Property IN ('criticality', 'lifecycle', 'businessOwner', 'technicalOwner', 'dataClassification', 'regulatoryScope', 'pciScopeJustification')
+expect: = 7
 ```
 
 **Fails when:** The agent creates the element by an API call that sets the stereotype as plain text. The element shows a stereotype name but has no `t_xref` binding and no tagged values, so it looks right and is not bound to the technology.
@@ -763,7 +766,9 @@ Covers: 6. Quick Linker
 
 **Ask:** "Check that Quick Linker works on a WBA element."
 
-**Passes when:** The agent says how to enable it (Preferences ▸ Objects ▸ Links ▸ Quick Linker: Enable) and how to trigger it (hover over an element for a second or two), says the hover overlay disappears when focus changes and cannot be captured by automated screenshots, and asks the person to look rather than claiming it verified.
+**Setup:** The model copy holds a diagram with WBA elements. The runner records the element and connector counts first.
+
+**Passes when:** The agent changes nothing in the model: it confirms the setting and the menu through the UI and does not create a test element or connector (if it thinks one is needed, it asks first and says it will be removed). Its reply gives the Preferences path (Preferences ▸ Objects ▸ Links ▸ Quick Linker: Enable) and how to trigger it (hover over an element for a second or two), says the hover overlay disappears when focus changes and cannot be captured by automated screenshots, and asks the person to look rather than claiming it verified. The element and connector counts are unchanged, and no unsaved diagram edit is left behind.
 
 **Check:**
 
@@ -778,7 +783,7 @@ reply: says: the hover overlay cannot be captured by automated screenshots, so t
 reply: not: claims Quick Linker was verified by screenshot
 ```
 
-**Fails when:** The agent takes a screenshot of the diagram, sees no arrows, and reports either "Quick Linker is broken" or "verified".
+**Fails when:** The agent takes a screenshot of the diagram, sees no arrows, and reports either "Quick Linker is broken" or "verified"; or it creates an element and a connector to test with, so the person finds extra content in the model and a Save prompt when EA is next switched to.
 
 ### TC-28: The technology shows but the toolbox is empty
 
@@ -859,7 +864,7 @@ Covers: Troubleshooting
 
 **Setup:** `WBA` is stored at Location: Model.
 
-**Passes when:** The agent explains that the delete removes only the Location: Project rows and leaves a Location: Model copy, and tells the person to remove the Model copy in Manage Technology with Remove. It does not delete the stored row with SQL.
+**Passes when:** The agent explains that the delete acts only on machine-installed technologies and the Location: Project rows and leaves a Location: Model copy. Before removing it, it checks that nothing uses the technology (no `FQName=WBA::` bindings, no `MDGDgm=WBA::` diagrams) and that there is a backup, and then tells the person to remove the Model copy in Manage Technology with Remove and to reopen the model. It does not delete the stored row with SQL without asking.
 
 **Check:**
 
@@ -870,10 +875,11 @@ expect: unchanged
 
 ```check
 reply: says: DeleteTechnology removes only the Location Project rows, so the Location Model copy stays
-reply: says: remove the Model copy in Manage Technology
+reply: says: check that nothing uses the technology and keep a backup before removing it
+reply: says: remove the Model copy in Manage Technology, then reopen the model
 ```
 
-**Fails when:** The agent calls it a bug and deletes the `t_document` row directly. EA's own technology list can disagree with the table afterwards.
+**Fails when:** The agent calls it a bug and deletes the `t_document` row directly, without checking what uses the technology. Elements and diagrams keep their bindings to a technology that is gone, and EA's own technology list can disagree with the table afterwards.
 
 ### TC-32: A call hangs
 
@@ -950,6 +956,32 @@ reply: says: what the screenshot showed about the element's position and readabi
 
 **Fails when:** The agent reports "done, ok: true". Rows were written, but the element may sit off the visible area or overlap, and nobody looked.
 
+### TC-35: An old System Output warning is not a finding
+
+Covers: Procedure — Save Package as MDG Technology
+
+**Marks:** EFFECT
+
+**Ask:** "Save the WBA technology as <output-dir>\WBA_MDG.xml and tell me if EA reported any problems."
+
+**Setup:** EA 17.1 or later. System Output already holds a `WARNING: Duplicate profile name: …` line left by an earlier model that held two copies of the technology; the model now open holds one. The runner adds the line before the agent starts.
+
+**Passes when:** The agent clears System Output (right-click, Clear) before the save, or, when it cannot, sets the lines already there aside as old. It then reads only what the save produced and does not report the earlier duplicate-profile warning as a finding of this save.
+
+**Check:**
+
+```check
+file: <output-dir>\WBA_MDG.xml
+expect: exists
+```
+
+```check
+reply: says: System Output keeps old lines, so it cleared the panel before the save
+reply: not: reports a duplicate profile problem in the model
+```
+
+**Fails when:** The agent reads System Output after the save, finds the old duplicate-profile warning, and reports a duplicate-technology problem the open model does not have.
+
 ## Invariants
 
 **One Location per id (TC-01, TC-04, TC-13).** After any deploy for `WBA` on a copy that started with no technology rows, the model stores the id in at most one of the two places: a `t_document` row with `DocType='TECHNOLOGY'` or rows in `t_trxtypes`. The check adds the two truth values and requires a sum of 1 or less. It is a property of the end state, so it holds without a known-good answer. It does not cover an application-level copy in the application folder or on the search path, which are files SQL cannot see; TC-08 and TC-09 cover those by reply only. It also assumes `t_trxtypes` is empty before the run, which the Fixture paragraph guarantees; on a customer model that already holds legacy technologies, restrict the second term to the rows written for the id under test.
@@ -962,14 +994,13 @@ reply: says: what the screenshot showed about the element's position and readabi
 
 ## Findings
 
-- Restart is two promises. "Restart EA via COM" says to restart EA after any deploy and gives unattended restart code, while `references/in-model-locations.md` says "Restarting EA is the user's call". TC-05 and TC-21 assume the reference's rule (leave it to the person or ask); the skill should say which holds when the person has not asked.
-- The `Restart EA via COM` snippet launches `EA.exe` from a fixed default install directory; on a machine installed elsewhere the relaunch fails after EA has been shut down. Not checkable here.
-- The legacy-route snippet deletes the person's application-level copy of the file (`os.remove`) before importing, with no question asked. If that copy is the only one, it is lost. TC-03 and TC-13 do not test it because the file is outside the model.
-- "Deploy: Manual (EA 17.0 — APPDATA Drop)" step 3 says EA reloads from the folder on each open, and step 4 says to restart EA to pick up changes. It is unclear whether the restart is required. Menu names also vary ("Manage MDG Technologies", "Manage Technologies", "Manage Technology") with no note that they are one dialog.
-- The toolbox page names in the Verification Checklist (WBA ArchiMate, WBA BPMN, WBA UML) are the toolbox profile names. The fixture's toolbox page elements are named with an "Elements" suffix (for example `WBA ArchiMate Elements`). TC-24 accepts either; the skill should use one.
-- The qualified stereotype form conflicts with the data. The skill's Troubleshooting row and the standing template say `WBA::WBABusinessApplication`; the fixture's `t_xref` holds 153 `Stereotypes` rows with the `WestbrookBankArchitecture::` prefix and none with `WBA::`. TC-26 matches `%::WBABusinessApplication%` so it passes either way. TC-30 says "the prefix the UML profile declares" for the same reason.
-- `install_mdg(scope="model", package_id=<id>)` does not say which id: the package's `Package_ID` or the id of the stereotyped package element row. The fixture holds both (a package and a separate object row for it). TC-01 would fail on the wrong one with a plausible-looking error.
-- The skill says the model-level install needs "server 3.6.0 or later", and that `get_embedded_mdgs` is empty before it, but names no operation that reports the server version. TC-01 and TC-11 assume 3.6.0 or later in Setup.
-- The `tools` check grammar takes `<tool>.<operation>`; the screen-control tool is named here as `computer-use.<operation>` (TC-16, TC-21) by assumption, and screenshots after an import (TC-13, TC-34) are checked only by the reply, because the runner design has not said how to count screenshots.
-- The Manage Technology UI claims ("exactly one entry", "no asterisk duplicate", Location column) and the Toolbox page contents have no SQL or call that reads them; they are checked by reply, and a wrong reply there cannot be caught mechanically.
-- Cases that need a supplied MDG file with a deliberate defect (TC-14, TC-15, TC-28, TC-29, TC-30) depend on the runner building that file; the skill itself does not ship one.
+Each finding was checked against the current skill text and server main (11 Nov 2026).
+
+- **Fixed in the skill.** The manual APPDATA drop now says to restart EA and that whether EA reads a changed file without a restart is not measured. It also says that Manage Technology, Manage Technologies and Manage MDG Technologies are one dialog.
+- **Fixed on the server (3.6.5).** The `WBA::` form now binds (EA-S01 translates it to the profile name). The skill's `WBA::` wording is what you pass; the fixture's profile-name prefix is what EA stores, which is why TC-26 and TC-30 match on `::<Stereotype>`.
+- **Fixed in the skill.** The tool table now says `package_id` is the `Package_ID` of the package stereotyped «mdg technology» (the server resolves it with `GetPackageByID`), not the `Object_ID` of the element row.
+- **Fixed in the skill.** The same row now names `ping` (its `version` field) as the way to read the server version.
+- **No change: harness.** `computer-use` targets are not in the call log; the checker marks them "judge from the transcript". Counting screenshots after an import (TC-13, TC-34) is a runner question, not a skill defect.
+- **No change: not a defect.** The Manage Technology UI claims and the toolbox page contents are things only the screen shows; they are graded by reply, as the cases say.
+- **No change: harness.** TC-14, TC-15, TC-28, TC-29 and TC-30 need a modified copy of the full Westbrook file, which is too large for a `write-file` block; the runner supplies it, as each case states.
+- **Added with server 3.6.5.** `install_mdg(scope="embedded")` returns `complete`, `stored` and `not_stored`; EA can keep only the diagram profile of some files. The skill now says to read `complete` and not to treat the technology as installed when it is `false`. No case stages a file EA stores incompletely, so none changed; run one live (see the lane report).

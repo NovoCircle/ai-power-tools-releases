@@ -1,0 +1,4818 @@
+# UAF 1.0 Conformance Ruleset
+# Language:     Unified Architecture Framework 1.0 (OMG formal/17-12-01), as modeled with Sparx's built-in `UAF` technology
+#               (profile UAFP; EA reports technology version 1.1, its perspective text says UAF 1.0)
+# Enforced by:  AI Power Tools for Sparx EA - validate_model tool
+# Generated from the language skill's rules, relationships and specializations; do not edit by hand.
+#
+# STEREOTYPE NAMES ARE UNQUALIFIED, UPPER CAMEL CASE, AND THAT IS MEASURED.
+#
+# validate_model selects with `Stereotype IN (...)` on t_object and t_connector. For Sparx's UAF technology that column holds the
+# bare name as the profile writes it (`Capability`, `OperationalPerformer`, `IsCapableToPerform`); the qualified form
+# `UAFP::IsCapableToPerform` is only in the t_xref row named `Stereotypes`. The prefix is the profile name UAFP, not the technology
+# id UAF (`UAF::<name>` binds nothing). Measured on EA 17.1 build 1716 by creating one object per stereotype in a test model and
+# reading it back: 172 of the 178 names on the Resources tab bound, FQName `UAFP::<name>`. EA matches a name without regard to case
+# when it creates an object, but a selector compares the stored string exactly.
+#
+# WHAT IS CHECKED. Each relationship of the standard is a stereotyped connector in EA (Abstraction, Dependency, InformationFlow,
+# ControlFlow or Connector). The end rules say which kinds of element may stand at its two ends; the standard names abstract
+# groupings (OperationalAgent, CapableElement, Asset ...) that EA has no stereotype for, so each table lists the concrete stereotypes
+# that specialize them. 41 such rules implement 79 of the 92 END ids (client and supplier together). Thirteen of the 17 exactly-one
+# properties are tagged values of the stereotype in EA and are checked as required tags; one rule reads the Forecast same-kind rule.
+# 29 rules check where an element sits (contained_in): the owner of a role, port, part,
+# action, state description, signal property or information element is the element it is nested under (ParentID) or, for an element
+# in a package, that package; each rule lists the stereotypes the standard allows as the owner.
+#
+# WHAT THE VALIDATOR CANNOT SEE. A rule cannot read what a part or port is typed by (the classifier), the tagged values of a
+# connector, numbers, dates or formats, what a diagram shows, the operations and attributes of a class, or a second stereotype. It
+# can select the note and constraint links of Alias, Definition and the constraints (connectors of type NoteLink with no stereotype)
+# but cannot say that a link from one kind of note ends at one kind of element and a link from another ends at another, so those
+# rules are not here. Nor can it say that everything a performer owns of a kind is of one stereotype (the converse ownership
+# rules). Most of UAF's typing and exchange rules are about those, so they are not in this file. An element with two stereotypes (for
+# example a UAF stereotype and a SysML block) stores only the first in t_object.Stereotype, which is all a rule sees.
+#
+# EA'S UAF TECHNOLOGY HAS NO STEREOTYPE for the abstract groupings, the 16 enumerations (the 15 kinds and SecurityClassificationKind; the guide counts 17 because it also counts StatusIndicators, which has a stereotype here), ActualMeasurement and the other five
+# slot concepts (the tab lists them; EA binds none), SecurityControlAction, SecurityProperty and a few others; rules about them are not
+# written.
+#
+# Sources:
+#   [S1] OMG, Unified Architecture Framework Profile (UAFP) 1.0, formal/17-12-01, and the domain metamodel, formal/17-12-02
+#        https://www.omg.org/spec/UAF/1.0/
+#   [S2] Sparx Systems, the UAF technology built into Enterprise Architect 17.1 (MDG technology id UAF, profile UAFP)
+
+meta:
+  version: "0.1"
+  language: uaf-1
+  organization: "(your organization)"
+  mdg_family: UAF
+  description: >
+    Conformance rules for UAF 1.0 models built with Sparx Enterprise Architect's UAF technology: which kinds of element each
+    relationship may join, that a Forecast joins elements of the same kind, that the exactly-one properties EA carries as tagged
+    values have a value, and that roles, ports, parts, actions, state descriptions and data elements sit in the owner the standard
+    names. Each rule names the rules.md id it implements.
+  severity_levels:
+    error: A requirement of the standard (rules.md strength must)
+    warning: Guidance of the standard (rules.md strength should)
+    info: Advisory note; not a conformance violation
+
+tables:
+  uaf-1-achievedEffect:
+    source: "OMG UAF 1.0 (formal/17-12-01) 7.1.4.4, the metaconstraints of AchievedEffect, written in the stored stereotypes of Sparx's UAF technology; each abstract end concept is expanded to the concrete stereotypes that specialize it"
+    connectors:
+      c: AchievedEffect
+    cells:
+      ActualEnterprisePhase:
+        ActualCondition: "c"
+        ActualEnduringTask: "c"
+        ActualEnterprisePhase: "c"
+        ActualEnvironment: "c"
+        ActualLocation: "c"
+        ActualMeasurementSet: "c"
+        ActualOrganization: "c"
+        ActualPerson: "c"
+        ActualPost: "c"
+        ActualProject: "c"
+        ActualProjectMilestone: "c"
+        ActualPropertySet: "c"
+        ActualResource: "c"
+        ActualResponsibility: "c"
+        ActualRisk: "c"
+        ActualService: "c"
+        FieldedCapability: "c"
+        ProvidedServiceLevel: "c"
+        RequiredServiceLevel: "c"
+      ActualOrganization:
+        ActualCondition: "c"
+        ActualEnduringTask: "c"
+        ActualEnterprisePhase: "c"
+        ActualEnvironment: "c"
+        ActualLocation: "c"
+        ActualMeasurementSet: "c"
+        ActualOrganization: "c"
+        ActualPerson: "c"
+        ActualPost: "c"
+        ActualProject: "c"
+        ActualProjectMilestone: "c"
+        ActualPropertySet: "c"
+        ActualResource: "c"
+        ActualResponsibility: "c"
+        ActualRisk: "c"
+        ActualService: "c"
+        FieldedCapability: "c"
+        ProvidedServiceLevel: "c"
+        RequiredServiceLevel: "c"
+      ActualPerson:
+        ActualCondition: "c"
+        ActualEnduringTask: "c"
+        ActualEnterprisePhase: "c"
+        ActualEnvironment: "c"
+        ActualLocation: "c"
+        ActualMeasurementSet: "c"
+        ActualOrganization: "c"
+        ActualPerson: "c"
+        ActualPost: "c"
+        ActualProject: "c"
+        ActualProjectMilestone: "c"
+        ActualPropertySet: "c"
+        ActualResource: "c"
+        ActualResponsibility: "c"
+        ActualRisk: "c"
+        ActualService: "c"
+        FieldedCapability: "c"
+        ProvidedServiceLevel: "c"
+        RequiredServiceLevel: "c"
+      ActualPost:
+        ActualCondition: "c"
+        ActualEnduringTask: "c"
+        ActualEnterprisePhase: "c"
+        ActualEnvironment: "c"
+        ActualLocation: "c"
+        ActualMeasurementSet: "c"
+        ActualOrganization: "c"
+        ActualPerson: "c"
+        ActualPost: "c"
+        ActualProject: "c"
+        ActualProjectMilestone: "c"
+        ActualPropertySet: "c"
+        ActualResource: "c"
+        ActualResponsibility: "c"
+        ActualRisk: "c"
+        ActualService: "c"
+        FieldedCapability: "c"
+        ProvidedServiceLevel: "c"
+        RequiredServiceLevel: "c"
+      ActualProject:
+        ActualCondition: "c"
+        ActualEnduringTask: "c"
+        ActualEnterprisePhase: "c"
+        ActualEnvironment: "c"
+        ActualLocation: "c"
+        ActualMeasurementSet: "c"
+        ActualOrganization: "c"
+        ActualPerson: "c"
+        ActualPost: "c"
+        ActualProject: "c"
+        ActualProjectMilestone: "c"
+        ActualPropertySet: "c"
+        ActualResource: "c"
+        ActualResponsibility: "c"
+        ActualRisk: "c"
+        ActualService: "c"
+        FieldedCapability: "c"
+        ProvidedServiceLevel: "c"
+        RequiredServiceLevel: "c"
+      ActualResource:
+        ActualCondition: "c"
+        ActualEnduringTask: "c"
+        ActualEnterprisePhase: "c"
+        ActualEnvironment: "c"
+        ActualLocation: "c"
+        ActualMeasurementSet: "c"
+        ActualOrganization: "c"
+        ActualPerson: "c"
+        ActualPost: "c"
+        ActualProject: "c"
+        ActualProjectMilestone: "c"
+        ActualPropertySet: "c"
+        ActualResource: "c"
+        ActualResponsibility: "c"
+        ActualRisk: "c"
+        ActualService: "c"
+        FieldedCapability: "c"
+        ProvidedServiceLevel: "c"
+        RequiredServiceLevel: "c"
+      ActualResponsibility:
+        ActualCondition: "c"
+        ActualEnduringTask: "c"
+        ActualEnterprisePhase: "c"
+        ActualEnvironment: "c"
+        ActualLocation: "c"
+        ActualMeasurementSet: "c"
+        ActualOrganization: "c"
+        ActualPerson: "c"
+        ActualPost: "c"
+        ActualProject: "c"
+        ActualProjectMilestone: "c"
+        ActualPropertySet: "c"
+        ActualResource: "c"
+        ActualResponsibility: "c"
+        ActualRisk: "c"
+        ActualService: "c"
+        FieldedCapability: "c"
+        ProvidedServiceLevel: "c"
+        RequiredServiceLevel: "c"
+      FieldedCapability:
+        ActualCondition: "c"
+        ActualEnduringTask: "c"
+        ActualEnterprisePhase: "c"
+        ActualEnvironment: "c"
+        ActualLocation: "c"
+        ActualMeasurementSet: "c"
+        ActualOrganization: "c"
+        ActualPerson: "c"
+        ActualPost: "c"
+        ActualProject: "c"
+        ActualProjectMilestone: "c"
+        ActualPropertySet: "c"
+        ActualResource: "c"
+        ActualResponsibility: "c"
+        ActualRisk: "c"
+        ActualService: "c"
+        FieldedCapability: "c"
+        ProvidedServiceLevel: "c"
+        RequiredServiceLevel: "c"
+  uaf-1-actualResourceRelationship:
+    source: "OMG UAF 1.0 (formal/17-12-01) 7.1.12.3, the metaconstraints of ActualResourceRelationship, written in the stored stereotypes of Sparx's UAF technology; each abstract end concept is expanded to the concrete stereotypes that specialize it"
+    connectors:
+      c: ActualResourceRelationship
+    cells:
+      ActualOrganization:
+        ActualOrganization: "c"
+        ActualPerson: "c"
+        ActualPost: "c"
+        ActualProject: "c"
+        ActualResource: "c"
+        ActualResponsibility: "c"
+        FieldedCapability: "c"
+      ActualPerson:
+        ActualOrganization: "c"
+        ActualPerson: "c"
+        ActualPost: "c"
+        ActualProject: "c"
+        ActualResource: "c"
+        ActualResponsibility: "c"
+        FieldedCapability: "c"
+      ActualPost:
+        ActualOrganization: "c"
+        ActualPerson: "c"
+        ActualPost: "c"
+        ActualProject: "c"
+        ActualResource: "c"
+        ActualResponsibility: "c"
+        FieldedCapability: "c"
+      ActualProject:
+        ActualOrganization: "c"
+        ActualPerson: "c"
+        ActualPost: "c"
+        ActualProject: "c"
+        ActualResource: "c"
+        ActualResponsibility: "c"
+        FieldedCapability: "c"
+      ActualResource:
+        ActualOrganization: "c"
+        ActualPerson: "c"
+        ActualPost: "c"
+        ActualProject: "c"
+        ActualResource: "c"
+        ActualResponsibility: "c"
+        FieldedCapability: "c"
+      ActualResponsibility:
+        ActualOrganization: "c"
+        ActualPerson: "c"
+        ActualPost: "c"
+        ActualProject: "c"
+        ActualResource: "c"
+        ActualResponsibility: "c"
+        FieldedCapability: "c"
+      FieldedCapability:
+        ActualOrganization: "c"
+        ActualPerson: "c"
+        ActualPost: "c"
+        ActualProject: "c"
+        ActualResource: "c"
+        ActualResponsibility: "c"
+        FieldedCapability: "c"
+  uaf-1-affects:
+    source: "OMG UAF 1.0 (formal/17-12-01) 7.1.9.5, the metaconstraints of Affects, written in the stored stereotypes of Sparx's UAF technology; each abstract end concept is expanded to the concrete stereotypes that specialize it"
+    connectors:
+      c: Affects
+    cells:
+      Risk:
+        CapabilityConfiguration: "c"
+        DataElement: "c"
+        InformationElement: "c"
+        KnownResource: "c"
+        NaturalResource: "c"
+        OperationalArchitecture: "c"
+        OperationalMitigation: "c"
+        OperationalPerformer: "c"
+        Organization: "c"
+        Person: "c"
+        Post: "c"
+        Project: "c"
+        ResourceArchitecture: "c"
+        ResourceArtifact: "c"
+        ResourceMitigation: "c"
+        Responsibility: "c"
+        SecurityEnclave: "c"
+        Software: "c"
+        System: "c"
+        Technology: "c"
+  uaf-1-affectsInContext:
+    source: "OMG UAF 1.0 (formal/17-12-01) 7.1.9.5, the metaconstraints of AffectsInContext, written in the stored stereotypes of Sparx's UAF technology; each abstract end concept is expanded to the concrete stereotypes that specialize it"
+    connectors:
+      c: AffectsInContext
+    cells:
+      Risk:
+        OperationalRole: "c"
+        ProblemDomain: "c"
+        ProjectRole: "c"
+        ResourceRole: "c"
+  uaf-1-arbitraryConnector:
+    source: "OMG UAF 1.0 (formal/17-12-01) 7.1.5.1, the metaconstraints of ArbitraryConnector, written in the stored stereotypes of Sparx's UAF technology; each abstract end concept is expanded to the concrete stereotypes that specialize it"
+    connectors:
+      c: ArbitraryConnector
+    cells:
+      ConceptRole:
+        ConceptRole: "c"
+  uaf-1-architecturalReference:
+    source: "OMG UAF 1.0 (formal/17-12-01) 7.1.3.6, the metaconstraints of ArchitecturalReference, written in the stored stereotypes of Sparx's UAF technology; each abstract end concept is expanded to the concrete stereotypes that specialize it"
+    connectors:
+      c: ArchitecturalReference
+    cells:
+      ArchitecturalDescription:
+        ArchitecturalDescription: "c"
+  uaf-1-capabilityForTask:
+    source: "OMG UAF 1.0 (formal/17-12-01) 7.1.4.3, the metaconstraints of CapabilityForTask, written in the stored stereotypes of Sparx's UAF technology; each abstract end concept is expanded to the concrete stereotypes that specialize it"
+    connectors:
+      c: CapabilityForTask
+    cells:
+      Capability:
+        ActualEnduringTask: "c"
+  uaf-1-command:
+    source: "OMG UAF 1.0 (formal/17-12-01) 7.1.7.2, the metaconstraints of Command, written in the stored stereotypes of Sparx's UAF technology; each abstract end concept is expanded to the concrete stereotypes that specialize it"
+    connectors:
+      c: Command
+    cells:
+      Organization:
+        Organization: "c"
+        Person: "c"
+        Post: "c"
+        Project: "c"
+        Responsibility: "c"
+      Person:
+        Organization: "c"
+        Person: "c"
+        Post: "c"
+        Project: "c"
+        Responsibility: "c"
+      Post:
+        Organization: "c"
+        Person: "c"
+        Post: "c"
+        Project: "c"
+        Responsibility: "c"
+      Project:
+        Organization: "c"
+        Person: "c"
+        Post: "c"
+        Project: "c"
+        Responsibility: "c"
+      Responsibility:
+        Organization: "c"
+        Person: "c"
+        Post: "c"
+        Project: "c"
+        Responsibility: "c"
+  uaf-1-competenceForRole:
+    source: "OMG UAF 1.0 (formal/17-12-01) 7.1.7.4, the metaconstraints of CompetenceForRole, written in the stored stereotypes of Sparx's UAF technology; each abstract end concept is expanded to the concrete stereotypes that specialize it"
+    connectors:
+      c: CompetenceForRole
+    cells:
+      ProjectRole:
+        Competence: "c"
+      ResourceRole:
+        Competence: "c"
+  uaf-1-competenceToConduct:
+    source: "OMG UAF 1.0 (formal/17-12-01) 7.1.7.3, the metaconstraints of CompetenceToConduct, written in the stored stereotypes of Sparx's UAF technology; each abstract end concept is expanded to the concrete stereotypes that specialize it"
+    connectors:
+      c: CompetenceToConduct
+    cells:
+      Function:
+        Competence: "c"
+      ProjectActivity:
+        Competence: "c"
+      SecurityProcess:
+        Competence: "c"
+  uaf-1-consumes:
+    source: "OMG UAF 1.0 (formal/17-12-01) 7.1.6.8, the metaconstraints of Consumes, written in the stored stereotypes of Sparx's UAF technology; each abstract end concept is expanded to the concrete stereotypes that specialize it"
+    connectors:
+      c: Consumes
+    cells:
+      OperationalActivity:
+        ServiceSpecification: "c"
+      SecurityProcess:
+        ServiceSpecification: "c"
+      StandardOperationalActivity:
+        ServiceSpecification: "c"
+  uaf-1-control:
+    source: "OMG UAF 1.0 (formal/17-12-01) 7.1.7.2, the metaconstraints of Control, written in the stored stereotypes of Sparx's UAF technology; each abstract end concept is expanded to the concrete stereotypes that specialize it"
+    connectors:
+      c: Control
+    cells:
+      NaturalResource:
+        NaturalResource: "c"
+        Organization: "c"
+        Person: "c"
+        Post: "c"
+        Project: "c"
+        ResourceArtifact: "c"
+        Responsibility: "c"
+        Software: "c"
+        Technology: "c"
+      Organization:
+        NaturalResource: "c"
+        Organization: "c"
+        Person: "c"
+        Post: "c"
+        Project: "c"
+        ResourceArtifact: "c"
+        Responsibility: "c"
+        Software: "c"
+        Technology: "c"
+      Person:
+        NaturalResource: "c"
+        Organization: "c"
+        Person: "c"
+        Post: "c"
+        Project: "c"
+        ResourceArtifact: "c"
+        Responsibility: "c"
+        Software: "c"
+        Technology: "c"
+      Post:
+        NaturalResource: "c"
+        Organization: "c"
+        Person: "c"
+        Post: "c"
+        Project: "c"
+        ResourceArtifact: "c"
+        Responsibility: "c"
+        Software: "c"
+        Technology: "c"
+      Project:
+        NaturalResource: "c"
+        Organization: "c"
+        Person: "c"
+        Post: "c"
+        Project: "c"
+        ResourceArtifact: "c"
+        Responsibility: "c"
+        Software: "c"
+        Technology: "c"
+      ResourceArtifact:
+        NaturalResource: "c"
+        Organization: "c"
+        Person: "c"
+        Post: "c"
+        Project: "c"
+        ResourceArtifact: "c"
+        Responsibility: "c"
+        Software: "c"
+        Technology: "c"
+      Responsibility:
+        NaturalResource: "c"
+        Organization: "c"
+        Person: "c"
+        Post: "c"
+        Project: "c"
+        ResourceArtifact: "c"
+        Responsibility: "c"
+        Software: "c"
+        Technology: "c"
+      Software:
+        NaturalResource: "c"
+        Organization: "c"
+        Person: "c"
+        Post: "c"
+        Project: "c"
+        ResourceArtifact: "c"
+        Responsibility: "c"
+        Software: "c"
+        Technology: "c"
+      Technology:
+        NaturalResource: "c"
+        Organization: "c"
+        Person: "c"
+        Post: "c"
+        Project: "c"
+        ResourceArtifact: "c"
+        Responsibility: "c"
+        Software: "c"
+        Technology: "c"
+  uaf-1-desiredEffect:
+    source: "OMG UAF 1.0 (formal/17-12-01) 7.1.4.4, the metaconstraints of DesiredEffect, written in the stored stereotypes of Sparx's UAF technology; each abstract end concept is expanded to the concrete stereotypes that specialize it"
+    connectors:
+      c: DesiredEffect
+    cells:
+      Capability:
+        ActualCondition: "c"
+        ActualEnduringTask: "c"
+        ActualEnterprisePhase: "c"
+        ActualEnvironment: "c"
+        ActualLocation: "c"
+        ActualMeasurementSet: "c"
+        ActualOrganization: "c"
+        ActualPerson: "c"
+        ActualPost: "c"
+        ActualProject: "c"
+        ActualProjectMilestone: "c"
+        ActualPropertySet: "c"
+        ActualResource: "c"
+        ActualResponsibility: "c"
+        ActualRisk: "c"
+        ActualService: "c"
+        FieldedCapability: "c"
+        ProvidedServiceLevel: "c"
+        RequiredServiceLevel: "c"
+      CapabilityConfiguration:
+        ActualCondition: "c"
+        ActualEnduringTask: "c"
+        ActualEnterprisePhase: "c"
+        ActualEnvironment: "c"
+        ActualLocation: "c"
+        ActualMeasurementSet: "c"
+        ActualOrganization: "c"
+        ActualPerson: "c"
+        ActualPost: "c"
+        ActualProject: "c"
+        ActualProjectMilestone: "c"
+        ActualPropertySet: "c"
+        ActualResource: "c"
+        ActualResponsibility: "c"
+        ActualRisk: "c"
+        ActualService: "c"
+        FieldedCapability: "c"
+        ProvidedServiceLevel: "c"
+        RequiredServiceLevel: "c"
+      KnownResource:
+        ActualCondition: "c"
+        ActualEnduringTask: "c"
+        ActualEnterprisePhase: "c"
+        ActualEnvironment: "c"
+        ActualLocation: "c"
+        ActualMeasurementSet: "c"
+        ActualOrganization: "c"
+        ActualPerson: "c"
+        ActualPost: "c"
+        ActualProject: "c"
+        ActualProjectMilestone: "c"
+        ActualPropertySet: "c"
+        ActualResource: "c"
+        ActualResponsibility: "c"
+        ActualRisk: "c"
+        ActualService: "c"
+        FieldedCapability: "c"
+        ProvidedServiceLevel: "c"
+        RequiredServiceLevel: "c"
+      NaturalResource:
+        ActualCondition: "c"
+        ActualEnduringTask: "c"
+        ActualEnterprisePhase: "c"
+        ActualEnvironment: "c"
+        ActualLocation: "c"
+        ActualMeasurementSet: "c"
+        ActualOrganization: "c"
+        ActualPerson: "c"
+        ActualPost: "c"
+        ActualProject: "c"
+        ActualProjectMilestone: "c"
+        ActualPropertySet: "c"
+        ActualResource: "c"
+        ActualResponsibility: "c"
+        ActualRisk: "c"
+        ActualService: "c"
+        FieldedCapability: "c"
+        ProvidedServiceLevel: "c"
+        RequiredServiceLevel: "c"
+      OperationalArchitecture:
+        ActualCondition: "c"
+        ActualEnduringTask: "c"
+        ActualEnterprisePhase: "c"
+        ActualEnvironment: "c"
+        ActualLocation: "c"
+        ActualMeasurementSet: "c"
+        ActualOrganization: "c"
+        ActualPerson: "c"
+        ActualPost: "c"
+        ActualProject: "c"
+        ActualProjectMilestone: "c"
+        ActualPropertySet: "c"
+        ActualResource: "c"
+        ActualResponsibility: "c"
+        ActualRisk: "c"
+        ActualService: "c"
+        FieldedCapability: "c"
+        ProvidedServiceLevel: "c"
+        RequiredServiceLevel: "c"
+      OperationalMitigation:
+        ActualCondition: "c"
+        ActualEnduringTask: "c"
+        ActualEnterprisePhase: "c"
+        ActualEnvironment: "c"
+        ActualLocation: "c"
+        ActualMeasurementSet: "c"
+        ActualOrganization: "c"
+        ActualPerson: "c"
+        ActualPost: "c"
+        ActualProject: "c"
+        ActualProjectMilestone: "c"
+        ActualPropertySet: "c"
+        ActualResource: "c"
+        ActualResponsibility: "c"
+        ActualRisk: "c"
+        ActualService: "c"
+        FieldedCapability: "c"
+        ProvidedServiceLevel: "c"
+        RequiredServiceLevel: "c"
+      OperationalPerformer:
+        ActualCondition: "c"
+        ActualEnduringTask: "c"
+        ActualEnterprisePhase: "c"
+        ActualEnvironment: "c"
+        ActualLocation: "c"
+        ActualMeasurementSet: "c"
+        ActualOrganization: "c"
+        ActualPerson: "c"
+        ActualPost: "c"
+        ActualProject: "c"
+        ActualProjectMilestone: "c"
+        ActualPropertySet: "c"
+        ActualResource: "c"
+        ActualResponsibility: "c"
+        ActualRisk: "c"
+        ActualService: "c"
+        FieldedCapability: "c"
+        ProvidedServiceLevel: "c"
+        RequiredServiceLevel: "c"
+      Organization:
+        ActualCondition: "c"
+        ActualEnduringTask: "c"
+        ActualEnterprisePhase: "c"
+        ActualEnvironment: "c"
+        ActualLocation: "c"
+        ActualMeasurementSet: "c"
+        ActualOrganization: "c"
+        ActualPerson: "c"
+        ActualPost: "c"
+        ActualProject: "c"
+        ActualProjectMilestone: "c"
+        ActualPropertySet: "c"
+        ActualResource: "c"
+        ActualResponsibility: "c"
+        ActualRisk: "c"
+        ActualService: "c"
+        FieldedCapability: "c"
+        ProvidedServiceLevel: "c"
+        RequiredServiceLevel: "c"
+      Person:
+        ActualCondition: "c"
+        ActualEnduringTask: "c"
+        ActualEnterprisePhase: "c"
+        ActualEnvironment: "c"
+        ActualLocation: "c"
+        ActualMeasurementSet: "c"
+        ActualOrganization: "c"
+        ActualPerson: "c"
+        ActualPost: "c"
+        ActualProject: "c"
+        ActualProjectMilestone: "c"
+        ActualPropertySet: "c"
+        ActualResource: "c"
+        ActualResponsibility: "c"
+        ActualRisk: "c"
+        ActualService: "c"
+        FieldedCapability: "c"
+        ProvidedServiceLevel: "c"
+        RequiredServiceLevel: "c"
+      Post:
+        ActualCondition: "c"
+        ActualEnduringTask: "c"
+        ActualEnterprisePhase: "c"
+        ActualEnvironment: "c"
+        ActualLocation: "c"
+        ActualMeasurementSet: "c"
+        ActualOrganization: "c"
+        ActualPerson: "c"
+        ActualPost: "c"
+        ActualProject: "c"
+        ActualProjectMilestone: "c"
+        ActualPropertySet: "c"
+        ActualResource: "c"
+        ActualResponsibility: "c"
+        ActualRisk: "c"
+        ActualService: "c"
+        FieldedCapability: "c"
+        ProvidedServiceLevel: "c"
+        RequiredServiceLevel: "c"
+      Project:
+        ActualCondition: "c"
+        ActualEnduringTask: "c"
+        ActualEnterprisePhase: "c"
+        ActualEnvironment: "c"
+        ActualLocation: "c"
+        ActualMeasurementSet: "c"
+        ActualOrganization: "c"
+        ActualPerson: "c"
+        ActualPost: "c"
+        ActualProject: "c"
+        ActualProjectMilestone: "c"
+        ActualPropertySet: "c"
+        ActualResource: "c"
+        ActualResponsibility: "c"
+        ActualRisk: "c"
+        ActualService: "c"
+        FieldedCapability: "c"
+        ProvidedServiceLevel: "c"
+        RequiredServiceLevel: "c"
+      ResourceArchitecture:
+        ActualCondition: "c"
+        ActualEnduringTask: "c"
+        ActualEnterprisePhase: "c"
+        ActualEnvironment: "c"
+        ActualLocation: "c"
+        ActualMeasurementSet: "c"
+        ActualOrganization: "c"
+        ActualPerson: "c"
+        ActualPost: "c"
+        ActualProject: "c"
+        ActualProjectMilestone: "c"
+        ActualPropertySet: "c"
+        ActualResource: "c"
+        ActualResponsibility: "c"
+        ActualRisk: "c"
+        ActualService: "c"
+        FieldedCapability: "c"
+        ProvidedServiceLevel: "c"
+        RequiredServiceLevel: "c"
+      ResourceArtifact:
+        ActualCondition: "c"
+        ActualEnduringTask: "c"
+        ActualEnterprisePhase: "c"
+        ActualEnvironment: "c"
+        ActualLocation: "c"
+        ActualMeasurementSet: "c"
+        ActualOrganization: "c"
+        ActualPerson: "c"
+        ActualPost: "c"
+        ActualProject: "c"
+        ActualProjectMilestone: "c"
+        ActualPropertySet: "c"
+        ActualResource: "c"
+        ActualResponsibility: "c"
+        ActualRisk: "c"
+        ActualService: "c"
+        FieldedCapability: "c"
+        ProvidedServiceLevel: "c"
+        RequiredServiceLevel: "c"
+      ResourceMitigation:
+        ActualCondition: "c"
+        ActualEnduringTask: "c"
+        ActualEnterprisePhase: "c"
+        ActualEnvironment: "c"
+        ActualLocation: "c"
+        ActualMeasurementSet: "c"
+        ActualOrganization: "c"
+        ActualPerson: "c"
+        ActualPost: "c"
+        ActualProject: "c"
+        ActualProjectMilestone: "c"
+        ActualPropertySet: "c"
+        ActualResource: "c"
+        ActualResponsibility: "c"
+        ActualRisk: "c"
+        ActualService: "c"
+        FieldedCapability: "c"
+        ProvidedServiceLevel: "c"
+        RequiredServiceLevel: "c"
+      Responsibility:
+        ActualCondition: "c"
+        ActualEnduringTask: "c"
+        ActualEnterprisePhase: "c"
+        ActualEnvironment: "c"
+        ActualLocation: "c"
+        ActualMeasurementSet: "c"
+        ActualOrganization: "c"
+        ActualPerson: "c"
+        ActualPost: "c"
+        ActualProject: "c"
+        ActualProjectMilestone: "c"
+        ActualPropertySet: "c"
+        ActualResource: "c"
+        ActualResponsibility: "c"
+        ActualRisk: "c"
+        ActualService: "c"
+        FieldedCapability: "c"
+        ProvidedServiceLevel: "c"
+        RequiredServiceLevel: "c"
+      SecurityEnclave:
+        ActualCondition: "c"
+        ActualEnduringTask: "c"
+        ActualEnterprisePhase: "c"
+        ActualEnvironment: "c"
+        ActualLocation: "c"
+        ActualMeasurementSet: "c"
+        ActualOrganization: "c"
+        ActualPerson: "c"
+        ActualPost: "c"
+        ActualProject: "c"
+        ActualProjectMilestone: "c"
+        ActualPropertySet: "c"
+        ActualResource: "c"
+        ActualResponsibility: "c"
+        ActualRisk: "c"
+        ActualService: "c"
+        FieldedCapability: "c"
+        ProvidedServiceLevel: "c"
+        RequiredServiceLevel: "c"
+      Software:
+        ActualCondition: "c"
+        ActualEnduringTask: "c"
+        ActualEnterprisePhase: "c"
+        ActualEnvironment: "c"
+        ActualLocation: "c"
+        ActualMeasurementSet: "c"
+        ActualOrganization: "c"
+        ActualPerson: "c"
+        ActualPost: "c"
+        ActualProject: "c"
+        ActualProjectMilestone: "c"
+        ActualPropertySet: "c"
+        ActualResource: "c"
+        ActualResponsibility: "c"
+        ActualRisk: "c"
+        ActualService: "c"
+        FieldedCapability: "c"
+        ProvidedServiceLevel: "c"
+        RequiredServiceLevel: "c"
+      System:
+        ActualCondition: "c"
+        ActualEnduringTask: "c"
+        ActualEnterprisePhase: "c"
+        ActualEnvironment: "c"
+        ActualLocation: "c"
+        ActualMeasurementSet: "c"
+        ActualOrganization: "c"
+        ActualPerson: "c"
+        ActualPost: "c"
+        ActualProject: "c"
+        ActualProjectMilestone: "c"
+        ActualPropertySet: "c"
+        ActualResource: "c"
+        ActualResponsibility: "c"
+        ActualRisk: "c"
+        ActualService: "c"
+        FieldedCapability: "c"
+        ProvidedServiceLevel: "c"
+        RequiredServiceLevel: "c"
+      Technology:
+        ActualCondition: "c"
+        ActualEnduringTask: "c"
+        ActualEnterprisePhase: "c"
+        ActualEnvironment: "c"
+        ActualLocation: "c"
+        ActualMeasurementSet: "c"
+        ActualOrganization: "c"
+        ActualPerson: "c"
+        ActualPost: "c"
+        ActualProject: "c"
+        ActualProjectMilestone: "c"
+        ActualPropertySet: "c"
+        ActualResource: "c"
+        ActualResponsibility: "c"
+        ActualRisk: "c"
+        ActualService: "c"
+        FieldedCapability: "c"
+        ProvidedServiceLevel: "c"
+        RequiredServiceLevel: "c"
+  uaf-1-enhances:
+    source: "OMG UAF 1.0 (formal/17-12-01) 7.1.9.3, the metaconstraints of Enhances, written in the stored stereotypes of Sparx's UAF technology; each abstract end concept is expanded to the concrete stereotypes that specialize it"
+    connectors:
+      c: Enhances
+    cells:
+      EnhancedSecurityControl:
+        EnhancedSecurityControl: "c"
+        SecurityControl: "c"
+        SecurityControlFamily: "c"
+  uaf-1-exhibits:
+    source: "OMG UAF 1.0 (formal/17-12-01) 7.1.4.5, the metaconstraints of Exhibits, written in the stored stereotypes of Sparx's UAF technology; each abstract end concept is expanded to the concrete stereotypes that specialize it"
+    connectors:
+      c: Exhibits
+    cells:
+      ActualEnduringTask:
+        Capability: "c"
+      ActualEnterprisePhase:
+        Capability: "c"
+      CapabilityConfiguration:
+        Capability: "c"
+      EnterprisePhase:
+        Capability: "c"
+      KnownResource:
+        Capability: "c"
+      NaturalResource:
+        Capability: "c"
+      OperationalArchitecture:
+        Capability: "c"
+      OperationalMitigation:
+        Capability: "c"
+      OperationalPerformer:
+        Capability: "c"
+      Organization:
+        Capability: "c"
+      Person:
+        Capability: "c"
+      Post:
+        Capability: "c"
+      Project:
+        Capability: "c"
+      ResourceArchitecture:
+        Capability: "c"
+      ResourceArtifact:
+        Capability: "c"
+      ResourceMitigation:
+        Capability: "c"
+      Responsibility:
+        Capability: "c"
+      SecurityEnclave:
+        Capability: "c"
+      ServiceSpecification:
+        Capability: "c"
+      Software:
+        Capability: "c"
+      System:
+        Capability: "c"
+      Technology:
+        Capability: "c"
+      WholeLifeEnterprise:
+        Capability: "c"
+  uaf-1-fillsPost:
+    source: "OMG UAF 1.0 (formal/17-12-01) 7.1.12.3, the metaconstraints of FillsPost, written in the stored stereotypes of Sparx's UAF technology; each abstract end concept is expanded to the concrete stereotypes that specialize it"
+    connectors:
+      c: FillsPost
+    cells:
+      ActualPerson:
+        ActualPost: "c"
+  uaf-1-forecast:
+    source: "OMG UAF 1.0 (formal/17-12-01) 7.1.8.9, the metaconstraints of Forecast, written in the stored stereotypes of Sparx's UAF technology; each abstract end concept is expanded to the concrete stereotypes that specialize it"
+    connectors:
+      c: Forecast
+    cells:
+      CapabilityConfiguration:
+        CapabilityConfiguration: "c"
+        Competence: "c"
+        KnownResource: "c"
+        NaturalResource: "c"
+        Organization: "c"
+        Person: "c"
+        Post: "c"
+        Project: "c"
+        Protocol: "c"
+        ProtocolStack: "c"
+        ResourceArchitecture: "c"
+        ResourceArtifact: "c"
+        ResourceMitigation: "c"
+        Responsibility: "c"
+        SecurityEnclave: "c"
+        Software: "c"
+        Standard: "c"
+        System: "c"
+        Technology: "c"
+      Competence:
+        CapabilityConfiguration: "c"
+        Competence: "c"
+        KnownResource: "c"
+        NaturalResource: "c"
+        Organization: "c"
+        Person: "c"
+        Post: "c"
+        Project: "c"
+        Protocol: "c"
+        ProtocolStack: "c"
+        ResourceArchitecture: "c"
+        ResourceArtifact: "c"
+        ResourceMitigation: "c"
+        Responsibility: "c"
+        SecurityEnclave: "c"
+        Software: "c"
+        Standard: "c"
+        System: "c"
+        Technology: "c"
+      KnownResource:
+        CapabilityConfiguration: "c"
+        Competence: "c"
+        KnownResource: "c"
+        NaturalResource: "c"
+        Organization: "c"
+        Person: "c"
+        Post: "c"
+        Project: "c"
+        Protocol: "c"
+        ProtocolStack: "c"
+        ResourceArchitecture: "c"
+        ResourceArtifact: "c"
+        ResourceMitigation: "c"
+        Responsibility: "c"
+        SecurityEnclave: "c"
+        Software: "c"
+        Standard: "c"
+        System: "c"
+        Technology: "c"
+      NaturalResource:
+        CapabilityConfiguration: "c"
+        Competence: "c"
+        KnownResource: "c"
+        NaturalResource: "c"
+        Organization: "c"
+        Person: "c"
+        Post: "c"
+        Project: "c"
+        Protocol: "c"
+        ProtocolStack: "c"
+        ResourceArchitecture: "c"
+        ResourceArtifact: "c"
+        ResourceMitigation: "c"
+        Responsibility: "c"
+        SecurityEnclave: "c"
+        Software: "c"
+        Standard: "c"
+        System: "c"
+        Technology: "c"
+      Organization:
+        CapabilityConfiguration: "c"
+        Competence: "c"
+        KnownResource: "c"
+        NaturalResource: "c"
+        Organization: "c"
+        Person: "c"
+        Post: "c"
+        Project: "c"
+        Protocol: "c"
+        ProtocolStack: "c"
+        ResourceArchitecture: "c"
+        ResourceArtifact: "c"
+        ResourceMitigation: "c"
+        Responsibility: "c"
+        SecurityEnclave: "c"
+        Software: "c"
+        Standard: "c"
+        System: "c"
+        Technology: "c"
+      Person:
+        CapabilityConfiguration: "c"
+        Competence: "c"
+        KnownResource: "c"
+        NaturalResource: "c"
+        Organization: "c"
+        Person: "c"
+        Post: "c"
+        Project: "c"
+        Protocol: "c"
+        ProtocolStack: "c"
+        ResourceArchitecture: "c"
+        ResourceArtifact: "c"
+        ResourceMitigation: "c"
+        Responsibility: "c"
+        SecurityEnclave: "c"
+        Software: "c"
+        Standard: "c"
+        System: "c"
+        Technology: "c"
+      Post:
+        CapabilityConfiguration: "c"
+        Competence: "c"
+        KnownResource: "c"
+        NaturalResource: "c"
+        Organization: "c"
+        Person: "c"
+        Post: "c"
+        Project: "c"
+        Protocol: "c"
+        ProtocolStack: "c"
+        ResourceArchitecture: "c"
+        ResourceArtifact: "c"
+        ResourceMitigation: "c"
+        Responsibility: "c"
+        SecurityEnclave: "c"
+        Software: "c"
+        Standard: "c"
+        System: "c"
+        Technology: "c"
+      Project:
+        CapabilityConfiguration: "c"
+        Competence: "c"
+        KnownResource: "c"
+        NaturalResource: "c"
+        Organization: "c"
+        Person: "c"
+        Post: "c"
+        Project: "c"
+        Protocol: "c"
+        ProtocolStack: "c"
+        ResourceArchitecture: "c"
+        ResourceArtifact: "c"
+        ResourceMitigation: "c"
+        Responsibility: "c"
+        SecurityEnclave: "c"
+        Software: "c"
+        Standard: "c"
+        System: "c"
+        Technology: "c"
+      Protocol:
+        CapabilityConfiguration: "c"
+        Competence: "c"
+        KnownResource: "c"
+        NaturalResource: "c"
+        Organization: "c"
+        Person: "c"
+        Post: "c"
+        Project: "c"
+        Protocol: "c"
+        ProtocolStack: "c"
+        ResourceArchitecture: "c"
+        ResourceArtifact: "c"
+        ResourceMitigation: "c"
+        Responsibility: "c"
+        SecurityEnclave: "c"
+        Software: "c"
+        Standard: "c"
+        System: "c"
+        Technology: "c"
+      ProtocolStack:
+        CapabilityConfiguration: "c"
+        Competence: "c"
+        KnownResource: "c"
+        NaturalResource: "c"
+        Organization: "c"
+        Person: "c"
+        Post: "c"
+        Project: "c"
+        Protocol: "c"
+        ProtocolStack: "c"
+        ResourceArchitecture: "c"
+        ResourceArtifact: "c"
+        ResourceMitigation: "c"
+        Responsibility: "c"
+        SecurityEnclave: "c"
+        Software: "c"
+        Standard: "c"
+        System: "c"
+        Technology: "c"
+      ResourceArchitecture:
+        CapabilityConfiguration: "c"
+        Competence: "c"
+        KnownResource: "c"
+        NaturalResource: "c"
+        Organization: "c"
+        Person: "c"
+        Post: "c"
+        Project: "c"
+        Protocol: "c"
+        ProtocolStack: "c"
+        ResourceArchitecture: "c"
+        ResourceArtifact: "c"
+        ResourceMitigation: "c"
+        Responsibility: "c"
+        SecurityEnclave: "c"
+        Software: "c"
+        Standard: "c"
+        System: "c"
+        Technology: "c"
+      ResourceArtifact:
+        CapabilityConfiguration: "c"
+        Competence: "c"
+        KnownResource: "c"
+        NaturalResource: "c"
+        Organization: "c"
+        Person: "c"
+        Post: "c"
+        Project: "c"
+        Protocol: "c"
+        ProtocolStack: "c"
+        ResourceArchitecture: "c"
+        ResourceArtifact: "c"
+        ResourceMitigation: "c"
+        Responsibility: "c"
+        SecurityEnclave: "c"
+        Software: "c"
+        Standard: "c"
+        System: "c"
+        Technology: "c"
+      ResourceMitigation:
+        CapabilityConfiguration: "c"
+        Competence: "c"
+        KnownResource: "c"
+        NaturalResource: "c"
+        Organization: "c"
+        Person: "c"
+        Post: "c"
+        Project: "c"
+        Protocol: "c"
+        ProtocolStack: "c"
+        ResourceArchitecture: "c"
+        ResourceArtifact: "c"
+        ResourceMitigation: "c"
+        Responsibility: "c"
+        SecurityEnclave: "c"
+        Software: "c"
+        Standard: "c"
+        System: "c"
+        Technology: "c"
+      Responsibility:
+        CapabilityConfiguration: "c"
+        Competence: "c"
+        KnownResource: "c"
+        NaturalResource: "c"
+        Organization: "c"
+        Person: "c"
+        Post: "c"
+        Project: "c"
+        Protocol: "c"
+        ProtocolStack: "c"
+        ResourceArchitecture: "c"
+        ResourceArtifact: "c"
+        ResourceMitigation: "c"
+        Responsibility: "c"
+        SecurityEnclave: "c"
+        Software: "c"
+        Standard: "c"
+        System: "c"
+        Technology: "c"
+      SecurityEnclave:
+        CapabilityConfiguration: "c"
+        Competence: "c"
+        KnownResource: "c"
+        NaturalResource: "c"
+        Organization: "c"
+        Person: "c"
+        Post: "c"
+        Project: "c"
+        Protocol: "c"
+        ProtocolStack: "c"
+        ResourceArchitecture: "c"
+        ResourceArtifact: "c"
+        ResourceMitigation: "c"
+        Responsibility: "c"
+        SecurityEnclave: "c"
+        Software: "c"
+        Standard: "c"
+        System: "c"
+        Technology: "c"
+      Software:
+        CapabilityConfiguration: "c"
+        Competence: "c"
+        KnownResource: "c"
+        NaturalResource: "c"
+        Organization: "c"
+        Person: "c"
+        Post: "c"
+        Project: "c"
+        Protocol: "c"
+        ProtocolStack: "c"
+        ResourceArchitecture: "c"
+        ResourceArtifact: "c"
+        ResourceMitigation: "c"
+        Responsibility: "c"
+        SecurityEnclave: "c"
+        Software: "c"
+        Standard: "c"
+        System: "c"
+        Technology: "c"
+      Standard:
+        CapabilityConfiguration: "c"
+        Competence: "c"
+        KnownResource: "c"
+        NaturalResource: "c"
+        Organization: "c"
+        Person: "c"
+        Post: "c"
+        Project: "c"
+        Protocol: "c"
+        ProtocolStack: "c"
+        ResourceArchitecture: "c"
+        ResourceArtifact: "c"
+        ResourceMitigation: "c"
+        Responsibility: "c"
+        SecurityEnclave: "c"
+        Software: "c"
+        Standard: "c"
+        System: "c"
+        Technology: "c"
+      System:
+        CapabilityConfiguration: "c"
+        Competence: "c"
+        KnownResource: "c"
+        NaturalResource: "c"
+        Organization: "c"
+        Person: "c"
+        Post: "c"
+        Project: "c"
+        Protocol: "c"
+        ProtocolStack: "c"
+        ResourceArchitecture: "c"
+        ResourceArtifact: "c"
+        ResourceMitigation: "c"
+        Responsibility: "c"
+        SecurityEnclave: "c"
+        Software: "c"
+        Standard: "c"
+        System: "c"
+        Technology: "c"
+      Technology:
+        CapabilityConfiguration: "c"
+        Competence: "c"
+        KnownResource: "c"
+        NaturalResource: "c"
+        Organization: "c"
+        Person: "c"
+        Post: "c"
+        Project: "c"
+        Protocol: "c"
+        ProtocolStack: "c"
+        ResourceArchitecture: "c"
+        ResourceArtifact: "c"
+        ResourceMitigation: "c"
+        Responsibility: "c"
+        SecurityEnclave: "c"
+        Software: "c"
+        Standard: "c"
+        System: "c"
+        Technology: "c"
+  uaf-1-forecastSameKind:
+    source: "OMG UAF 1.0 (formal/17-12-01) 7.1.8.9 (Forecast), read through the specializations of SubjectOfForecast: resource performers, competences, standards and protocols; both ends of a Forecast belong to the same group"
+    connectors:
+      f: Forecast
+    cells:
+      CapabilityConfiguration:
+        CapabilityConfiguration: "f"
+        KnownResource: "f"
+        NaturalResource: "f"
+        Organization: "f"
+        Person: "f"
+        Post: "f"
+        Project: "f"
+        ResourceArchitecture: "f"
+        ResourceArtifact: "f"
+        ResourceMitigation: "f"
+        Responsibility: "f"
+        SecurityEnclave: "f"
+        Software: "f"
+        System: "f"
+        Technology: "f"
+      Competence:
+        Competence: "f"
+      KnownResource:
+        CapabilityConfiguration: "f"
+        KnownResource: "f"
+        NaturalResource: "f"
+        Organization: "f"
+        Person: "f"
+        Post: "f"
+        Project: "f"
+        ResourceArchitecture: "f"
+        ResourceArtifact: "f"
+        ResourceMitigation: "f"
+        Responsibility: "f"
+        SecurityEnclave: "f"
+        Software: "f"
+        System: "f"
+        Technology: "f"
+      NaturalResource:
+        CapabilityConfiguration: "f"
+        KnownResource: "f"
+        NaturalResource: "f"
+        Organization: "f"
+        Person: "f"
+        Post: "f"
+        Project: "f"
+        ResourceArchitecture: "f"
+        ResourceArtifact: "f"
+        ResourceMitigation: "f"
+        Responsibility: "f"
+        SecurityEnclave: "f"
+        Software: "f"
+        System: "f"
+        Technology: "f"
+      Organization:
+        CapabilityConfiguration: "f"
+        KnownResource: "f"
+        NaturalResource: "f"
+        Organization: "f"
+        Person: "f"
+        Post: "f"
+        Project: "f"
+        ResourceArchitecture: "f"
+        ResourceArtifact: "f"
+        ResourceMitigation: "f"
+        Responsibility: "f"
+        SecurityEnclave: "f"
+        Software: "f"
+        System: "f"
+        Technology: "f"
+      Person:
+        CapabilityConfiguration: "f"
+        KnownResource: "f"
+        NaturalResource: "f"
+        Organization: "f"
+        Person: "f"
+        Post: "f"
+        Project: "f"
+        ResourceArchitecture: "f"
+        ResourceArtifact: "f"
+        ResourceMitigation: "f"
+        Responsibility: "f"
+        SecurityEnclave: "f"
+        Software: "f"
+        System: "f"
+        Technology: "f"
+      Post:
+        CapabilityConfiguration: "f"
+        KnownResource: "f"
+        NaturalResource: "f"
+        Organization: "f"
+        Person: "f"
+        Post: "f"
+        Project: "f"
+        ResourceArchitecture: "f"
+        ResourceArtifact: "f"
+        ResourceMitigation: "f"
+        Responsibility: "f"
+        SecurityEnclave: "f"
+        Software: "f"
+        System: "f"
+        Technology: "f"
+      Project:
+        CapabilityConfiguration: "f"
+        KnownResource: "f"
+        NaturalResource: "f"
+        Organization: "f"
+        Person: "f"
+        Post: "f"
+        Project: "f"
+        ResourceArchitecture: "f"
+        ResourceArtifact: "f"
+        ResourceMitigation: "f"
+        Responsibility: "f"
+        SecurityEnclave: "f"
+        Software: "f"
+        System: "f"
+        Technology: "f"
+      Protocol:
+        Protocol: "f"
+        ProtocolStack: "f"
+        Standard: "f"
+      ProtocolStack:
+        Protocol: "f"
+        ProtocolStack: "f"
+        Standard: "f"
+      ResourceArchitecture:
+        CapabilityConfiguration: "f"
+        KnownResource: "f"
+        NaturalResource: "f"
+        Organization: "f"
+        Person: "f"
+        Post: "f"
+        Project: "f"
+        ResourceArchitecture: "f"
+        ResourceArtifact: "f"
+        ResourceMitigation: "f"
+        Responsibility: "f"
+        SecurityEnclave: "f"
+        Software: "f"
+        System: "f"
+        Technology: "f"
+      ResourceArtifact:
+        CapabilityConfiguration: "f"
+        KnownResource: "f"
+        NaturalResource: "f"
+        Organization: "f"
+        Person: "f"
+        Post: "f"
+        Project: "f"
+        ResourceArchitecture: "f"
+        ResourceArtifact: "f"
+        ResourceMitigation: "f"
+        Responsibility: "f"
+        SecurityEnclave: "f"
+        Software: "f"
+        System: "f"
+        Technology: "f"
+      ResourceMitigation:
+        CapabilityConfiguration: "f"
+        KnownResource: "f"
+        NaturalResource: "f"
+        Organization: "f"
+        Person: "f"
+        Post: "f"
+        Project: "f"
+        ResourceArchitecture: "f"
+        ResourceArtifact: "f"
+        ResourceMitigation: "f"
+        Responsibility: "f"
+        SecurityEnclave: "f"
+        Software: "f"
+        System: "f"
+        Technology: "f"
+      Responsibility:
+        CapabilityConfiguration: "f"
+        KnownResource: "f"
+        NaturalResource: "f"
+        Organization: "f"
+        Person: "f"
+        Post: "f"
+        Project: "f"
+        ResourceArchitecture: "f"
+        ResourceArtifact: "f"
+        ResourceMitigation: "f"
+        Responsibility: "f"
+        SecurityEnclave: "f"
+        Software: "f"
+        System: "f"
+        Technology: "f"
+      SecurityEnclave:
+        CapabilityConfiguration: "f"
+        KnownResource: "f"
+        NaturalResource: "f"
+        Organization: "f"
+        Person: "f"
+        Post: "f"
+        Project: "f"
+        ResourceArchitecture: "f"
+        ResourceArtifact: "f"
+        ResourceMitigation: "f"
+        Responsibility: "f"
+        SecurityEnclave: "f"
+        Software: "f"
+        System: "f"
+        Technology: "f"
+      Software:
+        CapabilityConfiguration: "f"
+        KnownResource: "f"
+        NaturalResource: "f"
+        Organization: "f"
+        Person: "f"
+        Post: "f"
+        Project: "f"
+        ResourceArchitecture: "f"
+        ResourceArtifact: "f"
+        ResourceMitigation: "f"
+        Responsibility: "f"
+        SecurityEnclave: "f"
+        Software: "f"
+        System: "f"
+        Technology: "f"
+      Standard:
+        Protocol: "f"
+        ProtocolStack: "f"
+        Standard: "f"
+      System:
+        CapabilityConfiguration: "f"
+        KnownResource: "f"
+        NaturalResource: "f"
+        Organization: "f"
+        Person: "f"
+        Post: "f"
+        Project: "f"
+        ResourceArchitecture: "f"
+        ResourceArtifact: "f"
+        ResourceMitigation: "f"
+        Responsibility: "f"
+        SecurityEnclave: "f"
+        Software: "f"
+        System: "f"
+        Technology: "f"
+      Technology:
+        CapabilityConfiguration: "f"
+        KnownResource: "f"
+        NaturalResource: "f"
+        Organization: "f"
+        Person: "f"
+        Post: "f"
+        Project: "f"
+        ResourceArchitecture: "f"
+        ResourceArtifact: "f"
+        ResourceMitigation: "f"
+        Responsibility: "f"
+        SecurityEnclave: "f"
+        Software: "f"
+        System: "f"
+        Technology: "f"
+  uaf-1-functionControlFlow:
+    source: "OMG UAF 1.0 (formal/17-12-01) 7.1.8.4, the metaconstraints of FunctionControlFlow, written in the stored stereotypes of Sparx's UAF technology; each abstract end concept is expanded to the concrete stereotypes that specialize it"
+    connectors:
+      c: FunctionControlFlow
+    cells:
+      FunctionAction:
+        FunctionAction: "c"
+        ProjectActivityAction: "c"
+        SecurityProcessAction: "c"
+      ProjectActivityAction:
+        FunctionAction: "c"
+        ProjectActivityAction: "c"
+        SecurityProcessAction: "c"
+      SecurityProcessAction:
+        FunctionAction: "c"
+        ProjectActivityAction: "c"
+        SecurityProcessAction: "c"
+  uaf-1-implements:
+    source: "OMG UAF 1.0 (formal/17-12-01) 7.1.3.6, the metaconstraints of Implements, written in the stored stereotypes of Sparx's UAF technology; each abstract end concept is expanded to the concrete stereotypes that specialize it"
+    connectors:
+      c: Implements
+    cells:
+      CapabilityConfiguration:
+        KnownResource: "c"
+        OperationalArchitecture: "c"
+        OperationalMitigation: "c"
+        OperationalPerformer: "c"
+      DataElement:
+        InformationElement: "c"
+      Function:
+        OperationalActivity: "c"
+        SecurityProcess: "c"
+        ServiceFunction: "c"
+        StandardOperationalActivity: "c"
+      KnownResource:
+        KnownResource: "c"
+        OperationalArchitecture: "c"
+        OperationalMitigation: "c"
+        OperationalPerformer: "c"
+      NaturalResource:
+        KnownResource: "c"
+        OperationalArchitecture: "c"
+        OperationalMitigation: "c"
+        OperationalPerformer: "c"
+      OperationalActivity:
+        ActualEnduringTask: "c"
+      Organization:
+        KnownResource: "c"
+        OperationalArchitecture: "c"
+        OperationalMitigation: "c"
+        OperationalPerformer: "c"
+      Person:
+        KnownResource: "c"
+        OperationalArchitecture: "c"
+        OperationalMitigation: "c"
+        OperationalPerformer: "c"
+      Post:
+        KnownResource: "c"
+        OperationalArchitecture: "c"
+        OperationalMitigation: "c"
+        OperationalPerformer: "c"
+      Project:
+        KnownResource: "c"
+        OperationalArchitecture: "c"
+        OperationalMitigation: "c"
+        OperationalPerformer: "c"
+      ProjectActivity:
+        OperationalActivity: "c"
+        SecurityProcess: "c"
+        ServiceFunction: "c"
+        StandardOperationalActivity: "c"
+      ProjectRole:
+        OperationalRole: "c"
+        ProblemDomain: "c"
+      ResourceArchitecture:
+        KnownResource: "c"
+        OperationalArchitecture: "c"
+        OperationalMitigation: "c"
+        OperationalPerformer: "c"
+      ResourceArtifact:
+        KnownResource: "c"
+        OperationalArchitecture: "c"
+        OperationalMitigation: "c"
+        OperationalPerformer: "c"
+      ResourceInterface:
+        OperationalInterface: "c"
+        ServiceInterface: "c"
+      ResourceMitigation:
+        KnownResource: "c"
+        OperationalArchitecture: "c"
+        OperationalMitigation: "c"
+        OperationalPerformer: "c"
+      ResourceRole:
+        OperationalRole: "c"
+        ProblemDomain: "c"
+      Responsibility:
+        KnownResource: "c"
+        OperationalArchitecture: "c"
+        OperationalMitigation: "c"
+        OperationalPerformer: "c"
+      SecurityEnclave:
+        KnownResource: "c"
+        OperationalArchitecture: "c"
+        OperationalMitigation: "c"
+        OperationalPerformer: "c"
+      SecurityProcess:
+        ActualEnduringTask: "c"
+        OperationalActivity: "c"
+        SecurityProcess: "c"
+        ServiceFunction: "c"
+        StandardOperationalActivity: "c"
+      Software:
+        KnownResource: "c"
+        OperationalArchitecture: "c"
+        OperationalMitigation: "c"
+        OperationalPerformer: "c"
+      StandardOperationalActivity:
+        ActualEnduringTask: "c"
+      System:
+        KnownResource: "c"
+        OperationalArchitecture: "c"
+        OperationalMitigation: "c"
+        OperationalPerformer: "c"
+      Technology:
+        KnownResource: "c"
+        OperationalArchitecture: "c"
+        OperationalMitigation: "c"
+        OperationalPerformer: "c"
+  uaf-1-isCapableToPerform:
+    source: "OMG UAF 1.0 (formal/17-12-01) 7.1.3.3, the metaconstraints of IsCapableToPerform, written in the stored stereotypes of Sparx's UAF technology; each abstract end concept is expanded to the concrete stereotypes that specialize it"
+    connectors:
+      c: IsCapableToPerform
+    cells:
+      CapabilityConfiguration:
+        Function: "c"
+        SecurityProcess: "c"
+      KnownResource:
+        Function: "c"
+        OperationalActivity: "c"
+        SecurityProcess: "c"
+        StandardOperationalActivity: "c"
+      NaturalResource:
+        Function: "c"
+        SecurityProcess: "c"
+      OperationalArchitecture:
+        OperationalActivity: "c"
+        SecurityProcess: "c"
+        StandardOperationalActivity: "c"
+      OperationalMitigation:
+        OperationalActivity: "c"
+        SecurityProcess: "c"
+        StandardOperationalActivity: "c"
+      OperationalPerformer:
+        OperationalActivity: "c"
+        SecurityProcess: "c"
+        StandardOperationalActivity: "c"
+      Organization:
+        Function: "c"
+        SecurityProcess: "c"
+      Person:
+        Function: "c"
+        SecurityProcess: "c"
+      Post:
+        Function: "c"
+        SecurityProcess: "c"
+      Project:
+        Function: "c"
+        ProjectActivity: "c"
+        SecurityProcess: "c"
+      ResourceArchitecture:
+        Function: "c"
+        SecurityProcess: "c"
+      ResourceArtifact:
+        Function: "c"
+        SecurityProcess: "c"
+      ResourceMitigation:
+        Function: "c"
+        SecurityProcess: "c"
+      Responsibility:
+        Function: "c"
+        SecurityProcess: "c"
+      SecurityEnclave:
+        Function: "c"
+        SecurityProcess: "c"
+      ServiceSpecification:
+        ServiceFunction: "c"
+      Software:
+        Function: "c"
+        SecurityProcess: "c"
+      System:
+        Function: "c"
+        SecurityProcess: "c"
+      Technology:
+        Function: "c"
+        SecurityProcess: "c"
+  uaf-1-mapsToCapability:
+    source: "OMG UAF 1.0 (formal/17-12-01) 7.1.4.5, the metaconstraints of MapsToCapability, written in the stored stereotypes of Sparx's UAF technology; each abstract end concept is expanded to the concrete stereotypes that specialize it"
+    connectors:
+      c: MapsToCapability
+    cells:
+      Function:
+        Capability: "c"
+      OperationalActivity:
+        Capability: "c"
+      ProjectActivity:
+        Capability: "c"
+      SecurityProcess:
+        Capability: "c"
+      ServiceFunction:
+        Capability: "c"
+      StandardOperationalActivity:
+        Capability: "c"
+  uaf-1-milestoneDependency:
+    source: "OMG UAF 1.0 (formal/17-12-01) 7.1.10.3, the metaconstraints of MilestoneDependency, written in the stored stereotypes of Sparx's UAF technology; each abstract end concept is expanded to the concrete stereotypes that specialize it"
+    connectors:
+      c: MilestoneDependency
+    cells:
+      ActualProjectMilestone:
+        ActualProjectMilestone: "c"
+  uaf-1-mitigates:
+    source: "OMG UAF 1.0 (formal/17-12-01) 7.1.9.5, the metaconstraints of Mitigates, written in the stored stereotypes of Sparx's UAF technology; each abstract end concept is expanded to the concrete stereotypes that specialize it"
+    connectors:
+      c: Mitigates
+    cells:
+      EnhancedSecurityControl:
+        Risk: "c"
+      SecurityControl:
+        Risk: "c"
+      SecurityControlFamily:
+        Risk: "c"
+  uaf-1-operationalConnector:
+    source: "OMG UAF 1.0 (formal/17-12-01) 7.1.5.3, the metaconstraints of OperationalConnector, written in the stored stereotypes of Sparx's UAF technology; each abstract end concept is expanded to the concrete stereotypes that specialize it"
+    connectors:
+      c: OperationalConnector
+    cells:
+      OperationalPort:
+        OperationalPort: "c"
+        OperationalRole: "c"
+        ProblemDomain: "c"
+      OperationalRole:
+        OperationalPort: "c"
+        OperationalRole: "c"
+        ProblemDomain: "c"
+      ProblemDomain:
+        OperationalPort: "c"
+        OperationalRole: "c"
+        ProblemDomain: "c"
+  uaf-1-operationalControlFlow:
+    source: "OMG UAF 1.0 (formal/17-12-01) 7.1.5.4, the metaconstraints of OperationalControlFlow, written in the stored stereotypes of Sparx's UAF technology; each abstract end concept is expanded to the concrete stereotypes that specialize it"
+    connectors:
+      c: OperationalControlFlow
+    cells:
+      OperationalActivityAction:
+        OperationalActivityAction: "c"
+        SecurityProcessAction: "c"
+      SecurityProcessAction:
+        OperationalActivityAction: "c"
+        SecurityProcessAction: "c"
+  uaf-1-operationalExchange:
+    source: "OMG UAF 1.0 (formal/17-12-01) 7.1.5.3, the metaconstraints of OperationalExchange, written in the stored stereotypes of Sparx's UAF technology; each abstract end concept is expanded to the concrete stereotypes that specialize it"
+    connectors:
+      c: OperationalExchange
+    cells:
+      KnownResource:
+        KnownResource: "c"
+        OperationalPerformer: "c"
+      OperationalPerformer:
+        KnownResource: "c"
+        OperationalPerformer: "c"
+  uaf-1-organizationInEnterprise:
+    source: "OMG UAF 1.0 (formal/17-12-01) 7.1.4.5, the metaconstraints of OrganizationInEnterprise, written in the stored stereotypes of Sparx's UAF technology; each abstract end concept is expanded to the concrete stereotypes that specialize it"
+    connectors:
+      c: OrganizationInEnterprise
+    cells:
+      ActualOrganization:
+        ActualEnterprisePhase: "c"
+  uaf-1-ownsProcess:
+    source: "OMG UAF 1.0 (formal/17-12-01) 7.1.12.5, the metaconstraints of OwnsProcess, written in the stored stereotypes of Sparx's UAF technology; each abstract end concept is expanded to the concrete stereotypes that specialize it"
+    connectors:
+      c: OwnsProcess
+    cells:
+      ActualOrganization:
+        OperationalActivity: "c"
+        SecurityProcess: "c"
+        StandardOperationalActivity: "c"
+      ActualPerson:
+        OperationalActivity: "c"
+        SecurityProcess: "c"
+        StandardOperationalActivity: "c"
+      ActualPost:
+        OperationalActivity: "c"
+        SecurityProcess: "c"
+        StandardOperationalActivity: "c"
+      ActualProject:
+        OperationalActivity: "c"
+        SecurityProcess: "c"
+        StandardOperationalActivity: "c"
+      ActualResponsibility:
+        OperationalActivity: "c"
+        SecurityProcess: "c"
+        StandardOperationalActivity: "c"
+  uaf-1-ownsRisk:
+    source: "OMG UAF 1.0 (formal/17-12-01) 7.1.9.5, the metaconstraints of OwnsRisk, written in the stored stereotypes of Sparx's UAF technology; each abstract end concept is expanded to the concrete stereotypes that specialize it"
+    connectors:
+      c: OwnsRisk
+    cells:
+      Organization:
+        Risk: "c"
+      Person:
+        Risk: "c"
+      Post:
+        Risk: "c"
+      Project:
+        Risk: "c"
+      Responsibility:
+        Risk: "c"
+  uaf-1-ownsRiskInContext:
+    source: "OMG UAF 1.0 (formal/17-12-01) 7.1.9.5, the metaconstraints of OwnsRiskInContext, written in the stored stereotypes of Sparx's UAF technology; each abstract end concept is expanded to the concrete stereotypes that specialize it"
+    connectors:
+      c: OwnsRiskInContext
+    cells:
+      ProjectRole:
+        Risk: "c"
+      ResourceRole:
+        Risk: "c"
+  uaf-1-performsInContext:
+    source: "OMG UAF 1.0 (formal/17-12-01) 7.1.3.3, the metaconstraints of PerformsInContext, written in the stored stereotypes of Sparx's UAF technology; each abstract end concept is expanded to the concrete stereotypes that specialize it"
+    connectors:
+      c: PerformsInContext
+    cells:
+      OperationalRole:
+        OperationalActivityAction: "c"
+        SecurityProcessAction: "c"
+      ProblemDomain:
+        OperationalActivityAction: "c"
+        SecurityProcessAction: "c"
+      ProjectRole:
+        FunctionAction: "c"
+        ProjectActivityAction: "c"
+        SecurityProcessAction: "c"
+      ResourceRole:
+        FunctionAction: "c"
+        SecurityProcessAction: "c"
+      ServiceSpecificationRole:
+        ServiceFunctionAction: "c"
+  uaf-1-projectSequence:
+    source: "OMG UAF 1.0 (formal/17-12-01) 7.1.10.3, the metaconstraints of ProjectSequence, written in the stored stereotypes of Sparx's UAF technology; each abstract end concept is expanded to the concrete stereotypes that specialize it"
+    connectors:
+      c: ProjectSequence
+    cells:
+      ActualProject:
+        ActualProject: "c"
+  uaf-1-protects:
+    source: "OMG UAF 1.0 (formal/17-12-01) 7.1.9.3, the metaconstraints of Protects, written in the stored stereotypes of Sparx's UAF technology; each abstract end concept is expanded to the concrete stereotypes that specialize it"
+    connectors:
+      c: Protects
+    cells:
+      EnhancedSecurityControl:
+        CapabilityConfiguration: "c"
+        DataElement: "c"
+        InformationElement: "c"
+        KnownResource: "c"
+        NaturalResource: "c"
+        OperationalArchitecture: "c"
+        OperationalMitigation: "c"
+        OperationalPerformer: "c"
+        Organization: "c"
+        Person: "c"
+        Post: "c"
+        Project: "c"
+        ResourceArchitecture: "c"
+        ResourceArtifact: "c"
+        ResourceMitigation: "c"
+        Responsibility: "c"
+        SecurityEnclave: "c"
+        Software: "c"
+        System: "c"
+        Technology: "c"
+      SecurityControl:
+        CapabilityConfiguration: "c"
+        DataElement: "c"
+        InformationElement: "c"
+        KnownResource: "c"
+        NaturalResource: "c"
+        OperationalArchitecture: "c"
+        OperationalMitigation: "c"
+        OperationalPerformer: "c"
+        Organization: "c"
+        Person: "c"
+        Post: "c"
+        Project: "c"
+        ResourceArchitecture: "c"
+        ResourceArtifact: "c"
+        ResourceMitigation: "c"
+        Responsibility: "c"
+        SecurityEnclave: "c"
+        Software: "c"
+        System: "c"
+        Technology: "c"
+      SecurityControlFamily:
+        CapabilityConfiguration: "c"
+        DataElement: "c"
+        InformationElement: "c"
+        KnownResource: "c"
+        NaturalResource: "c"
+        OperationalArchitecture: "c"
+        OperationalMitigation: "c"
+        OperationalPerformer: "c"
+        Organization: "c"
+        Person: "c"
+        Post: "c"
+        Project: "c"
+        ResourceArchitecture: "c"
+        ResourceArtifact: "c"
+        ResourceMitigation: "c"
+        Responsibility: "c"
+        SecurityEnclave: "c"
+        Software: "c"
+        System: "c"
+        Technology: "c"
+  uaf-1-providesCompetence:
+    source: "OMG UAF 1.0 (formal/17-12-01) 7.1.12.4, the metaconstraints of ProvidesCompetence, written in the stored stereotypes of Sparx's UAF technology; each abstract end concept is expanded to the concrete stereotypes that specialize it"
+    connectors:
+      c: ProvidesCompetence
+    cells:
+      ActualOrganization:
+        Competence: "c"
+      ActualPerson:
+        Competence: "c"
+      ActualPost:
+        Competence: "c"
+      ActualProject:
+        Competence: "c"
+      ActualResponsibility:
+        Competence: "c"
+  uaf-1-requiresCompetence:
+    source: "OMG UAF 1.0 (formal/17-12-01) 7.1.7.4, the metaconstraints of RequiresCompetence, written in the stored stereotypes of Sparx's UAF technology; each abstract end concept is expanded to the concrete stereotypes that specialize it"
+    connectors:
+      c: RequiresCompetence
+    cells:
+      Organization:
+        Competence: "c"
+      Person:
+        Competence: "c"
+      Post:
+        Competence: "c"
+      Project:
+        Competence: "c"
+      Responsibility:
+        Competence: "c"
+  uaf-1-resourceConnector:
+    source: "OMG UAF 1.0 (formal/17-12-01) 7.1.8.3, the metaconstraints of ResourceConnector, written in the stored stereotypes of Sparx's UAF technology; each abstract end concept is expanded to the concrete stereotypes that specialize it"
+    connectors:
+      c: ResourceConnector
+    cells:
+      ProjectRole:
+        ProjectRole: "c"
+        ResourcePort: "c"
+        ResourceRole: "c"
+      ResourcePort:
+        ProjectRole: "c"
+        ResourcePort: "c"
+        ResourceRole: "c"
+      ResourceRole:
+        ProjectRole: "c"
+        ResourcePort: "c"
+        ResourceRole: "c"
+  uaf-1-resourceExchange:
+    source: "OMG UAF 1.0 (formal/17-12-01) 7.1.8.3, the metaconstraints of ResourceExchange, written in the stored stereotypes of Sparx's UAF technology; each abstract end concept is expanded to the concrete stereotypes that specialize it"
+    connectors:
+      c: ResourceExchange
+    cells:
+      CapabilityConfiguration:
+        CapabilityConfiguration: "c"
+        KnownResource: "c"
+        NaturalResource: "c"
+        Organization: "c"
+        Person: "c"
+        Post: "c"
+        Project: "c"
+        ResourceArchitecture: "c"
+        ResourceArtifact: "c"
+        ResourceMitigation: "c"
+        Responsibility: "c"
+        SecurityEnclave: "c"
+        Software: "c"
+        System: "c"
+        Technology: "c"
+      KnownResource:
+        CapabilityConfiguration: "c"
+        KnownResource: "c"
+        NaturalResource: "c"
+        Organization: "c"
+        Person: "c"
+        Post: "c"
+        Project: "c"
+        ResourceArchitecture: "c"
+        ResourceArtifact: "c"
+        ResourceMitigation: "c"
+        Responsibility: "c"
+        SecurityEnclave: "c"
+        Software: "c"
+        System: "c"
+        Technology: "c"
+      NaturalResource:
+        CapabilityConfiguration: "c"
+        KnownResource: "c"
+        NaturalResource: "c"
+        Organization: "c"
+        Person: "c"
+        Post: "c"
+        Project: "c"
+        ResourceArchitecture: "c"
+        ResourceArtifact: "c"
+        ResourceMitigation: "c"
+        Responsibility: "c"
+        SecurityEnclave: "c"
+        Software: "c"
+        System: "c"
+        Technology: "c"
+      Organization:
+        CapabilityConfiguration: "c"
+        KnownResource: "c"
+        NaturalResource: "c"
+        Organization: "c"
+        Person: "c"
+        Post: "c"
+        Project: "c"
+        ResourceArchitecture: "c"
+        ResourceArtifact: "c"
+        ResourceMitigation: "c"
+        Responsibility: "c"
+        SecurityEnclave: "c"
+        Software: "c"
+        System: "c"
+        Technology: "c"
+      Person:
+        CapabilityConfiguration: "c"
+        KnownResource: "c"
+        NaturalResource: "c"
+        Organization: "c"
+        Person: "c"
+        Post: "c"
+        Project: "c"
+        ResourceArchitecture: "c"
+        ResourceArtifact: "c"
+        ResourceMitigation: "c"
+        Responsibility: "c"
+        SecurityEnclave: "c"
+        Software: "c"
+        System: "c"
+        Technology: "c"
+      Post:
+        CapabilityConfiguration: "c"
+        KnownResource: "c"
+        NaturalResource: "c"
+        Organization: "c"
+        Person: "c"
+        Post: "c"
+        Project: "c"
+        ResourceArchitecture: "c"
+        ResourceArtifact: "c"
+        ResourceMitigation: "c"
+        Responsibility: "c"
+        SecurityEnclave: "c"
+        Software: "c"
+        System: "c"
+        Technology: "c"
+      Project:
+        CapabilityConfiguration: "c"
+        KnownResource: "c"
+        NaturalResource: "c"
+        Organization: "c"
+        Person: "c"
+        Post: "c"
+        Project: "c"
+        ResourceArchitecture: "c"
+        ResourceArtifact: "c"
+        ResourceMitigation: "c"
+        Responsibility: "c"
+        SecurityEnclave: "c"
+        Software: "c"
+        System: "c"
+        Technology: "c"
+      ResourceArchitecture:
+        CapabilityConfiguration: "c"
+        KnownResource: "c"
+        NaturalResource: "c"
+        Organization: "c"
+        Person: "c"
+        Post: "c"
+        Project: "c"
+        ResourceArchitecture: "c"
+        ResourceArtifact: "c"
+        ResourceMitigation: "c"
+        Responsibility: "c"
+        SecurityEnclave: "c"
+        Software: "c"
+        System: "c"
+        Technology: "c"
+      ResourceArtifact:
+        CapabilityConfiguration: "c"
+        KnownResource: "c"
+        NaturalResource: "c"
+        Organization: "c"
+        Person: "c"
+        Post: "c"
+        Project: "c"
+        ResourceArchitecture: "c"
+        ResourceArtifact: "c"
+        ResourceMitigation: "c"
+        Responsibility: "c"
+        SecurityEnclave: "c"
+        Software: "c"
+        System: "c"
+        Technology: "c"
+      ResourceMitigation:
+        CapabilityConfiguration: "c"
+        KnownResource: "c"
+        NaturalResource: "c"
+        Organization: "c"
+        Person: "c"
+        Post: "c"
+        Project: "c"
+        ResourceArchitecture: "c"
+        ResourceArtifact: "c"
+        ResourceMitigation: "c"
+        Responsibility: "c"
+        SecurityEnclave: "c"
+        Software: "c"
+        System: "c"
+        Technology: "c"
+      Responsibility:
+        CapabilityConfiguration: "c"
+        KnownResource: "c"
+        NaturalResource: "c"
+        Organization: "c"
+        Person: "c"
+        Post: "c"
+        Project: "c"
+        ResourceArchitecture: "c"
+        ResourceArtifact: "c"
+        ResourceMitigation: "c"
+        Responsibility: "c"
+        SecurityEnclave: "c"
+        Software: "c"
+        System: "c"
+        Technology: "c"
+      SecurityEnclave:
+        CapabilityConfiguration: "c"
+        KnownResource: "c"
+        NaturalResource: "c"
+        Organization: "c"
+        Person: "c"
+        Post: "c"
+        Project: "c"
+        ResourceArchitecture: "c"
+        ResourceArtifact: "c"
+        ResourceMitigation: "c"
+        Responsibility: "c"
+        SecurityEnclave: "c"
+        Software: "c"
+        System: "c"
+        Technology: "c"
+      Software:
+        CapabilityConfiguration: "c"
+        KnownResource: "c"
+        NaturalResource: "c"
+        Organization: "c"
+        Person: "c"
+        Post: "c"
+        Project: "c"
+        ResourceArchitecture: "c"
+        ResourceArtifact: "c"
+        ResourceMitigation: "c"
+        Responsibility: "c"
+        SecurityEnclave: "c"
+        Software: "c"
+        System: "c"
+        Technology: "c"
+      System:
+        CapabilityConfiguration: "c"
+        KnownResource: "c"
+        NaturalResource: "c"
+        Organization: "c"
+        Person: "c"
+        Post: "c"
+        Project: "c"
+        ResourceArchitecture: "c"
+        ResourceArtifact: "c"
+        ResourceMitigation: "c"
+        Responsibility: "c"
+        SecurityEnclave: "c"
+        Software: "c"
+        System: "c"
+        Technology: "c"
+      Technology:
+        CapabilityConfiguration: "c"
+        KnownResource: "c"
+        NaturalResource: "c"
+        Organization: "c"
+        Person: "c"
+        Post: "c"
+        Project: "c"
+        ResourceArchitecture: "c"
+        ResourceArtifact: "c"
+        ResourceMitigation: "c"
+        Responsibility: "c"
+        SecurityEnclave: "c"
+        Software: "c"
+        System: "c"
+        Technology: "c"
+  uaf-1-responsibleFor:
+    source: "OMG UAF 1.0 (formal/17-12-01) 7.1.7.5, the metaconstraints of ResponsibleFor, written in the stored stereotypes of Sparx's UAF technology; each abstract end concept is expanded to the concrete stereotypes that specialize it"
+    connectors:
+      c: ResponsibleFor
+    cells:
+      ActualOrganization:
+        ActualProject: "c"
+        ActualResponsibility: "c"
+      ActualPerson:
+        ActualProject: "c"
+        ActualResponsibility: "c"
+      ActualPost:
+        ActualProject: "c"
+        ActualResponsibility: "c"
+  uaf-1-serviceConnector:
+    source: "OMG UAF 1.0 (formal/17-12-01) 7.1.6.3, the metaconstraints of ServiceConnector, written in the stored stereotypes of Sparx's UAF technology; each abstract end concept is expanded to the concrete stereotypes that specialize it"
+    connectors:
+      c: ServiceConnector
+    cells:
+      ServicePort:
+        ServicePort: "c"
+        ServiceSpecificationRole: "c"
+      ServiceSpecificationRole:
+        ServicePort: "c"
+        ServiceSpecificationRole: "c"
+  uaf-1-versionSuccession:
+    source: "OMG UAF 1.0 (formal/17-12-01) 7.1.8.9, the metaconstraints of VersionSuccession, written in the stored stereotypes of Sparx's UAF technology; each abstract end concept is expanded to the concrete stereotypes that specialize it"
+    connectors:
+      c: VersionSuccession
+    cells:
+      VersionOfConfiguration:
+        VersionOfConfiguration: "c"
+
+rules:
+  - id: UAF1-END-003
+    name: A SameAs joins two UAF elements
+    implements: UAF-END-003
+    also_implements:
+    - UAF-END-004
+    description: The client of a SameAs must be a UAFElement (or a specialization of it). The supplier of a SameAs must be
+      a UAFElement (or a specialization of it). In EA the relationship is a Dependency connector stereotyped SameAs; its ends
+      must be elements that carry a UAF stereotype (every concrete stereotype is a specialization of UAFElement). A SameAs
+      to a class with no UAF stereotype is reported. [OMG UAF 1.0 (formal/17-12-01) 7.1.1]
+    category: end
+    severity: error
+    demo_trigger: false
+    coverage: partial
+    not_checked: 'End concepts that EA cannot put on an element (no stereotype, a slot, or a stereotype of a connector or
+      an operation), so an end of that kind is not recognized: AchievedEffect, ActivityPerformableUnderCondition, ActualMeasurement,
+      ActualOrganizationRole, ActualProjectMilestoneRole, ActualProjectRole, ActualResourceRelationship, ActualResourceRole
+      and 57 more.'
+    selector:
+      type: connector
+      connector_stereotype: SameAs
+    condition:
+      type: connector_endpoint_stereotype
+      source_must_be_one_of:
+      - ActualCondition
+      - ActualEnduringTask
+      - ActualEnterprisePhase
+      - ActualEnvironment
+      - ActualLocation
+      - ActualMeasurementSet
+      - ActualOrganization
+      - ActualPerson
+      - ActualPost
+      - ActualProject
+      - ActualProjectMilestone
+      - ActualPropertySet
+      - ActualResource
+      - ActualResponsibility
+      - ActualRisk
+      - ActualService
+      - Alias
+      - ArchitecturalDescription
+      - ArchitectureMetadata
+      - Capability
+      - CapabilityConfiguration
+      - CapabilityProperty
+      - Competence
+      - ConceptRole
+      - Concern
+      - Condition
+      - DataElement
+      - DataModel
+      - Definition
+      - EnduringTask
+      - EnhancedSecurityControl
+      - EnterpriseGoal
+      - EnterprisePhase
+      - EnterpriseVision
+      - Environment
+      - EnvironmentProperty
+      - FieldedCapability
+      - Function
+      - FunctionAction
+      - GeoPoliticalExtentType
+      - HighLevelOperationalConcept
+      - Information
+      - InformationElement
+      - KnownResource
+      - Location
+      - Measurement
+      - MeasurementSet
+      - Metadata
+      - NaturalResource
+      - OperationalActivity
+      - OperationalActivityAction
+      - OperationalArchitecture
+      - OperationalConstraint
+      - OperationalInterface
+      - OperationalMitigation
+      - OperationalParameter
+      - OperationalPerformer
+      - OperationalPort
+      - OperationalRole
+      - OperationalSignal
+      - OperationalSignalProperty
+      - OperationalStateDescription
+      - Organization
+      - Person
+      - Post
+      - ProblemDomain
+      - Project
+      - ProjectActivity
+      - ProjectActivityAction
+      - ProjectMilestone
+      - ProjectMilestoneRole
+      - ProjectRole
+      - ProjectTheme
+      - Protocol
+      - ProtocolLayer
+      - ProtocolStack
+      - ProvidedServiceLevel
+      - RequiredServiceLevel
+      - ResourceArchitecture
+      - ResourceArtifact
+      - ResourceConstraint
+      - ResourceInterface
+      - ResourceMitigation
+      - ResourceParameter
+      - ResourcePort
+      - ResourceRole
+      - ResourceSignal
+      - ResourceSignalProperty
+      - ResourceStateDescription
+      - Responsibility
+      - Risk
+      - SecurityConstraint
+      - SecurityControl
+      - SecurityControlFamily
+      - SecurityEnclave
+      - SecurityProcess
+      - SecurityProcessAction
+      - ServiceFunction
+      - ServiceFunctionAction
+      - ServiceInterface
+      - ServiceParameter
+      - ServicePolicy
+      - ServicePort
+      - ServiceSpecification
+      - ServiceSpecificationRole
+      - ServiceStateDescription
+      - Software
+      - Standard
+      - StandardOperationalActivity
+      - StatusIndicators
+      - StructuralPart
+      - System
+      - Technology
+      - TemporalPart
+      - VersionOfConfiguration
+      - View
+      - Viewpoint
+      - VisionStatement
+      - WholeLifeConfiguration
+      - WholeLifeEnterprise
+      target_must_be_one_of:
+      - ActualCondition
+      - ActualEnduringTask
+      - ActualEnterprisePhase
+      - ActualEnvironment
+      - ActualLocation
+      - ActualMeasurementSet
+      - ActualOrganization
+      - ActualPerson
+      - ActualPost
+      - ActualProject
+      - ActualProjectMilestone
+      - ActualPropertySet
+      - ActualResource
+      - ActualResponsibility
+      - ActualRisk
+      - ActualService
+      - Alias
+      - ArchitecturalDescription
+      - ArchitectureMetadata
+      - Capability
+      - CapabilityConfiguration
+      - CapabilityProperty
+      - Competence
+      - ConceptRole
+      - Concern
+      - Condition
+      - DataElement
+      - DataModel
+      - Definition
+      - EnduringTask
+      - EnhancedSecurityControl
+      - EnterpriseGoal
+      - EnterprisePhase
+      - EnterpriseVision
+      - Environment
+      - EnvironmentProperty
+      - FieldedCapability
+      - Function
+      - FunctionAction
+      - GeoPoliticalExtentType
+      - HighLevelOperationalConcept
+      - Information
+      - InformationElement
+      - KnownResource
+      - Location
+      - Measurement
+      - MeasurementSet
+      - Metadata
+      - NaturalResource
+      - OperationalActivity
+      - OperationalActivityAction
+      - OperationalArchitecture
+      - OperationalConstraint
+      - OperationalInterface
+      - OperationalMitigation
+      - OperationalParameter
+      - OperationalPerformer
+      - OperationalPort
+      - OperationalRole
+      - OperationalSignal
+      - OperationalSignalProperty
+      - OperationalStateDescription
+      - Organization
+      - Person
+      - Post
+      - ProblemDomain
+      - Project
+      - ProjectActivity
+      - ProjectActivityAction
+      - ProjectMilestone
+      - ProjectMilestoneRole
+      - ProjectRole
+      - ProjectTheme
+      - Protocol
+      - ProtocolLayer
+      - ProtocolStack
+      - ProvidedServiceLevel
+      - RequiredServiceLevel
+      - ResourceArchitecture
+      - ResourceArtifact
+      - ResourceConstraint
+      - ResourceInterface
+      - ResourceMitigation
+      - ResourceParameter
+      - ResourcePort
+      - ResourceRole
+      - ResourceSignal
+      - ResourceSignalProperty
+      - ResourceStateDescription
+      - Responsibility
+      - Risk
+      - SecurityConstraint
+      - SecurityControl
+      - SecurityControlFamily
+      - SecurityEnclave
+      - SecurityProcess
+      - SecurityProcessAction
+      - ServiceFunction
+      - ServiceFunctionAction
+      - ServiceInterface
+      - ServiceParameter
+      - ServicePolicy
+      - ServicePort
+      - ServiceSpecification
+      - ServiceSpecificationRole
+      - ServiceStateDescription
+      - Software
+      - Standard
+      - StandardOperationalActivity
+      - StatusIndicators
+      - StructuralPart
+      - System
+      - Technology
+      - TemporalPart
+      - VersionOfConfiguration
+      - View
+      - Viewpoint
+      - VisionStatement
+      - WholeLifeConfiguration
+      - WholeLifeEnterprise
+    remediation:
+      short: Join two elements that carry a UAF stereotype.
+      auto_fixable: false
+
+  - id: UAF1-END-005
+    name: 'IsCapableToPerform: the kinds of element at its two ends'
+    implements: UAF-END-005
+    also_implements:
+    - UAF-END-006
+    - UAF-OWN-003
+    - UAF-OWN-023
+    description: When the supplier is an OperationalActivity, the client must be an OperationalAgent; when the supplier is
+      a ServiceFunction, the client must be a ServiceSpecification; when the supplier is a Function other than a ProjectActivity,
+      the client must be a ResourcePerformer; when the supplier is a ProjectActivity, the client must be a Project. When the
+      client is an OperationalAgent, the supplier must be an OperationalActivity; when the client is a ServiceSpecification,
+      the supplier must be a ServiceFunction; when the client is a ResourcePerformer, the supplier must be a Function other
+      than a ProjectActivity; when the client is a Project, the supplier must be a ProjectActivity. In EA the relationship
+      is an Abstraction connector stereotyped IsCapableToPerform (source = client or information source, target = supplier
+      or information target). Each end must carry a stereotype that the standard allows there (the table lists the concrete
+      stereotypes); an end with no stereotype, or with one that is not in the table, is reported. The rule also covers the
+      OperationalPerformer and ResourcePerformer statements of what an element may be capable of performing. [OMG UAF 1.0
+      (formal/17-12-01) 7.1.3.3, 7.1.5.2, 7.1.8.1]
+    category: end
+    severity: error
+    demo_trigger: false
+    coverage: full
+    selector:
+      type: connector
+      connector_stereotype: IsCapableToPerform
+    condition:
+      type: relationship_table
+      table: uaf-1-isCapableToPerform
+      unknown_endpoint: error
+    remediation:
+      short: Join the kinds of element the standard allows at the two ends of an IsCapableToPerform.
+      auto_fixable: false
+
+  - id: UAF1-END-007
+    name: 'PerformsInContext: the kinds of element at its two ends'
+    implements: UAF-END-007
+    also_implements:
+    - UAF-END-008
+    description: When the supplier is an OperationalActivityAction, the client must be an OperationalRole; when the supplier
+      is a ServiceFunctionAction, the client must be a ServiceSpecificationRole; when the supplier is a FunctionAction other
+      than a ProjectActivityAction, the client must be a ResourceRole; when the supplier is a ProjectActivityAction, the client
+      must be a ProjectRole. When the client is an OperationalRole, the supplier must be an OperationalActivityAction; when
+      the client is a ServiceSpecificationRole, the supplier must be a ServiceFunctionAction; when the client is a ResourceRole,
+      the supplier must be a FunctionAction other than a ProjectActivityAction. (The standard states no supplier rule for
+      a ProjectRole client.). In EA the relationship is an Abstraction connector stereotyped PerformsInContext
+      (source = client or information source, target = supplier or information target). Each end must carry a stereotype that
+      the standard allows there (the table lists the concrete stereotypes); an end with no stereotype, or with one that is
+      not in the table, is reported. [OMG UAF 1.0 (formal/17-12-01) 7.1.3.3]
+    category: end
+    severity: error
+    demo_trigger: false
+    coverage: partial
+    not_checked: 'End concepts that EA cannot put on an element (no stereotype, a slot, or a stereotype of a connector or
+      an operation), so an end of that kind is not recognized: SecurityControlAction.'
+    selector:
+      type: connector
+      connector_stereotype: PerformsInContext
+    condition:
+      type: relationship_table
+      table: uaf-1-performsInContext
+      unknown_endpoint: error
+    remediation:
+      short: Join the kinds of element the standard allows at the two ends of a PerformsInContext.
+      auto_fixable: false
+
+  - id: UAF1-END-012
+    name: 'ArchitecturalReference: the kinds of element at its two ends'
+    implements: UAF-END-012
+    also_implements:
+    - UAF-END-013
+    description: The client of an ArchitecturalReference must be an ArchitecturalDescription (or a specialization of it).
+      The supplier of an ArchitecturalReference must be an ArchitecturalDescription (or a specialization of it). In EA the
+      relationship is a Dependency connector stereotyped ArchitecturalReference (source = client or information source, target
+      = supplier or information target). Each end must carry a stereotype that the standard allows there (the table lists
+      the concrete stereotypes); an end with no stereotype, or with one that is not in the table, is reported. [OMG UAF 1.0
+      (formal/17-12-01) 7.1.3.6]
+    category: end
+    severity: error
+    demo_trigger: false
+    coverage: full
+    selector:
+      type: connector
+      connector_stereotype: ArchitecturalReference
+    condition:
+      type: relationship_table
+      table: uaf-1-architecturalReference
+      unknown_endpoint: error
+    remediation:
+      short: Join the kinds of element the standard allows at the two ends of an ArchitecturalReference.
+      auto_fixable: false
+
+  - id: UAF1-END-014
+    name: 'Implements: the kinds of element at its two ends'
+    implements: UAF-END-014
+    also_implements:
+    - UAF-END-015
+    description: When the supplier is an OperationalAgent, the client must be a ResourcePerformer; an OperationalActivity
+      or a ServiceFunction, a Function; a ServiceInterface or an OperationalInterface, a ResourceInterface; an OperationalConnector
+      or a ResourceConnector, a ResourceConnector; an OperationalExchange, a ResourceExchange; an OperationalRole, a ResourceRole;
+      an ActualEnduringTask, an OperationalActivity; an InformationElement, a DataElement. When the client is a ResourcePerformer,
+      the supplier must be an OperationalAgent; a Function, an OperationalActivity or a ServiceFunction; a ResourceInterface,
+      a ServiceInterface or an OperationalInterface; a ResourceConnector, an OperationalConnector or a ResourceConnector;
+      a ResourceExchange, an OperationalExchange; a ResourceRole, an OperationalRole; an OperationalActivity, an ActualEnduringTask;
+      a DataElement, an InformationElement. In EA the relationship is an Abstraction connector stereotyped Implements (source
+      = client or information source, target = supplier or information target). Each end must carry a stereotype that the
+      standard allows there (the table lists the concrete stereotypes); an end with no stereotype, or with one that is not
+      in the table, is reported. [OMG UAF 1.0 (formal/17-12-01) 7.1.3.6]
+    category: end
+    severity: error
+    demo_trigger: false
+    coverage: partial
+    not_checked: 'End concepts that EA cannot put on an element (no stereotype, a slot, or a stereotype of a connector or
+      an operation), so an end of that kind is not recognized: Command, Control, OperationalConnector, OperationalExchange,
+      ResourceConnector, ResourceExchange.'
+    selector:
+      type: connector
+      connector_stereotype: Implements
+    condition:
+      type: relationship_table
+      table: uaf-1-implements
+      unknown_endpoint: error
+    remediation:
+      short: Join the kinds of element the standard allows at the two ends of an Implements.
+      auto_fixable: false
+
+  - id: UAF1-END-017
+    name: 'CapabilityForTask: the kinds of element at its two ends'
+    implements: UAF-END-017
+    also_implements:
+    - UAF-END-018
+    description: The client of a CapabilityForTask must be a Capability (or a specialization of it). The supplier of a CapabilityForTask
+      must be an ActualEnduringTask (or a specialization of it). In EA the relationship is an Abstraction connector stereotyped
+      CapabilityForTask (source = client or information source, target = supplier or information target). Each end must carry
+      a stereotype that the standard allows there (the table lists the concrete stereotypes); an end with no stereotype, or
+      with one that is not in the table, is reported. [OMG UAF 1.0 (formal/17-12-01) 7.1.4.3]
+    category: end
+    severity: error
+    demo_trigger: false
+    coverage: full
+    selector:
+      type: connector
+      connector_stereotype: CapabilityForTask
+    condition:
+      type: relationship_table
+      table: uaf-1-capabilityForTask
+      unknown_endpoint: error
+    remediation:
+      short: Join the kinds of element the standard allows at the two ends of a CapabilityForTask.
+      auto_fixable: false
+
+  - id: UAF1-END-019
+    name: 'AchievedEffect: the kinds of element at its two ends'
+    implements: UAF-END-019
+    also_implements:
+    - UAF-END-020
+    description: The client of an AchievedEffect must be an Achiever (or a specialization of it). The supplier of an AchievedEffect
+      must be an ActualState (or a specialization of it). In EA the relationship is a Dependency connector stereotyped AchievedEffect
+      (source = client or information source, target = supplier or information target). Each end must carry a stereotype that
+      the standard allows there (the table lists the concrete stereotypes); an end with no stereotype, or with one that is
+      not in the table, is reported. [OMG UAF 1.0 (formal/17-12-01) 7.1.4.4]
+    category: end
+    severity: error
+    demo_trigger: false
+    coverage: partial
+    not_checked: 'End concepts that EA cannot put on an element (no stereotype, a slot, or a stereotype of a connector or
+      an operation), so an end of that kind is not recognized: ActualMeasurement, ActualProjectMilestoneRole, ActualProjectRole.'
+    selector:
+      type: connector
+      connector_stereotype: AchievedEffect
+    condition:
+      type: relationship_table
+      table: uaf-1-achievedEffect
+      unknown_endpoint: error
+    remediation:
+      short: Join the kinds of element the standard allows at the two ends of an AchievedEffect.
+      auto_fixable: false
+
+  - id: UAF1-END-021
+    name: 'DesiredEffect: the kinds of element at its two ends'
+    implements: UAF-END-021
+    also_implements:
+    - UAF-END-022
+    description: The client of a DesiredEffect must be a Desirer (or a specialization of it). The supplier of a DesiredEffect
+      must be an ActualState (or a specialization of it). In EA the relationship is a Dependency connector stereotyped DesiredEffect
+      (source = client or information source, target = supplier or information target). Each end must carry a stereotype that
+      the standard allows there (the table lists the concrete stereotypes); an end with no stereotype, or with one that is
+      not in the table, is reported. [OMG UAF 1.0 (formal/17-12-01) 7.1.4.4]
+    category: end
+    severity: error
+    demo_trigger: false
+    coverage: partial
+    not_checked: 'End concepts that EA cannot put on an element (no stereotype, a slot, or a stereotype of a connector or
+      an operation), so an end of that kind is not recognized: ActualMeasurement, ActualProjectMilestoneRole, ActualProjectRole.'
+    selector:
+      type: connector
+      connector_stereotype: DesiredEffect
+    condition:
+      type: relationship_table
+      table: uaf-1-desiredEffect
+      unknown_endpoint: error
+    remediation:
+      short: Join the kinds of element the standard allows at the two ends of a DesiredEffect.
+      auto_fixable: false
+
+  - id: UAF1-END-023
+    name: 'Exhibits: the kinds of element at its two ends'
+    implements: UAF-END-023
+    also_implements:
+    - UAF-END-024
+    description: The client of an Exhibits must be a CapableElement (or a specialization of it). The supplier of an Exhibits
+      must be a Capability (or a specialization of it). In EA the relationship is an Abstraction connector stereotyped Exhibits
+      (source = client or information source, target = supplier or information target). Each end must carry a stereotype that
+      the standard allows there (the table lists the concrete stereotypes); an end with no stereotype, or with one that is
+      not in the table, is reported. [OMG UAF 1.0 (formal/17-12-01) 7.1.4.5]
+    category: end
+    severity: error
+    demo_trigger: false
+    coverage: full
+    selector:
+      type: connector
+      connector_stereotype: Exhibits
+    condition:
+      type: relationship_table
+      table: uaf-1-exhibits
+      unknown_endpoint: error
+    remediation:
+      short: Join the kinds of element the standard allows at the two ends of an Exhibits.
+      auto_fixable: false
+
+  - id: UAF1-END-025
+    name: 'MapsToCapability: the kinds of element at its two ends'
+    implements: UAF-END-025
+    also_implements:
+    - UAF-END-026
+    description: The client of a MapsToCapability must be an Activity (or a specialization of it). The supplier of a MapsToCapability
+      must be a Capability (or a specialization of it). In EA the relationship is an Abstraction connector stereotyped MapsToCapability
+      (source = client or information source, target = supplier or information target). Each end must carry a stereotype that
+      the standard allows there (the table lists the concrete stereotypes); an end with no stereotype, or with one that is
+      not in the table, is reported. [OMG UAF 1.0 (formal/17-12-01) 7.1.4.5]
+    category: end
+    severity: error
+    demo_trigger: false
+    coverage: full
+    selector:
+      type: connector
+      connector_stereotype: MapsToCapability
+    condition:
+      type: relationship_table
+      table: uaf-1-mapsToCapability
+      unknown_endpoint: error
+    remediation:
+      short: Join the kinds of element the standard allows at the two ends of a MapsToCapability.
+      auto_fixable: false
+
+  - id: UAF1-END-027
+    name: 'OrganizationInEnterprise: the kinds of element at its two ends'
+    implements: UAF-END-027
+    also_implements:
+    - UAF-END-028
+    description: The client of an OrganizationInEnterprise must be an ActualOrganization (or a specialization of it). The
+      supplier of an OrganizationInEnterprise must be an ActualEnterprisePhase (or a specialization of it). In EA the relationship
+      is an Abstraction connector stereotyped OrganizationInEnterprise (source = client or information source, target = supplier
+      or information target). Each end must carry a stereotype that the standard allows there (the table lists the concrete
+      stereotypes); an end with no stereotype, or with one that is not in the table, is reported. [OMG UAF 1.0 (formal/17-12-01)
+      7.1.4.5]
+    category: end
+    severity: error
+    demo_trigger: false
+    coverage: full
+    selector:
+      type: connector
+      connector_stereotype: OrganizationInEnterprise
+    condition:
+      type: relationship_table
+      table: uaf-1-organizationInEnterprise
+      unknown_endpoint: error
+    remediation:
+      short: Join the kinds of element the standard allows at the two ends of an OrganizationInEnterprise.
+      auto_fixable: false
+
+  - id: UAF1-END-029
+    name: 'ArbitraryConnector: the kinds of element at its two ends'
+    implements: UAF-END-029
+    also_implements:
+    - UAF-END-030
+    description: The client of an ArbitraryConnector must be a ConceptRole (or a specialization of it). The supplier of an
+      ArbitraryConnector must be a ConceptRole (or a specialization of it). In EA the relationship is a Dependency connector
+      stereotyped ArbitraryConnector (source = client or information source, target = supplier or information target). Each
+      end must carry a stereotype that the standard allows there (the table lists the concrete stereotypes); an end with no
+      stereotype, or with one that is not in the table, is reported. [OMG UAF 1.0 (formal/17-12-01) 7.1.5.1]
+    category: end
+    severity: error
+    demo_trigger: false
+    coverage: full
+    selector:
+      type: connector
+      connector_stereotype: ArbitraryConnector
+    condition:
+      type: relationship_table
+      table: uaf-1-arbitraryConnector
+      unknown_endpoint: error
+    remediation:
+      short: Join the kinds of element the standard allows at the two ends of an ArbitraryConnector.
+      auto_fixable: false
+
+  - id: UAF1-END-031
+    name: 'OperationalConnector: the kinds of element at its two ends'
+    implements: UAF-END-031
+    description: Each end of an OperationalConnector must attach to an OperationalRole or an OperationalPort (or a specialization
+      of either). In EA the relationship is a Connector connector stereotyped OperationalConnector (source = client or information
+      source, target = supplier or information target). Each end must carry a stereotype that the standard allows there (the
+      table lists the concrete stereotypes); an end with no stereotype, or with one that is not in the table, is reported.
+      [OMG UAF 1.0 (formal/17-12-01) 7.1.5.3]
+    category: end
+    severity: error
+    demo_trigger: false
+    coverage: full
+    selector:
+      type: connector
+      connector_stereotype: OperationalConnector
+    condition:
+      type: relationship_table
+      table: uaf-1-operationalConnector
+      unknown_endpoint: error
+    remediation:
+      short: Join the kinds of element the standard allows at the two ends of an OperationalConnector.
+      auto_fixable: false
+
+  - id: UAF1-END-032
+    name: 'OperationalExchange: the kinds of element at its two ends'
+    implements: UAF-END-032
+    also_implements:
+    - UAF-END-033
+    description: The information source of an OperationalExchange must be an OperationalPerformer (or a specialization of
+      it). The information target of an OperationalExchange must be an OperationalPerformer (or a specialization of it). In
+      EA the relationship is an InformationFlow connector stereotyped OperationalExchange (source = client or information source,
+      target = supplier or information target). Each end must carry a stereotype that the standard allows there (the table
+      lists the concrete stereotypes); an end with no stereotype, or with one that is not in the table, is reported. [OMG
+      UAF 1.0 (formal/17-12-01) 7.1.5.3]
+    category: end
+    severity: error
+    demo_trigger: false
+    coverage: full
+    selector:
+      type: connector
+      connector_stereotype: OperationalExchange
+    condition:
+      type: relationship_table
+      table: uaf-1-operationalExchange
+      unknown_endpoint: error
+    remediation:
+      short: Join the kinds of element the standard allows at the two ends of an OperationalExchange.
+      auto_fixable: false
+
+  - id: UAF1-END-034
+    name: 'OperationalControlFlow: the kinds of element at its two ends'
+    implements: UAF-END-034
+    also_implements:
+    - UAF-END-035
+    description: The source of an OperationalControlFlow must be an OperationalActivityAction (or a specialization of it).
+      The target of an OperationalControlFlow must be an OperationalActivityAction (or a specialization of it). In EA the
+      relationship is a ControlFlow connector stereotyped OperationalControlFlow (source = client or information source, target
+      = supplier or information target). Each end must carry a stereotype that the standard allows there (the table lists
+      the concrete stereotypes); an end with no stereotype, or with one that is not in the table, is reported. [OMG UAF 1.0
+      (formal/17-12-01) 7.1.5.4]
+    category: end
+    severity: error
+    demo_trigger: false
+    coverage: partial
+    not_checked: 'End concepts that EA cannot put on an element (no stereotype, a slot, or a stereotype of a connector or
+      an operation), so an end of that kind is not recognized: SecurityControlAction.'
+    selector:
+      type: connector
+      connector_stereotype: OperationalControlFlow
+    condition:
+      type: relationship_table
+      table: uaf-1-operationalControlFlow
+      unknown_endpoint: error
+    remediation:
+      short: Join the kinds of element the standard allows at the two ends of an OperationalControlFlow.
+      auto_fixable: false
+
+  - id: UAF1-END-037
+    name: 'ServiceConnector: the kinds of element at its two ends'
+    implements: UAF-END-037
+    description: Each end of a ServiceConnector must attach to a ServicePort or a ServiceSpecificationRole (or a specialization
+      of either). In EA the relationship is a Connector connector stereotyped ServiceConnector (source = client or information
+      source, target = supplier or information target). Each end must carry a stereotype that the standard allows there (the
+      table lists the concrete stereotypes); an end with no stereotype, or with one that is not in the table, is reported.
+      [OMG UAF 1.0 (formal/17-12-01) 7.1.6.3]
+    category: end
+    severity: error
+    demo_trigger: false
+    coverage: full
+    selector:
+      type: connector
+      connector_stereotype: ServiceConnector
+    condition:
+      type: relationship_table
+      table: uaf-1-serviceConnector
+      unknown_endpoint: error
+    remediation:
+      short: Join the kinds of element the standard allows at the two ends of a ServiceConnector.
+      auto_fixable: false
+
+  - id: UAF1-END-039
+    name: 'Consumes: the kinds of element at its two ends'
+    implements: UAF-END-039
+    also_implements:
+    - UAF-END-040
+    description: The client of a Consumes must be an OperationalActivity (or a specialization of it). The supplier of a Consumes
+      must be a ServiceSpecification (or a specialization of it). In EA the relationship is an Abstraction connector stereotyped
+      Consumes (source = client or information source, target = supplier or information target). Each end must carry a stereotype
+      that the standard allows there (the table lists the concrete stereotypes); an end with no stereotype, or with one that
+      is not in the table, is reported. [OMG UAF 1.0 (formal/17-12-01) 7.1.6.8]
+    category: end
+    severity: error
+    demo_trigger: false
+    coverage: full
+    selector:
+      type: connector
+      connector_stereotype: Consumes
+    condition:
+      type: relationship_table
+      table: uaf-1-consumes
+      unknown_endpoint: error
+    remediation:
+      short: Join the kinds of element the standard allows at the two ends of a Consumes.
+      auto_fixable: false
+
+  - id: UAF1-END-041
+    name: 'Command: the kinds of element at its two ends'
+    implements: UAF-END-041
+    also_implements:
+    - UAF-END-042
+    description: The information source of a Command must be an OrganizationalResource (or a specialization of it). The information
+      target of a Command must be an OrganizationalResource (or a specialization of it). In EA the relationship is an InformationFlow
+      connector stereotyped Command (source = client or information source, target = supplier or information target). Each
+      end must carry a stereotype that the standard allows there (the table lists the concrete stereotypes); an end with no
+      stereotype, or with one that is not in the table, is reported. [OMG UAF 1.0 (formal/17-12-01) 7.1.7.2]
+    category: end
+    severity: error
+    demo_trigger: false
+    coverage: full
+    selector:
+      type: connector
+      connector_stereotype: Command
+    condition:
+      type: relationship_table
+      table: uaf-1-command
+      unknown_endpoint: error
+    remediation:
+      short: Join the kinds of element the standard allows at the two ends of a Command.
+      auto_fixable: false
+
+  - id: UAF1-END-043
+    name: 'Control: the kinds of element at its two ends'
+    implements: UAF-END-043
+    also_implements:
+    - UAF-END-044
+    description: The information source of a Control must be a PhysicalResource (or a specialization of it). The information
+      target of a Control must be a PhysicalResource (or a specialization of it). In EA the relationship is an InformationFlow
+      connector stereotyped Control (source = client or information source, target = supplier or information target). Each
+      end must carry a stereotype that the standard allows there (the table lists the concrete stereotypes); an end with no
+      stereotype, or with one that is not in the table, is reported. [OMG UAF 1.0 (formal/17-12-01) 7.1.7.2]
+    category: end
+    severity: error
+    demo_trigger: false
+    coverage: full
+    selector:
+      type: connector
+      connector_stereotype: Control
+    condition:
+      type: relationship_table
+      table: uaf-1-control
+      unknown_endpoint: error
+    remediation:
+      short: Join the kinds of element the standard allows at the two ends of a Control.
+      auto_fixable: false
+
+  - id: UAF1-END-045
+    name: 'CompetenceToConduct: the kinds of element at its two ends'
+    implements: UAF-END-045
+    also_implements:
+    - UAF-END-046
+    description: The client of a CompetenceToConduct must be a Function (or a specialization of it). The supplier of a CompetenceToConduct
+      must be a Competence (or a specialization of it). In EA the relationship is an Abstraction connector stereotyped CompetenceToConduct
+      (source = client or information source, target = supplier or information target). Each end must carry a stereotype that
+      the standard allows there (the table lists the concrete stereotypes); an end with no stereotype, or with one that is
+      not in the table, is reported. [OMG UAF 1.0 (formal/17-12-01) 7.1.7.3]
+    category: end
+    severity: error
+    demo_trigger: false
+    coverage: full
+    selector:
+      type: connector
+      connector_stereotype: CompetenceToConduct
+    condition:
+      type: relationship_table
+      table: uaf-1-competenceToConduct
+      unknown_endpoint: error
+    remediation:
+      short: Join the kinds of element the standard allows at the two ends of a CompetenceToConduct.
+      auto_fixable: false
+
+  - id: UAF1-END-047
+    name: 'CompetenceForRole: the kinds of element at its two ends'
+    implements: UAF-END-047
+    also_implements:
+    - UAF-END-048
+    description: The client of a CompetenceForRole must be a ResourceRole (or a specialization of it). The supplier of a CompetenceForRole
+      must be a Competence (or a specialization of it). In EA the relationship is an Abstraction connector stereotyped CompetenceForRole
+      (source = client or information source, target = supplier or information target). Each end must carry a stereotype that
+      the standard allows there (the table lists the concrete stereotypes); an end with no stereotype, or with one that is
+      not in the table, is reported. [OMG UAF 1.0 (formal/17-12-01) 7.1.7.4]
+    category: end
+    severity: error
+    demo_trigger: false
+    coverage: full
+    selector:
+      type: connector
+      connector_stereotype: CompetenceForRole
+    condition:
+      type: relationship_table
+      table: uaf-1-competenceForRole
+      unknown_endpoint: error
+    remediation:
+      short: Join the kinds of element the standard allows at the two ends of a CompetenceForRole.
+      auto_fixable: false
+
+  - id: UAF1-END-049
+    name: 'RequiresCompetence: the kinds of element at its two ends'
+    implements: UAF-END-049
+    also_implements:
+    - UAF-END-050
+    description: The client of a RequiresCompetence must be an OrganizationalResource (or a specialization of it). The supplier
+      of a RequiresCompetence must be a Competence (or a specialization of it). In EA the relationship is an Abstraction connector
+      stereotyped RequiresCompetence (source = client or information source, target = supplier or information target). Each
+      end must carry a stereotype that the standard allows there (the table lists the concrete stereotypes); an end with no
+      stereotype, or with one that is not in the table, is reported. [OMG UAF 1.0 (formal/17-12-01) 7.1.7.4]
+    category: end
+    severity: error
+    demo_trigger: false
+    coverage: full
+    selector:
+      type: connector
+      connector_stereotype: RequiresCompetence
+    condition:
+      type: relationship_table
+      table: uaf-1-requiresCompetence
+      unknown_endpoint: error
+    remediation:
+      short: Join the kinds of element the standard allows at the two ends of a RequiresCompetence.
+      auto_fixable: false
+
+  - id: UAF1-END-051
+    name: 'ResponsibleFor: the kinds of element at its two ends'
+    implements: UAF-END-051
+    also_implements:
+    - UAF-END-052
+    description: The client of a ResponsibleFor must be an ActualResponsibleResource (or a specialization of it). The supplier
+      of a ResponsibleFor must be an ActualProject or an ActualResponsibility (or a specialization of it). In EA the relationship
+      is an Abstraction connector stereotyped ResponsibleFor (source = client or information source, target = supplier or information
+      target). Each end must carry a stereotype that the standard allows there (the table lists the concrete stereotypes);
+      an end with no stereotype, or with one that is not in the table, is reported. [OMG UAF 1.0 (formal/17-12-01) 7.1.7.5]
+    category: end
+    severity: error
+    demo_trigger: false
+    coverage: full
+    selector:
+      type: connector
+      connector_stereotype: ResponsibleFor
+    condition:
+      type: relationship_table
+      table: uaf-1-responsibleFor
+      unknown_endpoint: error
+    remediation:
+      short: Join the kinds of element the standard allows at the two ends of a ResponsibleFor.
+      auto_fixable: false
+
+  - id: UAF1-END-053
+    name: 'ResourceConnector: the kinds of element at its two ends'
+    implements: UAF-END-053
+    description: Each end of a ResourceConnector must attach to a ResourcePort or a ResourceRole (or a specialization of either).
+      In EA the relationship is a Connector connector stereotyped ResourceConnector (source = client or information source,
+      target = supplier or information target). Each end must carry a stereotype that the standard allows there (the table
+      lists the concrete stereotypes); an end with no stereotype, or with one that is not in the table, is reported. [OMG
+      UAF 1.0 (formal/17-12-01) 7.1.8.3]
+    category: end
+    severity: error
+    demo_trigger: false
+    coverage: full
+    selector:
+      type: connector
+      connector_stereotype: ResourceConnector
+    condition:
+      type: relationship_table
+      table: uaf-1-resourceConnector
+      unknown_endpoint: error
+    remediation:
+      short: Join the kinds of element the standard allows at the two ends of a ResourceConnector.
+      auto_fixable: false
+
+  - id: UAF1-END-054
+    name: 'ResourceExchange: the kinds of element at its two ends'
+    implements: UAF-END-054
+    also_implements:
+    - UAF-END-055
+    description: The information source of a ResourceExchange must be a ResourcePerformer (or a specialization of it). The
+      information target of a ResourceExchange must be a ResourcePerformer (or a specialization of it). In EA the relationship
+      is an InformationFlow connector stereotyped ResourceExchange (source = client or information source, target = supplier
+      or information target). Each end must carry a stereotype that the standard allows there (the table lists the concrete
+      stereotypes); an end with no stereotype, or with one that is not in the table, is reported. [OMG UAF 1.0 (formal/17-12-01)
+      7.1.8.3]
+    category: end
+    severity: error
+    demo_trigger: false
+    coverage: full
+    selector:
+      type: connector
+      connector_stereotype: ResourceExchange
+    condition:
+      type: relationship_table
+      table: uaf-1-resourceExchange
+      unknown_endpoint: error
+    remediation:
+      short: Join the kinds of element the standard allows at the two ends of a ResourceExchange.
+      auto_fixable: false
+
+  - id: UAF1-END-056
+    name: 'FunctionControlFlow: the kinds of element at its two ends'
+    implements: UAF-END-056
+    also_implements:
+    - UAF-END-057
+    description: The source of a FunctionControlFlow must be a FunctionAction (or a specialization of it). The target of a
+      FunctionControlFlow must be a FunctionAction (or a specialization of it). In EA the relationship is a ControlFlow connector
+      stereotyped FunctionControlFlow (source = client or information source, target = supplier or information target). Each
+      end must carry a stereotype that the standard allows there (the table lists the concrete stereotypes); an end with no
+      stereotype, or with one that is not in the table, is reported. [OMG UAF 1.0 (formal/17-12-01) 7.1.8.4]
+    category: end
+    severity: error
+    demo_trigger: false
+    coverage: partial
+    not_checked: 'End concepts that EA cannot put on an element (no stereotype, a slot, or a stereotype of a connector or
+      an operation), so an end of that kind is not recognized: SecurityControlAction.'
+    selector:
+      type: connector
+      connector_stereotype: FunctionControlFlow
+    condition:
+      type: relationship_table
+      table: uaf-1-functionControlFlow
+      unknown_endpoint: error
+    remediation:
+      short: Join the kinds of element the standard allows at the two ends of a FunctionControlFlow.
+      auto_fixable: false
+
+  - id: UAF1-END-059
+    name: 'Forecast: the kinds of element at its two ends'
+    implements: UAF-END-059
+    also_implements:
+    - UAF-END-060
+    description: The client of a Forecast must be a SubjectOfForecast (or a specialization of it). The supplier of a Forecast
+      must be a SubjectOfForecast (or a specialization of it). In EA the relationship is a Dependency connector stereotyped
+      Forecast (source = client or information source, target = supplier or information target). Each end must carry a stereotype
+      that the standard allows there (the table lists the concrete stereotypes); an end with no stereotype, or with one that
+      is not in the table, is reported. [OMG UAF 1.0 (formal/17-12-01) 7.1.8.9]
+    category: end
+    severity: error
+    demo_trigger: false
+    coverage: full
+    selector:
+      type: connector
+      connector_stereotype: Forecast
+    condition:
+      type: relationship_table
+      table: uaf-1-forecast
+      unknown_endpoint: error
+    remediation:
+      short: Join the kinds of element the standard allows at the two ends of a Forecast.
+      auto_fixable: false
+
+  - id: UAF1-END-061
+    name: 'VersionSuccession: the kinds of element at its two ends'
+    implements: UAF-END-061
+    also_implements:
+    - UAF-END-062
+    description: The client of a VersionSuccession must be a VersionOfConfiguration (or a specialization of it). The supplier
+      of a VersionSuccession must be a VersionOfConfiguration (or a specialization of it). In EA the relationship is a Dependency
+      connector stereotyped VersionSuccession (source = client or information source, target = supplier or information target).
+      Each end must carry a stereotype that the standard allows there (the table lists the concrete stereotypes); an end with
+      no stereotype, or with one that is not in the table, is reported. [OMG UAF 1.0 (formal/17-12-01) 7.1.8.9]
+    category: end
+    severity: error
+    demo_trigger: false
+    coverage: full
+    selector:
+      type: connector
+      connector_stereotype: VersionSuccession
+    condition:
+      type: relationship_table
+      table: uaf-1-versionSuccession
+      unknown_endpoint: error
+    remediation:
+      short: Join the kinds of element the standard allows at the two ends of a VersionSuccession.
+      auto_fixable: false
+
+  - id: UAF1-END-063
+    name: 'Enhances: the kinds of element at its two ends'
+    implements: UAF-END-063
+    also_implements:
+    - UAF-END-064
+    description: The client of an Enhances must be an EnhancedSecurityControl (or a specialization of it). The supplier of
+      an Enhances must be a SecurityControl (or a specialization of it). In EA the relationship is a Dependency connector
+      stereotyped Enhances (source = client or information source, target = supplier or information target). Each end must
+      carry a stereotype that the standard allows there (the table lists the concrete stereotypes); an end with no stereotype,
+      or with one that is not in the table, is reported. [OMG UAF 1.0 (formal/17-12-01) 7.1.9.3]
+    category: end
+    severity: error
+    demo_trigger: false
+    coverage: full
+    selector:
+      type: connector
+      connector_stereotype: Enhances
+    condition:
+      type: relationship_table
+      table: uaf-1-enhances
+      unknown_endpoint: error
+    remediation:
+      short: Join the kinds of element the standard allows at the two ends of an Enhances.
+      auto_fixable: false
+
+  - id: UAF1-END-065
+    name: 'Protects: the kinds of element at its two ends'
+    implements: UAF-END-065
+    also_implements:
+    - UAF-END-066
+    description: The client of a Protects must be a SecurityControl (or a specialization of it). The supplier of a Protects
+      must be an Asset (or a specialization of it). In EA the relationship is a Dependency connector stereotyped Protects
+      (source = client or information source, target = supplier or information target). Each end must carry a stereotype that
+      the standard allows there (the table lists the concrete stereotypes); an end with no stereotype, or with one that is
+      not in the table, is reported. [OMG UAF 1.0 (formal/17-12-01) 7.1.9.3]
+    category: end
+    severity: error
+    demo_trigger: false
+    coverage: full
+    selector:
+      type: connector
+      connector_stereotype: Protects
+    condition:
+      type: relationship_table
+      table: uaf-1-protects
+      unknown_endpoint: error
+    remediation:
+      short: Join the kinds of element the standard allows at the two ends of a Protects.
+      auto_fixable: false
+
+  - id: UAF1-END-071
+    name: 'Affects: the kinds of element at its two ends'
+    implements: UAF-END-071
+    also_implements:
+    - UAF-END-072
+    description: The client of an Affects must be a Risk (or a specialization of it). The supplier of an Affects must be an
+      Asset (or a specialization of it). In EA the relationship is a Dependency connector stereotyped Affects (source = client
+      or information source, target = supplier or information target). Each end must carry a stereotype that the standard
+      allows there (the table lists the concrete stereotypes); an end with no stereotype, or with one that is not in the table,
+      is reported. [OMG UAF 1.0 (formal/17-12-01) 7.1.9.5]
+    category: end
+    severity: error
+    demo_trigger: false
+    coverage: full
+    selector:
+      type: connector
+      connector_stereotype: Affects
+    condition:
+      type: relationship_table
+      table: uaf-1-affects
+      unknown_endpoint: error
+    remediation:
+      short: Join the kinds of element the standard allows at the two ends of an Affects.
+      auto_fixable: false
+
+  - id: UAF1-END-073
+    name: 'AffectsInContext: the kinds of element at its two ends'
+    implements: UAF-END-073
+    also_implements:
+    - UAF-END-074
+    description: The client of an AffectsInContext must be a Risk (or a specialization of it). The supplier of an AffectsInContext
+      must be an AssetRole (or a specialization of it). In EA the relationship is a Dependency connector stereotyped AffectsInContext
+      (source = client or information source, target = supplier or information target). Each end must carry a stereotype that
+      the standard allows there (the table lists the concrete stereotypes); an end with no stereotype, or with one that is
+      not in the table, is reported. [OMG UAF 1.0 (formal/17-12-01) 7.1.9.5]
+    category: end
+    severity: error
+    demo_trigger: false
+    coverage: partial
+    not_checked: 'End concepts that EA cannot put on an element (no stereotype, a slot, or a stereotype of a connector or
+      an operation), so an end of that kind is not recognized: SecurityProperty.'
+    selector:
+      type: connector
+      connector_stereotype: AffectsInContext
+    condition:
+      type: relationship_table
+      table: uaf-1-affectsInContext
+      unknown_endpoint: error
+    remediation:
+      short: Join the kinds of element the standard allows at the two ends of an AffectsInContext.
+      auto_fixable: false
+
+  - id: UAF1-END-075
+    name: 'Mitigates: the kinds of element at its two ends'
+    implements: UAF-END-075
+    also_implements:
+    - UAF-END-076
+    description: The client of a Mitigates must be a SecurityControl (or a specialization of it). The supplier of a Mitigates
+      must be a Risk (or a specialization of it). In EA the relationship is a Dependency connector stereotyped Mitigates (source
+      = client or information source, target = supplier or information target). Each end must carry a stereotype that the
+      standard allows there (the table lists the concrete stereotypes); an end with no stereotype, or with one that is not
+      in the table, is reported. [OMG UAF 1.0 (formal/17-12-01) 7.1.9.5]
+    category: end
+    severity: error
+    demo_trigger: false
+    coverage: full
+    selector:
+      type: connector
+      connector_stereotype: Mitigates
+    condition:
+      type: relationship_table
+      table: uaf-1-mitigates
+      unknown_endpoint: error
+    remediation:
+      short: Join the kinds of element the standard allows at the two ends of a Mitigates.
+      auto_fixable: false
+
+  - id: UAF1-END-077
+    name: 'OwnsRisk: the kinds of element at its two ends'
+    implements: UAF-END-077
+    also_implements:
+    - UAF-END-078
+    description: The client of an OwnsRisk must be an OrganizationalResource (or a specialization of it). The supplier of
+      an OwnsRisk must be a Risk (or a specialization of it). In EA the relationship is an Abstraction connector stereotyped
+      OwnsRisk (source = client or information source, target = supplier or information target). Each end must carry a stereotype
+      that the standard allows there (the table lists the concrete stereotypes); an end with no stereotype, or with one that
+      is not in the table, is reported. [OMG UAF 1.0 (formal/17-12-01) 7.1.9.5]
+    category: end
+    severity: error
+    demo_trigger: false
+    coverage: full
+    selector:
+      type: connector
+      connector_stereotype: OwnsRisk
+    condition:
+      type: relationship_table
+      table: uaf-1-ownsRisk
+      unknown_endpoint: error
+    remediation:
+      short: Join the kinds of element the standard allows at the two ends of an OwnsRisk.
+      auto_fixable: false
+
+  - id: UAF1-END-079
+    name: 'OwnsRiskInContext: the kinds of element at its two ends'
+    implements: UAF-END-079
+    also_implements:
+    - UAF-END-080
+    description: The client of an OwnsRiskInContext must be a ResourceRole (or a specialization of it). The supplier of an
+      OwnsRiskInContext must be a Risk (or a specialization of it). In EA the relationship is an Abstraction connector stereotyped
+      OwnsRiskInContext (source = client or information source, target = supplier or information target). Each end must carry
+      a stereotype that the standard allows there (the table lists the concrete stereotypes); an end with no stereotype, or
+      with one that is not in the table, is reported. [OMG UAF 1.0 (formal/17-12-01) 7.1.9.5]
+    category: end
+    severity: error
+    demo_trigger: false
+    coverage: full
+    selector:
+      type: connector
+      connector_stereotype: OwnsRiskInContext
+    condition:
+      type: relationship_table
+      table: uaf-1-ownsRiskInContext
+      unknown_endpoint: error
+    remediation:
+      short: Join the kinds of element the standard allows at the two ends of an OwnsRiskInContext.
+      auto_fixable: false
+
+  - id: UAF1-END-081
+    name: 'MilestoneDependency: the kinds of element at its two ends'
+    implements: UAF-END-081
+    also_implements:
+    - UAF-END-082
+    description: The client of a MilestoneDependency must be an ActualProjectMilestone (or a specialization of it). The supplier
+      of a MilestoneDependency must be an ActualProjectMilestone (or a specialization of it). In EA the relationship is a
+      Dependency connector stereotyped MilestoneDependency (source = client or information source, target = supplier or information
+      target). Each end must carry a stereotype that the standard allows there (the table lists the concrete stereotypes);
+      an end with no stereotype, or with one that is not in the table, is reported. [OMG UAF 1.0 (formal/17-12-01) 7.1.10.3]
+    category: end
+    severity: error
+    demo_trigger: false
+    coverage: full
+    selector:
+      type: connector
+      connector_stereotype: MilestoneDependency
+    condition:
+      type: relationship_table
+      table: uaf-1-milestoneDependency
+      unknown_endpoint: error
+    remediation:
+      short: Join the kinds of element the standard allows at the two ends of a MilestoneDependency.
+      auto_fixable: false
+
+  - id: UAF1-END-083
+    name: 'ProjectSequence: the kinds of element at its two ends'
+    implements: UAF-END-083
+    also_implements:
+    - UAF-END-084
+    description: The client of a ProjectSequence must be an ActualProject (or a specialization of it). The supplier of a ProjectSequence
+      must be an ActualProject (or a specialization of it). In EA the relationship is a Dependency connector stereotyped ProjectSequence
+      (source = client or information source, target = supplier or information target). Each end must carry a stereotype that
+      the standard allows there (the table lists the concrete stereotypes); an end with no stereotype, or with one that is
+      not in the table, is reported. [OMG UAF 1.0 (formal/17-12-01) 7.1.10.3]
+    category: end
+    severity: error
+    demo_trigger: false
+    coverage: full
+    selector:
+      type: connector
+      connector_stereotype: ProjectSequence
+    condition:
+      type: relationship_table
+      table: uaf-1-projectSequence
+      unknown_endpoint: error
+    remediation:
+      short: Join the kinds of element the standard allows at the two ends of a ProjectSequence.
+      auto_fixable: false
+
+  - id: UAF1-END-085
+    name: 'ActualResourceRelationship: the kinds of element at its two ends'
+    implements: UAF-END-085
+    also_implements:
+    - UAF-END-086
+    description: The information source of an ActualResourceRelationship must be an ActualResource (or a specialization of
+      it). The information target of an ActualResourceRelationship must be an ActualResource (or a specialization of it).
+      In EA the relationship is an InformationFlow connector stereotyped ActualResourceRelationship (source = client or information
+      source, target = supplier or information target). Each end must carry a stereotype that the standard allows there (the
+      table lists the concrete stereotypes); an end with no stereotype, or with one that is not in the table, is reported.
+      [OMG UAF 1.0 (formal/17-12-01) 7.1.12.3]
+    category: end
+    severity: error
+    demo_trigger: false
+    coverage: full
+    selector:
+      type: connector
+      connector_stereotype: ActualResourceRelationship
+    condition:
+      type: relationship_table
+      table: uaf-1-actualResourceRelationship
+      unknown_endpoint: error
+    remediation:
+      short: Join the kinds of element the standard allows at the two ends of an ActualResourceRelationship.
+      auto_fixable: false
+
+  - id: UAF1-END-087
+    name: 'FillsPost: the kinds of element at its two ends'
+    implements: UAF-END-087
+    also_implements:
+    - UAF-END-088
+    description: The client of a FillsPost must be an ActualPerson (or a specialization of it). The supplier of a FillsPost
+      must be an ActualPost (or a specialization of it). In EA the relationship is an Abstraction connector stereotyped FillsPost
+      (source = client or information source, target = supplier or information target). Each end must carry a stereotype that
+      the standard allows there (the table lists the concrete stereotypes); an end with no stereotype, or with one that is
+      not in the table, is reported. [OMG UAF 1.0 (formal/17-12-01) 7.1.12.3]
+    category: end
+    severity: error
+    demo_trigger: false
+    coverage: full
+    selector:
+      type: connector
+      connector_stereotype: FillsPost
+    condition:
+      type: relationship_table
+      table: uaf-1-fillsPost
+      unknown_endpoint: error
+    remediation:
+      short: Join the kinds of element the standard allows at the two ends of a FillsPost.
+      auto_fixable: false
+
+  - id: UAF1-END-089
+    name: 'ProvidesCompetence: the kinds of element at its two ends'
+    implements: UAF-END-089
+    also_implements:
+    - UAF-END-090
+    description: The client of a ProvidesCompetence must be an ActualOrganizationalResource (or a specialization of it). The
+      supplier of a ProvidesCompetence must be a Competence (or a specialization of it). In EA the relationship is a Dependency
+      connector stereotyped ProvidesCompetence (source = client or information source, target = supplier or information target).
+      Each end must carry a stereotype that the standard allows there (the table lists the concrete stereotypes); an end with
+      no stereotype, or with one that is not in the table, is reported. [OMG UAF 1.0 (formal/17-12-01) 7.1.12.4]
+    category: end
+    severity: error
+    demo_trigger: false
+    coverage: full
+    selector:
+      type: connector
+      connector_stereotype: ProvidesCompetence
+    condition:
+      type: relationship_table
+      table: uaf-1-providesCompetence
+      unknown_endpoint: error
+    remediation:
+      short: Join the kinds of element the standard allows at the two ends of a ProvidesCompetence.
+      auto_fixable: false
+
+  - id: UAF1-END-091
+    name: 'OwnsProcess: the kinds of element at its two ends'
+    implements: UAF-END-091
+    also_implements:
+    - UAF-END-092
+    description: The client of an OwnsProcess must be an ActualOrganizationalResource (or a specialization of it). The supplier
+      of an OwnsProcess must be an OperationalActivity (or a specialization of it). In EA the relationship is an Abstraction
+      connector stereotyped OwnsProcess (source = client or information source, target = supplier or information target).
+      Each end must carry a stereotype that the standard allows there (the table lists the concrete stereotypes); an end with
+      no stereotype, or with one that is not in the table, is reported. [OMG UAF 1.0 (formal/17-12-01) 7.1.12.5]
+    category: end
+    severity: error
+    demo_trigger: false
+    coverage: full
+    selector:
+      type: connector
+      connector_stereotype: OwnsProcess
+    condition:
+      type: relationship_table
+      table: uaf-1-ownsProcess
+      unknown_endpoint: error
+    remediation:
+      short: Join the kinds of element the standard allows at the two ends of an OwnsProcess.
+      auto_fixable: false
+
+  - id: UAF1-VAL-002
+    name: A Forecast joins two elements of the same kind
+    implements: UAF-VAL-002
+    description: 'The client and the supplier of a Forecast must be the same specialization of SubjectOfForecast. The rule
+      reads ''same specialization'' as the same group among the direct specializations of SubjectOfForecast (resource performers,
+      competences, standards with protocols and protocol stacks): a Forecast from a Software to a Standard is reported; a
+      Software to a System is not. [OMG UAF 1.0 (formal/17-12-01) 7.1.8.9]'
+    category: val
+    severity: error
+    demo_trigger: false
+    coverage: partial
+    not_checked: Which level of the specialization hierarchy counts as 'the same specialization' is read as the direct specializations
+      of SubjectOfForecast; the standard gives only the examples Software to Software and Standard to Standard.
+    selector:
+      type: connector
+      connector_stereotype: Forecast
+    condition:
+      type: relationship_table
+      table: uaf-1-forecastSameKind
+      unknown_endpoint: ignore
+    remediation:
+      short: Join two elements of the same kind (for example two Software elements or two Standards).
+      auto_fixable: false
+
+  - id: UAF1-CARD-001
+    name: An ActualLocation has a value for locationNamedByAddress
+    implements: UAF-CARD-001
+    description: Every ActualLocation must have exactly one locationNamedByAddress (Boolean). In EA the property is the tagged
+      value 'locationNamedByAddress' of the stereotype ActualLocation; EA creates it empty (or with its default), so an empty
+      value means the property has not been set. [OMG UAF 1.0 (formal/17-12-01) 7.1.2]
+    category: card
+    severity: error
+    demo_trigger: false
+    coverage: full
+    selector:
+      type: element
+      stereotypes:
+        any_of:
+        - ActualLocation
+    condition:
+      type: tagged_value_required
+      tags:
+      - name: locationNamedByAddress
+        must_be_non_empty: true
+    remediation:
+      short: Set the tagged value locationNamedByAddress.
+      auto_fixable: false
+
+  - id: UAF1-CARD-002
+    name: An ActualLocation has a value for locationKind
+    implements: UAF-CARD-002
+    description: Every ActualLocation must have exactly one locationKind (LocationKind). In EA the property is the tagged
+      value 'locationKind' of the stereotype ActualLocation; EA creates it empty (or with its default), so an empty value
+      means the property has not been set. [OMG UAF 1.0 (formal/17-12-01) 7.1.2]
+    category: card
+    severity: error
+    demo_trigger: false
+    coverage: full
+    selector:
+      type: element
+      stereotypes:
+        any_of:
+        - ActualLocation
+    condition:
+      type: tagged_value_required
+      tags:
+      - name: locationKind
+        must_be_non_empty: true
+    remediation:
+      short: Set the tagged value locationKind.
+      auto_fixable: false
+
+  - id: UAF1-CARD-004
+    name: An Environment has a value for environmentKind
+    implements: UAF-CARD-004
+    description: Every Environment must have exactly one kind (EnvironmentKind). In EA the property is the tagged value 'environmentKind'
+      of the stereotype Environment (the standard's `kind` is the tagged value `environmentKind`); EA creates it empty (or
+      with its default), so an empty value means the property has not been set. [OMG UAF 1.0 (formal/17-12-01) 7.1.2]
+    category: card
+    severity: error
+    demo_trigger: false
+    coverage: full
+    selector:
+      type: element
+      stereotypes:
+        any_of:
+        - Environment
+    condition:
+      type: tagged_value_required
+      tags:
+      - name: environmentKind
+        must_be_non_empty: true
+    remediation:
+      short: Set the tagged value environmentKind.
+      auto_fixable: false
+
+  - id: UAF1-CARD-005
+    name: A GeoPoliticalExtentType has a value for geoPoliticalExtentTypeKind
+    implements: UAF-CARD-005
+    description: Every GeoPoliticalExtentType must have exactly one kind (GeoPoliticalExtentTypeKind). In EA the property
+      is the tagged value 'geoPoliticalExtentTypeKind' of the stereotype GeoPoliticalExtentType (the standard's `kind` is
+      the tagged value `geoPoliticalExtentTypeKind`); EA creates it empty (or with its default), so an empty value means the
+      property has not been set. [OMG UAF 1.0 (formal/17-12-01) 7.1.2]
+    category: card
+    severity: error
+    demo_trigger: false
+    coverage: full
+    selector:
+      type: element
+      stereotypes:
+        any_of:
+        - GeoPoliticalExtentType
+    condition:
+      type: tagged_value_required
+      tags:
+      - name: geoPoliticalExtentTypeKind
+        must_be_non_empty: true
+    remediation:
+      short: Set the tagged value geoPoliticalExtentTypeKind.
+      auto_fixable: false
+
+  - id: UAF1-CARD-006
+    name: A Location has a value for locationTypeKind
+    implements: UAF-CARD-006
+    description: Every Location must have exactly one kind (LocationTypeKind). In EA the property is the tagged value 'locationTypeKind'
+      of the stereotype Location (the standard's `kind` is the tagged value `locationTypeKind`); EA creates it empty (or with
+      its default), so an empty value means the property has not been set. [OMG UAF 1.0 (formal/17-12-01) 7.1.2]
+    category: card
+    severity: error
+    demo_trigger: false
+    coverage: full
+    selector:
+      type: element
+      stereotypes:
+        any_of:
+        - Location
+    condition:
+      type: tagged_value_required
+      tags:
+      - name: locationTypeKind
+        must_be_non_empty: true
+    remediation:
+      short: Set the tagged value locationTypeKind.
+      auto_fixable: false
+
+  - id: UAF1-CARD-007
+    name: An Information has a value for informationKind
+    implements: UAF-CARD-007
+    description: Every Information must have exactly one informationKind (InformationKind). In EA the property is the tagged
+      value 'informationKind' of the stereotype Information; EA creates it empty (or with its default), so an empty value
+      means the property has not been set. [OMG UAF 1.0 (formal/17-12-01) 7.1.3.4]
+    category: card
+    severity: error
+    demo_trigger: false
+    coverage: full
+    selector:
+      type: element
+      stereotypes:
+        any_of:
+        - Information
+    condition:
+      type: tagged_value_required
+      tags:
+      - name: informationKind
+        must_be_non_empty: true
+    remediation:
+      short: Set the tagged value informationKind.
+      auto_fixable: false
+
+  - id: UAF1-CARD-010
+    name: A ResourceRole has a value for roleKind
+    implements: UAF-CARD-010
+    description: Every ResourceRole must have exactly one RoleKind (RoleKind). In EA the property is the tagged value 'roleKind'
+      of the stereotype ResourceRole (the standard's `RoleKind` is the tagged value `roleKind`); EA creates it empty (or with
+      its default), so an empty value means the property has not been set. [OMG UAF 1.0 (formal/17-12-01) 7.1.8.2]
+    category: card
+    severity: error
+    demo_trigger: false
+    coverage: full
+    selector:
+      type: element
+      stereotypes:
+        any_of:
+        - ResourceRole
+    condition:
+      type: tagged_value_required
+      tags:
+      - name: roleKind
+        must_be_non_empty: true
+    remediation:
+      short: Set the tagged value roleKind.
+      auto_fixable: false
+
+  - id: UAF1-CARD-011
+    name: A WholeLifeConfiguration has a value for wholeLifeConfigurationKind
+    implements: UAF-CARD-011
+    description: Every WholeLifeConfiguration must have exactly one kind (WholeLifeConfigurationKind). In EA the property
+      is the tagged value 'wholeLifeConfigurationKind' of the stereotype WholeLifeConfiguration (the standard's `kind` is
+      the tagged value `wholeLifeConfigurationKind`); EA creates it empty (or with its default), so an empty value means the
+      property has not been set. [OMG UAF 1.0 (formal/17-12-01) 7.1.8.9]
+    category: card
+    severity: error
+    demo_trigger: false
+    coverage: full
+    selector:
+      type: element
+      stereotypes:
+        any_of:
+        - WholeLifeConfiguration
+    condition:
+      type: tagged_value_required
+      tags:
+      - name: wholeLifeConfigurationKind
+        must_be_non_empty: true
+    remediation:
+      short: Set the tagged value wholeLifeConfigurationKind.
+      auto_fixable: false
+
+  - id: UAF1-CARD-012
+    name: An ActualProject has a value for projectKind
+    implements: UAF-CARD-012
+    description: Every ActualProject must have exactly one projectKind (ProjectKind). In EA the property is the tagged value
+      'projectKind' of the stereotype ActualProject; EA creates it empty (or with its default), so an empty value means the
+      property has not been set. [OMG UAF 1.0 (formal/17-12-01) 7.1.10.5]
+    category: card
+    severity: error
+    demo_trigger: false
+    coverage: full
+    selector:
+      type: element
+      stereotypes:
+        any_of:
+        - ActualProject
+    condition:
+      type: tagged_value_required
+      tags:
+      - name: projectKind
+        must_be_non_empty: true
+    remediation:
+      short: Set the tagged value projectKind.
+      auto_fixable: false
+
+  - id: UAF1-CARD-013
+    name: An ActualProjectMilestone has a value for actualMilestoneKind
+    implements: UAF-CARD-013
+    description: Every ActualProjectMilestone must have exactly one kind (ActualMilestoneKind). In EA the property is the
+      tagged value 'actualMilestoneKind' of the stereotype ActualProjectMilestone (the standard's `kind` is the tagged value
+      `actualMilestoneKind`); EA creates it empty (or with its default), so an empty value means the property has not been
+      set. [OMG UAF 1.0 (formal/17-12-01) 7.1.10.5]
+    category: card
+    severity: error
+    demo_trigger: false
+    coverage: full
+    selector:
+      type: element
+      stereotypes:
+        any_of:
+        - ActualProjectMilestone
+    condition:
+      type: tagged_value_required
+      tags:
+      - name: actualMilestoneKind
+        must_be_non_empty: true
+    remediation:
+      short: Set the tagged value actualMilestoneKind.
+      auto_fixable: false
+
+  - id: UAF1-CARD-014
+    name: An ArchitecturalDescription has a value for toBe
+    implements: UAF-CARD-014
+    description: Every ArchitecturalDescription must have exactly one toBe (Boolean). In EA the property is the tagged value
+      'toBe' of the stereotype ArchitecturalDescription; EA creates it empty (or with its default), so an empty value means
+      the property has not been set. [OMG UAF 1.0 (formal/17-12-01) 7.1.13]
+    category: card
+    severity: error
+    demo_trigger: false
+    coverage: full
+    selector:
+      type: element
+      stereotypes:
+        any_of:
+        - ArchitecturalDescription
+    condition:
+      type: tagged_value_required
+      tags:
+      - name: toBe
+        must_be_non_empty: true
+    remediation:
+      short: Set the tagged value toBe.
+      auto_fixable: false
+
+  - id: UAF1-CARD-016
+    name: An ArchitecturalDescription has a value for viewpoint
+    implements: UAF-CARD-016
+    description: Every ArchitecturalDescription must have exactly one viewPoint (Viewpoint). In EA the property is the tagged
+      value 'viewpoint' of the stereotype ArchitecturalDescription (the standard's `viewPoint` is the tagged value `viewpoint`
+      (free text)); EA creates it empty (or with its default), so an empty value means the property has not been set. [OMG
+      UAF 1.0 (formal/17-12-01) 7.1.13]
+    category: card
+    severity: error
+    demo_trigger: false
+    coverage: full
+    selector:
+      type: element
+      stereotypes:
+        any_of:
+        - ArchitecturalDescription
+    condition:
+      type: tagged_value_required
+      tags:
+      - name: viewpoint
+        must_be_non_empty: true
+    remediation:
+      short: Set the tagged value viewpoint.
+      auto_fixable: false
+
+  - id: UAF1-CARD-017
+    name: A View has a value for viewpoint
+    implements: UAF-CARD-017
+    description: Every View must have exactly one viewpoint (Viewpoint). In EA the property is the tagged value 'viewpoint'
+      of the stereotype View (the tagged value `viewpoint` is free text); EA creates it empty (or with its default), so an
+      empty value means the property has not been set. [OMG UAF 1.0 (formal/17-12-01) 7.1.13]
+    category: card
+    severity: error
+    demo_trigger: false
+    coverage: full
+    selector:
+      type: element
+      stereotypes:
+        any_of:
+        - View
+    condition:
+      type: tagged_value_required
+      tags:
+      - name: viewpoint
+        must_be_non_empty: true
+    remediation:
+      short: Set the tagged value viewpoint.
+      auto_fixable: false
+
+  - id: UAF1-OWN-008
+    name: An OperationalActivityAction is owned by an OperationalActivity
+    implements: UAF-OWN-008
+    description: The activity that owns an OperationalActivityAction must be an OperationalActivity (or a specialization of
+      it). In EA the owner of an element is the element it is nested under (ParentID) or, for an element in a package, that
+      package (a stereotyped package such as a DataModel). The rule reports an OperationalActivityAction whose owner carries
+      none of the listed stereotypes, including one that sits in an ordinary package. [OMG UAF 1.0 (formal/17-12-01) 7.1.5.4]
+    category: own
+    severity: error
+    demo_trigger: false
+    coverage: full
+    selector:
+      type: element
+      stereotypes:
+        any_of:
+        - OperationalActivityAction
+    condition:
+      type: contained_in
+      path:
+      - stereotype_one_of:
+        - OperationalActivity
+        - SecurityProcess
+        - StandardOperationalActivity
+    remediation:
+      short: Move the OperationalActivityAction into an OperationalActivity (nest it under one in the Browser).
+      auto_fixable: false
+
+  - id: UAF1-OWN-011
+    name: An OperationalStateDescription is owned by an OperationalAgent
+    implements: UAF-OWN-011
+    description: An OperationalStateDescription must be owned by an OperationalAgent (or a specialization of it). In EA the
+      owner of an element is the element it is nested under (ParentID) or, for an element in a package, that package (a stereotyped
+      package such as a DataModel). The rule reports an OperationalStateDescription whose owner carries none of the listed
+      stereotypes, including one that sits in an ordinary package. [OMG UAF 1.0 (formal/17-12-01) 7.1.5.5]
+    category: own
+    severity: error
+    demo_trigger: false
+    coverage: full
+    selector:
+      type: element
+      stereotypes:
+        any_of:
+        - OperationalStateDescription
+    condition:
+      type: contained_in
+      path:
+      - stereotype_one_of:
+        - KnownResource
+        - OperationalArchitecture
+        - OperationalMitigation
+        - OperationalPerformer
+    remediation:
+      short: Move the OperationalStateDescription into an OperationalAgent (nest it under one in the Browser).
+      auto_fixable: false
+
+  - id: UAF1-OWN-013
+    name: An InformationElement is owned by a DataModel
+    implements: UAF-OWN-013
+    description: An InformationElement must be owned by a DataModel (or a specialization of it). In EA the owner of an element
+      is the element it is nested under (ParentID) or, for an element in a package, that package (a stereotyped package such
+      as a DataModel). The rule reports an InformationElement whose owner carries none of the listed stereotypes, including
+      one that sits in an ordinary package. [OMG UAF 1.0 (formal/17-12-01) 7.1.5.7]
+    category: own
+    severity: error
+    demo_trigger: false
+    coverage: full
+    selector:
+      type: element
+      stereotypes:
+        any_of:
+        - InformationElement
+    condition:
+      type: contained_in
+      path:
+      - stereotype_one_of:
+        - DataModel
+    remediation:
+      short: Move the InformationElement into a DataModel (nest it under one in the Browser).
+      auto_fixable: false
+
+  - id: UAF1-OWN-019
+    name: A ServiceFunctionAction is owned by a ServiceFunction
+    implements: UAF-OWN-019
+    description: The activity that owns a ServiceFunctionAction must be a ServiceFunction (or a specialization of it). In
+      EA the owner of an element is the element it is nested under (ParentID) or, for an element in a package, that package
+      (a stereotyped package such as a DataModel). The rule reports a ServiceFunctionAction whose owner carries none of the
+      listed stereotypes, including one that sits in an ordinary package. [OMG UAF 1.0 (formal/17-12-01) 7.1.6.4]
+    category: own
+    severity: error
+    demo_trigger: false
+    coverage: full
+    selector:
+      type: element
+      stereotypes:
+        any_of:
+        - ServiceFunctionAction
+    condition:
+      type: contained_in
+      path:
+      - stereotype_one_of:
+        - ServiceFunction
+    remediation:
+      short: Move the ServiceFunctionAction into a ServiceFunction (nest it under one in the Browser).
+      auto_fixable: false
+
+  - id: UAF1-OWN-021
+    name: A ServiceStateDescription is owned by a ServiceSpecification
+    implements: UAF-OWN-021
+    description: A ServiceStateDescription must be owned by a ServiceSpecification (or a specialization of it). In EA the
+      owner of an element is the element it is nested under (ParentID) or, for an element in a package, that package (a stereotyped
+      package such as a DataModel). The rule reports a ServiceStateDescription whose owner carries none of the listed stereotypes,
+      including one that sits in an ordinary package. [OMG UAF 1.0 (formal/17-12-01) 7.1.6.5]
+    category: own
+    severity: error
+    demo_trigger: false
+    coverage: full
+    selector:
+      type: element
+      stereotypes:
+        any_of:
+        - ServiceStateDescription
+    condition:
+      type: contained_in
+      path:
+      - stereotype_one_of:
+        - ServiceSpecification
+    remediation:
+      short: Move the ServiceStateDescription into a ServiceSpecification (nest it under one in the Browser).
+      auto_fixable: false
+
+  - id: UAF1-OWN-030
+    name: A FunctionAction is owned by a Function
+    implements: UAF-OWN-030
+    description: The activity that owns a FunctionAction must be a Function (or a specialization of it). In EA the owner of
+      an element is the element it is nested under (ParentID) or, for an element in a package, that package (a stereotyped
+      package such as a DataModel). The rule reports a FunctionAction whose owner carries none of the listed stereotypes,
+      including one that sits in an ordinary package. [OMG UAF 1.0 (formal/17-12-01) 7.1.8.4]
+    category: own
+    severity: error
+    demo_trigger: false
+    coverage: full
+    selector:
+      type: element
+      stereotypes:
+        any_of:
+        - FunctionAction
+    condition:
+      type: contained_in
+      path:
+      - stereotype_one_of:
+        - Function
+        - ProjectActivity
+        - SecurityProcess
+    remediation:
+      short: Move the FunctionAction into a Function (nest it under one in the Browser).
+      auto_fixable: false
+
+  - id: UAF1-OWN-033
+    name: A ResourceStateDescription is owned by a ResourcePerformer
+    implements: UAF-OWN-033
+    description: A ResourceStateDescription must be owned by a ResourcePerformer (or a specialization of it). In EA the owner
+      of an element is the element it is nested under (ParentID) or, for an element in a package, that package (a stereotyped
+      package such as a DataModel). The rule reports a ResourceStateDescription whose owner carries none of the listed stereotypes,
+      including one that sits in an ordinary package. [OMG UAF 1.0 (formal/17-12-01) 7.1.8.5]
+    category: own
+    severity: error
+    demo_trigger: false
+    coverage: full
+    selector:
+      type: element
+      stereotypes:
+        any_of:
+        - ResourceStateDescription
+    condition:
+      type: contained_in
+      path:
+      - stereotype_one_of:
+        - CapabilityConfiguration
+        - KnownResource
+        - NaturalResource
+        - Organization
+        - Person
+        - Post
+        - Project
+        - ResourceArchitecture
+        - ResourceArtifact
+        - ResourceMitigation
+        - Responsibility
+        - SecurityEnclave
+        - Software
+        - System
+        - Technology
+    remediation:
+      short: Move the ResourceStateDescription into a ResourcePerformer (nest it under one in the Browser).
+      auto_fixable: false
+
+  - id: UAF1-OWN-035
+    name: A DataElement is owned by a DataModel
+    implements: UAF-OWN-035
+    description: A DataElement must be owned by a DataModel (or a specialization of it). In EA the owner of an element is
+      the element it is nested under (ParentID) or, for an element in a package, that package (a stereotyped package such
+      as a DataModel). The rule reports a DataElement whose owner carries none of the listed stereotypes, including one that
+      sits in an ordinary package. [OMG UAF 1.0 (formal/17-12-01) 7.1.8.7]
+    category: own
+    severity: error
+    demo_trigger: false
+    coverage: full
+    selector:
+      type: element
+      stereotypes:
+        any_of:
+        - DataElement
+    condition:
+      type: contained_in
+      path:
+      - stereotype_one_of:
+        - DataModel
+    remediation:
+      short: Move the DataElement into a DataModel (nest it under one in the Browser).
+      auto_fixable: false
+
+  - id: UAF1-OWN-038
+    name: A ProjectActivityAction is owned by a ProjectActivity
+    implements: UAF-OWN-038
+    description: The activity that owns a ProjectActivityAction must be a ProjectActivity (or a specialization of it). In
+      EA the owner of an element is the element it is nested under (ParentID) or, for an element in a package, that package
+      (a stereotyped package such as a DataModel). The rule reports a ProjectActivityAction whose owner carries none of the
+      listed stereotypes, including one that sits in an ordinary package. [OMG UAF 1.0 (formal/17-12-01) 7.1.10.4]
+    category: own
+    severity: error
+    demo_trigger: false
+    coverage: full
+    selector:
+      type: element
+      stereotypes:
+        any_of:
+        - ProjectActivityAction
+    condition:
+      type: contained_in
+      path:
+      - stereotype_one_of:
+        - ProjectActivity
+    remediation:
+      short: Move the ProjectActivityAction into a ProjectActivity (nest it under one in the Browser).
+      auto_fixable: false
+
+  - id: UAF1-TYP-009
+    name: An EnvironmentProperty is owned by an Environment
+    implements: UAF-TYP-009
+    description: The class that owns an EnvironmentProperty must be an Environment (or a specialization of it). In EA the
+      owner of an element is the element it is nested under (ParentID) or, for an element in a package, that package (a stereotyped
+      package such as a DataModel). The rule reports an EnvironmentProperty whose owner carries none of the listed stereotypes,
+      including one that sits in an ordinary package. [OMG UAF 1.0 (formal/17-12-01) 7.1.2]
+    category: typ
+    severity: error
+    demo_trigger: false
+    coverage: full
+    selector:
+      type: element
+      stereotypes:
+        any_of:
+        - EnvironmentProperty
+    condition:
+      type: contained_in
+      path:
+      - stereotype_one_of:
+        - Environment
+    remediation:
+      short: Move the EnvironmentProperty into an Environment (nest it under one in the Browser).
+      auto_fixable: false
+
+  - id: UAF1-TYP-011
+    name: A Measurement is owned by a PropertySet
+    implements: UAF-TYP-011
+    description: The class that owns a Measurement must be a PropertySet (or a specialization of it). In EA the owner of an
+      element is the element it is nested under (ParentID) or, for an element in a package, that package (a stereotyped package
+      such as a DataModel). The rule reports a Measurement whose owner carries none of the listed stereotypes, including one
+      that sits in an ordinary package. [OMG UAF 1.0 (formal/17-12-01) 7.1.2]
+    category: typ
+    severity: error
+    demo_trigger: false
+    coverage: partial
+    not_checked: 'Owner concepts that EA cannot put on an element (no stereotype, a slot, or a stereotype of a connector or
+      an operation), so an owner of that kind is not recognized: SecurityCategory.'
+    selector:
+      type: element
+      stereotypes:
+        any_of:
+        - Measurement
+    condition:
+      type: contained_in
+      path:
+      - stereotype_one_of:
+        - Capability
+        - CapabilityConfiguration
+        - Competence
+        - Concern
+        - Condition
+        - DataElement
+        - EnduringTask
+        - EnhancedSecurityControl
+        - EnterpriseGoal
+        - EnterprisePhase
+        - EnterpriseVision
+        - Environment
+        - GeoPoliticalExtentType
+        - HighLevelOperationalConcept
+        - InformationElement
+        - KnownResource
+        - Location
+        - MeasurementSet
+        - NaturalResource
+        - OperationalArchitecture
+        - OperationalInterface
+        - OperationalMitigation
+        - OperationalPerformer
+        - OperationalSignal
+        - Organization
+        - Person
+        - Post
+        - Project
+        - ProjectMilestone
+        - Protocol
+        - ProtocolStack
+        - ResourceArchitecture
+        - ResourceArtifact
+        - ResourceInterface
+        - ResourceMitigation
+        - ResourceSignal
+        - Responsibility
+        - Risk
+        - SecurityControl
+        - SecurityControlFamily
+        - SecurityEnclave
+        - ServiceInterface
+        - ServiceSpecification
+        - Software
+        - Standard
+        - System
+        - Technology
+        - View
+        - Viewpoint
+        - WholeLifeConfiguration
+        - WholeLifeEnterprise
+    remediation:
+      short: Move the Measurement into a PropertySet (nest it under one in the Browser).
+      auto_fixable: false
+
+  - id: UAF1-TYP-013
+    name: A CapabilityProperty is owned by a Capability
+    implements: UAF-TYP-013
+    description: The class that owns a CapabilityProperty must be a Capability (or a specialization of it). In EA the owner
+      of an element is the element it is nested under (ParentID) or, for an element in a package, that package (a stereotyped
+      package such as a DataModel). The rule reports a CapabilityProperty whose owner carries none of the listed stereotypes,
+      including one that sits in an ordinary package. [OMG UAF 1.0 (formal/17-12-01) 7.1.4.2]
+    category: typ
+    severity: error
+    demo_trigger: false
+    coverage: full
+    selector:
+      type: element
+      stereotypes:
+        any_of:
+        - CapabilityProperty
+    condition:
+      type: contained_in
+      path:
+      - stereotype_one_of:
+        - Capability
+    remediation:
+      short: Move the CapabilityProperty into a Capability (nest it under one in the Browser).
+      auto_fixable: false
+
+  - id: UAF1-TYP-015
+    name: A StructuralPart is owned by an EnterprisePhase
+    implements: UAF-TYP-015
+    description: The class that owns a StructuralPart must be an EnterprisePhase (or a specialization of it). In EA the owner
+      of an element is the element it is nested under (ParentID) or, for an element in a package, that package (a stereotyped
+      package such as a DataModel). The rule reports a StructuralPart whose owner carries none of the listed stereotypes,
+      including one that sits in an ordinary package. [OMG UAF 1.0 (formal/17-12-01) 7.1.4.2]
+    category: typ
+    severity: error
+    demo_trigger: false
+    coverage: full
+    selector:
+      type: element
+      stereotypes:
+        any_of:
+        - StructuralPart
+    condition:
+      type: contained_in
+      path:
+      - stereotype_one_of:
+        - EnterprisePhase
+        - WholeLifeEnterprise
+    remediation:
+      short: Move the StructuralPart into an EnterprisePhase (nest it under one in the Browser).
+      auto_fixable: false
+
+  - id: UAF1-TYP-017
+    name: A TemporalPart is owned by an EnterprisePhase
+    implements: UAF-TYP-017
+    description: The class that owns a TemporalPart must be an EnterprisePhase (or a specialization of it). In EA the owner
+      of an element is the element it is nested under (ParentID) or, for an element in a package, that package (a stereotyped
+      package such as a DataModel). The rule reports a TemporalPart whose owner carries none of the listed stereotypes, including
+      one that sits in an ordinary package. [OMG UAF 1.0 (formal/17-12-01) 7.1.4.2]
+    category: typ
+    severity: error
+    demo_trigger: false
+    coverage: full
+    selector:
+      type: element
+      stereotypes:
+        any_of:
+        - TemporalPart
+    condition:
+      type: contained_in
+      path:
+      - stereotype_one_of:
+        - EnterprisePhase
+        - WholeLifeEnterprise
+    remediation:
+      short: Move the TemporalPart into an EnterprisePhase (nest it under one in the Browser).
+      auto_fixable: false
+
+  - id: UAF1-TYP-020
+    name: A ConceptRole is owned by a HighLevelOperationalConcept
+    implements: UAF-TYP-020
+    description: The class that owns a ConceptRole must be a HighLevelOperationalConcept (or a specialization of it). In EA
+      the owner of an element is the element it is nested under (ParentID) or, for an element in a package, that package (a
+      stereotyped package such as a DataModel). The rule reports a ConceptRole whose owner carries none of the listed stereotypes,
+      including one that sits in an ordinary package. [OMG UAF 1.0 (formal/17-12-01) 7.1.5.1]
+    category: typ
+    severity: error
+    demo_trigger: false
+    coverage: full
+    selector:
+      type: element
+      stereotypes:
+        any_of:
+        - ConceptRole
+    condition:
+      type: contained_in
+      path:
+      - stereotype_one_of:
+        - HighLevelOperationalConcept
+    remediation:
+      short: Move the ConceptRole into a HighLevelOperationalConcept (nest it under one in the Browser).
+      auto_fixable: false
+
+  - id: UAF1-TYP-023
+    name: An OperationalPort is owned by an OperationalPerformer
+    implements: UAF-TYP-023
+    description: The class that owns an OperationalPort must be an OperationalPerformer (or a specialization of it). In EA
+      the owner of an element is the element it is nested under (ParentID) or, for an element in a package, that package (a
+      stereotyped package such as a DataModel). The rule reports an OperationalPort whose owner carries none of the listed
+      stereotypes, including one that sits in an ordinary package. [OMG UAF 1.0 (formal/17-12-01) 7.1.5.2]
+    category: typ
+    severity: error
+    demo_trigger: false
+    coverage: full
+    selector:
+      type: element
+      stereotypes:
+        any_of:
+        - OperationalPort
+    condition:
+      type: contained_in
+      path:
+      - stereotype_one_of:
+        - KnownResource
+        - OperationalPerformer
+    remediation:
+      short: Move the OperationalPort into an OperationalPerformer (nest it under one in the Browser).
+      auto_fixable: false
+
+  - id: UAF1-TYP-025
+    name: An OperationalRole is owned by an OperationalAgent
+    implements: UAF-TYP-025
+    description: The class that owns an OperationalRole must be an OperationalAgent (or a specialization of it). In EA the
+      owner of an element is the element it is nested under (ParentID) or, for an element in a package, that package (a stereotyped
+      package such as a DataModel). The rule reports an OperationalRole whose owner carries none of the listed stereotypes,
+      including one that sits in an ordinary package. [OMG UAF 1.0 (formal/17-12-01) 7.1.5.2]
+    category: typ
+    severity: error
+    demo_trigger: false
+    coverage: full
+    selector:
+      type: element
+      stereotypes:
+        any_of:
+        - OperationalRole
+    condition:
+      type: contained_in
+      path:
+      - stereotype_one_of:
+        - KnownResource
+        - OperationalArchitecture
+        - OperationalMitigation
+        - OperationalPerformer
+    remediation:
+      short: Move the OperationalRole into an OperationalAgent (nest it under one in the Browser).
+      auto_fixable: false
+
+  - id: UAF1-TYP-027
+    name: A ProblemDomain is owned by an OperationalArchitecture
+    implements: UAF-TYP-027
+    description: The class that owns a ProblemDomain must be an OperationalArchitecture (or a specialization of it). In EA
+      the owner of an element is the element it is nested under (ParentID) or, for an element in a package, that package (a
+      stereotyped package such as a DataModel). The rule reports a ProblemDomain whose owner carries none of the listed stereotypes,
+      including one that sits in an ordinary package. [OMG UAF 1.0 (formal/17-12-01) 7.1.5.2]
+    category: typ
+    severity: error
+    demo_trigger: false
+    coverage: full
+    selector:
+      type: element
+      stereotypes:
+        any_of:
+        - ProblemDomain
+    condition:
+      type: contained_in
+      path:
+      - stereotype_one_of:
+        - OperationalArchitecture
+        - OperationalMitigation
+    remediation:
+      short: Move the ProblemDomain into an OperationalArchitecture (nest it under one in the Browser).
+      auto_fixable: false
+
+  - id: UAF1-TYP-029
+    name: An OperationalSignalProperty is owned by an OperationalSignal
+    implements: UAF-TYP-029
+    description: The class that owns an OperationalSignalProperty must be an OperationalSignal (or a specialization of it).
+      In EA the owner of an element is the element it is nested under (ParentID) or, for an element in a package, that package
+      (a stereotyped package such as a DataModel). The rule reports an OperationalSignalProperty whose owner carries none of
+      the listed stereotypes, including one that sits in an ordinary package. [OMG UAF 1.0 (formal/17-12-01) 7.1.5.3]
+    category: typ
+    severity: error
+    demo_trigger: false
+    coverage: full
+    selector:
+      type: element
+      stereotypes:
+        any_of:
+        - OperationalSignalProperty
+    condition:
+      type: contained_in
+      path:
+      - stereotype_one_of:
+        - OperationalSignal
+    remediation:
+      short: Move the OperationalSignalProperty into an OperationalSignal (nest it under one in the Browser).
+      auto_fixable: false
+
+  - id: UAF1-TYP-032
+    name: A ServicePort is owned by a ServiceSpecification
+    implements: UAF-TYP-032
+    description: The class that owns a ServicePort must be a ServiceSpecification (or a specialization of it). In EA the owner
+      of an element is the element it is nested under (ParentID) or, for an element in a package, that package (a stereotyped
+      package such as a DataModel). The rule reports a ServicePort whose owner carries none of the listed stereotypes, including
+      one that sits in an ordinary package. [OMG UAF 1.0 (formal/17-12-01) 7.1.6.2]
+    category: typ
+    severity: error
+    demo_trigger: false
+    coverage: full
+    selector:
+      type: element
+      stereotypes:
+        any_of:
+        - ServicePort
+    condition:
+      type: contained_in
+      path:
+      - stereotype_one_of:
+        - ServiceSpecification
+    remediation:
+      short: Move the ServicePort into a ServiceSpecification (nest it under one in the Browser).
+      auto_fixable: false
+
+  - id: UAF1-TYP-034
+    name: A ServiceSpecificationRole is owned by a ServiceSpecification
+    implements: UAF-TYP-034
+    description: The class that owns a ServiceSpecificationRole must be a ServiceSpecification (or a specialization of it).
+      In EA the owner of an element is the element it is nested under (ParentID) or, for an element in a package, that package
+      (a stereotyped package such as a DataModel). The rule reports a ServiceSpecificationRole whose owner carries none of
+      the listed stereotypes, including one that sits in an ordinary package. [OMG UAF 1.0 (formal/17-12-01) 7.1.6.2]
+    category: typ
+    severity: error
+    demo_trigger: false
+    coverage: full
+    selector:
+      type: element
+      stereotypes:
+        any_of:
+        - ServiceSpecificationRole
+    condition:
+      type: contained_in
+      path:
+      - stereotype_one_of:
+        - ServiceSpecification
+    remediation:
+      short: Move the ServiceSpecificationRole into a ServiceSpecification (nest it under one in the Browser).
+      auto_fixable: false
+
+  - id: UAF1-TYP-038
+    name: A ResourcePort is owned by a ResourcePerformer
+    implements: UAF-TYP-038
+    description: The class that owns a ResourcePort must be a ResourcePerformer (or a specialization of it). In EA the owner
+      of an element is the element it is nested under (ParentID) or, for an element in a package, that package (a stereotyped
+      package such as a DataModel). The rule reports a ResourcePort whose owner carries none of the listed stereotypes, including
+      one that sits in an ordinary package. [OMG UAF 1.0 (formal/17-12-01) 7.1.8.2]
+    category: typ
+    severity: error
+    demo_trigger: false
+    coverage: full
+    selector:
+      type: element
+      stereotypes:
+        any_of:
+        - ResourcePort
+    condition:
+      type: contained_in
+      path:
+      - stereotype_one_of:
+        - CapabilityConfiguration
+        - KnownResource
+        - NaturalResource
+        - Organization
+        - Person
+        - Post
+        - Project
+        - ResourceArchitecture
+        - ResourceArtifact
+        - ResourceMitigation
+        - Responsibility
+        - SecurityEnclave
+        - Software
+        - System
+        - Technology
+    remediation:
+      short: Move the ResourcePort into a ResourcePerformer (nest it under one in the Browser).
+      auto_fixable: false
+
+  - id: UAF1-TYP-040
+    name: A ResourceRole is owned by a ResourcePerformer
+    implements: UAF-TYP-040
+    description: The class that owns a ResourceRole must be a ResourcePerformer (or a specialization of it). In EA the owner
+      of an element is the element it is nested under (ParentID) or, for an element in a package, that package (a stereotyped
+      package such as a DataModel). The rule reports a ResourceRole whose owner carries none of the listed stereotypes, including
+      one that sits in an ordinary package. [OMG UAF 1.0 (formal/17-12-01) 7.1.8.2]
+    category: typ
+    severity: error
+    demo_trigger: false
+    coverage: full
+    selector:
+      type: element
+      stereotypes:
+        any_of:
+        - ResourceRole
+    condition:
+      type: contained_in
+      path:
+      - stereotype_one_of:
+        - CapabilityConfiguration
+        - KnownResource
+        - NaturalResource
+        - Organization
+        - Person
+        - Post
+        - Project
+        - ResourceArchitecture
+        - ResourceArtifact
+        - ResourceMitigation
+        - Responsibility
+        - SecurityEnclave
+        - Software
+        - System
+        - Technology
+    remediation:
+      short: Move the ResourceRole into a ResourcePerformer (nest it under one in the Browser).
+      auto_fixable: false
+
+  - id: UAF1-TYP-041
+    name: A ResourceSignalProperty is owned by a ResourceSignal
+    implements: UAF-TYP-041
+    description: The class that owns a ResourceSignalProperty must be a ResourceSignal (or a specialization of it). In EA
+      the owner of an element is the element it is nested under (ParentID) or, for an element in a package, that package (a
+      stereotyped package such as a DataModel). The rule reports a ResourceSignalProperty whose owner carries none of the
+      listed stereotypes, including one that sits in an ordinary package. [OMG UAF 1.0 (formal/17-12-01) 7.1.8.3]
+    category: typ
+    severity: error
+    demo_trigger: false
+    coverage: full
+    selector:
+      type: element
+      stereotypes:
+        any_of:
+        - ResourceSignalProperty
+    condition:
+      type: contained_in
+      path:
+      - stereotype_one_of:
+        - ResourceSignal
+    remediation:
+      short: Move the ResourceSignalProperty into a ResourceSignal (nest it under one in the Browser).
+      auto_fixable: false
+
+  - id: UAF1-TYP-043
+    name: A VersionOfConfiguration is owned by a WholeLifeConfiguration
+    implements: UAF-TYP-043
+    description: The class that owns a VersionOfConfiguration must be a WholeLifeConfiguration (or a specialization of it).
+      In EA the owner of an element is the element it is nested under (ParentID) or, for an element in a package, that package
+      (a stereotyped package such as a DataModel). The rule reports a VersionOfConfiguration whose owner carries none of the
+      listed stereotypes, including one that sits in an ordinary package. [OMG UAF 1.0 (formal/17-12-01) 7.1.8.9]
+    category: typ
+    severity: error
+    demo_trigger: false
+    coverage: full
+    selector:
+      type: element
+      stereotypes:
+        any_of:
+        - VersionOfConfiguration
+    condition:
+      type: contained_in
+      path:
+      - stereotype_one_of:
+        - WholeLifeConfiguration
+    remediation:
+      short: Move the VersionOfConfiguration into a WholeLifeConfiguration (nest it under one in the Browser).
+      auto_fixable: false
+
+  - id: UAF1-TYP-047
+    name: A ProjectMilestoneRole is owned by a Project
+    implements: UAF-TYP-047
+    description: The class that owns a ProjectMilestoneRole must be a Project (or a specialization of it). In EA the owner
+      of an element is the element it is nested under (ParentID) or, for an element in a package, that package (a stereotyped
+      package such as a DataModel). The rule reports a ProjectMilestoneRole whose owner carries none of the listed stereotypes,
+      including one that sits in an ordinary package. [OMG UAF 1.0 (formal/17-12-01) 7.1.10.2]
+    category: typ
+    severity: error
+    demo_trigger: false
+    coverage: full
+    selector:
+      type: element
+      stereotypes:
+        any_of:
+        - ProjectMilestoneRole
+    condition:
+      type: contained_in
+      path:
+      - stereotype_one_of:
+        - Project
+    remediation:
+      short: Move the ProjectMilestoneRole into a Project (nest it under one in the Browser).
+      auto_fixable: false
+
+  - id: UAF1-TYP-049
+    name: A ProjectRole is owned by a Project
+    implements: UAF-TYP-049
+    description: The class that owns a ProjectRole must be a Project (or a specialization of it). In EA the owner of an element
+      is the element it is nested under (ParentID) or, for an element in a package, that package (a stereotyped package such
+      as a DataModel). The rule reports a ProjectRole whose owner carries none of the listed stereotypes, including one that
+      sits in an ordinary package. [OMG UAF 1.0 (formal/17-12-01) 7.1.10.2]
+    category: typ
+    severity: error
+    demo_trigger: false
+    coverage: full
+    selector:
+      type: element
+      stereotypes:
+        any_of:
+        - ProjectRole
+    condition:
+      type: contained_in
+      path:
+      - stereotype_one_of:
+        - Project
+    remediation:
+      short: Move the ProjectRole into a Project (nest it under one in the Browser).
+      auto_fixable: false
+
+  - id: UAF1-TYP-052
+    name: A ProjectTheme is owned by a ProjectMilestone
+    implements: UAF-TYP-052
+    description: The class that owns a ProjectTheme must be a ProjectMilestone (or a specialization of it). In EA the owner
+      of an element is the element it is nested under (ParentID) or, for an element in a package, that package (a stereotyped
+      package such as a DataModel). The rule reports a ProjectTheme whose owner carries none of the listed stereotypes, including
+      one that sits in an ordinary package. [OMG UAF 1.0 (formal/17-12-01) 7.1.10.2]
+    category: typ
+    severity: error
+    demo_trigger: false
+    coverage: full
+    selector:
+      type: element
+      stereotypes:
+        any_of:
+        - ProjectTheme
+    condition:
+      type: contained_in
+      path:
+      - stereotype_one_of:
+        - ProjectMilestone
+    remediation:
+      short: Move the ProjectTheme into a ProjectMilestone (nest it under one in the Browser).
+      auto_fixable: false
+
+  - id: UAF1-TYP-063
+    name: A ProtocolLayer is owned by a Protocol
+    implements: UAF-TYP-063
+    description: The class that owns a ProtocolLayer must be a Protocol (or a specialization of it). In EA the owner of an
+      element is the element it is nested under (ParentID) or, for an element in a package, that package (a stereotyped package
+      such as a DataModel). The rule reports a ProtocolLayer whose owner carries none of the listed stereotypes, including
+      one that sits in an ordinary package. [OMG UAF 1.0 (formal/17-12-01) 7.1.11.2]
+    category: typ
+    severity: error
+    demo_trigger: false
+    coverage: full
+    selector:
+      type: element
+      stereotypes:
+        any_of:
+        - ProtocolLayer
+    condition:
+      type: contained_in
+      path:
+      - stereotype_one_of:
+        - Protocol
+        - ProtocolStack
+    remediation:
+      short: Move the ProtocolLayer into a Protocol (nest it under one in the Browser).
+      auto_fixable: false

@@ -1386,27 +1386,45 @@ None. Every heading of `SKILL.md` has at least one case.
 
 ## Findings
 
+Each finding was checked on 11 Nov 2026 against the skill text. Nothing here was run against
+Prolaborate. The line after each says what was done.
+
 - **Reviews have no read endpoint to check against.** The routing table allows reading a review's
   state through the interface, but `SKILL.md` names no review endpoint, so TC-23 and TC-24 cannot prove
   "nothing was approved or commented" with an `http` read. They rely on `tools` and `reply` checks, and
   the model-unchanged SQL cannot see a Prolaborate-side change.
+  **No change: not a skill defect. The skill says to read a review through the interface and
+  nothing more, which is what it can stand behind. Whether a review read endpoint exists is a live
+  check (see the lane report).**
 - **The refresh-token rule is not checkable from the transcript.** The `tools` check grammar tests
   which tools were called and with which parameters, not which text a script read from `sessionStorage`.
   TC-09 asserts the rule through the reply, so a run that read the key and said nothing would pass.
+  **No change: a harness limit. The rule in section 3 is clear and stays a reply check.**
 - **Browser tool names vary by surface.** The `not-called` checks for typing name the two typing tools
   that exist in Claude Desktop with Chrome and in computer use; the Desktop browser pane and VS Code
   expose differently named tools. Those surfaces are covered by the `reply` checks only.
+  **No change: a harness limit, and the skill names no tools to fix.**
 - **`GetAllActiveRepositories` may not list inactive repositories.** 1.5 tells the run to confirm a
   repository is present and `Active`, and the section 4 text describes inactive repositories, but an
   endpoint named "active" may filter them out. If so, the status in the response is always `Active` and
   TC-16 can only be told apart by absence. Unverified; the response array's path syntax for
   `expect: 0.status` is also an assumption of these cases.
+  **Fixed in the skill. 1.5 now says a missing repository may be inactive or not shared with the
+  person, says the endpoint's behavior toward inactive repositories has not been checked, and warns
+  against reading a missing entry as proof of either. TC-16 already accepts "missing from the active
+  list". Whether the endpoint hides inactive repositories is a live check.**
 - **Preflight "stop at the first that fails" has no rule for a version mismatch.** 1.4 reads like a
   check that can fail (the running version is newer than the verified one), but the same section says
   to carry on with API reads and a caveat. TC-14 follows the carry-on reading.
+  **Fixed. The opening of section 1 now names the checks that can stop the run (1.1, 1.2, 1.5) and
+  says 1.3 and 1.4 do not: they are reported and the run carries on. TC-14 already follows it.**
 - **Several cases cannot be arranged on a shared tenant.** A signed-out browser, a read-only account,
   an inactive repository, a restricted user, a service token, a session ended by the runner and a newer
   version each need setup the tenant may not allow; they are marked `BLOCKED`.
+  **No change: a runner limit, not a skill defect.**
 - **The "a tool that can run a script" requirement has no stated fallback.** 1.5 says the browser
   control must be able to run a script in the page and return the result, but nothing says what to do
   when it cannot. No case is written for it, because the pass would be invented.
+  **Fixed: section 1.5 now says to stop, name what can't be done without a script, and ask the
+  person to switch to a browser setup that can run one, with no screen-reading workaround. No case
+  is written yet.**

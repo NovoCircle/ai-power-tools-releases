@@ -162,7 +162,11 @@ Two consequences worth stating out loud:
 - **It needs a real browser context.** The site sits behind bot protection, and a plain HTTP
   client is answered with a challenge page rather than the guide — an HTTP error, not content.
   If a fetch comes back as a short "checking your browser" document, that is what happened; it
-  is not a missing page.
+  is not a missing page. Fetch through a browser tool (Claude in Chrome on the person's machine,
+  for example), and filter the search results and the sitemap with a script or by extracting page
+  text, so only the matching lines reach the context. On a surface with neither a browser tool nor
+  a way to run code, say the guide can't be reached from there, give the person the guide base
+  URL for their version and the search terms, and ask them to bring back the page text.
 
 ---
 

@@ -13,21 +13,25 @@ description: How to generate click-through "navigation diagrams" over hierarchic
 
 A navigation diagram is an ordinary diagram that has been attached to an element as its **child diagram**, with the element flagged **composite**. On any diagram where that element appears, EA draws a small marker in the element's bottom-right corner — users describe it as the "eyeglasses" or "chain-link" icon — and double-clicking the element opens the child diagram.
 
-Chained across levels, this turns a hierarchy into something a non-modeller can browse: a landing diagram of the top level, each box opening the level below it, all the way to the leaves. It replaces the classic one-big-tree diagram, which stops being readable past about thirty elements.
+Chained across levels, this turns a hierarchy into something a non-modeler can browse: a landing diagram of the top level, each box opening the level below it, all the way to the leaves. It replaces the classic one-big-tree diagram, which stops being readable past about thirty elements.
 
 It is **not** a hyperlink element, **not** a diagram frame, and **not** a Navigation Cell. Those are different EA features with different storage and different behavior.
 
-## The mechanism — two parts, both required
+## The mechanism: three parts, all required
 
 | # | What | Where it lives | Value |
 |---|------|----------------|-------|
 | 1 | The diagram is made a child of the element | `t_diagram.ParentID` | the element's `Object_ID` |
 | 2 | The element is flagged composite | `t_object.NType` | `8` (default is `0`) |
+| 3 | EA's link row exists | `t_xref` | Name `DefaultDiagram`, Type `element property`, Client the element's GUID, Supplier the diagram's GUID |
 
-Both are required. This is the single most important fact in this skill:
+All three are required. This is the single most important fact in this skill:
 
-- `ParentID` alone → the diagram is owned by the element and appears under it in the Browser, but the element shows **no marker and does not navigate on double-click**.
-- `NType = 8` alone → nothing to navigate to.
+- Without (3) the element shows the marker, but double-click does nothing (shown live on EA 17.1, 11 Nov 2026).
+- Without (2) there is no marker, even though the diagram is owned by the element and appears under it in the Browser.
+- Without (1) there is nothing to open (`NType = 8` alone).
+
+`set_composite_diagram` writes all three. Never write them with raw SQL.
 
 A repository that has hand-built navigation diagrams will often contain a mix. Before extending someone's existing pattern, audit it. As of this release, prefer the dedicated operation over hand-rolled SQL:
 
@@ -35,7 +39,7 @@ A repository that has hand-built navigation diagrams will often contain a mix. B
 ea_model("find_composite_diagram_mismatches", {"package_id": <pkg>, "recursive": true})
 ```
 
-It scans the whole package subtree (or just `package_id` itself with `recursive: false`) in one call and returns `{ok, package_id, recursive, checked_count, mismatches}`, where each mismatch is `{element_id, name, ntype, child_diagram_ids, problem}`. `problem` is `diagram_without_flag` (a child diagram exists but `NType <> 8` — looks navigable in the Browser, doesn't drill down) or `flag_without_diagram` (`NType = 8` but no child diagram — a marker that opens nothing). Both are the same defect class described above, in either direction.
+It scans the whole package subtree (or just `package_id` itself with `recursive: false`) in one call and returns `{ok, package_id, recursive, checked_count, mismatches}`, where each mismatch is `{element_id, name, ntype, child_diagram_ids, problem}`. `problem` is `diagram_without_flag` (a child diagram exists but `NType <> 8`; looks navigable in the Browser, doesn't drill down) or `missing_default_diagram_xref` (both halves are present but EA's `DefaultDiagram` row is missing: the element looks navigable and does not drill down; re-run `set_composite_diagram` for it) or `flag_without_diagram` (`NType = 8` but no child diagram; a marker that opens nothing). All are the same defect class described above, in either direction.
 
 The equivalent raw SQL, for when you need to inspect the same thing by hand:
 
@@ -48,13 +52,13 @@ WHERE o.Package_ID = <pkg>
   AND o.NType <> 8
 ```
 
-Any rows returned (or any `diagram_without_flag` mismatch) are elements that look navigable to the author but are not. Fix them with `set_composite_diagram` (see Phase 4) rather than a hand-written `UPDATE` — it writes both halves together and reports whether they actually landed consistent.
+Any rows returned (or any `diagram_without_flag` mismatch) are elements that look navigable to the author but are not. The SQL cannot see the third part (the `t_xref` row), so use `find_composite_diagram_mismatches` for the full check. Fix them with `set_composite_diagram` (see Phase 4) rather than a hand-written `UPDATE`: it writes all three parts together and reports whether they actually landed consistent.
 
-This audit is the highest-value check in this skill — it is exactly what would have caught the 6-of-21 "looks navigable but isn't" defect described below, automatically, before a user ever clicked and found nothing. Run it before extending any existing set, and offer to run it any time a user asks about navigation diagrams in a repository you didn't build yourself.
+This audit is the highest-value check in this skill — it catches the "looks navigable but isn't" defect (some parents with a child diagram and no composite flag) automatically, before a user clicks and finds nothing. Run it before extending any existing set, and offer to run it any time a user asks about navigation diagrams in a repository you didn't build yourself.
 
 > **Note on `t_diagram.ParentID`:** despite what some schema documentation says, this column holds the parent **element's** `Object_ID`, not a parent diagram and not a package. `Package_ID` is the owning package and is independent of it. An element-owned diagram (`ParentID > 0`) appears in the Browser under the element, not in the package's diagram list, so it does not clutter the package and does not collide with same-named package-level diagrams.
 >
-> The `describe_table('t_diagram')` schema notes returned by `ea_analyze` currently state the opposite ("ParentID here is parent *diagram*, not package") — that is a documentation defect (tracked separately), not a description of this mechanism. Trust this skill's statement, not that note, until the doc is fixed.
+> The `describe_table('t_diagram')` notes on current servers say the same. An older server's notes said the opposite (parent *diagram*); if you see that, trust this skill.
 
 ## When to offer this
 
@@ -70,9 +74,9 @@ Typical subjects: business and technical capability models, technology reference
 
 ```sql
 -- parentage view
-SELECT ParentID, COUNT(*) FROM t_object WHERE Package_ID = <pkg> GROUP BY ParentID;
+SELECT ParentID, COUNT(*) AS n FROM t_object WHERE Package_ID = <pkg> GROUP BY ParentID;
 -- connector view
-SELECT c.Start_Object_ID, COUNT(*) FROM t_connector c
+SELECT c.Start_Object_ID, COUNT(*) AS n FROM t_connector c
  WHERE c.Stereotype LIKE '%PartOf%' GROUP BY c.Start_Object_ID;
 ```
 
@@ -82,7 +86,7 @@ For the exact thresholds and wording to use when *proactively* raising this — 
 
 This is a conversational behavior, not a tool call. No MCP operation can "ask the user a question" — only you, the calling agent, decide when to speak up. This section is authoritative for *when* and *how* to offer; everything else in this skill is the *how to build*.
 
-The commercial case is direct: customers do not ask for navigation diagrams because most don't know the feature exists. The ones who do know build a handful by hand and stop (see the 6-of-21 defect above). Offering it the moment a qualifying hierarchy lands — while you already have the parent/child map in context and the user is looking for confirmation the load worked — is the difference between a feature nobody uses and the thing the tool gets remembered for.
+The commercial case is direct: customers do not ask for navigation diagrams because most don't know the feature exists. The ones who do know build a handful by hand and stop, and often leave some half-linked (see the audit above). Offering it the moment a qualifying hierarchy lands — while you already have the parent/child map in context and the user is looking for confirmation the load worked — is the difference between a feature nobody uses and the thing the tool gets remembered for.
 
 ### Trigger points
 
@@ -98,8 +102,8 @@ All three must hold. Below this, say nothing; a single diagram is the better ans
 | Check | Threshold | How to get it (usually already in hand from the triggering call) |
 |---|---|---|
 | Depth | 2 or more levels | Walk `t_object.ParentID` from a leaf to a root within scope (or use a level/tier tag if present); depth = the longest chain. |
-| Scope size | more than 12 elements | `SELECT COUNT(*) FROM t_object WHERE Package_ID IN (<scope subtree>)` — see `ea-modeling` §8 for the recursive subtree pattern. |
-| Elements with children | 3 or more | `SELECT ParentID, COUNT(*) FROM t_object WHERE Package_ID IN (<scope subtree>) AND ParentID <> 0 GROUP BY ParentID` — count the distinct `ParentID` values that are themselves elements in scope. |
+| Scope size | more than 12 elements | `SELECT COUNT(*) AS n FROM t_object WHERE Package_ID IN (<scope subtree>)` — see `ea-modeling` §8 for the recursive subtree pattern. |
+| Elements with children | 3 or more | `SELECT ParentID, COUNT(*) AS n FROM t_object WHERE Package_ID IN (<scope subtree>) AND ParentID <> 0 GROUP BY ParentID` — count the distinct `ParentID` values that are themselves elements in scope. |
 
 ### Before offering: check what's already navigable
 
@@ -109,7 +113,7 @@ Run the audit before saying anything:
 ea_model("find_composite_diagram_mismatches", {"package_id": <scope>, "recursive": true})
 ```
 
-Combine that with a count of in-scope parents (elements with children) that already have **both** halves correct (a child diagram and `NType = 8`):
+Combine that with a count of in-scope parents (elements with children) that already have **all three parts** correct (a child diagram, `NType = 8` and the `DefaultDiagram` row):
 
 - **Every qualifying parent is already navigable** → say nothing. Do not re-prompt on a package that's already done, even if it's touched again by a later load in the same session.
 - **Nothing is navigable yet** (no diagrams, or diagrams exist but none are flagged) → the full-build framing.
@@ -117,33 +121,38 @@ Combine that with a count of in-scope parents (elements with children) that alre
 
 ### What to say
 
-State scope, diagram count, and target package before the user answers — never ask blind. Match the source report's own audit language for the partial case rather than paraphrasing it:
+State scope, diagram count, and target package before the user answers — never ask blind. Use the wording below, with the real counts in place of the `<...>` slots:
 
 > **Full-build framing** (nothing navigable yet):
-> "This load just added a 3-level hierarchy to `<package>` — 13 areas, 43 categories, 128 capabilities (184 elements, 44 with children). Would you like me to build a set of navigation diagrams so you can browse it by clicking down through levels, instead of one large tree diagram?"
+> "This load just added a 3-level hierarchy to `<package>`: <n1> top-level groups, <n2> middle-level groups, <n3> leaf elements (<total> elements, <parents> with children). Would you like me to build a set of navigation diagrams so you can browse it by clicking down through levels, instead of one large tree diagram?"
 
-> **Fix-only framing** (partially navigable — mirror this wording exactly, filled in with the real counts):
-> "9 of the 21 capabilities with sub-capabilities are navigable; 12 are not, and 6 have a child diagram but are missing the composite flag, so they look navigable but don't drill down. Want me to fix the flags?"
+> **Fix-only framing** (partially navigable — keep this wording, filled in with the real counts):
+> "<a> of the <b> elements with children are navigable; <c> are not, and <d> of those have a child diagram but are missing the composite flag, so they look navigable but don't drill down. Want me to fix the flags?"
 
 Then offer exactly these four options, every time — don't reword or silently drop one, and offer option 3 even when the framing above is the full-build one, so a user who only wants the cheap fix isn't forced to ask for it separately:
 
 1. **Build the full set** — landing diagram plus one per parent, per the Build procedure below.
 2. **Complete an existing set** — generate only what's missing, matching the styling of diagrams already there (read the existing diagrams' `Diagram_Type`/`PDATA`/`StyleEx` per Phase 1 before generating).
-3. **Fix only the flags** — the cheap, safe, five-second option: run `set_composite_diagram` against every `diagram_without_flag` mismatch, nothing else.
+3. **Fix only the flags** — the cheap, safe, five-second option: run `set_composite_diagram` against every `diagram_without_flag` mismatch, nothing else. A `flag_without_diagram` mismatch has no diagram to link: report it, and say the two ways out (build its diagram, option 2, or clear the stray flag with `diagram_id: null`). Don't clear it unasked.
 4. **No thanks** — and remember it for the rest of this session. Do not offer again for this package this session, even if it's loaded into or analyzed again. A new session starts clean. If the user has told you (this session, or as a standing preference you're otherwise aware of) that they never want this offered at all, treat that as covering every package, not just the one in front of you.
 
 ### Rules
 
 - Fires once per load or per analyzed package, never mid-loop. If a single operation loads several packages, finish the whole load, then check/offer once per package — not once per batch and not once per element.
+- **One offer per package, each package named, never one combined offer.** Two qualifying packages mean two offers, each with its own scope, diagram count, target package and the same four options, so the person can accept one map and decline the other. An answer to one offer does not decide the other, and a "No thanks" (option 4) is remembered for that package only. Two packages loaded in one request, a Retail map and a Corporate map of 17 elements each, 4 of them with children:
+
+> "`Retail Capability Map` now holds a 2-level hierarchy: 17 elements, 4 with children. An offer to build would create 5 diagrams in `Retail Capability Map` (one landing diagram and one per parent). Would you like that?" (then the four options)
+>
+> "`Corporate Capability Map` has the same shape: 17 elements, 4 with children, 5 diagrams in `Corporate Capability Map`. Would you like that too?" (then the four options)
 - Scope, count, and target package are always stated before the user answers.
 - Accepting is not done until a rendered image confirms it — see Phase 5's "counting rows is not verification" rule.
-- Existing diagrams are never deleted or overwritten; see "Rebuilding after the hierarchy changes" below for the superseded-diagram handling.
+- Existing diagrams are never deleted or overwritten; "Rebuilding after the hierarchy changes" below says how a superseded one is handled and which diagrams count as yours.
 
 ## Build procedure
 
 ### Phase 0 — read the hierarchy
 
-Pull the whole set in one query: `Object_ID`, `Name`, `ParentID`, and the level tag if present. Derive:
+Pull the whole set in one query: `Object_ID`, `Name`, `ParentID`, and the level tag if present. If `ParentID` is flat and the hierarchy is carried by containment connectors, read parent and child pairs from them instead (check the direction of one pair first) and say that is the source. A level tag alone gives depth but not who belongs to whom, so with no other source say the hierarchy cannot be built and ask. Derive:
 
 - **roots** — elements with no parent inside the scope
 - **parents** — every element with at least one child (these get a diagram and `NType = 8`)
@@ -169,6 +178,8 @@ PDATA:    HideRel=0;ShowTags=0;ShowReqs=0;ShowCons=0;ShowIcons=1;ShowShape=1;
 
 One diagram per parent, plus one landing diagram with `ParentID = 0` in the package.
 
+**Default route: `create_diagram`** with `properties` for `Name`, `StyleEx`, `ParentID` and the batch marker (`Author` or `Version`), then check `applied_properties` and `rejected_properties`. It does not list `PDATA`, `Swimlanes` or the show/hide flags, so those still need the follow-up `UPDATE` below. Not yet verified live: that a diagram made this way, with this `StyleEx` and `ParentID`, ends up the same as one inserted by SQL. The raw `INSERT` that follows is the fallback for a server without the call, and what to use if that check fails.
+
 Name each child diagram after its element. Because element-owned diagrams surface under the element rather than in the package list, reusing the element name is unambiguous and is what hand-built examples do.
 
 Insert only the identifying columns, then set the bulky repeated columns (`PDATA`, `StyleEx`, `Swimlanes`, the show/hide flags, dates) in a single follow-up `UPDATE` over the whole batch. Tag the batch — `Author`, or a temporary `Version` marker — so the follow-up update and the later ID lookup can find exactly these rows.
@@ -182,7 +193,7 @@ GUIDs must be the braced upper-case form. Dialects differ:
 | Oracle | `'{' \|\| UPPER(REGEXP_REPLACE(...SYS_GUID()...)) \|\| '}'` |
 | Access / SQLite (.eap, .qea) | generate host-side and pass a literal |
 
-Then read back the assigned `Diagram_ID` for each `ParentID` — never assume the IDs are contiguous.
+Then read back the assigned `Diagram_ID` for each `ParentID` — never assume the IDs are contiguous — and keep that list: it is how Phase 5 selects the set and how a later rebuild knows which diagrams are yours.
 
 ### Phase 3 — place the objects
 
@@ -226,7 +237,7 @@ Build each element's `left`/`top`/`right`/`bottom` from the geometry above and e
 
 ### Phase 4 — flag the parents composite
 
-Use `set_composite_diagram` — it writes both halves of the mechanism (`t_diagram.ParentID` and `t_object.NType`) together in one call, so they cannot land out of sync the way two separate hand-written writes can:
+Use `set_composite_diagram`: it writes all three parts of the mechanism (`t_diagram.ParentID`, `t_object.NType` and the `DefaultDiagram` row) together in one call, so they cannot land out of sync the way separate hand-written writes can:
 
 ```
 for parent_id, child_diagram_id in parent_diagram_pairs:
@@ -236,21 +247,21 @@ for parent_id, child_diagram_id in parent_diagram_pairs:
     })
 ```
 
-Call it once per parent, after Phase 2 has created that parent's child diagram — `diagram_id` has no default, and passing `null` *clears* the link instead of setting it (useful only when rebuilding; see "Rebuilding after the hierarchy changes" below), so always pass the real diagram ID here. The response includes `consistent: bool`, read back from both halves after the write — check it. `ok: true` with `consistent: false` means the write did not fully land and needs investigating, not assuming fixed. It is idempotent: calling it again with the same arguments is a no-op, not an error.
+Call it once per parent, after Phase 2 has created that parent's child diagram: `diagram_id` has no default, and passing `null` *clears* the link instead of setting it (useful only when rebuilding; see "Rebuilding after the hierarchy changes" below), so always pass the real diagram ID here. The response includes `consistent: bool`, read back from all three parts after the write, and `default_diagram_xref`, whether the `DefaultDiagram` row is in place: check both. `consistent: true` now means all three parts are in place. `ok: true` with `consistent: false` means the write did not fully land and needs investigating, not assuming fixed. It is idempotent: calling it again with the same arguments is a no-op, not an error.
 
 Leaves stay unflagged (`NType = 0`, no diagram). That is correct and meaningful: no marker tells the user there is nothing below.
 
-Do not write `NType` with raw SQL. It sets only one half of the mechanism, leaving you to trust the Phase 2 `t_diagram.ParentID` write with nothing checking that the two agree — which is what `set_composite_diagram`'s `consistent` field is for.
+Do not write `NType` with raw SQL. It sets only one of the three parts, leaving you to trust the other writes with nothing checking that they agree: which is what `set_composite_diagram`'s `consistent` field is for.
 
 ### Phase 5 — verify, then refresh
 
 ```sql
 SELECT
- (SELECT COUNT(*) FROM t_diagram       WHERE Diagram_ID BETWEEN <lo> AND <hi>) AS diagrams,
- (SELECT COUNT(*) FROM t_diagramobjects WHERE Diagram_ID BETWEEN <lo> AND <hi>) AS objects,
- (SELECT COUNT(*) FROM t_diagramobjects WHERE Diagram_ID BETWEEN <lo> AND <hi>
+ (SELECT COUNT(*) FROM t_diagram       WHERE Diagram_ID IN (<ids from Phase 2>)) AS diagrams,
+ (SELECT COUNT(*) FROM t_diagramobjects WHERE Diagram_ID IN (<ids from Phase 2>)) AS objects,
+ (SELECT COUNT(*) FROM t_diagramobjects WHERE Diagram_ID IN (<ids from Phase 2>)
     AND LENGTH(ObjectStyle) < 10)                                              AS unstyled,
- (SELECT COUNT(*) FROM t_diagramlinks   WHERE DiagramID  BETWEEN <lo> AND <hi>) AS stray_links,
+ (SELECT COUNT(*) FROM t_diagramlinks   WHERE DiagramID  IN (<ids from Phase 2>)) AS stray_links,
  (SELECT COUNT(*) FROM t_object WHERE Package_ID = <pkg> AND NType = 8)         AS composites
 ```
 
@@ -258,7 +269,7 @@ Expect: `diagrams` = 1 + parents, `objects` = roots + Σ(1 + children), `unstyle
 
 Then **render at least the landing diagram, one mid-level diagram and one leaf-level diagram and look at them.** Confirm the marker is present on every box that should drill down, the children sit inside the container, and no name is clipped. Counting rows is not verification; the deliverable is a picture.
 
-EA caches diagrams it has already rendered, so a diagram written by SQL and previously opened will render stale. Call `ea_diagram("reload_diagram")` before rendering. Tell the user to reload the package in the Browser (right-click the package → *Contents → Reload Current Package*) or reopen the model — writes that go to the repository do not reach an EA session that already has the package cached.
+EA caches diagrams it has already rendered, so a diagram written by SQL and previously opened will render stale. Call `ea_diagram("reload_diagram")` before rendering. If the diagram is open in EA with unsaved changes, the call is refused with `open_with_unsaved_changes`; ask the person to save in EA, then call again. Tell the user to reload the package in the Browser (right-click the package → *Contents → Reload Current Package*) or reopen the model: writes that go to the repository do not reach an EA session that already has the package cached.
 
 ## Using `add_elements_to_diagram_bulk` for Phase 3
 
@@ -285,20 +296,21 @@ ea_diagram("add_elements_to_diagram_bulk", {
 })
 ```
 
-It is idempotent per element (an already-placed element comes back `skipped`, not duplicated) and a failure on one entry doesn't abort the rest of the batch — both properties direct SQL writes didn't give for free. Direct `t_diagramobjects` writes remain a valid fallback against a server predating APT-2026-0050.
+It is idempotent per element (an already-placed element comes back `skipped`, not duplicated) and a failure on one entry doesn't abort the rest of the batch — both properties direct SQL writes didn't give for free. Direct `t_diagramobjects` writes remain a valid fallback against a server that predates the bulk placement call.
 
-Where the API *does* work, use it: `ea_model("create_package")` for the staging/holding packages, `ea_diagram("reload_diagram")` for cache refresh, and `ea_diagram("get_diagram_png")` for visual verification.
+Where the API *does* work, use it: `ea_model("create_package")` for the staging/holding packages, `ea_diagram("reload_diagram")` for cache refresh (refused with `open_with_unsaved_changes` when the diagram is open in EA with unsaved changes: ask the person to save in EA, then call again), and `ea_diagram("get_diagram_png")` for visual verification.
 
 ## Known traps
 
 | Trap | Detail |
 |---|---|
-| Silent property drop | `ea_diagram("create_diagram"/"update_diagram")` passes `properties` keys through to the COM object **case-sensitively** and ignores unknown keys without error. `ParentID` works; `parent_id` is accepted and discarded. Always check `applied_properties` in the response. |
+| Properties that do not land | `ea_diagram("create_diagram"/"update_diagram")` accept documented diagram properties (`Name`, `Notes`, `StyleEx`, `ParentID` and others) and the common snake_case aliases: `parent_id` is applied as `ParentID`. A key EA does not recognize is not applied and is listed in `rejected_properties`; `ok: true` does not mean every key landed. Check `applied_properties` and `rejected_properties` in the response. |
 | `t_diagramlinks` column name | It is `DiagramID`, not `Diagram_ID` as on `t_diagram` and `t_diagramobjects`. |
 | `describe_table` argument | The parameter is `table`, not `table_name`. |
 | BGR not RGB | `BCol=15658671` is `RGB(175,238,238)` — bytes reversed. |
 | Filtering on a column you are also setting | `UPDATE … SET Version='1.0' WHERE Version='DD'` applies the `WHERE` first and then destroys the marker. Keep the batch marker out of the `SET` list, or re-identify rows by `Author` + creation date. |
 | Long names | A 130×80 box holds roughly four short words. Measure the longest name in the set before fixing box width; a taxonomy of long phrases needs a wider box, not a smaller font. |
+| Blank names and quotes | A child diagram is named after its element. A blank name gives a blank diagram name: use `(unnamed <Object_ID>)` and say so. A single quote in a name must be doubled in raw SQL (`create_diagram` needs no escaping). |
 | Duplicate names among siblings | Legal in EA and common in imported taxonomies. Diagram names will duplicate too. Harmless, but say so rather than letting the user discover it. |
 
 ## Rebuilding after the hierarchy changes
@@ -306,11 +318,13 @@ Where the API *does* work, use it: `ea_model("create_package")` for the staging/
 Navigation diagrams are derived artifacts. When the source hierarchy is reloaded or edited:
 
 - a **new parent** needs a diagram and `NType = 8`
-- an element that **lost all its children** should have its diagram removed and `NType` reset to `0`, or it navigates to an empty picture
+- an element that **lost all its children** should stop navigating to an empty picture: `set_composite_diagram` with `diagram_id: null` clears the link on every diagram parented to it and resets `NType` to `0`, and deletes nothing. The unlinked diagram is superseded, so it goes to the holding package below
 - a **renamed** element should have its child diagram renamed to match
 - **moved** children need their diagram object rows rewritten on both the old and the new parent's diagram
 
-The cheapest correct approach is to regenerate the whole set for the affected package rather than patch it. Identify the generated set by author/date or by a marker so a regeneration can find and replace exactly its own output.
+A copied package keeps its drill-down links: `duplicate_package` links a copied child diagram to its copied owner (server 3.6.5 or later). A copied diagram whose owner was not copied goes under the copied package with no owner, and the result lists it in `composite_owner_not_copied` (with a `composite_owner_note`); re-link those by hand with `set_composite_diagram`.
+
+The cheapest correct approach is to regenerate the whole set for the affected package rather than patch it. **Which diagrams are generated.** Only the ones this task created, whose ids you kept from Phase 2 (or a set the person names). The batch marker is temporary, so do not rely on it later. A diagram you cannot show you created counts as the person's, even if its name matches an element, and is never replaced.
 
 **Never delete the user's existing diagrams to make room.** Move superseded diagrams to a clearly named holding package (`_to-delete (superseded diagrams)`) inside the same scope, tell the user what moved and why, and let them do the deleting.
 
@@ -329,7 +343,11 @@ COM connection rather than as an error you can catch. Neither shows up in a tool
 - **After any diagram create or edit, reload the diagram, screenshot it, and look.**
   `ok: true` means rows were written, not that elements landed where you intended, that
   styling applied, or that the result is readable.
-- **Without computer use**, say so and ask the user to look — never report a hang you have
-  not diagnosed or a diagram you have not seen.
+- **Without computer use**, say so. Ask the user to paste a screenshot of the EA window or
+  dialog into the conversation, read the cause from it, and ask the user to dismiss the dialog
+  before you retry. Never report a hang you have not diagnosed or a diagram you have not seen.
+  A PNG exported through the API counts as looking at the diagram, but it shows neither a dialog nor the
+  Browser, and whether the drill-down marker shows in it has not been confirmed. Say which you looked at,
+  and say the marker was checked by the audit if you could not see it.
 
 Full procedure: [`../_shared/references/ea-ui-verification.md`](../_shared/references/ea-ui-verification.md)

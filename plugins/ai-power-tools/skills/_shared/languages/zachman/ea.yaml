@@ -1,0 +1,1678 @@
+# EA facts for the Zachman Framework (language file zachman), as Sparx Enterprise Architect's built-in ZF technology stores them.
+# Generated from elements created in EA and read back, and from Sparx's model pattern;
+# do not edit by hand. The framework is a classification schema: `concepts` maps the 20 concepts of the language skill to what EA offers,
+# and `cell_recording` says how a model records a cell. Westbrook Bank appears only in howto.md, as an illustration.
+
+language: zachman
+technology: ZF
+display_name: Zachman Framework
+profile: ZF
+stereotype_prefix: ''
+stereotype_storage: bare name in t_object.Stereotype and t_connector.Stereotype (BusinessEntity, ZFCell, Communicate); the qualified form ZF::<name>
+  is the FQName in the t_xref row named Stereotypes and is what AddNew takes. The Resources tab shows names with spaces and capitals ('Business
+  Entity', 'Based On', 'Board Of Directors'); EA stores BusinessEntity, basedOn, BOD
+measured_on:
+  ea: 17.1 build 1716
+  date: '2026-10-21'
+counts:
+  stereotypes_on_resources_tab: 64
+  element_stereotypes_bound: 44
+  package_stereotypes_bound: 1
+  connector_stereotypes_bound: 17
+  stereotypes_not_bound: 2
+  language_concept_names_refused: 20
+  diagram_types: 30
+  diagram_types_on_resources_tab: 32
+  tag_rows_read: 146
+  concepts_in_language_file: 20
+  concepts_by_representation:
+    none: 5
+    place: 2
+    stereotype: 11
+    uml: 2
+version_note: 'EA''s technology follows the pre-3.0 form: row names Planner, Owner, Designer, Builder, Subcontractor and a sixth row Functioning
+  Enterprise; columns Data, Function, Location, People, Time, Motivation. The Zachman Framework 3.0 (2011) renamed columns and rows;
+  nothing here describes 3.0.'
+cell_recording:
+  cell: a package whose stereotype is ZFCell (stored in t_object.Stereotype of the package's own t_object row, Object_Type Package; FQName ZF::ZFCell)
+  row: the parent package of the cell package (t_package.Parent_ID), an unstereotyped package named Planner, Owner, Designer, Builder, Subcontractor
+    or Functioning Enterprise; the grid diagram shows it as '(from Owner)'
+  column: not stored. It is implied by the cell package's name and by the type of the cell diagram (ZF Owner::OwnerData is the owner row, data
+    column)
+  elements_in_a_cell: an element sits in the cell by t_object.Package_ID; t_object.ParentID stays 0
+  tagged_values_on_a_cell: 'none: a package with ZFCell has no t_objectproperties rows'
+  tagged_values_on_an_element: 'none names a row, column or cell (146 tag rows read on the 44 element stereotypes: ID, Description, address and
+    contact fields, goal and strategy measures, rule fields)'
+  readable_by_the_ruleset_grammar: 'yes, since the engine of 2026-10-21: contained_in reads the chain of containers an element sits in (cell
+    package, then row package) by stereotype or name, and contains_count bounds a package''s direct children. The column is read from the cell''s name. zachman_rules.yaml
+    holds seven rules. Not read: the diagrams an element is shown on'
+diagram_types:
+  ZF Interface::ZF_Interface:
+    ea_name: ZF_Interface
+    token: ZF Interface::ZF_Interface
+    family: ZF Interface
+    stored_diagram_type: Logical
+    style_ex: MDGDgm=ZF Interface::ZF_Interface;
+  ZF Planner::PlannerData:
+    ea_name: PlannerData
+    token: ZF Planner::PlannerData
+    family: ZF Planner
+    stored_diagram_type: Custom
+    style_ex: MDGDgm=ZF Planner::PlannerData;
+  ZF Planner::PlannerFunction:
+    ea_name: PlannerFunction
+    token: ZF Planner::PlannerFunction
+    family: ZF Planner
+    stored_diagram_type: Analysis
+    style_ex: MDGDgm=ZF Planner::PlannerFunction;
+  ZF Planner::PlannerLocation:
+    ea_name: PlannerLocation
+    token: ZF Planner::PlannerLocation
+    family: ZF Planner
+    stored_diagram_type: Custom
+    style_ex: MDGDgm=ZF Planner::PlannerLocation;
+  ZF Planner::PlannerPeople:
+    ea_name: PlannerPeople
+    token: ZF Planner::PlannerPeople
+    family: ZF Planner
+    stored_diagram_type: Use Case
+    style_ex: MDGDgm=ZF Planner::PlannerPeople;
+  ZF Planner::PlannerTime:
+    ea_name: PlannerTime
+    token: ZF Planner::PlannerTime
+    family: ZF Planner
+    stored_diagram_type: Custom
+    style_ex: MDGDgm=ZF Planner::PlannerTime;
+  ZF Planner::PlannerMotivation:
+    ea_name: PlannerMotivation
+    token: ZF Planner::PlannerMotivation
+    family: ZF Planner
+    stored_diagram_type: Custom
+    style_ex: MDGDgm=ZF Planner::PlannerMotivation;
+  ZF Owner::OwnerData:
+    ea_name: OwnerData
+    token: ZF Owner::OwnerData
+    family: ZF Owner
+    stored_diagram_type: Logical
+    style_ex: MDGDgm=ZF Owner::OwnerData;
+  ZF Owner::OwnerFunction:
+    ea_name: OwnerFunction
+    token: ZF Owner::OwnerFunction
+    family: ZF Owner
+    stored_diagram_type: Analysis
+    style_ex: MDGDgm=ZF Owner::OwnerFunction;
+  ZF Owner::OwnerLocation:
+    ea_name: OwnerLocation
+    token: ZF Owner::OwnerLocation
+    family: ZF Owner
+    stored_diagram_type: Deployment
+    style_ex: MDGDgm=ZF Owner::OwnerLocation;
+  ZF Owner::OwnerTime:
+    ea_name: OwnerTime
+    token: ZF Owner::OwnerTime
+    family: ZF Owner
+    stored_diagram_type: Statechart
+    style_ex: MDGDgm=ZF Owner::OwnerTime;
+  ZF Designer::DesignerData:
+    ea_name: DesignerData
+    token: ZF Designer::DesignerData
+    family: ZF Designer
+    stored_diagram_type: Logical
+    style_ex: MDGDgm=ZF Designer::DesignerData;
+  ZF Designer::DesignerFunction:
+    ea_name: DesignerFunction
+    token: ZF Designer::DesignerFunction
+    family: ZF Designer
+    stored_diagram_type: Activity
+    style_ex: MDGDgm=ZF Designer::DesignerFunction;
+  ZF Designer::DesignerLocation:
+    ea_name: DesignerLocation
+    token: ZF Designer::DesignerLocation
+    family: ZF Designer
+    stored_diagram_type: Deployment
+    style_ex: MDGDgm=ZF Designer::DesignerLocation;
+  ZF Designer::DesignerPeople:
+    ea_name: DesignerPeople
+    token: ZF Designer::DesignerPeople
+    family: ZF Designer
+    stored_diagram_type: Use Case
+    style_ex: MDGDgm=ZF Designer::DesignerPeople;
+  ZF Designer::DesignerTime:
+    ea_name: DesignerTime
+    token: ZF Designer::DesignerTime
+    family: ZF Designer
+    stored_diagram_type: Statechart
+    style_ex: MDGDgm=ZF Designer::DesignerTime;
+  ZF Designer::DesignerMotivation:
+    ea_name: DesignerMotivation
+    token: ZF Designer::DesignerMotivation
+    family: ZF Designer
+    stored_diagram_type: Custom
+    style_ex: MDGDgm=ZF Designer::DesignerMotivation;
+  ZF Builder::BuilderData:
+    ea_name: BuilderData
+    token: ZF Builder::BuilderData
+    family: ZF Builder
+    stored_diagram_type: Logical
+    style_ex: MDGDgm=ZF Builder::BuilderData;
+  ZF Builder::BuilderFunction:
+    ea_name: BuilderFunction
+    token: ZF Builder::BuilderFunction
+    family: ZF Builder
+    stored_diagram_type: Component
+    style_ex: MDGDgm=ZF Builder::BuilderFunction;
+  ZF Builder::BuilderLocation:
+    ea_name: BuilderLocation
+    token: ZF Builder::BuilderLocation
+    family: ZF Builder
+    stored_diagram_type: Deployment
+    style_ex: MDGDgm=ZF Builder::BuilderLocation;
+  ZF Builder::BuilderPeople:
+    ea_name: BuilderPeople
+    token: ZF Builder::BuilderPeople
+    family: ZF Builder
+    stored_diagram_type: Custom
+    style_ex: MDGDgm=ZF Builder::BuilderPeople;
+  ZF Builder::BuilderTime:
+    ea_name: BuilderTime
+    token: ZF Builder::BuilderTime
+    family: ZF Builder
+    stored_diagram_type: Sequence
+    style_ex: MDGDgm=ZF Builder::BuilderTime;
+  ZF Builder::BuilderMotivation:
+    ea_name: BuilderMotivation
+    token: ZF Builder::BuilderMotivation
+    family: ZF Builder
+    stored_diagram_type: Custom
+    style_ex: MDGDgm=ZF Builder::BuilderMotivation;
+  ZF Subcontractor::SC_Data:
+    ea_name: SC_Data
+    token: ZF Subcontractor::SC_Data
+    family: ZF Subcontractor
+    stored_diagram_type: Custom
+    style_ex: MDGDgm=ZF Subcontractor::SC_Data;
+  ZF Subcontractor::SC_Location:
+    ea_name: SC_Location
+    token: ZF Subcontractor::SC_Location
+    family: ZF Subcontractor
+    stored_diagram_type: Deployment
+    style_ex: MDGDgm=ZF Subcontractor::SC_Location;
+  ZF Subcontractor::SC_People:
+    ea_name: SC_People
+    token: ZF Subcontractor::SC_People
+    family: ZF Subcontractor
+    stored_diagram_type: Logical
+    style_ex: MDGDgm=ZF Subcontractor::SC_People;
+  ZF Subcontractor::SC_Time:
+    ea_name: SC_Time
+    token: ZF Subcontractor::SC_Time
+    family: ZF Subcontractor
+    stored_diagram_type: Timing
+    style_ex: MDGDgm=ZF Subcontractor::SC_Time;
+  ZF Subcontractor::SC_Motivation:
+    ea_name: SC_Motivation
+    token: ZF Subcontractor::SC_Motivation
+    family: ZF Subcontractor
+    stored_diagram_type: Component
+    style_ex: MDGDgm=ZF Subcontractor::SC_Motivation;
+  ZF Owner::BPMN:
+    ea_name: BPMN
+    token: ZF Owner::BPMN
+    family: ZF Owner
+    stored_diagram_type: Analysis
+    style_ex: MDGDgm=ZF Owner::BPMN;
+  ZF Owner::StrategyMap:
+    ea_name: StrategyMap
+    token: ZF Owner::StrategyMap
+    family: ZF Owner
+    stored_diagram_type: Logical
+    style_ex: MDGDgm=ZF Owner::StrategyMap;
+resources_tab_diagram_types:
+  measured_on: EA 17.1 build 1716, 2026-11-04, read on screen (Browser > Resources > MDG Technologies > System Technologies > Zachman Framework
+    > Diagram Types)
+  count: 32
+  note: 'the tab shows friendly names in six groups, not tokens, so it cannot be matched one to one with the 30 tokens in diagram_types. Counts
+    per group against the tokens: Planner 6 of 6, Owner 7 of 6 (tokens count BPMN and StrategyMap), Designer 6 of 6, Builder 7 of 6, Subcontractor
+    5 of 5, grid 1 of 1. Planner, Builder and Subcontractor all have cell types'
+  groups:
+    Planner (Zachman Framework):
+    - Business Data
+    - High Level Business Process
+    - Business Locations
+    - Organization Chart
+    - Business Events
+    - Business Motivation
+    Owner:
+    - Data Map
+    - Process Analysis
+    - Business Logistics
+    - BPMN
+    - Event Schedule
+    - Strategy Map
+    - Process Map
+    Designer:
+    - Class
+    - Activity
+    - Data Distribution Architecture
+    - Use Case
+    - State Transition
+    - Business Rule Model
+    Builder:
+    - Physical Data model
+    - Component
+    - Deployment
+    - User Interface
+    - Interaction
+    - Communication
+    - Rule Design
+    Subcontractor:
+    - Data Definition
+    - Network architecture
+    - Security Architecture
+    - Timing Definition
+    - Rule Specification
+    ZF Interface:
+    - Zachman Framework Interface
+diagram_tokens_refused:
+  note: EA accepts any text as a diagram type and quietly makes a Class diagram with no MDGDgm= when it does not know it; these were tried and
+    fell back that way
+  tokens:
+  - ZF Interface::ZF Interface
+  - ZF::ZF_Interface
+  - ZF Owner::OwnerPeople
+  - ZF Owner::OwnerMotivation
+  - ZF Subcontractor::SC_Function
+  - ZF::PlannerData
+  - ZF::OwnerData
+  - ZF::DesignerData
+  - ZF::BuilderData
+  - ZF::SC_Data
+  - ZF::FunctioningData
+  - ZF Functioning::FunctioningData
+  - ZF::PlannerFunction
+  - ZF::OwnerFunction
+  - ZF::DesignerFunction
+  - ZF::BuilderFunction
+  - ZF::SC_Function
+  - ZF::FunctioningFunction
+  - ZF Functioning::FunctioningFunction
+  - ZF::PlannerLocation
+  - ZF::OwnerLocation
+  - ZF::DesignerLocation
+  - ZF::BuilderLocation
+  - ZF::SC_Location
+  - ZF::FunctioningLocation
+  - ZF Functioning::FunctioningLocation
+  - ZF::PlannerPeople
+  - ZF::OwnerPeople
+  - ZF::DesignerPeople
+  - ZF::BuilderPeople
+  - ZF::SC_People
+  - ZF::FunctioningPeople
+  - ZF Functioning::FunctioningPeople
+  - ZF::PlannerTime
+  - ZF::OwnerTime
+  - ZF::DesignerTime
+  - ZF::BuilderTime
+  - ZF::SC_Time
+  - ZF::FunctioningTime
+  - ZF Functioning::FunctioningTime
+  - ZF::PlannerMotivation
+  - ZF::OwnerMotivation
+  - ZF::DesignerMotivation
+  - ZF::BuilderMotivation
+  - ZF::SC_Motivation
+  - ZF::FunctioningMotivation
+  - ZF Functioning::FunctioningMotivation
+  - ZF::BPMN
+  - ZF::StrategyMap
+  - ZF::ZF
+  - ZF Planner::ZF Planner
+  - ZF::ZF Cell
+stereotypes:
+  Asset:
+    metaclass: InformationItem
+    fqname: ZF::Asset
+    created_as: element in a package
+    tags:
+    - name: AssetValue
+      value: ''
+    - name: Description
+      value: ''
+    - name: ID
+      value: ''
+    placed_in_pattern: A1
+  Assumption:
+    metaclass: Artifact
+    fqname: ZF::Assumption
+    created_as: element in a package
+    tags:
+    - name: ID
+      value: ''
+    - name: Rationale
+      value: ''
+    - name: Statement
+      value: ''
+    - name: Type
+      value: ''
+      values: Enterprise,Business,System,Application,Technology,Data
+    placed_in_pattern: F1
+  BOD:
+    metaclass: Actor
+    fqname: ZF::BOD
+    created_as: element in a package
+    tags:
+    - name: PersonIncharge
+      value: ''
+    - name: ID
+      value: ''
+    placed_in_pattern: D1
+  BranchOffice:
+    metaclass: Node
+    fqname: ZF::BranchOffice
+    created_as: element in a package
+    tags:
+    - name: ID
+      value: ''
+    - name: Description
+      value: ''
+    - name: Street
+      value: ''
+    - name: City
+      value: ''
+    - name: Province
+      value: ''
+    - name: AreaCode
+      value: ''
+    - name: Country
+      value: ''
+    - name: EmailID
+      value: ''
+    - name: PhoneNumber
+      value: ''
+    placed_in_pattern: C1 x2
+  BusinessCycle:
+    metaclass: Activity
+    fqname: ZF::BusinessCycle
+    created_as: element in a package
+    tags:
+    - name: ID
+      value: ''
+    - name: TimeCycle
+      value: ''
+    placed_in_pattern: E2
+  BusinessEntity:
+    metaclass: Entity
+    fqname: ZF::BusinessEntity
+    created_as: element in a package
+    tags:
+    - name: Description
+      value: ''
+    - name: ID
+      value: ''
+    placed_in_pattern: not placed by the pattern
+  BusinessEvent:
+    metaclass: Event
+    fqname: ZF::BusinessEvent
+    created_as: element in a package
+    tags:
+    - name: ID
+      value: ''
+    - name: StartDate
+      value: ''
+    - name: EndDate
+      value: ''
+    - name: Description
+      value: ''
+    placed_in_pattern: E1 x2, E2 x4
+  BusinessFunction:
+    metaclass: Activity
+    fqname: ZF::BusinessFunction
+    created_as: element in a package
+    tags:
+    - name: ID
+      value: ''
+    placed_in_pattern: B1 x6
+  BusinessPerspective:
+    metaclass: ActivityPartition
+    fqname: ZF::BusinessPerspective
+    created_as: element in a package
+    tags: []
+    placed_in_pattern: F2 x4
+  BusinessProcess:
+    metaclass: Activity
+    fqname: ZF::BusinessProcess
+    created_as: element in a package
+    tags:
+    - name: Description
+      value: ''
+    - name: ID
+      value: ''
+    - name: ProcessType
+      value: ''
+    placed_in_pattern: not placed by the pattern
+  BusinessRule:
+    metaclass: Requirement
+    fqname: ZF::BusinessRule
+    created_as: element in a package
+    tags:
+    - name: Description
+      value: ''
+    - name: Expiry_Date
+      value: ''
+    - name: ID
+      value: ''
+    - name: Name
+      value: ''
+    - name: Status
+      value: ''
+      values: proposed,underReview,approved,assignedToChange,implemented,retired
+    - name: Version
+      value: ''
+    - name: Effective_From
+      value: ''
+    placed_in_pattern: F3 x2
+  ClientPlace:
+    metaclass: Node
+    fqname: ZF::ClientPlace
+    created_as: element in a package
+    tags:
+    - name: ID
+      value: ''
+    - name: Description
+      value: ''
+    - name: Street
+      value: ''
+    - name: City
+      value: ''
+    - name: Province
+      value: ''
+    - name: AreaCode
+      value: ''
+    - name: Country
+      value: ''
+    - name: EmailID
+      value: ''
+    - name: PhoneNumber
+      value: ''
+    placed_in_pattern: C1
+  DocumentAsset:
+    metaclass: InformationItem
+    fqname: ZF::DocumentAsset
+    created_as: element in a package
+    tags:
+    - name: AssetValue
+      value: ''
+    - name: Description
+      value: ''
+    - name: ID
+      value: ''
+    placed_in_pattern: A1
+  EquipmentAsset:
+    metaclass: InformationItem
+    fqname: ZF::EquipmentAsset
+    created_as: element in a package
+    tags:
+    - name: AssetValue
+      value: ''
+    - name: Description
+      value: ''
+    - name: ID
+      value: ''
+    placed_in_pattern: A1
+  EventNode:
+    metaclass: Object
+    fqname: ZF::EventNode
+    created_as: element of metaclass Object (AddNew type ZF::EventNode is refused)
+    tags:
+    - name: ID
+      value: ''
+    - name: Trigger
+      value: None
+      values: Error,Timer,Rule,Message,Cancel,None,Multiple
+      default: None
+    - name: TimePeriod
+      value: ''
+    - name: ErrorDetail
+      value: ''
+    - name: Rule
+      value: ''
+    - name: MessageDetail
+      value: ''
+    - name: TimerValue
+      value: ''
+    - name: Triggers
+      value: ''
+    placed_in_pattern: E2 x5
+  ExternalOrganization:
+    metaclass: Actor
+    fqname: ZF::ExternalOrganization
+    created_as: element in a package
+    tags: []
+    placed_in_pattern: D1
+  File:
+    metaclass: Artifact
+    fqname: ZF::File
+    created_as: element in a package
+    tags:
+    - name: ID
+      value: ''
+    placed_in_pattern: not placed by the pattern
+  FormalRule:
+    metaclass: Requirement
+    fqname: ZF::FormalRule
+    created_as: element in a package
+    tags:
+    - name: ID
+      value: ''
+    - name: ExpressionType
+      value: ''
+    - name: ActionAssertionType
+      value: ''
+      values: Condition,Integrity Constraint,Authorization
+    placed_in_pattern: F4 x2
+  Goal:
+    metaclass: Requirement
+    fqname: ZF::Goal
+    created_as: element in a package
+    tags:
+    - name: GoalType
+      value: ''
+    - name: ID
+      value: ''
+    - name: KPI
+      value: ''
+    - name: Measure
+      value: ''
+    - name: CSF
+      value: ''
+    - name: Threat
+      value: ''
+    - name: Strength
+      value: ''
+    - name: Weakness
+      value: ''
+    - name: Opportunity
+      value: ''
+    - name: Assumption
+      value: ''
+    - name: UnitResponsible
+      value: ''
+    placed_in_pattern: F1
+  HeadQuarters:
+    metaclass: Node
+    fqname: ZF::HeadQuarters
+    created_as: element in a package
+    tags:
+    - name: ID
+      value: ''
+    - name: Description
+      value: ''
+    - name: Street
+      value: ''
+    - name: City
+      value: ''
+    - name: Province
+      value: ''
+    - name: AreaCode
+      value: ''
+    - name: Country
+      value: ''
+    - name: EmailID
+      value: ''
+    - name: PhoneNumber
+      value: ''
+    placed_in_pattern: C1
+  InPerson:
+    metaclass: Artifact
+    fqname: ZF::InPerson
+    created_as: element in a package
+    tags: []
+    placed_in_pattern: not placed by the pattern
+  Internet:
+    metaclass: Artifact
+    fqname: ZF::Internet
+    created_as: element in a package
+    tags: []
+    placed_in_pattern: C2
+  IntersectingEntity:
+    metaclass: Entity
+    fqname: ZF::IntersectingEntity
+    created_as: element in a package
+    tags: []
+    placed_in_pattern: A2
+  Intranet:
+    metaclass: Artifact
+    fqname: ZF::Intranet
+    created_as: element in a package
+    tags: []
+    placed_in_pattern: C2
+  Location:
+    metaclass: Node
+    fqname: ZF::Location
+    created_as: element in a package
+    tags:
+    - name: ID
+      value: ''
+    - name: Description
+      value: ''
+    - name: Street
+      value: ''
+    - name: City
+      value: ''
+    - name: Province
+      value: ''
+    - name: AreaCode
+      value: ''
+    - name: Country
+      value: ''
+    - name: EmailID
+      value: ''
+    - name: PhoneNumber
+      value: ''
+    placed_in_pattern: not placed by the pattern
+  Mission:
+    metaclass: Artifact
+    fqname: ZF::Mission
+    created_as: element in a package
+    tags: []
+    placed_in_pattern: F1
+  OfficeBlock:
+    metaclass: Node
+    fqname: ZF::OfficeBlock
+    created_as: element in a package
+    tags:
+    - name: ID
+      value: ''
+    - name: Description
+      value: ''
+    - name: Street
+      value: ''
+    - name: City
+      value: ''
+    - name: Province
+      value: ''
+    - name: AreaCode
+      value: ''
+    - name: Country
+      value: ''
+    - name: EmailID
+      value: ''
+    - name: PhoneNumber
+      value: ''
+    placed_in_pattern: C1 x2
+  OrganizationUnit:
+    metaclass: Actor
+    fqname: ZF::OrganizationUnit
+    created_as: element in a package
+    tags:
+    - name: PersonIncharge
+      value: ''
+    - name: ID
+      value: ''
+    placed_in_pattern: D1 x4
+  PC:
+    metaclass: Device
+    fqname: ZF::PC
+    created_as: element in a package
+    tags:
+    - name: ID
+      value: ''
+    placed_in_pattern: C3
+  Personnel:
+    metaclass: Actor
+    fqname: ZF::Personnel
+    created_as: element in a package
+    tags:
+    - name: Head
+      value: ''
+    - name: Size
+      value: ''
+    - name: PersonIncharge
+      value: ''
+    - name: ID
+      value: ''
+    placed_in_pattern: not placed by the pattern
+  Phone:
+    metaclass: Artifact
+    fqname: ZF::Phone
+    created_as: element in a package
+    tags: []
+    placed_in_pattern: C2
+  PrincipalEntity:
+    metaclass: Entity
+    fqname: ZF::PrincipalEntity
+    created_as: element in a package
+    tags: []
+    placed_in_pattern: A2 x3
+  Principle:
+    metaclass: Artifact
+    fqname: ZF::Principle
+    created_as: element in a package
+    tags:
+    - name: Type
+      value: ''
+      values: Enterprise,Business,System,Application,Technology,Data
+    - name: ID
+      value: ''
+    - name: Statement
+      value: ''
+    - name: Rationale
+      value: ''
+    - name: Implications
+      value: ''
+    placed_in_pattern: not placed by the pattern
+  Processor:
+    metaclass: Device
+    fqname: ZF::Processor
+    created_as: element in a package
+    tags:
+    - name: ID
+      value: ''
+    placed_in_pattern: C3
+  RIC:
+    metaclass: Component
+    fqname: ZF::RIC
+    created_as: element in a package
+    tags: []
+    placed_in_pattern: F5
+  Registry:
+    metaclass: Component
+    fqname: ZF::Registry
+    created_as: element in a package
+    tags:
+    - name: ID
+      value: ''
+    - name: Description
+      value: ''
+    placed_in_pattern: C3
+  SalesAgent:
+    metaclass: Node
+    fqname: ZF::SalesAgent
+    created_as: element in a package
+    tags:
+    - name: ID
+      value: ''
+    - name: Description
+      value: ''
+    - name: Street
+      value: ''
+    - name: City
+      value: ''
+    - name: Province
+      value: ''
+    - name: AreaCode
+      value: ''
+    - name: Country
+      value: ''
+    - name: EmailID
+      value: ''
+    - name: PhoneNumber
+      value: ''
+    placed_in_pattern: not placed by the pattern
+  SnailMail:
+    metaclass: Artifact
+    fqname: ZF::SnailMail
+    created_as: element in a package
+    tags: []
+    placed_in_pattern: not placed by the pattern
+  Standard:
+    metaclass: Artifact
+    fqname: ZF::Standard
+    created_as: element in a package
+    tags:
+    - name: Type
+      value: ''
+      values: Enterprise,Business,System,Application,Technology,Data
+    - name: ID
+      value: ''
+    - name: Statement
+      value: ''
+    placed_in_pattern: not placed by the pattern
+  StorageDevice:
+    metaclass: Node
+    fqname: ZF::StorageDevice
+    created_as: element in a package
+    tags:
+    - name: ID
+      value: ''
+    placed_in_pattern: C3 x2
+  Strategy:
+    metaclass: Feature
+    fqname: ZF::Strategy
+    created_as: element in a package
+    tags:
+    - name: ActionPlan
+      value: ''
+    - name: EstimatedBudget
+      value: ''
+    - name: EstimatedPeriod
+      value: ''
+    - name: ID
+      value: ''
+    - name: Measure
+      value: ''
+    - name: TargetValue
+      value: ''
+    placed_in_pattern: F1 x2, F2 x6
+  StructureEntity:
+    metaclass: Entity
+    fqname: ZF::StructureEntity
+    created_as: element in a package
+    tags: []
+    placed_in_pattern: A2
+  Supplier:
+    metaclass: Node
+    fqname: ZF::Supplier
+    created_as: element in a package
+    tags:
+    - name: ID
+      value: ''
+    - name: Description
+      value: ''
+    - name: Street
+      value: ''
+    - name: City
+      value: ''
+    - name: Province
+      value: ''
+    - name: AreaCode
+      value: ''
+    - name: Country
+      value: ''
+    - name: EmailID
+      value: ''
+    - name: PhoneNumber
+      value: ''
+    placed_in_pattern: C1
+  WebService:
+    metaclass: Artifact
+    fqname: ZF::WebService
+    created_as: element in a package
+    tags:
+    - name: ID
+      value: ''
+    placed_in_pattern: C3
+package_stereotypes:
+  ZFCell:
+    metaclass: Package
+    fqname: ZF::ZFCell
+    tags: []
+    note: the cell container; 36 in Sparx's pattern
+connector_stereotypes:
+  AppliedTo:
+    metaclass: Dependency
+    stored_connector_type: Dependency
+    stored_on:
+    - Abstraction
+    - Dependency
+    - Nesting
+    - Realization
+    - Usage
+    fqname: ZF::AppliedTo
+    direction: Source -> Destination
+    tags: []
+    placed_in_pattern: not placed by the pattern
+  Communicate:
+    metaclass: Dependency
+    stored_connector_type: Dependency
+    stored_on:
+    - Abstraction
+    - Dependency
+    - Nesting
+    - Realization
+    - Usage
+    fqname: ZF::Communicate
+    direction: Bi-Directional
+    tags: []
+    placed_in_pattern: C1 x7, C2
+  Control:
+    metaclass: Dependency
+    stored_connector_type: Dependency
+    stored_on:
+    - Abstraction
+    - Dependency
+    - Nesting
+    - Realization
+    - Usage
+    fqname: ZF::Control
+    direction: Source -> Destination
+    tags: []
+    placed_in_pattern: D1 x3
+  InContract:
+    metaclass: Dependency
+    stored_connector_type: Dependency
+    stored_on:
+    - Abstraction
+    - Dependency
+    - Nesting
+    - Realization
+    - Usage
+    fqname: ZF::InContract
+    direction: Source -> Destination
+    tags: []
+    placed_in_pattern: D1
+  Invokes:
+    metaclass: Dependency
+    stored_connector_type: Dependency
+    stored_on:
+    - Abstraction
+    - Dependency
+    - Nesting
+    - Realization
+    - Usage
+    fqname: ZF::Invokes
+    direction: Source -> Destination
+    tags: []
+    placed_in_pattern: not placed by the pattern
+  StrategyLink:
+    metaclass: Dependency
+    stored_connector_type: Dependency
+    stored_on:
+    - Abstraction
+    - Dependency
+    - Nesting
+    - Realization
+    - Usage
+    fqname: ZF::StrategyLink
+    direction: Source -> Destination
+    tags: []
+    placed_in_pattern: F2 x5
+  Supervise:
+    metaclass: Dependency
+    stored_connector_type: Dependency
+    stored_on:
+    - Abstraction
+    - Dependency
+    - Nesting
+    - Realization
+    - Usage
+    fqname: ZF::Supervise
+    direction: Source -> Destination
+    tags: []
+    placed_in_pattern: not placed by the pattern
+  Trigger:
+    metaclass: ControlFlow
+    stored_connector_type: ControlFlow
+    stored_on:
+    - ControlFlow
+    fqname: ZF::Trigger
+    direction: Source -> Destination
+    tags: []
+    placed_in_pattern: not placed by the pattern
+  Validates:
+    metaclass: Dependency
+    stored_connector_type: Dependency
+    stored_on:
+    - Abstraction
+    - Dependency
+    - Nesting
+    - Realization
+    - Usage
+    fqname: ZF::Validates
+    direction: Source -> Destination
+    tags: []
+    placed_in_pattern: not placed by the pattern
+  WorksFor:
+    metaclass: Dependency
+    stored_connector_type: Dependency
+    stored_on:
+    - Abstraction
+    - Dependency
+    - Nesting
+    - Realization
+    - Usage
+    fqname: ZF::WorksFor
+    direction: Source -> Destination
+    tags: []
+    placed_in_pattern: not placed by the pattern
+  basedOn:
+    metaclass: Dependency
+    stored_connector_type: Dependency
+    stored_on:
+    - Abstraction
+    - Dependency
+    - Nesting
+    - Realization
+    - Usage
+    fqname: ZF::basedOn
+    direction: Source -> Destination
+    tags: []
+    placed_in_pattern: F3
+  conflict:
+    metaclass: Dependency
+    stored_connector_type: Dependency
+    stored_on:
+    - Abstraction
+    - Dependency
+    - Nesting
+    - Realization
+    - Usage
+    fqname: ZF::conflict
+    direction: Source -> Destination
+    tags: []
+    placed_in_pattern: not placed by the pattern
+  equivalentTo:
+    metaclass: Dependency
+    stored_connector_type: Dependency
+    stored_on:
+    - Abstraction
+    - Dependency
+    - Nesting
+    - Realization
+    - Usage
+    fqname: ZF::equivalentTo
+    direction: Source -> Destination
+    tags: []
+    placed_in_pattern: not placed by the pattern
+  exceptionTo:
+    metaclass: Dependency
+    stored_connector_type: Dependency
+    stored_on:
+    - Abstraction
+    - Dependency
+    - Nesting
+    - Realization
+    - Usage
+    fqname: ZF::exceptionTo
+    direction: Source -> Destination
+    tags: []
+    placed_in_pattern: F3
+  implements:
+    metaclass: Dependency
+    stored_connector_type: Dependency
+    stored_on:
+    - Abstraction
+    - Dependency
+    - Nesting
+    - Realization
+    - Usage
+    fqname: ZF::implements
+    direction: Source -> Destination
+    tags: []
+    placed_in_pattern: F3
+  replaces:
+    metaclass: Dependency
+    stored_connector_type: Dependency
+    stored_on:
+    - Abstraction
+    - Dependency
+    - Nesting
+    - Realization
+    - Usage
+    fqname: ZF::replaces
+    direction: Source -> Destination
+    tags: []
+    placed_in_pattern: F3
+  violates:
+    metaclass: Dependency
+    stored_connector_type: Dependency
+    stored_on:
+    - Abstraction
+    - Dependency
+    - Nesting
+    - Realization
+    - Usage
+    fqname: ZF::violates
+    direction: Source -> Destination
+    tags: []
+    placed_in_pattern: not placed by the pattern
+concepts:
+  Column:
+    representation: none
+    note: 'not stored anywhere: no stereotype, no tagged value, no package. The column is implied by the cell package''s name (EA''s names, one
+      per column and row) and by the type of the cell diagram'
+  Row:
+    representation: place
+    note: an unstereotyped package named Planner, Owner, Designer, Builder, Subcontractor or Functioning Enterprise; it is the parent of the six
+      cell packages
+  Cell:
+    representation: stereotype
+    stereotype: ZFCell
+    metaclass: Package
+    fqname: ZF::ZFCell
+    tags: []
+    note: 'a package stereotyped ZFCell; no tagged value records its row or column. Only a package takes it: an element created with type ZF::ZFCell
+      is refused (''Invalid type''), a Package-type element is accepted but is not a package'
+  CellModel:
+    representation: place
+    note: 'whatever sits in a ZFCell package: its elements (t_object.Package_ID is the cell package) and its diagram. 27 of the 36 cells have
+      an EA diagram type (see diagram_types); row 6 and three more cells have none'
+  CompositeModel:
+    representation: none
+    note: EA has no concept for it; nothing marks a model as a composite
+  RowComposite:
+    representation: uml
+    note: the row package that holds the six cells; EA does not mark it as a composite
+  Instance:
+    representation: none
+    note: no stereotype and no diagram type for row 6; instances are ordinary elements in a row 6 cell package
+  PrimitiveConcept:
+    representation: none
+    note: abstract; the primitives are in the twelve entries below
+  Entity:
+    representation: stereotype
+    stereotypes:
+    - stereotype: PrincipalEntity
+      metaclass: Entity
+      tags: []
+      placed_in_pattern: A2 x3
+    - stereotype: IntersectingEntity
+      metaclass: Entity
+      tags: []
+      placed_in_pattern: A2
+    - stereotype: StructureEntity
+      metaclass: Entity
+      tags: []
+      placed_in_pattern: A2
+    - stereotype: Asset
+      metaclass: InformationItem
+      tags:
+      - AssetValue
+      - Description
+      - ID
+      placed_in_pattern: A1
+    - stereotype: EquipmentAsset
+      metaclass: InformationItem
+      tags:
+      - AssetValue
+      - Description
+      - ID
+      placed_in_pattern: A1
+    - stereotype: DocumentAsset
+      metaclass: InformationItem
+      tags:
+      - AssetValue
+      - Description
+      - ID
+      placed_in_pattern: A1
+    note: 'the pattern files PrincipalEntity, IntersectingEntity and StructureEntity in the owner''s data cell and the three assets in the planner''s.
+      BusinessEntity is on the tab and the pattern files it nowhere. EA has no stereotype for a data entity, a segment or a field: the pattern
+      uses plain classes and another technology''s table and column there'
+  Relationship:
+    representation: uml
+    note: a plain UML association (the pattern's owner data cell uses plain associations); the `Relationship` stereotype in the pattern's Business
+      Plan cell is not a ZF stereotype (FQName not ZF::)
+  Function:
+    representation: stereotype
+    stereotypes:
+    - stereotype: BusinessFunction
+      metaclass: Activity
+      tags:
+      - ID
+      placed_in_pattern: B1 x6
+    note: the pattern files BusinessFunction in the planner's function cell; BusinessProcess is on the tab and the pattern files it nowhere
+  Argument:
+    representation: none
+    note: no connector stereotype is filed in a function cell by the pattern; Invokes is on the tab and is not placed
+  Node:
+    representation: stereotype
+    stereotypes:
+    - stereotype: BranchOffice
+      metaclass: Node
+      tags:
+      - ID
+      - Description
+      - Street
+      - City
+      - Province
+      - AreaCode
+      - Country
+      - EmailID
+      - PhoneNumber
+      placed_in_pattern: C1 x2
+    - stereotype: HeadQuarters
+      metaclass: Node
+      tags:
+      - ID
+      - Description
+      - Street
+      - City
+      - Province
+      - AreaCode
+      - Country
+      - EmailID
+      - PhoneNumber
+      placed_in_pattern: C1
+    - stereotype: OfficeBlock
+      metaclass: Node
+      tags:
+      - ID
+      - Description
+      - Street
+      - City
+      - Province
+      - AreaCode
+      - Country
+      - EmailID
+      - PhoneNumber
+      placed_in_pattern: C1 x2
+    - stereotype: ClientPlace
+      metaclass: Node
+      tags:
+      - ID
+      - Description
+      - Street
+      - City
+      - Province
+      - AreaCode
+      - Country
+      - EmailID
+      - PhoneNumber
+      placed_in_pattern: C1
+    - stereotype: Supplier
+      metaclass: Node
+      tags:
+      - ID
+      - Description
+      - Street
+      - City
+      - Province
+      - AreaCode
+      - Country
+      - EmailID
+      - PhoneNumber
+      placed_in_pattern: C1
+    - stereotype: StorageDevice
+      metaclass: Node
+      tags:
+      - ID
+      placed_in_pattern: C3 x2
+    - stereotype: Processor
+      metaclass: Device
+      tags:
+      - ID
+      placed_in_pattern: C3
+    - stereotype: PC
+      metaclass: Device
+      tags:
+      - ID
+      placed_in_pattern: C3
+    - stereotype: Registry
+      metaclass: Component
+      tags:
+      - ID
+      - Description
+      placed_in_pattern: C3
+    - stereotype: WebService
+      metaclass: Artifact
+      tags:
+      - ID
+      placed_in_pattern: C3
+    note: business places in the planner's network cell and the designer's system devices in its network cell. The pattern spells HeadQuarters
+      'HeadQuaters', which EA does not bind
+  Link:
+    representation: stereotype
+    stereotypes:
+    - stereotype: Communicate
+      metaclass: Dependency
+      tags: []
+      placed_in_pattern: C1 x7, C2
+    - stereotype: Phone
+      metaclass: Artifact
+      tags: []
+      placed_in_pattern: C2
+    - stereotype: Intranet
+      metaclass: Artifact
+      tags: []
+      placed_in_pattern: C2
+    - stereotype: Internet
+      metaclass: Artifact
+      tags: []
+      placed_in_pattern: C2
+    note: Communicate is the connector; the other three are Artifact elements that name a channel (owner's network cell)
+  Agent:
+    representation: stereotype
+    stereotypes:
+    - stereotype: OrganizationUnit
+      metaclass: Actor
+      tags:
+      - PersonIncharge
+      - ID
+      placed_in_pattern: D1 x4
+    - stereotype: ExternalOrganization
+      metaclass: Actor
+      tags: []
+      placed_in_pattern: D1
+    - stereotype: BOD
+      metaclass: Actor
+      tags:
+      - PersonIncharge
+      - ID
+      placed_in_pattern: D1
+    note: BOD is the stored name of the tab's 'Board Of Directors'; Personnel, SalesAgent and Person are on the tab and the pattern files them
+      nowhere
+  Work:
+    representation: stereotype
+    stereotypes:
+    - stereotype: Control
+      metaclass: Dependency
+      tags: []
+      placed_in_pattern: D1 x3
+    - stereotype: InContract
+      metaclass: Dependency
+      tags: []
+      placed_in_pattern: D1
+    note: connectors filed in the planner's people cell; WorksFor and Supervise are on the tab and the pattern files them nowhere
+  Time:
+    representation: stereotype
+    stereotypes:
+    - stereotype: BusinessEvent
+      metaclass: Event
+      tags:
+      - ID
+      - StartDate
+      - EndDate
+      - Description
+      placed_in_pattern: E1 x2, E2 x4
+    - stereotype: EventNode
+      metaclass: Object
+      tags:
+      - ID
+      - Trigger
+      - TimePeriod
+      - ErrorDetail
+      - Rule
+      - MessageDetail
+      - TimerValue
+      - Triggers
+      placed_in_pattern: E2 x5
+    note: EventNode binds only on an Object element (see CATALOG.md)
+  Cycle:
+    representation: stereotype
+    stereotypes:
+    - stereotype: BusinessCycle
+      metaclass: Activity
+      tags:
+      - ID
+      - TimeCycle
+      placed_in_pattern: E2
+    note: an Activity element, not a connector
+  Ends:
+    representation: stereotype
+    stereotypes:
+    - stereotype: Goal
+      metaclass: Requirement
+      tags:
+      - GoalType
+      - ID
+      - KPI
+      - Measure
+      - CSF
+      - Threat
+      - Strength
+      - Weakness
+      - Opportunity
+      - Assumption
+      - UnitResponsible
+      placed_in_pattern: F1
+    - stereotype: Mission
+      metaclass: Artifact
+      tags: []
+      placed_in_pattern: F1
+    - stereotype: Assumption
+      metaclass: Artifact
+      tags:
+      - ID
+      - Rationale
+      - Statement
+      - Type
+      placed_in_pattern: F1
+    - stereotype: BusinessRule
+      metaclass: Requirement
+      tags:
+      - Description
+      - Expiry_Date
+      - ID
+      - Name
+      - Status
+      - Version
+      - Effective_From
+      placed_in_pattern: F3 x2
+    - stereotype: FormalRule
+      metaclass: Requirement
+      tags:
+      - ID
+      - ExpressionType
+      - ActionAssertionType
+      placed_in_pattern: F4 x2
+    - stereotype: RIC
+      metaclass: Component
+      tags: []
+      placed_in_pattern: F5
+    note: the planner's motivation cell (F1) holds a goal, a mission and an assumption; the pattern files BusinessRule in the designer's motivation
+      cell (F3), FormalRule in the builder's (F4) and RIC in the subcontractor's (F5), where the framework's primitives are criteria, conditions
+      and subconditions. Placing them there is the pattern's, not the standard's
+  Means:
+    representation: stereotype
+    stereotypes:
+    - stereotype: Strategy
+      metaclass: Feature
+      tags:
+      - ActionPlan
+      - EstimatedBudget
+      - EstimatedPeriod
+      - ID
+      - Measure
+      - TargetValue
+      placed_in_pattern: F1 x2, F2 x6
+    - stereotype: StrategyLink
+      metaclass: Dependency
+      tags: []
+      placed_in_pattern: F2 x5
+    - stereotype: basedOn
+      metaclass: Dependency
+      tags: []
+      placed_in_pattern: F3
+    - stereotype: exceptionTo
+      metaclass: Dependency
+      tags: []
+      placed_in_pattern: F3
+    - stereotype: replaces
+      metaclass: Dependency
+      tags: []
+      placed_in_pattern: F3
+    - stereotype: implements
+      metaclass: Dependency
+      tags: []
+      placed_in_pattern: F3
+    note: Strategy and StrategyLink in the planner's and owner's motivation cells; the four rule connectors in the designer's motivation cell
+      (F3), where the framework's connector is an option
+cannot_represent:
+  concepts_with_no_stereotype_tag_or_uml_home:
+  - Argument
+  - Column
+  - CompositeModel
+  - Instance
+  - PrimitiveConcept
+  language_concept_names_refused_by_EA:
+  - Column
+  - Row
+  - Cell
+  - CellModel
+  - CompositeModel
+  - RowComposite
+  - Instance
+  - PrimitiveConcept
+  - Entity
+  - Relationship
+  - Function
+  - Argument
+  - Node
+  - Link
+  - Agent
+  - Work
+  - Time
+  - Cycle
+  - Ends
+  - Means
+  resources_names_not_bound:
+  - Person
+  - Responsibile
+ea_only:
+  note: 'All 61 bound stereotypes other than ZFCell are generic enterprise concepts that EA files under the cells (people, places, assets, events,
+    goals, rules, relationships). None is a concept of the framework: the framework defines columns, rows and cells and twelve primitives, and
+    EA binds no stereotype to any of them. Where Sparx''s pattern files a stereotype in a cell it is listed under stereotypes[...].placed_in_pattern;
+    the rest are on the Resources tab and nowhere in the pattern.'
+  stereotypes_not_placed_by_the_pattern:
+  - AppliedTo
+  - BusinessEntity
+  - BusinessProcess
+  - File
+  - InPerson
+  - Invokes
+  - Location
+  - Personnel
+  - Principle
+  - SalesAgent
+  - SnailMail
+  - Standard
+  - Supervise
+  - Trigger
+  - Validates
+  - WorksFor
+  - conflict
+  - equivalentTo
+  - violates
+  stereotypes_in_the_pattern_that_belong_to_other_technologies:
+  - Activity
+  - CentralTopic
+  - Device
+  - EndEvent
+  - FK
+  - Functional
+  - IntermediateEvent
+  - MainTopic
+  - Message
+  - PK
+  - Relationship
+  - SequenceFlow
+  - StartEvent
+  - SubTopic
+  - Topic
+  - boundary
+  - button
+  - column
+  - control
+  - document
+  - entity
+  - form
+  - information
+  - process
+  - property get
+  - property set
+  - realize
+  - table
+  tag_ID: most element stereotypes carry a free-text tag ID; no value is generated
+  defaultDiagramType: BusinessFunction carries a custom property _defaultDiagramType = ZF Planner::PlannerFunction (a double click opens that
+    diagram type); Location carries _location
+toolbox:
+  status: read on screen, measured on EA 17.1 build 1716, 2026-11-04; two diagrams opened
+  toolboxes: 29
+  toolboxes_listed:
+  - Business Data
+  - Business Process
+  - Business Locations
+  - Business Motivation
+  - Organization Chart
+  - Business Events
+  - Data Map
+  - Process Analysis
+  - Business Logistics
+  - BPMN
+  - Event Schedule
+  - Strategy Map
+  - Class
+  - Activity
+  - Data Distribution Architecture
+  - Business Rule Model
+  - Use Case
+  - State Transition
+  - Data Modeling
+  - Component
+  - Deployment
+  - User Interface
+  - Interaction
+  - Rule Design
+  - Data Definition
+  - Network Architecture
+  - Security Architecture
+  - Timing Definition
+  - Rule Specification
+  pages_of_the_grid_diagram: Class, Class Relationships, Composite Parts, UML Standard Profile, then EA's generic pages; there is no Zachman page
+  pages_of_an_Owner_data_cell_diagram: Data Map (Principal Entity, Intersecting Entity, Structure Entity), Data Map Relations (Associate)
+  not_done: the other toolboxes were not opened
+quick_links:
+  status: read on screen, measured on EA 17.1 build 1716, 2026-11-04; one source, a BusinessEntity on the Owner data cell diagram
+  result: 'only ''Create Multiple Elements...'' and ''Common'': no Zachman-specific quick link'
+harvest:
+  created_and_read_back:
+  - '62 of the 64 Resources-tab names (44 element stereotypes, 1 package stereotype, 17 connector stereotypes): metaclass, binding, tags with
+    Values and Default, connector type and direction; 30 diagram type tokens; the cell recording (ZFCell package, no tags, element Package_ID);
+    20 concept names of the language file refused as ZF::<name>'
+  model_pattern:
+  - 'zf1.0-zachman-framework.xml (read only): which stereotype Sparx files in which cell'
+  resources_tab:
+  - the 64 names on the Resources tab; the read-back adds none
+  on_screen_2026_11_04: 'EA 17.1 build 1716: the ZF profile rows matched the stored row list; Diagram Types lists 32 types in six groups; Toolboxes
+    lists 29; Person and Responsibile are listed on the tab (binding was not tested on screen); two diagrams'' toolbox pages and one quick-link
+    source were read'
+  not_harvested:
+  - toolbox pages of the other 27 toolboxes
+  - quick links from sources other than one BusinessEntity
+  - the definition file (encrypted)
+  - the two names Person and Responsibile (not bound)
+  ea_build: 17.1 build 1716
+
+# EA's names for this language's layout. tools/gen_conventions.py reads layout_map.
+layout_map:
+  technology: ZF
+  display_name: Zachman Framework (framework grid)
+  extends: UML
+  stereotype_prefix: ''
+  notes: |
+    `matrix` for ZF_Interface. The diagram is a table of 36 cells, six columns by six rows, and a cell's address is its row and column. It isn't `layered-bands`, because the horizontal axis is the framework's question words and each column has its own width. It isn't `nested-grid`, because no cell sits inside another.
+
+    Where a composed matrix differs from the reference diagram. The composed one draws every cell at one size, where the reference holds one width per column and one height per row. It also writes row and column headers as elements, where EA paints them on the reference with its matrix overlay. Both differences are expected.
+
+    No header size is stated, because the reference diagram has no header element to measure.
+
+    Not bound: the 28 diagram types under ZF Planner, ZF Owner, ZF Designer, ZF Builder, ZF Subcontractor and ZF. None has enough elements to support a default size. ZF Owner's OwnerTime reaches a default of 15 by 15, but that is the size of its event markers and not of its business events, so it isn't used.
+
+    No viewpoints. The 36 cells are 36 named views, but the diagram type behind each one is under one of those other token groups, which this map doesn't bind.
+
+    `ZF` is the id EA reports, measured on EA 17.1 build 1716.
+  diagram_types:
+    ZF_Interface:
+      token: ZF Interface::ZF_Interface
+      base: Logical
+      default_type: large-box
+      arrangement: matrix
+      title: frame-header
+      route: straight
+      channels:
+        fill: 'The cell''s tone, painted by the `ZFCell` shape script. 36 of 36 elements carry no fill
+          override: `Backcolor` is -1 on every one, and the eight whose `ObjectStyle` mentions `BCol`
+          say `BCol=-1`, which is the absence of an override rather than one: so EA paints all of them.
+          The corpus row records the cell tone and the diagonal gradient corner triangle as the framework''s
+          own decoration. Whether a written fill would be honored was not tested, which is a second reason
+          not to offer it.'
+        claimed:
+          position: 'Both axes, and more completely than on any other diagram type in this library: a
+            cell IS its row and its column. The row is the perspective the view is drawn for: planner,
+            owner, designer, builder, subcontractor, the functioning enterprise: and the column is the
+            interrogative it answers: what, how, where, who, when, why. Moving a cell one column left
+            changes the question it answers. Measured as six columns of exactly six cells and six rows
+            of exactly six.'
+          size: 'Column and row membership. A cell''s width belongs to its column and its height to its
+            row: measured widths 120, 126, 124, 118, 126, 118 and heights 103, 102, 104, 94, 100, 104:
+            so resizing one cell breaks the alignment of the six it shares a column with or the six it
+            shares a row with.'
+          icon: The cell artwork. 36 of 36 elements carry an `ImageID` in `ObjectStyle`, so every cell
+            holds an embedded image, which is what the corpus row records as an image in every cell. Setting
+            one would replace the framework's own artwork.
+        free:
+        - border
+        - border_width
+        - font_color
+        - opacity

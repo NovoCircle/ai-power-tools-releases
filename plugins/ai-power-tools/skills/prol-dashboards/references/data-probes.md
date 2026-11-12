@@ -44,12 +44,12 @@ How to read it, with Westbrook Bank as the illustration:
 
 | Reading | Means |
 |---|---|
-| `distinct element Stereotype` = 14 | the WBA stereotype set; usable as a Bar, **too many for a Pie** |
+| `distinct element Stereotype` well above seven (the Westbrook copy has 13 `WBA` element stereotypes, and more in all) | the technology's stereotype set; usable as a Bar, **too many for a Pie** |
 | a tagged value with 4 permitted values, such as `criticality` | **ideal for a Pie or Donut** |
 | a tagged value with 5 permitted values, such as `lifecycle` | good Bar, good second dimension for a stack |
 | `distinct Complexity` = 3 | technically numeric, **almost no range** — a poor Bubble axis |
 | `connectors` greater than zero | Integration Map is viable |
-| `distinct connector Stereotype` = 8 | one of them may be the hierarchy — see Probe C |
+| `distinct connector Stereotype` greater than one | one of them may be the hierarchy — see Probe C |
 
 > **Run this before proposing anything.** One query, and it rules chart types in and out before any
 > are built.

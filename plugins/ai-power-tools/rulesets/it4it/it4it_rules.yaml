@@ -1,0 +1,2431 @@
+# IT4IT Reference Architecture Conformance Ruleset
+# Language:     The Open Group IT4IT Standard 3.0, read from the public draft (February 2022), language file id it4it
+# Enforced by:  AI Power Tools for Sparx EA -- validate_model tool
+#
+# READ FROM THE DRAFT. These rules rest on the public 3.0 draft, not the published text, and make no claim of conformance.
+#
+# GENERATED from the guide's list. Do not edit by hand.
+#
+# STORED NAMES. The pack stores IT4IT_FC_<Name> for a component and IT4IT_DO_<Name> for a data object, with no namespace in
+# the column rules read (measured on a scratch build, EA 17.1 build 1716). The qualified form IT4ITArchitecture::<stored> is
+# in t_xref.
+#
+# WHAT IS NOT HERE. A check reports what is wrong, never what is missing, because the standard says "can relate" and a
+# customer may model part of it. The example data objects and supporting function groups carry no rules: the draft defines
+# nothing to check them against. Most of the guide's rules say what a tool or a practice must do, which no model can show.
+#
+# IMPLEMENTS. A rule marked `implements: pack` checks the pack's own structure, which the guide holds as data and not as a numbered rule.
+
+meta:
+  version: '1.0'
+  language: it4it
+  organization: (your organization)
+  mdg_family: IT4IT
+  description: Conformance rules for IT4IT models built with the IT4IT pack. Read from The Open Group's public 3.0 draft (February
+    2022), with no claim of conformance. They check links between data objects, where data objects and components sit, and
+    which shapes each line joins. They never report something as missing.
+  severity_levels:
+    error: The standard states it as a requirement.
+    warning: Outside the standard's list, though the standard allows local additions.
+    info: Advisory note; not a conformance violation.
+tables:
+  it4it-3.0-draft-data-relationships:
+    source: The Open Group IT4IT Standard 3.0, public draft (February 2022), chapters 6 to 10, each data object's key relationships;
+      generated from the IT4IT language file. Entered both ways, because the standard reads a relationship from either end.
+    connectors:
+      r: IT4IT_DataRelationship
+    cells:
+      IT4IT_DO_ActualProductInstance:
+        IT4IT_DO_ActualProductInstance: r
+        IT4IT_DO_DesiredProductInstance: r
+        IT4IT_DO_Event: r
+        IT4IT_DO_Incident: r
+        IT4IT_DO_Problem: r
+        IT4IT_DO_Runbook: r
+        IT4IT_DO_ServiceContract: r
+        IT4IT_DO_ServiceMonitor: r
+      IT4IT_DO_ArchitectureBlueprint:
+        IT4IT_DO_ArchitectureRoadmapItem: r
+        IT4IT_DO_DigitalProduct: r
+      IT4IT_DO_ArchitectureRoadmapItem:
+        IT4IT_DO_ArchitectureBlueprint: r
+        IT4IT_DO_Policy: r
+        IT4IT_DO_PortfolioBacklogItem: r
+        IT4IT_DO_ProductBacklogItem: r
+        IT4IT_DO_StrategicObjective: r
+        IT4IT_DO_ValueStream: r
+      IT4IT_DO_BudgetItem:
+        IT4IT_DO_DigitalProduct: r
+        IT4IT_DO_ScopeAgreement: r
+      IT4IT_DO_BuildPackage:
+        IT4IT_DO_BuildPackage: r
+        IT4IT_DO_Pipeline: r
+        IT4IT_DO_ProductReleaseBlueprint: r
+        IT4IT_DO_Source: r
+        IT4IT_DO_TestCase: r
+        IT4IT_DO_TestPlan: r
+      IT4IT_DO_Change:
+        IT4IT_DO_Change: r
+        IT4IT_DO_DesiredProductInstance: r
+        IT4IT_DO_Event: r
+        IT4IT_DO_Incident: r
+        IT4IT_DO_Order: r
+        IT4IT_DO_Pipeline: r
+        IT4IT_DO_Problem: r
+      IT4IT_DO_ChargebackContract:
+        IT4IT_DO_ChargebackRecord: r
+        IT4IT_DO_Subscription: r
+        IT4IT_DO_UsageRecord: r
+      IT4IT_DO_ChargebackRecord:
+        IT4IT_DO_ChargebackContract: r
+        IT4IT_DO_CostModel: r
+        IT4IT_DO_UsageRecord: r
+      IT4IT_DO_CostModel:
+        IT4IT_DO_ChargebackRecord: r
+        IT4IT_DO_Resource: r
+      IT4IT_DO_Defect:
+        IT4IT_DO_Problem: r
+        IT4IT_DO_ProductBacklogItem: r
+        IT4IT_DO_ProductRelease: r
+        IT4IT_DO_Source: r
+        IT4IT_DO_TestCase: r
+      IT4IT_DO_DesiredProductInstance:
+        IT4IT_DO_ActualProductInstance: r
+        IT4IT_DO_Change: r
+        IT4IT_DO_DesiredProductInstance: r
+        IT4IT_DO_FulfillmentBook: r
+        IT4IT_DO_ProductRelease: r
+        IT4IT_DO_Resource: r
+        IT4IT_DO_Subscription: r
+      IT4IT_DO_DigitalProduct:
+        IT4IT_DO_ArchitectureBlueprint: r
+        IT4IT_DO_BudgetItem: r
+        IT4IT_DO_DigitalProduct: r
+        IT4IT_DO_Policy: r
+        IT4IT_DO_PortfolioBacklogItem: r
+        IT4IT_DO_ProductBacklogItem: r
+        IT4IT_DO_ProductDesign: r
+        IT4IT_DO_ScopeAgreement: r
+        IT4IT_DO_Source: r
+        IT4IT_DO_ValueStream: r
+      IT4IT_DO_Entitlement:
+        IT4IT_DO_Identity: r
+        IT4IT_DO_ServiceOffer: r
+      IT4IT_DO_Event:
+        IT4IT_DO_ActualProductInstance: r
+        IT4IT_DO_Change: r
+        IT4IT_DO_Event: r
+        IT4IT_DO_Incident: r
+        IT4IT_DO_Log: r
+        IT4IT_DO_Runbook: r
+      IT4IT_DO_FulfillmentBook:
+        IT4IT_DO_DesiredProductInstance: r
+      IT4IT_DO_Identity:
+        IT4IT_DO_Entitlement: r
+        IT4IT_DO_Interaction: r
+        IT4IT_DO_Order: r
+        IT4IT_DO_Subscription: r
+      IT4IT_DO_Incident:
+        IT4IT_DO_ActualProductInstance: r
+        IT4IT_DO_Change: r
+        IT4IT_DO_Event: r
+        IT4IT_DO_Incident: r
+        IT4IT_DO_Interaction: r
+        IT4IT_DO_KnowledgeItem: r
+        IT4IT_DO_Problem: r
+        IT4IT_DO_Runbook: r
+        IT4IT_DO_ServiceContract: r
+      IT4IT_DO_Interaction:
+        IT4IT_DO_Identity: r
+        IT4IT_DO_Incident: r
+        IT4IT_DO_KnowledgeItem: r
+        IT4IT_DO_Order: r
+        IT4IT_DO_ServiceOffer: r
+      IT4IT_DO_KPI:
+        IT4IT_DO_ServiceContract: r
+      IT4IT_DO_KnowledgeItem:
+        IT4IT_DO_Incident: r
+        IT4IT_DO_Interaction: r
+        IT4IT_DO_KnowledgeItem: r
+        IT4IT_DO_Problem: r
+      IT4IT_DO_Log:
+        IT4IT_DO_Event: r
+        IT4IT_DO_ServiceMonitor: r
+      IT4IT_DO_Order:
+        IT4IT_DO_Change: r
+        IT4IT_DO_Identity: r
+        IT4IT_DO_Interaction: r
+        IT4IT_DO_ServiceOffer: r
+        IT4IT_DO_Subscription: r
+      IT4IT_DO_Pipeline:
+        IT4IT_DO_BuildPackage: r
+        IT4IT_DO_Change: r
+        IT4IT_DO_ProductReleaseBlueprint: r
+        IT4IT_DO_Source: r
+        IT4IT_DO_TestPlan: r
+      IT4IT_DO_Policy:
+        IT4IT_DO_ArchitectureRoadmapItem: r
+        IT4IT_DO_DigitalProduct: r
+        IT4IT_DO_PortfolioBacklogItem: r
+        IT4IT_DO_Requirement: r
+      IT4IT_DO_PortfolioBacklogItem:
+        IT4IT_DO_ArchitectureRoadmapItem: r
+        IT4IT_DO_DigitalProduct: r
+        IT4IT_DO_Policy: r
+        IT4IT_DO_Problem: r
+        IT4IT_DO_ProductBacklogItem: r
+        IT4IT_DO_Requirement: r
+        IT4IT_DO_ScopeAgreement: r
+        IT4IT_DO_StrategicObjective: r
+      IT4IT_DO_Problem:
+        IT4IT_DO_ActualProductInstance: r
+        IT4IT_DO_Change: r
+        IT4IT_DO_Defect: r
+        IT4IT_DO_Incident: r
+        IT4IT_DO_KnowledgeItem: r
+        IT4IT_DO_PortfolioBacklogItem: r
+      IT4IT_DO_ProductBacklogItem:
+        IT4IT_DO_ArchitectureRoadmapItem: r
+        IT4IT_DO_Defect: r
+        IT4IT_DO_DigitalProduct: r
+        IT4IT_DO_PortfolioBacklogItem: r
+        IT4IT_DO_ProductBacklogItem: r
+        IT4IT_DO_ProductDesign: r
+        IT4IT_DO_ProductRelease: r
+        IT4IT_DO_Requirement: r
+        IT4IT_DO_ScopeAgreement: r
+        IT4IT_DO_Source: r
+        IT4IT_DO_TestCase: r
+      IT4IT_DO_ProductDesign:
+        IT4IT_DO_DigitalProduct: r
+        IT4IT_DO_ProductBacklogItem: r
+        IT4IT_DO_ProductRelease: r
+        IT4IT_DO_Requirement: r
+      IT4IT_DO_ProductRelease:
+        IT4IT_DO_Defect: r
+        IT4IT_DO_DesiredProductInstance: r
+        IT4IT_DO_ProductBacklogItem: r
+        IT4IT_DO_ProductDesign: r
+        IT4IT_DO_ProductRelease: r
+        IT4IT_DO_ProductReleaseBlueprint: r
+        IT4IT_DO_TestPlan: r
+      IT4IT_DO_ProductReleaseBlueprint:
+        IT4IT_DO_BuildPackage: r
+        IT4IT_DO_Pipeline: r
+        IT4IT_DO_ProductRelease: r
+        IT4IT_DO_ServiceOffer: r
+      IT4IT_DO_Requirement:
+        IT4IT_DO_Policy: r
+        IT4IT_DO_PortfolioBacklogItem: r
+        IT4IT_DO_ProductBacklogItem: r
+        IT4IT_DO_ProductDesign: r
+        IT4IT_DO_Requirement: r
+        IT4IT_DO_TestCase: r
+      IT4IT_DO_Resource:
+        IT4IT_DO_CostModel: r
+        IT4IT_DO_DesiredProductInstance: r
+        IT4IT_DO_UsageRecord: r
+      IT4IT_DO_Runbook:
+        IT4IT_DO_ActualProductInstance: r
+        IT4IT_DO_Event: r
+        IT4IT_DO_Incident: r
+      IT4IT_DO_ScopeAgreement:
+        IT4IT_DO_BudgetItem: r
+        IT4IT_DO_DigitalProduct: r
+        IT4IT_DO_PortfolioBacklogItem: r
+        IT4IT_DO_ProductBacklogItem: r
+      IT4IT_DO_ServiceContract:
+        IT4IT_DO_ActualProductInstance: r
+        IT4IT_DO_Incident: r
+        IT4IT_DO_KPI: r
+        IT4IT_DO_Subscription: r
+      IT4IT_DO_ServiceMonitor:
+        IT4IT_DO_ActualProductInstance: r
+        IT4IT_DO_Log: r
+      IT4IT_DO_ServiceOffer:
+        IT4IT_DO_Entitlement: r
+        IT4IT_DO_Interaction: r
+        IT4IT_DO_Order: r
+        IT4IT_DO_ProductReleaseBlueprint: r
+        IT4IT_DO_ServiceOffer: r
+        IT4IT_DO_ServiceOfferCatalog: r
+        IT4IT_DO_Subscription: r
+      IT4IT_DO_ServiceOfferCatalog:
+        IT4IT_DO_ServiceOffer: r
+      IT4IT_DO_Source:
+        IT4IT_DO_BuildPackage: r
+        IT4IT_DO_Defect: r
+        IT4IT_DO_DigitalProduct: r
+        IT4IT_DO_Pipeline: r
+        IT4IT_DO_ProductBacklogItem: r
+        IT4IT_DO_TestCase: r
+      IT4IT_DO_StrategicObjective:
+        IT4IT_DO_ArchitectureRoadmapItem: r
+        IT4IT_DO_PortfolioBacklogItem: r
+        IT4IT_DO_StrategicTheme: r
+      IT4IT_DO_StrategicTheme:
+        IT4IT_DO_StrategicObjective: r
+      IT4IT_DO_Subscription:
+        IT4IT_DO_ChargebackContract: r
+        IT4IT_DO_DesiredProductInstance: r
+        IT4IT_DO_Identity: r
+        IT4IT_DO_Order: r
+        IT4IT_DO_ServiceContract: r
+        IT4IT_DO_ServiceOffer: r
+      IT4IT_DO_TestCase:
+        IT4IT_DO_BuildPackage: r
+        IT4IT_DO_Defect: r
+        IT4IT_DO_ProductBacklogItem: r
+        IT4IT_DO_Requirement: r
+        IT4IT_DO_Source: r
+        IT4IT_DO_TestCase: r
+        IT4IT_DO_TestPlan: r
+      IT4IT_DO_TestPlan:
+        IT4IT_DO_BuildPackage: r
+        IT4IT_DO_Pipeline: r
+        IT4IT_DO_ProductRelease: r
+        IT4IT_DO_TestCase: r
+        IT4IT_DO_TestPlan: r
+      IT4IT_DO_UsageRecord:
+        IT4IT_DO_ChargebackContract: r
+        IT4IT_DO_ChargebackRecord: r
+        IT4IT_DO_Resource: r
+      IT4IT_DO_ValueStream:
+        IT4IT_DO_ArchitectureRoadmapItem: r
+        IT4IT_DO_DigitalProduct: r
+rules:
+- id: IT4IT30-REL-001
+  implements: IT4IT-REL-001
+  name: Two data objects link only where the standard lists a link
+  description: The standard lists each data object's key relationships. A link outside that list is outside the standard,
+    though the standard says other links may be kept for local needs, so this is a warning. Any shape the table does not name
+    is left alone.
+  category: rel
+  severity: warning
+  demo_trigger: false
+  selector:
+    type: connector
+    connector_stereotypes: any_of_table
+  condition:
+    type: relationship_table
+    table: it4it-3.0-draft-data-relationships
+    unknown_endpoint: ignore
+  remediation:
+    short: Use a link the standard lists between these two data objects, or keep this one as a known local link.
+    auto_fixable: false
+- id: IT4IT30-CTRL-001
+  implements: IT4IT-DEF-003
+  name: Policy sits only in the Policy component
+  description: A data object is controlled by one functional component (11.7.5), and the standard names Policy for Policy.
+    A data object directly in a package passes, because a partial model is valid.
+  category: ctrl
+  severity: error
+  demo_trigger: false
+  selector:
+    type: element
+    stereotypes:
+      any_of:
+      - IT4IT_DO_Policy
+  condition:
+    type: contained_in
+    path:
+    - stereotype_one_of:
+      - IT4IT_FC_Policy
+      - type:Package
+  remediation:
+    short: Move this data object into the Policy component, or directly into a package.
+    auto_fixable: false
+- id: IT4IT30-CTRL-002
+  implements: IT4IT-DEF-003
+  name: Strategic Theme sits only in the Strategy component
+  description: A data object is controlled by one functional component (11.7.5), and the standard names Strategy for Strategic
+    Theme. A data object directly in a package passes, because a partial model is valid.
+  category: ctrl
+  severity: error
+  demo_trigger: false
+  selector:
+    type: element
+    stereotypes:
+      any_of:
+      - IT4IT_DO_StrategicTheme
+  condition:
+    type: contained_in
+    path:
+    - stereotype_one_of:
+      - IT4IT_FC_Strategy
+      - type:Package
+  remediation:
+    short: Move this data object into the Strategy component, or directly into a package.
+    auto_fixable: false
+- id: IT4IT30-CTRL-003
+  implements: IT4IT-DEF-003
+  name: Strategic Objective sits only in the Strategy component
+  description: A data object is controlled by one functional component (11.7.5), and the standard names Strategy for Strategic
+    Objective. A data object directly in a package passes, because a partial model is valid.
+  category: ctrl
+  severity: error
+  demo_trigger: false
+  selector:
+    type: element
+    stereotypes:
+      any_of:
+      - IT4IT_DO_StrategicObjective
+  condition:
+    type: contained_in
+    path:
+    - stereotype_one_of:
+      - IT4IT_FC_Strategy
+      - type:Package
+  remediation:
+    short: Move this data object into the Strategy component, or directly into a package.
+    auto_fixable: false
+- id: IT4IT30-CTRL-004
+  implements: IT4IT-DEF-003
+  name: Architecture Roadmap Item sits only in the Enterprise Architecture component
+  description: A data object is controlled by one functional component (11.7.5), and the standard names Enterprise Architecture
+    for Architecture Roadmap Item. A data object directly in a package passes, because a partial model is valid.
+  category: ctrl
+  severity: error
+  demo_trigger: false
+  selector:
+    type: element
+    stereotypes:
+      any_of:
+      - IT4IT_DO_ArchitectureRoadmapItem
+  condition:
+    type: contained_in
+    path:
+    - stereotype_one_of:
+      - IT4IT_FC_EnterpriseArchitecture
+      - type:Package
+  remediation:
+    short: Move this data object into the Enterprise Architecture component, or directly into a package.
+    auto_fixable: false
+- id: IT4IT30-CTRL-005
+  implements: IT4IT-DEF-003
+  name: Architecture Blueprint sits only in the Enterprise Architecture component
+  description: A data object is controlled by one functional component (11.7.5), and the standard names Enterprise Architecture
+    for Architecture Blueprint. A data object directly in a package passes, because a partial model is valid.
+  category: ctrl
+  severity: error
+  demo_trigger: false
+  selector:
+    type: element
+    stereotypes:
+      any_of:
+      - IT4IT_DO_ArchitectureBlueprint
+  condition:
+    type: contained_in
+    path:
+    - stereotype_one_of:
+      - IT4IT_FC_EnterpriseArchitecture
+      - type:Package
+  remediation:
+    short: Move this data object into the Enterprise Architecture component, or directly into a package.
+    auto_fixable: false
+- id: IT4IT30-CTRL-006
+  implements: IT4IT-DEF-003
+  name: Value Stream sits only in the Enterprise Architecture component
+  description: A data object is controlled by one functional component (11.7.5), and the standard names Enterprise Architecture
+    for Value Stream. A data object directly in a package passes, because a partial model is valid.
+  category: ctrl
+  severity: error
+  demo_trigger: false
+  selector:
+    type: element
+    stereotypes:
+      any_of:
+      - IT4IT_DO_ValueStream
+  condition:
+    type: contained_in
+    path:
+    - stereotype_one_of:
+      - IT4IT_FC_EnterpriseArchitecture
+      - type:Package
+  remediation:
+    short: Move this data object into the Enterprise Architecture component, or directly into a package.
+    auto_fixable: false
+- id: IT4IT30-CTRL-007
+  implements: IT4IT-DEF-003
+  name: Portfolio Backlog Item sits only in the Portfolio Backlog component
+  description: A data object is controlled by one functional component (11.7.5), and the standard names Portfolio Backlog
+    for Portfolio Backlog Item. A data object directly in a package passes, because a partial model is valid.
+  category: ctrl
+  severity: error
+  demo_trigger: false
+  selector:
+    type: element
+    stereotypes:
+      any_of:
+      - IT4IT_DO_PortfolioBacklogItem
+  condition:
+    type: contained_in
+    path:
+    - stereotype_one_of:
+      - IT4IT_FC_PortfolioBacklog
+      - type:Package
+  remediation:
+    short: Move this data object into the Portfolio Backlog component, or directly into a package.
+    auto_fixable: false
+- id: IT4IT30-CTRL-008
+  implements: IT4IT-DEF-003
+  name: Scope Agreement sits only in the Proposal component
+  description: A data object is controlled by one functional component (11.7.5), and the standard names Proposal for Scope
+    Agreement. A data object directly in a package passes, because a partial model is valid.
+  category: ctrl
+  severity: error
+  demo_trigger: false
+  selector:
+    type: element
+    stereotypes:
+      any_of:
+      - IT4IT_DO_ScopeAgreement
+  condition:
+    type: contained_in
+    path:
+    - stereotype_one_of:
+      - IT4IT_FC_Proposal
+      - type:Package
+  remediation:
+    short: Move this data object into the Proposal component, or directly into a package.
+    auto_fixable: false
+- id: IT4IT30-CTRL-009
+  implements: IT4IT-DEF-003
+  name: Digital Product sits only in the Product Portfolio component
+  description: A data object is controlled by one functional component (11.7.5), and the standard names Product Portfolio
+    for Digital Product. A data object directly in a package passes, because a partial model is valid.
+  category: ctrl
+  severity: error
+  demo_trigger: false
+  selector:
+    type: element
+    stereotypes:
+      any_of:
+      - IT4IT_DO_DigitalProduct
+  condition:
+    type: contained_in
+    path:
+    - stereotype_one_of:
+      - IT4IT_FC_ProductPortfolio
+      - type:Package
+  remediation:
+    short: Move this data object into the Product Portfolio component, or directly into a package.
+    auto_fixable: false
+- id: IT4IT30-CTRL-010
+  implements: IT4IT-DEF-003
+  name: Product Backlog Item sits only in the Product Backlog component
+  description: A data object is controlled by one functional component (11.7.5), and the standard names Product Backlog for
+    Product Backlog Item. A data object directly in a package passes, because a partial model is valid.
+  category: ctrl
+  severity: error
+  demo_trigger: false
+  selector:
+    type: element
+    stereotypes:
+      any_of:
+      - IT4IT_DO_ProductBacklogItem
+  condition:
+    type: contained_in
+    path:
+    - stereotype_one_of:
+      - IT4IT_FC_ProductBacklog
+      - type:Package
+  remediation:
+    short: Move this data object into the Product Backlog component, or directly into a package.
+    auto_fixable: false
+- id: IT4IT30-CTRL-011
+  implements: IT4IT-DEF-003
+  name: Requirement sits only in the Requirement component
+  description: A data object is controlled by one functional component (11.7.5), and the standard names Requirement for Requirement.
+    A data object directly in a package passes, because a partial model is valid.
+  category: ctrl
+  severity: error
+  demo_trigger: false
+  selector:
+    type: element
+    stereotypes:
+      any_of:
+      - IT4IT_DO_Requirement
+  condition:
+    type: contained_in
+    path:
+    - stereotype_one_of:
+      - IT4IT_FC_Requirement
+      - type:Package
+  remediation:
+    short: Move this data object into the Requirement component, or directly into a package.
+    auto_fixable: false
+- id: IT4IT30-CTRL-012
+  implements: IT4IT-DEF-003
+  name: Product Design sits only in the Product Design component
+  description: A data object is controlled by one functional component (11.7.5), and the standard names Product Design for
+    Product Design. A data object directly in a package passes, because a partial model is valid.
+  category: ctrl
+  severity: error
+  demo_trigger: false
+  selector:
+    type: element
+    stereotypes:
+      any_of:
+      - IT4IT_DO_ProductDesign
+  condition:
+    type: contained_in
+    path:
+    - stereotype_one_of:
+      - IT4IT_FC_ProductDesign
+      - type:Package
+  remediation:
+    short: Move this data object into the Product Design component, or directly into a package.
+    auto_fixable: false
+- id: IT4IT30-CTRL-013
+  implements: IT4IT-DEF-003
+  name: Source sits only in the Source Control component
+  description: A data object is controlled by one functional component (11.7.5), and the standard names Source Control for
+    Source. A data object directly in a package passes, because a partial model is valid.
+  category: ctrl
+  severity: error
+  demo_trigger: false
+  selector:
+    type: element
+    stereotypes:
+      any_of:
+      - IT4IT_DO_Source
+  condition:
+    type: contained_in
+    path:
+    - stereotype_one_of:
+      - IT4IT_FC_SourceControl
+      - type:Package
+  remediation:
+    short: Move this data object into the Source Control component, or directly into a package.
+    auto_fixable: false
+- id: IT4IT30-CTRL-014
+  implements: IT4IT-DEF-003
+  name: Pipeline sits only in the Pipeline component
+  description: A data object is controlled by one functional component (11.7.5), and the standard names Pipeline for Pipeline.
+    A data object directly in a package passes, because a partial model is valid.
+  category: ctrl
+  severity: error
+  demo_trigger: false
+  selector:
+    type: element
+    stereotypes:
+      any_of:
+      - IT4IT_DO_Pipeline
+  condition:
+    type: contained_in
+    path:
+    - stereotype_one_of:
+      - IT4IT_FC_Pipeline
+      - type:Package
+  remediation:
+    short: Move this data object into the Pipeline component, or directly into a package.
+    auto_fixable: false
+- id: IT4IT30-CTRL-015
+  implements: IT4IT-DEF-003
+  name: Build Package sits only in the Build Package component
+  description: A data object is controlled by one functional component (11.7.5), and the standard names Build Package for
+    Build Package. A data object directly in a package passes, because a partial model is valid.
+  category: ctrl
+  severity: error
+  demo_trigger: false
+  selector:
+    type: element
+    stereotypes:
+      any_of:
+      - IT4IT_DO_BuildPackage
+  condition:
+    type: contained_in
+    path:
+    - stereotype_one_of:
+      - IT4IT_FC_BuildPackage
+      - type:Package
+  remediation:
+    short: Move this data object into the Build Package component, or directly into a package.
+    auto_fixable: false
+- id: IT4IT30-CTRL-016
+  implements: IT4IT-DEF-003
+  name: Product Release sits only in the Release Composition component
+  description: A data object is controlled by one functional component (11.7.5), and the standard names Release Composition
+    for Product Release. A data object directly in a package passes, because a partial model is valid.
+  category: ctrl
+  severity: error
+  demo_trigger: false
+  selector:
+    type: element
+    stereotypes:
+      any_of:
+      - IT4IT_DO_ProductRelease
+  condition:
+    type: contained_in
+    path:
+    - stereotype_one_of:
+      - IT4IT_FC_ReleaseComposition
+      - type:Package
+  remediation:
+    short: Move this data object into the Release Composition component, or directly into a package.
+    auto_fixable: false
+- id: IT4IT30-CTRL-017
+  implements: IT4IT-DEF-003
+  name: Product Release Blueprint sits only in the Release Composition component
+  description: A data object is controlled by one functional component (11.7.5), and the standard names Release Composition
+    for Product Release Blueprint. A data object directly in a package passes, because a partial model is valid.
+  category: ctrl
+  severity: error
+  demo_trigger: false
+  selector:
+    type: element
+    stereotypes:
+      any_of:
+      - IT4IT_DO_ProductReleaseBlueprint
+  condition:
+    type: contained_in
+    path:
+    - stereotype_one_of:
+      - IT4IT_FC_ReleaseComposition
+      - type:Package
+  remediation:
+    short: Move this data object into the Release Composition component, or directly into a package.
+    auto_fixable: false
+- id: IT4IT30-CTRL-018
+  implements: IT4IT-DEF-003
+  name: Test Case sits only in the Test component
+  description: A data object is controlled by one functional component (11.7.5), and the standard names Test for Test Case.
+    A data object directly in a package passes, because a partial model is valid.
+  category: ctrl
+  severity: error
+  demo_trigger: false
+  selector:
+    type: element
+    stereotypes:
+      any_of:
+      - IT4IT_DO_TestCase
+  condition:
+    type: contained_in
+    path:
+    - stereotype_one_of:
+      - IT4IT_FC_Test
+      - type:Package
+  remediation:
+    short: Move this data object into the Test component, or directly into a package.
+    auto_fixable: false
+- id: IT4IT30-CTRL-019
+  implements: IT4IT-DEF-003
+  name: Test Plan sits only in the Test component
+  description: A data object is controlled by one functional component (11.7.5), and the standard names Test for Test Plan.
+    A data object directly in a package passes, because a partial model is valid.
+  category: ctrl
+  severity: error
+  demo_trigger: false
+  selector:
+    type: element
+    stereotypes:
+      any_of:
+      - IT4IT_DO_TestPlan
+  condition:
+    type: contained_in
+    path:
+    - stereotype_one_of:
+      - IT4IT_FC_Test
+      - type:Package
+  remediation:
+    short: Move this data object into the Test component, or directly into a package.
+    auto_fixable: false
+- id: IT4IT30-CTRL-020
+  implements: IT4IT-DEF-003
+  name: Defect sits only in the Defect component
+  description: A data object is controlled by one functional component (11.7.5), and the standard names Defect for Defect.
+    A data object directly in a package passes, because a partial model is valid.
+  category: ctrl
+  severity: error
+  demo_trigger: false
+  selector:
+    type: element
+    stereotypes:
+      any_of:
+      - IT4IT_DO_Defect
+  condition:
+    type: contained_in
+    path:
+    - stereotype_one_of:
+      - IT4IT_FC_Defect
+      - type:Package
+  remediation:
+    short: Move this data object into the Defect component, or directly into a package.
+    auto_fixable: false
+- id: IT4IT30-CTRL-021
+  implements: IT4IT-DEF-003
+  name: Interaction sits only in the Consumption Experience component
+  description: A data object is controlled by one functional component (11.7.5), and the standard names Consumption Experience
+    for Interaction. A data object directly in a package passes, because a partial model is valid.
+  category: ctrl
+  severity: error
+  demo_trigger: false
+  selector:
+    type: element
+    stereotypes:
+      any_of:
+      - IT4IT_DO_Interaction
+  condition:
+    type: contained_in
+    path:
+    - stereotype_one_of:
+      - IT4IT_FC_ConsumptionExperience
+      - type:Package
+  remediation:
+    short: Move this data object into the Consumption Experience component, or directly into a package.
+    auto_fixable: false
+- id: IT4IT30-CTRL-022
+  implements: IT4IT-DEF-003
+  name: Identity sits only in the Identity component
+  description: A data object is controlled by one functional component (11.7.5), and the standard names Identity for Identity.
+    A data object directly in a package passes, because a partial model is valid.
+  category: ctrl
+  severity: error
+  demo_trigger: false
+  selector:
+    type: element
+    stereotypes:
+      any_of:
+      - IT4IT_DO_Identity
+  condition:
+    type: contained_in
+    path:
+    - stereotype_one_of:
+      - IT4IT_FC_Identity
+      - type:Package
+  remediation:
+    short: Move this data object into the Identity component, or directly into a package.
+    auto_fixable: false
+- id: IT4IT30-CTRL-023
+  implements: IT4IT-DEF-003
+  name: Entitlement sits only in the Identity component
+  description: A data object is controlled by one functional component (11.7.5), and the standard names Identity for Entitlement.
+    A data object directly in a package passes, because a partial model is valid.
+  category: ctrl
+  severity: error
+  demo_trigger: false
+  selector:
+    type: element
+    stereotypes:
+      any_of:
+      - IT4IT_DO_Entitlement
+  condition:
+    type: contained_in
+    path:
+    - stereotype_one_of:
+      - IT4IT_FC_Identity
+      - type:Package
+  remediation:
+    short: Move this data object into the Identity component, or directly into a package.
+    auto_fixable: false
+- id: IT4IT30-CTRL-024
+  implements: IT4IT-DEF-003
+  name: Service Offer Catalog sits only in the Offer component
+  description: A data object is controlled by one functional component (11.7.5), and the standard names Offer for Service
+    Offer Catalog. A data object directly in a package passes, because a partial model is valid.
+  category: ctrl
+  severity: error
+  demo_trigger: false
+  selector:
+    type: element
+    stereotypes:
+      any_of:
+      - IT4IT_DO_ServiceOfferCatalog
+  condition:
+    type: contained_in
+    path:
+    - stereotype_one_of:
+      - IT4IT_FC_Offer
+      - type:Package
+  remediation:
+    short: Move this data object into the Offer component, or directly into a package.
+    auto_fixable: false
+- id: IT4IT30-CTRL-025
+  implements: IT4IT-DEF-003
+  name: Service Offer sits only in the Offer component
+  description: A data object is controlled by one functional component (11.7.5), and the standard names Offer for Service
+    Offer. A data object directly in a package passes, because a partial model is valid.
+  category: ctrl
+  severity: error
+  demo_trigger: false
+  selector:
+    type: element
+    stereotypes:
+      any_of:
+      - IT4IT_DO_ServiceOffer
+  condition:
+    type: contained_in
+    path:
+    - stereotype_one_of:
+      - IT4IT_FC_Offer
+      - type:Package
+  remediation:
+    short: Move this data object into the Offer component, or directly into a package.
+    auto_fixable: false
+- id: IT4IT30-CTRL-026
+  implements: IT4IT-DEF-003
+  name: Order sits only in the Order component
+  description: A data object is controlled by one functional component (11.7.5), and the standard names Order for Order. A
+    data object directly in a package passes, because a partial model is valid.
+  category: ctrl
+  severity: error
+  demo_trigger: false
+  selector:
+    type: element
+    stereotypes:
+      any_of:
+      - IT4IT_DO_Order
+  condition:
+    type: contained_in
+    path:
+    - stereotype_one_of:
+      - IT4IT_FC_Order
+      - type:Package
+  remediation:
+    short: Move this data object into the Order component, or directly into a package.
+    auto_fixable: false
+- id: IT4IT30-CTRL-027
+  implements: IT4IT-DEF-003
+  name: Subscription sits only in the Order component
+  description: A data object is controlled by one functional component (11.7.5), and the standard names Order for Subscription.
+    A data object directly in a package passes, because a partial model is valid.
+  category: ctrl
+  severity: error
+  demo_trigger: false
+  selector:
+    type: element
+    stereotypes:
+      any_of:
+      - IT4IT_DO_Subscription
+  condition:
+    type: contained_in
+    path:
+    - stereotype_one_of:
+      - IT4IT_FC_Order
+      - type:Package
+  remediation:
+    short: Move this data object into the Order component, or directly into a package.
+    auto_fixable: false
+- id: IT4IT30-CTRL-028
+  implements: IT4IT-DEF-003
+  name: Chargeback Contract sits only in the Chargeback component
+  description: A data object is controlled by one functional component (11.7.5), and the standard names Chargeback for Chargeback
+    Contract. A data object directly in a package passes, because a partial model is valid.
+  category: ctrl
+  severity: error
+  demo_trigger: false
+  selector:
+    type: element
+    stereotypes:
+      any_of:
+      - IT4IT_DO_ChargebackContract
+  condition:
+    type: contained_in
+    path:
+    - stereotype_one_of:
+      - IT4IT_FC_Chargeback
+      - type:Package
+  remediation:
+    short: Move this data object into the Chargeback component, or directly into a package.
+    auto_fixable: false
+- id: IT4IT30-CTRL-029
+  implements: IT4IT-DEF-003
+  name: Chargeback Record sits only in the Chargeback component
+  description: A data object is controlled by one functional component (11.7.5), and the standard names Chargeback for Chargeback
+    Record. A data object directly in a package passes, because a partial model is valid.
+  category: ctrl
+  severity: error
+  demo_trigger: false
+  selector:
+    type: element
+    stereotypes:
+      any_of:
+      - IT4IT_DO_ChargebackRecord
+  condition:
+    type: contained_in
+    path:
+    - stereotype_one_of:
+      - IT4IT_FC_Chargeback
+      - type:Package
+  remediation:
+    short: Move this data object into the Chargeback component, or directly into a package.
+    auto_fixable: false
+- id: IT4IT30-CTRL-030
+  implements: IT4IT-DEF-003
+  name: Change sits only in the Change component
+  description: A data object is controlled by one functional component (11.7.5), and the standard names Change for Change.
+    A data object directly in a package passes, because a partial model is valid.
+  category: ctrl
+  severity: error
+  demo_trigger: false
+  selector:
+    type: element
+    stereotypes:
+      any_of:
+      - IT4IT_DO_Change
+  condition:
+    type: contained_in
+    path:
+    - stereotype_one_of:
+      - IT4IT_FC_Change
+      - type:Package
+  remediation:
+    short: Move this data object into the Change component, or directly into a package.
+    auto_fixable: false
+- id: IT4IT30-CTRL-031
+  implements: IT4IT-DEF-003
+  name: Desired Product Instance sits only in the Fulfillment Orchestration component
+  description: A data object is controlled by one functional component (11.7.5), and the standard names Fulfillment Orchestration
+    for Desired Product Instance. A data object directly in a package passes, because a partial model is valid.
+  category: ctrl
+  severity: error
+  demo_trigger: false
+  selector:
+    type: element
+    stereotypes:
+      any_of:
+      - IT4IT_DO_DesiredProductInstance
+  condition:
+    type: contained_in
+    path:
+    - stereotype_one_of:
+      - IT4IT_FC_FulfillmentOrchestration
+      - type:Package
+  remediation:
+    short: Move this data object into the Fulfillment Orchestration component, or directly into a package.
+    auto_fixable: false
+- id: IT4IT30-CTRL-032
+  implements: IT4IT-DEF-003
+  name: Resource sits only in the Resource component
+  description: A data object is controlled by one functional component (11.7.5), and the standard names Resource for Resource.
+    A data object directly in a package passes, because a partial model is valid.
+  category: ctrl
+  severity: error
+  demo_trigger: false
+  selector:
+    type: element
+    stereotypes:
+      any_of:
+      - IT4IT_DO_Resource
+  condition:
+    type: contained_in
+    path:
+    - stereotype_one_of:
+      - IT4IT_FC_Resource
+      - type:Package
+  remediation:
+    short: Move this data object into the Resource component, or directly into a package.
+    auto_fixable: false
+- id: IT4IT30-CTRL-033
+  implements: IT4IT-DEF-003
+  name: Fulfillment Book sits only in the Fulfillment component
+  description: A data object is controlled by one functional component (11.7.5), and the standard names Fulfillment for Fulfillment
+    Book. A data object directly in a package passes, because a partial model is valid.
+  category: ctrl
+  severity: error
+  demo_trigger: false
+  selector:
+    type: element
+    stereotypes:
+      any_of:
+      - IT4IT_DO_FulfillmentBook
+  condition:
+    type: contained_in
+    path:
+    - stereotype_one_of:
+      - IT4IT_FC_Fulfillment
+      - type:Package
+  remediation:
+    short: Move this data object into the Fulfillment component, or directly into a package.
+    auto_fixable: false
+- id: IT4IT30-CTRL-034
+  implements: IT4IT-DEF-003
+  name: Usage Record sits only in the Usage component
+  description: A data object is controlled by one functional component (11.7.5), and the standard names Usage for Usage Record.
+    A data object directly in a package passes, because a partial model is valid.
+  category: ctrl
+  severity: error
+  demo_trigger: false
+  selector:
+    type: element
+    stereotypes:
+      any_of:
+      - IT4IT_DO_UsageRecord
+  condition:
+    type: contained_in
+    path:
+    - stereotype_one_of:
+      - IT4IT_FC_Usage
+      - type:Package
+  remediation:
+    short: Move this data object into the Usage component, or directly into a package.
+    auto_fixable: false
+- id: IT4IT30-CTRL-035
+  implements: IT4IT-DEF-003
+  name: Service Contract sits only in the Service Level component
+  description: A data object is controlled by one functional component (11.7.5), and the standard names Service Level for
+    Service Contract. A data object directly in a package passes, because a partial model is valid.
+  category: ctrl
+  severity: error
+  demo_trigger: false
+  selector:
+    type: element
+    stereotypes:
+      any_of:
+      - IT4IT_DO_ServiceContract
+  condition:
+    type: contained_in
+    path:
+    - stereotype_one_of:
+      - IT4IT_FC_ServiceLevel
+      - type:Package
+  remediation:
+    short: Move this data object into the Service Level component, or directly into a package.
+    auto_fixable: false
+- id: IT4IT30-CTRL-036
+  implements: IT4IT-DEF-003
+  name: KPI sits only in the Service Level component
+  description: A data object is controlled by one functional component (11.7.5), and the standard names Service Level for
+    KPI. A data object directly in a package passes, because a partial model is valid.
+  category: ctrl
+  severity: error
+  demo_trigger: false
+  selector:
+    type: element
+    stereotypes:
+      any_of:
+      - IT4IT_DO_KPI
+  condition:
+    type: contained_in
+    path:
+    - stereotype_one_of:
+      - IT4IT_FC_ServiceLevel
+      - type:Package
+  remediation:
+    short: Move this data object into the Service Level component, or directly into a package.
+    auto_fixable: false
+- id: IT4IT30-CTRL-037
+  implements: IT4IT-DEF-003
+  name: Incident sits only in the Incident component
+  description: A data object is controlled by one functional component (11.7.5), and the standard names Incident for Incident.
+    A data object directly in a package passes, because a partial model is valid.
+  category: ctrl
+  severity: error
+  demo_trigger: false
+  selector:
+    type: element
+    stereotypes:
+      any_of:
+      - IT4IT_DO_Incident
+  condition:
+    type: contained_in
+    path:
+    - stereotype_one_of:
+      - IT4IT_FC_Incident
+      - type:Package
+  remediation:
+    short: Move this data object into the Incident component, or directly into a package.
+    auto_fixable: false
+- id: IT4IT30-CTRL-038
+  implements: IT4IT-DEF-003
+  name: Problem sits only in the Problem component
+  description: A data object is controlled by one functional component (11.7.5), and the standard names Problem for Problem.
+    A data object directly in a package passes, because a partial model is valid.
+  category: ctrl
+  severity: error
+  demo_trigger: false
+  selector:
+    type: element
+    stereotypes:
+      any_of:
+      - IT4IT_DO_Problem
+  condition:
+    type: contained_in
+    path:
+    - stereotype_one_of:
+      - IT4IT_FC_Problem
+      - type:Package
+  remediation:
+    short: Move this data object into the Problem component, or directly into a package.
+    auto_fixable: false
+- id: IT4IT30-CTRL-039
+  implements: IT4IT-DEF-003
+  name: Knowledge Item sits only in the Knowledge component
+  description: A data object is controlled by one functional component (11.7.5), and the standard names Knowledge for Knowledge
+    Item. A data object directly in a package passes, because a partial model is valid.
+  category: ctrl
+  severity: error
+  demo_trigger: false
+  selector:
+    type: element
+    stereotypes:
+      any_of:
+      - IT4IT_DO_KnowledgeItem
+  condition:
+    type: contained_in
+    path:
+    - stereotype_one_of:
+      - IT4IT_FC_Knowledge
+      - type:Package
+  remediation:
+    short: Move this data object into the Knowledge component, or directly into a package.
+    auto_fixable: false
+- id: IT4IT30-CTRL-040
+  implements: IT4IT-DEF-003
+  name: Actual Product Instance sits only in the Configuration component
+  description: A data object is controlled by one functional component (11.7.5), and the standard names Configuration for
+    Actual Product Instance. A data object directly in a package passes, because a partial model is valid.
+  category: ctrl
+  severity: error
+  demo_trigger: false
+  selector:
+    type: element
+    stereotypes:
+      any_of:
+      - IT4IT_DO_ActualProductInstance
+  condition:
+    type: contained_in
+    path:
+    - stereotype_one_of:
+      - IT4IT_FC_Configuration
+      - type:Package
+  remediation:
+    short: Move this data object into the Configuration component, or directly into a package.
+    auto_fixable: false
+- id: IT4IT30-CTRL-041
+  implements: IT4IT-DEF-003
+  name: Service Monitor sits only in the Monitoring component
+  description: A data object is controlled by one functional component (11.7.5), and the standard names Monitoring for Service
+    Monitor. A data object directly in a package passes, because a partial model is valid.
+  category: ctrl
+  severity: error
+  demo_trigger: false
+  selector:
+    type: element
+    stereotypes:
+      any_of:
+      - IT4IT_DO_ServiceMonitor
+  condition:
+    type: contained_in
+    path:
+    - stereotype_one_of:
+      - IT4IT_FC_Monitoring
+      - type:Package
+  remediation:
+    short: Move this data object into the Monitoring component, or directly into a package.
+    auto_fixable: false
+- id: IT4IT30-CTRL-042
+  implements: IT4IT-DEF-003
+  name: Log sits only in the Monitoring component
+  description: A data object is controlled by one functional component (11.7.5), and the standard names Monitoring for Log.
+    A data object directly in a package passes, because a partial model is valid.
+  category: ctrl
+  severity: error
+  demo_trigger: false
+  selector:
+    type: element
+    stereotypes:
+      any_of:
+      - IT4IT_DO_Log
+  condition:
+    type: contained_in
+    path:
+    - stereotype_one_of:
+      - IT4IT_FC_Monitoring
+      - type:Package
+  remediation:
+    short: Move this data object into the Monitoring component, or directly into a package.
+    auto_fixable: false
+- id: IT4IT30-CTRL-043
+  implements: IT4IT-DEF-003
+  name: Event sits only in the Event component
+  description: A data object is controlled by one functional component (11.7.5), and the standard names Event for Event. A
+    data object directly in a package passes, because a partial model is valid.
+  category: ctrl
+  severity: error
+  demo_trigger: false
+  selector:
+    type: element
+    stereotypes:
+      any_of:
+      - IT4IT_DO_Event
+  condition:
+    type: contained_in
+    path:
+    - stereotype_one_of:
+      - IT4IT_FC_Event
+      - type:Package
+  remediation:
+    short: Move this data object into the Event component, or directly into a package.
+    auto_fixable: false
+- id: IT4IT30-CTRL-044
+  implements: IT4IT-DEF-003
+  name: Runbook sits only in the Diagnostics & Remediation component
+  description: A data object is controlled by one functional component (11.7.5), and the standard names Diagnostics & Remediation
+    for Runbook. A data object directly in a package passes, because a partial model is valid.
+  category: ctrl
+  severity: error
+  demo_trigger: false
+  selector:
+    type: element
+    stereotypes:
+      any_of:
+      - IT4IT_DO_Runbook
+  condition:
+    type: contained_in
+    path:
+    - stereotype_one_of:
+      - IT4IT_FC_DiagnosticsRemediation
+      - type:Package
+  remediation:
+    short: Move this data object into the Diagnostics & Remediation component, or directly into a package.
+    auto_fixable: false
+- id: IT4IT30-CTRL-045
+  implements: IT4IT-DEF-003
+  name: Cost Model sits only in the Cost Modeling component
+  description: A data object is controlled by one functional component (11.7.5), and the standard names Cost Modeling for
+    Cost Model. A data object directly in a package passes, because a partial model is valid.
+  category: ctrl
+  severity: error
+  demo_trigger: false
+  selector:
+    type: element
+    stereotypes:
+      any_of:
+      - IT4IT_DO_CostModel
+  condition:
+    type: contained_in
+    path:
+    - stereotype_one_of:
+      - IT4IT_FC_CostModeling
+      - type:Package
+  remediation:
+    short: Move this data object into the Cost Modeling component, or directly into a package.
+    auto_fixable: false
+- id: IT4IT30-CTRL-046
+  implements: IT4IT-DEF-003
+  name: Budget Item sits only in the Investment component
+  description: A data object is controlled by one functional component (11.7.5), and the standard names Investment for Budget
+    Item. A data object directly in a package passes, because a partial model is valid.
+  category: ctrl
+  severity: error
+  demo_trigger: false
+  selector:
+    type: element
+    stereotypes:
+      any_of:
+      - IT4IT_DO_BudgetItem
+  condition:
+    type: contained_in
+    path:
+    - stereotype_one_of:
+      - IT4IT_FC_Investment
+      - type:Package
+  remediation:
+    short: Move this data object into the Investment component, or directly into a package.
+    auto_fixable: false
+- id: IT4IT30-GRP-001
+  implements: pack
+  name: The Assure group holds only its own components
+  description: The standard places each component in one functional group. A group marked Assure should not hold another group's
+    component. A component in no group passes, because a partial model is valid.
+  category: grp
+  severity: error
+  demo_trigger: false
+  selector:
+    type: element
+    stereotypes:
+      any_of:
+      - IT4IT_Group
+    tagged_value_filter:
+    - tag: IT4ITGroup
+      value_in:
+      - Assure
+  condition:
+    type: contains_count
+    child:
+      stereotype_one_of:
+      - IT4IT_FC_BuildPackage
+      - IT4IT_FC_Change
+      - IT4IT_FC_Chargeback
+      - IT4IT_FC_ConsumptionExperience
+      - IT4IT_FC_CostModeling
+      - IT4IT_FC_Defect
+      - IT4IT_FC_EnterpriseArchitecture
+      - IT4IT_FC_Fulfillment
+      - IT4IT_FC_FulfillmentOrchestration
+      - IT4IT_FC_Identity
+      - IT4IT_FC_Incident
+      - IT4IT_FC_Investment
+      - IT4IT_FC_Knowledge
+      - IT4IT_FC_Offer
+      - IT4IT_FC_Order
+      - IT4IT_FC_Pipeline
+      - IT4IT_FC_Policy
+      - IT4IT_FC_PortfolioBacklog
+      - IT4IT_FC_Problem
+      - IT4IT_FC_ProductBacklog
+      - IT4IT_FC_ProductDesign
+      - IT4IT_FC_ProductPortfolio
+      - IT4IT_FC_Proposal
+      - IT4IT_FC_ReleaseComposition
+      - IT4IT_FC_Requirement
+      - IT4IT_FC_Resource
+      - IT4IT_FC_ServiceLevel
+      - IT4IT_FC_SourceControl
+      - IT4IT_FC_Strategy
+      - IT4IT_FC_Test
+      - IT4IT_FC_Usage
+    max: 0
+  remediation:
+    short: Move the component into the group the standard places it in.
+    auto_fixable: false
+- id: IT4IT30-GRP-002
+  implements: pack
+  name: The Consume group holds only its own components
+  description: The standard places each component in one functional group. A group marked Consume should not hold another
+    group's component. A component in no group passes, because a partial model is valid.
+  category: grp
+  severity: error
+  demo_trigger: false
+  selector:
+    type: element
+    stereotypes:
+      any_of:
+      - IT4IT_Group
+    tagged_value_filter:
+    - tag: IT4ITGroup
+      value_in:
+      - Consume
+  condition:
+    type: contains_count
+    child:
+      stereotype_one_of:
+      - IT4IT_FC_BuildPackage
+      - IT4IT_FC_Change
+      - IT4IT_FC_Configuration
+      - IT4IT_FC_CostModeling
+      - IT4IT_FC_Defect
+      - IT4IT_FC_DiagnosticsRemediation
+      - IT4IT_FC_EnterpriseArchitecture
+      - IT4IT_FC_Event
+      - IT4IT_FC_Fulfillment
+      - IT4IT_FC_FulfillmentOrchestration
+      - IT4IT_FC_Incident
+      - IT4IT_FC_Investment
+      - IT4IT_FC_Knowledge
+      - IT4IT_FC_Monitoring
+      - IT4IT_FC_Pipeline
+      - IT4IT_FC_Policy
+      - IT4IT_FC_PortfolioBacklog
+      - IT4IT_FC_Problem
+      - IT4IT_FC_ProductBacklog
+      - IT4IT_FC_ProductDesign
+      - IT4IT_FC_ProductPortfolio
+      - IT4IT_FC_Proposal
+      - IT4IT_FC_ReleaseComposition
+      - IT4IT_FC_Requirement
+      - IT4IT_FC_Resource
+      - IT4IT_FC_ServiceLevel
+      - IT4IT_FC_SourceControl
+      - IT4IT_FC_Strategy
+      - IT4IT_FC_Test
+      - IT4IT_FC_Usage
+    max: 0
+  remediation:
+    short: Move the component into the group the standard places it in.
+    auto_fixable: false
+- id: IT4IT30-GRP-003
+  implements: pack
+  name: The Develop group holds only its own components
+  description: The standard places each component in one functional group. A group marked Develop should not hold another
+    group's component. A component in no group passes, because a partial model is valid.
+  category: grp
+  severity: error
+  demo_trigger: false
+  selector:
+    type: element
+    stereotypes:
+      any_of:
+      - IT4IT_Group
+    tagged_value_filter:
+    - tag: IT4ITGroup
+      value_in:
+      - Develop
+  condition:
+    type: contains_count
+    child:
+      stereotype_one_of:
+      - IT4IT_FC_Change
+      - IT4IT_FC_Chargeback
+      - IT4IT_FC_Configuration
+      - IT4IT_FC_ConsumptionExperience
+      - IT4IT_FC_CostModeling
+      - IT4IT_FC_Defect
+      - IT4IT_FC_DiagnosticsRemediation
+      - IT4IT_FC_EnterpriseArchitecture
+      - IT4IT_FC_Event
+      - IT4IT_FC_Fulfillment
+      - IT4IT_FC_FulfillmentOrchestration
+      - IT4IT_FC_Identity
+      - IT4IT_FC_Incident
+      - IT4IT_FC_Investment
+      - IT4IT_FC_Knowledge
+      - IT4IT_FC_Monitoring
+      - IT4IT_FC_Offer
+      - IT4IT_FC_Order
+      - IT4IT_FC_Policy
+      - IT4IT_FC_PortfolioBacklog
+      - IT4IT_FC_Problem
+      - IT4IT_FC_ProductPortfolio
+      - IT4IT_FC_Proposal
+      - IT4IT_FC_Resource
+      - IT4IT_FC_ServiceLevel
+      - IT4IT_FC_Strategy
+      - IT4IT_FC_Test
+      - IT4IT_FC_Usage
+    max: 0
+  remediation:
+    short: Move the component into the group the standard places it in.
+    auto_fixable: false
+- id: IT4IT30-GRP-004
+  implements: pack
+  name: The Financial Management group holds only its own components
+  description: The standard places each component in one functional group. A group marked Financial Management should not
+    hold another group's component. A component in no group passes, because a partial model is valid.
+  category: grp
+  severity: error
+  demo_trigger: false
+  selector:
+    type: element
+    stereotypes:
+      any_of:
+      - IT4IT_Group
+    tagged_value_filter:
+    - tag: IT4ITGroup
+      value_in:
+      - Financial Management
+  condition:
+    type: contains_count
+    child:
+      stereotype_one_of:
+      - IT4IT_FC_BuildPackage
+      - IT4IT_FC_Change
+      - IT4IT_FC_Chargeback
+      - IT4IT_FC_Configuration
+      - IT4IT_FC_ConsumptionExperience
+      - IT4IT_FC_Defect
+      - IT4IT_FC_DiagnosticsRemediation
+      - IT4IT_FC_EnterpriseArchitecture
+      - IT4IT_FC_Event
+      - IT4IT_FC_Fulfillment
+      - IT4IT_FC_FulfillmentOrchestration
+      - IT4IT_FC_Identity
+      - IT4IT_FC_Incident
+      - IT4IT_FC_Knowledge
+      - IT4IT_FC_Monitoring
+      - IT4IT_FC_Offer
+      - IT4IT_FC_Order
+      - IT4IT_FC_Pipeline
+      - IT4IT_FC_Policy
+      - IT4IT_FC_PortfolioBacklog
+      - IT4IT_FC_Problem
+      - IT4IT_FC_ProductBacklog
+      - IT4IT_FC_ProductDesign
+      - IT4IT_FC_ProductPortfolio
+      - IT4IT_FC_Proposal
+      - IT4IT_FC_ReleaseComposition
+      - IT4IT_FC_Requirement
+      - IT4IT_FC_Resource
+      - IT4IT_FC_ServiceLevel
+      - IT4IT_FC_SourceControl
+      - IT4IT_FC_Strategy
+      - IT4IT_FC_Test
+      - IT4IT_FC_Usage
+    max: 0
+  remediation:
+    short: Move the component into the group the standard places it in.
+    auto_fixable: false
+- id: IT4IT30-GRP-005
+  implements: pack
+  name: The Fulfill group holds only its own components
+  description: The standard places each component in one functional group. A group marked Fulfill should not hold another
+    group's component. A component in no group passes, because a partial model is valid.
+  category: grp
+  severity: error
+  demo_trigger: false
+  selector:
+    type: element
+    stereotypes:
+      any_of:
+      - IT4IT_Group
+    tagged_value_filter:
+    - tag: IT4ITGroup
+      value_in:
+      - Fulfill
+  condition:
+    type: contains_count
+    child:
+      stereotype_one_of:
+      - IT4IT_FC_BuildPackage
+      - IT4IT_FC_Chargeback
+      - IT4IT_FC_Configuration
+      - IT4IT_FC_ConsumptionExperience
+      - IT4IT_FC_CostModeling
+      - IT4IT_FC_Defect
+      - IT4IT_FC_DiagnosticsRemediation
+      - IT4IT_FC_EnterpriseArchitecture
+      - IT4IT_FC_Event
+      - IT4IT_FC_Identity
+      - IT4IT_FC_Incident
+      - IT4IT_FC_Investment
+      - IT4IT_FC_Knowledge
+      - IT4IT_FC_Monitoring
+      - IT4IT_FC_Offer
+      - IT4IT_FC_Order
+      - IT4IT_FC_Pipeline
+      - IT4IT_FC_Policy
+      - IT4IT_FC_PortfolioBacklog
+      - IT4IT_FC_Problem
+      - IT4IT_FC_ProductBacklog
+      - IT4IT_FC_ProductDesign
+      - IT4IT_FC_ProductPortfolio
+      - IT4IT_FC_Proposal
+      - IT4IT_FC_ReleaseComposition
+      - IT4IT_FC_Requirement
+      - IT4IT_FC_ServiceLevel
+      - IT4IT_FC_SourceControl
+      - IT4IT_FC_Strategy
+      - IT4IT_FC_Test
+    max: 0
+  remediation:
+    short: Move the component into the group the standard places it in.
+    auto_fixable: false
+- id: IT4IT30-GRP-006
+  implements: pack
+  name: The Portfolio group holds only its own components
+  description: The standard places each component in one functional group. A group marked Portfolio should not hold another
+    group's component. A component in no group passes, because a partial model is valid.
+  category: grp
+  severity: error
+  demo_trigger: false
+  selector:
+    type: element
+    stereotypes:
+      any_of:
+      - IT4IT_Group
+    tagged_value_filter:
+    - tag: IT4ITGroup
+      value_in:
+      - Portfolio
+  condition:
+    type: contains_count
+    child:
+      stereotype_one_of:
+      - IT4IT_FC_BuildPackage
+      - IT4IT_FC_Change
+      - IT4IT_FC_Chargeback
+      - IT4IT_FC_Configuration
+      - IT4IT_FC_ConsumptionExperience
+      - IT4IT_FC_CostModeling
+      - IT4IT_FC_Defect
+      - IT4IT_FC_DiagnosticsRemediation
+      - IT4IT_FC_EnterpriseArchitecture
+      - IT4IT_FC_Event
+      - IT4IT_FC_Fulfillment
+      - IT4IT_FC_FulfillmentOrchestration
+      - IT4IT_FC_Identity
+      - IT4IT_FC_Incident
+      - IT4IT_FC_Investment
+      - IT4IT_FC_Knowledge
+      - IT4IT_FC_Monitoring
+      - IT4IT_FC_Offer
+      - IT4IT_FC_Order
+      - IT4IT_FC_Pipeline
+      - IT4IT_FC_Policy
+      - IT4IT_FC_Problem
+      - IT4IT_FC_ProductBacklog
+      - IT4IT_FC_ProductDesign
+      - IT4IT_FC_ReleaseComposition
+      - IT4IT_FC_Requirement
+      - IT4IT_FC_Resource
+      - IT4IT_FC_ServiceLevel
+      - IT4IT_FC_SourceControl
+      - IT4IT_FC_Strategy
+      - IT4IT_FC_Test
+      - IT4IT_FC_Usage
+    max: 0
+  remediation:
+    short: Move the component into the group the standard places it in.
+    auto_fixable: false
+- id: IT4IT30-GRP-007
+  implements: pack
+  name: The Strategy group holds only its own components
+  description: The standard places each component in one functional group. A group marked Strategy should not hold another
+    group's component. A component in no group passes, because a partial model is valid.
+  category: grp
+  severity: error
+  demo_trigger: false
+  selector:
+    type: element
+    stereotypes:
+      any_of:
+      - IT4IT_Group
+    tagged_value_filter:
+    - tag: IT4ITGroup
+      value_in:
+      - Strategy
+  condition:
+    type: contains_count
+    child:
+      stereotype_one_of:
+      - IT4IT_FC_BuildPackage
+      - IT4IT_FC_Change
+      - IT4IT_FC_Chargeback
+      - IT4IT_FC_Configuration
+      - IT4IT_FC_ConsumptionExperience
+      - IT4IT_FC_CostModeling
+      - IT4IT_FC_Defect
+      - IT4IT_FC_DiagnosticsRemediation
+      - IT4IT_FC_Event
+      - IT4IT_FC_Fulfillment
+      - IT4IT_FC_FulfillmentOrchestration
+      - IT4IT_FC_Identity
+      - IT4IT_FC_Incident
+      - IT4IT_FC_Investment
+      - IT4IT_FC_Knowledge
+      - IT4IT_FC_Monitoring
+      - IT4IT_FC_Offer
+      - IT4IT_FC_Order
+      - IT4IT_FC_Pipeline
+      - IT4IT_FC_PortfolioBacklog
+      - IT4IT_FC_Problem
+      - IT4IT_FC_ProductBacklog
+      - IT4IT_FC_ProductDesign
+      - IT4IT_FC_ProductPortfolio
+      - IT4IT_FC_Proposal
+      - IT4IT_FC_ReleaseComposition
+      - IT4IT_FC_Requirement
+      - IT4IT_FC_Resource
+      - IT4IT_FC_ServiceLevel
+      - IT4IT_FC_SourceControl
+      - IT4IT_FC_Test
+      - IT4IT_FC_Usage
+    max: 0
+  remediation:
+    short: Move the component into the group the standard places it in.
+    auto_fixable: false
+- id: IT4IT30-GRP-008
+  implements: pack
+  name: The Support group holds only its own components
+  description: The standard places each component in one functional group. A group marked Support should not hold another
+    group's component. A component in no group passes, because a partial model is valid.
+  category: grp
+  severity: error
+  demo_trigger: false
+  selector:
+    type: element
+    stereotypes:
+      any_of:
+      - IT4IT_Group
+    tagged_value_filter:
+    - tag: IT4ITGroup
+      value_in:
+      - Support
+  condition:
+    type: contains_count
+    child:
+      stereotype_one_of:
+      - IT4IT_FC_BuildPackage
+      - IT4IT_FC_Change
+      - IT4IT_FC_Chargeback
+      - IT4IT_FC_Configuration
+      - IT4IT_FC_ConsumptionExperience
+      - IT4IT_FC_CostModeling
+      - IT4IT_FC_Defect
+      - IT4IT_FC_DiagnosticsRemediation
+      - IT4IT_FC_EnterpriseArchitecture
+      - IT4IT_FC_Event
+      - IT4IT_FC_Fulfillment
+      - IT4IT_FC_FulfillmentOrchestration
+      - IT4IT_FC_Identity
+      - IT4IT_FC_Investment
+      - IT4IT_FC_Monitoring
+      - IT4IT_FC_Offer
+      - IT4IT_FC_Order
+      - IT4IT_FC_Pipeline
+      - IT4IT_FC_Policy
+      - IT4IT_FC_PortfolioBacklog
+      - IT4IT_FC_ProductBacklog
+      - IT4IT_FC_ProductDesign
+      - IT4IT_FC_ProductPortfolio
+      - IT4IT_FC_Proposal
+      - IT4IT_FC_ReleaseComposition
+      - IT4IT_FC_Requirement
+      - IT4IT_FC_Resource
+      - IT4IT_FC_SourceControl
+      - IT4IT_FC_Strategy
+      - IT4IT_FC_Test
+      - IT4IT_FC_Usage
+    max: 0
+  remediation:
+    short: Move the component into the group the standard places it in.
+    auto_fixable: false
+- id: IT4IT30-GRP-009
+  implements: pack
+  name: The Test group holds only its own components
+  description: The standard places each component in one functional group. A group marked Test should not hold another group's
+    component. A component in no group passes, because a partial model is valid.
+  category: grp
+  severity: error
+  demo_trigger: false
+  selector:
+    type: element
+    stereotypes:
+      any_of:
+      - IT4IT_Group
+    tagged_value_filter:
+    - tag: IT4ITGroup
+      value_in:
+      - Test
+  condition:
+    type: contains_count
+    child:
+      stereotype_one_of:
+      - IT4IT_FC_BuildPackage
+      - IT4IT_FC_Change
+      - IT4IT_FC_Chargeback
+      - IT4IT_FC_Configuration
+      - IT4IT_FC_ConsumptionExperience
+      - IT4IT_FC_CostModeling
+      - IT4IT_FC_DiagnosticsRemediation
+      - IT4IT_FC_EnterpriseArchitecture
+      - IT4IT_FC_Event
+      - IT4IT_FC_Fulfillment
+      - IT4IT_FC_FulfillmentOrchestration
+      - IT4IT_FC_Identity
+      - IT4IT_FC_Incident
+      - IT4IT_FC_Investment
+      - IT4IT_FC_Knowledge
+      - IT4IT_FC_Monitoring
+      - IT4IT_FC_Offer
+      - IT4IT_FC_Order
+      - IT4IT_FC_Pipeline
+      - IT4IT_FC_Policy
+      - IT4IT_FC_PortfolioBacklog
+      - IT4IT_FC_Problem
+      - IT4IT_FC_ProductBacklog
+      - IT4IT_FC_ProductDesign
+      - IT4IT_FC_ProductPortfolio
+      - IT4IT_FC_Proposal
+      - IT4IT_FC_ReleaseComposition
+      - IT4IT_FC_Requirement
+      - IT4IT_FC_Resource
+      - IT4IT_FC_ServiceLevel
+      - IT4IT_FC_SourceControl
+      - IT4IT_FC_Strategy
+      - IT4IT_FC_Usage
+    max: 0
+  remediation:
+    short: Move the component into the group the standard places it in.
+    auto_fixable: false
+- id: IT4IT30-GRP-010
+  implements: pack
+  name: A group's name field is one the standard defines
+  description: The group shape's list holds the Level 1 groups and the Level 2 groups with defined content.
+  category: grp
+  severity: error
+  demo_trigger: false
+  selector:
+    type: element
+    stereotypes:
+      any_of:
+      - IT4IT_Group
+  condition:
+    type: tagged_value_constraint
+    tags:
+    - name: IT4ITGroup
+      value_must_be_one_of:
+      - Plan
+      - Build
+      - Deliver
+      - Run
+      - Supporting
+      - Strategy
+      - Portfolio
+      - Develop
+      - Test
+      - Consume
+      - Fulfill
+      - Support
+      - Assure
+      - Financial Management
+  remediation:
+    short: Pick the group from the list.
+    auto_fixable: false
+- id: IT4IT30-GRP-011
+  implements: pack
+  name: A component sits only in a functional group or a package
+  description: The standard places each component in a functional group. It defines no component inside another component
+    or inside a supporting function, whose content the draft doesn't define.
+  category: grp
+  severity: error
+  demo_trigger: false
+  selector:
+    type: element
+    stereotypes:
+      any_of:
+      - IT4IT_FC_Policy
+      - IT4IT_FC_Strategy
+      - IT4IT_FC_EnterpriseArchitecture
+      - IT4IT_FC_PortfolioBacklog
+      - IT4IT_FC_Proposal
+      - IT4IT_FC_ProductPortfolio
+      - IT4IT_FC_ProductBacklog
+      - IT4IT_FC_Requirement
+      - IT4IT_FC_ProductDesign
+      - IT4IT_FC_SourceControl
+      - IT4IT_FC_Pipeline
+      - IT4IT_FC_BuildPackage
+      - IT4IT_FC_ReleaseComposition
+      - IT4IT_FC_Test
+      - IT4IT_FC_Defect
+      - IT4IT_FC_ConsumptionExperience
+      - IT4IT_FC_Identity
+      - IT4IT_FC_Offer
+      - IT4IT_FC_Order
+      - IT4IT_FC_Chargeback
+      - IT4IT_FC_Change
+      - IT4IT_FC_FulfillmentOrchestration
+      - IT4IT_FC_Resource
+      - IT4IT_FC_Fulfillment
+      - IT4IT_FC_Usage
+      - IT4IT_FC_ServiceLevel
+      - IT4IT_FC_Incident
+      - IT4IT_FC_Problem
+      - IT4IT_FC_Knowledge
+      - IT4IT_FC_Configuration
+      - IT4IT_FC_Monitoring
+      - IT4IT_FC_Event
+      - IT4IT_FC_DiagnosticsRemediation
+      - IT4IT_FC_CostModeling
+      - IT4IT_FC_Investment
+  condition:
+    type: contained_in
+    path:
+    - stereotype_one_of:
+      - IT4IT_Group
+      - type:Package
+  remediation:
+    short: Move the component into its functional group, or directly into a package.
+    auto_fixable: false
+- id: IT4IT30-GRP-012
+  implements: pack
+  name: The Build group holds no other group's components
+  description: The standard places each component under one Level 1 group. A group marked Build should not hold a component
+    that belongs under another one. A component directly in Build that belongs there passes.
+  category: grp
+  severity: error
+  demo_trigger: false
+  selector:
+    type: element
+    stereotypes:
+      any_of:
+      - IT4IT_Group
+    tagged_value_filter:
+    - tag: IT4ITGroup
+      value_in:
+      - Build
+  condition:
+    type: contains_count
+    child:
+      stereotype_one_of:
+      - IT4IT_FC_Change
+      - IT4IT_FC_Chargeback
+      - IT4IT_FC_Configuration
+      - IT4IT_FC_ConsumptionExperience
+      - IT4IT_FC_CostModeling
+      - IT4IT_FC_DiagnosticsRemediation
+      - IT4IT_FC_EnterpriseArchitecture
+      - IT4IT_FC_Event
+      - IT4IT_FC_Fulfillment
+      - IT4IT_FC_FulfillmentOrchestration
+      - IT4IT_FC_Identity
+      - IT4IT_FC_Incident
+      - IT4IT_FC_Investment
+      - IT4IT_FC_Knowledge
+      - IT4IT_FC_Monitoring
+      - IT4IT_FC_Offer
+      - IT4IT_FC_Order
+      - IT4IT_FC_Policy
+      - IT4IT_FC_PortfolioBacklog
+      - IT4IT_FC_Problem
+      - IT4IT_FC_ProductPortfolio
+      - IT4IT_FC_Proposal
+      - IT4IT_FC_Resource
+      - IT4IT_FC_ServiceLevel
+      - IT4IT_FC_Strategy
+      - IT4IT_FC_Usage
+    max: 0
+  remediation:
+    short: Move the component into the group the standard places it in.
+    auto_fixable: false
+- id: IT4IT30-GRP-013
+  implements: pack
+  name: The Deliver group holds no other group's components
+  description: The standard places each component under one Level 1 group. A group marked Deliver should not hold a component
+    that belongs under another one. A component directly in Deliver that belongs there passes.
+  category: grp
+  severity: error
+  demo_trigger: false
+  selector:
+    type: element
+    stereotypes:
+      any_of:
+      - IT4IT_Group
+    tagged_value_filter:
+    - tag: IT4ITGroup
+      value_in:
+      - Deliver
+  condition:
+    type: contains_count
+    child:
+      stereotype_one_of:
+      - IT4IT_FC_BuildPackage
+      - IT4IT_FC_Configuration
+      - IT4IT_FC_CostModeling
+      - IT4IT_FC_Defect
+      - IT4IT_FC_DiagnosticsRemediation
+      - IT4IT_FC_EnterpriseArchitecture
+      - IT4IT_FC_Event
+      - IT4IT_FC_Incident
+      - IT4IT_FC_Investment
+      - IT4IT_FC_Knowledge
+      - IT4IT_FC_Monitoring
+      - IT4IT_FC_Pipeline
+      - IT4IT_FC_Policy
+      - IT4IT_FC_PortfolioBacklog
+      - IT4IT_FC_Problem
+      - IT4IT_FC_ProductBacklog
+      - IT4IT_FC_ProductDesign
+      - IT4IT_FC_ProductPortfolio
+      - IT4IT_FC_Proposal
+      - IT4IT_FC_ReleaseComposition
+      - IT4IT_FC_Requirement
+      - IT4IT_FC_ServiceLevel
+      - IT4IT_FC_SourceControl
+      - IT4IT_FC_Strategy
+      - IT4IT_FC_Test
+    max: 0
+  remediation:
+    short: Move the component into the group the standard places it in.
+    auto_fixable: false
+- id: IT4IT30-GRP-014
+  implements: pack
+  name: The Plan group holds no other group's components
+  description: The standard places each component under one Level 1 group. A group marked Plan should not hold a component
+    that belongs under another one. A component directly in Plan that belongs there passes.
+  category: grp
+  severity: error
+  demo_trigger: false
+  selector:
+    type: element
+    stereotypes:
+      any_of:
+      - IT4IT_Group
+    tagged_value_filter:
+    - tag: IT4ITGroup
+      value_in:
+      - Plan
+  condition:
+    type: contains_count
+    child:
+      stereotype_one_of:
+      - IT4IT_FC_BuildPackage
+      - IT4IT_FC_Change
+      - IT4IT_FC_Chargeback
+      - IT4IT_FC_Configuration
+      - IT4IT_FC_ConsumptionExperience
+      - IT4IT_FC_CostModeling
+      - IT4IT_FC_Defect
+      - IT4IT_FC_DiagnosticsRemediation
+      - IT4IT_FC_Event
+      - IT4IT_FC_Fulfillment
+      - IT4IT_FC_FulfillmentOrchestration
+      - IT4IT_FC_Identity
+      - IT4IT_FC_Incident
+      - IT4IT_FC_Investment
+      - IT4IT_FC_Knowledge
+      - IT4IT_FC_Monitoring
+      - IT4IT_FC_Offer
+      - IT4IT_FC_Order
+      - IT4IT_FC_Pipeline
+      - IT4IT_FC_Problem
+      - IT4IT_FC_ProductBacklog
+      - IT4IT_FC_ProductDesign
+      - IT4IT_FC_ReleaseComposition
+      - IT4IT_FC_Requirement
+      - IT4IT_FC_Resource
+      - IT4IT_FC_ServiceLevel
+      - IT4IT_FC_SourceControl
+      - IT4IT_FC_Test
+      - IT4IT_FC_Usage
+    max: 0
+  remediation:
+    short: Move the component into the group the standard places it in.
+    auto_fixable: false
+- id: IT4IT30-GRP-015
+  implements: pack
+  name: The Run group holds no other group's components
+  description: The standard places each component under one Level 1 group. A group marked Run should not hold a component
+    that belongs under another one. A component directly in Run that belongs there passes.
+  category: grp
+  severity: error
+  demo_trigger: false
+  selector:
+    type: element
+    stereotypes:
+      any_of:
+      - IT4IT_Group
+    tagged_value_filter:
+    - tag: IT4ITGroup
+      value_in:
+      - Run
+  condition:
+    type: contains_count
+    child:
+      stereotype_one_of:
+      - IT4IT_FC_BuildPackage
+      - IT4IT_FC_Change
+      - IT4IT_FC_Chargeback
+      - IT4IT_FC_ConsumptionExperience
+      - IT4IT_FC_CostModeling
+      - IT4IT_FC_Defect
+      - IT4IT_FC_EnterpriseArchitecture
+      - IT4IT_FC_Fulfillment
+      - IT4IT_FC_FulfillmentOrchestration
+      - IT4IT_FC_Identity
+      - IT4IT_FC_Investment
+      - IT4IT_FC_Offer
+      - IT4IT_FC_Order
+      - IT4IT_FC_Pipeline
+      - IT4IT_FC_Policy
+      - IT4IT_FC_PortfolioBacklog
+      - IT4IT_FC_ProductBacklog
+      - IT4IT_FC_ProductDesign
+      - IT4IT_FC_ProductPortfolio
+      - IT4IT_FC_Proposal
+      - IT4IT_FC_ReleaseComposition
+      - IT4IT_FC_Requirement
+      - IT4IT_FC_Resource
+      - IT4IT_FC_SourceControl
+      - IT4IT_FC_Strategy
+      - IT4IT_FC_Test
+      - IT4IT_FC_Usage
+    max: 0
+  remediation:
+    short: Move the component into the group the standard places it in.
+    auto_fixable: false
+- id: IT4IT30-GRP-016
+  implements: pack
+  name: The Supporting group holds no other group's components
+  description: The standard places each component under one Level 1 group. A group marked Supporting should not hold a component
+    that belongs under another one. A component directly in Supporting that belongs there passes.
+  category: grp
+  severity: error
+  demo_trigger: false
+  selector:
+    type: element
+    stereotypes:
+      any_of:
+      - IT4IT_Group
+    tagged_value_filter:
+    - tag: IT4ITGroup
+      value_in:
+      - Supporting
+  condition:
+    type: contains_count
+    child:
+      stereotype_one_of:
+      - IT4IT_FC_BuildPackage
+      - IT4IT_FC_Change
+      - IT4IT_FC_Chargeback
+      - IT4IT_FC_Configuration
+      - IT4IT_FC_ConsumptionExperience
+      - IT4IT_FC_Defect
+      - IT4IT_FC_DiagnosticsRemediation
+      - IT4IT_FC_EnterpriseArchitecture
+      - IT4IT_FC_Event
+      - IT4IT_FC_Fulfillment
+      - IT4IT_FC_FulfillmentOrchestration
+      - IT4IT_FC_Identity
+      - IT4IT_FC_Incident
+      - IT4IT_FC_Knowledge
+      - IT4IT_FC_Monitoring
+      - IT4IT_FC_Offer
+      - IT4IT_FC_Order
+      - IT4IT_FC_Pipeline
+      - IT4IT_FC_Policy
+      - IT4IT_FC_PortfolioBacklog
+      - IT4IT_FC_Problem
+      - IT4IT_FC_ProductBacklog
+      - IT4IT_FC_ProductDesign
+      - IT4IT_FC_ProductPortfolio
+      - IT4IT_FC_Proposal
+      - IT4IT_FC_ReleaseComposition
+      - IT4IT_FC_Requirement
+      - IT4IT_FC_Resource
+      - IT4IT_FC_ServiceLevel
+      - IT4IT_FC_SourceControl
+      - IT4IT_FC_Strategy
+      - IT4IT_FC_Test
+      - IT4IT_FC_Usage
+    max: 0
+  remediation:
+    short: Move the component into the group the standard places it in.
+    auto_fixable: false
+- id: IT4IT30-LINE-001
+  implements: pack
+  name: System of Record Integration joins the right kinds of shape
+  description: The standard's concepts say which kinds of shape System of Record Integration joins.
+  category: line
+  severity: error
+  demo_trigger: false
+  selector:
+    type: connector
+    connector_stereotype: IT4IT_SystemOfRecordIntegration
+  condition:
+    type: connector_endpoint_stereotype
+    source_must_be_one_of: &id001
+    - IT4IT_FC_Policy
+    - IT4IT_FC_Strategy
+    - IT4IT_FC_EnterpriseArchitecture
+    - IT4IT_FC_PortfolioBacklog
+    - IT4IT_FC_Proposal
+    - IT4IT_FC_ProductPortfolio
+    - IT4IT_FC_ProductBacklog
+    - IT4IT_FC_Requirement
+    - IT4IT_FC_ProductDesign
+    - IT4IT_FC_SourceControl
+    - IT4IT_FC_Pipeline
+    - IT4IT_FC_BuildPackage
+    - IT4IT_FC_ReleaseComposition
+    - IT4IT_FC_Test
+    - IT4IT_FC_Defect
+    - IT4IT_FC_ConsumptionExperience
+    - IT4IT_FC_Identity
+    - IT4IT_FC_Offer
+    - IT4IT_FC_Order
+    - IT4IT_FC_Chargeback
+    - IT4IT_FC_Change
+    - IT4IT_FC_FulfillmentOrchestration
+    - IT4IT_FC_Resource
+    - IT4IT_FC_Fulfillment
+    - IT4IT_FC_Usage
+    - IT4IT_FC_ServiceLevel
+    - IT4IT_FC_Incident
+    - IT4IT_FC_Problem
+    - IT4IT_FC_Knowledge
+    - IT4IT_FC_Configuration
+    - IT4IT_FC_Monitoring
+    - IT4IT_FC_Event
+    - IT4IT_FC_DiagnosticsRemediation
+    - IT4IT_FC_CostModeling
+    - IT4IT_FC_Investment
+    target_must_be_one_of: *id001
+  remediation:
+    short: Use System of Record Integration only between the shapes it joins, as the how-to's table lists them.
+    auto_fixable: false
+- id: IT4IT30-LINE-002
+  implements: pack
+  name: Engagement Integration joins the right kinds of shape
+  description: The standard's concepts say which kinds of shape Engagement Integration joins.
+  category: line
+  severity: error
+  demo_trigger: false
+  selector:
+    type: connector
+    connector_stereotype: IT4IT_EngagementIntegration
+  condition:
+    type: connector_endpoint_stereotype
+    source_must_be_one_of: *id001
+    target_must_be_one_of: *id001
+  remediation:
+    short: Use Engagement Integration only between the shapes it joins, as the how-to's table lists them.
+    auto_fixable: false
+- id: IT4IT30-LINE-003
+  implements: pack
+  name: Supports joins the right kinds of shape
+  description: The standard's concepts say which kinds of shape Supports joins.
+  category: line
+  severity: error
+  demo_trigger: false
+  selector:
+    type: connector
+    connector_stereotype: IT4IT_Supports
+  condition:
+    type: connector_endpoint_stereotype
+    source_must_be_one_of: *id001
+    target_must_be_one_of:
+    - IT4IT_ValueStream
+  remediation:
+    short: Use Supports only between the shapes it joins, as the how-to's table lists them.
+    auto_fixable: false
+- id: IT4IT30-LINE-004
+  implements: pack
+  name: Depends On joins the right kinds of shape
+  description: The standard's concepts say which kinds of shape Depends On joins.
+  category: line
+  severity: error
+  demo_trigger: false
+  selector:
+    type: connector
+    connector_stereotype: IT4IT_DependsOn
+  condition:
+    type: connector_endpoint_stereotype
+    source_must_be_one_of:
+    - IT4IT_ValueStream
+    target_must_be_one_of:
+    - IT4IT_ValueStream
+  remediation:
+    short: Use Depends On only between the shapes it joins, as the how-to's table lists them.
+    auto_fixable: false
+- id: IT4IT30-LINE-005
+  implements: pack
+  name: Executed For joins the right kinds of shape
+  description: The standard's concepts say which kinds of shape Executed For joins.
+  category: line
+  severity: error
+  demo_trigger: false
+  selector:
+    type: connector
+    connector_stereotype: IT4IT_ExecutedFor
+  condition:
+    type: connector_endpoint_stereotype
+    source_must_be_one_of:
+    - IT4IT_ValueStream
+    target_must_be_one_of:
+    - IT4IT_Scenario
+  remediation:
+    short: Use Executed For only between the shapes it joins, as the how-to's table lists them.
+    auto_fixable: false
+- id: IT4IT30-LINE-006
+  implements: pack
+  name: Lists Stakeholder joins the right kinds of shape
+  description: The standard's concepts say which kinds of shape Lists Stakeholder joins.
+  category: line
+  severity: error
+  demo_trigger: false
+  selector:
+    type: connector
+    connector_stereotype: IT4IT_ListsStakeholder
+  condition:
+    type: connector_endpoint_stereotype
+    source_must_be_one_of:
+    - IT4IT_Stage
+    target_must_be_one_of:
+    - IT4IT_Stakeholder
+  remediation:
+    short: Use Lists Stakeholder only between the shapes it joins, as the how-to's table lists them.
+    auto_fixable: false
+- id: IT4IT30-LINE-007
+  implements: pack
+  name: Lists Data Object joins the right kinds of shape
+  description: The standard's concepts say which kinds of shape Lists Data Object joins.
+  category: line
+  severity: error
+  demo_trigger: false
+  selector:
+    type: connector
+    connector_stereotype: IT4IT_ListsDataObject
+  condition:
+    type: connector_endpoint_stereotype
+    source_must_be_one_of:
+    - IT4IT_Stage
+    target_must_be_one_of: &id002
+    - IT4IT_DO_Policy
+    - IT4IT_DO_StrategicTheme
+    - IT4IT_DO_StrategicObjective
+    - IT4IT_DO_ArchitectureRoadmapItem
+    - IT4IT_DO_ArchitectureBlueprint
+    - IT4IT_DO_ValueStream
+    - IT4IT_DO_PortfolioBacklogItem
+    - IT4IT_DO_ScopeAgreement
+    - IT4IT_DO_DigitalProduct
+    - IT4IT_DO_ProductBacklogItem
+    - IT4IT_DO_Requirement
+    - IT4IT_DO_ProductDesign
+    - IT4IT_DO_Source
+    - IT4IT_DO_Pipeline
+    - IT4IT_DO_BuildPackage
+    - IT4IT_DO_ProductRelease
+    - IT4IT_DO_ProductReleaseBlueprint
+    - IT4IT_DO_TestCase
+    - IT4IT_DO_TestPlan
+    - IT4IT_DO_Defect
+    - IT4IT_DO_Interaction
+    - IT4IT_DO_Identity
+    - IT4IT_DO_Entitlement
+    - IT4IT_DO_ServiceOfferCatalog
+    - IT4IT_DO_ServiceOffer
+    - IT4IT_DO_Order
+    - IT4IT_DO_Subscription
+    - IT4IT_DO_ChargebackContract
+    - IT4IT_DO_ChargebackRecord
+    - IT4IT_DO_Change
+    - IT4IT_DO_DesiredProductInstance
+    - IT4IT_DO_Resource
+    - IT4IT_DO_FulfillmentBook
+    - IT4IT_DO_UsageRecord
+    - IT4IT_DO_ServiceContract
+    - IT4IT_DO_KPI
+    - IT4IT_DO_Incident
+    - IT4IT_DO_Problem
+    - IT4IT_DO_KnowledgeItem
+    - IT4IT_DO_ActualProductInstance
+    - IT4IT_DO_ServiceMonitor
+    - IT4IT_DO_Log
+    - IT4IT_DO_Event
+    - IT4IT_DO_Runbook
+    - IT4IT_DO_CostModel
+    - IT4IT_DO_BudgetItem
+  remediation:
+    short: Use Lists Data Object only between the shapes it joins, as the how-to's table lists them.
+    auto_fixable: false
+- id: IT4IT30-LINE-008
+  implements: pack
+  name: Supported By joins the right kinds of shape
+  description: The standard's concepts say which kinds of shape Supported By joins.
+  category: line
+  severity: error
+  demo_trigger: false
+  selector:
+    type: connector
+    connector_stereotype: IT4IT_SupportedBy
+  condition:
+    type: connector_endpoint_stereotype
+    source_must_be_one_of:
+    - IT4IT_Capability
+    target_must_be_one_of: *id001
+  remediation:
+    short: Use Supported By only between the shapes it joins, as the how-to's table lists them.
+    auto_fixable: false
+- id: IT4IT30-LINE-009
+  implements: pack
+  name: Data Relationship joins two data objects
+  description: The standard's data relationships join data objects. REL-001 judges the pair of data objects, and this rule
+    catches a Data Relationship with any other shape at either end.
+  category: line
+  severity: error
+  demo_trigger: false
+  selector:
+    type: connector
+    connector_stereotype: IT4IT_DataRelationship
+  condition:
+    type: connector_endpoint_stereotype
+    source_must_be_one_of: *id002
+    target_must_be_one_of: *id002
+  remediation:
+    short: Use Data Relationship only between two data objects.
+    auto_fixable: false

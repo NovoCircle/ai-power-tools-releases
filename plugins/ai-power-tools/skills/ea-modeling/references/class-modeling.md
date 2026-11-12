@@ -211,7 +211,7 @@ integer id column; the response carries `guid` instead. `default`, when supplied
 A raised error here means the write did not happen — verified by refreshing and reading the
 operation's `Parameters` collection back before reporting success, not by trusting the write call
 in isolation. Two ways this can happen:
-- An unknown `method_id`.
+- An unknown `method_id`: the server returns `ok: false` with `operation_not_found`.
 - **A parameter name that already exists on the same operation.** EA does not raise for this and
   does not overwrite the existing row in place — it silently no-ops the second write. A second
   `add_parameter` call for a name already present on that operation therefore raises here rather
@@ -241,6 +241,9 @@ or remove a parameter, either recreate the owning operation or drop to raw SQL
 (`UPDATE`/`DELETE ... FROM t_operationparams WHERE OperationID = ? AND Name = ?`) — there is no
 MCP-level update or delete for this one object kind, unlike every other object covered in this
 file.
+
+An update, delete or `add_parameter` on an id that does not exist returns `attribute_not_found` or
+`operation_not_found` (`ok: false`); an unknown id is no longer a raised error.
 
 ### 3e. `execute_sql` can time out on a live, shared repository
 

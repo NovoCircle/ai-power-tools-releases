@@ -1,0 +1,520 @@
+# EA facts for SoaML 1.0.1 as Sparx Enterprise Architect's built-in SoaML technology stores it.
+# Measured by reading back what EA stores.
+# Every stereotype and tag below was created in EA and read back. `concepts` maps a concept of the language skill to the stored
+# stereotypes (and the metaclass rows each has, with how each row was established); the tags of each stereotype are under `stereotypes`.
+# Westbrook Bank appears only in howto.md, as an illustration.
+
+language: soaml-1
+technology: SoaML
+display_name: SoaML
+stereotype_prefix: ''
+stereotype_storage: 'bare lower camel case name in t_object.Stereotype, t_attribute.Stereotype and t_connector.Stereotype (participant,
+  servicePoint, serviceChannel); the qualified form SoaML::<name> is in the t_xref row named Stereotypes (FQName) and is what AddNew
+  and StereotypeEx take. EA matches the name after SoaML:: without regard to case and stores the canonical form'
+measured_on:
+  ea: 17.1 build 1716
+  date: '2026-10-21'
+  technology_version: '1.0'
+  technology_file: 'none: the technology is one of EA''s InternalTechnologies (encrypted); measured by creating objects'
+  standard_version_named_by_ea_samples: 1.0.1 (namespace http://www.omg.org/spec/SoaML/20120501)
+counts:
+  stereotype_names_bound: 25
+  stereotype_metaclass_pairs: 38
+  resources_tab_rows: 38
+  diagram_types: 2
+  concepts_without_a_stereotype: 9
+diagram_types:
+  SoaML:
+    ea_name: SoaML
+    token: SoaML::SoaML
+    stored_diagram_type: Component
+    style_ex: MDGDgm=SoaML::SoaML;
+    standard_views:
+    - Services Architecture
+    - Service Contract
+    - Participants
+    - Service Interface
+    - Capabilities
+    - Service Data
+    - Categorization
+    - Business Motivation
+    note: one general diagram type for every SoaML view; the standard names no diagram type, so the mapping is EA's, not the standard's
+  SoaMLSequence:
+    ea_name: SoaMLSequence
+    token: SoaML::SoaMLSequence
+    stored_diagram_type: Sequence
+    style_ex: MDGDgm=SoaML::SoaMLSequence;
+    standard_views:
+    - Choreography
+    note: a sequence diagram for the choreography of a service contract or the protocol of a service interface
+concepts:
+  Participant:
+    stereotypes:
+    - participant
+    metaclass:
+    - 'participant: Class (default)'
+    - 'participant: Component (inferred)'
+    note: a class or a component; EA also offers entity, specification and participantArchitecture (EA only)
+  Agent:
+    stereotypes:
+    - agent
+    metaclass:
+    - 'agent: Class (default)'
+    - 'agent: Component (inferred)'
+    - 'agent: Actor (measured)'
+    note: 'created through the API with the active flag clear (t_object.IsActive = 0); the standard says an agent is always active,
+      so the flag has to be set by hand. Not checked: whether the toolbox item sets it'
+  Service:
+    stereotypes:
+    - service
+    - servicePoint
+    metaclass:
+    - 'service: Port (port child)'
+    - 'servicePoint: Port (port child)'
+    tags:
+      connectorRequired:
+        values:
+        - 'true'
+        - 'false'
+        default: 'true'
+    note: 'two stereotypes: service (the profile''s name) and servicePoint (the metamodel''s name); both are Port elements, children
+      of the participant; service has no tagged value, servicePoint has connectorRequired'
+  Request:
+    stereotypes:
+    - request
+    - requestPoint
+    metaclass:
+    - 'request: Port (port child)'
+    - 'requestPoint: Port (port child)'
+    tags:
+      connectorRequired:
+        values:
+        - 'true'
+        - 'false'
+        default: 'true'
+    note: 'two stereotypes: request (the profile''s name) and requestPoint (the metamodel''s name; the standard''s notation keyword);
+      both are Port elements; request has no tagged value, requestPoint has connectorRequired; created through the API no conjugation
+      is stored (no PDATA or StyleEx value), so the port''s Conjugated setting has to be set by hand'
+  Port:
+    stereotypes:
+    - port
+    metaclass:
+    - 'port: Port (port child)'
+    tags:
+      connectorRequired:
+        values:
+        - 'true'
+        - 'false'
+        default: 'true'
+    note: 'the refinement of the UML port: a Port element stereotyped port, with connectorRequired (default true)'
+  ServiceChannel:
+    stereotypes:
+    - serviceChannel
+    metaclass:
+    - 'serviceChannel: Connector (connector)'
+    note: a Connector (assembly or delegate), not a Dependency; applied through the qualified connector type
+  ServiceInterface:
+    stereotypes:
+    - serviceInterface
+    metaclass:
+    - 'serviceInterface: Class (default)'
+    - 'serviceInterface: Interface (measured)'
+    note: on a Class (the standard's metaclass) or an Interface; a stereotype selector cannot tell the two apart (a rule that adds the EA type, Class or Interface, can)
+  ServiceContract:
+    stereotypes:
+    - serviceContract
+    metaclass:
+    - 'serviceContract: Collaboration (default)'
+    tags:
+      isStrict:
+        values:
+        - 'true'
+        - 'false'
+  Provider:
+    stereotypes:
+    - provider
+    metaclass:
+    - 'provider: Class (default)'
+    - 'provider: Interface (measured)'
+    note: on an Interface (non-composite contract) or a Class (composite)
+  Consumer:
+    stereotypes:
+    - consumer
+    metaclass:
+    - 'consumer: Class (default)'
+    - 'consumer: Interface (measured)'
+    note: on an Interface (non-composite contract) or a Class (composite)
+  ServicesArchitecture:
+    stereotypes:
+    - servicesArchitecture
+    metaclass:
+    - 'servicesArchitecture: Collaboration (default)'
+  Collaboration:
+    stereotypes:
+    - collaboration
+    metaclass:
+    - 'collaboration: Collaboration (default)'
+    tags:
+      isStrict:
+        values:
+        - 'true'
+        - 'false'
+    note: 'the refinement of the UML collaboration: isStrict, stored empty'
+  CollaborationUse:
+    stereotypes:
+    - collaborationUse
+    metaclass:
+    - 'collaborationUse: CollaborationOccurrence (default)'
+    tags:
+      isStrict:
+        values:
+        - 'true'
+        - 'false'
+        default: 'true'
+    note: EA calls the metaclass CollaborationOccurrence; isStrict defaults to true
+  Capability:
+    stereotypes:
+    - capability
+    metaclass:
+    - 'capability: Class (default)'
+    - 'capability: Component (inferred)'
+  Expose:
+    stereotypes:
+    - expose
+    metaclass:
+    - 'expose: Dependency (connector)'
+    note: a Dependency (Usage, Realisation, Abstraction and Nesting accept it too)
+  MessageType:
+    stereotypes:
+    - messageType
+    metaclass:
+    - 'messageType: Class (default)'
+    - 'messageType: DataType (measured)'
+    - 'messageType: Signal (measured)'
+    tags:
+      encoding: {}
+    note: on a Class, a DataType or a Signal; the standard's Message Type is generally a data type
+  Attachment:
+    stereotypes:
+    - attachment
+    metaclass:
+    - 'attachment: Part (child of a class)'
+    - 'attachment: Attribute (attribute)'
+    tags:
+      encoding: {}
+      mimeType: {}
+    note: on an attribute or on a Part element; tags encoding and mimeType
+  Property:
+    stereotypes:
+    - property
+    - id
+    metaclass:
+    - 'property: Part (child of a class)'
+    - 'property: Attribute (attribute)'
+    - 'id: Part (child of a class)'
+    - 'id: Attribute (attribute)'
+    tags:
+      isID:
+        values:
+        - 'true'
+        - 'false'
+        default: 'true'
+    note: 'two stereotypes: property and id (the standard''s notation keyword Id); both carry isID, which EA creates as true (the
+      standard''s default is false); on an attribute or on a Part element'
+  Milestone:
+    stereotypes:
+    - milestone
+    metaclass:
+    - 'milestone: Note (default)'
+    tags:
+      progress: {}
+    note: a Note (the standard's Comment); tagged value progress is free text, empty until set
+  Catalog:
+    status: not-in-ea
+    reason: Sparx's SoaML technology has no stereotype for it (tried as SoaML::Catalog in four forms)
+  Categorization:
+    status: not-in-ea
+    reason: Sparx's SoaML technology has no stereotype for it (tried as SoaML::Categorization in four forms)
+  Category:
+    status: not-in-ea
+    reason: Sparx's SoaML technology has no stereotype for it (tried as SoaML::Category in four forms)
+  CategoryValue:
+    status: not-in-ea
+    reason: Sparx's SoaML technology has no stereotype for it (tried as SoaML::CategoryValue in four forms)
+  NodeDescriptor:
+    status: not-in-ea
+    reason: Sparx's SoaML technology has no stereotype for it (tried as SoaML::NodeDescriptor in four forms)
+  FreeFormDescriptor:
+    status: not-in-ea
+    reason: Sparx's SoaML technology has no stereotype for it (tried as SoaML::FreeFormDescriptor in four forms)
+  FreeFormValue:
+    status: not-in-ea
+    reason: Sparx's SoaML technology has no stereotype for it (tried as SoaML::FreeFormValue in four forms)
+  MotivationElement:
+    status: not-in-ea
+    reason: Sparx's SoaML technology has no stereotype for it (tried as SoaML::MotivationElement in four forms)
+  MotivationRealization:
+    status: not-in-ea
+    reason: Sparx's SoaML technology has no stereotype for it (tried as SoaML::MotivationRealization in four forms)
+stereotypes:
+  agent:
+    metaclass_rows:
+    - Class (default)
+    - Component (inferred)
+    - Actor (measured)
+  attachment:
+    metaclass_rows:
+    - Part (child of a class)
+    - Attribute (attribute)
+    tags:
+      encoding: {}
+      mimeType: {}
+  capability:
+    metaclass_rows:
+    - Class (default)
+    - Component (inferred)
+  collaboration:
+    metaclass_rows:
+    - Collaboration (default)
+    tags:
+      isStrict:
+        values:
+        - 'true'
+        - 'false'
+  collaborationUse:
+    metaclass_rows:
+    - CollaborationOccurrence (default)
+    tags:
+      isStrict:
+        values:
+        - 'true'
+        - 'false'
+        default: 'true'
+  consumer:
+    metaclass_rows:
+    - Class (default)
+    - Interface (measured)
+  entity:
+    metaclass_rows:
+    - Class (default)
+  expose:
+    metaclass_rows:
+    - Dependency (connector)
+  id:
+    metaclass_rows:
+    - Part (child of a class)
+    - Attribute (attribute)
+    tags:
+      isID:
+        values:
+        - 'true'
+        - 'false'
+        default: 'true'
+  messageType:
+    metaclass_rows:
+    - Class (default)
+    - DataType (measured)
+    - Signal (measured)
+    tags:
+      encoding: {}
+  milestone:
+    metaclass_rows:
+    - Note (default)
+    tags:
+      progress: {}
+  participant:
+    metaclass_rows:
+    - Class (default)
+    - Component (inferred)
+  participantArchitecture:
+    metaclass_rows:
+    - Class (default)
+    - Component (inferred)
+  port:
+    metaclass_rows:
+    - Port (port child)
+    tags:
+      connectorRequired:
+        values:
+        - 'true'
+        - 'false'
+        default: 'true'
+  property:
+    metaclass_rows:
+    - Part (child of a class)
+    - Attribute (attribute)
+    tags:
+      isID:
+        values:
+        - 'true'
+        - 'false'
+        default: 'true'
+  provider:
+    metaclass_rows:
+    - Class (default)
+    - Interface (measured)
+  request:
+    metaclass_rows:
+    - Port (port child)
+  requestPoint:
+    metaclass_rows:
+    - Port (port child)
+    tags:
+      connectorRequired:
+        values:
+        - 'true'
+        - 'false'
+        default: 'true'
+  service:
+    metaclass_rows:
+    - Port (port child)
+  serviceChannel:
+    metaclass_rows:
+    - Connector (connector)
+  serviceContract:
+    metaclass_rows:
+    - Collaboration (default)
+    tags:
+      isStrict:
+        values:
+        - 'true'
+        - 'false'
+  serviceInterface:
+    metaclass_rows:
+    - Class (default)
+    - Interface (measured)
+  servicePoint:
+    metaclass_rows:
+    - Port (port child)
+    tags:
+      connectorRequired:
+        values:
+        - 'true'
+        - 'false'
+        default: 'true'
+  servicesArchitecture:
+    metaclass_rows:
+    - Collaboration (default)
+  specification:
+    metaclass_rows:
+    - Component (default)
+ea_only:
+  stereotypes:
+    entity: a Class; a business entity (no tagged value)
+    specification: a Component marking a participant that is only a specification (the standard shows the keyword 'specification'
+      on such a participant)
+    participantArchitecture: a Class or Component for the services architecture of one participant
+  diagram_types:
+  - SoaML
+  - SoaMLSequence (the standard defines none)
+  samples: EA's model patterns so1.0-* (starter SOA model, basic service architecture, basic service contract, basic service contract
+    choreography) use participant, servicePoint, requestPoint, serviceContract and servicesArchitecture
+toolbox:
+  status: read on screen, measured on EA 17.1 build 1716, 2026-11-04; the sample diagram of type SoaML was opened
+  toolboxes:
+  - SoaML Component
+  - SoaML Sequence
+  diagram_types_on_the_resources_tab: one group named SoaML holds two types, SoaML Component Diagram and SoaML Sequence Diagram
+  pages:
+    UML Component:
+    - Package
+    - Component
+    - Class
+    - Interface
+    - Object
+    - Part
+    - Expose Interface
+    UML Component Relationships:
+    - Assembly
+    - Delegate
+    - Associate
+    - Realize
+    - Generalize
+    - Nesting
+    SoaML Stereotypes:
+    - Agent
+    - Attachment
+    - Capability
+    - Collaboration
+    - Collaboration Use
+    - Consumer...
+    - Expose
+    - Message Type
+    - Milestone
+    - Participant
+    - Port
+    - Property
+    - Provider...
+    - Request
+    - Service
+    - Service Channel
+    - Service Contract
+    - Service Interface
+    - Services Architecture
+  note: Consumer... and Provider... are folder-style entries with several choices. The SoaML Stereotypes page has no item for id,
+    entity, specification, participantArchitecture, requestPoint or servicePoint
+  not_done: 'the SoaML Sequence toolbox was not read: no sequence diagram was in the copy and none was created'
+quick_links:
+  status: read on screen, measured on EA 17.1 build 1716, 2026-11-04; two sources
+  from_a_participant: '''Create Multiple Elements...'', ''Requirement'' (submenu: Realization) and ''Common'': no SoaML-specific
+    quick link'
+  from_a_serviceInterface: EA's generic UML class links (Artifact, Capability, Class, Component, InformationItem, Interface, Object,
+    Package, Profile, Note, Common); the menu was cut off at the screen edge and the submenus were not opened
+tags_of_note:
+  isID: created true for both id and property; the standard's default is false
+  connectorRequired: on port, requestPoint and servicePoint only (not on request or service); default true
+  isStrict: on collaboration and serviceContract stored empty; on collaborationUse default true
+  progress: on milestone, free text, empty until set
+conventions:
+  ports_need_a_parent: a Port element cannot be created in a package; create it as a child of the participant (ParentID)
+  attribute_stereotypes: attachment, id and property go on an attribute or a Part element, never on a package-level element
+  flags_not_set_by_the_stereotype: agent does not set the class's active flag, request and requestPoint do not set the port's conjugated
+    flag (measured on elements created through the API; the toolbox items were not tried)
+  port_typing: a port is typed by its classifier (t_object.Classifier); the validator cannot read it
+  channels: serviceChannel is a Connector between two Port elements; EA does not order the ends
+harvest:
+  shipped-xml: not available (encrypted internal technology)
+  sample-content:
+  - stored metaclass (Object_Type) per stereotype and per extra metaclass, binding (t_xref FQName), tagged values with Values and
+    Default notes, attribute and Part forms, connector types, diagram types (t_diagram, StyleEx MDGDgm)
+  binding-matrix: every name set with StereotypeEx on 18 element types, 17 connector types, attributes, methods, parameters, Port
+    and Part children
+  ui: 'the Resources tab gives 25 names and 38 rows; the metaclass per row was not recorded there.
+    Measured on EA 17.1 build 1716, 2026-11-04: the profile lists 38 rows and the same 25 names with the same repeats; the four
+    inferred second rows (agent, participant, capability, participantArchitecture) are listed with a component-style icon, but
+    the tab prints no metaclass; Diagram Types, Toolboxes, the toolbox pages of one diagram and two quick-link sources were read.'
+  ea_build: 17.1 build 1716
+
+# EA's names for this language's layout. tools/gen_conventions.py reads layout_map.
+layout_map:
+  technology: SoaML
+  display_name: SoaML
+  extends: UML
+  stereotype_prefix: ''
+  notes: |
+    EA has two diagram types for this language. `SoaML` draws the guide's Services Architecture and its other views except Choreography. This map has no entry for `SoaMLSequence`, because UML leaves its Sequence base to EA and an entry on that base would pull plain UML sequence diagrams into SoaML. The standard names no diagram types. Route names are conventions, not measurements.
+
+    `SoaML` is the id EA reports, measured on EA 17.1 build 1716.
+  diagram_types:
+    SoaML:
+      guide: Services Architecture
+      base: Component
+      size_keys:
+        collaboration: Collaboration
+        Collaboration: Collaboration
+        collaborationUse: CollaborationUse
+        CollaborationUse: CollaborationUse
+        serviceContract: ServiceContract
+        ServiceContract: ServiceContract
+        servicesArchitecture: ServicesArchitecture
+        ServicesArchitecture: ServicesArchitecture
+        milestone: Milestone
+        Milestone: Milestone
+        port: Port
+        Port: Port
+        request: Request
+        requestPoint: Request
+        Request: Request
+        service: Service
+        servicePoint: Service
+        Service: Service

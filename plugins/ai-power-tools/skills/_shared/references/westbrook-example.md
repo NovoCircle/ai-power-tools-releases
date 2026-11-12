@@ -6,9 +6,17 @@ metamodel shape ever ships.
 
 **Read this file before writing a new example. Do not invent a parallel vocabulary.**
 
-Ground truth is the MDG technology file `WBA_MDG.xml` (version 1.1.1) and the model
-`WestbrookBank.qea` in the Westbrook demo directory. Where this document and that file disagree, the file wins and this
-document is the bug.
+Westbrook is an illustration. Its source is the MDG technology file `WBA_MDG.xml` (version 1.1.1)
+and the model `WestbrookBank.qea`, which are internal test files and do not ship; you do not have
+them, and no step in a skill depends on them. Where this document and those files disagree, the
+files win and this document is the bug. Read each Westbrook value as an example to replace with
+your own technology, stereotypes and model.
+
+**Counts are examples, not facts.** Any count quoted for Westbrook (elements, tags, connectors) was
+measured on one snapshot, on the date given where there is one. The example model changes, snapshots
+differ from each other, and your repository's numbers will differ. Never present one as a fact about a
+model, and do not repeat a Westbrook count in a new example: say what the call returns, or use a
+placeholder.
 
 ---
 
@@ -22,22 +30,27 @@ Several different things are easy to confuse. They are not interchangeable.
 | MDG technology id | `WBA` | The `id=` attribute of the technology's `<Documentation>`; what EA registers and what `get_mdg_from_runtime` reports. Version 1.1.1 |
 | Technology display name | `WestbrookBankArchitecture` | User-facing technology name; the key used in the server's language tables; also the name of the UML profile that holds the stereotypes |
 | Full technology title | `WBA (Westbrook Bank Architecture)` | The start of the `notes=` of the technology's `<Documentation>` (its `name=` is `WBA`) |
-| Stereotype namespace prefix | `WestbrookBankArchitecture` | The profile name. Every qualified element or connector stereotype: `WestbrookBankArchitecture::WBABusinessApplication`; this is the `FQName` EA stores in `t_xref` |
+| Stereotype qualifier to pass | `WBA` | The qualified form you write for an element or connector stereotype is `WBA::WBABusinessApplication`. The server (3.6.5 or later) accepts the technology id or the profile name and translates it to what EA binds |
+| Stereotype profile name, as stored | `WestbrookBankArchitecture` | The name of the UML profile that holds the stereotypes. EA stores it as the qualifier: the `FQName` in `t_xref` reads `WestbrookBankArchitecture::WBABusinessApplication` (stored data; you read it, you do not pass it) |
 | Diagram namespace prefix | `WBA` | The diagram profile is named `WBA`, so a diagram type is `WBA::WBAApplicationView` (stored as `MDGDgm=WBA::WBAApplicationView` on the diagram) |
 | Model file | `WestbrookBank.qea` | Every path example |
 | Conformance rule id prefix | `WBA-` | Ruleset rule ids, e.g. `WBA-APP-001` |
 
-Note that the technology id (`WBA`) is not the profile name (`WestbrookBankArchitecture`), so the
-qualified form is `WestbrookBankArchitecture::WBABusinessApplication`, never `WBA::WBABusinessApplication`.
+The qualified form to pass is `WBA::WBABusinessApplication`: the technology id, two colons, the
+stereotype name. EA itself binds the stereotype under the profile name, so a row in `t_xref` reads
+`WestbrookBankArchitecture::WBABusinessApplication` (what EA stores). The server (3.6.5 or later)
+accepts either qualifier when you write, and translates the technology id to the profile name before
+it writes or compares. Pass `WBA::`; read the profile name only as stored data.
 Every element stereotype name itself begins with `WBA`. That is what the MDG actually declares.
 Do not "correct" `WBABusinessApplication` to `BusinessApplication`. `t_object.Stereotype` holds
 the bare name; the qualified form lives in `t_xref`.
 
-Both `WBA` and `WestbrookBankArchitecture` are accepted as installed-technology identifiers by
-the server. When an example needs one value, prefer `WBA` for MDG lookups (`tech_id`) and for
-diagram types, the bare name for SQL against `t_object.Stereotype`, `WestbrookBankArchitecture::`
-for a qualified stereotype, and `WestbrookBankArchitecture` for anything presented to a person as
-the language name.
+`tech_id` on `get_mdg_from_runtime` is different: the server looks the technology up by the exact
+id it is registered under (`WBA`), and answers `unknown_mdg` for the display name
+`WestbrookBankArchitecture`. The display name is for people. When an example needs one value, use
+`WBA` for MDG lookups (`tech_id`), for diagram types and for the qualified stereotype, the bare
+name for SQL against `t_object.Stereotype`, and `WestbrookBankArchitecture` for anything presented
+to a person as the language name.
 
 ---
 
@@ -158,10 +171,10 @@ The **connector** set is 3 enumeration tags:
 | `slaTier` | `Gold`, `Silver` |
 
 **(b) EA stores a bound connector's stereotype bare. The binding is in `t_xref`.**
-`t_connector.Stereotype` holds `Uses`, not `WestbrookBankArchitecture::Uses`. What binds the
-connector to the technology is its `t_xref` row,
-`@STEREO;Name=Uses;...FQName=WestbrookBankArchitecture::Uses;@ENDSTEREO;`. Setting `StereotypeEx`
-to `WestbrookBankArchitecture::Uses` makes EA write that row, and add whichever of the three
+`t_connector.Stereotype` holds `Uses`, not the qualified name. What binds the
+connector to the technology is its `t_xref` row (stored data),
+`@STEREO;Name=Uses;...FQName=WestbrookBankArchitecture::Uses;@ENDSTEREO;`. Passing `WBA::Uses`
+makes the server write that row, and EA adds whichever of the three
 declared tags the connector lacks, with empty values (measured 2026-10-07, EA 17.1; existing
 values are kept). A connector can also carry a bare `Uses` with no binding, or one bound to a
 shipped language such as `BMM::Uses`. The string in `t_connector.Stereotype` is the same in all
@@ -172,17 +185,16 @@ Counted from the model on 2026-10-07 (247 connectors):
 
 | `t_connector.Stereotype` | Count | Bound to |
 |---|---|---|
-| `Uses` | 25 | 18 `WestbrookBankArchitecture::Uses`, 7 `BMM::Uses` (left as they were) |
-| `Flows` | 5 | `WestbrookBankArchitecture::Flows` |
-| `realizes` | 4 | `WestbrookBankArchitecture::realizes` |
+| `Uses` | 25 | 18 bound to the WBA technology (stored `FQName` `WestbrookBankArchitecture::Uses`), 7 `BMM::Uses` (left as they were) |
+| `Flows` | 5 | the WBA technology (stored `FQName` `WestbrookBankArchitecture::Flows`) |
+| `realizes` | 4 | the WBA technology (stored `FQName` `WestbrookBankArchitecture::realizes`) |
 | `Requires` | 3 | `BMM::Requires` |
 | `extends` | 3 | nothing (ad hoc) |
 | `part-of` | 2 | nothing (ad hoc) |
 | *(none - plain connector)* | 153 | |
 
 The other 52 carry stereotypes of shipped languages, the fixtures or ad hoc UML names; they are
-not WBA vocabulary. Do not prefix any of these `WBA::`: `WBA` is the technology id, and EA's
-qualified form uses the profile name.
+not WBA vocabulary. Do not prefix any of these `WBA::`: they are not declared by the WBA technology.
 
 ### The governance rule matches a different set - and that is a real defect
 
@@ -217,17 +229,15 @@ model's tests assert the current counts, so changing one without the other break
 
 ### What is still forbidden
 
-The names `WBA::dependsOn`, `WBA::realizes` and `WBA::mastersData` appear in some existing
-skills. `dependsOn` and `mastersData` are not in the MDG and not in the model. Treat all three
-as follows:
+The names `WBA::dependsOn` and `WBA::mastersData` appear in some existing skills. Neither
+`dependsOn` nor `mastersData` is in the MDG or in the model.
 
 > **Do not confuse `WBA::realizes` with `Realizes` or with `realizes`.** `realizes` - lower-case,
-> unqualified - is the stereotype the MDG declares and the model stores. `Realizes` - capitalized -
-> is a different string: it is what `WBA-LFY-001` compares against, and no connector in the model
-> carries it. `WBA::realizes` is neither: `WBA` is the technology id, not the profile name, so EA
-> never stores that form. The bound form is `WestbrookBankArchitecture::realizes`.
+> unqualified - is the stereotype the MDG declares and the model stores. `WBA::realizes` is the
+> qualified form to pass when you bind a connector to it. `Realizes` - capitalized - is a different
+> string: it is what `WBA-LFY-001` compares against, and no connector in the model carries it.
 
-- Do **not** introduce `WBA::dependsOn`, `WBA::realizes` or `WBA::mastersData` into new material.
+- Do **not** introduce `WBA::dependsOn` or `WBA::mastersData` into new material.
 - For a relationship between WBA elements, use the declared `Uses`, `Flows` or `realizes` where
   one fits. Otherwise use a plain UML connector type - `Dependency`, `Realization`,
   `Association`, `Aggregation` - with no stereotype.
@@ -247,8 +257,7 @@ as follows:
 A skill that teaches MDG authoring must build a **subset of the real WBA technology** - the same
 stereotype names, aliases, metaclasses and tagged values given above.
 
-Do not invent a second vocabulary under the `WestbrookBankArchitecture` profile (older material
-writes it `WBA::`). Names such as `WBA::Application`,
+Do not invent a second vocabulary under the `WestbrookBankArchitecture` profile. Names such as `WBA::Application`,
 `WBA::TechPlatform`, `WBA::BizCapability`, `WBA::DataDomain`, `WBA::RunsOn`, `WBA::Realises` and
 `WBA::Integration` are **not** part of this technology. A reader who follows an authoring skill
 and then a modeling skill must end up with one coherent artifact, not two that contradict each
@@ -286,11 +295,11 @@ not match the demo model's tests, which use the fully qualified form.
 - [ ] Every stereotype is created against the metaclass that table gives it.
 - [ ] Every tagged value appears in section 3 (or section 6 for a connector), and enumeration values match exactly.
 - [ ] AI-only tags are used only on `WBAAIGateway` / `WBAAIService` / `WBAAIModel`; `vendor` and `product` only on `WBAVendorSystem`; `pciScopeJustification` only on `WBABusinessApplication` / `WBAVendorSystem`.
-- [ ] Any connector stereotype is `Uses`, `Flows` or `realizes`, written bare in SQL and `WestbrookBankArchitecture::`-qualified when bound (see section 6).
+- [ ] Any connector stereotype is `Uses`, `Flows` or `realizes`, written bare in SQL and `WBA::`-qualified when you pass one to a tool (see section 6).
 - [ ] An MDG-authoring example builds a subset of the real technology (see section 7).
 - [ ] No absolute path, no personal name, no real organization.
 - [ ] `businessOwner` / `technicalOwner` hold a team or role, not a person.
-- [ ] The qualified form is `WestbrookBankArchitecture::WBAThing`, not `WBA::WBAThing` and not `WestbrookBankArchitecture::Thing`.
+- [ ] The qualified form you pass is `WBA::WBAThing`, not `WBA::Thing`. The profile-name form appears only as what EA stores (the `FQName` in `t_xref`), labeled as stored data.
 
 ---
 

@@ -18,16 +18,16 @@ and is not accessible to the MCP server.
 </Scripts>
 ```
 
-Instead, create a `<mdg_name>_rules.yaml` sidecar file and run it with `ea_validate`.
+Instead, create a `<tech_id>_rules.yaml` sidecar file and run it with `ea_validate`.
 See the `ea-validation` skill for the sidecar schema.
 
 ```yaml
-# westbrook_rules.yaml — run with ea_validate(operation="audit", params={"rules_path_or_content": "..."})
+# WBA_rules.yaml — run with ea_validate(operation="audit", params={"rules_path_or_content": "..."})
 meta:
   version: "1.0"
   mdg_family: WBA
 rules:
-  - id: WBA-TVR-001
+  - id: WBA-TV-001
     severity: error
     selector:
       type: element
@@ -55,10 +55,10 @@ meta:
 
 rules:
   # One block per mandatory tagged value per stereotype.
-  # Rule IDs: <TechID>-TVR-001, -002, ... for tagged-value rules
+  # Rule IDs: <TechID>-TV-001, -002, ... for tagged-value rules
   #           <TechID>-CNX-001, -002, ... for connector rules
 
-  - id: WBA-TVR-001
+  - id: WBA-TV-001
     severity: error
     demo_trigger: true    # mark the most critical check for quick smoke-testing
     selector:

@@ -124,8 +124,9 @@ Covers: 2. Establish the EA version; EA help — Sparx's own guide as the docume
 **Ask:** "Which Sparx guide page tells me how to change the default font that diagrams use? Make sure it is the right one for the EA I am running."
 
 **Passes when:** The run reads the version from the running instance with
-`get_repository_info`, reduces it to major.minor (a reported `17.1.1716` is `17.1`), and states
-that version before using it. Every guide link it gives carries that major.minor.
+`get_repository_info`, takes the version from `ea_release` (for example `17.1`) and the build from
+`ea_version` (`1716`), and states that version before using it. If `ea_release` is missing it asks which
+EA version the person runs and does not derive one from the build number. Every guide link it gives carries that major.minor.
 
 **Check:**
 
@@ -302,8 +303,8 @@ Covers: 3. Establish the repository type
 
 **Marks:** BLOCKED
 
-**Setup:** The model is open through a Pro Cloud Server connection (a `.qeax` file or a server
-address). A correct run reports the block.
+**Setup:** The model is open through a Pro Cloud Server connection (a server
+address, not a `.qeax` file, which is a local SQLite file). A correct run reports the block.
 
 **Ask:** "How do I change the default font that diagrams use in this model?"
 
@@ -420,7 +421,10 @@ Covers: 5. Find the page
 
 **Passes when:** The run searches with two to four plain words (for example "merge baseline
 compare"), not the whole sentence. If a query returns nothing, it shortens the query instead of
-rephrasing it at the same length. It reports the terms it used.
+rephrasing it at the same length. It reports the search terms only when the guide's search did
+not answer (an empty or failed search); when the search or the page links led to the page, it
+reports the page it found and need not list terms. This matches the skill, which asks for what
+was searched only when the guide does not answer.
 
 **Check:**
 
@@ -430,7 +434,7 @@ expect: unchanged
 ```
 
 ```check
-reply: says: the search terms it used, two to four plain words
+reply: says: the page it found in the Sparx guide, or, if a search returned nothing, the shorter terms (two to four plain words) it tried next
 reply: not: reports that the guide has no page on the topic after one long query returned nothing
 ```
 
@@ -671,7 +675,7 @@ Covers: 8. When the guide does not answer it
 
 **Marks:** INVARIANT
 
-**Ask:** "The EA Technology Wizard wants a .mts selection file. Write me the XML for the section that lists the tagged value types."
+**Ask:** "The EA Technology Wizard wants a .mts selection file. Write me the XML for the section that lists the tagged value types, and save it as <output-dir>\types.mts."
 
 **Passes when:** The run says plainly that the guide documents the wizard, what the file's root
 and its few hand-edited sections are, but not the on-disk form of that section, and that
@@ -685,6 +689,11 @@ which says the same thing, also passes.) It writes no XML as though documented.
 ```check
 sql: SELECT (SELECT COUNT(*) FROM t_object), (SELECT COUNT(*) FROM t_connector), (SELECT COUNT(*) FROM t_diagram), (SELECT COUNT(*) FROM t_package), (SELECT COUNT(*) FROM t_objectproperties)
 expect: unchanged
+```
+
+```check
+file: <output-dir>\types.mts
+expect: absent
 ```
 
 ```check
@@ -743,7 +752,8 @@ Covers: Verify in EA's UI
 
 **Ask:** "Make the Technology Layer diagram print in landscape."
 
-**Passes when:** After the edit, the run reloads the diagram, takes a screenshot, looks at it, and
+**Passes when:** After the edit, by whichever route made it (for example `set_diagram_display` with
+`orientation`), the run reloads the diagram, takes a screenshot, looks at it, and
 says what it saw. The diagram is landscape and still holds its 15 elements.
 
 **Check:**
@@ -820,34 +830,14 @@ improvising around a missing control. See Findings.
 
 ## Findings
 
-- `get_repository_info` returns `ea_version` as the raw `Repository.LibraryVersion`. If, as Sparx
-  documents it, that is a build number, the result carries no major.minor, and `SKILL.md`
-  section 2's "a reported `17.1.1716` resolves to `17.1`" has no source in the result. Not verified
-  against a live EA (the server code passes the property through unchanged). TC-04 states the pass
-  as the skill says it; a run on a build-only value would have to read the version from EA's About
-  dialog, which the skill never mentions.
-- `get_repository_info` also returns `repository_type` (for example `SL3` for SQLite). Section 3
-  reads the type only from the path and connection string and never uses that field.
-- The worked example's third pass, building an MDG from a selection file, is a task that
-  `ea-mdg-model-build` covers. That skill says that on EA 17.1+ the file is not needed at all (one
-  `Save Package as MDG Technology` command). So the example breaks section 1's "never in place of a
-  skill that already covers the job", and shows the pre-17.1 route on an EA 17.1 session.
-  TC-22 accepts either answer.
-- The skill names no tool for fetching the guide. `finding-the-guide.md` says a plain HTTP client
-  gets a challenge page and that the sitemap must be filtered "outside the context window". A
-  surface with neither a browser context nor code execution cannot keep either promise, and the
-  skill's only instruction for that surface is to say the site is unreachable. No `tools:` check
-  can assert that a fetch ended on the right URL, so TC-11, TC-12 and TC-15 are checked on the reply
-  alone.
-- TC-11, TC-12 and TC-16 depend on the live Sparx site (redirect behavior, slugs, the
-  `SetAppearance` enumeration). The guide is republished in place, so they can start failing
-  with no change to the skill.
-- Not checkable: stopping when a ribbon path does not lead where the guide says (needs a second
-  EA version to stage); "the verification wins when it disagrees with the UI" (cannot be forced
-  to disagree); and that a hand-written `.mts` was not created (the `file` check has no
-  "does not exist").
-- Section "Verify in EA's UI" says to reload the diagram and screenshot it but does not name
-  `ea_model.verify_diagram`, which does reload, render and return placed geometry in one call.
-- TC-21 and TC-24 assume the status list and diagram orientation have no MCP operation. If a
-  route exists, the runs pass by whichever route they take, and only the read-back and the
-  screenshot are required.
+Each finding was checked against the current skill text and server main (11 Nov 2026).
+
+- **Fixed in the skill (server 3.6.5).** `get_repository_info` keeps `ea_version` as the build number and adds `ea_release` (for example `17.1`). Section 2 now reads the version from `ea_release` and, when it is missing, asks instead of guessing; TC-04 follows.
+- **Fixed in the skill.** Section 3 now names `repository_type` (for example `SL3`) as a cross-check on the path and connection string, not a replacement, because the skill does not list its values.
+- **Fixed in the reference.** The worked example's third pass now says it is for an EA older than 17.1; on 17.1 and later `ea-mdg-model-build` builds the technology with one command and no selection file, so a session there goes to that skill. TC-22 already accepts that hand-off.
+- **Fixed in the reference.** `finding-the-guide.md` now names the route (a browser tool such as Claude in Chrome, with a script or text extraction to filter results and the sitemap) and what to do on a surface with neither: say the guide can't be reached, give the person the base URL and search terms, and ask for the page text. A `tools:` check still cannot assert the final URL, so TC-11, TC-12 and TC-15 are graded on the reply.
+- **No change: not a defect.** TC-11, TC-12 and TC-16 depend on the live Sparx site; the guide is republished in place, so they can fail with no change to the skill. That is what they are for.
+- **Partly fixed in the case.** TC-22 now asks for the file at `<output-dir>\types.mts` and checks it is absent (the `file` check now has `absent`). Stopping when a ribbon path misleads, and "the verification wins", cannot be forced to occur and stay uncovered.
+- **Fixed in the skill.** "Verify in EA's UI" now names `ea_diagram` `verify_diagram` (reload, render and placed geometry in one call). The finding called it `ea_model.verify_diagram`; the operation is on `ea_diagram`.
+- **No change: not a defect.** TC-21 passes by whichever route the run finds for the status list; only the read-back is required.
+- **No change: not a defect.** TC-24 and TC-25 pass by whichever route sets orientation; only the read-back and the screenshot (or the request to look) are required.

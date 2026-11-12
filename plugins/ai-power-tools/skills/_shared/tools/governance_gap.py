@@ -7,51 +7,54 @@ shapes and returns findings; applying anything to a model is the caller's job.
 
 WHY THIS EXISTS
 ---------------
-An element with no stereotype lands in no entity table. Once the database is
-restricted to logical business objects it is simply absent, and
-nothing tells the customer. Measured on the reference model, three Components
-carry the complete governance tag set - criticality Business-Critical,
-regulatoryScope GLBA, both owners, data classification - and no stereotype at
-all. A Business-Critical, GLBA-scoped platform that no report can see.
+An element that the inclusion choice leaves without a table is simply absent
+from the reporting database, and nothing tells the customer. On the reference
+model, three Components carry the complete governance tag set - criticality
+Business-Critical, regulatoryScope GLBA, both owners, data classification - and
+no stereotype at all. Under "only what my MDG defines" that is a
+Business-Critical, GLBA-scoped platform that no report can see.
 
-So the build asks BEFORE it generates, not after.
+So the build asks BEFORE it generates, not after. "Ungoverned" is defined by the
+saved inclusion choice, not by an empty stereotype: an unstereotyped element is
+ungoverned under option 1 but has a table under option 2, and an ad hoc
+stereotype the choice excludes leaves its element ungoverned too.
 
 WHAT THIS MODULE REFUSES TO DO
 ------------------------------
 Rank candidates it cannot tell apart. On the reference technology (WBA 1.1.1) ten of
-the fifteen element stereotypes declare an identical six-tag set, so for an element
-carrying exactly those six tags, tag overlap scores three of the seven Component
-stereotypes at exactly 1.0. Returning the
-alphabetically-first one dressed as a recommendation would be a guess wearing a
-number.
+the fifteen element stereotypes declare an identical six-tag set, so tag overlap
+cannot separate them. Returning the alphabetically-first one dressed as a
+recommendation would be a guess wearing a number.
 
-Three outcomes, kept distinct on purpose:
+Four outcomes, kept distinct on purpose:
 
-  NO_CANDIDATE  the technology extends no stereotype for this metaclass, so
-                there is nothing to apply. Ten Requirements on the reference model.
-                The answer is to extend the technology - which is R1's job - or
-                to accept the exclusion. Never a suggestion.
-  RANKED        one candidate is backed by evidence the others lack, and the
-                evidence is stated with it.
-  UNRANKABLE    candidates exist and nothing distinguishes them. List them,
-                refuse to order them, let the customer choose.
+  NO_CANDIDATE      the technology extends no stereotype for this metaclass, so
+                    there is nothing to apply. The answer is to extend the
+                    technology - which is R1's job - or to accept the exclusion.
+                    Never a suggestion.
+  RANKED            one candidate is backed by package evidence the others lack,
+                    and the evidence is stated with it.
+  SINGLE_CANDIDATE  exactly one stereotype could be applied and nothing in the
+                    repository confirms it: "one candidate, not confirmed". It
+                    is named, never ranked.
+  UNRANKABLE        several candidates and nothing distinguishes them, or the
+                    element carries tags that rule every candidate out. List
+                    them (if any), refuse to order them, let the customer choose.
 
 This follows the toolchain's rule for suggestions: "a CANDIDATE list, never an
 instruction."
 
-THE SIGNALS, IN THE ORDER THEY DISCRIMINATE
--------------------------------------------
+THE SIGNALS
+-----------
 1. Base metaclass. A hard filter, not a tiebreak. It eliminates every candidate
    for a Requirement and narrows a Component to seven.
-2. Package locality. What stereotype do this element's stereotyped neighbors
-   carry? This is what decided the three real cases on the reference model under
-   WBA 1.0, where three siblings in the same package were all the same stereotype.
-   Under 1.1.1 it does not: `WBAVendorSystem` declares nine tags and so scores below
-   four other Component candidates on tag fit, and `assess` ranks only a candidate
-   that leads on both signals, so those three come out UNRANKABLE.
-3. Tag signature. Weak as a discriminator because the declared sets collide, but
-   it does one useful job: an element carrying only the common tags should not
-   be offered a stereotype that declares four more it does not have.
+2. Tag fit. A VETO only: a stereotype is ruled out when the element carries a
+   tag the stereotype does not declare. It never ranks: a stereotype that
+   declares more tags than the element carries is not demoted for it.
+3. Package locality. What stereotype do this element's stereotyped neighbors
+   carry? Among the candidates the veto leaves, it is the only signal that
+   ranks. It decided the three real cases on the reference model, where three
+   siblings in the same package were all `WBAVendorSystem`.
 """
 from __future__ import annotations
 
@@ -59,17 +62,19 @@ from collections import Counter
 from dataclasses import dataclass, field
 
 from ea_census import Shape, Suggestion
+from inclusion import ALL, NOT_MODEL_CONTENT
 
-#: The three outcome classes. Conflating them is the failure mode this module
-#: exists to avoid, so they are named rather than implied by an empty list.
+#: The outcome classes. Conflating them is the failure mode this module exists
+#: to avoid, so they are named rather than implied by an empty list.
 NO_CANDIDATE = "no_candidate"
 RANKED = "ranked"
+SINGLE_CANDIDATE = "single_candidate"
 UNRANKABLE = "unrankable"
 
 
 @dataclass(frozen=True)
 class UngovernedElement:
-    """One in-scope element carrying no stereotype."""
+    """One in-scope element the inclusion choice leaves without a table."""
 
     ea_guid: str
     name: str
@@ -78,10 +83,12 @@ class UngovernedElement:
     package_path: str = ""
     tag_names: frozenset[str] = frozenset()
     populated_tags: int = 0
+    #: "" when the element carries none; else an ad hoc stereotype the choice excludes.
+    stereotype: str = ""
 
     @property
     def is_governed(self) -> bool:
-        """Carries governance data despite carrying no stereotype.
+        """Carries governance data despite having no table.
 
         This is the dangerous case and the one to lead with. An untagged,
         unstereotyped element is merely undrawn; a tagged one is data somebody
@@ -101,23 +108,63 @@ class GapFinding:
 
     @property
     def suggestion(self) -> str:
-        """The single stereotype to apply, or "" when there is not one."""
-        return self.candidates[0].stereotype if self.outcome == RANKED else ""
+        """The stereotype to offer as ranked, or "" when there is not one.
+
+        Only a RANKED finding has one, and a RANKED finding always has at least
+        one candidate (the leader, listed first).
+        """
+        return self.candidates[0].stereotype if self.outcome == RANKED and self.candidates else ""
 
 
-def find_ungoverned(element_rows, tag_rows, *,
-                    skip_metaclasses: frozenset[str] = frozenset({"Package"})
+def _stereotype_tail(text: str) -> str:
+    return text.rsplit("::", 1)[-1]
+
+
+def _has_table(stereotype: str, metaclass: str, declared: frozenset[str], inclusion: dict) -> bool:
+    """Does the build give this element a table under the inclusion choice?
+
+    Mirrors the server: the technology's own element stereotypes always have a
+    table; anything else has one only when `inclusion` admits its
+    (stereotype, metaclass) key. Names compare without case, and a bound
+    foreign stereotype is saved qualified (`BMM::Goal`) while the row carries
+    the bare name, so the part after `::` is compared.
+    """
+    observed = inclusion.get("observed_elements")
+    if stereotype:
+        if stereotype.casefold() in declared:
+            return True
+    elif metaclass in NOT_MODEL_CONTENT:
+        return False                       # diagram furniture never gets a table
+    if observed == ALL:
+        return True
+    return any(_stereotype_tail((e.get("stereotype") or "")).casefold() == stereotype.casefold()
+               and (e.get("metaclass") or "").casefold() == metaclass.casefold()
+               for e in observed or ())
+
+
+def find_ungoverned(element_rows, tag_rows, *, inclusion: dict, declared,
+                    skip_metaclasses: frozenset[str] = NOT_MODEL_CONTENT
                     ) -> list[UngovernedElement]:
-    """In-scope elements carrying no stereotype, with the tags they do carry.
+    """In-scope elements the saved inclusion choice leaves without a table.
+
+    `inclusion` is the profile's `inclusion` section (`resolve_answer(...).inclusion`):
+    option 1 is two empty lists, option 2 is `"all"` twice. `declared` is the
+    technology's element stereotype names (the keys of `declared_shapes(mdg)`).
+
+    So: under option 1 the unstereotyped elements are listed, and so is any
+    element carrying a stereotype the technology does not declare; under option
+    2 neither is; under option 3 only those the user did not include.
 
     `element_rows` are mappings with `ea_guid`, `name`, `metaclass`,
     `stereotype`, `package_id` and optionally `package_path`; `tag_rows` are
     mappings with `ea_guid`, `tag` and `value`.
 
-    Packages are skipped by default. EA stores every package twice - once in the
-    package tree and once as an object so it can sit on a diagram - and the
-    object twin is not something anybody stereotypes.
+    Diagram furniture (`Package`, `Note`, `Text`, `Boundary`) is skipped by
+    default: it is never model content and never gets a table, so listing it
+    would alarm the reader for nothing. EA also stores every package twice -
+    once in the package tree and once as an object so it can sit on a diagram.
     """
+    declared = frozenset(d.casefold() for d in declared)
     names: dict[str, set[str]] = {}
     populated: Counter = Counter()
     for r in tag_rows:
@@ -128,10 +175,11 @@ def find_ungoverned(element_rows, tag_rows, *,
 
     out = []
     for r in element_rows:
-        if (r.get("stereotype") or "").strip():
-            continue
+        stereotype = (r.get("stereotype") or "").strip()
         metaclass = (r.get("metaclass") or "").strip()
         if metaclass in skip_metaclasses:
+            continue
+        if _has_table(stereotype, metaclass, declared, inclusion):
             continue
         guid = r["ea_guid"]
         out.append(UngovernedElement(
@@ -142,6 +190,7 @@ def find_ungoverned(element_rows, tag_rows, *,
             package_path=(r.get("package_path") or ""),
             tag_names=frozenset(names.get(guid, ())),
             populated_tags=populated.get(guid, 0),
+            stereotype=stereotype,
         ))
     # Governed first - they are the ones that cost something - then by name so
     # two runs over one repository produce identical output.
@@ -155,7 +204,7 @@ def locality_votes(element_rows, *, package_id: int) -> Counter:
     The signal that actually decided the real cases on the reference model. It
     holds only where a repository is organized by type; a flat or
     domain-organized one will produce few votes, which correctly yields an
-    UNRANKABLE outcome rather than a weak suggestion.
+    UNRANKABLE or SINGLE_CANDIDATE outcome rather than a weak suggestion.
     """
     votes: Counter = Counter()
     for r in element_rows:
@@ -169,7 +218,7 @@ def locality_votes(element_rows, *, package_id: int) -> Counter:
 
 def assess(ungoverned: list[UngovernedElement], declared: dict[str, Shape],
            element_rows, *, min_votes: int = 1) -> list[GapFinding]:
-    """Classify each ungoverned element into one of the three outcomes."""
+    """Classify each ungoverned element into one of the four outcomes."""
     by_package: dict[int, Counter] = {}
     findings = []
 
@@ -189,46 +238,50 @@ def assess(ungoverned: list[UngovernedElement], declared: dict[str, Shape],
             ))
             continue
 
+        # 2. Tag fit is a veto and nothing else: a stereotype is ruled out when
+        #    the element carries a tag it never declares. A stereotype that
+        #    declares more tags than the element carries stays in.
+        survivors = {n: s for n, s in cands.items() if el.tag_names <= s.tag_names}
+        if not survivors:
+            findings.append(GapFinding(
+                element=el, outcome=UNRANKABLE, candidates=[],
+                reason=(f"the element carries tagged values that none of the "
+                        f"{len(cands)} stereotype(s) extending metaclass "
+                        f"{el.metaclass} declares, so none can be offered. "
+                        f"Extend the technology, or accept the exclusion."),
+            ))
+            continue
+
+        # 3. Package locality ranks the survivors, and only when one holds it alone.
         if el.package_id not in by_package:
             by_package[el.package_id] = locality_votes(element_rows,
                                                        package_id=el.package_id)
         votes = by_package[el.package_id]
-
-        scored = []
-        for name, want in cands.items():
-            # 3. Tag signature. Only discriminates downward: an element holding
-            #    just the common tags should not be offered a stereotype that
-            #    declares four more it does not have.
-            fit = 0.0
-            if el.tag_names and want.tag_names:
-                if el.tag_names <= want.tag_names:
-                    fit = len(el.tag_names) / len(want.tag_names)
-                else:
-                    fit = -1.0        # carries tags this stereotype never declares
-            scored.append((votes.get(name, 0), fit, name, want))
-
-        best_votes = max(s[0] for s in scored)
-        best_fit = max(s[1] for s in scored)
-        # 2. Package locality decides, and only when one candidate holds it
-        #    alone. Tag fit breaks a tie underneath it.
-        leaders = [s for s in scored if s[0] == best_votes and s[1] == best_fit]
-
+        ordered = sorted(survivors.items(), key=lambda kv: (-votes.get(kv[0], 0), kv[0]))
         suggestions = [
-            Suggestion(stereotype=name, score=round(fit, 3),
+            Suggestion(stereotype=name, score=float(votes.get(name, 0)),
                        shared_tags=len(el.tag_names & want.tag_names),
                        metaclass_agrees=True,
-                       detail=_detail(v, fit, el, want))
-            for v, fit, name, want in sorted(scored, key=lambda s: (-s[0], -s[1], s[2]))
-            if fit >= 0.0
+                       detail=_detail(votes.get(name, 0), el, want))
+            for name, want in ordered
         ]
+        best_votes = votes.get(ordered[0][0], 0)
+        leaders = [n for n, _ in ordered if votes.get(n, 0) == best_votes]
 
         if len(leaders) == 1 and best_votes >= min_votes:
-            v, fit, name, want = leaders[0]
             findings.append(GapFinding(
                 element=el, outcome=RANKED, candidates=suggestions,
-                reason=(f"{v} stereotyped element(s) in the same package carry "
-                        f"{name!r}, and no other candidate for metaclass "
+                reason=(f"{best_votes} stereotyped element(s) in the same package carry "
+                        f"{leaders[0]!r}, and no other candidate for metaclass "
                         f"{el.metaclass} is backed by that evidence."),
+            ))
+        elif len(survivors) == 1:
+            findings.append(GapFinding(
+                element=el, outcome=SINGLE_CANDIDATE, candidates=suggestions,
+                reason=(f"one candidate, not confirmed: {ordered[0][0]!r} is the only "
+                        f"stereotype extending metaclass {el.metaclass} that the "
+                        f"element's tags allow, and nothing in its package confirms "
+                        f"it. Apply it if it fits, or accept the exclusion."),
             ))
         else:
             findings.append(GapFinding(
@@ -243,7 +296,7 @@ def assess(ungoverned: list[UngovernedElement], declared: dict[str, Shape],
     return findings
 
 
-def _detail(votes: int, fit: float, el: UngovernedElement, want: Shape) -> str:
+def _detail(votes: int, el: UngovernedElement, want: Shape) -> str:
     bits = [f"extends {el.metaclass}"]
     if votes:
         bits.append(f"{votes} sibling(s) in the same package carry it")
@@ -260,21 +313,27 @@ def summarize(findings: list[GapFinding]) -> dict[str, int]:
         "governed": sum(1 for f in findings if f.element.is_governed),
         NO_CANDIDATE: counts.get(NO_CANDIDATE, 0),
         RANKED: counts.get(RANKED, 0),
+        SINGLE_CANDIDATE: counts.get(SINGLE_CANDIDATE, 0),
         UNRANKABLE: counts.get(UNRANKABLE, 0),
     }
 
 
 def format_report(findings: list[GapFinding], *, limit_candidates: int = 5) -> str:
-    """The text a customer reads BEFORE the database is generated."""
+    """The text a customer reads BEFORE the database is generated.
+
+    `findings` must come from `find_ungoverned` with the saved inclusion choice,
+    so every element listed is one the choice leaves without a table.
+    """
     if not findings:
-        return ("No ungoverned elements. Every in-scope element carries a "
-                "stereotype and will appear in the reporting database.")
+        return ("No ungoverned elements. Every in-scope element has a table under "
+                "the inclusion choice and will appear in the reporting database.")
     s = summarize(findings)
     lines = [
-        f"{s['total']} element(s) carry no stereotype and will NOT appear in the "
-        f"reporting database.",
+        f"{s['total']} element(s) have no table under the inclusion choice and will "
+        f"NOT appear in the reporting database.",
         f"  {s['governed']} of them carry governance tagged values already.",
-        f"  {s[RANKED]} have a suggested stereotype, {s[UNRANKABLE]} need a choice, "
+        f"  {s[RANKED]} have a suggested stereotype, {s[SINGLE_CANDIDATE]} have one "
+        f"candidate not confirmed, {s[UNRANKABLE]} need a choice, "
         f"{s[NO_CANDIDATE]} cannot be stereotyped by this technology.",
         "",
     ]
@@ -282,16 +341,21 @@ def format_report(findings: list[GapFinding], *, limit_candidates: int = 5) -> s
         el = f.element
         flag = "  [GOVERNED] " if el.is_governed else "  "
         lines.append(f"{flag}{el.name}  ({el.metaclass})")
+        if el.stereotype:
+            lines.append(f"      carries : {el.stereotype} (not in the technology; "
+                         f"the inclusion choice leaves it out)")
         if el.package_path:
             lines.append(f"      package : {el.package_path}")
         if el.tag_names:
             lines.append(f"      tags    : {', '.join(sorted(el.tag_names))}")
         if f.outcome == RANKED:
             lines.append(f"      SUGGEST : {f.suggestion}")
+        elif f.outcome == SINGLE_CANDIDATE:
+            lines.append(f"      ONE CANDIDATE, NOT CONFIRMED : {f.candidates[0].stereotype}")
         elif f.outcome == UNRANKABLE:
             lines.append("      CHOOSE  : "
-                         + ", ".join(c.stereotype
-                                     for c in f.candidates[:limit_candidates]))
+                         + (", ".join(c.stereotype for c in f.candidates[:limit_candidates])
+                            or "(no stereotype fits its tags)"))
         else:
             lines.append("      NO STEREOTYPE AVAILABLE")
         lines.append(f"      why     : {f.reason}")

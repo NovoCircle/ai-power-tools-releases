@@ -1,0 +1,1449 @@
+# UML 2.5.1 Conformance Ruleset
+# Language:     UML 2.5.1 (OMG formal/17-12-05), as Sparx Enterprise Architect stores it: EA's own element and connector types, no technology
+# Enforced by:  AI Power Tools for Sparx EA - validate_model tool (the engine with rules by EA type and where-it-sits rules)
+# Generated from the language skill's rules; do not edit by hand.
+#
+# UML IS NOT AN MDG TECHNOLOGY IN EA. A class, a use case or a port is told apart by EA's own element type (t_object.Object_Type) and a
+# generalization or a control flow by its connector type (t_connector.Connector_Type); almost none of them carries a stereotype. So the
+# rules here select by `types:` and `connector_types:`, and name an element at a connector's end, in a table or in a container as
+# `type:<Object_Type>`. The type names are EA's, measured on EA 17.1 build 1716: `StateNode`, `ActionPin`,
+# `Sequence` (a lifeline), `Realisation` (British spelling), `StateFlow` (a transition), `UseCase` (an actor-to-use-case association).
+#
+# KEYWORD STEREOTYPES ARE PLAIN TEXT. EA applies no profile to the UML keywords: include, extend, import, access, merge, substitute, call,
+# send, create, instantiate are free strings on a connector (include and extend with SubType Includes and Extends). The Standard Profile
+# stereotypes of EA's StandardProfileL2 are capitalized (Call, Send, Create, Instantiate); the rules name both spellings.
+#
+# WHAT THE VALIDATOR CANNOT SEE. It reads an element's type, stereotype, tags, connector counts and containers, and a connector's type,
+# stereotype and two ends. It cannot read attributes, operations, parameters, multiplicities, the kind of a pseudostate or action (a stored
+# number), the operator of a combined fragment, generalization chains, what a part or port is typed by, names, or numeric values. Most of
+# UML's rules are about those, so only 24 of the language skill's rules are in this file; the
+# others are review guidance.
+#
+# ENDPOINT LISTS. The engine's endpoint condition takes a list for each end. A rule that bans a few types lists every other EA element type
+# the catalog found; an EA type added later passes.
+#
+# Sources:
+#   [S1] OMG, Unified Modeling Language (UML) Version 2.5.1, formal/17-12-05  https://www.omg.org/spec/UML/2.5.1
+#   [S2] Sparx Systems, Enterprise Architect 17.1 (the element and connector types are EA's own; the Standard Profile is StandardProfileL2)
+
+meta:
+  version: "0.1"
+  language: uml-2
+  organization: "(your organization)"
+  mdg_family: UML
+  description: >
+    Conformance rules for UML 2.5.1 models built with Sparx Enterprise Architect's native UML types: what a generalization, a use case
+    connector, an information flow, a communication path and the keyword usages may join, that a control flow and an object flow keep to
+    control and object nodes, the edges of a decision and a merge node, where a port, a region and a node's children may sit, and
+    which parts and ports a connector joins. Each rule names the rules.md id it implements.
+  severity_levels:
+    error: A requirement of the standard (rules.md strength must)
+    warning: Guidance of the standard (rules.md strength should)
+    info: Advisory note; not a conformance violation
+
+tables:
+  uml-2-keyword-relationships:
+    source: "OMG UML 2.5.1 (formal/17-12-05): Include (18.2.4) and Extend (18.2.2), PackageImport (7.8.11), PackageMerge (12.4.6), Substitution (9.9.22), as listed in the language skill's relationships.allowed; written in EA's element types (type:<Object_Type>); a substitution joins two classifiers, so EA's own types that are not UML classifiers (Boundary, Entity, Requirement) are left out of the substitute cells"
+    connectors:
+      i: include
+      x: extend
+      m: import
+      a: access
+      g: merge
+      s: substitute
+    cells:
+      "type:Action": {}
+      "type:ActionPin": {}
+      "type:Activity": {"type:Activity": "s", "type:Actor": "s", "type:Artifact": "s", "type:Association": "s", "type:Class": "s", "type:Collaboration": "s", "type:Component": "s", "type:DataType": "s", "type:Device": "s", "type:Enumeration": "s", "type:ExecutionEnvironment": "s", "type:InformationItem": "s", "type:Interaction": "s", "type:Interface": "s", "type:Node": "s", "type:Package": "ma", "type:PrimitiveType": "s", "type:Signal": "s", "type:StateMachine": "s", "type:UseCase": "s"}
+      "type:ActivityParameter": {}
+      "type:ActivityPartition": {}
+      "type:Actor": {"type:Activity": "s", "type:Actor": "s", "type:Artifact": "s", "type:Association": "s", "type:Class": "s", "type:Collaboration": "s", "type:Component": "s", "type:DataType": "s", "type:Device": "s", "type:Enumeration": "s", "type:ExecutionEnvironment": "s", "type:InformationItem": "s", "type:Interaction": "s", "type:Interface": "s", "type:Node": "s", "type:Package": "ma", "type:PrimitiveType": "s", "type:Signal": "s", "type:StateMachine": "s", "type:UseCase": "s"}
+      "type:Artifact": {"type:Activity": "s", "type:Actor": "s", "type:Artifact": "s", "type:Association": "s", "type:Class": "s", "type:Collaboration": "s", "type:Component": "s", "type:DataType": "s", "type:Device": "s", "type:Enumeration": "s", "type:ExecutionEnvironment": "s", "type:InformationItem": "s", "type:Interaction": "s", "type:Interface": "s", "type:Node": "s", "type:Package": "ma", "type:PrimitiveType": "s", "type:Signal": "s", "type:StateMachine": "s", "type:UseCase": "s"}
+      "type:Association": {"type:Activity": "s", "type:Actor": "s", "type:Artifact": "s", "type:Association": "s", "type:Class": "s", "type:Collaboration": "s", "type:Component": "s", "type:DataType": "s", "type:Device": "s", "type:Enumeration": "s", "type:ExecutionEnvironment": "s", "type:InformationItem": "s", "type:Interaction": "s", "type:Interface": "s", "type:Node": "s", "type:PrimitiveType": "s", "type:Signal": "s", "type:StateMachine": "s", "type:UseCase": "s"}
+      "type:Boundary": {}
+      "type:CentralBufferNode": {}
+      "type:Change": {}
+      "type:Class": {"type:Activity": "s", "type:Actor": "s", "type:Artifact": "s", "type:Association": "s", "type:Class": "s", "type:Collaboration": "s", "type:Component": "s", "type:DataType": "s", "type:Device": "s", "type:Enumeration": "s", "type:ExecutionEnvironment": "s", "type:InformationItem": "s", "type:Interaction": "s", "type:Interface": "s", "type:Node": "s", "type:Package": "ma", "type:PrimitiveType": "s", "type:Signal": "s", "type:StateMachine": "s", "type:UseCase": "s"}
+      "type:Collaboration": {"type:Activity": "s", "type:Actor": "s", "type:Artifact": "s", "type:Association": "s", "type:Class": "s", "type:Collaboration": "s", "type:Component": "s", "type:DataType": "s", "type:Device": "s", "type:Enumeration": "s", "type:ExecutionEnvironment": "s", "type:InformationItem": "s", "type:Interaction": "s", "type:Interface": "s", "type:Node": "s", "type:Package": "ma", "type:PrimitiveType": "s", "type:Signal": "s", "type:StateMachine": "s", "type:UseCase": "s"}
+      "type:CollaborationOccurrence": {}
+      "type:Component": {"type:Activity": "s", "type:Actor": "s", "type:Artifact": "s", "type:Association": "s", "type:Class": "s", "type:Collaboration": "s", "type:Component": "s", "type:DataType": "s", "type:Device": "s", "type:Enumeration": "s", "type:ExecutionEnvironment": "s", "type:InformationItem": "s", "type:Interaction": "s", "type:Interface": "s", "type:Node": "s", "type:Package": "ma", "type:PrimitiveType": "s", "type:Signal": "s", "type:StateMachine": "s", "type:UseCase": "s"}
+      "type:ConditionalNode": {}
+      "type:Constraint": {}
+      "type:DataType": {"type:Activity": "s", "type:Actor": "s", "type:Artifact": "s", "type:Association": "s", "type:Class": "s", "type:Collaboration": "s", "type:Component": "s", "type:DataType": "s", "type:Device": "s", "type:Enumeration": "s", "type:ExecutionEnvironment": "s", "type:InformationItem": "s", "type:Interaction": "s", "type:Interface": "s", "type:Node": "s", "type:Package": "ma", "type:PrimitiveType": "s", "type:Signal": "s", "type:StateMachine": "s", "type:UseCase": "s"}
+      "type:Decision": {}
+      "type:DeploymentSpecification": {}
+      "type:Device": {"type:Activity": "s", "type:Actor": "s", "type:Artifact": "s", "type:Association": "s", "type:Class": "s", "type:Collaboration": "s", "type:Component": "s", "type:DataType": "s", "type:Device": "s", "type:Enumeration": "s", "type:ExecutionEnvironment": "s", "type:InformationItem": "s", "type:Interaction": "s", "type:Interface": "s", "type:Node": "s", "type:Package": "ma", "type:PrimitiveType": "s", "type:Signal": "s", "type:StateMachine": "s", "type:UseCase": "s"}
+      "type:DiagramFrame": {}
+      "type:Entity": {}
+      "type:EntryPoint": {}
+      "type:Enumeration": {"type:Activity": "s", "type:Actor": "s", "type:Artifact": "s", "type:Association": "s", "type:Class": "s", "type:Collaboration": "s", "type:Component": "s", "type:DataType": "s", "type:Device": "s", "type:Enumeration": "s", "type:ExecutionEnvironment": "s", "type:InformationItem": "s", "type:Interaction": "s", "type:Interface": "s", "type:Node": "s", "type:Package": "ma", "type:PrimitiveType": "s", "type:Signal": "s", "type:StateMachine": "s", "type:UseCase": "s"}
+      "type:Event": {}
+      "type:ExceptionHandler": {}
+      "type:ExecutionEnvironment": {"type:Activity": "s", "type:Actor": "s", "type:Artifact": "s", "type:Association": "s", "type:Class": "s", "type:Collaboration": "s", "type:Component": "s", "type:DataType": "s", "type:Device": "s", "type:Enumeration": "s", "type:ExecutionEnvironment": "s", "type:InformationItem": "s", "type:Interaction": "s", "type:Interface": "s", "type:Node": "s", "type:Package": "ma", "type:PrimitiveType": "s", "type:Signal": "s", "type:StateMachine": "s", "type:UseCase": "s"}
+      "type:ExitPoint": {}
+      "type:ExpansionNode": {}
+      "type:ExpansionRegion": {}
+      "type:Feature": {}
+      "type:GUIElement": {}
+      "type:InformationItem": {"type:Activity": "s", "type:Actor": "s", "type:Artifact": "s", "type:Association": "s", "type:Class": "s", "type:Collaboration": "s", "type:Component": "s", "type:DataType": "s", "type:Device": "s", "type:Enumeration": "s", "type:ExecutionEnvironment": "s", "type:InformationItem": "s", "type:Interaction": "s", "type:Interface": "s", "type:Node": "s", "type:Package": "ma", "type:PrimitiveType": "s", "type:Signal": "s", "type:StateMachine": "s", "type:UseCase": "s"}
+      "type:Interaction": {"type:Activity": "s", "type:Actor": "s", "type:Artifact": "s", "type:Association": "s", "type:Class": "s", "type:Collaboration": "s", "type:Component": "s", "type:DataType": "s", "type:Device": "s", "type:Enumeration": "s", "type:ExecutionEnvironment": "s", "type:InformationItem": "s", "type:Interaction": "s", "type:Interface": "s", "type:Node": "s", "type:Package": "ma", "type:PrimitiveType": "s", "type:Signal": "s", "type:StateMachine": "s", "type:UseCase": "s"}
+      "type:InteractionFragment": {}
+      "type:InteractionOccurrence": {}
+      "type:InteractionState": {}
+      "type:Interface": {"type:Activity": "s", "type:Actor": "s", "type:Artifact": "s", "type:Association": "s", "type:Class": "s", "type:Collaboration": "s", "type:Component": "s", "type:DataType": "s", "type:Device": "s", "type:Enumeration": "s", "type:ExecutionEnvironment": "s", "type:InformationItem": "s", "type:Interaction": "s", "type:Interface": "s", "type:Node": "s", "type:Package": "ma", "type:PrimitiveType": "s", "type:Signal": "s", "type:StateMachine": "s", "type:UseCase": "s"}
+      "type:InterruptibleActivityRegion": {}
+      "type:Issue": {}
+      "type:LoopNode": {}
+      "type:MergeNode": {}
+      "type:MessageEndpoint": {}
+      "type:Node": {"type:Activity": "s", "type:Actor": "s", "type:Artifact": "s", "type:Association": "s", "type:Class": "s", "type:Collaboration": "s", "type:Component": "s", "type:DataType": "s", "type:Device": "s", "type:Enumeration": "s", "type:ExecutionEnvironment": "s", "type:InformationItem": "s", "type:Interaction": "s", "type:Interface": "s", "type:Node": "s", "type:Package": "ma", "type:PrimitiveType": "s", "type:Signal": "s", "type:StateMachine": "s", "type:UseCase": "s"}
+      "type:Note": {}
+      "type:Object": {}
+      "type:ObjectNode": {}
+      "type:Package": {"type:Package": "mag"}
+      "type:Part": {}
+      "type:Port": {}
+      "type:PrimitiveType": {"type:Activity": "s", "type:Actor": "s", "type:Artifact": "s", "type:Association": "s", "type:Class": "s", "type:Collaboration": "s", "type:Component": "s", "type:DataType": "s", "type:Device": "s", "type:Enumeration": "s", "type:ExecutionEnvironment": "s", "type:InformationItem": "s", "type:Interaction": "s", "type:Interface": "s", "type:Node": "s", "type:Package": "ma", "type:PrimitiveType": "s", "type:Signal": "s", "type:StateMachine": "s", "type:UseCase": "s"}
+      "type:ProvidedInterface": {}
+      "type:Region": {"type:Package": "ma"}
+      "type:Report": {}
+      "type:RequiredInterface": {}
+      "type:Requirement": {}
+      "type:Risk": {}
+      "type:Screen": {}
+      "type:Sequence": {}
+      "type:Signal": {"type:Activity": "s", "type:Actor": "s", "type:Artifact": "s", "type:Association": "s", "type:Class": "s", "type:Collaboration": "s", "type:Component": "s", "type:DataType": "s", "type:Device": "s", "type:Enumeration": "s", "type:ExecutionEnvironment": "s", "type:InformationItem": "s", "type:Interaction": "s", "type:Interface": "s", "type:Node": "s", "type:Package": "ma", "type:PrimitiveType": "s", "type:Signal": "s", "type:StateMachine": "s", "type:UseCase": "s"}
+      "type:State": {"type:Package": "ma"}
+      "type:StateMachine": {"type:Activity": "s", "type:Actor": "s", "type:Artifact": "s", "type:Association": "s", "type:Class": "s", "type:Collaboration": "s", "type:Component": "s", "type:DataType": "s", "type:Device": "s", "type:Enumeration": "s", "type:ExecutionEnvironment": "s", "type:InformationItem": "s", "type:Interaction": "s", "type:Interface": "s", "type:Node": "s", "type:Package": "ma", "type:PrimitiveType": "s", "type:Signal": "s", "type:StateMachine": "s", "type:UseCase": "s"}
+      "type:StateNode": {}
+      "type:StructuredActivityNode": {}
+      "type:Synchronization": {}
+      "type:Task": {}
+      "type:Test": {}
+      "type:Text": {}
+      "type:TimeLine": {}
+      "type:Trigger": {}
+      "type:UMLDiagram": {}
+      "type:UseCase": {"type:Activity": "s", "type:Actor": "s", "type:Artifact": "s", "type:Association": "s", "type:Class": "s", "type:Collaboration": "s", "type:Component": "s", "type:DataType": "s", "type:Device": "s", "type:Enumeration": "s", "type:ExecutionEnvironment": "s", "type:InformationItem": "s", "type:Interaction": "s", "type:Interface": "s", "type:Node": "s", "type:Package": "ma", "type:PrimitiveType": "s", "type:Signal": "s", "type:StateMachine": "s", "type:UseCase": "ixs"}
+
+rules:
+  - id: UML2-CLS-002
+    name: A generalization joins two classifiers
+    implements: UML-CLS-002
+    description: A Generalization connector joins a specific classifier (the source) to a general classifier (the target);
+      a note, a package, a decision or a text label is not a classifier. EA stores a classifier as a Class, Interface, Component,
+      Node, Device, ExecutionEnvironment, Artifact, Actor, UseCase, Collaboration, DataType, PrimitiveType, Enumeration, Signal,
+      Activity, StateMachine, Interaction, InformationItem, Association, Boundary, Entity or Requirement element; both ends
+      must be one of these. [OMG UML 2.5.1 (formal/17-12-05) 9.9.4.8 Constraints]
+    category: classification
+    severity: error
+    demo_trigger: true
+    coverage: partial
+    not_checked: 'That the two classifiers are of a valid pair (the standard says a classifier may specialize only classifiers
+      of a valid type) is not checked: only that both ends are classifiers.'
+    selector:
+      type: connector
+      connector_types:
+      - Generalization
+    condition:
+      type: connector_endpoint_stereotype
+      source_must_be_one_of:
+      - type:Class
+      - type:Interface
+      - type:Component
+      - type:Node
+      - type:Device
+      - type:ExecutionEnvironment
+      - type:Artifact
+      - type:Actor
+      - type:UseCase
+      - type:Collaboration
+      - type:DataType
+      - type:PrimitiveType
+      - type:Enumeration
+      - type:Signal
+      - type:Activity
+      - type:StateMachine
+      - type:Interaction
+      - type:InformationItem
+      - type:Association
+      - type:Boundary
+      - type:Entity
+      - type:Requirement
+      target_must_be_one_of:
+      - type:Class
+      - type:Interface
+      - type:Component
+      - type:Node
+      - type:Device
+      - type:ExecutionEnvironment
+      - type:Artifact
+      - type:Actor
+      - type:UseCase
+      - type:Collaboration
+      - type:DataType
+      - type:PrimitiveType
+      - type:Enumeration
+      - type:Signal
+      - type:Activity
+      - type:StateMachine
+      - type:Interaction
+      - type:InformationItem
+      - type:Association
+      - type:Boundary
+      - type:Entity
+      - type:Requirement
+    remediation:
+      short: Draw the generalization between two classifiers.
+      auto_fixable: false
+
+  - id: UML2-UC-001
+    name: A use case connector joins an actor, use case, component or class
+    implements: UML-UC-001
+    description: In EA the association between an actor and a use case is a connector of type UseCase (an include or extend
+      is the same type with a stereotype). An actor may be associated only with use cases, components and classes, so both
+      ends of a UseCase connector must be an Actor, UseCase, Component or Class. [OMG UML 2.5.1 (formal/17-12-05) 18.2.1.4
+      Constraints]
+    category: usecase
+    severity: error
+    demo_trigger: false
+    coverage: partial
+    not_checked: Plain Association connectors that have an actor at one end are not checked (a positive end list cannot say
+      'if one end is an Actor, the other is ...'); that the association is binary is not stored.
+    selector:
+      type: connector
+      connector_types:
+      - UseCase
+    condition:
+      type: connector_endpoint_stereotype
+      source_must_be_one_of:
+      - type:Actor
+      - type:UseCase
+      - type:Component
+      - type:Class
+      target_must_be_one_of:
+      - type:Actor
+      - type:UseCase
+      - type:Component
+      - type:Class
+    remediation:
+      short: Join the actor to a use case, component or class.
+      auto_fixable: false
+
+  - id: UML2-PKG-001
+    name: An extension joins a stereotype class to a metaclass class
+    implements: UML-PKG-001
+    description: An Extension runs from the stereotype to the metaclass it extends; the end the extension does not own is
+      typed by a class. In EA a stereotype and a metaclass are Class elements (the stereotype carries the stereotype 'stereotype'),
+      so both ends of an Extension connector must be Class elements. [OMG UML 2.5.1 (formal/17-12-05) 12.4.1.7 Constraints]
+    category: profile
+    severity: error
+    demo_trigger: false
+    coverage: partial
+    not_checked: That the source is a stereotype and the target a metaclass is not checked (both are plain Class elements
+      to the validator).
+    selector:
+      type: connector
+      connector_types:
+      - Extension
+    condition:
+      type: connector_endpoint_stereotype
+      source_must_be_one_of:
+      - type:Class
+      target_must_be_one_of:
+      - type:Class
+    remediation:
+      short: Draw the extension from a stereotype class to a metaclass class.
+      auto_fixable: false
+
+  - id: UML2-STD-003
+    name: A call usage joins the classes that contain operations
+    implements: UML-STD-003
+    description: 'A Call usage has an operation as client and an operation as supplier, or the classes that contain them.
+      EA connects elements, not operations, so the connector joins classifiers that own operations: a Class, Interface, Component,
+      DataType, Node, Device, ExecutionEnvironment, Boundary or Entity. The stereotype is stored as ''call'' (plain string)
+      or ''Call'' (StandardProfileL2). [OMG UML 2.5.1 (formal/17-12-05) 22.3]'
+    category: standard-profile
+    severity: error
+    demo_trigger: false
+    coverage: partial
+    not_checked: 'That the operations themselves are the ends cannot be seen: EA connectors end on elements.'
+    selector:
+      type: connector
+      connector_stereotypes:
+      - call
+      - Call
+    condition:
+      type: connector_endpoint_stereotype
+      source_must_be_one_of:
+      - type:Class
+      - type:Interface
+      - type:Component
+      - type:DataType
+      - type:Node
+      - type:Device
+      - type:ExecutionEnvironment
+      - type:Boundary
+      - type:Entity
+      target_must_be_one_of:
+      - type:Class
+      - type:Interface
+      - type:Component
+      - type:DataType
+      - type:Node
+      - type:Device
+      - type:ExecutionEnvironment
+      - type:Boundary
+      - type:Entity
+    remediation:
+      short: Join the classes (or classifiers) that own the calling and the called operation.
+      auto_fixable: false
+
+  - id: UML2-STD-004
+    name: A send usage ends at a signal
+    implements: UML-STD-004
+    description: A Send usage has an operation as client and a signal as supplier. EA connects the class that owns the sending
+      operation to the Signal element. The stereotype is stored as 'send' (plain string) or 'Send' (StandardProfileL2). [OMG
+      UML 2.5.1 (formal/17-12-05) 22.3]
+    category: standard-profile
+    severity: error
+    demo_trigger: false
+    coverage: partial
+    not_checked: 'That the client is an operation is not seen: EA connectors end on the owning class.'
+    selector:
+      type: connector
+      connector_stereotypes:
+      - send
+      - Send
+    condition:
+      type: connector_endpoint_stereotype
+      source_must_be_one_of:
+      - type:Class
+      - type:Interface
+      - type:Component
+      - type:DataType
+      - type:Node
+      - type:Device
+      - type:ExecutionEnvironment
+      - type:Boundary
+      - type:Entity
+      target_must_be_one_of:
+      - type:Signal
+    remediation:
+      short: End the send at a Signal element.
+      auto_fixable: false
+
+  - id: UML2-STD-005
+    name: A create usage joins two classifiers
+    implements: UML-STD-005
+    description: A Create usage has a classifier as client and the classifier it creates as supplier. The stereotype is stored
+      as 'create' (plain string) or 'Create' (StandardProfileL2). [OMG UML 2.5.1 (formal/17-12-05) 22.3]
+    category: standard-profile
+    severity: error
+    demo_trigger: false
+    coverage: full
+    selector:
+      type: connector
+      connector_stereotypes:
+      - create
+      - Create
+    condition:
+      type: connector_endpoint_stereotype
+      source_must_be_one_of:
+      - type:Class
+      - type:Interface
+      - type:Component
+      - type:Node
+      - type:Device
+      - type:ExecutionEnvironment
+      - type:Artifact
+      - type:Actor
+      - type:UseCase
+      - type:Collaboration
+      - type:DataType
+      - type:PrimitiveType
+      - type:Enumeration
+      - type:Signal
+      - type:Activity
+      - type:StateMachine
+      - type:Interaction
+      - type:InformationItem
+      - type:Association
+      - type:Boundary
+      - type:Entity
+      - type:Requirement
+      target_must_be_one_of:
+      - type:Class
+      - type:Interface
+      - type:Component
+      - type:Node
+      - type:Device
+      - type:ExecutionEnvironment
+      - type:Artifact
+      - type:Actor
+      - type:UseCase
+      - type:Collaboration
+      - type:DataType
+      - type:PrimitiveType
+      - type:Enumeration
+      - type:Signal
+      - type:Activity
+      - type:StateMachine
+      - type:Interaction
+      - type:InformationItem
+      - type:Association
+      - type:Boundary
+      - type:Entity
+      - type:Requirement
+    remediation:
+      short: Join the creating classifier to the classifier it creates.
+      auto_fixable: false
+
+  - id: UML2-STD-006
+    name: An instantiate usage joins two classifiers
+    implements: UML-STD-006
+    description: 'An Instantiate usage is between classifiers: operations on the client create instances of the supplier.
+      The stereotype is stored as ''instantiate'' (plain string) or ''Instantiate'' (StandardProfileL2). [OMG UML 2.5.1 (formal/17-12-05)
+      22.3]'
+    category: standard-profile
+    severity: error
+    demo_trigger: false
+    coverage: full
+    selector:
+      type: connector
+      connector_stereotypes:
+      - instantiate
+      - Instantiate
+    condition:
+      type: connector_endpoint_stereotype
+      source_must_be_one_of:
+      - type:Class
+      - type:Interface
+      - type:Component
+      - type:Node
+      - type:Device
+      - type:ExecutionEnvironment
+      - type:Artifact
+      - type:Actor
+      - type:UseCase
+      - type:Collaboration
+      - type:DataType
+      - type:PrimitiveType
+      - type:Enumeration
+      - type:Signal
+      - type:Activity
+      - type:StateMachine
+      - type:Interaction
+      - type:InformationItem
+      - type:Association
+      - type:Boundary
+      - type:Entity
+      - type:Requirement
+      target_must_be_one_of:
+      - type:Class
+      - type:Interface
+      - type:Component
+      - type:Node
+      - type:Device
+      - type:ExecutionEnvironment
+      - type:Artifact
+      - type:Actor
+      - type:UseCase
+      - type:Collaboration
+      - type:DataType
+      - type:PrimitiveType
+      - type:Enumeration
+      - type:Signal
+      - type:Activity
+      - type:StateMachine
+      - type:Interaction
+      - type:InformationItem
+      - type:Association
+      - type:Boundary
+      - type:Entity
+      - type:Requirement
+    remediation:
+      short: Join the classifier whose operations create instances to the classifier instantiated.
+      auto_fixable: false
+
+  - id: UML2-ACT-015
+    name: A control flow has no object node at either end
+    implements: UML-ACT-015
+    also_implements:
+    - UML-ACT-050
+    description: A control flow cannot have object nodes at either end, except object nodes of control type. EA stores object
+      nodes as ObjectNode, CentralBufferNode, ActionPin, ActivityParameter and ExpansionNode elements; the rule lets a ControlFlow
+      connector end at any other EA element type. The same list settles the standard's rule that an object node's edges are
+      all object flows. [OMG UML 2.5.1 (formal/17-12-05) 15.7.9.4 Constraints]
+    category: activity
+    severity: error
+    demo_trigger: true
+    coverage: partial
+    not_checked: The exception for an object node of control type is not stored in a form the validator reads, so a control
+      pin is reported too. An Object element with the stereotype datastore (a data store node) is an Object and passes.
+    selector:
+      type: connector
+      connector_types:
+      - ControlFlow
+    condition:
+      type: connector_endpoint_stereotype
+      source_must_be_one_of:
+      - type:Action
+      - type:Activity
+      - type:ActivityPartition
+      - type:Actor
+      - type:Artifact
+      - type:Association
+      - type:Boundary
+      - type:Change
+      - type:Class
+      - type:Collaboration
+      - type:CollaborationOccurrence
+      - type:Component
+      - type:ConditionalNode
+      - type:Constraint
+      - type:DataType
+      - type:Decision
+      - type:DeploymentSpecification
+      - type:Device
+      - type:DiagramFrame
+      - type:Entity
+      - type:EntryPoint
+      - type:Enumeration
+      - type:Event
+      - type:ExceptionHandler
+      - type:ExecutionEnvironment
+      - type:ExitPoint
+      - type:ExpansionRegion
+      - type:Feature
+      - type:GUIElement
+      - type:InformationItem
+      - type:Interaction
+      - type:InteractionFragment
+      - type:InteractionOccurrence
+      - type:InteractionState
+      - type:Interface
+      - type:InterruptibleActivityRegion
+      - type:Issue
+      - type:LoopNode
+      - type:MergeNode
+      - type:MessageEndpoint
+      - type:Node
+      - type:Note
+      - type:Object
+      - type:Package
+      - type:Part
+      - type:Port
+      - type:PrimitiveType
+      - type:ProvidedInterface
+      - type:Region
+      - type:Report
+      - type:RequiredInterface
+      - type:Requirement
+      - type:Risk
+      - type:Screen
+      - type:Sequence
+      - type:Signal
+      - type:State
+      - type:StateMachine
+      - type:StateNode
+      - type:StructuredActivityNode
+      - type:Synchronization
+      - type:Task
+      - type:Test
+      - type:Text
+      - type:TimeLine
+      - type:Trigger
+      - type:UMLDiagram
+      - type:UseCase
+      target_must_be_one_of:
+      - type:Action
+      - type:Activity
+      - type:ActivityPartition
+      - type:Actor
+      - type:Artifact
+      - type:Association
+      - type:Boundary
+      - type:Change
+      - type:Class
+      - type:Collaboration
+      - type:CollaborationOccurrence
+      - type:Component
+      - type:ConditionalNode
+      - type:Constraint
+      - type:DataType
+      - type:Decision
+      - type:DeploymentSpecification
+      - type:Device
+      - type:DiagramFrame
+      - type:Entity
+      - type:EntryPoint
+      - type:Enumeration
+      - type:Event
+      - type:ExceptionHandler
+      - type:ExecutionEnvironment
+      - type:ExitPoint
+      - type:ExpansionRegion
+      - type:Feature
+      - type:GUIElement
+      - type:InformationItem
+      - type:Interaction
+      - type:InteractionFragment
+      - type:InteractionOccurrence
+      - type:InteractionState
+      - type:Interface
+      - type:InterruptibleActivityRegion
+      - type:Issue
+      - type:LoopNode
+      - type:MergeNode
+      - type:MessageEndpoint
+      - type:Node
+      - type:Note
+      - type:Object
+      - type:Package
+      - type:Part
+      - type:Port
+      - type:PrimitiveType
+      - type:ProvidedInterface
+      - type:Region
+      - type:Report
+      - type:RequiredInterface
+      - type:Requirement
+      - type:Risk
+      - type:Screen
+      - type:Sequence
+      - type:Signal
+      - type:State
+      - type:StateMachine
+      - type:StateNode
+      - type:StructuredActivityNode
+      - type:Synchronization
+      - type:Task
+      - type:Test
+      - type:Text
+      - type:TimeLine
+      - type:Trigger
+      - type:UMLDiagram
+      - type:UseCase
+    remediation:
+      short: Use an object flow at the object node, or move the control flow to the action.
+      auto_fixable: false
+
+  - id: UML2-ACT-041
+    name: An object flow has no executable node at either end
+    implements: UML-ACT-041
+    also_implements:
+    - UML-SEM-028
+    description: An object flow cannot have executable nodes at either end; actions pass objects through pins. EA stores executable
+      nodes as Action, StructuredActivityNode, ConditionalNode, LoopNode and ExpansionRegion elements. The same list settles
+      the standard's rule that all edges of an executable node are control flows. [OMG UML 2.5.1 (formal/17-12-05) 15.7.22.6
+      Constraints]
+    category: activity
+    severity: error
+    demo_trigger: true
+    coverage: full
+    selector:
+      type: connector
+      connector_types:
+      - ObjectFlow
+    condition:
+      type: connector_endpoint_stereotype
+      source_must_be_one_of:
+      - type:ActionPin
+      - type:Activity
+      - type:ActivityParameter
+      - type:ActivityPartition
+      - type:Actor
+      - type:Artifact
+      - type:Association
+      - type:Boundary
+      - type:CentralBufferNode
+      - type:Change
+      - type:Class
+      - type:Collaboration
+      - type:CollaborationOccurrence
+      - type:Component
+      - type:Constraint
+      - type:DataType
+      - type:Decision
+      - type:DeploymentSpecification
+      - type:Device
+      - type:DiagramFrame
+      - type:Entity
+      - type:EntryPoint
+      - type:Enumeration
+      - type:Event
+      - type:ExceptionHandler
+      - type:ExecutionEnvironment
+      - type:ExitPoint
+      - type:ExpansionNode
+      - type:Feature
+      - type:GUIElement
+      - type:InformationItem
+      - type:Interaction
+      - type:InteractionFragment
+      - type:InteractionOccurrence
+      - type:InteractionState
+      - type:Interface
+      - type:InterruptibleActivityRegion
+      - type:Issue
+      - type:MergeNode
+      - type:MessageEndpoint
+      - type:Node
+      - type:Note
+      - type:Object
+      - type:ObjectNode
+      - type:Package
+      - type:Part
+      - type:Port
+      - type:PrimitiveType
+      - type:ProvidedInterface
+      - type:Region
+      - type:Report
+      - type:RequiredInterface
+      - type:Requirement
+      - type:Risk
+      - type:Screen
+      - type:Sequence
+      - type:Signal
+      - type:State
+      - type:StateMachine
+      - type:StateNode
+      - type:Synchronization
+      - type:Task
+      - type:Test
+      - type:Text
+      - type:TimeLine
+      - type:Trigger
+      - type:UMLDiagram
+      - type:UseCase
+      target_must_be_one_of:
+      - type:ActionPin
+      - type:Activity
+      - type:ActivityParameter
+      - type:ActivityPartition
+      - type:Actor
+      - type:Artifact
+      - type:Association
+      - type:Boundary
+      - type:CentralBufferNode
+      - type:Change
+      - type:Class
+      - type:Collaboration
+      - type:CollaborationOccurrence
+      - type:Component
+      - type:Constraint
+      - type:DataType
+      - type:Decision
+      - type:DeploymentSpecification
+      - type:Device
+      - type:DiagramFrame
+      - type:Entity
+      - type:EntryPoint
+      - type:Enumeration
+      - type:Event
+      - type:ExceptionHandler
+      - type:ExecutionEnvironment
+      - type:ExitPoint
+      - type:ExpansionNode
+      - type:Feature
+      - type:GUIElement
+      - type:InformationItem
+      - type:Interaction
+      - type:InteractionFragment
+      - type:InteractionOccurrence
+      - type:InteractionState
+      - type:Interface
+      - type:InterruptibleActivityRegion
+      - type:Issue
+      - type:MergeNode
+      - type:MessageEndpoint
+      - type:Node
+      - type:Note
+      - type:Object
+      - type:ObjectNode
+      - type:Package
+      - type:Part
+      - type:Port
+      - type:PrimitiveType
+      - type:ProvidedInterface
+      - type:Region
+      - type:Report
+      - type:RequiredInterface
+      - type:Requirement
+      - type:Risk
+      - type:Screen
+      - type:Sequence
+      - type:Signal
+      - type:State
+      - type:StateMachine
+      - type:StateNode
+      - type:Synchronization
+      - type:Task
+      - type:Test
+      - type:Text
+      - type:TimeLine
+      - type:Trigger
+      - type:UMLDiagram
+      - type:UseCase
+    remediation:
+      short: Attach the object flow to a pin of the action, or to an object node.
+      auto_fixable: false
+
+  - id: UML2-ACT-034
+    name: An object flow does not leave an initial or final node
+    implements: UML-ACT-034
+    description: All edges leaving an initial node are control flows, and a final node has no outgoing edges. In EA initial
+      and final nodes are StateNode elements (the kind is a stored number the validator cannot read), and no StateNode in
+      an activity starts an object flow, so an ObjectFlow connector may not start at a StateNode. [OMG UML 2.5.1 (formal/17-12-05)
+      15.7.18.4 Constraints]
+    category: activity
+    severity: error
+    demo_trigger: false
+    coverage: partial
+    not_checked: 'Control flows leaving a final node, and the initial node''s own flows, are not checked: the kind of a StateNode
+      is a stored number the validator cannot read.'
+    selector:
+      type: connector
+      connector_types:
+      - ObjectFlow
+    condition:
+      type: connector_endpoint_stereotype
+      source_must_be_one_of:
+      - type:Action
+      - type:ActionPin
+      - type:Activity
+      - type:ActivityParameter
+      - type:ActivityPartition
+      - type:Actor
+      - type:Artifact
+      - type:Association
+      - type:Boundary
+      - type:CentralBufferNode
+      - type:Change
+      - type:Class
+      - type:Collaboration
+      - type:CollaborationOccurrence
+      - type:Component
+      - type:ConditionalNode
+      - type:Constraint
+      - type:DataType
+      - type:Decision
+      - type:DeploymentSpecification
+      - type:Device
+      - type:DiagramFrame
+      - type:Entity
+      - type:EntryPoint
+      - type:Enumeration
+      - type:Event
+      - type:ExceptionHandler
+      - type:ExecutionEnvironment
+      - type:ExitPoint
+      - type:ExpansionNode
+      - type:ExpansionRegion
+      - type:Feature
+      - type:GUIElement
+      - type:InformationItem
+      - type:Interaction
+      - type:InteractionFragment
+      - type:InteractionOccurrence
+      - type:InteractionState
+      - type:Interface
+      - type:InterruptibleActivityRegion
+      - type:Issue
+      - type:LoopNode
+      - type:MergeNode
+      - type:MessageEndpoint
+      - type:Node
+      - type:Note
+      - type:Object
+      - type:ObjectNode
+      - type:Package
+      - type:Part
+      - type:Port
+      - type:PrimitiveType
+      - type:ProvidedInterface
+      - type:Region
+      - type:Report
+      - type:RequiredInterface
+      - type:Requirement
+      - type:Risk
+      - type:Screen
+      - type:Sequence
+      - type:Signal
+      - type:State
+      - type:StateMachine
+      - type:StructuredActivityNode
+      - type:Synchronization
+      - type:Task
+      - type:Test
+      - type:Text
+      - type:TimeLine
+      - type:Trigger
+      - type:UMLDiagram
+      - type:UseCase
+      target_must_be_one_of:
+      - type:Action
+      - type:ActionPin
+      - type:Activity
+      - type:ActivityParameter
+      - type:ActivityPartition
+      - type:Actor
+      - type:Artifact
+      - type:Association
+      - type:Boundary
+      - type:CentralBufferNode
+      - type:Change
+      - type:Class
+      - type:Collaboration
+      - type:CollaborationOccurrence
+      - type:Component
+      - type:ConditionalNode
+      - type:Constraint
+      - type:DataType
+      - type:Decision
+      - type:DeploymentSpecification
+      - type:Device
+      - type:DiagramFrame
+      - type:Entity
+      - type:EntryPoint
+      - type:Enumeration
+      - type:Event
+      - type:ExceptionHandler
+      - type:ExecutionEnvironment
+      - type:ExitPoint
+      - type:ExpansionNode
+      - type:ExpansionRegion
+      - type:Feature
+      - type:GUIElement
+      - type:InformationItem
+      - type:Interaction
+      - type:InteractionFragment
+      - type:InteractionOccurrence
+      - type:InteractionState
+      - type:Interface
+      - type:InterruptibleActivityRegion
+      - type:Issue
+      - type:LoopNode
+      - type:MergeNode
+      - type:MessageEndpoint
+      - type:Node
+      - type:Note
+      - type:Object
+      - type:ObjectNode
+      - type:Package
+      - type:Part
+      - type:Port
+      - type:PrimitiveType
+      - type:ProvidedInterface
+      - type:Region
+      - type:Report
+      - type:RequiredInterface
+      - type:Requirement
+      - type:Risk
+      - type:Screen
+      - type:Sequence
+      - type:Signal
+      - type:State
+      - type:StateMachine
+      - type:StateNode
+      - type:StructuredActivityNode
+      - type:Synchronization
+      - type:Task
+      - type:Test
+      - type:Text
+      - type:TimeLine
+      - type:Trigger
+      - type:UMLDiagram
+      - type:UseCase
+    remediation:
+      short: Start the object flow at an object node or a pin, not at the initial or final node.
+      auto_fixable: false
+
+  - id: UML2-ACT-020a
+    name: A decision node has one or two incoming edges
+    implements: UML-ACT-020
+    description: A decision node has one or two incoming edges (control or object flows). The rule counts every connector
+      that ends at a Decision element, so a note link attached to a decision counts too. [OMG UML 2.5.1 (formal/17-12-05)
+      15.7.12.5 Constraints]
+    category: activity
+    severity: error
+    demo_trigger: false
+    coverage: partial
+    not_checked: Counts all connectors at the node, not only edges.
+    selector:
+      type: element
+      types:
+        any_of:
+        - Decision
+    condition:
+      type: connector_count
+      direction: incoming
+      min: 1
+      max: 2
+    remediation:
+      short: Give the decision one incoming flow (two when one is the decision input flow).
+      auto_fixable: false
+
+  - id: UML2-ACT-020b
+    name: A decision node has at least one outgoing edge
+    implements: UML-ACT-020
+    description: A decision node has at least one outgoing edge (control or object flow). [OMG UML 2.5.1 (formal/17-12-05)
+      15.7.12.5 Constraints]
+    category: activity
+    severity: error
+    demo_trigger: false
+    coverage: partial
+    not_checked: Counts all connectors at the node, not only edges.
+    selector:
+      type: element
+      types:
+        any_of:
+        - Decision
+    condition:
+      type: connector_count
+      direction: outgoing
+      min: 1
+    remediation:
+      short: Add at least one outgoing flow to the decision.
+      auto_fixable: false
+
+  - id: UML2-ACT-038
+    name: A merge node has exactly one outgoing edge
+    implements: UML-ACT-038
+    description: A merge node has exactly one outgoing edge (control or object flow). [OMG UML 2.5.1 (formal/17-12-05) 15.7.21.4
+      Constraints]
+    category: activity
+    severity: error
+    demo_trigger: false
+    coverage: partial
+    not_checked: Counts all connectors at the node, not only edges.
+    selector:
+      type: element
+      types:
+        any_of:
+        - MergeNode
+    condition:
+      type: connector_count
+      direction: outgoing
+      min: 1
+      max: 1
+    remediation:
+      short: Leave exactly one flow leaving the merge node.
+      auto_fixable: false
+
+  - id: UML2-SEM-035
+    name: A merge node is shown with two or more incoming edges
+    implements: UML-SEM-035
+    description: A merge node is shown with two or more incoming edges (guidance, not a constraint). [OMG UML 2.5.1 (formal/17-12-05)
+      15.3.4.3]
+    category: activity
+    severity: warning
+    demo_trigger: false
+    coverage: partial
+    not_checked: Counts all connectors at the node, not only edges.
+    selector:
+      type: element
+      types:
+        any_of:
+        - MergeNode
+    condition:
+      type: connector_count
+      direction: incoming
+      min: 2
+    remediation:
+      short: Join at least two flows at the merge node, or use no merge node.
+      auto_fixable: false
+
+  - id: UML2-STR-022
+    name: A port is owned by an encapsulated classifier
+    implements: UML-STR-022
+    description: Every port is owned by an encapsulated classifier. In EA a Port is a child of the element that owns it; the
+      owner must be a Class, Component, Node, Device, ExecutionEnvironment, Collaboration, Activity, StateMachine, Interaction
+      or Part (a part stands for its typed class). [OMG UML 2.5.1 (formal/17-12-05) 11.8.14.7 Constraints]
+    category: structure
+    severity: error
+    demo_trigger: true
+    coverage: full
+    selector:
+      type: element
+      types:
+        any_of:
+        - Port
+    condition:
+      type: contained_in
+      path:
+      - stereotype_one_of:
+        - type:Class
+        - type:Component
+        - type:Node
+        - type:Device
+        - type:ExecutionEnvironment
+        - type:Collaboration
+        - type:Part
+        - type:Activity
+        - type:StateMachine
+        - type:Interaction
+        - type:Boundary
+        - type:Entity
+    remediation:
+      short: Move the port to a class, component or other encapsulated classifier.
+      auto_fixable: false
+
+  - id: UML2-STR-015
+    name: A connector joins parts and ports
+    implements: UML-STR-015
+    description: The elements attached to a connector's ends must be roles of the owning classifier, or ports of such roles.
+      In EA a Connector, Assembly or Delegate joins Part, Port, ProvidedInterface or RequiredInterface elements; a Class or
+      Component is not a role. [OMG UML 2.5.1 (formal/17-12-05) 11.8.10.7 Constraints]
+    category: structure
+    severity: error
+    demo_trigger: false
+    coverage: partial
+    not_checked: That the parts and ports belong to the connector's owning classifier is not checked.
+    selector:
+      type: connector
+      connector_types:
+      - Connector
+      - Assembly
+      - Delegate
+    condition:
+      type: connector_endpoint_stereotype
+      source_must_be_one_of:
+      - type:Part
+      - type:Port
+      - type:ProvidedInterface
+      - type:RequiredInterface
+      target_must_be_one_of:
+      - type:Part
+      - type:Port
+      - type:ProvidedInterface
+      - type:RequiredInterface
+    remediation:
+      short: Attach the connector to parts and ports, not to classes or components.
+      auto_fixable: false
+
+  - id: UML2-SM-027
+    name: A region is owned by a state machine or a state
+    implements: UML-SM-027
+    description: A region is owned by a state machine or by a state. In EA a Region is a child of the element that owns it;
+      the owner must be a State or a StateMachine. [OMG UML 2.5.1 (formal/17-12-05) 14.5.8.6 Constraints]
+    category: state-machine
+    severity: error
+    demo_trigger: false
+    coverage: partial
+    not_checked: That a region is not owned by both a state machine and a state cannot arise in EA, which stores one parent.
+    selector:
+      type: element
+      types:
+        any_of:
+        - Region
+    condition:
+      type: contained_in
+      path:
+      - stereotype_one_of:
+        - type:State
+        - type:StateMachine
+    remediation:
+      short: Move the region into a state or a state machine.
+      auto_fixable: false
+
+  - id: UML2-DEP-004
+    name: A node's internal structure is nodes only
+    implements: UML-DEP-004
+    also_implements:
+    - UML-SEM-057
+    description: The internal structure of a node consists only of parts typed by nodes. In EA the internal structure of a
+      Node, Device or ExecutionEnvironment is the elements nested under it; the rule reports a nested Class, Component, Interface,
+      Artifact, Actor, UseCase, data type, signal, behavior, collaboration, information item or package. Deploy components
+      and artifacts with a Deployment connector instead. A Part, a Port and a nested Node, Device or ExecutionEnvironment
+      pass. [OMG UML 2.5.1 (formal/17-12-05) 19.5.10.6 Constraints]
+    category: deployment
+    severity: error
+    demo_trigger: false
+    coverage: partial
+    not_checked: That a nested part is typed by a node is not checked (typing is not stored where the validator reads).
+    selector:
+      type: element
+      types:
+        any_of:
+        - Node
+        - Device
+        - ExecutionEnvironment
+    condition:
+      type: contains_count
+      child:
+        stereotype_one_of:
+        - type:Class
+        - type:Component
+        - type:Interface
+        - type:Artifact
+        - type:Actor
+        - type:UseCase
+        - type:DataType
+        - type:PrimitiveType
+        - type:Enumeration
+        - type:Signal
+        - type:Activity
+        - type:StateMachine
+        - type:Interaction
+        - type:Collaboration
+        - type:InformationItem
+        - type:Package
+      max: 0
+    remediation:
+      short: Deploy the element with a Deployment connector instead of nesting it in the node.
+      auto_fixable: false
+
+  - id: UML2-DEP-001
+    name: A communication path joins deployment targets
+    implements: UML-DEP-001
+    description: The ends of a communication path are typed by deployment targets. In EA a CommunicationPath connector joins
+      Node, Device and ExecutionEnvironment elements, or a Part or Object that stands for one. [OMG UML 2.5.1 (formal/17-12-05)
+      19.5.2.4 Constraints]
+    category: deployment
+    severity: error
+    demo_trigger: false
+    coverage: partial
+    not_checked: That a Part or an Object is typed by a node is not checked.
+    selector:
+      type: connector
+      connector_types:
+      - CommunicationPath
+    condition:
+      type: connector_endpoint_stereotype
+      source_must_be_one_of:
+      - type:Node
+      - type:Device
+      - type:ExecutionEnvironment
+      - type:Part
+      - type:Object
+      target_must_be_one_of:
+      - type:Node
+      - type:Device
+      - type:ExecutionEnvironment
+      - type:Part
+      - type:Object
+    remediation:
+      short: Join two nodes, devices or execution environments.
+      auto_fixable: false
+
+  - id: UML2-INF-002
+    name: An information flow joins the kinds of element the standard names
+    implements: UML-INF-002
+    description: Sources and targets of an information flow are actors, nodes, use cases, artifacts, classes, components,
+      ports, properties, interfaces, packages, activity nodes, activity partitions, behaviors or instance specifications.
+      A note, text label or other annotation is none of these. [OMG UML 2.5.1 (formal/17-12-05) 20.2.1.5 Constraints]
+    category: information-flow
+    severity: error
+    demo_trigger: false
+    coverage: partial
+    not_checked: The exception when the flow's classifier is a relationship is not checked.
+    selector:
+      type: connector
+      connector_types:
+      - InformationFlow
+    condition:
+      type: connector_endpoint_stereotype
+      source_must_be_one_of:
+      - type:Actor
+      - type:Node
+      - type:Device
+      - type:ExecutionEnvironment
+      - type:UseCase
+      - type:Artifact
+      - type:Class
+      - type:Component
+      - type:Port
+      - type:Part
+      - type:Interface
+      - type:Package
+      - type:Action
+      - type:ObjectNode
+      - type:CentralBufferNode
+      - type:ActionPin
+      - type:ActivityParameter
+      - type:Decision
+      - type:MergeNode
+      - type:Synchronization
+      - type:StateNode
+      - type:StructuredActivityNode
+      - type:ConditionalNode
+      - type:LoopNode
+      - type:ExpansionRegion
+      - type:ExpansionNode
+      - type:ActivityPartition
+      - type:Activity
+      - type:StateMachine
+      - type:Interaction
+      - type:Object
+      - type:Boundary
+      - type:Entity
+      - type:DataType
+      - type:Enumeration
+      - type:Signal
+      - type:PrimitiveType
+      - type:Collaboration
+      - type:InformationItem
+      target_must_be_one_of:
+      - type:Actor
+      - type:Node
+      - type:Device
+      - type:ExecutionEnvironment
+      - type:UseCase
+      - type:Artifact
+      - type:Class
+      - type:Component
+      - type:Port
+      - type:Part
+      - type:Interface
+      - type:Package
+      - type:Action
+      - type:ObjectNode
+      - type:CentralBufferNode
+      - type:ActionPin
+      - type:ActivityParameter
+      - type:Decision
+      - type:MergeNode
+      - type:Synchronization
+      - type:StateNode
+      - type:StructuredActivityNode
+      - type:ConditionalNode
+      - type:LoopNode
+      - type:ExpansionRegion
+      - type:ExpansionNode
+      - type:ActivityPartition
+      - type:Activity
+      - type:StateMachine
+      - type:Interaction
+      - type:Object
+      - type:Boundary
+      - type:Entity
+      - type:DataType
+      - type:Enumeration
+      - type:Signal
+      - type:PrimitiveType
+      - type:Collaboration
+      - type:InformationItem
+    remediation:
+      short: Join two model elements of the kinds the standard lists.
+      auto_fixable: false
+
+  - id: UML2-INF-005a
+    name: An information item has no generalization (outgoing)
+    implements: UML-INF-005
+    description: An information item has no features, no generalizations and no associations. This rule reports a generalization
+      leaving an InformationItem element. [OMG UML 2.5.1 (formal/17-12-05) 20.2.2.5 Constraints]
+    category: information-flow
+    severity: error
+    demo_trigger: false
+    coverage: partial
+    not_checked: Features (attributes and operations) and aggregations are not checked.
+    selector:
+      type: element
+      types:
+        any_of:
+        - InformationItem
+    condition:
+      type: connector_count
+      connector_type: Generalization
+      direction: outgoing
+      max: 0
+    remediation:
+      short: Remove the generalization from the information item.
+      auto_fixable: false
+
+  - id: UML2-INF-005b
+    name: An information item has no generalization (incoming)
+    implements: UML-INF-005
+    description: An information item has no features, no generalizations and no associations. This rule reports a generalization
+      entering an InformationItem element. [OMG UML 2.5.1 (formal/17-12-05) 20.2.2.5 Constraints]
+    category: information-flow
+    severity: error
+    demo_trigger: false
+    coverage: partial
+    selector:
+      type: element
+      types:
+        any_of:
+        - InformationItem
+    condition:
+      type: connector_count
+      connector_type: Generalization
+      direction: incoming
+      max: 0
+    remediation:
+      short: Remove the generalization from the information item.
+      auto_fixable: false
+
+  - id: UML2-INF-005c
+    name: An information item has no association (outgoing)
+    implements: UML-INF-005
+    description: An information item has no features, no generalizations and no associations. This rule reports an association
+      leaving an InformationItem element. [OMG UML 2.5.1 (formal/17-12-05) 20.2.2.5 Constraints]
+    category: information-flow
+    severity: error
+    demo_trigger: false
+    coverage: partial
+    selector:
+      type: element
+      types:
+        any_of:
+        - InformationItem
+    condition:
+      type: connector_count
+      connector_type: Association
+      direction: outgoing
+      max: 0
+    remediation:
+      short: Remove the association from the information item.
+      auto_fixable: false
+
+  - id: UML2-INF-005d
+    name: An information item has no association (incoming)
+    implements: UML-INF-005
+    description: An information item has no features, no generalizations and no associations. This rule reports an association
+      entering an InformationItem element. [OMG UML 2.5.1 (formal/17-12-05) 20.2.2.5 Constraints]
+    category: information-flow
+    severity: error
+    demo_trigger: false
+    coverage: partial
+    selector:
+      type: element
+      types:
+        any_of:
+        - InformationItem
+    condition:
+      type: connector_count
+      connector_type: Association
+      direction: incoming
+      max: 0
+    remediation:
+      short: Remove the association from the information item.
+      auto_fixable: false
+
+  - id: UML2-REL-001
+    name: Include, extend, import, access, merge and substitute join the elements the standard allows
+    implements: UML-SEM-088
+    description: An include and an extend join a use case to a use case; a package import (import, access) joins a namespace
+      to a package; a package merge joins a package to a package; a substitution joins a classifier to a classifier. EA stores
+      the first two as a UseCase connector and the others as a Dependency, Package or Substitution connector, each with a
+      plain stereotype string (include, extend, import, access, merge, substitute). The table is generated from the language
+      skill's relationships.allowed. [OMG UML 2.5.1 (formal/17-12-05) 18.2.4; 18.2.2; 7.8.11; 12.4.6; 9.9.22]
+    category: relationship
+    severity: error
+    demo_trigger: true
+    coverage: partial
+    not_checked: Only the connectors that carry a stereotype can be listed in a table (the validator keys a table by stereotype);
+      the unstereotyped relationships are judged by their own rules.
+    selector:
+      type: connector
+      connector_stereotypes: any_of_table
+    condition:
+      type: relationship_table
+      table: uml-2-keyword-relationships
+      skip_endpoints: []
+      unknown_endpoint: ignore
+    remediation:
+      short: Join the element kinds the standard allows for this relationship.
+      auto_fixable: false

@@ -1,0 +1,121 @@
+# How Enterprise Architect translates the layout standard.
+#
+# The standard is in the Modeling Languages plugin (a separate plugin with its own
+# repository and versions), in `_languages/layout-standard.yaml`. This file
+# holds only what EA needs to read it: EA's names and display settings. It restates no
+# size and no gap. `tools/gen_conventions.py` reads the standard, each language's `layout`
+# block, each `ea.yaml` `layout_map`, and this file, and writes
+# `<id>/conventions.yaml` for the helper programs.
+
+schema_version: 1
+
+# One standard unit is one EA stored unit. Measured 2026-10-12: a 200-unit box drew about
+# 267 px at 135% zoom, expected 270.
+unit:
+  ea_units_per_standard_unit: 1
+
+# Standard route name to the route EA accepts.
+routes:
+  straight: Direct
+  orthogonal: OrthogonalSquare
+  orthogonal-rounded: OrthogonalRounded
+  curved: Bezier
+  auto: AutoRouting
+  custom: CustomLine
+  tree-vertical: TreeVertical
+  tree-horizontal: TreeHorizontal
+  lateral-vertical: LateralVertical
+  lateral-horizontal: LateralHorizontal
+
+# Standard arrangement to the composition grammar. Only one name differs.
+arrangements:
+  layered-bands: layered-bands
+  lanes: lanes
+  nested-grid: nested-grid
+  radial: radial
+  two-column-cycle: two-column-cycle
+  computed-geometry: computed-geometry
+  matrix: matrix
+  radial-tree: radial-tree
+  chevron-stack: chevron-stack
+  treemap: treemap
+  graph: graph
+  type-fixed: ea-semantic
+
+# Standard spacing name to the engine's spec keys. A value is the standard's times the
+# unit rule; `sign: -1` is for `origin_top`, because EA's vertical axis runs negative.
+spacing:
+  across:
+    - key: item_gap_x
+  down:
+    - key: item_gap_y
+  along_flow:
+    - key: item_gap_flow
+  between_lanes:
+    - key: lane_gap
+  lane_thickness:
+    - key: min_lane_thickness
+  between_bands:
+    - key: band_gap
+  page_margin:
+    - key: origin_left
+    - key: origin_top
+      sign: -1
+
+# The container's own figures, on the same terms.
+container:
+  inner_padding:
+    - key: band_pad_x
+    - key: band_pad_y
+    - key: lane_pad
+    - key: grid_pad
+  label_strip:
+    - key: label_height
+
+# An element type reaches a generated `sizing` block through a `layout_map`: as a diagram
+# type's `default_type`, or as the target of one of its `size_keys`. A line label has no
+# home in `sizing`, because EA places a connector's label itself.
+element_types:
+  not_sized:
+    line-label: EA positions connector labels. The standard's height and clearance are for tools that place them.
+
+# Figures that belong to the tool and aren't in the standard. `LABEL_MARGIN` in `lint.py`
+# is a name's clearance from its own box border. The standard's line-label clearance is
+# a label's distance from its line, a different quantity.
+tool_figures:
+  label_margin: 8
+
+# EA display settings. A language's `layout_map.presentation_profiles` may reword a
+# description for its own reader. The settings stay the same across languages.
+presentation_profiles:
+  detail:
+    description: Everything. The working view.
+    connector_labels: true
+    connector_stereotypes: true
+    element_stereotypes: true
+    compartments: all
+    notes: true
+    collapse_parallel: false
+  review:
+    description: >-
+      For a design walkthrough. Keeps connector labels, which on a UML diagram carry the
+      multiplicities and role names - the part of an association that is actually under
+      review.
+    connector_labels: true
+    connector_stereotypes: false
+    element_stereotypes: false
+    compartments: [name]
+    notes: true
+    collapse_parallel: false
+  executive:
+    description: >-
+      For an audience following structure rather than detail. Note that `compartments: none`
+      reduces a class to its name but does not remove the compartment - EA offers no verified
+      way to do that - so say "names only" rather than implying the classes have no members.
+    connector_labels: false
+    connector_stereotypes: false
+    element_stereotypes: false
+    compartments: none
+    notes: false
+    collapse_parallel: true
+    direction_only: true

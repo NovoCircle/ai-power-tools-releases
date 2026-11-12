@@ -58,7 +58,7 @@ own — so it runs anywhere you can carry the payload.
 import lint
 
 report = lint.lint_diagram(verified, profile=..., roles=..., rows=..., columns=...,
-                           stacks=..., rings=..., expected_route=...)
+                           stacks=..., rings=..., expected_route=<the route the notation calls for>)
 if not report.clean:
     for finding in report.errors:
         print(finding.rule, finding.subjects, "->", finding.correction)
@@ -139,6 +139,24 @@ it, the way `crossings` carries `crossings_measured_over`:
 All five of those metric keys are always present. `roles_with_inconsistent_sizing: 0` is the same zero whether you
 passed clean roles or passed none, and a vacuous zero has already been quoted as a result here.
 
+### What each rule checks
+
+- **Overlaps** — two elements sharing space, where neither contains the other. Always wrong.
+- **Clipping** — an element too small for its label.
+- **Render exceeds rect** — EA drew a box wider than the element's stored rect (an error). Needs `include_svg`.
+- **Out of canvas** — placement beyond `cx`/`cy`; it renders but exports cut off. Info severity.
+- **Pitch** — in a declared row or column, neighbors that touch (error) or uneven spacing (warning).
+- **Inconsistent sizing** — elements in the same role at different sizes: the one that most makes a
+  diagram look machine-made.
+- **Ragged and staggered stacks, uneven spokes and ring angles** — all warnings.
+- **Crossings** — a count, `info` only: compare between passes rather than aiming for zero.
+- **Unrouted connectors** — no explicit route, so the diagram depends on EA's default.
+- **Inconsistent connector labels** — some named and some not, so the blank ones read as oversights.
+
+Two are about honesty rather than tidiness: **color encoding without a legend** (a color a reader
+cannot decode misleads), and **a missing title** where the convention calls for a drawn one (many
+diagrams correctly use EA's frame header instead; check which applies).
+
 ### Severity
 
 One rule is deliberately narrower than its name suggests. `missing-connector-labels` fires only on
@@ -148,10 +166,10 @@ report correct diagrams as broken.
 
 - **error** — the diagram is wrong. Overlapping elements, a row or column with no whitespace,
   elements in one role at different sizes. `report.clean` is false.
-- **warning** — look at it. Often correct in context: out-of-canvas placement, an unset route, an
-  unexplained set of fills, a ragged stack, a staggered stack, uneven spokes, a bunched ring. Does
-  not block.
-- **info** — a measurement, not a judgment.
+- **warning** — look at it. Often correct in context: an unset route, an unexplained set of fills, a
+  ragged stack, a staggered stack, uneven spokes, a bunched ring. Does not block.
+- **info** — a measurement, not a judgment: out-of-canvas placement (it renders but exports cut off)
+  and the crossings count.
 
 `report.clean` means **no errors**, not "no findings". A bar nobody can clear is a bar nobody uses,
 and a linter that rejects every legitimate view gets switched off — after which it protects nothing.
@@ -261,6 +279,11 @@ capability map did, on a diagram that scored clean on every other metric.
 `label-clipped` is kept for shapes that genuinely clip rather than grow. On ordinary elements it
 will not fire, and that is the correct behavior rather than a gap.
 
+- **Image elements drawn away from their stored position (unverified).** EA has also been seen
+  drawing some image elements (nodes with `NameUnderImage=1`) away from their stored position. The
+  cause is not established and `verify_diagram` reports stored positions only, so for such elements
+  check the render.
+
 ### These rules refuse to guess, and that costs coverage on purpose
 
 They only judge a box whose text is **exactly one known element's name**, and whose width could
@@ -292,6 +315,12 @@ positive count and says nothing about the half it skipped. **Read `labels_measur
 judged", never as "elements checked", and compare it against the element count yourself.** The claim
 elsewhere in this file that a shape-scripted notation reports itself on `not_run` holds only when
 every element on the view is shape-scripted.
+
+From server 3.6.5, `verify_diagram` also reports how many element names it checked (`label_names`:
+`checked`, `matched`, `unmatched_element_ids`, `status`, `ok`). Zero names checked, or none matched,
+is a failure (`ok: false`, `error: "no_label_names"`), not a pass. That count is about names read
+from the repository. It does not replace the comparison above of boxes judged against elements
+placed, and the linter's own label matching is unchanged.
 
 **A name two elements share used to name the wrong element.** In the same run the plain `Class` grew
 its drawn box from 100px to 216px — a real `render-exceeds-rect` error — and the error was raised
@@ -389,7 +418,7 @@ the inventory claims.
 perturbed, linted, and provably fires nothing** (a name colliding with the stereotype icon drawn
 inside its own box — see the known limit at the end of this section). So **a clean score is not
 proof of a good diagram**: it excludes those 21, says nothing about that one, and says nothing at
-all about the eight classes listed below, which no rule reaches. The report also names the six
+all about the ten classes listed below, which no rule reaches. The report also names the six
 causes a rule puts on `not_run`, and the five shapes the captured payloads do not contain, each of
 which bounds what the corpus can claim without a fresh capture.
 
@@ -421,14 +450,15 @@ date, so re-run it rather than repeating the figures above.
   approximate and is still the right metric for comparing two versions of one diagram, but under
   orthogonal routing it is neither an upper nor a lower bound on what the reader sees, and no rule
   sees the overlap at all.
-- **Color set as the element's DEFAULT appearance rather than on the placement.** `unexplained-color`
-  counts `distinct_fills`, and `fill` is decoded from the placement's own style string only. Measured
-  live on EA 17.1: the same three colors reported `distinct_fills: 3` when set per placement and
-  `distinct_fills: 0` when set as the element default — while EA drew all three either way, and the
-  render carried `fill:#FF0000`, `fill:#00FF00` and `fill:#0000FF` in both cases. So a diagram
-  colored the way EA's own *Default Appearance* dialog colors one is **invisible** to this rule, and
-  its zero is the vacuous kind. This is the likeliest reason a generated view reports no fills at all
-  when it plainly has some: check the render, or set the color on the placement.
+- **Color set as the element's DEFAULT appearance rather than on the placement (servers before
+  3.6.5 only).** `unexplained-color` counts `distinct_fills`, and on those servers `fill` is decoded
+  from the placement's own style string only. Measured live on EA 17.1 on such a server: the same
+  three colors reported `distinct_fills: 3` when set per placement and `distinct_fills: 0` when set
+  as the element default, while EA drew all three either way. From server 3.6.5 `fill` falls back to
+  the element's default appearance color, so a color set that way is counted. A default of black
+  (0) or -1 is read as no color. The diagram manifest does not apply the fallback yet, so its fill
+  can differ from `verify_diagram`'s. On an older server a zero here is the vacuous kind, and the
+  render, not the report, shows the colors.
 
 When a rule *can* be built for something on this list, it should be. Until then, the honest report
 is "clean, and here is what clean does not cover" — which is why this section exists in a file the

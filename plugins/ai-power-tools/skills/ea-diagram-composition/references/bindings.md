@@ -15,6 +15,12 @@ every new notation is an engineering task and the library never covers more than
 hard-coded. So they live in data instead — one YAML binding per technology — and adding a notation is
 a data change rather than an engineering task.
 
+**The numbers come from the layout standard.** Every size and gap in a shipped binding is the shared
+standard's, in the separate Modeling Languages plugin at `_languages/layout-standard.yaml`, translated into EA's terms by
+`_shared/languages/ea-translation.yaml`. Each language's binding is generated from those, its `layout`
+block, and `layout_map` in its `ea.yaml`, and nobody edits it. Where this page says a figure was
+measured, it means what EA does (ids, prefixes, how EA draws), not a size or a gap.
+
 The dependency runs one way only. `compose.py` contains no technology name and does not import the
 loader: a binding is data that *feeds* the engine. A single `if technology == …` in the engine would
 quietly undo the whole design.
@@ -22,20 +28,24 @@ quietly undo the whole design.
 **The bindings are a tree, not a flat set of peers.** EA is a UML tool, so one binding holds EA's base
 notation and every MDG binding declares `extends` to it and records in `base` which of its diagram
 types each of its own is drawn on. What that buys is the slots a binding does *not* state: they resolve
-to the value measured for the diagram type it is actually drawn on instead of to an engine default.
+to the value of the diagram type it is actually drawn on instead of to an engine default. Generated
+bindings state every size and gap, so this matters to a binding you write by hand over one of them.
 §5.6 is the whole of it.
 
 ## 2. Where bindings live, and how one is found
 
-Bindings sit in `bindings/`, one file per technology. **Ask `available_bindings()` which ones ship**
+Bindings sit in `_shared/languages/<language id>/conventions.yaml`, one file per technology. Generated
+from the sources above, so edit those and run `tools/gen_conventions.py`. A directory you pass yourself
+may also hold flat `*.yaml` files. Nothing else in a language folder counts as a binding. **Ask
+`available_bindings()` which ones ship**
 rather than trusting a list in a document: this line read "two ship" for some time after the third
 one landed, and a stale inventory here is the one that sends a reader looking for a file that is not
 there — or worse, writing a second binding for a technology that already has one.
 
-The filename is a slug of the technology id — lowercased, with anything outside letters, digits, `.`,
-`_` and `-` flattened to `-`, so `BPMN2.0` becomes `bpmn2.0.yaml`. The **declared `technology` is
-authoritative**: when no slug matches, the loader reads each file's declared id, so a file named
-anything at all still binds the technology it says it does.
+The **declared `technology` is authoritative**: the loader reads each file's declared id, so a file
+named anything at all still binds the technology it says it does. A flat file named with a slug of the
+id (lowercased, with anything outside letters, digits, `.`, `_` and `-` flattened to `-`, so `BPMN2.0`
+becomes `bpmn2.0.yaml`) is found first.
 
 Bindings are parsed with `yaml.safe_load`, always. That is why a binding cannot carry executable
 content — `!!python/object` is refused by the parser rather than by a check someone could forget to
@@ -46,11 +56,59 @@ says so and names the install.
 pip install pyyaml
 ```
 
+### 2.1 One id EA reports, any number of tokens
+
+`technology` is the id EA reports, the one `Repository.IsTechnologyLoaded` answers to. The resolver
+never uses a file unless that id is in the installed list. What a diagram stores after `MDGDgm=` is a
+**token**, and its first part is often not that id. So a language's `layout_map` names the id once and
+declares the token on each diagram type whose token doesn't read `<technology>::<name>`:
+
+```yaml
+layout_map:
+  technology: EAExtended:Requirements    # the id EA reports
+  extends: UML
+  diagram_types:
+    Requirements:                        # any name; the guide's or EA's
+      token: Extended::Requirements      # exactly what EA stores after MDGDgm=
+      base: Custom
+```
+
+`token` is carried into the generated `conventions.yaml`. The rules:
+
+- **Leave it out when the token is `<technology>::<name>`.** Most maps need nothing, and nothing about
+  them changes.
+- **A stored token resolves to the file that claims it,** in any installed file, before its first part
+  is read as a technology. A diagram type with a `token` answers to that token and no other.
+- **A name holding `::` must state its `token`.** A map may key a diagram type by its full token, as
+  long as it states it too.
+- **One token, one file.** A second claim, in another folder or the same one, fails
+  `tools/gen_conventions.py` and its `--check`, and the loader raises `DuplicateToken`. A diagram type
+  with no `token` claims `<technology>::<name>`, so a stated token can collide with it.
+- **A token in `token` must be in `ea.yaml`'s `diagram_types`,** or the entry states a `token_reason`.
+- **`technology` may be `ea.yaml`'s `technology` or `api_technology_id`.** Anything else needs a
+  `technology_reason`.
+- **A token left out of a family is `unbound`, not `not-installed`.** A file that claims
+  `UPDM2_AV::AV-1` owns `UPDM2_AV`, so a diagram stating `UPDM2_AV::AV-3` is told the file doesn't bind
+  it, instead of being told to check an id.
+
+Check the id before writing the map. It isn't guessable, and the Resources tab can show another name.
+
+| Language | `technology`, as EA reports it | `token` |
+|---|---|---|
+| UPDM | `UPDM2` | `UPDM2_OV::OV-2`, and one per diagram type |
+| RAAML | `RAAML1.0` | `RAAML::RAAML`, and one per diagram type |
+| UAF | `UAF` | `UAFP_Framework::UPDM Framework` |
+| Requirements | `EAExtended:Requirements` | `Extended::Requirements` |
+| Business Modeling | `EAExtended` | `Extended::Business Modeling` |
+
+UAF's other views are drawn on SysML diagram types, so they carry `SysML1.4::` tokens. Those are SysML's
+to claim, so UAF's map doesn't list them.
+
 ## 3. The closed vocabularies
 
 Four vocabularies are fixed. A value outside them is refused on load.
 
-**Grammars** — eight, in three placements. The placement is who computes the coordinates, and it
+**Grammars** — twelve, in three placements. The placement is who computes the coordinates, and it
 decides what a consumer may do with a diagram type that names the grammar.
 
 | Grammar | Placement | Geometry is ours | Producible today |
@@ -61,13 +119,16 @@ decides what a consumer may do with a diagram type that names the grammar.
 | `radial` | composed by us | yes | yes — `compose_radial` |
 | `two-column-cycle` | composed by us | yes | yes — `compose_two_column_cycle` |
 | `computed-geometry` | composed by us | yes | **no** — no composer yet |
-| `graph` | EA's layout places it | **no** | **yes** — via `layout_diagram`, then tidy |
+| `matrix` | composed by us | yes | yes — `compose_matrix` |
+| `radial-tree` | composed by us | yes | yes — `compose_radial_tree` |
+| `chevron-stack` | composed by us | yes | yes — `compose_chevron_stack` |
+| `treemap` | composed by us | yes | yes — `compose_treemap` |
+| `graph` | EA's layout places it | **no** | **yes** — via `layout_diagram` (refused while the diagram is open in EA with unsaved changes: save, then call again), then tidy |
 | `ea-semantic` | the diagram type dictates it | **no** | **no** — later design work |
 
-Six are compositional layouts this library computes coordinates for. `computed-geometry` is one of
-them and has no code behind it yet: **the treemap is all that remains under that name** after `radial`
-was split out and built, and the timing diagram was moved to `ea-semantic` — see §5.5.1 and
-`grammars.md` §7.
+Ten are compositional layouts this library computes coordinates for. `computed-geometry` is one of
+them and has no code behind it. `radial` and `treemap` were split out of it and built, and the timing
+diagram was moved to `ea-semantic` — see §5.5.1 and `grammars.md` §7.
 
 The other two are the cases where we place nothing, and they are not layouts:
 
@@ -113,9 +174,9 @@ mistakes are told what they probably meant.
 
 | Key | Required | Validated against |
 |---|---|---|
-| `technology` | yes | Non-empty string, and must not contain `::`. This is the part *before* the `::` in an `MDGDgm=<Tech>::<DiagramType>` value, and it has to match EA verbatim. |
+| `technology` | yes | Non-empty string, and must not contain `::`. The id EA reports, verbatim. It's also the part *before* the `::` in a diagram's `MDGDgm` value unless the diagram type states a `token` (§2.1). |
 | `display_name` | no | Non-empty string. Defaults to `technology`. |
-| `extends` | no | Technology id of another binding in the same directory — **the notation this one is built on**. Cannot be this binding's own id; cycles are refused by name. Every shipped MDG binding names the base notation here; see §5.6. |
+| `extends` | no | Technology id of another binding in the same catalog — **the notation this one is built on**. Cannot be this binding's own id; cycles are refused by name. Every shipped MDG binding names the base notation here; see §5.6. |
 | `stereotype_prefix` | no | String, `""` included. See §5.3 — `""` is a statement, not an omission. |
 | `notes` | no | Non-empty string. |
 | `diagram_types` | yes | Mapping, at least one entry. |
@@ -129,8 +190,9 @@ space.
 
 | Key | Required | Validated against |
 |---|---|---|
+| `token` | no | The whole value EA stores after `MDGDgm=`: `<part>::<part>`, with no `;` or `=`. Defaults to `<technology>::<name>`. One token belongs to one file. See §2.1. |
 | `base` | no | Non-empty string. The EA base diagram type this MDG diagram type is built on, which is what a caller passes to `create_diagram` to create one — `Logical` for `ArchiMate3::Application`, `Analysis` for `BPMN2.0::Business Process`. **Consumed twice**: it picks the parent diagram type this one inherits its unstated sizes and gaps from (§5.6), and it is the resolver's weakest match when a diagram names no MDG diagram type of its own. State it on every diagram type — a missing `base` costs the substrate. |
-| `grammar` | yes | One of the eight grammars (§3). Mandatory, which is why `graph` and `ea-semantic` exist — see §5.5. |
+| `grammar` | yes | One of the twelve grammars (§3). Mandatory, which is why `graph` and `ea-semantic` exist — see §5.5. |
 | `title` | yes | `drawn` or `frame-header`. |
 | `sizing` | yes | §4.3. |
 | `spacing` | no | §4.4. Per key, an omitted gap now means **the value measured for the base diagram type this one is drawn on**, and the engine's own default only when there is no substrate to ask. See §5.6. |
@@ -176,6 +238,8 @@ Values are copied into the spec verbatim. See §5.1.
 > `grammar: lanes` and all three set both, so in `bpmn2.0.yaml` those two are recorded measurements
 > rather than layout input — kept for a future nested-grid or bands rendering, and labeled as such at
 > the point they are set.
+> Each generated `conventions.yaml` states every gap in the standard, and each composer reads the ones
+> it uses, so a gap a composer doesn't read is not a bug.
 
 ### 4.5 `routing`
 
@@ -208,7 +272,7 @@ branch per notation.
 | `diagram_type` | yes | Must be a diagram type this binding declares. |
 | `intent` | no | List of phrases a request might match. |
 | `admits` | no | List of concept names, no duplicates. Concept names, not stored stereotypes. |
-| `grammar` | no | One of the eight. Overrides the diagram type's grammar for this viewpoint. |
+| `grammar` | no | One of the twelve. Overrides the diagram type's grammar for this viewpoint. |
 | `notes` | no | Free text. |
 
 ### 4.8 `presentation_profiles.<name>`
@@ -467,6 +531,9 @@ if fitted.widened:
   `conflicts`, `widened`, `requested_width`, `driver` and `note`. A measured convention that was not
   the figure used has to be visible, not inferred.
 - **And where the two cannot both be honored, it asks rather than deciding** — see §5.7.1.
+- **A treemap has no item width**, because area carries the weight. For it `spec()` fits the same name
+  against `min_tile_side`, the floor under every tile, and returns no `item_width` or `item_height` (the
+  treemap composer refuses them). `SpecFit.item_width` reads whichever of the two the spec carries.
 - **Without `names` nothing is measured** and the width is the convention's, exactly as before.
 - **What it does not promise.** EA's wrap is greedy, so a *multi-word* name can still read as cramped
   at a width that leaves it fitting one line with 5px each side. Guaranteeing clearance there means
@@ -524,12 +591,13 @@ document.
 
 | Call | Returns |
 |---|---|
-| `find_binding(technology, directory=None)` | The `Binding` for a technology id, or `None` if there is not one. Defaults to the skill's own `bindings/`. |
+| `find_binding(technology, directory=None)` | The `Binding` for a technology id, or `None` if there is not one. Defaults to `_shared/languages/`. |
 | `load_binding(path)` | Load, validate and resolve one file, following `extends`. |
 | `load_binding_text(text, source)` | Validate and load from YAML text. No directory, so no `extends` resolution. |
-| `available_bindings(directory=None)` | `{technology id: filename}` for every valid binding on hand. An invalid file is omitted rather than raising, so one bad file does not make the whole catalog unreadable; load it directly to see why. **A duplicate technology id is the exception and raises `DuplicateTechnology`** naming the id and every file that claims it — omitting one of two files that claim an id is not omitting it, it is picking a winner, and the readers of the directory used to pick different ones. |
+| `available_bindings(directory=None)` | `{technology id: file}` for every valid binding on hand, named below the directory (`bpmn-2/conventions.yaml`). An invalid file is omitted rather than raising, so one bad file does not make the whole catalog unreadable; load it directly to see why. **A duplicate technology id is the exception and raises `DuplicateTechnology`** naming the id and every file that claims it — omitting one of two files that claim an id is not omitting it, it is picking a winner, and the readers of the directory used to pick different ones. |
 | `declared_technologies(directory=None)` | `{technology id: filenames that declare it}` for every file that parses, validated or not. Identity only: the one view of the directory every reader agrees on. |
 | `binding_conflicts(directory=None)` | The subset of the above with more than one file per id. Never raises, so an audit or a health check can report a shadowed id instead of failing on it. Empty for a clean directory. |
+| `token_conflicts(directory=None)` | `{token: filenames}` for each token more than one file claims (§2.1). Never raises. The readers that raise `DuplicateTechnology` raise `DuplicateToken` for these. |
 | `unvalidated_glyphs(name)` | The distinct characters of `name` that `HEADER_ADVANCE_PX` was never calibrated on — it was measured over printable ASCII in one font. The guard on that constant: a width predicted for a name carrying any of these is an extrapolation, and `spec(names=...)` reports it as `SpecFit.extrapolated`. |
 | `implemented_grammars()` | The grammars the engine has a `compose_<grammar>` for, **read from `compose.py` on every call**. Never a written-down set: a hand-kept flag pinned to the engine by a test is two copies of one fact, and that shape once let a measurement tool report a remembered reach figure for a grammar that had already shipped. |
 | `producible_grammars()` | `implemented_grammars()` plus the grammars EA's layout places — the answer to "can we produce this at all". |
@@ -550,7 +618,7 @@ On `Binding`:
 | `profile(name)` | One `PresentationProfile`. Raises, naming what is declared. |
 | `stereotype_for(concept)` | `ApplicationComponent` to `ArchiMate_ApplicationComponent`. |
 | `concept_for(stereotype)` | The inverse. A stereotype without the prefix comes back unchanged — models contain elements stereotyped from other technologies, or from none, and a lookup helper is the wrong place to have an opinion about that. |
-| `diagram_type_for_mdgdgm(value)` | Resolve an `MDGDgm=<Tech>::<DiagramType>` value, or `None` when it names another technology, so a caller can try the next binding. Only about half of real diagrams carry `MDGDgm` at all; the rest identify themselves through `Diagram_Type`, so resolution needs a second path. |
+| `diagram_type_for_mdgdgm(value)` | Resolve a whole `MDGDgm=` value, or `None` when no diagram type here claims it, so a caller can try the next binding. Only about half of real diagrams carry `MDGDgm` at all; the rest identify themselves through `Diagram_Type`, so resolution needs a second path. |
 | `viewpoints_admitting(concepts)` | Viewpoints that admit **every** concept given, narrowest first — the one admitting the fewest concepts overall leads, ties broken by name. Ranking is on admissibility only; intent matching belongs to the caller. |
 
 On `DiagramTypeBinding`:
@@ -575,7 +643,7 @@ On `DiagramTypeBinding`:
 | `grammar_is_producible` | Property. Whether a diagram of this type can be produced at all today, by either route — a composed grammar that is built, or one EA's layout places. |
 | `geometry_is_composed` | Property. Whether the coordinates are ours to compute. `False` means they come from EA. |
 | `grammar_placement` | Property. Who places the geometry, as one of the three values in `GRAMMAR_PLACEMENT`. |
-| `mdg_diagram_type` | Property. The `<Tech>::<DiagramType>` string, to compare against a diagram's own `MDGDgm`. |
+| `mdg_diagram_type` | Property. The token: the stated `token`, or `<Tech>::<DiagramType>`. Compare it against a diagram's own `MDGDgm`, and pass it when creating one. |
 
 On `Viewpoint`: `admits_concept(concept)`, plus `diagram_type`, `intent` and `admits` as read-only
 attributes, and `effective_grammar`, `grammar_is_implemented`, `grammar_is_producible` and
@@ -607,7 +675,8 @@ if not dt.grammar_is_producible:
 if not dt.geometry_is_composed:
     ...        # EA places this one. Create the elements, call layout_diagram with the
                # spacing from dt.spec(), then tidy: dt.size_for(), dt.route_for() and
-               # the title convention. Do NOT compute coordinates.
+               # the title convention. Do NOT compute coordinates. If the diagram is open in EA
+               # with unsaved changes, layout_diagram is refused: ask for a save, then call again.
 
 result = compose_layered_bands(       # reached only when the geometry is ours
     [

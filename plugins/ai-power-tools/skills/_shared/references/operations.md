@@ -3,7 +3,7 @@
 **Generated — do not edit by hand.** Produced by `tools/gen-operations.py` from the
 server's dispatch tables. Re-run it after any server change rather than editing here.
 
-Server version: `3.6.4` · 149 operations across 6 meta-tools.
+Server version: `3.6.5` · 149 operations across 6 meta-tools.
 
 Every operation is called the same way:
 
@@ -62,7 +62,7 @@ If an operation is not in this list, it does not exist. Do not infer one from a 
 | `list_tagged_values` | List all tagged values on an element. |
 | `move_element` | Move an element to a different package. |
 | `select_element_in_browser` | Highlight an element in EA's Browser (project tree). |
-| `set_composite_diagram` | Set or clear an element's composite (navigation/drill-down) diagram link, writing both halves of the mechanism together so they can never land out of sync (APT-2026-0059). |
+| `set_composite_diagram` | Set or clear an element's composite (navigation/drill-down) diagram link, writing both halves of the mechanism together so they can never land out of sync. |
 | `set_connector_tagged_value` | Create or update a tagged value on a connector. |
 | `set_element_appearance` | Set an element's DEFAULT appearance -- background color, font color, border color, border width -- through `Element.SetAppearance`. |
 | `set_tagged_value` | Create or update a tagged value on an element. |
@@ -190,14 +190,14 @@ If an operation is not in this list, it does not exist. Do not infer one from a 
 | `create_baseline` | Create a baseline snapshot of a package. |
 | `create_model` | Create a new EA model file at `path` and open it. |
 | `export_xmi` | Export a package as XMI for cross-tool interchange. |
-| `generate_report` | Run an EA-native report template against a package. |
+| `generate_report` | Run an EA-native report template against a package and write a document to `output_path`. |
 | `get_reporting_refresh` | The status of a refresh started with `start_reporting_refresh`: running, succeeded or failed, and when finished the full result (row counts per table, flags, alignment, timings, or why it stopped). |
 | `get_repository_info` | Return metadata about the currently-open EA project: file path, connection string, EA version, number of root packages. |
 | `get_skill_update_diff` | Return the local and remote content of a skill file that has a conflict. |
 | `import_xmi` | Import XMI into a package. |
-| `install_skills` | Install Claude skills from the public skills bundle into the host's skill directory. |
-| `launch_ea` | Start Enterprise Architect on the local machine. |
-| `list_available_skills` | List the Claude skills available for installation from the public skills bundle (``NovoCircle/ai-power-tools-skills``). |
+| `install_skills` | Install Claude skills from a skills bundle into the host's skill directory (the legacy channel). |
+| `launch_ea` | Start Enterprise Architect on the local machine, or attach to one that is already running. |
+| `list_available_skills` | List the Claude skills available for installation from a skills bundle (the legacy channel). |
 | `list_baselines` | List baselines registered against a package. |
 | `open_model` | Open an existing EA model file (.qea, .qeax, .eap, .eapx) in the running EA instance. |
 | `open_project` | Open a .qea, .qeax, .eap, or .eapx project file. |

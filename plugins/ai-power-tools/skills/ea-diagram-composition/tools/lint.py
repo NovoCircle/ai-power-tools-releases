@@ -138,6 +138,8 @@ _MIN_BOX = 20.0          # smaller SVG rects are decoration, not elements
 # not fit adds tens.
 _RENDER_SLACK = 6.0
 _BASELINE_SLACK = 6.0    # a baseline may sit just below the box and still fit
+_WRAP_ALIGN = 6.0        # lines of one wrapped block share a centre or a left edge to this
+_WRAP_PITCH = 30.0       # the longest line step assumed before a block has two lines
 
 _SVG_TEXT_RE = re.compile(
     r'<text\s+x="(?P<x>[-\d.]+)"\s+y="(?P<y>[-\d.]+)"'
@@ -1357,6 +1359,65 @@ def _assign_runs_to_boxes(boxes, runs) -> dict:
     return grouped
 
 
+def _label_of(runs) -> str:
+    """The text of runs in reading order, whitespace collapsed."""
+    joined = " ".join(r["text"] for r in sorted(runs, key=lambda r: r["y"]))
+    return " ".join(joined.split())
+
+
+def _same_column(a: Mapping[str, Any], b: Mapping[str, Any]) -> bool:
+    """Two runs of one wrapped block: centred on one line or starting on one edge."""
+    centre = abs((a["x"] + a["length"] / 2) - (b["x"] + b["length"] / 2))
+    return centre <= _WRAP_ALIGN or abs(a["x"] - b["x"]) <= _WRAP_ALIGN
+
+
+def _rejoin_wrapped_names(grouped: dict, known) -> None:
+    """Hand a wrapped name's stray lines back to the box that starts it.
+
+    A tall narrow shape wraps a name onto many lines, and the last of them can
+    land inside the vertical range of the box below. `_assign_runs_to_boxes`
+    then gives those lines to the lower box, and neither box's text equals a
+    name, so the label rules judged nothing. A box whose text is the START of a
+    known name takes the next line of that block, from any other box, while the
+    line continues the same column at about the same pitch, until the text is a
+    whole name. A box whose text starts no name is left alone, so nothing is
+    joined on a guess.
+    """
+    names = list(known)
+    for index in sorted(grouped):
+        current = sorted(grouped[index], key=lambda r: r["y"])
+        if not current or _label_of(current) in known:
+            continue
+        taken = []
+        while True:
+            label = _label_of(current)
+            if label in known:
+                break
+            if not any(n.startswith(label + " ") for n in names):
+                taken = []
+                break
+            pitch = (current[-1]["y"] - current[-2]["y"]
+                     if len(current) > 1 else _WRAP_PITCH)
+            best = None
+            for other, runs in grouped.items():
+                if other == index:
+                    continue
+                for run in runs:
+                    gap = run["y"] - current[-1]["y"]
+                    if 0 < gap <= max(pitch, 1) * 1.5 and _same_column(run, current[-1]):
+                        if best is None or run["y"] < best[1]["y"]:
+                            best = (other, run)
+            if best is None:
+                taken = []
+                break
+            taken.append(best)
+            current = current + [best[1]]
+        if taken:
+            for other, run in taken:
+                grouped[other] = [r for r in grouped[other] if r is not run]
+            grouped[index] = current
+
+
 def check_labels_fit(objects: Sequence[Mapping[str, Any]],
                      svg_text: Optional[str],
                      report: LintReport) -> None:
@@ -1431,8 +1492,10 @@ def check_labels_fit(objects: Sequence[Mapping[str, Any]],
                                if len(ids) == 1}
 
     grouped = _assign_runs_to_boxes(boxes, runs)
+    _rejoin_wrapped_names(grouped, by_name)
     measured = 0
     unmatched = 0
+    judged_ids: set = set()
     for index, box in enumerate(boxes):
         mine = grouped.get(index) or []
         if not mine:
@@ -1465,6 +1528,7 @@ def check_labels_fit(objects: Sequence[Mapping[str, Any]],
             unmatched += 1
             continue
         subjects = (by_name[label],)
+        judged_ids.add(subjects[0])
 
         # The matched box must be able to BE this element's outline. A shape
         # script emits several rects per element -- an icon box, a compartment
@@ -1530,6 +1594,21 @@ def check_labels_fit(objects: Sequence[Mapping[str, Any]],
             ))
     report.metrics["labels_measured"] = measured
     report.metrics["labels_unmatched"] = unmatched
+    # `labels_measured` counts boxes, not elements checked. Name the elements
+    # no rule judged, so a clean report cannot hide them.
+    not_judged = [obj["element_id"] for obj in objects
+                  if " ".join((obj.get("name") or "").split())
+                  and obj["element_id"] not in judged_ids]
+    report.metrics["elements_not_judged"] = not_judged
+    if not_judged and measured:
+        shown = {obj["element_id"]: " ".join((obj.get("name") or "").split())
+                 for obj in objects}
+        report.not_run.append(
+            f"label-fit: {len(not_judged)} named element(s) were not judged, "
+            f"because no drawn box held exactly their name (a duplicated name, "
+            f"a shape script, or a name that wrapped across boxes): "
+            + ", ".join(f"{shown[i]!r}" for i in not_judged[:10])
+            + (" and more" if len(not_judged) > 10 else ""))
     if unmatched and not measured:
         report.not_run.append(
             f"label-fit: none of {unmatched} text block(s) matched a single "

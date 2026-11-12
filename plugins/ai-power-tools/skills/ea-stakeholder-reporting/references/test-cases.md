@@ -202,7 +202,9 @@ Covers: Step 0: check coverage before you quote a number
 
 **Passes when:** The run reports that 43 of the 46 business applications have an owner and 3 do
 not, presents the owner breakdown for the 43, and shows the 3 as unassigned rather than leaving
-them out or folding them into an owner.
+them out or folding them into an owner. It may instead count over 47 when it includes Core Deposit
+System of Record, which carries two stereotypes, provided it names that element and says the
+figures then include it.
 
 **Check:**
 
@@ -217,8 +219,9 @@ expect: unchanged
 ```
 
 ```check
-reply: says: 43 of 46 business applications have a business owner and 3 do not
-reply: not: presents the owner counts as covering all 46 applications
+reply: says: 43 of 46 business applications have a business owner and 3 do not, or the same over 47 with Core Deposit System of Record named as the element carrying two stereotypes
+reply: not: presents the owner counts as covering every application when some have no owner
+reply: not: gives a 47 without naming the element that makes the difference
 ```
 
 **Fails when:** The owner table is presented as the whole portfolio. The counts add to 43, the
@@ -366,7 +369,9 @@ Covers: Portfolio roll-ups: `aggregate_portfolio`; Failure modes you will actual
 **Ask:** "How many of our business applications are in GLBA scope?"
 
 **Passes when:** The run notices that some applications list several regulations in one value,
-counts each application under every regulation it names, and answers 29 of 46.
+counts each application under every regulation it names, and answers 29 of 46. It may instead
+answer over 47 when it includes Core Deposit System of Record, provided it names that element and
+says the figure then includes it.
 
 **Check:**
 
@@ -382,11 +387,12 @@ expect: unchanged
 
 ```check
 tools: called: ea_repository.aggregate_portfolio
-reply: says: 29 of 46 business applications are in GLBA scope
+reply: says: 29 of 46 business applications are in GLBA scope, or the same count over 47 with Core Deposit System of Record named as the element carrying two stereotypes
 reply: not: gives 14 as the number of applications in GLBA scope
+reply: not: gives a 47 without naming the element that makes the difference
 ```
 
-**Fails when:** The run reads the group labelled "GLBA" and answers 14. It is the exact-match
+**Fails when:** The run reads the group labeled "GLBA" and answers 14. It is the exact-match
 group, it looks like the answer, and it is about half the true count; the rest sit under
 "GLBA, FFIEC", "PCI, GLBA" and "GLBA, SOX".
 
@@ -398,7 +404,8 @@ Covers: Portfolio roll-ups: `aggregate_portfolio`
 
 **Passes when:** Each percentage is computed against the 46 applications (GLBA 29, FFIEC 16, SOX
 7, PCI 3), and the run says the percentages add to more than 100 because an application can be
-in more than one scope.
+in more than one scope. It may instead compute against 47 when it includes Core Deposit System of
+Record, provided it names that element and uses 47 for every percentage.
 
 **Check:**
 
@@ -413,8 +420,9 @@ expect: unchanged
 ```
 
 ```check
-reply: says: GLBA is 29 of 46, FFIEC 16 of 46, SOX 7 of 46 and PCI 3 of 46
+reply: says: GLBA is 29 of 46, FFIEC 16 of 46, SOX 7 of 46 and PCI 3 of 46, or the same shares over 47 with Core Deposit System of Record named as the element carrying two stereotypes
 reply: says: the percentages add to more than 100 because some applications are in several scopes
+reply: not: gives a 47 without naming the element that makes the difference
 reply: not: computes the percentages against 55, the sum of the four counts
 ```
 
@@ -492,7 +500,7 @@ reply: not: uses the words WBABusinessApplication, businessOwner or dataClassifi
 ```
 
 **Fails when:** The summary is correct but written in the model's vocabulary ("WBABusinessApplication
-with criticality=Mission-Critical and businessOwner=..."), which a non-modeller cannot read, or it
+with criticality=Mission-Critical and businessOwner=..."), which a non-modeler cannot read, or it
 states a value the model does not hold.
 
 ### TC-14: A missing field is not "not applicable"
@@ -537,9 +545,9 @@ Covers: Display terms: `resolve_display_term`
 element type, and for WBAVendorSystem?"
 
 **Passes when:** The run takes the names from the technology's declared aliases (Business
-Application, Vendor System), or derives them by dropping the technology prefix and splitting the
-words. If it calls the term lookup and gets no match, it does not conclude the type has no
-business name.
+Application, Vendor System), by the term lookup on server 3.6.5 or later or from the technology's
+own listing, or derives them by dropping the technology prefix and splitting the words. If the
+lookup returns `found: false`, it does not conclude the type has no business name.
 
 **Check:**
 
@@ -549,14 +557,15 @@ expect: unchanged
 ```
 
 ```check
-tools: called: ea_mdg.get_mdg_from_runtime
 reply: says: Business Application and Vendor System
 reply: not: says there is no business name for these types because the term lookup found nothing
 ```
 
 **Fails when:** The run asks the term lookup, gets back the technical name unchanged with
 `found: false`, and hands the stakeholder "WBABusinessApplication" as the display term, or says
-no alias exists. The lookup reads the server's own tables, not the technology EA has loaded.
+no alias exists. A `found: false` answer means the loaded technology declares no alias, so the
+label is derived from the name; before server 3.6.5 the lookup did not read the loaded
+technology at all.
 
 ### TC-16: Business labels for a customer's own tags
 
@@ -565,10 +574,10 @@ Covers: Display terms: `resolve_display_term`; Failure modes you will actually h
 **Ask:** "I'm building a report. What business-friendly column headings can I use for criticality
 and technicalOwner?"
 
-**Passes when:** The run offers "Criticality" and "Technical Owner", derived by splitting the
-camelCase names, and says the term lookup does not know a customer's own tags. If it used the
-lookup, it used the kind `tagged_value`, not `tag`, and treated a miss as "not found", not as
-"no such term".
+**Passes when:** The run offers "Criticality" and "Technical Owner", from the loaded technology's
+own wording when the lookup finds the tag, else derived by splitting the camelCase names. If it
+used the lookup, it used the kind `tagged_value`, not `tag`, and treated a miss as "not found",
+not as "no such term".
 
 **Check:**
 
@@ -579,12 +588,13 @@ expect: unchanged
 
 ```check
 reply: says: Criticality and Technical Owner
-reply: says: the lookup does not resolve tags of the organization's own technology, so the labels are derived from the tag names
+reply: says: the labels come from the technology's own wording, or are derived from the tag names where the technology declares none
 reply: not: says the tags have no business name
 ```
 
-**Fails when:** The run asks the lookup for kind `tag` (not a valid kind), gets a miss that looks
-like any other miss, and tells the user no business term exists for the tag.
+**Fails when:** The run asks the lookup for kind `tag` (not a valid kind, refused with `invalid_kind`
+and the valid list), does not retry with `tagged_value`, and tells the user no business term
+exists for the tag.
 
 ### TC-17: A term from a language that ships with EA
 
@@ -880,8 +890,9 @@ expect: unchanged
 known-good answer:
 
 1. N equals the number of elements of that type (in the scope the person asked about) in the
-   model: 46 for business applications, 35 for vendor systems, 12 for data assets, 8 for business
-   services.
+   model: 46 for business applications (47 when the run counts an element carrying two
+   stereotypes under both and names it), 35 for vendor systems, 12 for data assets, 8 for
+   business services.
 2. X equals the number of elements whose tag holds a non-blank value in the stated group. For a
    multi-value field, X counts an element under every part it holds, and the run does not use
    the sum of the groups as N.
@@ -902,40 +913,49 @@ compute X and N independently from the model.
 
 - `A note on latency`: states that no waiting is needed for reads and points to another file for
   UI work; there is nothing the skill does, refuses or warns about that a run can show.
+- `Say only what you checked` and `The standard report format`: not yet graded by a case. The first
+  is the discipline behind every figure the cases above check; the second needs a live run of the
+  book's owner-gap question against the Westbrook copy, expecting the 0 of 12 owner gap in the
+  completeness part.
 
 ## Findings
 
+- An element can carry two stereotypes: Core Deposit System of Record is a System of Record and a
+  Business Application, so a count on the primary stereotype gives 46 and a roll-up over every
+  element bound to the stereotype gives 47. The skill now says to name the element and the basis.
+  TC-01, TC-02, TC-05, TC-07, TC-10 and TC-11 accept either reading when the reply names the
+  element; a strict grader no longer fails a correct 47. **Triaged 11 Nov: no change, already fixed** (the counting rule is in SKILL.md under "Say only what you checked"; the cases accept either reading).
 - The numbers in `SKILL.md` and `references/coverage-data.md` do not match the Westbrook copy
   these cases were checked against: 52 business applications in the skill versus 46 in the model,
   criticality 22/14/8/8 versus 21/11/8/6, `businessOwner` 42 of 52 versus 43 of 46,
   `technicalOwner` 44 of 52 versus 45 of 46, `dataClassification` 45 of 52 versus 46 of 46,
   `regulatoryScope` blank on 10 versus 3, the GLBA split count 28 versus 29, and the
   comma-joined count 16 versus 17. The skill says every count is "real, not illustrative"; either
-  the fixture changed since 2026-09-23 or the figures are stale. The cases use the model's counts.
+  the fixture changed since 2026-09-23 or the figures are stale. The cases use the model's counts. **Triaged 11 Nov: fixed.** SKILL.md Step 0 no longer says the counts are live and real; it says they are a 2026-09-23 snapshot that has since changed, as `coverage-data.md` already did. The copy now gives different figures; whether the model changed or the figures were stale cannot be told from here. The cases use the model's counts.
 - The skill says scoping to the root Westbrook Bank package drops 52 applications to 45 because
   7 live "elsewhere in the repository (a scratch/test area)". In the copy all 46 applications sit
   under the Westbrook Bank root, so that scoping claim cannot be reproduced. TC-08 scopes to a
-  line-of-business package instead.
+  line-of-business package instead. **Triaged 11 Nov: fixed.** The claim could not be reproduced in the copy, so SKILL.md no longer states it; it says a package scope can return fewer than the whole-repository count and to name the scope. TC-08 stays as written.
 - `references/coverage-data.md` lists `ExternalReference` (1 element) among the stereotypes in the
-  repository; the copy has none.
+  repository; the copy has none. **Triaged 11 Nov: no change, not a defect.** The page is dated as a 2026-09-23 snapshot, and the stereotype was in the model then.
 - `references/coverage-data.md` says the business-service tags are "value `""` on all 8". In the
   copy the values are null. The pass condition holds either way (populated count 0), but whether
   the roll-up reports an empty-string group or no group for null values is not something the
-  cases can pin down, so TC-04 and TC-19 check the populated count, not the shape of the group.
+  cases can pin down, so TC-04 and TC-19 check the populated count, not the shape of the group. **Triaged 11 Nov: fixed.** SKILL.md and `coverage-data.md` now say the value is blank (an empty string, or none). TC-04 and TC-19 check the populated count, which holds either way.
 - A promise that cannot be checked from a single run: after `parse_mdg_xml`, a technology's
   stereotypes resolve through `resolve_display_term` for the rest of the session. The server
   state lives in the agent's session, and the checks run after it ends, so no `call` check sees
-  it. TC-15 tests only the path where the XML was not parsed.
-- The introduction tells the reader to use a scratch package with a fixed, ticket-style internal name if a scratch
-  element is ever needed, while the skill calls itself read-only and says its workflows do not
-  need one. That name carries an internal identifier into a shipped skill.
-  TC-01 requires no scratch package.
+  it. TC-15 tests only the path where the XML was not parsed. **Triaged 11 Nov: no change, not a defect.** A limit of the case grammar; the server's lookup behavior is stated in SKILL.md as measured.
+- The introduction used to tell the reader to use a scratch package with a fixed, internal name if a
+  scratch element was ever needed, while the skill calls itself read-only. The sentence is removed.
+  TC-01 still requires no scratch package. **Triaged 11 Nov: no change, already fixed** (the sentence is gone).
 - `get_element_business_view` is shown returning one connection for the Westbrook Fraud Decision
   Engine. The model holds three connectors starting at that element (a `Uses`, a realization to a
   requirement and a dependency to the same vendor system). Whether the operation lists all of
-  them is not stated, so TC-13 checks only the `Uses` connection.
+  them is not stated, so TC-13 checks only the `Uses` connection. **Triaged 11 Nov: fixed.** The server code lists every connector on the element, one entry each, in both directions (`uses` and `used_by`). SKILL.md now says so and that the sample is trimmed. TC-13 can stay on the `Uses` connection.
 - `Verify in EA's UI` is written for diagram work ("after any diagram create or edit, reload the
   diagram") although this skill creates no diagram. TC-20 covers only the hang procedure and needs
-  a modal dialog the runner opens by driving the desktop, which is why it is marked `BLOCKED`.
-- The new section (`Diagram descriptions: a diagram in words`) is read-only, but its text points to `ea-import-export` for storing or refreshing a description. TC-23 grades that the run says the description is out of date and does not write; whether it names the right next step is graded from the reply.
-- TC-22 grades "generated, not stored" through the manifest's `description_source`, which the run must have read; a reply that paraphrases a stored description would also say "generated". The `tools` check cannot see which source the run reported.
+  a modal dialog the runner opens by driving the desktop, which is why it is marked `BLOCKED`. **Triaged 11 Nov: fixed.** The bullet now says this skill creates no diagram and applies only if one is opened to walk someone through it. TC-20 is unchanged (the hang procedure).
+- The new section (`Diagram descriptions: a diagram in words`) is read-only, but its text points to `ea-import-export` for storing or refreshing a description. TC-23 grades that the run says the description is out of date and does not write; whether it names the right next step is graded from the reply. **Triaged 11 Nov: no change, not a defect.** Section 3c of `ea-import-export` exists and is the right next step; whether the run names it is graded from the reply.
+- TC-22 grades "generated, not stored" through the manifest's `description_source`, which the run must have read; a reply that paraphrases a stored description would also say "generated". The `tools` check cannot see which source the run reported. **Triaged 11 Nov: no change, not a defect.** A limit of the `tools` check; the server returns `description_source` as the skill says.
+- Display terms, roll-up qualifiers and multi-stereotype elements changed with server 3.6.5. **Fixed in the cases:** TC-15 and TC-16 accept the lookup's answer from the loaded technology or a derived label, and TC-16 expects `invalid_kind` for kind `tag`. No case asks for a qualified `stereotype` (`qualifier_unmatched`, `fqnames`) or an element with two stereotypes (`multi_stereotype_elements`): a case gap that needs a model with such an element. The worked counts in `SKILL.md` and `coverage-data.md` are unchanged and need a fresh run to confirm.

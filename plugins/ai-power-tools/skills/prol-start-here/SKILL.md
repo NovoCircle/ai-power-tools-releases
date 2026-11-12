@@ -25,13 +25,16 @@ in Prolaborate are session failures wearing a disguise.
 
 ## 1. Session preflight
 
-Five checks. Run them in order and stop at the first that fails. All are read-only.
+Five checks. Run them in order. All are read-only. A failure in 1.1 (not signed in), 1.2 (no token
+after opening the app root) or 1.5 (the intended repository is not in the list) stops the run until
+it is sorted out. 1.3 and 1.4 do not stop it: a read-only identity or a newer version is something
+to tell the person, and the run carries on with that caveat.
 
 ### 1.1 Are we signed in, and to what?
 
 Open the Prolaborate host in the browser and read the page. If you land on `/Account/Login`, stop —
 the person must sign in themselves. **Never enter credentials on their behalf.** How they sign in
-depends on the browser you are driving:
+depends on the browser you are driving (as of October 2026):
 
 - **Claude Desktop browser pane** — a clean profile with no sign-ins. Ask the person to sign in to
   Prolaborate inside the pane, then continue.
@@ -81,11 +84,19 @@ await fetch('/api/repository/GetAllActiveRepositories',
 ```
 
 Returns the repositories this person has access to, with `id`, `name` and `status`. Confirm the
-intended repository is present and `Active` before going further — an inactive repository produces
-errors throughout Prolaborate that read like permission faults.
+intended repository is present, and `Active` where the list gives a status, before going further —
+an inactive repository produces errors throughout Prolaborate that read like permission faults. If
+the intended repository is missing, it may be inactive or not shared with this person; the
+endpoint's name suggests it lists active repositories only, which has not been checked, so do not
+read a missing entry as proof of either cause.
 
 These snippets run as JavaScript inside the signed-in Prolaborate page, so the browser control you
 use must be able to run a script in that page and return the result.
+
+If it can't, stop and say so plainly. Name what you couldn't do: without a script there is no
+session token, no signed-in identity and no read of Prolaborate's own data. Then ask the person to
+switch to a browser setup that lets you run a script in the page. Don't work around it by reading
+values off the screen or by guessing.
 
 ---
 
@@ -177,6 +188,15 @@ These hold across every `prol-` skill.
 > areas in §2.** Approving a review, deleting a user and changing access permissions are not
 > gated by announcing who you are; there is no skill for them and the answer is to stop.
 
+> **List endpoints need the full request body.** A loose body is refused ("invalid JSON
+> characters"). Send the whole lazy-loading object, shape in
+> [`_shared/references/prolaborate-session.md`](../_shared/references/prolaborate-session.md) §7.
+
+> **A tab that is not in front can swallow clicks and fail screenshots.** Bring the tab to the
+> front first. If a Save click may have been swallowed, read the list before clicking again, or
+> the record is created twice. Detail in
+> [`_shared/references/prolaborate-session.md`](../_shared/references/prolaborate-session.md) §8.
+
 > **Do not act on a session that ended.** If a page becomes the login screen mid-task, stop and
 > tell the person. Re-driving a flow against a half-authenticated app creates duplicates.
 
@@ -186,8 +206,8 @@ These hold across every `prol-` skill.
 
 Work through these in order before concluding a capability is missing:
 
-1. **`ID2019` in `WWW-Authenticate`** — the token aged out. Reload the page to refresh it, re-read
-   `sessionStorage`, retry once.
+1. **`ID2019` in `WWW-Authenticate`** — the token aged out. Navigate within the app (a reload also
+   works) to refresh it, re-read `sessionStorage`, retry once.
 2. **`ID2095`** — authenticated but not permitted. Check `rol` and the person's Access Permissions
    on the repository. This is a permissions answer, not a bug.
 3. **`422` with `'User Id' must not be empty`** — you are holding a service token rather than the
@@ -199,3 +219,13 @@ Work through these in order before concluding a capability is missing:
 
 If none of these explain it, say what you observed and stop. Do not try alternative routes to the
 same change in a collaboration tool — partial writes are visible to other people immediately.
+
+---
+
+## 5. After a model is copied to another repository
+
+EA keeps a Prolaborate repository id inside each model (Model Options, Cloud, Prolaborate Repo ID;
+stored in `usys_system` as `ProLabRepoID`). It travels with the model, so a model copied into another
+EA repository still points at the old Prolaborate repository, and Prolaborate content built for the new
+one will not line up with it. After any copy or transfer, read the value and compare it with the
+Prolaborate repository the model should serve. How to read and change it is in the `ea-com` skill.

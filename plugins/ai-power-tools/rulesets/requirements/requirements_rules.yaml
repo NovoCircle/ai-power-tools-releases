@@ -1,0 +1,537 @@
+# Requirements Modeling Conformance Ruleset
+# Language:     requirements (no single standard: ISO/IEC/IEEE 29148:2018 with OMG SysML 1.5 clause 16 as supporting source)
+# Enforced by:  AI Power Tools for Sparx EA -- validate_model tool
+#
+# Needs an engine with selection by EA type and containment (selector.types, "type:" ends, contains_count).
+#
+# WHAT EA STORES (MEASURED).
+#
+# Measured on EA 17.1 build 1716, in a test model. EA's "EA Requirements" technology holds model templates only; its
+# stereotypes are the EAREQ profile of Core Extensions. An element created with the type `EAREQ::BusinessRequirement` is stored with
+# `t_object.Object_Type = Requirement` and `t_object.Stereotype = BusinessRequirement`; the qualified name lives only in the t_xref row (FQName=EAREQ::...).
+# validate_model selects with `Stereotype IN (...)`, exact and case sensitive, so the selectors use the bare names. A requirement in EA is the EA TYPE
+# Requirement (selected here as `types: {any_of: [Requirement]}` and `type:Requirement`); EAREQ stereotypes classify it. The plain stereotype `Functional`
+# that EA's model patterns use is not in EAREQ: it is one of EA's built-in stereotypes of the Requirement type (t_stereotypes), stored by its bare name.
+# The relationship stereotypes are not EAREQ either: EA's own Requirements technology has none. A derive, satisfy, verify, copy and allocate are Dependency
+# (allocate: Abstraction) connectors stereotyped deriveReqt, satisfy, verify, copy and allocate from the SysML1.4 technology; a trace is a Dependency
+# stereotyped trace (SysML1.4 or EA's built-in one: the stored name is the same). Containment is an Aggregation (shared, the diamond at the parent, drawn
+# from child to parent in EA's own patterns) or nesting (ParentID).
+#
+# LEVELS ARE A JUDGMENT. The language has four levels (business, stakeholder, system, system element) and EA stores none of them. The only levels EAREQ carries are
+# the stereotypes BusinessRequirement and UserRequirement. This ruleset reads UserRequirement as the stakeholder level, BusinessRequirement as the business level,
+# and every other requirement stereotype (the six other EAREQ ones and `Functional`) as system level or below. Rules that depend on it say so
+# (REL-009, TRACE-002, TRACE-003, TRACE-005, TRACE-006). A Requirement with no stereotype is not selected by a rule that selects by stereotype.
+#
+# WHAT THE GRAMMAR CANNOT READ. It reads tagged values, not the element's own fields: Status, Priority, Difficulty, Version, Author, Alias and the notes of a
+# requirement are columns of t_object (Status; PDATA2; PDATA3; Version; Author; Alias; Note), so the attribute rules that need them have no rule here
+# (the language's rules reference lists each). It reads no name, no text and no number. An EAREQ memo tag always reads as the text "<memo>" (the memo's own text is in
+# the Notes column), so a "tag is not empty" test on a memo tag is always true; only the enumeration tag `priority` is tested.
+#
+# Sources:
+#   [S1] ISO/IEC/IEEE 29148:2018, Systems and software engineering, Life cycle processes, Requirements engineering (paid; read through third-party summaries)
+#   [S2] OMG SysML 1.5, clause 16 (requirements), through the sysml-1 skill
+#
+# Rule ids: `RQ-<CAT>-nnn` here, `implements: REQ-<CAT>-nnn` names the rule of references/rules.md.
+
+meta:
+  version: "1.0"
+  language: requirements
+  organization: "(your organization)"
+  mdg_family: "EAREQ (Core Extensions); SysML1.4 for the relationship stereotypes"
+  description: >
+    Conformance rules for requirements modeled with Sparx EA's requirement element and the EAREQ stereotypes. They check what the saved model shows: that a derive,
+    satisfy, verify, copy or allocate joins the kinds of element the language allows, that only requirements are nested in a requirement, that a requirement
+    has a source, is verified or validated, is satisfied, is derived from a parent, and has a priority on the agreed scale. Status, version, owner, text, names and
+    the quality of a requirement's wording are not fields the rule grammar can read and are not checked.
+  severity_levels:
+    error:   The source states it as a constraint (a must).
+    warning: The source gives it as guidance (a should).
+    info:    Advisory note; not a conformance violation.
+
+tables:
+  requirements-pairs:
+    source: "ISO/IEC/IEEE 29148 6.4.3.5, 6.5.1.2 and 6.5.2.2 and OMG SysML 1.5 clause 16 (SYSML-REQ-016, SYSML-REQ-019), as the language file's relationships satisfy, verify and allocate and the rules REQ-REL-002, REQ-REL-003 and REQ-REL-010 state them; Requirement is the EA type Requirement, DesignElement the EA types listed for it in the requirements EA reference"
+    connectors:
+      "s": satisfy
+      "v": verify
+      "a": allocate
+    cells:
+      type:Action:
+        type:Requirement: "sv"
+      type:Activity:
+        type:Requirement: "sv"
+      type:Actor:
+        type:Requirement: "sv"
+      type:Artifact:
+        type:Requirement: "sv"
+      type:Boundary:
+        type:Requirement: "sv"
+      type:Change:
+        type:Requirement: "sv"
+      type:Class:
+        type:Requirement: "sv"
+      type:Collaboration:
+        type:Requirement: "sv"
+      type:Component:
+        type:Requirement: "sv"
+      type:Constraint:
+        type:Requirement: "sv"
+      type:DataType:
+        type:Requirement: "sv"
+      type:Decision:
+        type:Requirement: "sv"
+      type:Entity:
+        type:Requirement: "sv"
+      type:Enumeration:
+        type:Requirement: "sv"
+      type:Event:
+        type:Requirement: "sv"
+      type:Feature:
+        type:Requirement: "sv"
+      type:GUIElement:
+        type:Requirement: "sv"
+      type:Interface:
+        type:Requirement: "sv"
+      type:Issue:
+        type:Requirement: "sv"
+      type:Node:
+        type:Requirement: "sv"
+      type:Object:
+        type:Requirement: "sv"
+      type:Package:
+        type:Requirement: "sv"
+      type:Part:
+        type:Requirement: "sv"
+      type:Requirement:
+        type:Artifact: "a"
+        type:Class: "a"
+        type:Component: "a"
+        type:Entity: "a"
+        type:Interface: "a"
+        type:Node: "a"
+        type:Object: "a"
+        type:Part: "a"
+        type:Requirement: "sv"
+      type:Risk:
+        type:Requirement: "sv"
+      type:Screen:
+        type:Requirement: "sv"
+      type:Sequence:
+        type:Requirement: "sv"
+      type:Signal:
+        type:Requirement: "sv"
+      type:State:
+        type:Requirement: "sv"
+      type:StateMachine:
+        type:Requirement: "sv"
+      type:Test:
+        type:Requirement: "sv"
+      type:UseCase:
+        type:Requirement: "sv"
+  requirements-derive-levels:
+    source: "The language file's relationship derive and the rule REQ-REL-009 (a requirement is derived from one at the same or a higher level: business, then stakeholder, then system, then system element), over the two EAREQ stereotypes that carry a level, BusinessRequirement and UserRequirement"
+    connectors:
+      "d": deriveReqt
+    cells:
+      BusinessRequirement:
+        BusinessRequirement: "d"
+      UserRequirement:
+        BusinessRequirement: "d"
+        UserRequirement: "d"
+
+rules:
+
+  # --------------------------------------------------------------------------
+  # REL
+  # --------------------------------------------------------------------------
+  - id: RQ-REL-001
+    implements: REQ-REL-001
+    name: "Both ends of a derive relationship are requirements"
+    description: >
+      A derived requirement and the requirement it is derived from are both requirements (OMG SysML
+      1.5 clause 16, through the language file's REQ-REL-001; ISO/IEC/IEEE 29148 5.3.2). EA stores a
+      derive as a Dependency stereotyped deriveReqt (the SysML1.4 technology), and a requirement as
+      the EA type Requirement that every EAREQ stereotype is on, so both ends must have the type
+      Requirement. EA accepts a deriveReqt between any two elements without a message.
+    category: rel
+    severity: error
+    demo_trigger: true
+
+    selector:
+      type: connector
+      connector_stereotype: deriveReqt
+
+    condition:
+      type: connector_endpoint_stereotype
+      source_must_be_one_of: ["type:Requirement"]
+      target_must_be_one_of: ["type:Requirement"]
+
+    remediation:
+      short: "Draw the deriveReqt between two requirements: from the derived requirement to its parent."
+      auto_fixable: false
+
+  - id: RQ-REL-002
+    implements: REQ-REL-002
+    name: "The target of a satisfy relationship is a requirement"
+    description: >
+      Whatever satisfies a requirement may be any element, but what it satisfies is a requirement
+      (SysML 1.5 clause 16, REQ-REL-002). EA stores satisfy as a Dependency stereotyped satisfy. The
+      pair table requirements-pairs allows a satisfy from any element type EA offers to the type
+      Requirement and nowhere else. An end whose EA type the table does not name (a type EA added
+      after this table, a Port) is ignored, not reported.
+    category: rel
+    severity: error
+    demo_trigger: false
+
+    selector:
+      type: connector
+      connector_stereotypes: [satisfy]
+
+    condition:
+      type: relationship_table
+      table: requirements-pairs
+      unknown_endpoint: ignore
+
+    remediation:
+      short: "Draw the satisfy from the design element to the requirement it satisfies, not to another kind of element."
+      auto_fixable: false
+
+  - id: RQ-REL-003
+    implements: REQ-REL-003
+    name: "The target of a verify relationship is a requirement"
+    description: >
+      What verifies a requirement may be any element, but what it verifies is a requirement (SysML 1.5
+      clause 16, REQ-REL-003). EA stores verify as a Dependency stereotyped verify. The pair table
+      requirements-pairs allows a verify from any element type EA offers to the type Requirement and
+      nowhere else. An end whose EA type the table does not name is ignored, not reported.
+    category: rel
+    severity: error
+    demo_trigger: false
+
+    selector:
+      type: connector
+      connector_stereotypes: [verify]
+
+    condition:
+      type: relationship_table
+      table: requirements-pairs
+      unknown_endpoint: ignore
+
+    remediation:
+      short: "Draw the verify from the test (or other verifying element) to the requirement it verifies."
+      auto_fixable: false
+
+  - id: RQ-REL-004
+    implements: REQ-REL-004
+    name: "Both ends of a copy relationship are requirements"
+    description: >
+      A slave requirement and its master are both requirements (SysML 1.5 clause 16, REQ-REL-004). EA
+      stores a copy as a Dependency stereotyped copy, so both ends must have the EA type Requirement.
+    category: rel
+    severity: error
+    demo_trigger: false
+
+    selector:
+      type: connector
+      connector_stereotype: copy
+
+    condition:
+      type: connector_endpoint_stereotype
+      source_must_be_one_of: ["type:Requirement"]
+      target_must_be_one_of: ["type:Requirement"]
+
+    remediation:
+      short: "Draw the copy between two requirements: from the slave to its master."
+      auto_fixable: false
+
+  - id: RQ-REL-005
+    implements: REQ-REL-005
+    name: "Only requirements are nested in a requirement"
+    description: >
+      Only requirements are contained in a requirement (SysML 1.5 clause 16, REQ-REL-005). In EA a
+      child element nested under a requirement in the Browser has the requirement as its owner
+      (ParentID). The rule counts the children of each requirement that have an EA type other than
+      Requirement and reports a requirement with any. Partial: it reads nesting only. A containment
+      drawn as an Aggregation connector cannot be isolated (an unstereotyped Aggregation says nothing
+      about requirements), and a child whose EA type is not in the list below is not seen.
+    category: rel
+    severity: error
+    demo_trigger: false
+
+    selector:
+      type: element
+      types:
+        any_of: [Requirement]
+
+    condition:
+      type: contains_count
+      child:
+        stereotype_one_of: ["type:Action", "type:Activity", "type:Actor", "type:Artifact", "type:Boundary", "type:Change", "type:Class", "type:Collaboration", "type:Component", "type:Constraint", "type:DataType", "type:Decision", "type:Entity", "type:Enumeration", "type:Event", "type:Feature", "type:GUIElement", "type:Interface", "type:Issue", "type:Node", "type:Object", "type:Part", "type:Risk", "type:Screen", "type:Sequence", "type:Signal", "type:State", "type:StateMachine", "type:Test", "type:UseCase"]
+      max: 0
+
+    remediation:
+      short: "Move the element out of the requirement, or make it a requirement."
+      auto_fixable: false
+
+  - id: RQ-REL-009
+    implements: REQ-REL-009
+    name: "A requirement is derived from one at the same or a higher level"
+    description: >
+      A requirement is derived from a requirement at the same or a higher level (business, then
+      stakeholder, then system, then system element), not from a lower one (the language file's
+      REQ-REL-009, a reading of ISO/IEC/IEEE 29148 5.3.2). EA stores a level only as two
+      EAREQ stereotypes, BusinessRequirement and UserRequirement (read here as the stakeholder level,
+      judgment), so the table requirements-derive-levels covers a derive between those two and nothing
+      else: a BusinessRequirement may be derived only from a BusinessRequirement, a UserRequirement
+      from either. A derive that starts or ends on any other stereotype is not judged.
+    category: rel
+    severity: warning
+    demo_trigger: false
+
+    selector:
+      type: connector
+      connector_stereotypes: [deriveReqt]
+
+    condition:
+      type: relationship_table
+      table: requirements-derive-levels
+      unknown_endpoint: ignore
+
+    remediation:
+      short: "Reverse the deriveReqt, or derive the requirement from one at its own level or above."
+      auto_fixable: false
+
+  - id: RQ-REL-010
+    implements: REQ-REL-010
+    name: "A requirement is allocated to a design element"
+    description: >
+      The source of an allocate relationship is a requirement and its target is a design element
+      (ISO/IEC/IEEE 29148 6.5.1.2, the language file's REQ-REL-010). EA stores allocate as an
+      Abstraction stereotyped allocate (SysML1.4). The pair table requirements-pairs allows an
+      allocate from the type Requirement to a design element type (Artifact, Class, Component, Entity,
+      Interface, Node, Object, Part) and nowhere else. An end whose EA type the table does not name is
+      ignored.
+    category: rel
+    severity: warning
+    demo_trigger: false
+
+    selector:
+      type: connector
+      connector_stereotypes: [allocate]
+
+    condition:
+      type: relationship_table
+      table: requirements-pairs
+      unknown_endpoint: ignore
+
+    remediation:
+      short: "Draw the allocate from the requirement to the design element that receives it."
+      auto_fixable: false
+
+
+  # --------------------------------------------------------------------------
+  # TRACE
+  # --------------------------------------------------------------------------
+  - id: RQ-TRACE-001
+    implements: REQ-TRACE-001
+    name: "Every requirement traces to a source"
+    description: >
+      Every requirement traces to a source: a stakeholder, a need, a source document, a trade study, a
+      business rule or a parent requirement (ISO/IEC/IEEE 29148 6.3.3.7, 6.4.3.5; the language file's
+      REQ-TRACE-001, which REQ-ATTR-007 refers to). The rule reads the source as a connector
+      stereotyped trace that leaves the requirement. Partial: a source recorded in another way (a
+      deriveReqt to a parent, nesting) does not count here, so a requirement whose only source link is
+      one of those is reported.
+    category: trace
+    severity: warning
+    demo_trigger: true
+
+    selector:
+      type: element
+      types:
+        any_of: [Requirement]
+
+    condition:
+      type: connector_count
+      connector_stereotype: trace
+      direction: outgoing
+      min: 1
+
+    remediation:
+      short: "Draw a trace from the requirement to its stakeholder, need, document, study or rule."
+      auto_fixable: false
+
+  - id: RQ-TRACE-002
+    implements: REQ-TRACE-002
+    name: "Every system level requirement is verified"
+    description: >
+      Every system, system element and software requirement is verified by at least one verification
+      entity (ISO/IEC/IEEE 29148 6.4.3.5, 6.5.2.2; REQ-TRACE-002). EA stores a verification as a
+      verify connector that ends on the requirement. EA stores no level for these, so the rule reads
+      every EAREQ requirement stereotype except BusinessRequirement and UserRequirement, and the model
+      patterns' Functional stereotype, as system level or below (judgment); a Requirement with no
+      stereotype is not selected.
+    category: trace
+    severity: warning
+    demo_trigger: false
+
+    selector:
+      type: element
+      stereotypes:
+        any_of: [ArchitecturalRequirement, FunctionalRequirement, NonfunctionalRequirement, SecurityRequirement, ImplementationRequirement, RegulatoryRequirement, Functional]
+
+    condition:
+      type: connector_count
+      connector_stereotype: verify
+      direction: incoming
+      min: 1
+
+    remediation:
+      short: "Add a verify from a test, analysis, inspection or demonstration to the requirement."
+      auto_fixable: false
+
+  - id: RQ-TRACE-003
+    implements: REQ-TRACE-003
+    name: "Every business and stakeholder requirement is validated"
+    description: >
+      Every business and stakeholder requirement can be traced to what validates it (ISO/IEC/IEEE
+      29148 6.5.3.3; REQ-TRACE-003, applies when validation is planned). The language file reads
+      validation as the verify relationship, so the rule asks for a verify
+      connector that ends on a BusinessRequirement or a UserRequirement (read as the stakeholder
+      level, judgment). It applies whenever the model holds such a requirement, not only when
+      validation is planned.
+    category: trace
+    severity: warning
+    demo_trigger: false
+
+    selector:
+      type: element
+      stereotypes:
+        any_of: [BusinessRequirement, UserRequirement]
+
+    condition:
+      type: connector_count
+      connector_stereotype: verify
+      direction: incoming
+      min: 1
+
+    remediation:
+      short: "Add a verify from the element that validates the requirement (an acceptance test, a review record)."
+      auto_fixable: false
+
+  - id: RQ-TRACE-005
+    implements: REQ-TRACE-005
+    name: "Every system level requirement is satisfied by a design element"
+    description: >
+      Every system and system element requirement is satisfied by at least one design element
+      (ISO/IEC/IEEE 29148 6.4.3.5; REQ-TRACE-005, applies when a design exists). EA stores a
+      satisfaction as a satisfy connector that ends on the requirement. The selection is the system
+      level reading of TRACE-002. The rule applies whenever the model holds such a requirement, not
+      only when a design exists.
+    category: trace
+    severity: warning
+    demo_trigger: false
+
+    selector:
+      type: element
+      stereotypes:
+        any_of: [ArchitecturalRequirement, FunctionalRequirement, NonfunctionalRequirement, SecurityRequirement, ImplementationRequirement, RegulatoryRequirement, Functional]
+
+    condition:
+      type: connector_count
+      connector_stereotype: satisfy
+      direction: incoming
+      min: 1
+
+    remediation:
+      short: "Draw a satisfy from the design element to the requirement."
+      auto_fixable: false
+
+  - id: RQ-TRACE-006
+    implements: REQ-TRACE-006
+    name: "Every requirement below the business level traces upward"
+    description: >
+      Every requirement below the business level traces upward to at least one parent requirement or
+      the need it came from, so that each is justified (ISO/IEC/IEEE 29148 6.4.3.5, 5.3.2;
+      REQ-TRACE-006). The rule reads the upward trace as a deriveReqt that leaves the requirement, for
+      a UserRequirement and every system level stereotype (see TRACE-002). Partial: a requirement
+      whose only upward link is a trace to a need, an Aggregation or nesting is reported too.
+    category: trace
+    severity: warning
+    demo_trigger: false
+
+    selector:
+      type: element
+      stereotypes:
+        any_of: [UserRequirement, ArchitecturalRequirement, FunctionalRequirement, NonfunctionalRequirement, SecurityRequirement, ImplementationRequirement, RegulatoryRequirement, Functional]
+
+    condition:
+      type: connector_count
+      connector_stereotype: deriveReqt
+      direction: outgoing
+      min: 1
+
+    remediation:
+      short: "Draw a deriveReqt from the requirement to its parent requirement."
+      auto_fixable: false
+
+
+  # --------------------------------------------------------------------------
+  # ATTR
+  # --------------------------------------------------------------------------
+  - id: RQ-ATTR-005
+    implements: REQ-ATTR-005
+    name: "Every requirement has a stakeholder priority"
+    description: >
+      Every requirement has a stakeholder priority (ISO/IEC/IEEE 29148 5.2.8; REQ-ATTR-005). Every
+      EAREQ requirement stereotype carries a tagged value priority (an enumeration, empty until set);
+      the rule reads that tag. It does not read EA's own Priority field of the element (a different
+      field, set to Medium by default, t_object.PDATA2). A Requirement with no EAREQ stereotype has no
+      such tag and is not selected.
+    category: attr
+    severity: warning
+    demo_trigger: false
+
+    selector:
+      type: element
+      stereotypes:
+        any_of: [ArchitecturalRequirement, BusinessRequirement, UserRequirement, FunctionalRequirement, NonfunctionalRequirement, SecurityRequirement, ImplementationRequirement, RegulatoryRequirement]
+
+    condition:
+      type: tagged_value_required
+      tags:
+        - name: priority
+          must_be_non_empty: true
+
+    remediation:
+      short: "Set the priority tagged value of the requirement."
+      auto_fixable: false
+
+  - id: RQ-ATTR-016
+    implements: REQ-ATTR-016
+    name: "Priority is on the agreed scale"
+    description: >
+      Priority is stated on a scale the stakeholders have agreed, or as high, medium or low
+      (ISO/IEC/IEEE 29148 5.2.8; REQ-ATTR-016). The scale EA offers on the priority tag is High,
+      Medium, Low, Essential, Conditional and Optional; the rule reports a value outside it. Partial:
+      a project that agrees its own scale must replace the list. An empty value is ATTR-005's finding,
+      not this one.
+    category: attr
+    severity: warning
+    demo_trigger: false
+
+    selector:
+      type: element
+      stereotypes:
+        any_of: [ArchitecturalRequirement, BusinessRequirement, UserRequirement, FunctionalRequirement, NonfunctionalRequirement, SecurityRequirement, ImplementationRequirement, RegulatoryRequirement]
+
+    condition:
+      type: tagged_value_constraint
+      tags:
+        - name: priority
+          value_must_be_one_of: ["High", "Medium", "Low", "Essential", "Conditional", "Optional"]
+
+    remediation:
+      short: "Use a value of the agreed scale for the priority tagged value."
+      auto_fixable: false
+

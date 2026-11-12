@@ -1,0 +1,280 @@
+# Data Modeling and Entity-Relationship (ER) Modeling Conformance Ruleset
+# Language:     data-modeling-er (no single standard: Chen 1976, FIPS 184 / IDEF1X, Codd 1970, a public SQL database manual)
+# Enforced by:  AI Power Tools for Sparx EA -- validate_model tool
+#
+# Needs an engine with selection by EA type and containment (the connector_type field of connector_count is used here).
+#
+# EA SPLITS THIS LANGUAGE ACROSS TWO TECHNOLOGIES, AND THE STORED NAMES ARE THE BARE STEREOTYPE NAMES (MEASURED).
+#
+# Measured on EA 17.1 build 1716, in a test model: an element created with the type
+# `ERD::ERD_Entity` stores `t_object.Stereotype = ERD_Entity` and a t_xref row `FQName=ERD::ERD_Entity`; one created with
+# `EAUML::table` stores `table` and `FQName=EAUML::table`. The prefixes are ERD (the Entity Relationship Diagram technology)
+# and EAUML (a profile of Core Extensions); EA's Resources tab shows neither as a technology id. validate_model selects with
+# `Stereotype IN (...)`, exact and case sensitive, so the selectors below use the bare names (ERD_Entity, table), not the
+# qualified form.
+#
+# WHAT EA STORES AS WHAT. ERD level (conceptual and logical): ERD_Entity and ERD_Attribute are elements; an attribute is
+# joined to its owner by an ERD_Connector (owner to attribute). A relationship is an ERD_Relationship connector; a subtype is a
+# Generalization stereotyped ERD_Disjoint or ERD_Overlapping (category to generic). The primary key of an entity is the
+# tagged value attributeType = primaryKey on one of its attributes; a weak entity is isWeakEntity = true. Physical level: a
+# table is a Class stereotyped table. ITS COLUMNS, KEYS AND INDEXES ARE ATTRIBUTES AND OPERATIONS OF THE TABLE (stereotypes
+# column, PK, FK, unique, index), NOT ELEMENTS, and the rule grammar cannot read attributes or operations. A foreign key is
+# also an association stereotyped FK between the two tables, and that connector is what the rules below can see.
+#
+# SCOPE. The sources apply some rules only to one notation or level (applies_when in references/rules.md): the model carries no
+# marker of its notation, so a rule here fires on every construct it selects. Each rule's selector is the construct the rule
+# is about (a weak entity, a multi-valued attribute, an FK line), so scoping follows from the model's content.
+#
+# The rule grammar cannot read a name, a cardinality, an attribute or an operation, or follow a path; the language's rules
+# that need them have no rule here.
+#
+# Sources:
+#   [S1] Chen, The Entity-Relationship Model -- Toward a Unified View of Data, ACM TODS 1(1), 1976
+#   [S2] FIPS PUB 184, Integration Definition for Information Modeling (IDEF1X), 1993 (withdrawn 2008)
+#   [S3] Codd, A Relational Model of Data for Large Shared Data Banks, CACM 13(6), 1970
+#   [S4] A public SQL database manual, chapter on constraints (see references/standard.md)
+#
+# Rule ids: `DMER-<CAT>-nnn` here, `implements: DATA-<CAT>-nnn` names the rule of references/rules.md.
+
+meta:
+  version: "1.0"
+  language: data-modeling-er
+  organization: "(your organization)"
+  mdg_family: "ERD; EAUML (Core Extensions)"
+  description: >
+    Conformance rules for data models and entity-relationship models built with Sparx EA's Entity Relationship Diagram
+    technology (conceptual and logical level) and its data-modeling profile (physical level). They check what the saved
+    model shows: which pairs of elements a relationship, attribute or foreign key line may join, that an attribute has exactly
+    one owner and is single-valued, that a weak entity has an owner and a category entity has one generic entity. Columns,
+    keys, indexes, cardinalities, names and normal forms are not fields the rule grammar can read and are not checked.
+  severity_levels:
+    error:   The source states it as a requirement (a must).
+    warning: The source gives it as guidance (a should).
+    info:    Advisory note; not a conformance violation.
+
+tables:
+  data-modeling-er-logical:
+    source: "Chen 1976 section 3.1 (participation and attribute lines), FIPS 184 sections 3.5 to 3.7 (connection, categorization and non-specific relationships); the language file's relationships.connection_tables for ChenDiagram and IDEF1XViews, mapped to the stereotypes of EA's ERD technology"
+    connectors:
+      "r": ERD_Relationship
+      "c": ERD_Connector
+      "d": ERD_Disjoint
+      "o": ERD_Overlapping
+    cells:
+      ERD_Entity:
+        ERD_Attribute: "c"
+        ERD_Entity: "dor"
+        ERD_naryAssociation: "cr"
+        WeakRelationship: "cr"
+      ERD_naryAssociation:
+        ERD_Attribute: "c"
+        ERD_Entity: "cr"
+      WeakRelationship:
+        ERD_Attribute: "c"
+        ERD_Entity: "cr"
+  data-modeling-er-physical:
+    source: "SQLDOC 5.5.5 (foreign key constraint), the language file's relationships.connection_tables for PhysicalDataModelDiagram, mapped to the stereotypes of EA's EAUML data-modeling profile"
+    connectors:
+      "f": FK
+    cells:
+      table:
+        table: "f"
+
+rules:
+
+  # --------------------------------------------------------------------------
+  # ENT
+  # --------------------------------------------------------------------------
+  - id: DMER-ENT-005
+    implements: DATA-ENT-005
+    name: "A weak entity takes its identity from an owner through a relationship"
+    description: >
+      A weak entity cannot be identified by its own attribute values alone. It is identified by them
+      together with the key of one owner entity, through a relationship in which its existence depends
+      on the owner (Chen 1976, section 2.3.2). EA marks a weak entity with the tagged value
+      isWeakEntity = true on an ERD_Entity. The rule reads the owner as the source of an
+      ERD_Relationship that ends on the weak entity (parent to child, the direction the other rules of
+      this language use), so a weak entity with no ERD_Relationship arriving at it is reported.
+      Partial: it does not test that the relationship is one-to-many or that the owner's key is part
+      of the weak entity's key, and it does not see an owner joined only through a WeakRelationship
+      element.
+    category: ent
+    severity: error
+    demo_trigger: false
+
+    selector:
+      type: element
+      stereotypes:
+        any_of: [ERD_Entity]
+      tagged_value_filter:
+        - tag: isWeakEntity
+          value_in: ["true"]
+
+    condition:
+      type: connector_count
+      connector_stereotype: ERD_Relationship
+      direction: incoming
+      min: 1
+
+    remediation:
+      short: "Draw an ERD_Relationship from the owner entity to the weak entity, or clear isWeakEntity if the entity can be identified by its own attributes."
+      auto_fixable: false
+
+  # --------------------------------------------------------------------------
+  # ATT
+  # --------------------------------------------------------------------------
+  - id: DMER-ATT-001
+    implements: DATA-ATT-001
+    name: "Every attribute is owned by exactly one entity or relationship"
+    description: >
+      Every attribute is owned by exactly one entity (the single-owner rule, FIPS 184 section 3.4); in
+      Chen's model it may be owned by a relationship set (section 2.2.3). EA draws an attribute as a
+      separate ERD_Attribute element joined to its owner by an ERD_Connector that runs from the owner
+      to the attribute, so an ERD_Attribute must have exactly one ERD_Connector arriving at it. An
+      attribute that no one owns, or that two owners share, is reported. An attribute is reached by
+      another entity only by migrating as a foreign key, never by a second owner line.
+    category: att
+    severity: error
+    demo_trigger: true
+
+    selector:
+      type: element
+      stereotypes:
+        any_of: [ERD_Attribute]
+
+    condition:
+      type: connector_count
+      connector_stereotype: ERD_Connector
+      direction: incoming
+      min: 1
+      max: 1
+
+    remediation:
+      short: "Join the attribute to the one entity or relationship that owns it with an ERD_Connector drawn from the owner; remove any second owner line (give the other entity a foreign key instead)."
+      auto_fixable: false
+  - id: DMER-ATT-002
+    implements: DATA-ATT-002
+    name: "An attribute has at most one value (no multi-valued attribute)"
+    description: >
+      An instance of an entity has at most one value for each of its attributes; a repeating group is
+      not an attribute and is modeled as a further entity (FIPS 184 section 3.4.3(e); Chen 1976
+      section 2.2.3; Codd 1970 section 1.4). EA's ERD_Attribute carries attributeType with the values
+      normal, primaryKey, multi-valued and derived. A value of multi-valued names a repeating group,
+      so it is reported. Partial: only an attribute the modeler marked multi-valued is seen; a
+      repeating group modeled under a normal type is not.
+    category: att
+    severity: error
+    demo_trigger: true
+
+    selector:
+      type: element
+      stereotypes:
+        any_of: [ERD_Attribute]
+
+    condition:
+      type: tagged_value_constraint
+      tags:
+        - name: attributeType
+          value_must_be_one_of: [normal, primaryKey, derived]
+
+    remediation:
+      short: "Model the repeating group as a further entity related to the owner, and give the attribute a single-valued type."
+      auto_fixable: false
+
+  # --------------------------------------------------------------------------
+  # REL
+  # --------------------------------------------------------------------------
+  - id: DMER-REL-001
+    implements: DATA-REL-001
+    name: "A relationship line joins only the entity-level pairs the connection table gives"
+    description: >
+      A connection relationship joins exactly two entities, a parent and a child (FIPS 184 section
+      3.5.4(a)); in Chen's model a participation line joins an entity to a relationship set and an
+      attribute line joins an entity or relationship set to an attribute (section 3.1). The table
+      holds those pairs, generated from the language file's connection tables and mapped to EA's ERD
+      stereotypes: ERD_Relationship joins entities (and an entity with a relationship set),
+      ERD_Connector joins an owner to its attribute, ERD_Disjoint and ERD_Overlapping join a category
+      to its generic entity. An end that is not an ERD element at all (a table, a view) is reported,
+      because these connectors belong to the ERD technology. The participation line of a relationship
+      set is not measured in EA: the sample models hold none, so both ERD_Relationship and
+      ERD_Connector are allowed there. Partial for Chen's n-ary relationship: the table cannot count
+      the participants of a diamond.
+    category: rel
+    severity: error
+    demo_trigger: true
+
+    selector:
+      type: connector
+      connector_stereotypes: any_of_table
+
+    condition:
+      type: relationship_table
+      table: data-modeling-er-logical
+      unknown_endpoint: error
+
+    remediation:
+      short: "Join an entity to an entity with an ERD_Relationship, an owner to its attribute with an ERD_Connector drawn from the owner, and a category to its generic entity with ERD_Disjoint."
+      auto_fixable: false
+
+  # --------------------------------------------------------------------------
+  # CAT
+  # --------------------------------------------------------------------------
+  - id: DMER-CAT-001
+    implements: DATA-CAT-001
+    name: "A category entity has exactly one generic entity"
+    description: >
+      A category entity has exactly one generic entity, so it belongs to exactly one cluster (FIPS 184
+      section 3.6.3(a)). EA stores a categorization as a Generalization from the category to the
+      generic entity, stereotyped ERD_Disjoint or ERD_Overlapping (or plain, with no stereotype). The
+      rule counts an ERD_Entity's outgoing connectors of EA type Generalization, whatever their
+      stereotype, and reports an entity with more than one. An entity with none is not a category and
+      is not reported.
+    category: cat
+    severity: error
+    demo_trigger: true
+
+    selector:
+      type: element
+      stereotypes:
+        any_of: [ERD_Entity]
+
+    condition:
+      type: connector_count
+      connector_type: Generalization
+      direction: outgoing
+      max: 1
+
+    remediation:
+      short: "Give the category one generic entity; to share attributes with a second entity, relate them or put both under a common generic entity."
+      auto_fixable: false
+
+  # --------------------------------------------------------------------------
+  # PHY
+  # --------------------------------------------------------------------------
+  - id: DMER-PHY-005
+    implements: DATA-PHY-005
+    name: "A foreign key line joins two tables"
+    description: >
+      A foreign key constraint references the primary key or a unique constraint of the referenced
+      table (SQLDOC 5.5.5). In EA's data model a foreign key is an association stereotyped FK from the
+      referencing table to the referenced table (the language file's order), besides an FK operation
+      on the referencing table. The table holds that one pair, table to table. An FK line that starts
+      or ends on anything else (an ERD entity, a view) is reported. Partial: that the target columns
+      form a primary key or unique constraint is held in operations and parameters, which the rule
+      grammar cannot read.
+    category: phy
+    severity: error
+    demo_trigger: false
+
+    selector:
+      type: connector
+      connector_stereotypes: any_of_table
+
+    condition:
+      type: relationship_table
+      table: data-modeling-er-physical
+      unknown_endpoint: error
+
+    remediation:
+      short: "Draw the FK association from the referencing table to the referenced table, or use a relationship that suits the ends (an ERD_Relationship between entities)."
+      auto_fixable: false

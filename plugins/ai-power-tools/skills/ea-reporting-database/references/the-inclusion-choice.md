@@ -6,7 +6,7 @@ from a small Westbrook Bank-shaped fixture; substitute your own technology, ster
 model.
 
 Code: `../../_shared/tools/inclusion.py`. It is pure: rows in, plain data out. Its tests run with
-`python -m pytest ../_shared/tools/test_inclusion.py -q` and need no EA.
+`python -m pytest ../../_shared/tools/test_inclusion.py -q` and need no EA.
 
 ---
 
@@ -42,22 +42,33 @@ censuses were taken from go to `analyze` as well, because it needs a name to sho
 the metaclass of unstereotyped elements.
 
 **Where the inputs come from.** Each is a list of row dicts keyed by column name, read with
-`ea_analyze(operation="execute_sql", params={"sql": ...})`:
+`ea_analyze(operation="execute_sql", params={"sql": ..., "include_xml": False})`. The rows come back
+under the `rows` key of the result (`{"rows": [...], "row_count": n, ...}`), and every value is a
+string: NULL and empty text are both `""`, and an id is `"12"`, not `12`. Compare ids with ids from
+the same kind of row, or convert both sides with `int()`.
+
+**Take the census over the scope, not the whole repository, and read only the scope.** The scope is
+the root packages in `scope.roots` and every sub-package under them, minus each package in
+`scope.exclude` and its sub-packages. The two readings give different answers: a defect or a gap
+outside the scope would otherwise stop the preflight or be offered as a decision, and the build
+would never have read it. Read `t_package` whole (it is small), work out the in-scope package ids,
+and filter the other reads by them in SQL, so a large repository's tables are never read whole. A
+connector is in scope when either end's element is; keep only the `t_xref` rows whose `Client` is
+an in-scope element or connector GUID.
 
 | Name | Read with |
 |---|---|
 | `packages` | `SELECT Package_ID, Parent_ID, ea_guid, Name FROM t_package` |
-| `all_objects` | `SELECT * FROM t_object` |
-| `all_connectors` | `SELECT * FROM t_connector` |
-| `all_xref` | `SELECT * FROM t_xref WHERE Name = 'Stereotypes'` |
+| `objects` | `SELECT * FROM t_object WHERE Package_ID IN (<in-scope ids>)` |
+| `connectors` | `SELECT * FROM t_connector WHERE Start_Object_ID IN (<in-scope object ids>) OR End_Object_ID IN (<in-scope object ids>)`, the object ids being `SELECT Object_ID FROM t_object WHERE Package_ID IN (<in-scope ids>)` |
+| `xref_rows` | the Stereotypes rows of `t_xref` (`WHERE Name = 'Stereotypes'`) whose `Client` is an in-scope element GUID or connector GUID, as two reads: `Client IN (SELECT ea_guid FROM t_object WHERE Package_ID IN (<in-scope ids>))` and the same over the in-scope connectors |
 | `mdg` | the dict `ea_mdg(operation="get_mdg_from_runtime", params={"tech_id": "<id>"})` returns |
 
-**Take the census over the scope, not the whole repository.** The scope is the root packages in
-`scope.roots` and every sub-package under them, minus each package in `scope.exclude` and its
-sub-packages. The two readings give different answers: a defect or a gap outside the scope would
-otherwise stop the preflight or be offered as a decision, and the build would never have read it.
-Filter by `Package_ID` using the scope's package ids; a connector is in scope when either end's
-element is; keep only the `t_xref` rows whose `Client` is an in-scope element or connector GUID.
+A scope with no packages has nothing to read. A very long id list can exceed the database's
+statement limit: split it into groups of about 500 ids and join the rows. The server refuses an SQL
+result of more than 64 MB of XML as unreadable. How large each of these reads is on a large
+repository has not been measured; filtering by package is what keeps them small, and a scope that
+covers nearly the whole repository saves little.
 
 ```python
 import sys
@@ -65,6 +76,10 @@ sys.path.insert(0, r"<skills-dir>/_shared/tools")
 from ea_census import build_stereotype_index, census_elements, census_connectors
 from inclusion import analyze, resolve_answer, new_since_saved
 
+def rows(sql):   # ea_analyze(operation="execute_sql", params={"sql": sql, "include_xml": False})["rows"]
+    ...
+
+packages = rows("SELECT Package_ID, Parent_ID, ea_guid, Name FROM t_package")
 by_guid = {p["ea_guid"]: p for p in packages}
 children = {}
 for p in packages:
@@ -80,12 +95,16 @@ def subtree(guids):
     return ids
 
 in_scope = subtree(profile["scope"]["roots"]) - subtree(profile["scope"]["exclude"])
-objects = [o for o in all_objects if o["Package_ID"] in in_scope]
-object_ids = {o["Object_ID"] for o in objects}
-connectors = [c for c in all_connectors
-              if c["Start_Object_ID"] in object_ids or c["End_Object_ID"] in object_ids]
-guids = {r["ea_guid"] for r in objects} | {c["ea_guid"] for c in connectors}
-xref_rows = [x for x in all_xref if x["Client"] in guids]
+ids = ", ".join(sorted(in_scope, key=int))
+in_objects = f"SELECT Object_ID FROM t_object WHERE Package_ID IN ({ids})"
+objects = rows(f"SELECT * FROM t_object WHERE Package_ID IN ({ids})")
+connectors = rows(f"SELECT * FROM t_connector WHERE Start_Object_ID IN ({in_objects}) "
+                  f"OR End_Object_ID IN ({in_objects})")
+in_connectors = (f"SELECT ea_guid FROM t_connector WHERE Start_Object_ID IN ({in_objects}) "
+                 f"OR End_Object_ID IN ({in_objects})")
+xref_rows = (rows("SELECT * FROM t_xref WHERE Name = 'Stereotypes' AND Client IN "
+                  f"(SELECT ea_guid FROM t_object WHERE Package_ID IN ({ids}))")
+             + rows(f"SELECT * FROM t_xref WHERE Name = 'Stereotypes' AND Client IN ({in_connectors})"))
 
 index = build_stereotype_index(xref_rows)
 a = analyze(census_elements(objects, index), census_connectors(connectors, index), mdg,
@@ -107,6 +126,12 @@ yields depends on the allowed source and target combinations, which the build de
 Unstereotyped diagram furniture (`Package`, `Note`, `Text`, `Boundary`) is not model content and
 never gets a table, so it is neither counted nor offered as a gap.
 
+**Option 2's element count can understate what the server builds.** The census leaves out elements
+that carry only EA's own internal stereotypes (`a.ea_internal_elements` of them, and
+`a.ea_internal_connectors` for connectors), and the server's "everything" does not. Show that number
+beside option 2, so the person knows the count is a floor by that much. The count has not been
+compared with a build on a large repository.
+
 ---
 
 ## 3. Two data defects, which are not gaps
@@ -118,10 +143,13 @@ A gap is a question for the user. These are mistakes in the repository, fixed th
 refuses to produce a profile for any option while one exists. The defect carries the fix:
 
 - the MDG declares the stereotype: `update_connector` with `StereotypeEx` set to the qualified
-  name, `<profile namespace>::Flows`;
+  name, `<profile namespace>::Flows`; or re-apply the stereotype in EA from the toolbox or
+  Properties > Stereotype, which is the same fix by hand;
 - it declares no such stereotype: clear `StereotypeEx`, or have the MDG skills declare it.
 
-Take a baseline first (`ea-change-management`); this writes to the model. Then re-run the census.
+Take a baseline first (`ea-change-management`); either route writes to the model, and with the
+governance gate's stereotype application (`the-governance-gate.md` §4) it is one of the two writes
+in this skill. Then re-run the census.
 
 **An element with two declared stereotypes.** It is flagged, with the count and the combination.
 If the user continues, it is placed in **both** tables - pass
@@ -153,6 +181,14 @@ profile["inclusion_choice"] = answer.record() # stored beside it; see §5
 (`ea-mdg-model-build`); the census reruns afterwards and the gap is then declared, so it is no
 longer a gap. `resolve_answer` treats it as not decided and refuses to produce a profile while any
 gap is undecided or marked for an update. Say so, hand off, re-run the census, ask again.
+
+A bound stereotype seen on several metaclasses is saved with one entry per metaclass: the server
+keys it by its most common metaclass and, on an exact tie, by whichever it met first, so one entry
+per metaclass matches either way.
+
+**No one to ask.** An unattended run (a scheduled agent) uses the profile's saved `inclusion` and
+`inclusion_choice` as they are, and still flags drift (§6). If either is missing it stops, reports the
+counts of §2 and asks. It never picks an option and builds nothing without one.
 
 After the answer the metamodel is fixed. Do not re-open the choice mid-build.
 
@@ -189,3 +225,17 @@ user answers. The unbound-connector stop of §3 applies on every refresh as well
 
 If there is no saved record, the option is inferred: `"all"` on both sides is option 2, anything
 else is option 3 and every unlisted gap is reported.
+
+---
+
+## 7. The short route: only what my MDG defines, governance gate declined
+
+The question is still asked (or the saved answer used, section 4). This is the route when the answer
+is option 1 and the person declines to stereotype what that leaves out:
+
+1. Census over the scope (section 2). Stop on a connector bound to no profile, and ask about elements
+   with two declared stereotypes (section 3).
+2. `resolve_answer(a, 1)`. Save `inclusion` and `inclusion_choice` in the profile.
+3. Run the governance gate once (`the-governance-gate.md`), so the person sees what option 1 leaves
+   out, and take their decline.
+4. Build, and report the left-out counts with the result (`SKILL.md` §9).

@@ -1,0 +1,854 @@
+# CSDM 5 check rules
+# Language:     ServiceNow Common Service Data Model (CSDM) 5, language file id csdm-5
+# Enforced by:  AI Power Tools for Sparx EA -- validate_model tool
+#
+# CSDM is a vendor's guidance, and a clean result doesn't mean a model matches ServiceNow. Nothing connects the two.
+#
+# STORED NAMES. The pack stores CSDM<ConceptId>, with no namespace in the column rules read (measured on a scratch build,
+# EA 17.1 build 1716). The qualified form CSDM5::<stored> is in t_xref.
+#
+# These rules check 14 of the 56 rules in the language guide. The rest need a chain of lines followed, events in ServiceNow,
+# or a person's judgment, or they describe rather than require.
+
+meta:
+  version: '1.0'
+  language: csdm-5
+  organization: (your organization)
+  mdg_family: CSDM5
+  description: Rules for CSDM 5 models built with the CSDM 5 for EA pack. They check which lines join which shapes, a few
+    stated limits, and life cycle values. CSDM is guidance from one vendor, and a clean result doesn't mean a model matches
+    ServiceNow.
+  severity_levels:
+    error: CSDM states it as a flat limit.
+    warning: CSDM recommends it, or it falls outside CSDM's list.
+    info: Advisory note.
+tables:
+  csdm-5-relationships:
+    source: ServiceNow CSDM 5 white paper, Figure 16 and the text, and the product documentation; generated from the CSDM
+      language file. Service Instance expands to the types the source states, and any CI to the pack's CI shapes.
+    connectors:
+      a: CSDMMaps
+      b: CSDMOperationalizes
+      c: CSDMProvidedBy
+      d: CSDMProcessReference
+      e: CSDMUses
+      f: CSDMContains
+      g: CSDMConsumes
+      h: CSDMConnectedTo
+      i: CSDMDependsOn
+      j: CSDMConnectedBy
+      k: CSDMReceivesDataFrom
+      l: CSDMRunsOn
+      m: CSDMPublishedAs
+      n: CSDMIsPartOf
+      o: CSDMModel
+      p: CSDMBillOfMaterials
+      q: CSDMReferences
+      r: CSDMMember
+      s: CSDMRepresents
+      t: CSDMCovers
+      u: CSDMSubscriber
+      v: CSDMPartOf
+      w: CSDMHas
+      x: CSDMAlignedTo
+      y: CSDMMeasures
+      z: CSDMServes
+      A: CSDMRelatesTo
+      B: CSDMDeployedAs
+      C: CSDMAssigns
+      D: CSDMParentOf
+    cells:
+      CSDMValueStream:
+        CSDMBusinessCapability: a
+        CSDMBusinessProcess: a
+        CSDMValueStreamCategory: w
+      CSDMValueStreamStage:
+        CSDMBusinessCapability: a
+        CSDMBusinessProcess: a
+        CSDMValueStream: v
+      CSDMBusinessProcess:
+        CSDMBusinessCapability: b
+        CSDMProductModel: o
+        CSDMBusinessProcess: D
+      CSDMBusinessCapability:
+        CSDMBusinessApplication: c
+        CSDMBusinessService: c
+        CSDMProductModel: o
+        CSDMBusinessCapability: D
+      CSDMConnectionServiceInstance:
+        CSDMNetworkServiceInstance: c
+        CSDMConnectionServiceInstance: j
+        CSDMProductModel: o
+      CSDMAPI:
+        CSDMApplication: c
+        CSDMBusinessServiceOffering: k
+        CSDMApplicationService: k
+        CSDMProductModel: o
+      CSDMBusinessApplication:
+        CSDMBusinessProcess: d
+        CSDMInformationObject: e
+        CSDMApplicationService: eg
+        CSDMSDLCComponent: f
+        CSDMBusinessApplication: h
+        CSDMProductModel: o
+      CSDMSDLCComponent:
+        CSDMApplicationService: f
+        CSDMProductModel: o
+        CSDMInfrastructureCI: B
+      CSDMTechnologyManagementServiceOffering:
+        CSDMServiceInstance: f
+        CSDMApplicationService: f
+        CSDMDataServiceInstance: f
+        CSDMConnectionServiceInstance: f
+        CSDMNetworkServiceInstance: f
+        CSDMOperationalProcessServiceInstance: f
+        CSDMFacilityServiceInstance: f
+        CSDMDynamicCIGroup: f
+        CSDMProductModel: o
+      CSDMApplicationService:
+        CSDMApplicationService: i
+        CSDMApplication: i
+        CSDMServiceInstance: i
+        CSDMDataServiceInstance: i
+        CSDMConnectionServiceInstance: ij
+        CSDMNetworkServiceInstance: i
+        CSDMOperationalProcessServiceInstance: i
+        CSDMFacilityServiceInstance: i
+        CSDMProductModel: o
+      CSDMDataServiceInstance:
+        CSDMServiceInstance: i
+        CSDMApplicationService: i
+        CSDMDataServiceInstance: i
+        CSDMConnectionServiceInstance: ij
+        CSDMNetworkServiceInstance: i
+        CSDMOperationalProcessServiceInstance: i
+        CSDMFacilityServiceInstance: i
+        CSDMProductModel: o
+      CSDMNetworkServiceInstance:
+        CSDMServiceInstance: i
+        CSDMApplicationService: i
+        CSDMDataServiceInstance: i
+        CSDMConnectionServiceInstance: ij
+        CSDMNetworkServiceInstance: i
+        CSDMOperationalProcessServiceInstance: i
+        CSDMFacilityServiceInstance: i
+        CSDMProductModel: o
+      CSDMOperationalProcessServiceInstance:
+        CSDMServiceInstance: i
+        CSDMApplicationService: i
+        CSDMDataServiceInstance: i
+        CSDMConnectionServiceInstance: ij
+        CSDMNetworkServiceInstance: i
+        CSDMOperationalProcessServiceInstance: i
+        CSDMFacilityServiceInstance: i
+        CSDMProductModel: o
+      CSDMFacilityServiceInstance:
+        CSDMServiceInstance: i
+        CSDMApplicationService: i
+        CSDMDataServiceInstance: i
+        CSDMConnectionServiceInstance: ij
+        CSDMNetworkServiceInstance: i
+        CSDMOperationalProcessServiceInstance: i
+        CSDMFacilityServiceInstance: i
+        CSDMProductModel: o
+      CSDMNetworkFunction:
+        CSDMNetworkFunctionApplication: i
+        CSDMProductModel: o
+      CSDMBusinessServiceOffering:
+        CSDMServiceInstance: i
+        CSDMApplicationService: i
+        CSDMDataServiceInstance: i
+        CSDMConnectionServiceInstance: i
+        CSDMNetworkServiceInstance: i
+        CSDMOperationalProcessServiceInstance: i
+        CSDMFacilityServiceInstance: i
+        CSDMProductModel: o
+        CSDMAPI: k
+      CSDMServiceInstance:
+        CSDMConnectionServiceInstance: j
+        CSDMProductModel: o
+      CSDMConnectedDevice:
+        CSDMConnectionServiceInstance: j
+      CSDMApplication:
+        CSDMInfrastructureCI: l
+        CSDMProductModel: o
+      CSDMNetworkFunctionApplication:
+        CSDMInfrastructureCI: l
+        CSDMProductModel: o
+      CSDMTechnologyManagementService:
+        CSDMTechnologyManagementServiceOffering: m
+        CSDMServicePortfolio: n
+        CSDMProductModel: o
+      CSDMBusinessService:
+        CSDMBusinessServiceOffering: m
+        CSDMServicePortfolio: n
+        CSDMProductModel: o
+      CSDMInformationObject:
+        CSDMProductModel: o
+      CSDMAIFunction:
+        CSDMProductModel: o
+      CSDMAIApplication:
+        CSDMProductModel: o
+      CSDMOperationalTechnology:
+        CSDMProductModel: o
+      CSDMInfrastructureCI:
+        CSDMProductModel: o
+      CSDMDynamicCIGroup:
+        CSDMProductModel: o
+        CSDMCMDBGroup: q
+        CSDMBusinessProcess: r
+        CSDMBusinessCapability: r
+        CSDMBusinessApplication: r
+        CSDMInformationObject: r
+        CSDMSDLCComponent: r
+        CSDMServiceInstance: r
+        CSDMApplicationService: r
+        CSDMDataServiceInstance: r
+        CSDMConnectionServiceInstance: r
+        CSDMNetworkServiceInstance: r
+        CSDMOperationalProcessServiceInstance: r
+        CSDMFacilityServiceInstance: r
+        CSDMNetworkFunction: r
+        CSDMAPI: r
+        CSDMApplication: r
+        CSDMNetworkFunctionApplication: r
+        CSDMAIFunction: r
+        CSDMAIApplication: r
+        CSDMOperationalTechnology: r
+        CSDMInfrastructureCI: r
+        CSDMTechnologyManagementService: r
+        CSDMTechnologyManagementServiceOffering: r
+        CSDMBusinessService: r
+        CSDMBusinessServiceOffering: r
+      CSDMContract:
+        CSDMContractModel: o
+      CSDMProductModel:
+        CSDMProductModel: p
+      CSDMRequestCatalog:
+        CSDMCatalogItem: r
+      CSDMCatalogItem:
+        CSDMTechnologyManagementServiceOffering: s
+        CSDMBusinessServiceOffering: s
+      CSDMServiceOfferingSubscription:
+        CSDMTechnologyManagementServiceOffering: t
+        CSDMBusinessServiceOffering: t
+        CSDMUser: u
+        CSDMCompany: u
+        CSDMLocation: u
+        CSDMDepartment: u
+        CSDMGroup: u
+      CSDMBusinessUnit:
+        CSDMCompany: v
+        CSDMBusinessUnit: D
+      CSDMDepartment:
+        CSDMBusinessUnit: v
+      CSDMPlanningItem:
+        CSDMGoal: x
+        CSDMTarget: x
+        CSDMProductModel: A
+      CSDMTarget:
+        CSDMGoal: y
+      CSDMGoal:
+        CSDMStrategicPriority: z
+      CSDMProductIdea:
+        CSDMProductModel: A
+      CSDMTeam:
+        CSDMBusinessProcess: C
+        CSDMBusinessCapability: C
+        CSDMBusinessApplication: C
+        CSDMInformationObject: C
+        CSDMSDLCComponent: C
+        CSDMServiceInstance: C
+        CSDMApplicationService: C
+        CSDMDataServiceInstance: C
+        CSDMConnectionServiceInstance: C
+        CSDMNetworkServiceInstance: C
+        CSDMOperationalProcessServiceInstance: C
+        CSDMFacilityServiceInstance: C
+        CSDMNetworkFunction: C
+        CSDMAPI: C
+        CSDMApplication: C
+        CSDMNetworkFunctionApplication: C
+        CSDMAIFunction: C
+        CSDMAIApplication: C
+        CSDMOperationalTechnology: C
+        CSDMInfrastructureCI: C
+        CSDMTechnologyManagementService: C
+        CSDMTechnologyManagementServiceOffering: C
+        CSDMDynamicCIGroup: C
+        CSDMBusinessService: C
+        CSDMBusinessServiceOffering: C
+        CSDMGroup: C
+      CSDMCompany:
+        CSDMCompany: D
+      CSDMLocation:
+        CSDMLocation: D
+      CSDMServicePortfolio:
+        CSDMServicePortfolio: D
+  csdm-5-service-levels:
+    source: 'ServiceNow CSDM 5 white paper, p. 11: business and technology management services are single level. Neither names
+      its own kind as a child.'
+    connectors:
+      p: CSDMParentOf
+      c: CSDMContains
+    cells:
+      CSDMBusinessService:
+        CSDMTechnologyManagementService: pc
+      CSDMTechnologyManagementService:
+        CSDMBusinessService: pc
+  csdm-5-group-members:
+    source: 'ServiceNow CSDM 5 white paper, p. 43: a Dynamic CI Group contains CIs and cannot contain other groups.'
+    connectors:
+      m: CSDMMember
+    cells:
+      CSDMDynamicCIGroup:
+        CSDMBusinessProcess: m
+        CSDMBusinessCapability: m
+        CSDMBusinessApplication: m
+        CSDMInformationObject: m
+        CSDMSDLCComponent: m
+        CSDMServiceInstance: m
+        CSDMApplicationService: m
+        CSDMDataServiceInstance: m
+        CSDMConnectionServiceInstance: m
+        CSDMNetworkServiceInstance: m
+        CSDMOperationalProcessServiceInstance: m
+        CSDMFacilityServiceInstance: m
+        CSDMNetworkFunction: m
+        CSDMAPI: m
+        CSDMApplication: m
+        CSDMNetworkFunctionApplication: m
+        CSDMAIFunction: m
+        CSDMAIApplication: m
+        CSDMOperationalTechnology: m
+        CSDMInfrastructureCI: m
+        CSDMTechnologyManagementService: m
+        CSDMTechnologyManagementServiceOffering: m
+        CSDMDynamicCIGroup: ''
+        CSDMBusinessService: m
+        CSDMBusinessServiceOffering: m
+  csdm-5-application-uses:
+    source: 'ServiceNow product documentation, CI relationships: a Business Application relates to an Application Service
+      and to no other type of Service Instance; Figure 16 adds Information Object.'
+    connectors:
+      u: CSDMUses
+      c: CSDMConsumes
+    cells:
+      CSDMBusinessApplication:
+        CSDMApplicationService: uc
+        CSDMInformationObject: u
+        CSDMServiceInstance: ''
+        CSDMDataServiceInstance: ''
+        CSDMConnectionServiceInstance: ''
+        CSDMNetworkServiceInstance: ''
+        CSDMOperationalProcessServiceInstance: ''
+        CSDMFacilityServiceInstance: ''
+rules:
+- id: CSDM5-REL-001
+  implements: CSDM-REL-001
+  name: 'CSDM 5: a line joins only the pairs CSDM lists'
+  description: CSDM's Figure 16 and text list the relationships to use, without saying others are forbidden, so a pair outside
+    the list is a warning. Any shape the table doesn't name is left alone.
+  category: rel
+  severity: warning
+  demo_trigger: false
+  selector:
+    type: connector
+    connector_stereotypes: any_of_table
+  condition:
+    type: relationship_table
+    table: csdm-5-relationships
+    unknown_endpoint: ignore
+  remediation:
+    short: Use a line CSDM lists between these two shapes, or keep this one as a known local link.
+    auto_fixable: false
+- id: CSDM5-TBL-005
+  implements: CSDM-TBL-005
+  name: 'CSDM 5: a relationship line touches no Foundation entity other than Business Process'
+  description: Foundation tables are referential data and aren't used in CMDB relationships (p. 14). Business Process is the
+    exception, because it is a CMDB table. This covers Product Models, Contracts, common data, and CMDB Groups.
+  category: tbl
+  severity: error
+  demo_trigger: false
+  selector:
+    type: connector
+    connector_stereotypes:
+    - CSDMOperationalizes
+    - CSDMProvidedBy
+    - CSDMUses
+    - CSDMConsumes
+    - CSDMContains
+    - CSDMConnectedTo
+    - CSDMDependsOn
+    - CSDMConnectedBy
+    - CSDMReceivesDataFrom
+    - CSDMRunsOn
+  condition:
+    type: connector_endpoint_stereotype
+    source_must_be_one_of: &id001
+    - CSDMProductIdea
+    - CSDMPlanningItem
+    - CSDMStrategicPlan
+    - CSDMStrategicPriority
+    - CSDMGoal
+    - CSDMTarget
+    - CSDMBusinessCapability
+    - CSDMBusinessApplication
+    - CSDMInformationObject
+    - CSDMSDLCComponent
+    - CSDMAISystemDigitalAsset
+    - CSDMAIModelDigitalAsset
+    - CSDMAIDatasetDigitalAsset
+    - CSDMAIPromptDigitalAsset
+    - CSDMServiceInstance
+    - CSDMApplicationService
+    - CSDMDataServiceInstance
+    - CSDMConnectionServiceInstance
+    - CSDMNetworkServiceInstance
+    - CSDMOperationalProcessServiceInstance
+    - CSDMFacilityServiceInstance
+    - CSDMNetworkFunction
+    - CSDMAPI
+    - CSDMApplication
+    - CSDMNetworkFunctionApplication
+    - CSDMAIFunction
+    - CSDMAIApplication
+    - CSDMOperationalTechnology
+    - CSDMInfrastructureCI
+    - CSDMAsset
+    - CSDMInstallBaseItem
+    - CSDMConnectedDevice
+    - CSDMTechnologyManagementService
+    - CSDMTechnologyManagementServiceOffering
+    - CSDMDynamicCIGroup
+    - CSDMBusinessService
+    - CSDMBusinessServiceOffering
+    - CSDMServiceCommitment
+    - CSDMServiceOfferingSubscription
+    - CSDMRequestCatalog
+    - CSDMCatalogItem
+    - CSDMPortfolio
+    - CSDMServicePortfolio
+    - CSDMBusinessProcess
+    target_must_be_one_of: *id001
+  remediation:
+    short: Replace this relationship line with the reference line CSDM gives this Foundation entity.
+    auto_fixable: false
+- id: CSDM5-SVC-001
+  implements: CSDM-SVC-001
+  name: 'CSDM 5: a business or technology management service isn''t nested under its own kind'
+  description: Business Services and Technology Management Services are each single level (p. 11).
+  category: svc
+  severity: error
+  demo_trigger: false
+  selector:
+    type: connector
+    connector_stereotypes:
+    - CSDMParentOf
+    - CSDMContains
+  condition:
+    type: relationship_table
+    table: csdm-5-service-levels
+    unknown_endpoint: ignore
+  remediation:
+    short: Remove the line, and show the stratification with offerings.
+    auto_fixable: false
+- id: CSDM5-SVC-004
+  implements: CSDM-SVC-004
+  name: 'CSDM 5: a Dynamic CI Group contains no other group'
+  description: A Dynamic CI Group contains CIs and cannot contain other groups (p. 43).
+  category: svc
+  severity: error
+  demo_trigger: false
+  selector:
+    type: connector
+    connector_stereotypes:
+    - CSDMMember
+  condition:
+    type: relationship_table
+    table: csdm-5-group-members
+    unknown_endpoint: ignore
+  remediation:
+    short: Point the group's Member line at CIs, not at another group.
+    auto_fixable: false
+- id: CSDM5-SVC-005
+  implements: CSDM-SVC-005
+  name: 'CSDM 5: a Dynamic CI Group''s classification, when set, is one of its two values'
+  description: A Dynamic CI Group's classification is Application Service or Technical Service (p. 44). A blank value passes,
+    because all fields are optional.
+  category: svc
+  severity: error
+  demo_trigger: false
+  selector:
+    type: element
+    stereotypes:
+      any_of:
+      - CSDMDynamicCIGroup
+  condition:
+    type: tagged_value_constraint
+    tags:
+    - name: Service classification
+      value_must_be_one_of:
+      - Application Service
+      - Technical Service
+  remediation:
+    short: Pick Application Service or Technical Service.
+    auto_fixable: false
+- id: CSDM5-SVC-002
+  implements: CSDM-SVC-002
+  name: 'CSDM 5: an operational service has an offering'
+  description: Every operational Business Service and Technology Management Service has at least one offering (pp. 43, 45,
+    54-55). A service with no stage set isn't selected.
+  category: svc
+  severity: warning
+  demo_trigger: false
+  selector:
+    type: element
+    stereotypes:
+      any_of:
+      - CSDMBusinessService
+      - CSDMTechnologyManagementService
+    tagged_value_filter:
+    - tag: Life Cycle Stage
+      value_in:
+      - Operational
+  condition:
+    type: connector_count
+    connector_stereotype: CSDMPublishedAs
+    direction: outgoing
+    min: 1
+  remediation:
+    short: Add a Published as line to an offering, or correct the service's stage.
+    auto_fixable: false
+- id: CSDM5-TBL-010
+  implements: CSDM-TBL-010
+  name: 'CSDM 5: the legacy process reference isn''t used'
+  description: A Business Application's single reference to a Business Process is legacy from CSDM 5 and isn't recommended
+    (p. 33).
+  category: tbl
+  severity: warning
+  demo_trigger: false
+  selector:
+    type: element
+    stereotypes:
+      any_of:
+      - CSDMBusinessApplication
+  condition:
+    type: connector_count
+    connector_stereotype: CSDMProcessReference
+    direction: outgoing
+    max: 0
+  remediation:
+    short: Relate the process another way, and remove this reference.
+    auto_fixable: false
+- id: CSDM5-REL-004
+  implements: CSDM-REL-004
+  name: 'CSDM 5: a capability has something providing it'
+  description: Create a relationship between each Business Capability and its Business Applications (p. 31). A Business Service
+    may also provide it (Figure 16).
+  category: rel
+  severity: warning
+  demo_trigger: false
+  selector:
+    type: element
+    stereotypes:
+      any_of:
+      - CSDMBusinessCapability
+  condition:
+    type: connector_count
+    connector_stereotype: CSDMProvidedBy
+    direction: outgoing
+    min: 1
+  remediation:
+    short: Add a Provided by line to the Business Application or Business Service behind this capability.
+    auto_fixable: false
+- id: CSDM5-REL-008
+  implements: CSDM-REL-008
+  name: 'CSDM 5: a Business Application''s Uses or Consumes reaches only an Application Service or an Information Object'
+  description: A Business Application relates to Application Services and to no other type of Service Instance (docs, CI relationships).
+  category: rel
+  severity: warning
+  demo_trigger: false
+  selector:
+    type: connector
+    connector_stereotypes:
+    - CSDMUses
+    - CSDMConsumes
+  condition:
+    type: relationship_table
+    table: csdm-5-application-uses
+    unknown_endpoint: ignore
+  remediation:
+    short: Point this line at an Application Service.
+    auto_fixable: false
+- id: CSDM5-LCY-001
+  implements: CSDM-LCY-003
+  name: 'CSDM 5: life cycle values belong to the product process'
+  description: An object takes only the stage and status values of its own life cycle process (pp. 20-27). Stage and status
+    are each checked, not as a pair, and a blank passes.
+  category: lcy
+  severity: error
+  demo_trigger: false
+  selector:
+    type: element
+    stereotypes:
+      any_of:
+      - CSDMProductModel
+      - CSDMApplicationModel
+      - CSDMSystemComponentModel
+      - CSDMSoftwareComponentModel
+      - CSDMServiceOfferingModel
+      - CSDMFirmwareModel
+      - CSDMAISystemProductModel
+      - CSDMServiceModel
+      - CSDMSoftwareModel
+      - CSDMContentProductModel
+      - CSDMAIContentProductModel
+      - CSDMContractModel
+      - CSDMFacilityModel
+      - CSDMHardwareModel
+      - CSDMConsumableModel
+      - CSDMEnterpriseGoodModel
+  condition:
+    type: tagged_value_constraint
+    tags:
+    - name: Life Cycle Stage
+      value_must_be_one_of:
+      - Ideation
+      - Design
+      - Build & Integrate
+      - Operational
+      - End of Life
+    - name: Life Cycle Stage Status
+      value_must_be_one_of:
+      - Under Evaluation
+      - Pilot
+      - Design
+      - Chartered
+      - Planning
+      - Build
+      - In production
+      - In Use
+      - Available
+      - End of Support
+      - Pending Retirement
+      - Obsolete
+      - Retired
+      - Sold
+  remediation:
+    short: Pick a stage and status from the product list.
+    auto_fixable: false
+- id: CSDM5-LCY-002
+  implements: CSDM-LCY-003
+  name: 'CSDM 5: life cycle values belong to the tangible process'
+  description: An object takes only the stage and status values of its own life cycle process (pp. 20-27). Stage and status
+    are each checked, not as a pair, and a blank passes.
+  category: lcy
+  severity: error
+  demo_trigger: false
+  selector:
+    type: element
+    stereotypes:
+      any_of:
+      - CSDMOperationalTechnology
+      - CSDMInfrastructureCI
+      - CSDMConnectedDevice
+  condition:
+    type: tagged_value_constraint
+    tags:
+    - name: Life Cycle Stage
+      value_must_be_one_of:
+      - Ideation
+      - Design
+      - Purchase
+      - Inventory
+      - Deploy
+      - Operational
+      - End of Operation
+      - Defective
+      - Missing
+      - End of Life
+    - name: Life Cycle Stage Status
+      value_must_be_one_of:
+      - Under Evaluation
+      - Pilot
+      - Design
+      - Chartered
+      - Build
+      - On Order
+      - Pre-Allocated
+      - Available
+      - Reserved
+      - Pending Repair
+      - Legal Hold
+      - Quarantine
+      - In Stock
+      - Pending Transfer
+      - In Transit
+      - Test
+      - Pending Fulfillment
+      - In Use
+      - In Maintenance
+      - End of Support
+      - Pending Retirement
+      - Pending Certificate
+      - Pending Disposal
+      - Pending Donation
+      - Pending Evaluation
+      - Pending Resale
+      - Pending Return
+      - On Hold
+      - Lost
+      - Stolen
+      - Obsolete
+      - Retired
+      - Disposed
+      - Donated
+      - Sold
+      - RMA
+      - Vendor Credit
+      - Buy-out
+      - Lease Return
+  remediation:
+    short: Pick a stage and status from the tangible list.
+    auto_fixable: false
+- id: CSDM5-LCY-003
+  implements: CSDM-LCY-003
+  name: 'CSDM 5: life cycle values belong to the intangible process'
+  description: An object takes only the stage and status values of its own life cycle process (pp. 20-27). Stage and status
+    are each checked, not as a pair, and a blank passes.
+  category: lcy
+  severity: error
+  demo_trigger: false
+  selector:
+    type: element
+    stereotypes:
+      any_of:
+      - CSDMBusinessCapability
+      - CSDMBusinessApplication
+      - CSDMInformationObject
+      - CSDMSDLCComponent
+      - CSDMServiceInstance
+      - CSDMApplicationService
+      - CSDMDataServiceInstance
+      - CSDMConnectionServiceInstance
+      - CSDMNetworkServiceInstance
+      - CSDMOperationalProcessServiceInstance
+      - CSDMFacilityServiceInstance
+      - CSDMNetworkFunction
+      - CSDMAPI
+      - CSDMApplication
+      - CSDMNetworkFunctionApplication
+      - CSDMAIFunction
+      - CSDMAIApplication
+      - CSDMTechnologyManagementService
+      - CSDMTechnologyManagementServiceOffering
+      - CSDMDynamicCIGroup
+      - CSDMBusinessService
+      - CSDMBusinessServiceOffering
+  condition:
+    type: tagged_value_constraint
+    tags:
+    - name: Life Cycle Stage
+      value_must_be_one_of:
+      - Ideation
+      - Design
+      - Purchase
+      - Inventory
+      - Deploy
+      - Operational
+      - End of Operation
+      - End of Life
+    - name: Life Cycle Stage Status
+      value_must_be_one_of:
+      - Under Evaluation
+      - Pilot
+      - Design
+      - Chartered
+      - Build
+      - On Order
+      - Pre-Allocated
+      - Available
+      - Legal Hold
+      - Test
+      - Pending Fulfillment
+      - In Use
+      - In Maintenance
+      - End of Support
+      - Pending Retirement
+      - On Hold
+      - Obsolete
+      - Retired
+  remediation:
+    short: Pick a stage and status from the intangible list.
+    auto_fixable: false
+- id: CSDM5-LCY-004
+  implements: CSDM-LCY-003
+  name: 'CSDM 5: life cycle values belong to the document process'
+  description: An object takes only the stage and status values of its own life cycle process (pp. 20-27). Stage and status
+    are each checked, not as a pair, and a blank passes.
+  category: lcy
+  severity: error
+  demo_trigger: false
+  selector:
+    type: element
+    stereotypes:
+      any_of:
+      - CSDMBusinessProcess
+      - CSDMContract
+  condition:
+    type: tagged_value_constraint
+    tags:
+    - name: Life Cycle Stage
+      value_must_be_one_of:
+      - Ideation
+      - Operational
+      - End of Life
+    - name: Life Cycle Stage Status
+      value_must_be_one_of:
+      - Draft
+      - Under Evaluation
+      - In Use
+      - Published
+      - Renewal in Process
+      - Renewed
+      - Pending Retirement
+      - Expired
+      - Retired
+  remediation:
+    short: Pick a stage and status from the document list.
+    auto_fixable: false
+- id: CSDM5-LCY-005
+  implements: CSDM-LCY-003
+  name: 'CSDM 5: life cycle values belong to the location process'
+  description: An object takes only the stage and status values of its own life cycle process (pp. 20-27). Stage and status
+    are each checked, not as a pair, and a blank passes.
+  category: lcy
+  severity: error
+  demo_trigger: false
+  selector:
+    type: element
+    stereotypes:
+      any_of:
+      - CSDMLocation
+  condition:
+    type: tagged_value_constraint
+    tags:
+    - name: Life Cycle Stage
+      value_must_be_one_of:
+      - Design
+      - Operational
+      - End of Life
+    - name: Life Cycle Stage Status
+      value_must_be_one_of:
+      - Chartered
+      - Build
+      - Available
+      - In Use
+      - Pending Retirement
+      - Sold
+      - Lease Return
+      - Obsolete
+  remediation:
+    short: Pick a stage and status from the location list.
+    auto_fixable: false

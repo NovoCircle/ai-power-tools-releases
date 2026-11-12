@@ -1,0 +1,1783 @@
+# IT4IT in Sparx EA: the EA references (generated; do not edit by hand)
+language: it4it
+technology: IT4IT
+version: 3.0-draft.3
+display_name: IT4IT
+profile: IT4ITArchitecture
+stereotype_prefix: IT4IT_
+stereotype_storage:
+  stored: IT4IT_FC_<Name>, IT4IT_DO_<Name>, IT4IT_SG_<Name>, IT4IT_EX_<Name>, IT4IT_<Concept>, with spaces and & removed
+  stored_in: t_object.Stereotype and t_connector.Stereotype (what a ruleset selector matches)
+  qualified: IT4ITArchitecture::<stored>, in t_xref
+  create_with: the qualified form as the element or connector type; for a connector, the EA type with StereotypeEx set to
+    the qualified form
+basis: Read from The Open Group's public 3.0 draft (February 2022). No claim of conformance.
+measured_on:
+  ea: 17.1 build 1716
+  date: '2026-11-04'
+diagram_types:
+  IT4IT Level 1 Overview:
+    ea_name: IT4IT::IT4IT_Level1Overview
+    base: Diagram_Logical
+    toolbox: IT4IT::IT4IT Pages
+    stored:
+      t_diagram.Diagram_Type: Logical
+      t_diagram.StyleEx: MDGDgm=IT4IT::IT4IT_Level1Overview;
+  IT4IT Level 2 Value Stream:
+    ea_name: IT4IT::IT4IT_Level2ValueStream
+    base: Diagram_Logical
+    toolbox: IT4IT::IT4IT Pages
+    stored:
+      t_diagram.Diagram_Type: Logical
+      t_diagram.StyleEx: MDGDgm=IT4IT::IT4IT_Level2ValueStream;
+  IT4IT Level 3 Architecture:
+    ea_name: IT4IT::IT4IT_Level3Architecture
+    base: Diagram_Logical
+    toolbox: IT4IT::IT4IT Pages
+    stored:
+      t_diagram.Diagram_Type: Logical
+      t_diagram.StyleEx: MDGDgm=IT4IT::IT4IT_Level3Architecture;
+concepts:
+  IT4IT_FC_Policy:
+    name: Policy
+    shown_as: Policy Component
+    kind: functional component
+    stereotype: IT4IT_FC_Policy
+    qualified: IT4ITArchitecture::IT4IT_FC_Policy
+    metaclass: Component
+    toolbox_page: IT4IT Strategy
+    tags: []
+    group: Strategy
+  IT4IT_FC_Strategy:
+    name: Strategy
+    shown_as: Strategy Component
+    kind: functional component
+    stereotype: IT4IT_FC_Strategy
+    qualified: IT4ITArchitecture::IT4IT_FC_Strategy
+    metaclass: Component
+    toolbox_page: IT4IT Strategy
+    tags: []
+    group: Strategy
+  IT4IT_FC_EnterpriseArchitecture:
+    name: Enterprise Architecture
+    shown_as: Enterprise Architecture Component
+    kind: functional component
+    stereotype: IT4IT_FC_EnterpriseArchitecture
+    qualified: IT4ITArchitecture::IT4IT_FC_EnterpriseArchitecture
+    metaclass: Component
+    toolbox_page: IT4IT Strategy
+    tags: []
+    group: Strategy
+  IT4IT_FC_PortfolioBacklog:
+    name: Portfolio Backlog
+    shown_as: Portfolio Backlog Component
+    kind: functional component
+    stereotype: IT4IT_FC_PortfolioBacklog
+    qualified: IT4ITArchitecture::IT4IT_FC_PortfolioBacklog
+    metaclass: Component
+    toolbox_page: IT4IT Portfolio
+    tags: []
+    group: Portfolio
+  IT4IT_FC_Proposal:
+    name: Proposal
+    shown_as: Proposal Component
+    kind: functional component
+    stereotype: IT4IT_FC_Proposal
+    qualified: IT4ITArchitecture::IT4IT_FC_Proposal
+    metaclass: Component
+    toolbox_page: IT4IT Portfolio
+    tags: []
+    group: Portfolio
+  IT4IT_FC_ProductPortfolio:
+    name: Product Portfolio
+    shown_as: Product Portfolio Component
+    kind: functional component
+    stereotype: IT4IT_FC_ProductPortfolio
+    qualified: IT4ITArchitecture::IT4IT_FC_ProductPortfolio
+    metaclass: Component
+    toolbox_page: IT4IT Portfolio
+    tags: []
+    group: Portfolio
+  IT4IT_FC_ProductBacklog:
+    name: Product Backlog
+    shown_as: Product Backlog Component
+    kind: functional component
+    stereotype: IT4IT_FC_ProductBacklog
+    qualified: IT4ITArchitecture::IT4IT_FC_ProductBacklog
+    metaclass: Component
+    toolbox_page: IT4IT Develop
+    tags: []
+    group: Develop
+  IT4IT_FC_Requirement:
+    name: Requirement
+    shown_as: Requirement Component
+    kind: functional component
+    stereotype: IT4IT_FC_Requirement
+    qualified: IT4ITArchitecture::IT4IT_FC_Requirement
+    metaclass: Component
+    toolbox_page: IT4IT Develop
+    tags: []
+    group: Develop
+  IT4IT_FC_ProductDesign:
+    name: Product Design
+    shown_as: Product Design Component
+    kind: functional component
+    stereotype: IT4IT_FC_ProductDesign
+    qualified: IT4ITArchitecture::IT4IT_FC_ProductDesign
+    metaclass: Component
+    toolbox_page: IT4IT Develop
+    tags: []
+    group: Develop
+  IT4IT_FC_SourceControl:
+    name: Source Control
+    shown_as: Source Control Component
+    kind: functional component
+    stereotype: IT4IT_FC_SourceControl
+    qualified: IT4ITArchitecture::IT4IT_FC_SourceControl
+    metaclass: Component
+    toolbox_page: IT4IT Develop
+    tags: []
+    group: Develop
+  IT4IT_FC_Pipeline:
+    name: Pipeline
+    shown_as: Pipeline Component
+    kind: functional component
+    stereotype: IT4IT_FC_Pipeline
+    qualified: IT4ITArchitecture::IT4IT_FC_Pipeline
+    metaclass: Component
+    toolbox_page: IT4IT Develop
+    tags: []
+    group: Develop
+  IT4IT_FC_BuildPackage:
+    name: Build Package
+    shown_as: Build Package Component
+    kind: functional component
+    stereotype: IT4IT_FC_BuildPackage
+    qualified: IT4ITArchitecture::IT4IT_FC_BuildPackage
+    metaclass: Component
+    toolbox_page: IT4IT Develop
+    tags: []
+    group: Develop
+  IT4IT_FC_ReleaseComposition:
+    name: Release Composition
+    shown_as: Release Composition Component
+    kind: functional component
+    stereotype: IT4IT_FC_ReleaseComposition
+    qualified: IT4ITArchitecture::IT4IT_FC_ReleaseComposition
+    metaclass: Component
+    toolbox_page: IT4IT Develop
+    tags: []
+    group: Develop
+  IT4IT_FC_Test:
+    name: Test
+    shown_as: Test Component
+    kind: functional component
+    stereotype: IT4IT_FC_Test
+    qualified: IT4ITArchitecture::IT4IT_FC_Test
+    metaclass: Component
+    toolbox_page: IT4IT Test
+    tags: []
+    group: Test
+  IT4IT_FC_Defect:
+    name: Defect
+    shown_as: Defect Component
+    kind: functional component
+    stereotype: IT4IT_FC_Defect
+    qualified: IT4ITArchitecture::IT4IT_FC_Defect
+    metaclass: Component
+    toolbox_page: IT4IT Test
+    tags: []
+    group: Test
+  IT4IT_FC_ConsumptionExperience:
+    name: Consumption Experience
+    shown_as: Consumption Experience Component
+    kind: functional component
+    stereotype: IT4IT_FC_ConsumptionExperience
+    qualified: IT4ITArchitecture::IT4IT_FC_ConsumptionExperience
+    metaclass: Component
+    toolbox_page: IT4IT Consume
+    tags: []
+    group: Consume
+  IT4IT_FC_Identity:
+    name: Identity
+    shown_as: Identity Component
+    kind: functional component
+    stereotype: IT4IT_FC_Identity
+    qualified: IT4ITArchitecture::IT4IT_FC_Identity
+    metaclass: Component
+    toolbox_page: IT4IT Consume
+    tags: []
+    group: Consume
+  IT4IT_FC_Offer:
+    name: Offer
+    shown_as: Offer Component
+    kind: functional component
+    stereotype: IT4IT_FC_Offer
+    qualified: IT4ITArchitecture::IT4IT_FC_Offer
+    metaclass: Component
+    toolbox_page: IT4IT Consume
+    tags: []
+    group: Consume
+  IT4IT_FC_Order:
+    name: Order
+    shown_as: Order Component
+    kind: functional component
+    stereotype: IT4IT_FC_Order
+    qualified: IT4ITArchitecture::IT4IT_FC_Order
+    metaclass: Component
+    toolbox_page: IT4IT Consume
+    tags: []
+    group: Consume
+  IT4IT_FC_Chargeback:
+    name: Chargeback
+    shown_as: Chargeback Component
+    kind: functional component
+    stereotype: IT4IT_FC_Chargeback
+    qualified: IT4ITArchitecture::IT4IT_FC_Chargeback
+    metaclass: Component
+    toolbox_page: IT4IT Consume
+    tags: []
+    group: Consume
+  IT4IT_FC_Change:
+    name: Change
+    shown_as: Change Component
+    kind: functional component
+    stereotype: IT4IT_FC_Change
+    qualified: IT4ITArchitecture::IT4IT_FC_Change
+    metaclass: Component
+    toolbox_page: IT4IT Fulfill
+    tags: []
+    group: Fulfill
+  IT4IT_FC_FulfillmentOrchestration:
+    name: Fulfillment Orchestration
+    shown_as: Fulfillment Orchestration Component
+    kind: functional component
+    stereotype: IT4IT_FC_FulfillmentOrchestration
+    qualified: IT4ITArchitecture::IT4IT_FC_FulfillmentOrchestration
+    metaclass: Component
+    toolbox_page: IT4IT Fulfill
+    tags: []
+    group: Fulfill
+  IT4IT_FC_Resource:
+    name: Resource
+    shown_as: Resource Component
+    kind: functional component
+    stereotype: IT4IT_FC_Resource
+    qualified: IT4ITArchitecture::IT4IT_FC_Resource
+    metaclass: Component
+    toolbox_page: IT4IT Fulfill
+    tags: []
+    group: Fulfill
+  IT4IT_FC_Fulfillment:
+    name: Fulfillment
+    shown_as: Fulfillment Component
+    kind: functional component
+    stereotype: IT4IT_FC_Fulfillment
+    qualified: IT4ITArchitecture::IT4IT_FC_Fulfillment
+    metaclass: Component
+    toolbox_page: IT4IT Fulfill
+    tags: []
+    group: Fulfill
+  IT4IT_FC_Usage:
+    name: Usage
+    shown_as: Usage Component
+    kind: functional component
+    stereotype: IT4IT_FC_Usage
+    qualified: IT4ITArchitecture::IT4IT_FC_Usage
+    metaclass: Component
+    toolbox_page: IT4IT Fulfill
+    tags: []
+    group: Fulfill
+  IT4IT_FC_ServiceLevel:
+    name: Service Level
+    shown_as: Service Level Component
+    kind: functional component
+    stereotype: IT4IT_FC_ServiceLevel
+    qualified: IT4ITArchitecture::IT4IT_FC_ServiceLevel
+    metaclass: Component
+    toolbox_page: IT4IT Support
+    tags: []
+    group: Support
+  IT4IT_FC_Incident:
+    name: Incident
+    shown_as: Incident Component
+    kind: functional component
+    stereotype: IT4IT_FC_Incident
+    qualified: IT4ITArchitecture::IT4IT_FC_Incident
+    metaclass: Component
+    toolbox_page: IT4IT Support
+    tags: []
+    group: Support
+  IT4IT_FC_Problem:
+    name: Problem
+    shown_as: Problem Component
+    kind: functional component
+    stereotype: IT4IT_FC_Problem
+    qualified: IT4ITArchitecture::IT4IT_FC_Problem
+    metaclass: Component
+    toolbox_page: IT4IT Support
+    tags: []
+    group: Support
+  IT4IT_FC_Knowledge:
+    name: Knowledge
+    shown_as: Knowledge Component
+    kind: functional component
+    stereotype: IT4IT_FC_Knowledge
+    qualified: IT4ITArchitecture::IT4IT_FC_Knowledge
+    metaclass: Component
+    toolbox_page: IT4IT Support
+    tags: []
+    group: Support
+  IT4IT_FC_Configuration:
+    name: Configuration
+    shown_as: Configuration Component
+    kind: functional component
+    stereotype: IT4IT_FC_Configuration
+    qualified: IT4ITArchitecture::IT4IT_FC_Configuration
+    metaclass: Component
+    toolbox_page: IT4IT Assure
+    tags: []
+    group: Assure
+  IT4IT_FC_Monitoring:
+    name: Monitoring
+    shown_as: Monitoring Component
+    kind: functional component
+    stereotype: IT4IT_FC_Monitoring
+    qualified: IT4ITArchitecture::IT4IT_FC_Monitoring
+    metaclass: Component
+    toolbox_page: IT4IT Assure
+    tags: []
+    group: Assure
+  IT4IT_FC_Event:
+    name: Event
+    shown_as: Event Component
+    kind: functional component
+    stereotype: IT4IT_FC_Event
+    qualified: IT4ITArchitecture::IT4IT_FC_Event
+    metaclass: Component
+    toolbox_page: IT4IT Assure
+    tags: []
+    group: Assure
+  IT4IT_FC_DiagnosticsRemediation:
+    name: Diagnostics & Remediation
+    shown_as: Diagnostics & Remediation Component
+    kind: functional component
+    stereotype: IT4IT_FC_DiagnosticsRemediation
+    qualified: IT4ITArchitecture::IT4IT_FC_DiagnosticsRemediation
+    metaclass: Component
+    toolbox_page: IT4IT Assure
+    tags: []
+    group: Assure
+  IT4IT_FC_CostModeling:
+    name: Cost Modeling
+    shown_as: Cost Modeling Component
+    kind: functional component
+    stereotype: IT4IT_FC_CostModeling
+    qualified: IT4ITArchitecture::IT4IT_FC_CostModeling
+    metaclass: Component
+    toolbox_page: IT4IT Financial Management
+    tags: []
+    group: Financial Management
+  IT4IT_FC_Investment:
+    name: Investment
+    shown_as: Investment Component
+    kind: functional component
+    stereotype: IT4IT_FC_Investment
+    qualified: IT4ITArchitecture::IT4IT_FC_Investment
+    metaclass: Component
+    toolbox_page: IT4IT Financial Management
+    tags: []
+    group: Financial Management
+  IT4IT_DO_Policy:
+    name: Policy
+    shown_as: Policy
+    kind: data object
+    stereotype: IT4IT_DO_Policy
+    qualified: IT4ITArchitecture::IT4IT_DO_Policy
+    metaclass: Class
+    toolbox_page: IT4IT Strategy
+    tags:
+    - Id
+    - Name
+    - Description
+    - Applicable Geography
+    controlled_by: Policy
+    backbone: false
+  IT4IT_DO_StrategicTheme:
+    name: Strategic Theme
+    shown_as: Strategic Theme
+    kind: data object
+    stereotype: IT4IT_DO_StrategicTheme
+    qualified: IT4ITArchitecture::IT4IT_DO_StrategicTheme
+    metaclass: Class
+    toolbox_page: IT4IT Strategy
+    tags:
+    - Id
+    - Name
+    - Description
+    controlled_by: Strategy
+    backbone: false
+  IT4IT_DO_StrategicObjective:
+    name: Strategic Objective
+    shown_as: Strategic Objective
+    kind: data object
+    stereotype: IT4IT_DO_StrategicObjective
+    qualified: IT4ITArchitecture::IT4IT_DO_StrategicObjective
+    metaclass: Class
+    toolbox_page: IT4IT Strategy
+    tags:
+    - Id
+    - Name
+    - Description
+    controlled_by: Strategy
+    backbone: false
+  IT4IT_DO_ArchitectureRoadmapItem:
+    name: Architecture Roadmap Item
+    shown_as: Architecture Roadmap Item
+    kind: data object
+    stereotype: IT4IT_DO_ArchitectureRoadmapItem
+    qualified: IT4ITArchitecture::IT4IT_DO_ArchitectureRoadmapItem
+    metaclass: Class
+    toolbox_page: IT4IT Strategy
+    tags:
+    - Id
+    - Name
+    - Status
+    - TargetDate
+    - Roadmaps
+    - Description
+    controlled_by: Enterprise Architecture
+    backbone: false
+  IT4IT_DO_ArchitectureBlueprint:
+    name: Architecture Blueprint
+    shown_as: Architecture Blueprint
+    kind: data object
+    stereotype: IT4IT_DO_ArchitectureBlueprint
+    qualified: IT4ITArchitecture::IT4IT_DO_ArchitectureBlueprint
+    metaclass: Class
+    toolbox_page: IT4IT Strategy
+    tags:
+    - Id
+    - Name
+    - Description
+    - Version
+    - Artifact List
+    controlled_by: Enterprise Architecture
+    backbone: false
+  IT4IT_DO_ValueStream:
+    name: Value Stream
+    shown_as: Value Stream
+    kind: data object
+    stereotype: IT4IT_DO_ValueStream
+    qualified: IT4ITArchitecture::IT4IT_DO_ValueStream
+    metaclass: Class
+    toolbox_page: IT4IT Strategy
+    tags:
+    - Id
+    - Name
+    - Description
+    - Stakeholder
+    - Value Stream Id (N)
+    controlled_by: Enterprise Architecture
+    backbone: false
+  IT4IT_DO_PortfolioBacklogItem:
+    name: Portfolio Backlog Item
+    shown_as: Portfolio Backlog Item
+    kind: data object
+    stereotype: IT4IT_DO_PortfolioBacklogItem
+    qualified: IT4ITArchitecture::IT4IT_DO_PortfolioBacklogItem
+    metaclass: Class
+    toolbox_page: IT4IT Portfolio
+    tags:
+    - Id
+    - Name
+    - Description
+    - Prioritization
+    - Acceptance Criteria
+    - Related Products
+    - Demand Profile
+    - Cost Estimation
+    controlled_by: Portfolio Backlog
+    backbone: false
+  IT4IT_DO_ScopeAgreement:
+    name: Scope Agreement
+    shown_as: Scope Agreement
+    kind: data object
+    stereotype: IT4IT_DO_ScopeAgreement
+    qualified: IT4ITArchitecture::IT4IT_DO_ScopeAgreement
+    metaclass: Class
+    toolbox_page: IT4IT Portfolio
+    tags:
+    - Id
+    - Description
+    - Business Entity
+    - Anticipated Business Value
+    - Proposed Budget
+    - Approved Budget
+    - Status
+    - Context
+    controlled_by: Proposal
+    backbone: false
+  IT4IT_DO_DigitalProduct:
+    name: Digital Product
+    shown_as: Digital Product
+    kind: data object
+    stereotype: IT4IT_DO_DigitalProduct
+    qualified: IT4ITArchitecture::IT4IT_DO_DigitalProduct
+    metaclass: Class
+    toolbox_page: IT4IT Portfolio
+    tags:
+    - Id
+    - Name
+    - Description
+    - Product Manager
+    - Investment Status
+    - Portfolio
+    - Business Criticality
+    - Security Risk
+    - Budget
+    - Total Cost of Ownership (TCO)
+    - Profit/Loss
+    controlled_by: Product Portfolio
+    backbone: true
+  IT4IT_DO_ProductBacklogItem:
+    name: Product Backlog Item
+    shown_as: Product Backlog Item
+    kind: data object
+    stereotype: IT4IT_DO_ProductBacklogItem
+    qualified: IT4ITArchitecture::IT4IT_DO_ProductBacklogItem
+    metaclass: Class
+    toolbox_page: IT4IT Develop
+    tags:
+    - Id
+    - Title
+    - Type
+    - Description
+    - Status
+    - Parent Id
+    - Budget
+    - Actual Spend
+    - Start Date
+    - End Date
+    - Size
+    - Definition of Done
+    - Priority
+    - Value
+    controlled_by: Product Backlog
+    backbone: false
+  IT4IT_DO_Requirement:
+    name: Requirement
+    shown_as: Requirement
+    kind: data object
+    stereotype: IT4IT_DO_Requirement
+    qualified: IT4ITArchitecture::IT4IT_DO_Requirement
+    metaclass: Class
+    toolbox_page: IT4IT Develop
+    tags:
+    - Id
+    - Name
+    - Description
+    - Purpose
+    - Type
+    - Status
+    - Reference
+    - Priority
+    - Owner
+    - Version
+    controlled_by: Requirement
+    backbone: false
+  IT4IT_DO_ProductDesign:
+    name: Product Design
+    shown_as: Product Design
+    kind: data object
+    stereotype: IT4IT_DO_ProductDesign
+    qualified: IT4ITArchitecture::IT4IT_DO_ProductDesign
+    metaclass: Class
+    toolbox_page: IT4IT Develop
+    tags:
+    - Id
+    - Name
+    - Description
+    - Version
+    - Artifacts
+    controlled_by: Product Design
+    backbone: true
+  IT4IT_DO_Source:
+    name: Source
+    shown_as: Source
+    kind: data object
+    stereotype: IT4IT_DO_Source
+    qualified: IT4ITArchitecture::IT4IT_DO_Source
+    metaclass: Class
+    toolbox_page: IT4IT Develop
+    tags:
+    - Id
+    - Version
+    - Repository
+    - Owner
+    - Date/Time
+    - Person Id(s)
+    - Tags
+    - Comments
+    controlled_by: Source Control
+    backbone: false
+  IT4IT_DO_Pipeline:
+    name: Pipeline
+    shown_as: Pipeline
+    kind: data object
+    stereotype: IT4IT_DO_Pipeline
+    qualified: IT4ITArchitecture::IT4IT_DO_Pipeline
+    metaclass: Class
+    toolbox_page: IT4IT Develop
+    tags:
+    - Id
+    - Name
+    - Version
+    controlled_by: Pipeline
+    backbone: false
+  IT4IT_DO_BuildPackage:
+    name: Build Package
+    shown_as: Build Package
+    kind: data object
+    stereotype: IT4IT_DO_BuildPackage
+    qualified: IT4ITArchitecture::IT4IT_DO_BuildPackage
+    metaclass: Class
+    toolbox_page: IT4IT Develop
+    tags:
+    - Id
+    - Name
+    - Description
+    - Type
+    - Status
+    - Compliance Status
+    - Version
+    - Tags and Metadata
+    controlled_by: Build Package
+    backbone: false
+  IT4IT_DO_ProductRelease:
+    name: Product Release
+    shown_as: Product Release
+    kind: data object
+    stereotype: IT4IT_DO_ProductRelease
+    qualified: IT4ITArchitecture::IT4IT_DO_ProductRelease
+    metaclass: Class
+    toolbox_page: IT4IT Develop
+    tags:
+    - Id
+    - Name
+    - Description
+    - Status
+    - Version
+    - Tags
+    - Deployment Model
+    - Actual Spend
+    controlled_by: Release Composition
+    backbone: true
+  IT4IT_DO_ProductReleaseBlueprint:
+    name: Product Release Blueprint
+    shown_as: Product Release Blueprint
+    kind: data object
+    stereotype: IT4IT_DO_ProductReleaseBlueprint
+    qualified: IT4ITArchitecture::IT4IT_DO_ProductReleaseBlueprint
+    metaclass: Class
+    toolbox_page: IT4IT Develop
+    tags:
+    - Id
+    - Name
+    - Description
+    - Version
+    - Deployment Model
+    controlled_by: Release Composition
+    backbone: false
+  IT4IT_DO_TestCase:
+    name: Test Case
+    shown_as: Test Case
+    kind: data object
+    stereotype: IT4IT_DO_TestCase
+    qualified: IT4ITArchitecture::IT4IT_DO_TestCase
+    metaclass: Class
+    toolbox_page: IT4IT Test
+    tags:
+    - Id
+    - Name
+    - Description
+    - Status
+    - Result
+    controlled_by: Test
+    backbone: false
+  IT4IT_DO_TestPlan:
+    name: Test Plan
+    shown_as: Test Plan
+    kind: data object
+    stereotype: IT4IT_DO_TestPlan
+    qualified: IT4ITArchitecture::IT4IT_DO_TestPlan
+    metaclass: Class
+    toolbox_page: IT4IT Test
+    tags:
+    - Id
+    - Name
+    - Description
+    - Status
+    - Version
+    - Test Runs
+    controlled_by: Test
+    backbone: false
+  IT4IT_DO_Defect:
+    name: Defect
+    shown_as: Defect
+    kind: data object
+    stereotype: IT4IT_DO_Defect
+    qualified: IT4ITArchitecture::IT4IT_DO_Defect
+    metaclass: Class
+    toolbox_page: IT4IT Test
+    tags:
+    - Id
+    - Title
+    - Description
+    - Status
+    controlled_by: Defect
+    backbone: false
+  IT4IT_DO_Interaction:
+    name: Interaction
+    shown_as: Interaction
+    kind: data object
+    stereotype: IT4IT_DO_Interaction
+    qualified: IT4ITArchitecture::IT4IT_DO_Interaction
+    metaclass: Class
+    toolbox_page: IT4IT Consume
+    tags:
+    - Id
+    - Description
+    - Status
+    - Opened For
+    - Assigned To
+    - Opened
+    - Updated
+    controlled_by: Consumption Experience
+    backbone: false
+  IT4IT_DO_Identity:
+    name: Identity
+    shown_as: Identity
+    kind: data object
+    stereotype: IT4IT_DO_Identity
+    qualified: IT4ITArchitecture::IT4IT_DO_Identity
+    metaclass: Class
+    toolbox_page: IT4IT Consume
+    tags:
+    - Id
+    - Name
+    - Discriminator
+    - Location
+    - Creation Date
+    - Expiry Date
+    - Organization Id
+    controlled_by: Identity
+    backbone: false
+  IT4IT_DO_Entitlement:
+    name: Entitlement
+    shown_as: Entitlement
+    kind: data object
+    stereotype: IT4IT_DO_Entitlement
+    qualified: IT4ITArchitecture::IT4IT_DO_Entitlement
+    metaclass: Class
+    toolbox_page: IT4IT Consume
+    tags:
+    - Id
+    - Type
+    controlled_by: Identity
+    backbone: false
+  IT4IT_DO_ServiceOfferCatalog:
+    name: Service Offer Catalog
+    shown_as: Service Offer Catalog
+    kind: data object
+    stereotype: IT4IT_DO_ServiceOfferCatalog
+    qualified: IT4ITArchitecture::IT4IT_DO_ServiceOfferCatalog
+    metaclass: Class
+    toolbox_page: IT4IT Consume
+    tags:
+    - Id
+    - Name
+    controlled_by: Offer
+    backbone: false
+  IT4IT_DO_ServiceOffer:
+    name: Service Offer
+    shown_as: Service Offer
+    kind: data object
+    stereotype: IT4IT_DO_ServiceOffer
+    qualified: IT4ITArchitecture::IT4IT_DO_ServiceOffer
+    metaclass: Class
+    toolbox_page: IT4IT Consume
+    tags:
+    - Id
+    - Catalog Id
+    - Name
+    - Start Date
+    - Expiry Date
+    - Status
+    - Price
+    - Required Value
+    controlled_by: Offer
+    backbone: true
+  IT4IT_DO_Order:
+    name: Order
+    shown_as: Order
+    kind: data object
+    stereotype: IT4IT_DO_Order
+    qualified: IT4ITArchitecture::IT4IT_DO_Order
+    metaclass: Class
+    toolbox_page: IT4IT Consume
+    tags:
+    - Id
+    - Status
+    - Date
+    - Latest Fulfill Date
+    - Actual Fulfill Date
+    - Required Value
+    controlled_by: Order
+    backbone: false
+  IT4IT_DO_Subscription:
+    name: Subscription
+    shown_as: Subscription
+    kind: data object
+    stereotype: IT4IT_DO_Subscription
+    qualified: IT4ITArchitecture::IT4IT_DO_Subscription
+    metaclass: Class
+    toolbox_page: IT4IT Consume
+    tags:
+    - Id
+    - Status
+    - Start Date
+    - Expiry Date
+    controlled_by: Order
+    backbone: true
+  IT4IT_DO_ChargebackContract:
+    name: Chargeback Contract
+    shown_as: Chargeback Contract
+    kind: data object
+    stereotype: IT4IT_DO_ChargebackContract
+    qualified: IT4ITArchitecture::IT4IT_DO_ChargebackContract
+    metaclass: Class
+    toolbox_page: IT4IT Consume
+    tags:
+    - Id
+    - Status
+    - Rule
+    - Frequency
+    controlled_by: Chargeback
+    backbone: true
+  IT4IT_DO_ChargebackRecord:
+    name: Chargeback Record
+    shown_as: Chargeback Record
+    kind: data object
+    stereotype: IT4IT_DO_ChargebackRecord
+    qualified: IT4ITArchitecture::IT4IT_DO_ChargebackRecord
+    metaclass: Class
+    toolbox_page: IT4IT Consume
+    tags:
+    - Id
+    - Status
+    - From Date
+    - To Date
+    - Amount
+    controlled_by: Chargeback
+    backbone: false
+  IT4IT_DO_Change:
+    name: Change
+    shown_as: Change
+    kind: data object
+    stereotype: IT4IT_DO_Change
+    qualified: IT4ITArchitecture::IT4IT_DO_Change
+    metaclass: Class
+    toolbox_page: IT4IT Fulfill
+    tags:
+    - Id
+    - Title
+    - Description
+    - Category
+    - Approval Status
+    - Risk
+    - Planned Start Time
+    - Planned End Time
+    - Assigned To
+    controlled_by: Change
+    backbone: false
+  IT4IT_DO_DesiredProductInstance:
+    name: Desired Product Instance
+    shown_as: Desired Product Instance
+    kind: data object
+    stereotype: IT4IT_DO_DesiredProductInstance
+    qualified: IT4ITArchitecture::IT4IT_DO_DesiredProductInstance
+    metaclass: Class
+    toolbox_page: IT4IT Fulfill
+    tags:
+    - Id
+    - Name
+    - Type
+    - Configuration Items
+    - Create Time
+    - Last Modified Time
+    controlled_by: Fulfillment Orchestration
+    backbone: true
+  IT4IT_DO_Resource:
+    name: Resource
+    shown_as: Resource
+    kind: data object
+    stereotype: IT4IT_DO_Resource
+    qualified: IT4ITArchitecture::IT4IT_DO_Resource
+    metaclass: Class
+    toolbox_page: IT4IT Fulfill
+    tags:
+    - Id
+    - Type
+    - Status
+    controlled_by: Resource
+    backbone: false
+  IT4IT_DO_FulfillmentBook:
+    name: Fulfillment Book
+    shown_as: Fulfillment Book
+    kind: data object
+    stereotype: IT4IT_DO_FulfillmentBook
+    qualified: IT4ITArchitecture::IT4IT_DO_FulfillmentBook
+    metaclass: Class
+    toolbox_page: IT4IT Fulfill
+    tags:
+    - Id
+    - Category
+    - Description
+    - Execution Time
+    controlled_by: Fulfillment
+    backbone: false
+  IT4IT_DO_UsageRecord:
+    name: Usage Record
+    shown_as: Usage Record
+    kind: data object
+    stereotype: IT4IT_DO_UsageRecord
+    qualified: IT4ITArchitecture::IT4IT_DO_UsageRecord
+    metaclass: Class
+    toolbox_page: IT4IT Fulfill
+    tags:
+    - Id
+    - Usage Date From
+    - Usage Date To
+    - Units
+    - Unit Type
+    controlled_by: Usage
+    backbone: false
+  IT4IT_DO_ServiceContract:
+    name: Service Contract
+    shown_as: Service Contract
+    kind: data object
+    stereotype: IT4IT_DO_ServiceContract
+    qualified: IT4ITArchitecture::IT4IT_DO_ServiceContract
+    metaclass: Class
+    toolbox_page: IT4IT Support
+    tags:
+    - Id
+    - Name
+    - Type
+    - Provider
+    - Consumer
+    - Start Date
+    - End Date
+    - Support Calendar
+    - Adherence Calculation Periodicity
+    - Maintenance Window
+    controlled_by: Service Level
+    backbone: true
+  IT4IT_DO_KPI:
+    name: KPI
+    shown_as: KPI
+    kind: data object
+    stereotype: IT4IT_DO_KPI
+    qualified: IT4ITArchitecture::IT4IT_DO_KPI
+    metaclass: Class
+    toolbox_page: IT4IT Support
+    tags:
+    - Id
+    - Name
+    - Timestamp
+    - Metric
+    - Algorithm
+    controlled_by: Service Level
+    backbone: false
+  IT4IT_DO_Incident:
+    name: Incident
+    shown_as: Incident
+    kind: data object
+    stereotype: IT4IT_DO_Incident
+    qualified: IT4ITArchitecture::IT4IT_DO_Incident
+    metaclass: Class
+    toolbox_page: IT4IT Support
+    tags:
+    - Id
+    - Title
+    - Category
+    - Subcategory
+    - Status
+    - Status Time
+    - Outage Start Time
+    - Outage End Time
+    - Severity
+    - Priority
+    - Description
+    - Assigned To
+    controlled_by: Incident
+    backbone: false
+  IT4IT_DO_Problem:
+    name: Problem
+    shown_as: Problem
+    kind: data object
+    stereotype: IT4IT_DO_Problem
+    qualified: IT4ITArchitecture::IT4IT_DO_Problem
+    metaclass: Class
+    toolbox_page: IT4IT Support
+    tags:
+    - Id
+    - Title
+    - Category
+    - Subcategory
+    - Description
+    - Status
+    - Status Time
+    - Assigned To
+    controlled_by: Problem
+    backbone: false
+  IT4IT_DO_KnowledgeItem:
+    name: Knowledge Item
+    shown_as: Knowledge Item
+    kind: data object
+    stereotype: IT4IT_DO_KnowledgeItem
+    qualified: IT4ITArchitecture::IT4IT_DO_KnowledgeItem
+    metaclass: Class
+    toolbox_page: IT4IT Support
+    tags:
+    - Id
+    - Title
+    - Status
+    - Author Id
+    - Publish Date
+    - Expiry Date
+    - Body
+    controlled_by: Knowledge
+    backbone: false
+  IT4IT_DO_ActualProductInstance:
+    name: Actual Product Instance
+    shown_as: Actual Product Instance
+    kind: data object
+    stereotype: IT4IT_DO_ActualProductInstance
+    qualified: IT4ITArchitecture::IT4IT_DO_ActualProductInstance
+    metaclass: Class
+    toolbox_page: IT4IT Assure
+    tags:
+    - Id
+    - Name
+    - Type
+    - Configuration Items
+    - Create Time
+    - Last Modified Time
+    - Owner
+    - Location
+    controlled_by: Configuration
+    backbone: true
+  IT4IT_DO_ServiceMonitor:
+    name: Service Monitor
+    shown_as: Service Monitor
+    kind: data object
+    stereotype: IT4IT_DO_ServiceMonitor
+    qualified: IT4ITArchitecture::IT4IT_DO_ServiceMonitor
+    metaclass: Class
+    toolbox_page: IT4IT Assure
+    tags:
+    - Id
+    - Name
+    - Description
+    - Type
+    - Measurement Definitions
+    - Last Run Time
+    - Last Run Status
+    controlled_by: Monitoring
+    backbone: false
+  IT4IT_DO_Log:
+    name: Log
+    shown_as: Log
+    kind: data object
+    stereotype: IT4IT_DO_Log
+    qualified: IT4ITArchitecture::IT4IT_DO_Log
+    metaclass: Class
+    toolbox_page: IT4IT Assure
+    tags:
+    - Id
+    - Timestamp
+    - Data
+    controlled_by: Monitoring
+    backbone: false
+  IT4IT_DO_Event:
+    name: Event
+    shown_as: Event
+    kind: data object
+    stereotype: IT4IT_DO_Event
+    qualified: IT4ITArchitecture::IT4IT_DO_Event
+    metaclass: Class
+    toolbox_page: IT4IT Assure
+    tags:
+    - Id
+    - Name
+    - Category
+    - Type
+    - Status
+    - Status Time
+    - Severity
+    - Threshold Definitions
+    - Assigned To
+    - Is Correlated
+    controlled_by: Event
+    backbone: false
+  IT4IT_DO_Runbook:
+    name: Runbook
+    shown_as: Runbook
+    kind: data object
+    stereotype: IT4IT_DO_Runbook
+    qualified: IT4ITArchitecture::IT4IT_DO_Runbook
+    metaclass: Class
+    toolbox_page: IT4IT Assure
+    tags:
+    - Id
+    - Description
+    - Category
+    - Execution Time
+    controlled_by: Diagnostics & Remediation
+    backbone: false
+  IT4IT_DO_CostModel:
+    name: Cost Model
+    shown_as: Cost Model
+    kind: data object
+    stereotype: IT4IT_DO_CostModel
+    qualified: IT4ITArchitecture::IT4IT_DO_CostModel
+    metaclass: Class
+    toolbox_page: IT4IT Financial Management
+    tags:
+    - Id
+    - Name
+    - Description
+    - Status
+    - Version
+    - Calculation
+    - Resource Type
+    - Resource Id
+    - Resource Unit of Work
+    - Cost per Unit of Work
+    - Time Period
+    controlled_by: Cost Modeling
+    backbone: false
+  IT4IT_DO_BudgetItem:
+    name: Budget Item
+    shown_as: Budget Item
+    kind: data object
+    stereotype: IT4IT_DO_BudgetItem
+    qualified: IT4ITArchitecture::IT4IT_DO_BudgetItem
+    metaclass: Class
+    toolbox_page: IT4IT Financial Management
+    tags:
+    - Id
+    - Financial Period
+    - Investment Type
+    - Approved Budget
+    - Spend
+    - Forecast
+    controlled_by: Investment
+    backbone: false
+  IT4IT_ValueStream:
+    name: Value Stream
+    shown_as: Value Stream
+    kind: concept
+    stereotype: IT4IT_ValueStream
+    qualified: IT4ITArchitecture::IT4IT_ValueStream
+    metaclass: Activity
+    toolbox_page: IT4IT Concepts and Lines
+    tags: []
+  IT4IT_Stage:
+    name: Value Stream Stage
+    shown_as: Value Stream Stage
+    kind: concept
+    stereotype: IT4IT_Stage
+    qualified: IT4ITArchitecture::IT4IT_Stage
+    metaclass: Activity
+    toolbox_page: IT4IT Concepts and Lines
+    tags: []
+  IT4IT_Scenario:
+    name: Scenario
+    shown_as: Scenario
+    kind: concept
+    stereotype: IT4IT_Scenario
+    qualified: IT4ITArchitecture::IT4IT_Scenario
+    metaclass: Class
+    toolbox_page: IT4IT Concepts and Lines
+    tags: []
+  IT4IT_Stakeholder:
+    name: Stakeholder
+    shown_as: Stakeholder
+    kind: concept
+    stereotype: IT4IT_Stakeholder
+    qualified: IT4ITArchitecture::IT4IT_Stakeholder
+    metaclass: Actor
+    toolbox_page: IT4IT Concepts and Lines
+    tags: []
+  IT4IT_Group:
+    name: Functional Group
+    shown_as: Functional Group
+    kind: concept
+    stereotype: IT4IT_Group
+    qualified: IT4ITArchitecture::IT4IT_Group
+    metaclass: Class
+    toolbox_page: IT4IT Concepts and Lines
+    tags:
+    - IT4ITGroup
+  IT4IT_Capability:
+    name: Capability
+    shown_as: Capability
+    kind: concept
+    stereotype: IT4IT_Capability
+    qualified: IT4ITArchitecture::IT4IT_Capability
+    metaclass: Class
+    toolbox_page: IT4IT Concepts and Lines
+    tags: []
+  IT4IT_EssentialService:
+    name: Essential Service
+    shown_as: Essential Service
+    kind: concept
+    stereotype: IT4IT_EssentialService
+    qualified: IT4ITArchitecture::IT4IT_EssentialService
+    metaclass: Class
+    toolbox_page: IT4IT Concepts and Lines
+    tags: []
+  IT4IT_SG_GovernanceRiskCompliance:
+    name: Governance Risk & Compliance
+    shown_as: Governance Risk & Compliance
+    kind: supporting function group
+    stereotype: IT4IT_SG_GovernanceRiskCompliance
+    qualified: IT4ITArchitecture::IT4IT_SG_GovernanceRiskCompliance
+    metaclass: Class
+    toolbox_page: IT4IT Supporting Functions
+    tags: []
+  IT4IT_EX_RiskAssessment:
+    name: Risk Assessment
+    shown_as: Risk Assessment (example)
+    kind: example data object
+    stereotype: IT4IT_EX_RiskAssessment
+    qualified: IT4ITArchitecture::IT4IT_EX_RiskAssessment
+    metaclass: Class
+    toolbox_page: IT4IT Supporting Functions
+    tags: []
+  IT4IT_EX_Risk:
+    name: Risk
+    shown_as: Risk (example)
+    kind: example data object
+    stereotype: IT4IT_EX_Risk
+    qualified: IT4ITArchitecture::IT4IT_EX_Risk
+    metaclass: Class
+    toolbox_page: IT4IT Supporting Functions
+    tags: []
+  IT4IT_EX_VendorRisk:
+    name: Vendor Risk
+    shown_as: Vendor Risk (example)
+    kind: example data object
+    stereotype: IT4IT_EX_VendorRisk
+    qualified: IT4ITArchitecture::IT4IT_EX_VendorRisk
+    metaclass: Class
+    toolbox_page: IT4IT Supporting Functions
+    tags: []
+  IT4IT_EX_AuditFinding:
+    name: Audit Finding
+    shown_as: Audit Finding (example)
+    kind: example data object
+    stereotype: IT4IT_EX_AuditFinding
+    qualified: IT4ITArchitecture::IT4IT_EX_AuditFinding
+    metaclass: Class
+    toolbox_page: IT4IT Supporting Functions
+    tags: []
+  IT4IT_EX_ComplianceEvidence:
+    name: Compliance Evidence
+    shown_as: Compliance Evidence (example)
+    kind: example data object
+    stereotype: IT4IT_EX_ComplianceEvidence
+    qualified: IT4ITArchitecture::IT4IT_EX_ComplianceEvidence
+    metaclass: Class
+    toolbox_page: IT4IT Supporting Functions
+    tags: []
+  IT4IT_EX_RiskIssue:
+    name: Risk Issue
+    shown_as: Risk Issue (example)
+    kind: example data object
+    stereotype: IT4IT_EX_RiskIssue
+    qualified: IT4ITArchitecture::IT4IT_EX_RiskIssue
+    metaclass: Class
+    toolbox_page: IT4IT Supporting Functions
+    tags: []
+  IT4IT_SG_WorkforceManagement:
+    name: Workforce Management
+    shown_as: Workforce Management
+    kind: supporting function group
+    stereotype: IT4IT_SG_WorkforceManagement
+    qualified: IT4ITArchitecture::IT4IT_SG_WorkforceManagement
+    metaclass: Class
+    toolbox_page: IT4IT Supporting Functions
+    tags: []
+  IT4IT_EX_Employee:
+    name: Employee
+    shown_as: Employee (example)
+    kind: example data object
+    stereotype: IT4IT_EX_Employee
+    qualified: IT4ITArchitecture::IT4IT_EX_Employee
+    metaclass: Class
+    toolbox_page: IT4IT Supporting Functions
+    tags: []
+  IT4IT_EX_JobProfileAndRoles:
+    name: Job Profile and Roles
+    shown_as: Job Profile and Roles (example)
+    kind: example data object
+    stereotype: IT4IT_EX_JobProfileAndRoles
+    qualified: IT4ITArchitecture::IT4IT_EX_JobProfileAndRoles
+    metaclass: Class
+    toolbox_page: IT4IT Supporting Functions
+    tags: []
+  IT4IT_EX_Team:
+    name: Team
+    shown_as: Team (example)
+    kind: example data object
+    stereotype: IT4IT_EX_Team
+    qualified: IT4ITArchitecture::IT4IT_EX_Team
+    metaclass: Class
+    toolbox_page: IT4IT Supporting Functions
+    tags: []
+  IT4IT_EX_ResourceAllocation:
+    name: Resource Allocation
+    shown_as: Resource Allocation (example)
+    kind: example data object
+    stereotype: IT4IT_EX_ResourceAllocation
+    qualified: IT4ITArchitecture::IT4IT_EX_ResourceAllocation
+    metaclass: Class
+    toolbox_page: IT4IT Supporting Functions
+    tags: []
+  IT4IT_SG_SourcingVendorManagement:
+    name: Sourcing & Vendor Management
+    shown_as: Sourcing & Vendor Management
+    kind: supporting function group
+    stereotype: IT4IT_SG_SourcingVendorManagement
+    qualified: IT4ITArchitecture::IT4IT_SG_SourcingVendorManagement
+    metaclass: Class
+    toolbox_page: IT4IT Supporting Functions
+    tags: []
+  IT4IT_EX_Vendor:
+    name: Vendor
+    shown_as: Vendor (example)
+    kind: example data object
+    stereotype: IT4IT_EX_Vendor
+    qualified: IT4ITArchitecture::IT4IT_EX_Vendor
+    metaclass: Class
+    toolbox_page: IT4IT Supporting Functions
+    tags: []
+  IT4IT_EX_Contract:
+    name: Contract
+    shown_as: Contract (example)
+    kind: example data object
+    stereotype: IT4IT_EX_Contract
+    qualified: IT4ITArchitecture::IT4IT_EX_Contract
+    metaclass: Class
+    toolbox_page: IT4IT Supporting Functions
+    tags: []
+  IT4IT_EX_PurchaseOrder:
+    name: Purchase Order
+    shown_as: Purchase Order (example)
+    kind: example data object
+    stereotype: IT4IT_EX_PurchaseOrder
+    qualified: IT4ITArchitecture::IT4IT_EX_PurchaseOrder
+    metaclass: Class
+    toolbox_page: IT4IT Supporting Functions
+    tags: []
+  IT4IT_SG_IntelligenceReporting:
+    name: Intelligence & Reporting
+    shown_as: Intelligence & Reporting
+    kind: supporting function group
+    stereotype: IT4IT_SG_IntelligenceReporting
+    qualified: IT4ITArchitecture::IT4IT_SG_IntelligenceReporting
+    metaclass: Class
+    toolbox_page: IT4IT Supporting Functions
+    tags: []
+  IT4IT_EX_Metric:
+    name: Metric
+    shown_as: Metric (example)
+    kind: example data object
+    stereotype: IT4IT_EX_Metric
+    qualified: IT4ITArchitecture::IT4IT_EX_Metric
+    metaclass: Class
+    toolbox_page: IT4IT Supporting Functions
+    tags: []
+  IT4IT_SG_CollaborationCommunication:
+    name: Collaboration & Communication
+    shown_as: Collaboration & Communication
+    kind: supporting function group
+    stereotype: IT4IT_SG_CollaborationCommunication
+    qualified: IT4ITArchitecture::IT4IT_SG_CollaborationCommunication
+    metaclass: Class
+    toolbox_page: IT4IT Supporting Functions
+    tags: []
+lines:
+  IT4IT_DataRelationship:
+    shown_as: Data Relationship
+    metaclass: Association
+    qualified: IT4ITArchitecture::IT4IT_DataRelationship
+    sources: 46
+    targets: 46
+  IT4IT_SystemOfRecordIntegration:
+    shown_as: System of Record Integration
+    metaclass: InformationFlow
+    qualified: IT4ITArchitecture::IT4IT_SystemOfRecordIntegration
+    sources: 35
+    targets: 35
+  IT4IT_EngagementIntegration:
+    shown_as: Engagement Integration
+    metaclass: InformationFlow
+    qualified: IT4ITArchitecture::IT4IT_EngagementIntegration
+    sources: 35
+    targets: 35
+  IT4IT_Supports:
+    shown_as: Supports
+    metaclass: Dependency
+    qualified: IT4ITArchitecture::IT4IT_Supports
+    sources: 35
+    targets: 1
+  IT4IT_DependsOn:
+    shown_as: Depends On
+    metaclass: Dependency
+    qualified: IT4ITArchitecture::IT4IT_DependsOn
+    sources: 1
+    targets: 1
+  IT4IT_ExecutedFor:
+    shown_as: Executed For
+    metaclass: Association
+    qualified: IT4ITArchitecture::IT4IT_ExecutedFor
+    sources: 1
+    targets: 1
+  IT4IT_ListsStakeholder:
+    shown_as: Lists Stakeholder
+    metaclass: Association
+    qualified: IT4ITArchitecture::IT4IT_ListsStakeholder
+    sources: 1
+    targets: 1
+  IT4IT_ListsDataObject:
+    shown_as: Lists Data Object
+    metaclass: Association
+    qualified: IT4ITArchitecture::IT4IT_ListsDataObject
+    sources: 1
+    targets: 46
+  IT4IT_SupportedBy:
+    shown_as: Supported By
+    metaclass: Association
+    qualified: IT4ITArchitecture::IT4IT_SupportedBy
+    sources: 1
+    targets: 35
+group_tag:
+  name: IT4ITGroup
+  values:
+  - Plan
+  - Build
+  - Deliver
+  - Run
+  - Supporting
+  - Strategy
+  - Portfolio
+  - Develop
+  - Test
+  - Consume
+  - Fulfill
+  - Support
+  - Assure
+  - Financial Management
+ea_only: []
+toolbox:
+  IT4IT Strategy:
+  - Policy Component
+  - Strategy Component
+  - Enterprise Architecture Component
+  - Policy
+  - Strategic Theme
+  - Strategic Objective
+  - Architecture Roadmap Item
+  - Architecture Blueprint
+  - Value Stream
+  IT4IT Portfolio:
+  - Portfolio Backlog Component
+  - Proposal Component
+  - Product Portfolio Component
+  - Portfolio Backlog Item
+  - Scope Agreement
+  - Digital Product
+  IT4IT Develop:
+  - Product Backlog Component
+  - Requirement Component
+  - Product Design Component
+  - Source Control Component
+  - Pipeline Component
+  - Build Package Component
+  - Release Composition Component
+  - Product Backlog Item
+  - Requirement
+  - Product Design
+  - Source
+  - Pipeline
+  - Build Package
+  - Product Release
+  - Product Release Blueprint
+  IT4IT Test:
+  - Test Component
+  - Defect Component
+  - Test Case
+  - Test Plan
+  - Defect
+  IT4IT Consume:
+  - Consumption Experience Component
+  - Identity Component
+  - Offer Component
+  - Order Component
+  - Chargeback Component
+  - Interaction
+  - Identity
+  - Entitlement
+  - Service Offer Catalog
+  - Service Offer
+  - Order
+  - Subscription
+  - Chargeback Contract
+  - Chargeback Record
+  IT4IT Fulfill:
+  - Change Component
+  - Fulfillment Orchestration Component
+  - Resource Component
+  - Fulfillment Component
+  - Usage Component
+  - Change
+  - Desired Product Instance
+  - Resource
+  - Fulfillment Book
+  - Usage Record
+  IT4IT Support:
+  - Service Level Component
+  - Incident Component
+  - Problem Component
+  - Knowledge Component
+  - Service Contract
+  - KPI
+  - Incident
+  - Problem
+  - Knowledge Item
+  IT4IT Assure:
+  - Configuration Component
+  - Monitoring Component
+  - Event Component
+  - Diagnostics and Remediation Component
+  - Actual Product Instance
+  - Service Monitor
+  - Log
+  - Event
+  - Runbook
+  IT4IT Financial Management:
+  - Cost Modeling Component
+  - Investment Component
+  - Cost Model
+  - Budget Item
+  IT4IT Concepts and Lines:
+  - Value Stream
+  - Value Stream Stage
+  - Scenario
+  - Stakeholder
+  - Functional Group
+  - Capability
+  - Essential Service
+  IT4IT Supporting Functions:
+  - Governance Risk and Compliance
+  - Risk Assessment (example)
+  - Risk (example)
+  - Vendor Risk (example)
+  - Audit Finding (example)
+  - Compliance Evidence (example)
+  - Risk Issue (example)
+  - Workforce Management
+  - Employee (example)
+  - Job Profile and Roles (example)
+  - Team (example)
+  - Resource Allocation (example)
+  - Sourcing and Vendor Management
+  - Vendor (example)
+  - Contract (example)
+  - Purchase Order (example)
+  - Intelligence and Reporting
+  - Metric (example)
+  - Collaboration and Communication
+quick_links:
+  data_objects: IT4IT_DataRelationship to each data object the standard lists a link with, both ways round
+  components: Supports to a value stream, and the two integrations to any component
+  default_uml_links: hidden on data objects and components
+  counts:
+    cells: 212
+layout_map:
+  technology: IT4IT
+  display_name: IT4IT
+  extends: UML
+  stereotype_prefix: IT4IT_
+  diagram_types:
+    IT4IT_Level1Overview:
+      guide: Level 1 End-to-End Overview
+      base: Logical
+      size_reason:
+        Stakeholder: The pack draws a stakeholder as EA's stick figure, so EA takes the layout standard's actor size where the guide says box.
+      size_keys:
+        Group: FunctionalGroup
+        ValueStream: ValueStream
+        Stakeholder: actor
+        FC_Policy: FunctionalComponent
+        FC_Strategy: FunctionalComponent
+        FC_EnterpriseArchitecture: FunctionalComponent
+        FC_PortfolioBacklog: FunctionalComponent
+        FC_Proposal: FunctionalComponent
+        FC_ProductPortfolio: FunctionalComponent
+        FC_ProductBacklog: FunctionalComponent
+        FC_Requirement: FunctionalComponent
+        FC_ProductDesign: FunctionalComponent
+        FC_SourceControl: FunctionalComponent
+        FC_Pipeline: FunctionalComponent
+        FC_BuildPackage: FunctionalComponent
+        FC_ReleaseComposition: FunctionalComponent
+        FC_Test: FunctionalComponent
+        FC_Defect: FunctionalComponent
+        FC_ConsumptionExperience: FunctionalComponent
+        FC_Identity: FunctionalComponent
+        FC_Offer: FunctionalComponent
+        FC_Order: FunctionalComponent
+        FC_Chargeback: FunctionalComponent
+        FC_Change: FunctionalComponent
+        FC_FulfillmentOrchestration: FunctionalComponent
+        FC_Resource: FunctionalComponent
+        FC_Fulfillment: FunctionalComponent
+        FC_Usage: FunctionalComponent
+        FC_ServiceLevel: FunctionalComponent
+        FC_Incident: FunctionalComponent
+        FC_Problem: FunctionalComponent
+        FC_Knowledge: FunctionalComponent
+        FC_Configuration: FunctionalComponent
+        FC_Monitoring: FunctionalComponent
+        FC_Event: FunctionalComponent
+        FC_DiagnosticsRemediation: FunctionalComponent
+        FC_CostModeling: FunctionalComponent
+        FC_Investment: FunctionalComponent
+        SG_GovernanceRiskCompliance: container
+        SG_WorkforceManagement: container
+        SG_SourcingVendorManagement: container
+        SG_IntelligenceReporting: container
+        SG_CollaborationCommunication: container
+    IT4IT_Level2ValueStream:
+      guide: Level 2 Value Stream Documentation
+      base: Logical
+      size_reason:
+        Stakeholder: The pack draws a stakeholder as EA's stick figure, so EA takes the layout standard's actor size where the guide says box.
+      size_keys:
+        Group: FunctionalGroup
+        ValueStream: ValueStream
+        Stakeholder: actor
+        FC_Policy: FunctionalComponent
+        FC_Strategy: FunctionalComponent
+        FC_EnterpriseArchitecture: FunctionalComponent
+        FC_PortfolioBacklog: FunctionalComponent
+        FC_Proposal: FunctionalComponent
+        FC_ProductPortfolio: FunctionalComponent
+        FC_ProductBacklog: FunctionalComponent
+        FC_Requirement: FunctionalComponent
+        FC_ProductDesign: FunctionalComponent
+        FC_SourceControl: FunctionalComponent
+        FC_Pipeline: FunctionalComponent
+        FC_BuildPackage: FunctionalComponent
+        FC_ReleaseComposition: FunctionalComponent
+        FC_Test: FunctionalComponent
+        FC_Defect: FunctionalComponent
+        FC_ConsumptionExperience: FunctionalComponent
+        FC_Identity: FunctionalComponent
+        FC_Offer: FunctionalComponent
+        FC_Order: FunctionalComponent
+        FC_Chargeback: FunctionalComponent
+        FC_Change: FunctionalComponent
+        FC_FulfillmentOrchestration: FunctionalComponent
+        FC_Resource: FunctionalComponent
+        FC_Fulfillment: FunctionalComponent
+        FC_Usage: FunctionalComponent
+        FC_ServiceLevel: FunctionalComponent
+        FC_Incident: FunctionalComponent
+        FC_Problem: FunctionalComponent
+        FC_Knowledge: FunctionalComponent
+        FC_Configuration: FunctionalComponent
+        FC_Monitoring: FunctionalComponent
+        FC_Event: FunctionalComponent
+        FC_DiagnosticsRemediation: FunctionalComponent
+        FC_CostModeling: FunctionalComponent
+        FC_Investment: FunctionalComponent
+        SG_GovernanceRiskCompliance: container
+        SG_WorkforceManagement: container
+        SG_SourcingVendorManagement: container
+        SG_IntelligenceReporting: container
+        SG_CollaborationCommunication: container
+    IT4IT_Level3Architecture:
+      guide: Level 3 Vendor-Independent Architecture
+      base: Logical
+      size_reason:
+        Stakeholder: The pack draws a stakeholder as EA's stick figure, so EA takes the layout standard's actor size where the guide says box.
+      size_keys:
+        Group: FunctionalGroup
+        ValueStream: ValueStream
+        Stakeholder: actor
+        FC_Policy: FunctionalComponent
+        FC_Strategy: FunctionalComponent
+        FC_EnterpriseArchitecture: FunctionalComponent
+        FC_PortfolioBacklog: FunctionalComponent
+        FC_Proposal: FunctionalComponent
+        FC_ProductPortfolio: FunctionalComponent
+        FC_ProductBacklog: FunctionalComponent
+        FC_Requirement: FunctionalComponent
+        FC_ProductDesign: FunctionalComponent
+        FC_SourceControl: FunctionalComponent
+        FC_Pipeline: FunctionalComponent
+        FC_BuildPackage: FunctionalComponent
+        FC_ReleaseComposition: FunctionalComponent
+        FC_Test: FunctionalComponent
+        FC_Defect: FunctionalComponent
+        FC_ConsumptionExperience: FunctionalComponent
+        FC_Identity: FunctionalComponent
+        FC_Offer: FunctionalComponent
+        FC_Order: FunctionalComponent
+        FC_Chargeback: FunctionalComponent
+        FC_Change: FunctionalComponent
+        FC_FulfillmentOrchestration: FunctionalComponent
+        FC_Resource: FunctionalComponent
+        FC_Fulfillment: FunctionalComponent
+        FC_Usage: FunctionalComponent
+        FC_ServiceLevel: FunctionalComponent
+        FC_Incident: FunctionalComponent
+        FC_Problem: FunctionalComponent
+        FC_Knowledge: FunctionalComponent
+        FC_Configuration: FunctionalComponent
+        FC_Monitoring: FunctionalComponent
+        FC_Event: FunctionalComponent
+        FC_DiagnosticsRemediation: FunctionalComponent
+        FC_CostModeling: FunctionalComponent
+        FC_Investment: FunctionalComponent
+        SG_GovernanceRiskCompliance: container
+        SG_WorkforceManagement: container
+        SG_SourcingVendorManagement: container
+        SG_IntelligenceReporting: container
+        SG_CollaborationCommunication: container
+  differences:
+  - concept: Stakeholder
+    element_type: actor
+    size:
+    - 45
+    - 90
+    reason: The pack draws a stakeholder as EA's stick figure, not a box, so it takes the standard's actor size.
+    evidence: The pack's IT4IT_Stakeholder shape, which applies to Actor.
+harvest: 'Our own technology: facts come from the list, and the stored file and sample model were read back on the build above.'

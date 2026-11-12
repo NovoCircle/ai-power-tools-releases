@@ -107,9 +107,17 @@ values are **untested**.
 
 ## 4. `GetEAMatrixData` — three arrays, no grid
 
+`POST /api/relationshipmatrix/GetEAMatrixData` returns an object with exactly three arrays:
+
 ```json
 { "sourceElements": [ … ], "targetElements": [ … ], "connectors": [ … ] }
 ```
+
+**Check the connector count against EA.** The length of `connectors` should equal the number of
+links EA holds for the same source and target packages, relationship and direction (count them in EA,
+for example with an SQL count over `t_connector` for that relationship between the two packages'
+elements). On four repaired profiles the two numbers matched exactly. A difference is unexplained, so
+report it rather than presenting the grid as complete.
 
 ### Element entries are full element records
 

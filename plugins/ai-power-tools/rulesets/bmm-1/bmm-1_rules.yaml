@@ -1,0 +1,641 @@
+# Business Motivation Model (BMM) 1.3 Conformance Ruleset
+# Language:     OMG Business Motivation Model 1.3 (formal/15-05-19), language file id bmm-1
+# Enforced by:  AI Power Tools for Sparx EA -- validate_model tool
+#
+# STEREOTYPE NAMES ARE THE CONCEPT NAMES, WITH NO TECHNOLOGY PREFIX, AND THAT IS MEASURED.
+#
+# Measured on EA 17.1 build 1716, in a test model: an element or connector created with the type
+# `BMM::Goal` stores `t_object.Stereotype = Goal` and a t_xref row `FQName=BMM::Goal`. All 29 element stereotypes and all
+# 37 connector stereotypes of EA's built-in BMM technology store the bare name (unlike ArchiMate, whose names carry
+# `ArchiMate_`). validate_model selects with `Stereotype IN (...)` against those columns, exact and case sensitive, so the
+# selectors below use the bare names and not `BMM::Goal`.
+#
+# THE BARE NAMES ARE SHARED. `BusinessProcess` and `Resource` are also stored stereotype names of EA's BPMN 2.0 technology
+# (a probe model holds a BPMN `BusinessProcess` next to BMM's); validate_model cannot tell them apart from the stored name.
+# No rule below selects those two as elements, and every table ignores a connector whose end it does not name
+# (`unknown_endpoint: ignore`), so a BPMN element is judged only if a BMM connector joins it.
+#
+# WHAT THE TABLES ARE. Three `tables:` generated from the BMM language file:
+#   bmm-1.3-relationships               53 of the standard's 54 relationship fact types, one letter per connector stereotype
+#   bmm-1.3-desired-result-includes     Includes joins like kinds of Desired Result (BMM-HIER-001)
+#   bmm-1.3-course-of-action-like-kind  Includes and Enables join like kinds of Course of Action (BMM-HIER-003)
+# Direction is the standard's active reading (source acts on target); the 8 connector stereotypes that EA's own sample
+# models use follow it. The mapping from a fact type to EA's connector stereotype is by the verb in the fact type's name;
+# EA's quick linker was spot-checked on three pairs only, so `quick_links` are not harvested.
+#
+# NOT COVERED. 25 of the 39 rules in the language's rules reference have no rule here: text-level wording, graph cycles and
+# method notes, which a validator that reads only the saved model cannot judge.
+#
+# Source:
+#   [S1] OMG Business Motivation Model 1.3, formal/15-05-19 -- https://www.omg.org/spec/BMM/1.3/
+#
+# Rule ids: `BMM13-<CAT>-nnn` here, `implements: BMM-<CAT>-nnn` names the rule of references/rules.md.
+
+meta:
+  version: "1.0"
+  language: bmm-1
+  organization: "(your organization)"
+  mdg_family: BMM
+  description: >
+    Conformance rules for Business Motivation Model 1.3 models built with Sparx EA's BMM technology. They check which
+    concepts a relationship may join, the cardinalities the standard states, the like-kind rules for Desired Results and
+    Courses of Action, that an enforcement level has a Tactic behind it, and that Courses of Action are governed and
+    Influencers categorized. Rules about how a statement is worded are not checkable and are not included.
+  severity_levels:
+    error:   The standard states it as a requirement (a must).
+    warning: The standard gives it as guidance or in prose only (a should).
+    info:    Advisory note; not a conformance violation.
+
+tables:
+  bmm-1.3-relationships:
+    source: "OMG Business Motivation Model 1.3 (formal/15-05-19), clause 9.5 (53 of the 54 relationship fact types: relationship 38 has no EA connector stereotype), applied to each concept's specializations; generated from the BMM language file"
+    connectors:
+      "a": ActsAs
+      "b": AffectsAchievementOf
+      "c": AffectsEmploymentOf
+      "d": Amplifies
+      "e": Categorizes
+      "f": ChannelsEffortsTowards
+      "g": Claims
+      "h": Defines
+      "i": Delivers
+      "j": Deploys
+      "k": Determines
+      "l": Discharges
+      "m": EffectsEnforcementLevelOf
+      "n": Enables
+      "o": Establishes
+      "p": Governs
+      "q": GovernsUseOf
+      "r": Guides
+      "s": Identifies
+      "t": Implements
+      "u": Includes
+      "v": IsAComponentOfThePlanFor
+      "w": IsFormulatedBasedOn
+      "x": IsJudgmentOf
+      "y": IsResponsibleFor
+      "z": IsSourceOf
+      "A": Makes
+      "B": MakesOperative
+      "C": Manages
+      "D": Provides
+      "E": ProvidesImpetusFor
+      "F": Quantifies
+      "G": Realizes
+      "H": Recognizes
+      "I": Requires
+      "J": SupportsAchievementOf
+      "K": Uses
+    cells:
+      Assessment:
+        Assessment: "K"
+        BusinessPolicy: "Ec"
+        BusinessRule: "Ec"
+        CourseOfAction: "c"
+        DesiredResult: "b"
+        Directive: "Ec"
+        End: "b"
+        Goal: "b"
+        Influencer: "x"
+        Means: "c"
+        Mission: "c"
+        Objective: "b"
+        PotentialImpact: "s"
+        Regulation: "x"
+        Strategy: "c"
+        Tactic: "c"
+        Vision: "b"
+      AssessmentCategory:
+        Assessment: "e"
+        AssessmentCategory: "e"
+      BusinessPolicy:
+        Asset: "q"
+        BusinessPolicy: "u"
+        BusinessProcess: "p"
+        CourseOfAction: "p"
+        DesiredResult: "J"
+        FixedAsset: "q"
+        Goal: "J"
+        Objective: "J"
+        Offering: "q"
+        Regulation: "a"
+        Resource: "q"
+        Strategy: "p"
+        Tactic: "p"
+      BusinessProcess:
+        Asset: "C"
+        CourseOfAction: "G"
+        FixedAsset: "C"
+        Offering: "Ci"
+        Resource: "C"
+        Strategy: "G"
+        Tactic: "G"
+      BusinessRule:
+        Asset: "q"
+        BusinessProcess: "r"
+        CourseOfAction: "p"
+        DesiredResult: "J"
+        FixedAsset: "q"
+        Goal: "J"
+        Objective: "J"
+        Offering: "q"
+        Regulation: "a"
+        Resource: "q"
+        Strategy: "p"
+        Tactic: "p"
+      CourseOfAction:
+        Asset: "j"
+        BusinessPolicy: "w"
+        BusinessRule: "w"
+        CourseOfAction: "nu"
+        DesiredResult: "f"
+        Directive: "w"
+        FixedAsset: "j"
+        Goal: "f"
+        Liability: "l"
+        Objective: "f"
+        Offering: "hj"
+        Resource: "j"
+        Strategy: "nu"
+        Tactic: "nu"
+      DesiredResult:
+        DesiredResult: "u"
+        Goal: "u"
+        Objective: "u"
+      DesiredResultCategory:
+        DesiredResult: "e"
+        DesiredResultCategory: "u"
+        Goal: "e"
+        Objective: "e"
+      Directive:
+        Asset: "q"
+        CourseOfAction: "p"
+        DesiredResult: "J"
+        FixedAsset: "q"
+        Goal: "J"
+        Objective: "J"
+        Offering: "q"
+        Regulation: "a"
+        Resource: "q"
+        Strategy: "p"
+        Tactic: "p"
+      FixedAsset:
+        Resource: "D"
+      Goal:
+        DesiredResult: "u"
+        Goal: "u"
+        Objective: "u"
+        Vision: "d"
+      InfluencerCategory:
+        Influencer: "e"
+        InfluencerCategory: "e"
+        Regulation: "e"
+      InfluencingOrganization:
+        Influencer: "z"
+        Regulation: "z"
+      Liability:
+        Resource: "g"
+      Mission:
+        Vision: "B"
+      Objective:
+        DesiredResult: "u"
+        Goal: "Fu"
+        Objective: "u"
+      Offering:
+        FixedAsset: "K"
+        Offering: "K"
+        Resource: "DI"
+      OrganizationCategory:
+        InfluencingOrganization: "e"
+        OrganizationCategory: "e"
+      OrganizationUnit:
+        Assessment: "A"
+        Asset: "y"
+        BusinessPolicy: "o"
+        BusinessProcess: "y"
+        BusinessRule: "o"
+        CourseOfAction: "o"
+        DesiredResult: "h"
+        Directive: "o"
+        End: "h"
+        FixedAsset: "y"
+        Goal: "h"
+        Influencer: "H"
+        InfluencingOrganization: "a"
+        Liability: "y"
+        Means: "o"
+        Mission: "o"
+        Objective: "h"
+        Offering: "y"
+        Regulation: "H"
+        Resource: "y"
+        Strategy: "o"
+        Tactic: "o"
+        Vision: "h"
+      PotentialImpact:
+        BusinessPolicy: "E"
+        BusinessRule: "E"
+        Directive: "E"
+      Strategy:
+        Asset: "j"
+        BusinessPolicy: "w"
+        BusinessRule: "w"
+        CourseOfAction: "nu"
+        DesiredResult: "f"
+        Directive: "w"
+        FixedAsset: "j"
+        Goal: "f"
+        Liability: "l"
+        Mission: "v"
+        Objective: "f"
+        Offering: "hj"
+        OrganizationUnit: "k"
+        Resource: "j"
+        Strategy: "nu"
+        Tactic: "nu"
+      Tactic:
+        Asset: "j"
+        BusinessPolicy: "w"
+        BusinessRule: "mw"
+        CourseOfAction: "nu"
+        DesiredResult: "f"
+        Directive: "w"
+        FixedAsset: "j"
+        Goal: "f"
+        Liability: "l"
+        Objective: "f"
+        Offering: "hj"
+        Resource: "j"
+        Strategy: "ntu"
+        Tactic: "nu"
+  bmm-1.3-desired-result-includes:
+    source: "OMG Business Motivation Model 1.3 (formal/15-05-19), clause 9.2 (Desired Result entry) and 8.2.6.1: a Desired Result includes only Desired Results of its own kind"
+    connectors:
+      "u": Includes
+    cells:
+      DesiredResult:
+        DesiredResult: "u"
+        Goal: "u"
+        Objective: "u"
+      Goal:
+        DesiredResult: "u"
+        Goal: "u"
+      Objective:
+        DesiredResult: "u"
+        Objective: "u"
+  bmm-1.3-course-of-action-like-kind:
+    source: "OMG Business Motivation Model 1.3 (formal/15-05-19), clauses 8.3.12.1 and 8.3.12.2: a Course of Action includes, and generally enables, Courses of Action of the same kind"
+    connectors:
+      "u": Includes
+      "n": Enables
+    cells:
+      CourseOfAction:
+        CourseOfAction: "nu"
+        Strategy: "nu"
+        Tactic: "nu"
+      Strategy:
+        CourseOfAction: "nu"
+        Strategy: "nu"
+      Tactic:
+        CourseOfAction: "nu"
+        Tactic: "nu"
+
+rules:
+
+  # --------------------------------------------------------------------------
+  # CARD
+  # --------------------------------------------------------------------------
+  - id: BMM13-CARD-001
+    implements: BMM-CARD-001
+    name: "An Assessment judges at least one Influencer"
+    description: >
+      Every Assessment judges at least one Influencer (9.2, Assessment entry). The standard states
+      this in prose only, so a miss is a warning. Partial: the same rule also asks that the Assessment
+      affect an End or a Means, which is a choice between two connector stereotypes and the grammar
+      counts one stereotype at a time.
+    category: card
+    severity: warning
+    demo_trigger: false
+
+    selector:
+      type: element
+      stereotypes:
+        any_of: [Assessment]
+
+    condition:
+      type: connector_count
+      connector_stereotype: IsJudgmentOf
+      direction: outgoing
+      min: 1
+
+    remediation:
+      short: "Connect the Assessment to the Influencer it judges with IsJudgmentOf."
+      auto_fixable: false
+  - id: BMM13-CARD-002
+    implements: BMM-CARD-002
+    name: "An Assessment identifies at least one Potential Impact"
+    description: >
+      Every Assessment identifies at least one Potential Impact (9.2, Assessment entry).
+    category: card
+    severity: warning
+    demo_trigger: false
+
+    selector:
+      type: element
+      stereotypes:
+        any_of: [Assessment]
+
+    condition:
+      type: connector_count
+      connector_stereotype: Identifies
+      direction: outgoing
+      min: 1
+
+    remediation:
+      short: "Connect the Assessment to a Potential Impact with Identifies."
+      auto_fixable: false
+  - id: BMM13-CARD-003
+    implements: BMM-CARD-003
+    name: "An Assessment is made by at least one Organization Unit"
+    description: >
+      Every Assessment is made by at least one Organization Unit (9.2, Organization Unit entry).
+    category: card
+    severity: warning
+    demo_trigger: false
+
+    selector:
+      type: element
+      stereotypes:
+        any_of: [Assessment]
+
+    condition:
+      type: connector_count
+      connector_stereotype: Makes
+      direction: incoming
+      min: 1
+
+    remediation:
+      short: "Connect an Organization Unit to the Assessment with Makes."
+      auto_fixable: false
+  - id: BMM13-CARD-004
+    implements: BMM-CARD-004
+    name: "An End is defined by at least one Organization Unit"
+    description: >
+      Every End, and so every Vision, Desired Result, Goal and Objective, is defined by at least one
+      Organization Unit (9.2, Organization Unit entry).
+    category: card
+    severity: warning
+    demo_trigger: false
+
+    selector:
+      type: element
+      stereotypes:
+        any_of: [End, Vision, DesiredResult, Goal, Objective]
+
+    condition:
+      type: connector_count
+      connector_stereotype: Defines
+      direction: incoming
+      min: 1
+
+    remediation:
+      short: "Connect an Organization Unit to the End with Defines."
+      auto_fixable: false
+  - id: BMM13-CARD-005
+    implements: BMM-CARD-005
+    name: "A Goal amplifies at most one Vision"
+    description: >
+      A Goal amplifies at most one Vision (9.2, Goal entry).
+    category: card
+    severity: error
+    demo_trigger: true
+
+    selector:
+      type: element
+      stereotypes:
+        any_of: [Goal]
+
+    condition:
+      type: connector_count
+      connector_stereotype: Amplifies
+      direction: outgoing
+      max: 1
+
+    remediation:
+      short: "Keep one Amplifies connector from the Goal to its Vision."
+      auto_fixable: false
+  - id: BMM13-CARD-006
+    implements: BMM-CARD-006
+    name: "A Mission makes at most one Vision operative"
+    description: >
+      A Mission makes operative at most one Vision (9.2, Mission entry).
+    category: card
+    severity: error
+    demo_trigger: false
+
+    selector:
+      type: element
+      stereotypes:
+        any_of: [Mission]
+
+    condition:
+      type: connector_count
+      connector_stereotype: MakesOperative
+      direction: outgoing
+      max: 1
+
+    remediation:
+      short: "Keep one MakesOperative connector from the Mission to its Vision."
+      auto_fixable: false
+  - id: BMM13-CARD-007
+    implements: BMM-CARD-007
+    name: "An Influencing Organization or a Regulation has at most one player"
+    description: >
+      An Influencing Organization is played by at most one Organization Unit, and a Regulation is the
+      role of at most one Directive (8.5.3, 8.5.4). Both facts use the ActsAs connector, counted on
+      the incoming side.
+    category: card
+    severity: error
+    demo_trigger: false
+
+    selector:
+      type: element
+      stereotypes:
+        any_of: [InfluencingOrganization, Regulation]
+
+    condition:
+      type: connector_count
+      connector_stereotype: ActsAs
+      direction: incoming
+      max: 1
+
+    remediation:
+      short: "Keep one ActsAs connector into the Influencing Organization or the Regulation."
+      auto_fixable: false
+
+  # --------------------------------------------------------------------------
+  # HIER
+  # --------------------------------------------------------------------------
+  - id: BMM13-HIER-001
+    implements: BMM-HIER-001
+    name: "A Desired Result includes only Desired Results of its own kind"
+    description: >
+      Goals include Goals and Objectives include Objectives; the only link between a Goal and an
+      Objective is that the Objective quantifies the Goal (9.2 Desired Result entry; 8.2.6.1). EA's
+      Includes connector joins any two Desired Results, so this table lists the pairs of like kind (a
+      general Desired Result joins either).
+    category: hier
+    severity: error
+    demo_trigger: true
+
+    selector:
+      type: connector
+      connector_stereotypes: [Includes]
+
+    condition:
+      type: relationship_table
+      table: bmm-1.3-desired-result-includes
+      unknown_endpoint: ignore
+
+    remediation:
+      short: "Join a Goal to a Goal or an Objective to an Objective with Includes; join a Goal and its Objective with Quantifies."
+      auto_fixable: false
+  - id: BMM13-HIER-003
+    implements: BMM-HIER-003
+    name: "A Course of Action includes and enables Courses of Action of the same kind"
+    description: >
+      Strategies include Strategies and Tactics include Tactics, and one Course of Action enables
+      another of the same kind in the usual case (8.3.12.1, 8.3.12.2). Guidance, so a warning.
+    category: hier
+    severity: warning
+    demo_trigger: false
+
+    selector:
+      type: connector
+      connector_stereotypes: [Includes, Enables]
+
+    condition:
+      type: relationship_table
+      table: bmm-1.3-course-of-action-like-kind
+      unknown_endpoint: ignore
+
+    remediation:
+      short: "Use Includes or Enables between two Strategies or two Tactics; join a Tactic to the Strategy it serves with Implements."
+      auto_fixable: false
+
+  # --------------------------------------------------------------------------
+  # DEF
+  # --------------------------------------------------------------------------
+  - id: BMM13-DEF-003
+    implements: BMM-DEF-003
+    name: "An enforcement level on a Business Rule is set by a Tactic"
+    description: >
+      A Tactic is what sets the enforcement level of a Business Rule (8.3.7). A Business Rule that
+      carries an EnforcementLevel value should therefore be reached by an EffectsEnforcementLevelOf
+      connector from a Tactic. Partial: the filter matches the six level names as the standard spells
+      them (lower case or capitalized); a Business Rule whose tag holds other text is not selected,
+      and that definitional rules carry no level is not checkable here. EnforcementLevel is free text
+      in EA.
+    category: def
+    severity: error
+    demo_trigger: true
+
+    selector:
+      type: element
+      stereotypes:
+        any_of: [BusinessRule]
+      tagged_value_filter:
+        - tag: EnforcementLevel
+          value_in: ["strictly enforced", "deferred enforcement", "pre-authorized override", "post-justified override", "override with explanation", "guideline", "Strictly enforced", "Deferred enforcement", "Pre-authorized override", "Post-justified override", "Override with explanation", "Guideline"]
+
+    condition:
+      type: connector_count
+      connector_stereotype: EffectsEnforcementLevelOf
+      direction: incoming
+      min: 1
+
+    remediation:
+      short: "Connect the Tactic that sets this rule's enforcement level with EffectsEnforcementLevelOf."
+      auto_fixable: false
+
+  # --------------------------------------------------------------------------
+  # REL
+  # --------------------------------------------------------------------------
+  - id: BMM13-REL-002
+    implements: BMM-REL-002
+    name: "A Course of Action is governed by some Directive"
+    description: >
+      Every Course of Action is governed by some Directive; one with none should be examined carefully
+      (8.3.6). A Strategy and a Tactic are both Courses of Action.
+    category: rel
+    severity: warning
+    demo_trigger: false
+
+    selector:
+      type: element
+      stereotypes:
+        any_of: [CourseOfAction, Strategy, Tactic]
+
+    condition:
+      type: connector_count
+      connector_stereotype: Governs
+      direction: incoming
+      min: 1
+
+    remediation:
+      short: "Connect a Directive (a Business Policy or Business Rule) to the Course of Action with Governs."
+      auto_fixable: false
+  - id: BMM13-REL-007
+    implements: BMM-REL-007
+    also_implements: [BMM-REL-004]
+    name: "Relationships connect only the concept pairs of the standard's fact types"
+    description: >
+      The table holds 53 of the standard's 54 relationship fact types (9.5) applied to each concept's
+      specializations. A known pair with no cell allows nothing. Among its consequences is the one
+      rules.md states as REL-004: an Influencer leads to a Business Policy only through an Assessment
+      that identifies a Potential Impact, so no connector joins an Influencer straight to a Directive.
+      Partial: relationship 38 (a Business Policy is the basis for a Business Rule) has no connector
+      stereotype of that name in EA and is not in the table.
+    category: rel
+    severity: error
+    demo_trigger: true
+
+    selector:
+      type: connector
+      connector_stereotypes: any_of_table
+
+    condition:
+      type: relationship_table
+      table: bmm-1.3-relationships
+      unknown_endpoint: ignore
+
+    remediation:
+      short: "Use a relationship the standard defines between these two concepts; an Influencer reaches a Business Policy through an Assessment."
+      auto_fixable: false
+  - id: BMM13-REL-006
+    implements: BMM-REL-006
+    name: "An Influencer is placed in at least one category"
+    description: >
+      Each Influencer is placed in at least one Influencer Category (8.5.2; Annex G.3). Partial: the
+      rule also asks that the Influencer be classed internal or external, by a subclass or by a
+      category named Internal or External; EA has no subclass stereotypes, and the grammar cannot
+      match a category's name.
+    category: rel
+    severity: warning
+    demo_trigger: false
+
+    selector:
+      type: element
+      stereotypes:
+        any_of: [Influencer, Regulation]
+
+    condition:
+      type: connector_count
+      connector_stereotype: Categorizes
+      direction: incoming
+      min: 1
+
+    remediation:
+      short: "Connect an Influencer Category to the Influencer with Categorizes."
+      auto_fixable: false

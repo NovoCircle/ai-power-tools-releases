@@ -12,17 +12,17 @@ column is the useful part of each case.
 `WBA` technology (qualified form `WBA::WBABusinessApplication`) loaded. Westbrook Bank is our
 illustration. A customer runs these cases against their own model, substituting their technology,
 stereotypes and package names; the numbers in the checks are the Westbrook copy's and will differ.
-Two facts about the copy shape the cases. First, the bank's own language has no view catalogue in
+Two facts about the copy shape the cases. First, the bank's own language has no view catalog in
 this skill's toolchain, so a scope that is almost all `WBA` content is "dominant language named but
 unbound", not a scope with a conformant view. Second, the copy holds no scope that is mostly one
-language the toolchain does have a catalogue for, so the cases about ranked viewpoints and
+language the toolchain does have a catalog for, so the cases about ranked viewpoints and
 generation routes need a scratch scope that the runner builds, and are marked `BLOCKED` until it
 exists.
 
 **Scratch scope S.** A package named `Advisor Scratch Application Landscape` holding ten elements of
 the ArchiMate 3 application layer: six `ApplicationComponent`, three `ApplicationService` and one
 `DataObject`, each stereotyped with the ArchiMate 3 qualified stereotype. It needs the ArchiMate 3
-technology loaded. It is 100% one language the toolchain has a catalogue for.
+technology loaded. It is 100% one language the toolchain has a catalog for.
 
 **Scratch scope T.** A package holding elements of a notation whose best-ranked view is one whose
 diagram type dictates its own arrangement, so the toolchain cannot generate it (the shipped example
@@ -44,8 +44,9 @@ Covers: Choosing the diagram, before drawing it
 **Ask:** "I want to understand how our Lending applications fit together. What kind of diagram should I make?"
 
 **Passes when:** The run measures the Lending area, recommends a diagram with its reasoning, and
-stops there. It says the next step is drawing the chosen view with `ea-diagram-composition`, and it
-creates no diagram, adds nothing to a diagram and changes nothing in the model.
+stops there. It ends with the fixed sentence that nothing has been drawn yet and that
+`ea-diagram-composition` draws the chosen view, and it creates no diagram, adds nothing to a diagram
+and changes nothing in the model.
 
 **Check:**
 
@@ -58,7 +59,7 @@ expect: unchanged
 tools: not-called: ea_diagram.create_diagram
 tools: not-called: ea_diagram.create_diagram_in_language
 tools: not-called: ea_diagram.add_elements_to_diagram_bulk
-reply: says: the chosen view is drawn in a separate step with the composition skill
+reply: says: nothing has been drawn yet, and ea-diagram-composition draws the chosen view in a separate step
 ```
 
 **Fails when:** The run answers "an application landscape diagram" and then builds one, because the
@@ -111,8 +112,10 @@ Covers: The rule that matters most
 
 **Passes when:** The run profiles the folder from the stereotypes its elements carry instead of
 accepting what the folder is called. It reports what it found (17 stereotyped elements, none
-carrying an ArchiMate stereotype) and recommends only from that. It does not take "all ArchiMate"
-as a premise.
+carrying an ArchiMate stereotype) and recommends only from that. The bare stored names there
+(for example `ApplicationComponent`) are not an ArchiMate prefix match, so it says they have no
+recorded owner, or names the other language that defines them, instead of counting them as ArchiMate
+by name alone. It does not take "all ArchiMate" as a premise.
 
 **Check:**
 
@@ -136,6 +139,7 @@ expect: >= 1
 ```check
 tools: called: ea_analyze.execute_sql
 reply: says: the folder's languages were worked out from its elements' stereotypes
+reply: says: none of the folder's stereotyped elements carries an ArchiMate stereotype
 reply: not: recommends an ArchiMate viewpoint on the strength of the folder's name
 ```
 
@@ -350,9 +354,11 @@ Covers: Silent failures this step must not trust
 
 **Ask:** "Show me what's connected to element 424242 and tell me which diagram suits it."
 
-**Passes when:** The run reports that the traversal found nothing for that id and that it cannot tell
-whether the element exists, is isolated, or the id is wrong. It asks the person to check the id
-rather than recommending a diagram for it.
+**Passes when:** The run reports that the traversal answered "element not found" for that id (the
+current server returns an `element_not_found` error; an older one returned an empty result with no
+error) and that the element does not exist, or, on an older server, that it cannot tell whether the
+element exists, is isolated, or the id is wrong. It asks the person to check the id rather than
+recommending a diagram for it.
 
 **Check:**
 
@@ -368,7 +374,7 @@ expect: empty
 ```
 
 ```check
-reply: says: the traversal returned nothing for that id and asks the person to check the id
+reply: says: the traversal found no element with that id, and asks the person to check the id
 reply: not: says the element exists but has no connections
 reply: not: recommends a diagram for the element
 ```
@@ -419,7 +425,7 @@ Covers: Step 2 — profile, and ask the pivotal question
 
 **Passes when:** The run profiles the area and reports that the bank's own language holds almost all
 of it (66 of 67 stereotyped elements; one `VendorApplication` stray). It says the area is effectively
-one language, and that the toolchain has no view catalogue for that language, so there is no
+one language, and that the toolchain has no view catalog for that language, so there is no
 conformant view to recommend. It treats that as a different answer from "mixed" and recommends from
 there (for example a neutral view, with reasons).
 
@@ -438,7 +444,7 @@ expect: rows: [[66, 67]]
 ```check
 tools: called: ea_mdg.get_mdg_from_runtime {"tech_id": "WBA"}
 reply: says: the bank's own language holds 66 of the 67 stereotyped elements
-reply: says: there is no view catalogue for that language here, so no conformant view can be recommended
+reply: says: there is no view catalog for that language here, so no conformant view can be recommended
 reply: not: calls the Consumer Banking area a mixture of languages
 reply: not: recommends an ArchiMate or UML viewpoint as the conformant view of the bank's own content
 ```
@@ -548,6 +554,10 @@ reply: says: more than one loaded language claims these stereotypes, so the lang
 reply: says: asks which language the content is meant to be, or asks to narrow the scope
 reply: not: names one language as the owner without saying another also claims it
 ```
+
+The collision can be a bare stored name that an unprefixed language matches by name while a
+prefixed language also defines it. That is ambiguous too: the run reports it as ambiguous and does
+not attribute it to the language that happened to match by name.
 
 **Fails when:** The run takes the first language that matches and recommends its viewpoint with
 measured-looking reasons. The answer is wrong about half the time and indistinguishable from a right
@@ -793,7 +803,7 @@ Covers: Step 4 — when no conformant view exists
 **Passes when:** The run presents the neutral custom view and the split into linked conformant
 diagrams, in that order of preference, and says what each costs: a neutral view belongs to no
 language, and a split leaves no single picture of the whole area. A dominant-language view is
-offered only where the dominant language has a view catalogue here; the run says why it is or is
+offered only where the dominant language has a view catalog here; the run says why it is or is
 not available.
 
 **Check:**
@@ -853,7 +863,8 @@ Covers: Two obligations, and they are not optional
 **Passes when:** The run says what, if anything, a conformance check will object to on this view,
 naming the concepts, and offers to scope those rules out or annotate them as accepted before any
 diagram is generated, so the person decides up front. It does not generate first and report findings
-afterwards.
+afterwards. A read-only `ea_validate` audit of the scope's package before answering is allowed,
+because it changes nothing and shows what a check reports today.
 
 **Check:**
 
@@ -866,7 +877,6 @@ expect: unchanged
 reply: says: names the concepts a conformance check will object to, or says why it expects none
 reply: says: offers to scope those rules out or to annotate them as accepted, before generating
 tools: not-called: ea_diagram.create_diagram
-tools: not-called: ea_validate.audit
 ```
 
 **Fails when:** The run says "should be fine" and moves on, or generates the diagram and runs the
@@ -967,7 +977,7 @@ Covers: Judgment this skill cannot encode
 
 **Ask:** "Our company has its own diagramming notation. Add it to the advisor's code so it can advise on our diagrams."
 
-**Passes when:** The run declines to change the ranking engine. It says a notation's view catalogue
+**Passes when:** The run declines to change the ranking engine. It says a notation's view catalog
 lives in a binding's `viewpoints:` block, so adding a language is a data change, and points to the
 bindings of `ea-diagram-composition` as the place to do it. It does not edit the engine.
 
@@ -1073,15 +1083,16 @@ checked through the reply statements and by the arithmetic tests that ship with 
 ## Headings not covered
 
 - `Reference`: two links to the engine and to the composition skill; it states nothing the skill does, refuses or warns about.
+- `Silent failures this step must not trust`, the package-id bullet: a package's own object row walks like an element and gives a `Package` node. A case would need that row's id, which differs from the package's `Package_ID` and is not known before the run; the bullet is not graded.
 
 ## Findings
 
-- **Display name versus id.** SKILL.md says the display name returns `unknown_mdg`; the Westbrook canon says the server accepts both `WBA` and `WestbrookBankArchitecture` as identifiers. One is out of date or build-specific. TC-06 passes either way, because it requires the id call.
-- **"Record on the diagram" has no owner.** Step 4 says to record the non-conformance on the diagram, but this skill never creates the diagram and says nothing about passing `non_conformance` to `ea-diagram-composition`. TC-24 can only check that the run supplies the sentence for the diagram; nothing checks it arrives.
-- **The route table contradicts "does not draw anything".** For `tool-layout` the table says "place the elements, call the layout operation, then tidy and check it", under "What you do", while the opening says the skill draws nothing and hands off. TC-20 checks the description of the route, not who performs it.
-- **Dominant-language option assumes a bound language.** Step 4's first option (dominant-language view) exists only when the dominant language has a view catalogue. When it does not, as for the bank's own language in the Fixtures area (27 of 48), the skill is silent about what replaces it. TC-23 accepts either explanation.
-- **The customer's own diagram types are never offered.** The unbound case ends in a neutral base type, but the bank's technology declares diagram types of its own (`WBA::WBAApplicationView`, stored as `MDGDgm=WBA::WBAApplicationView` on several existing diagrams). The skill gives no step for offering them, so a run following it recommends a plain Logical diagram where the model's own practice is a profiled one. Not turned into a pass or fail, because the skill does not promise it.
-- **Unstereotyped content cannot be profiled and nothing replaces the profile.** The histogram ignores unstereotyped elements, so a scope such as `03 UML Behavior` (37 elements, none stereotyped) yields no profile at all. The skill says to call the result weak (TC-28) but offers no way to use the elements' metaclass (`Object_Type`) as evidence, which the data plainly supports.
-- **Snippets are not runnable as written.** Steps 2 and 3 use `advise`, `bindings`, `histogram`, `vocabulary` and `what_the_user_said` without saying how `advise` is imported or how the bindings are loaded (they live in `ea-diagram-composition`). A surface without local code execution cannot follow the method at all; no case can show this, because the pass is judged on the reply.
-- **No Westbrook scope exercises a conformant view.** The bank's language has no binding, and the folder named `04 ArchiMate Viewpoints` holds elements stereotyped by another technology (bare `ApplicationComponent` and its siblings, bound to the TOGAF profile), which the ArchiMate 3 binding's `ArchiMate_` prefix does not match. Eight cases (TC-15, TC-16, TC-18 to TC-22) need the runner to build scratch scope S or T and are marked `BLOCKED`.
-- **Not checkable in one ask.** "Compare what validation returns with `will_be_flagged`" needs a prediction from an earlier turn and a drawn diagram. The `composer-pending` and `unanswered` routes need a binding that fails to answer, which cannot be built from a model. Both rest on the engine's own tests.
+- **Display name versus id.** SKILL.md says the display name returns `unknown_mdg`; the Westbrook canon says the server accepts both `WBA` and `WestbrookBankArchitecture` as identifiers. One is out of date or build-specific. TC-06 passes either way, because it requires the id call. **Triaged 11 Nov: fixed.** The server probes `IsTechnologyLoaded` by the exact id it is given, so `unknown_mdg` means not loaded under that id, and a technology can be registered under an id that differs from its display name. SKILL.md now says that instead of saying the display name always fails. The Westbrook canon's claim that the server accepts both is not confirmed in the code; the canon is not this skill's file.
+- **"Record on the diagram" has no owner.** Step 4 says to record the non-conformance on the diagram, but this skill never creates the diagram and says nothing about passing `non_conformance` to `ea-diagram-composition`. TC-24 can only check that the run supplies the sentence for the diagram; nothing checks it arrives. **Triaged 11 Nov: fixed.** SKILL.md Step 4 now says `ea-diagram-composition` has no field for the sentence, so it travels in the hand-off and is checked in the diagram's notes or on a note on the canvas once the diagram exists.
+- **The route table contradicts "does not draw anything".** For `tool-layout` the table says "place the elements, call the layout operation, then tidy and check it", under "What you do", while the opening says the skill draws nothing and hands off. TC-20 checks the description of the route, not who performs it. **Triaged 11 Nov: fixed.** The `tool-layout` row now says to hand the elements to `ea-diagram-composition`, which places, lays out, tidies and checks.
+- **Dominant-language option assumes a bound language.** Step 4's first option (dominant-language view) exists only when the dominant language has a view catalog. When it does not, as for the bank's own language in the Fixtures area (27 of 48), the skill is silent about what replaces it. TC-23 accepts either explanation. **Triaged 11 Nov: fixed.** Step 4 option 1 now says it exists only when the dominant language is bound with a view catalog, and otherwise to go to option 2. This matches the engine, which offers the neutral view then.
+- **The customer's own diagram types are never offered.** The unbound case ends in a neutral base type, but the bank's technology declares diagram types of its own (`WBA::WBAApplicationView`, stored as `MDGDgm=WBA::WBAApplicationView` on several existing diagrams). The skill gives no step for offering them, so a run following it recommends a plain Logical diagram where the model's own practice is a profiled one. Not turned into a pass or fail, because the skill does not promise it. **Triaged 11 Nov: fixed.** Step 4 now says to read the `diagram_types` the technology declares and the `MDGDgm=<id>::` values on existing diagrams, offer them, say nothing ranks them, and ask before recommending a plain base type. Offering them is judgment, not engine output, so no case grades it.
+- **Unstereotyped content cannot be profiled and nothing replaces the profile.** The histogram ignores unstereotyped elements, so a scope such as `03 UML Behavior` (37 elements, none stereotyped) yields no profile at all. The skill says to call the result weak (TC-28) but offers no way to use the elements' metaclass (`Object_Type`) as evidence, which the data plainly supports. **Triaged 11 Nov: fixed in the skill.** Step 1 now gives a second query grouped by `Object_Type` for a mostly unstereotyped scope, and says to call the profile weak and say the choice rests on the metaclasses. The engine still ignores unstereotyped elements; teaching it metaclass evidence is a code change nobody has asked for. TC-28 stays valid.
+- **Snippets are not runnable as written.** Steps 2 and 3 use `advise`, `bindings`, `histogram`, `vocabulary` and `what_the_user_said` without saying how `advise` is imported or how the bindings are loaded (they live in `ea-diagram-composition`). A surface without local code execution cannot follow the method at all; no case can show this, because the pass is judged on the reply. **Triaged 11 Nov: fixed.** Step 1 says the Python needs a place to run code with both tools folders on the import path, and what to do without one; the Step 2 snippet now shows the imports, loads the bindings with `bindings_for_technologies`, and folds the histogram rows into `{stereotype: count}`. The call sequence was run against the shipped bindings.
+- **No Westbrook scope exercises a conformant view.** The bank's language has no binding, and the folder named `04 ArchiMate Viewpoints` holds elements stereotyped by another technology (bare `ApplicationComponent` and its siblings, bound to the TOGAF profile), which the ArchiMate 3 binding's `ArchiMate_` prefix does not match. Eight cases (TC-15, TC-16, TC-18 to TC-22) need the runner to build scratch scope S or T and are marked `BLOCKED`. **Triaged 11 Nov: no change in the skill.** The `ArchiMate_` prefix miss is handled for the advisor (a bare stored name is attributed only when exactly one loaded language defines it, or reported as ambiguous). The missing conformant scope is a fixture matter: the cases stay `BLOCKED` until the runner builds scratch scopes.
+- **Not checkable in one ask.** "Compare what validation returns with `will_be_flagged`" needs a prediction from an earlier turn and a drawn diagram. The `composer-pending` and `unanswered` routes need a binding that fails to answer, which cannot be built from a model. Both rest on the engine's own tests. **Triaged 11 Nov: no change, not a defect.** A limit of what one ask can grade; the engine's own tests cover both routes.

@@ -13,7 +13,7 @@ stereotype in the intermediate metamodel dict:
 > As in Section 1 above, `WBA::WBARunsOn` here is a **proposed extension** — the shipped WBA
 > technology (1.1.1) defines the connector stereotypes `Uses`, `Flows` and `realizes`, not
 > `WBARunsOn`. Its own Quick Linker rules use them, for example `WBAVendorSystem` offers
-> `WestbrookBankArchitecture::Uses` to `WestbrookBankArchitecture::WBATechnologyNode`. A QL rule
+> `WBA::Uses` to `WBA::WBATechnologyNode`. A QL rule
 > targeting a real, un-stereotyped relationship (e.g. `Dependency` between two WBA elements)
 > needs no `quicklinker_rules` entry at all; EA's default UML QL entries already offer plain
 > `Dependency`/`Realization`/`Association`. The pattern below is for the day you add your own

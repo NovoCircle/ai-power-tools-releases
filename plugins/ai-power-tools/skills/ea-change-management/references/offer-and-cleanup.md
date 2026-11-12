@@ -20,25 +20,45 @@ ea_model(operation="list_package_tree", params={
 #        "element_count": 0, "diagrams": []}]}
 ```
 
-`delete_package` itself reports nothing about what it removed (`{"ok": true,
-"deleted_package_id": 41}` only), so pull the count first — it's also what makes the offer
+`delete_package` itself reports no element or diagram counts (`{"ok": true,
+"deleted_package_id": 41}`, plus `baselines_removed` when baselines went with it), so pull the count first; it's also what makes the offer
 concrete instead of vague. `element_count` and `diagrams` are per package, so add them up across
 `packages` to describe the whole subtree:
 
-> "About to delete `Legacy Integrations` (14 elements, 3 diagrams). Want me to baseline it
-> first, so there's a rollback point?"
+> "About to delete `Legacy Integrations` (14 elements, 3 diagrams). Deleting it also deletes
+> any baseline of it, so want me to baseline its parent, or export it as XMI, first so there's
+> a way back?"
 
-Accepted:
+A baseline of a package is stored with that package and is deleted when the package is deleted,
+so a baseline of the package you are about to delete is not a rollback point. To keep one,
+baseline the parent package (its baseline holds the subtree) before deleting the child, or export
+the package as XMI first. Then call `delete_package`. Accepted, with the parent (package 7):
 
 ```python
 ea_repository(operation="create_baseline", params={
-    "package_id": 41,
+    "package_id": 7,                       # the parent of "Legacy Integrations"
     "version": "2026-09-24-pre-delete",
-    "notes": "Snapshot before deleting Legacy Integrations",
+    "notes": "Snapshot of the parent before deleting Legacy Integrations",
 })
+ea_repository(operation="list_baselines", params={"package_id": 7})   # confirm
 # then:
 ea_model(operation="delete_package", params={"package_id": 41})
 ```
+
+That a parent's baseline survives deleting a child package and still compares has not been
+confirmed on a live model yet. After the delete, run `compare_baseline` on the parent and check
+that it still returns a diff before you tell the person the restore point is intact.
+
+If the package or one below it already has baselines, `delete_package` is refused with
+`package_has_baselines` and lists each one (package id and name, GUID, version, name, date) with a
+`remedy_param`. If the baselines cannot be read it is refused with `baselines_unreadable`. Tell
+the person those baselines will be lost with the package, and only after they agree call again
+with `allow_baseline_loss: true`; the result then lists `baselines_removed`. A package with no
+baselines deletes as before.
+
+Or, if the person wants only this package kept, export it instead
+(`ea_repository("export_xmi", {"package_id": 41, "path": "<export-dir>/Legacy-Integrations.xmi"})`)
+and check `elements_in_package` against `elements_in_export` before the delete.
 
 Declined: proceed straight to `delete_package`, and don't offer again for another
 `delete_package` call this session.

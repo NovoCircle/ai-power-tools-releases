@@ -17,7 +17,7 @@ verification honest.
 | Operation | Wait before screenshot |
 |---|---|
 | Any menu click or button in EA UI | 2–5 seconds |
-| Opening a `.qea` project file (EA UI, or COM `repo.OpenFile()` / `repo.CloseFile()`) | 5–15 seconds — for the COM calls specifically, expect the wait to run toward the top of this range rather than the bottom |
+| Opening a `.qea` project file (EA UI, or COM `repo.OpenFile()` / `repo.CloseFile()`) | 5–15 seconds — for the COM calls specifically, expect the wait to run toward the top of this range rather than the bottom. One measured run on build 1716 (a 4-core laptop, a 5 MB model, a visible EA started as `EA.exe`) took 2.8 to 4.9 s, and three EAs opening at once took 8 to 10 s each; a headless EA on a larger model took 13 to 83 s (see `ea-com/references/instances-and-sessions.md`). Plan on the longer figure and poll rather than wait a fixed time |
 | Importing or deploying an MDG (EA UI, or COM `repo.ImportTechnology()`) | 3–8 seconds |
 | Expanding a package in Project Browser | 1–3 seconds |
 | Any COM call that may trigger a dialog | 3–5 seconds |

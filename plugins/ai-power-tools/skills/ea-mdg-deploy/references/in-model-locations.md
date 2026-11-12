@@ -34,7 +34,7 @@ menu (≡ ▸ the technology), but **the automatic switch to them when a diagram
 until EA restarts**. Measured: once a project reopen was enough; another time neither a project
 reopen nor switching to another model and back was. After a restart all three Westbrook diagram
 types switched to their pages, and dragging an item created a correctly bound element
-(`FQName=WestbrookBankArchitecture::WBAVendorSystem`, its tagged values present).
+(what EA stores in `t_xref`: `FQName=WestbrookBankArchitecture::WBAVendorSystem`, its tagged values present; what you pass is `WBA::WBAVendorSystem`).
 
 So: install, restart EA, then run the verification checklist. Restarting EA is the user's call.
 
@@ -44,8 +44,36 @@ Manage Technology lists two entries, both enabled, and EA answers `GetTechnology
 **Project** copy. `get_mdg_from_runtime` (server 3.6.0 or later) answers from the same copy and
 lists the other under `provenance.also_stored`.
 
-`DeleteTechnology(<id>)` removes the Project rows only; the `t_document` row stays. A Location:
-Model copy is removed in Manage Technology (Remove).
+`DeleteTechnology(<id>)` returns True but acts only on technologies installed on the machine and
+the Project rows; the `t_document` row stays. A Location: Model copy is removed in Manage
+Technology (Remove), or by deleting its one row after checking nothing uses it; the steps are in
+[deploy-procedures.md](deploy-procedures.md).
+
+## Location: Project in a specific instance
+
+`Repository.ImportTechnology(xml)` on an EA instance attached by process id wrote Location: Project
+(`t_trxtypes`): it took about 10 s, raised no dialog, and the rows matched the ones a second,
+production instance held. This is the scriptable Location: Project route when several EA instances
+are running; attach with `attach_by_pid` (the `ea-com` skill, instances and sessions) and check
+`repo.ConnectionString` before the call. The file declared `windows-1252` and was read with that
+encoding. Measured on EA 17.0 build 1704.
+
+**With more than one EA running, `install_mdg` asks which one** (server 3.6.5 or later): it returns
+`ea_choice_needed` and writes nothing; ask the person which EA to use and call `launch_ea` with it as `target`; later calls follow it. On an older
+server it goes to whichever EA instance the server is attached to, the same instance `GetActiveObject`
+finds, and can write to the wrong model: close the others, or use the attached import above and treat
+the server's tools as read-only.
+
+## Check both tables, with the technology id
+
+A technology can be stored in either place, so a check of one table can report "nothing stored"
+for a technology that is there:
+
+- `t_trxtypes` (Location: Project): `SELECT Description, TRX FROM t_trxtypes`
+- `t_document` (Location: Model): `SELECT DocName FROM t_document WHERE DocType = 'TECHNOLOGY'`
+
+Ask EA about the technology **id** (`IsTechnologyLoaded("WBA")`), not the profile's display name
+(`WestbrookBankArchitecture`): the name is not an id, so the answer is not about your technology.
 
 ## Loaded is not enabled
 

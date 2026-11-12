@@ -63,6 +63,11 @@ not reach.
 > **Never describe a traversal you capped as a complete blast radius.** Say "three hops along
 > Uses and Aggregation, 61 elements, stopped at depth 3" — not "everything that is affected".
 
+A capped traversal also under-counts relationships: an edge between two elements that were both
+first reached at the last hop is never fetched. Treat the relationship total as a floor and say
+"at least N relationships" whenever a cap stopped the search. The reason is in
+[references/traversal.md](references/traversal.md) §6.
+
 ---
 
 ## 3. Building a view
@@ -75,6 +80,8 @@ not reach.
 > - **Never delete a view this session did not create.** §8 says view visibility is undetermined,
 >   so you cannot establish whose a view is or who is relying on it. "Tidy up the Analyzers list"
 >   is not authorization to remove someone else's saved work — list what is there and ask.
+> - **After you delete a view you created, re-read the saved views list** (`GET /api/diagrammer/GetAll`,
+>   §7) and confirm it is gone. A delete with no error is not a delete.
 > - **The same applies to editing one.** Adding nodes, changing the layout or renaming someone
 >   else's saved view changes what they see next time they open it. §1 calls renaming *safe*, and
 >   that is about link stability only — it says nothing about whether the change is wanted.
@@ -210,6 +217,9 @@ A traversal: seed with `GetTraceability`, expand the frontier in batches with
 5. **`ID2095`** — authenticated but not permitted; a permissions answer, not a bug.
 6. **A saved view cannot be found by name** — it may have saved before you renamed it, as
    `Analyzer View` (§1).
+
+7. **A read failed partway** — if you cannot finish a traversal after the retry, report what you
+   have as partial and say which hops are missing. Never present it as the complete graph.
 
 If none of these explain it, say what you observed and stop.
 

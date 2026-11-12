@@ -34,6 +34,10 @@ a conformant view even exists.
 whole repository. They are useful for a model-wide picture and useless for a scope, so the histogram
 has to come from SQL.
 
+The Python in steps 2 and 3 needs a place to run code, with this skill's `tools/advise.py`
+and `ea-diagram-composition`'s `tools/bindings.py` on the import path. Without one, do the counting by
+hand from the query results and say the ranking was not computed by the engine.
+
 Three steps, all measured against a live repository:
 
 **1. Collect the packages in the scope**, walking `t_package.Parent_ID` down from the root package.
@@ -49,15 +53,23 @@ GROUP BY Stereotype, Object_Type
 
 Two traps here, both measured:
 
-- **Every value comes back as a string.** Cast the counts.
+- **Every value comes back as a string.** Cast the counts, and fold the rows into
+  `{stereotype: count}` for `profile_scope`.
 - **This total is not the scope size** — it excludes unstereotyped elements. If you want the scope
   size, ask for it separately. Reporting "40% unattributed" against the wrong denominator is worse
   than not reporting it.
 
+**When the scope is mostly unstereotyped, the histogram says nothing, so read the metaclasses.** Run
+the same query with `Stereotype = ''` and `GROUP BY Object_Type`. Classes, activities or states are
+evidence for a base diagram type. They cannot be attributed to any MDG, so call the profile weak and
+say the choice rests on the metaclasses.
+
 **3. Get each technology's vocabulary** from `get_mdg_from_runtime(tech_id=...)`, and pass it as
 `known_concepts`. Notes that cost time to learn:
 
-- `tech_id` is the **id**, not the display name. The display name returns `unknown_mdg`.
+- `tech_id` is the **registered id**, not the display name. `unknown_mdg` means EA does not have the
+  technology loaded under that exact id; a technology can be registered under an id that differs from
+  its display name, so check the id before concluding it is absent.
 - The reply's key set varies by outcome: `stereotypes` is `[]` for a technology that is loaded but
   unreadable, and **absent entirely** for an unknown one. Use `.get("stereotypes") or []`.
 - A technology can be loaded and still expose nothing, so an empty vocabulary is not proof of an
@@ -74,8 +86,10 @@ or every connector figure comes out roughly doubled.
 
 Measured, and each returns a plausible empty answer rather than an error:
 
-- A bad element id gives empty `nodes` with **no error key**.
-- A package id passed where an element id was wanted returns a `Package` node instead of failing.
+- A bad element id: the current server answers `element_not_found`. An older server returned empty
+  `nodes` with **no error key**, so treat an empty `nodes` as "check the id" on any server.
+- An id that belongs to a package's own object row walks like an element and returns a `Package` node
+  as the root instead of failing. Read the root node's `type`.
 - An unknown stereotype gives `total_count: 0` with no error.
 
 So an empty profile means "check the scope", never "the scope is empty".
@@ -85,7 +99,11 @@ So an empty profile means "check the scope", never "the scope is empty".
 ```python
 import advise
 
-profile = advise.profile_scope(histogram, bindings, known_concepts=vocabulary)
+from advise import profile_scope, recommend        # tools/advise.py in this skill
+from bindings import bindings_for_technologies     # ea-diagram-composition/tools/bindings.py
+
+bindings = list(bindings_for_technologies(installed).values())   # installed technology ids
+profile = profile_scope(histogram, bindings, known_concepts=vocabulary)
 ```
 
 **Is this scope one modeling language, or several?** Everything downstream turns on it.
@@ -116,7 +134,15 @@ language the content is meant to be, or narrow the scope.
 
 **Naming a technology and being able to advise on it are separate facts.** With a vocabulary
 supplied, a customer's own MDG is named in `technologies` while `is_bound` stays False — there is no
-view catalogue for it, so there is no conformant view to recommend.
+view catalog for it, so there is no conformant view to recommend.
+
+**A bare stereotype name needs exactly one owner.** EA often stores a stereotype without its
+prefix, so a bare name is attributed to a language only when exactly one loaded language defines it.
+Two languages defining it makes it `(ambiguous)`: name it (`profile.ambiguous_stereotypes`) and ask
+which language the content is meant to be. A name no loaded language defines has **no recorded
+owner** and sits in `unattributed_stereotypes`. Say which of the two it is. Never recommend a
+language's view for content whose stereotypes that language does not own, and say so when none of the
+elements in a folder named for a language carries that language's stereotype.
 
 Look at `unattributed_stereotypes` before trusting anything. "I could not place 40% of this scope"
 is the most useful thing to know, and it changes what the recommendation is worth.
@@ -126,7 +152,7 @@ is the most useful thing to know, and it changes what the recommendation is wort
 ## Step 3 — recommend
 
 ```python
-for option in advise.recommend(profile, bindings, intent=what_the_user_said):
+for option in recommend(profile, bindings, intent=what_the_user_said):
     print(option.kind, option.technology, option.viewpoint, option.diagram_type)
     for reason in option.reasons:
         print("  -", reason)
@@ -134,6 +160,11 @@ for option in advise.recommend(profile, bindings, intent=what_the_user_said):
 
 Ranked best first, on **coverage** (how much of the content the view admits), then **intent**, then
 specificity — a narrower viewpoint says more about what a diagram is for.
+
+**Viewpoint advice exists only where a binding declares `viewpoints:`.** Check `binding.viewpoints`
+for the dominant language. Where it is empty (UML's binding defines none), say plainly that no
+viewpoints are defined for that language, so there is no standard view to rank; the answer is then the
+neutral custom view of step 4, which the advisor returns with that sentence among its reasons.
 
 **Show the reasoning.** It names the counts, the shares and the coverage arithmetic. A
 recommendation whose justification could have been written without looking at the content is not a
@@ -157,7 +188,7 @@ option.candidate.can_be_generated      # True / False / None when the binding di
 | Route | What it means | What you do |
 |---|---|---|
 | `composed` | the geometry is ours and the layout is built | hand it to `ea-diagram-composition` |
-| `tool-layout` | the geometry is not ours — EA's own layout places it | place the elements, call the layout operation, then tidy and check it looks right |
+| `tool-layout` | the geometry is not ours — EA's own layout places it | hand it to `ea-diagram-composition`, which places the elements, calls the layout operation, then tidies and checks it |
 | `composer-pending` | the geometry is ours to compute and nobody has built it yet | compose it another way, or fall back to EA's layout |
 | `not-producible` | the diagram type dictates the arrangement itself | **say so.** It cannot be generated by composing geometry; draw it by hand, or choose another view |
 | `unanswered` | the binding object did not answer the question | confirm before promising a generated diagram |
@@ -176,6 +207,10 @@ would report our gap as the content's, and would silently start recommending it 
 shipped, with the user never told a better view had existed all along. Pass the caveat on rather
 than the silence.
 
+**End every recommendation with this sentence: "Nothing has been drawn yet; `ea-diagram-composition`
+draws the chosen view."** The advisor draws nothing, so until that step runs no diagram exists, and
+the reader should not have to infer it.
+
 **Three properties, not one.** `grammar_is_implemented` alone cannot answer this — it is `False`
 both for a layout nobody has built and for a view whose geometry was never ours to compute, and
 those two lead to opposite advice. Read `generation_route`, or read
@@ -189,26 +224,33 @@ A scope spanning several languages has no correct answer, and pretending otherwi
 case. Three options, in preference order:
 
 1. **Dominant-language view.** Carries the majority; the rest appears as foreign content. Least
-   surprising.
+   surprising. It exists only when the dominant language is bound and has a view catalog; otherwise
+   say so and go to option 2.
 2. **Neutral custom view.** A base type with no profile, belonging to no language, so nothing on it
    is foreign. This is ordinary practice, not a workaround — a large share of real diagrams are
    plain base types.
 3. **Split into linked conformant diagrams.** Every view stays valid; the cost is that no single
    picture shows the whole scope, which is usually the thing that was wanted.
 
+**A customer's own technology may declare diagram types.** When the dominant language is a technology
+with no binding here, read the `diagram_types` in its `get_mdg_from_runtime` result, and look for
+`MDGDgm=<id>::` in the `StyleEx` of existing diagrams in the scope. Offer those as the model's own
+practice, say nothing ranks them, and ask, before recommending a plain base type.
+
 ### Two obligations, and they are not optional
 
 **Say so.** Record on the diagram and in your response that the view is non-conformant and which
-languages it spans. `option.non_conformance` is that sentence; put it somewhere the reader of the
-diagram will see it, not only in the chat.
+languages it spans. `option.non_conformance` is that sentence. This skill draws nothing, and
+`ea-diagram-composition` has no field for it, so carry the sentence in the hand-off, and when the
+diagram exists check it is in the diagram's notes or on a note on the canvas, not only in the chat.
 
 **Reconcile with validation.** `option.will_be_flagged` names the concepts a conformance check will
 object to. Offer to scope those rules out or annotate them as accepted — **before** generating, so
 the user decides rather than discovering a wall of findings afterwards.
 
-```
-ea_validate(... scoped to the new diagram ...)
-```
+`ea_validate("audit", ...)` takes a `package_id`, not a diagram, so scope the check to the package that
+holds the elements the diagram will show. A read-only audit before the diagram exists is fine: it
+changes nothing and shows what a conformance check says about that package today.
 
 Compare what comes back with `will_be_flagged`. A finding you did not predict means the profile
 missed something; say so rather than quietly absorbing it.
@@ -227,7 +269,7 @@ the choice; it does not settle it. Ask what decision the diagram supports if the
 **A recommendation over unmeasured content is a guess with a footnote.** If the scope could not be
 profiled, say the recommendation is weak and why.
 
-**Adding a language is a data change, never a code change.** A view catalogue lives in a binding's
+**Adding a language is a data change, never a code change.** A view catalog lives in a binding's
 `viewpoints:` block. If advising on a new notation seems to need a change to `tools/advise.py`, the
 knowledge is in the wrong place — a test enforces that no notation is named in the engine.
 
@@ -237,4 +279,4 @@ knowledge is in the wrong place — a test enforces that no notation is named in
 
 - `tools/advise.py` — the ranking engine. Pure arithmetic, no repository calls, no notation names
 - [`ea-diagram-composition`](../ea-diagram-composition/SKILL.md) — where the chosen view gets drawn;
-  its `bindings/` are the view catalogues this skill ranks
+  its bindings, generated into `_shared/languages/`, are the view catalogs this skill ranks

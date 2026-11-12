@@ -92,26 +92,32 @@ ea_model(operation="traverse_element_subgraph", params={"element_id": 79, "depth
 }
 ```
 
-Note the duplicate edge entries (`79 -> 140` and `79 -> 143` each appear twice) -- this is the
-"walks both directions at once" behavior noted in `SKILL.md`; treat `edges` as a set of
-relationships to review, not a count of connectors.
+This sample was recorded on a server before 3.6.5, which listed `79 -> 140` and `79 -> 143`
+twice because it walks both directions at once. From 3.6.5 each connector is one edge and carries
+its `connector_id`, so `edges` can be counted. Links between two nodes at the outermost depth
+are not read; raise `depth` if you need them.
 
 Also note the connector stereotype here is `realizes`, lower case, `Connector_Type: Realisation`
--- not the capitalised `Realizes` that `WBA-LFY-001` compares against (the technology declares
+-- not the capitalized `Realizes` that `WBA-LFY-001` compares against (the technology declares
 lower-case `realizes`, and EA stores it bare). A repository-wide check
-(`SELECT Stereotype, Connector_Type, COUNT(*) FROM t_connector GROUP BY Stereotype, Connector_Type`)
+(`SELECT Stereotype, Connector_Type, COUNT(*) AS n FROM t_connector GROUP BY Stereotype, Connector_Type`)
 confirmed, on 2026-09-23, the live model's connector-stereotype set: `Uses` (16), blank (5), `extends`
 (3), `Requires` (3), `Equivalent` (2), `part-of` (2), `Flows` (1), and `realizes` (1). WBA 1.1.1
 has since declared `Uses`, `Flows` and `realizes` and the model has bound them; the stored strings
 did not change, so this is still casing and vocabulary drift from the four names `WBA-LFY-001`
 matches, on the model's own connectors. This is
 flagged here rather than silently normalized; it is exactly the class of decay Section 3 of the
-main skill teaches you to look for, just on connectors instead of elements -- and the server's
-meta-tools have no dedicated connector-stereotype summarizer, so `execute_sql` against
-`t_connector` is the only way to run this particular check today.
+main skill teaches you to look for, just on connectors instead of elements -- and
+`ea_analyze("summarize_connector_patterns")` is the operation for running this check (it
+returns source, connector and target stereotypes with counts, and flags connector stereotypes
+that are both profile-bound and ad hoc). The `GROUP BY` above is what it replaces.
 
-**Step 3 -- diagram and composite check**, scoped to the element's parent package
-(`Consumer Banking`, package 5):
+**Step 3 -- diagram and composite check.** First ask whether the element anchors a drill-down
+diagram: `SELECT Diagram_ID, Name FROM t_diagram WHERE ParentID = 140` (no row, here). Then audit
+links over the element's parent package. When this transcript was captured the element sat in
+`Consumer Banking` (package 5, 70 elements); in the current Westbrook copy it sits in `Core
+Platforms`, under `IT Operations`, so scope the call to that package and expect a different
+`checked_count`; 70 is Consumer Banking's figure:
 
 ```
 ea_model(operation="find_composite_diagram_mismatches", params={"package_id": 5, "recursive": true})
@@ -121,8 +127,10 @@ ea_model(operation="find_composite_diagram_mismatches", params={"package_id": 5,
 {"ok": true, "package_id": 5, "recursive": true, "checked_count": 70, "mismatches": []}
 ```
 
-Clean. Combined with the diagram-placement SQL check from `SKILL.md` Section 2 Step 3, this
-element has no orphaned navigation link to worry about either way -- moot here since it was never
+Clean. That result alone does not say the element anchors no diagram (a healthy drill-down parent
+also returns zero mismatches); the `ParentID` query above does. Combined with the diagram-placement
+SQL check from `SKILL.md` Section 2 Step 3, this element has no orphaned navigation link to worry
+about either way -- moot here since it was never
 a deletion candidate, but this is the exact call to run before deleting a `WBABusinessApplication`
 or `WBABusinessService` that *did* pass Steps 1 and 2.
 
@@ -152,9 +160,11 @@ ea_model(operation="create_connector", params={"client_element_id": 9451, "suppl
 # -> connector_id 1225
 ```
 
-**`find_orphan_elements` on the scratch package** correctly separates connected from
-disconnected, and independently confirms the "package proxy object" behavior from `SKILL.md`
-Section 1 -- the sub-package itself (element_id 9454) is returned as an "orphan element":
+**`find_orphan_elements` on the scratch package** separates connected from disconnected. The
+sample below was recorded on a server before 3.6.5, which also returned the sub-package itself
+(element_id 9454, its mirror row; see the "package proxy objects" note in `SKILL.md` Section 1)
+as an "orphan element" and counted it in `scoped_total`. From 3.6.5 that row is left out of both,
+so the same run lists only `Scratch Orphan Data`:
 
 ```json
 {
@@ -188,10 +198,10 @@ ea_model(operation="delete_element", params={"element_id": 9453})
 # -> {"ok": true, "deleted_element_id": 9453}
 ```
 
-Re-fetching it (`get_element(9453)`) raises `(-2147352567, 'Exception occurred.', (61704,
-'Enterprise Architect', 'Internal application error.', ...))` -- this is the exception referenced
-in `SKILL.md` Section 2 Step 4. It is not a malformed call; it is EA's COM layer signalling "no
-such object" the only way it signals that for a single-item get.
+Re-fetching it (`get_element(9453)`) returns `{"ok": false, "error": "element_not_found",
+"element_id": 9453}` on server 2.3.0 and later, which is the confirmation `SKILL.md` Section 2
+Step 4 describes. (When this walkthrough was captured, on an older server, the same call raised
+EA's raw COM exception, `Internal application error`, code 61704, meaning the same thing.)
 
 **`delete_package`** as the final cleanup, cascading through the sub-package and the two
 remaining elements and the connector in one call:

@@ -214,3 +214,35 @@ newer, prefer the API read path over markup assumptions, verify an action landed
 assuming, and say plainly that the UI flow is unverified for that version instead of guessing.
 
 The running version is visible on the health page and in the page footer.
+
+---
+
+## 7. List endpoints need the full request body
+
+Endpoints that list records (seen on `/api/mdg/GetAll`, `/api/mdg/profile/GetAll` and
+`/api/mdg/stereptype/GetAll`, the last spelled as the server spells it) refuse a loose body with
+"invalid JSON characters". They need the whole lazy-loading object:
+
+```json
+{
+  "startIndex": 0,
+  "rowLimit": 50,
+  "sortField": "",
+  "sortOrder": 1,
+  "isColumnFilterKeyUp": false,
+  "globalFilter": null,
+  "filters": [],
+  "multiFilters": []
+}
+```
+
+Send every field, even the empty ones. Set `startIndex` and `rowLimit` for the page you want.
+
+---
+
+## 8. A tab that is not in front can swallow clicks and fail screenshots
+
+On a tab in the background, the first Save click on a form was swallowed and screenshots timed out.
+Both worked once the tab was in front (screenshots do work on a visible tab). So bring the tab to the
+front before clicking or taking a screenshot. If a click may have been swallowed, read the list again
+before clicking a second time, so nothing is created twice.

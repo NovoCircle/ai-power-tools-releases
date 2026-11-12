@@ -42,8 +42,10 @@ supported path.
 ea_repository(operation="get_repository_info", params={})
 ```
 
-Read the EA version and build out of the result. The guide is published per
-**major.minor** — `17.1`, `16.1`, `15.2` — so a reported `17.1.1716` resolves to `17.1`.
+Read the EA version from `ea_release` (for example `17.1`; server 3.6.5 or later) and the build
+from `ea_version` (for example `1716`). The guide is published per major.minor, so use `ea_release`
+for the guide path. If `ea_release` is missing or empty, do not guess from the build number: say the
+version could not be read and ask the person which EA version they run.
 
 Three ways this goes wrong, all of which must stop the work:
 
@@ -68,9 +70,13 @@ The same call answers it. Read the project path and connection string:
 
 | What you see | Repository type |
 |---|---|
-| A local path ending `.qea`, `.eap` or `.eapx` | File-based repository |
+| A local path ending `.qea`, `.qeax`, `.eap` or `.eapx` | File-based repository (a `.qeax` is EA's "Shared Project" file: a SQLite file with the same layout as a `.qea`, not a shortcut) |
 | A connection string carrying a `DBType=` and a server or data source | DBMS repository |
-| A server address, or a `.qeax` file | Cloud connection through Pro Cloud Server |
+| A server address | Cloud connection through Pro Cloud Server |
+
+The result also carries `repository_type` (the code EA reports, for example `SL3` for a SQLite
+file). Use it as a cross-check on the path or connection string, not in place of them: this skill
+does not list its values. If the two disagree, ask.
 
 If it is genuinely ambiguous, say so and ask rather than guessing — a cloud repository silently
 treated as a local file is how a procedure gets followed against a dialog that is not there.
@@ -206,9 +212,11 @@ COM connection rather than as an error you can catch. Neither shows up in a tool
   It names the cause. Dismiss from the front — dialogs stack, and a later call can be queued
   behind one raised by an earlier one. Windows reporting EA as "Responding" means nothing.
 - **After any diagram create or edit, reload the diagram, screenshot it, and look.**
-  `ok: true` means rows were written, not that elements landed where you intended, that
-  styling applied, or that the result is readable.
-- **Without computer use**, say so and ask the user to look — never report a hang you have
-  not diagnosed or a diagram you have not seen.
+  `ea_diagram(operation="verify_diagram", params={"diagram_id": N})` reloads, renders and returns
+  the placed geometry in one call. `ok: true` means rows were written, not that elements landed
+  where you intended, that styling applied, or that the result is readable.
+- **Without computer use**, say so. Ask the user to paste a screenshot of the EA window or
+  dialog into the conversation, read the cause from it, and ask the user to dismiss the dialog
+  before you retry. Never report a hang you have not diagnosed or a diagram you have not seen.
 
 Full procedure: [`../_shared/references/ea-ui-verification.md`](../_shared/references/ea-ui-verification.md)

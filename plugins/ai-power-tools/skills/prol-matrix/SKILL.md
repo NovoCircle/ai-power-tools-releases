@@ -33,7 +33,7 @@ artifact. Prolaborate reads it.
 |---|---|
 | "What does this matrix show?" | Yes — §2, §3 |
 | "Which applications support capability X?" | Yes — read and join, §4 |
-| "Export this matrix" / "give me a link to it" | Yes — §6 |
+| "Export this matrix" / "give me a link to it" | **Unverified.** The share and download controls exist, but neither flow was exercised (§6). Say so, and ask before using either |
 | "Show only the rows that have something" | Yes — a display toggle, §5 |
 | **"Create a matrix of A against B"** | **No.** Say so plainly and hand it to the EA skills — the profile is authored in EA and appears here once it exists |
 | **"Tick that cell" / "link these two elements"** | **Not from the matrix.** That is an EA model write through the element-connector endpoints. See §7 |
@@ -214,7 +214,9 @@ user asking for it**:
 
 - **Share** produces a private URL via `GetMatrixShareURL`, gated by a repository-level flag
   (`CheckIsMatrixShareEnabled`). A share link is a distribution decision — confirm before creating
-  one, and never enable the repository flag on the user's behalf.
+  one, and never enable the repository flag on the user's behalf. Calling `GetMatrixShareURL`
+  yourself creates the link, so it needs the same confirmation. To find out whether sharing is on,
+  read `CheckIsMatrixShareEnabled` instead.
 - **Download** writes a file. Ask first, and say what the file will be called.
 
 Neither was exercised on the test tenant beyond observing that `GetMatrixShareURL` fires on page

@@ -5,7 +5,9 @@ description: Author a Sparx EA MDG Technology XML file — define stereotypes, t
 
 # Authoring a Sparx EA MDG Technology
 
-*Verified against EA 17.0 Build 1704. All XML patterns here load and deploy correctly.*
+For a language that has a file in `../_shared/languages/<id>/ea.yaml`, that file holds the technology id, stored stereotype names and diagram types. Read it before measuring them again.
+
+*Verified against EA 17.0 Build 1704, except the statements about the diagram `toolbox` property and the embedded-technology route, which were measured on EA 17.1 (Section 2).*
 
 ## Before you start — does this MDG already have a source model?
 
@@ -35,7 +37,7 @@ never hand-editing again.
 |------|----------|
 | All `id=` attributes | **≤ 12 characters** (EA hard limit — silently fails if exceeded) |
 | File encoding | Must be `utf-8` |
-| UMLProfile `id` | Must match the technology `id` for toolbox namespace resolution |
+| UMLProfile `id` | In a hand-written file, make it match the technology `id` (a generated file differs; see the checklist note) |
 | `bgcolor` color values | COLORREF integer: B×65536 + G×256 + R. `-1` = use EA theme default |
 | Tagged value type | Use `enumeration` (not `enum`) and `String` (capital S) |
 | Test after every structural change | Use `ea-mdg-deploy` skill |
@@ -50,13 +52,13 @@ When automating MDG work, pick the right tool tier:
 |-----------|-----|
 | Author MDG XML, read/write files | Claude Code file tools (`Write`, `Read`, `Edit`) |
 | **Emit MDG XML from a metamodel dict** | `ea_mdg(operation="write_mdg_xml", params={"intermediate_metamodel": {...}, "output_path": "..."})` — the path-A route; hand-writing the XML is for edits afterwards |
-| Census a repository's existing usage | `_shared/tools/ea_census.py` — profile-aware. **Not** `summarize_stereotype_usage`, which reads the bare stereotype column and cannot see the language |
+| Census a repository's existing usage | `_shared/tools/ea_census.py` over the rows `ea-mdg-assess` §2a lists (profile-aware; one route, not your own SQL calls). `summarize_stereotype_usage` (server 3.6.0 or later, profile-aware) gives stereotype counts only, so it does not replace it |
 | Parse and validate MDG XML | `ea_mdg(operation="parse_mdg_xml", params={"path_or_content": "..."})` |
 | Install MDG at application scope | `ea_mdg(operation="install_mdg", params={"scope": "user", "xml_path_or_content": "<mdg-dir>\\WBA_MDG.xml"})` |
 | Install MDG into the model, whole technology | EA UI: Specialize ▸ Publish Technology ▸ Import MDG Technology ▸ **Import to Model** (Location: Model). EA has no COM call that imports a file there |
 | Install MDG into the model, legacy route | `ea_mdg(operation="install_mdg", params={"scope": "embedded", "xml_path_or_content": "<mdg-dir>\\WBA_MDG.xml"})` (Location: Project). **Drops toolbox pages**; the response's `not_stored` says so |
-| Verify MDG is loaded | COM: `repo.IsTechnologyLoaded(tech_id)` and `repo.IsTechnologyEnabled(tech_id)` with your technology id (a disabled technology still reports loaded) |
-| Fix `Object_Type` in database | `repo.Execute()` DML — **not** `elem.Type` COM setter (silently fails for ArchiMate types) |
+| Verify MDG is loaded | COM (see the `ea-com` skill): `repo.IsTechnologyLoaded(tech_id)` and `repo.IsTechnologyEnabled(tech_id)` with your technology id (a disabled technology still reports loaded) |
+| Fix `Object_Type` in database | `repo.Execute()` DML, run through the `ea-com` skill (no `ea_*` operation does it) — **not** the `elem.Type` COM setter (silently fails for ArchiMate types) |
 | Dismiss EA dialogs | Computer use screenshot → click → screenshot again |
 
 > **`get_embedded_mdgs` up to server 3.5.0 returns empty** for every in-model technology on EA
@@ -87,9 +89,13 @@ census  →  candidate metamodel  →  write_mdg_xml  →  parse_mdg_xml  →  i
                                                      (round-trip)
 ```
 
-**1. Census, profile-aware.** `_shared/tools/ea_census.py`. Not `summarize_stereotype_usage`:
-that reads `t_object.Stereotype`, a bare name that does not identify the language, so it cannot
-separate a governed element from an ad hoc one carrying the same name.
+**1. Census, profile-aware.** Run `_shared/tools/ea_census.py` over the rows `ea-mdg-assess` §2a
+lists, read once each. It is profile-aware and tested, and it gives the metaclass pairs, tag
+coverage and enum domains in step 2; rebuilding it from your own SQL calls is slower, risks an EA
+error box on a live model, and misses what it handles (multi-stereotype elements, other languages'
+tags). `summarize_stereotype_usage` is profile-aware from server 3.6.0 but returns stereotype
+counts only; before 3.6.0 it reads `t_object.Stereotype`, a bare name that cannot separate a
+governed element from an ad hoc one carrying the same name.
 
 **2. Shape the candidate.** `write_mdg_xml` takes the dict shape `parse_mdg_xml` produces and
 `get_mdg_from_runtime` returns — which is what makes the round-trip in step 4 meaningful:
@@ -175,7 +181,7 @@ domains the MDG declared, are both present in the XML as `values=` and neither b
 reference data. Say so when handing the technology over, rather than letting someone discover it
 when a dropdown is a text box. Reference data is a repository-wide concern — see
 `ea-mdg-model-build` Phase 3, which covers `t_propertytypes` and how types get selected into a
-build. Tracked as `APT-2026-0055`.
+build. This is a known gap in the generator.
 
 ---
 
@@ -195,7 +201,7 @@ Build in this order:
 
 1. **Element stereotypes** — one `<Stereotype>` per concept, applied to a UML base type.
 2. **Connector stereotypes** — only if the technology needs its own relationship semantics.
-3. **Custom diagram types** — bind each to a toolbox page by exact name.
+3. **Custom diagram types**: bind each to its toolbox with the `toolbox` property (form: Section 2).
 4. **Toolbox pages** — the palette items EA shows for each diagram type.
 5. **Quick Linker rules** (optional) — hover-menu connector creation, if you added connector stereotypes.
 6. **Companion validation sidecar** — a `<tech_id>_rules.yaml`, never `<Scripts>` (MCP can't reach EA's script engine).
@@ -224,22 +230,25 @@ the stereotype name and tagged values instead. The full safe/dangerous base-type
 `integrationPattern` and `slaTier`. For a relationship between WBA elements, use one of them where it
 fits, otherwise a plain UML connector type with no stereotype (`Dependency`, `Realization`,
 `Association`, `Aggregation`). [references/stereotypes.md](references/stereotypes.md) shows how
-you *would* add another — the example is a `WBARunsOn` connector labelled **PROPOSED EXTENSION — not
+you *would* add another — the example is a `WBARunsOn` connector labeled **PROPOSED EXTENSION — not
 part of the shipped WBA technology**, kept only to teach the pattern.
 
 ### Section 2 — Custom Diagram Type
 
-A diagram stereotype uses `Apply type="Diagram_Logical"` and points at a toolbox page by its
-*exact* name via a `toolbox` property. The full XML and rules are in
+A diagram stereotype uses `Apply type="Diagram_Logical"` and points at its toolbox via a
+`toolbox` property. The full XML and rules are in
 [references/diagrams-toolboxes.md](references/diagrams-toolboxes.md).
 
-**Pitfall — check what `toolbox` must equal on a scratch diagram.** The Westbrook demo MDG's
-`toolbox` property reads `WBA::WBA ArchiMate` (`<technology id>::<name of the toolbox's UML profile>`),
-while the toolbox page is named `WBA ArchiMate Elements`. Its 1.0 and 1.1.0 builds never resolved
-their custom diagrams. 1.1.1 keeps the same `toolbox` string, names its diagram profile `WBA`, and
-its diagrams resolve and switch the toolbox on (measured on EA 17.1, 2026-10-07). The pattern below
-uses the toolbox page's `Stereotype name=`; the shipped file uses the profile name. Try your form
-on a scratch diagram before relying on it.
+**Pitfall: what `toolbox` must equal is only partly measured.** The Westbrook demo MDG 1.1.1,
+generated by EA from its source model, sets `toolbox` to `WBA::WBA ArchiMate`
+(`<technology id>::<name of the toolbox's UML profile>`, not the page name `WBA ArchiMate
+Elements`), and its four diagram types resolve and switch the toolbox (EA 17.1). That profile-name
+form is **measured to work**. The page-name form, the toolbox item tag forms and the UML profile id
+forms are **not yet measured**: the rules in this skill for them were written from the book, not
+from a test, and a generated file uses different forms (item tags prefixed with the profile name and
+suffixed `(UML::<metaclass>)`, profile ids derived from GUIDs). Use the profile-name form for
+`toolbox`, and check anything else on a scratch diagram
+([how](references/diagrams-toolboxes.md#checking-a-toolbox-form-on-a-scratch-model)) before relying on it.
 
 ### Section 3 — Toolbox Pages
 
@@ -262,8 +271,27 @@ Before deploying, verify:
 - [ ] `<Documentation id="WBA">` (top-level)
 - [ ] UMLProfile `<Documentation id="WBA">` — **must match technology id**
 - [ ] All toolbox `Tag name=` values: `WBA::WBABusinessApplication` etc.
-- [ ] DiagramProfile `Property name="toolbox" value="WBA::WBA ArchiMate Elements"` (the shipped 1.1.1 uses `WBA::WBA ArchiMate`; see Section 2)
+- [ ] DiagramProfile `Property name="toolbox"` names the toolbox: `WBA::WBA ArchiMate` (`<id>::<toolbox UML profile name>`, measured on 1.1.1; see Section 2)
 - [ ] COM calls: `Repository.IsTechnologyLoaded("WBA")`
+
+This checklist is for a file you author by hand. A technology EA generates from a source model
+(the shipped Westbrook one) names its UML profile after the profile package, prefixes its toolbox
+item tags with that profile name, and derives its profile ids from GUIDs, so it will not match the
+list line for line. That is a different generator, not a defect in the file, and neither form
+should be rewritten to match the other. Which forms EA resolves in a hand-written file is only
+partly measured (Section 2); the id cross-check below is how to find out on yours.
+
+### A toolbox that does not show: check in this order
+
+1. **The id cross-check first.** Read the file and compare the technology id in the root, the top-level
+   documentation, the UML profile documentation, the toolbox tag prefixes and the diagram `toolbox`
+   property. An id mismatch is the common cause. **Report the result** (a mismatch and where, or
+   that all agree) before any install, restart or reinstall advice, and before mentioning the legacy
+   embedded route.
+2. Then the diagram's `toolbox` value against the toolbox profile or page it names (above).
+3. Then where the technology is installed: at Location: Project no toolbox pages are stored, and the
+   fix is Location: Model (`ea-mdg-deploy`). Check loaded and enabled, and restart EA before judging.
+Do not send the person to reinstall before step 1 is reported.
 
 ---
 
@@ -356,7 +384,8 @@ COM connection rather than as an error you can catch. Neither shows up in a tool
 - **After any diagram create or edit, reload the diagram, screenshot it, and look.**
   `ok: true` means rows were written, not that elements landed where you intended, that
   styling applied, or that the result is readable.
-- **Without computer use**, say so and ask the user to look — never report a hang you have
-  not diagnosed or a diagram you have not seen.
+- **Without computer use**, say so. Ask the user to paste a screenshot of the EA window or
+  dialog into the conversation, read the cause from it, and ask the user to dismiss the dialog
+  before you retry. Never report a hang you have not diagnosed or a diagram you have not seen.
 
 Full procedure: [`../_shared/references/ea-ui-verification.md`](../_shared/references/ea-ui-verification.md)

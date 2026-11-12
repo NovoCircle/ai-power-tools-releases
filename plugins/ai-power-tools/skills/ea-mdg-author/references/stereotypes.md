@@ -118,7 +118,7 @@ Then close and reopen the project to flush EA's in-memory cache.
 > `Flows` (InformationFlow) and `realizes` (Realisation). For a relationship between WBA elements,
 > use one where it fits, otherwise a plain UML connector type with no stereotype — `Dependency`,
 > `Realization`, `Association`, `Aggregation`. The pattern below shows how you *would* add
-> another, labelled plainly as a proposed extension so it is never mistaken for part of the
+> another, labeled plainly as a proposed extension so it is never mistaken for part of the
 > shipped technology.
 
 ```xml
@@ -135,8 +135,8 @@ Then close and reopen the project to flush EA's in-memory cache.
   <TaggedValues>
     <Tag name="integrationPattern" type="enumeration"
          description="Integration pattern"
-         default="Synchronous" unit=""
-         values="Synchronous,Asynchronous,Batch"/>
+         default="API" unit=""
+         values="API,Batch,Event,File"/>
   </TaggedValues>
 </Stereotype>
 ```

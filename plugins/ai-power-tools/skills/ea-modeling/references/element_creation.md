@@ -1,6 +1,6 @@
 # Element Creation, Tagged Values, and Stereotype Persistence
 
-Detail supporting [`../SKILL.md`](../SKILL.md) §4 and §4.5. Read those sections first for the
+Detail supporting [`../SKILL.md`](../SKILL.md) §4, §4.5 and §4.6. Read those sections first for the
 decision points (bulk vs. single, `create_element_in_language` vs. `create_element`); this file
 carries the full code patterns, the complete WBA tagged-value set, and the stereotype-persistence
 deep dive.
@@ -36,7 +36,15 @@ ea_model(operation="create_elements_bulk", params={"specs": [
 
 The bulk call is idempotent (existing name + package + stereotype is skipped, not
 duplicated) and returns a structured `{created, skipped, failed, results}` summary.
-Failures don't abort the batch.
+Failures don't abort the batch. This holds when the stereotype is written as the technology id,
+the profile name or the bare name: the server compares the qualified binding, not the text you
+passed, so a rerun skips MDG-typed items too (server 3.6.5 or later; before that a rerun
+duplicated them).
+
+Set `parent_id` in a spec to nest the element under an existing element in the same package. A
+parent created in the same call cannot be named, so create parents first. A parent that does not
+exist is `parent_not_found` and one in another package is `parent_in_other_package`, each with the
+`spec_index`; the result returns the stored `parent_id`.
 
 **Single element (still valid for one-offs):**
 
@@ -110,23 +118,28 @@ ea_model(operation="create_elements_bulk", params={"specs": [
 
 ### Stereotype → Object_Type mapping
 
-The WBA MDG stereotypes map to these EA `Object_Type` values:
+Westbrook Bank's `WBA` technology is the illustration; your technology declares its own
+stereotypes and base metaclasses (read them with `get_mdg_from_runtime`). The WBA mapping, from
+the canon in `_shared/references/westbrook-example.md` section 2, is below. The metaclass is
+what you pass as `type` to `create_element`; a wrong one can make EA drop the stereotype.
 
 | Stereotype | Object_Type (`ea_model("create_element")` `type`) |
 |------------|---------------------------------------------|
-| `WBABusinessApplication` | `Component` |
-| `WBAVendorSystem` | `Component` |
-| `WBABusinessService` | `Component` |
-| `WBAAIService` | `Component` |
-| `WBAAIGateway` | `Component` |
-| `WBADataAsset` | `Object` |
-| `TechNode` | `Node` |
+| `WBABusinessApplication`, `WBABusinessService`, `WBAVendorSystem`, `WBARegulatedFunction`, `WBASystemOfRecord`, `WBAAIGateway`, `WBAAIService` | `Component` |
+| `WBAAIModel`, `WBADataAsset`, `WBADataEntity`, `WBAGovernedElement` | `Class` |
+| `WBARegulatedActivity`, `WBACustomerTouchpoint`, `WBAExternalCall` | `Activity` |
+| `WBATechnologyNode` | `Node` |
+
+A model built before the technology was loaded can hold these elements under another metaclass
+(for example data assets stored as `Object`). Check what the model holds with
+`ea_analyze("summarize_observed_metaclasses", {"stereotype": ...})` before copying its pattern.
 
 ### Full WBA MDG tagged value set
 
 Set all applicable tags in one block immediately after `create_element`. This is the
-canonical 10-tag set (base 6 + AI-only 4) from `_shared/references/westbrook-example.md`
-section 3 — see that file if a value below looks wrong; it is the source of truth.
+canonical set from `_shared/references/westbrook-example.md` section 3 (base 6, AI-only 4,
+and three PCI and vendor tags below); see that file if a value below looks wrong; it is the
+source of truth.
 
 ```
 criticality         → "Mission-Critical" | "Business-Critical" | "Important" | "Standard"
@@ -150,13 +163,17 @@ Enumeration values are exact — `Mission Critical` (space instead of hyphen) is
 will fail a conformance check. `businessOwner` / `technicalOwner` take a team name such as
 `Payments Engineering`, never a person's name.
 
-> **Non-canon tags found in this section before the 2026-09-23 split:** `vendor`, `product`,
-> `pciScopeJustification`, and `pciControlOwner` were listed here alongside the real 10. They
-> are not part of the WBA MDG per the canonical spec (section 3 is exhaustive: "all 10"). They
-> have been removed from this list rather than silently kept, since they do not correspond to
-> anything the MDG actually defines. If the product genuinely needs vendor/product tracking or
-> a PCI-specific justification tag, that is new MDG design work, not an example-authoring fix —
-> flag it to whoever owns the WBA MDG XML.
+PCI and vendor tags (free text), declared on only some stereotypes:
+
+```
+pciScopeJustification  → WBABusinessApplication, WBAVendorSystem
+product                → WBAVendorSystem
+vendor                 → WBAVendorSystem
+```
+
+The technology declares these 13 tags (6 + 4 + 3). Set one only on a stereotype that declares
+it. To check any tag against your own technology, read the stereotype's `tagged_values` from
+`get_mdg_from_runtime`; do not rely on a remembered list.
 
 ### Verification after tagging
 
@@ -179,15 +196,24 @@ the tag schema is being initialized.
 ## 2. Stereotype persistence — where EA stores what
 
 **This is the most common source of silent failures.** EA stores stereotype information
-in up to three separate places, and which place it writes to depends on which tool and
-path you use.
+in up to three separate places. Two of them are columns you can query; the third,
+`StereotypeEx`, is not. Server 3.6.5 or later writes all three from `create_element`,
+`create_element_in_language` and `update_element`, and reports the outcome in the result's
+`stereotype` block (`requested`, `written`, `stored`, `bound_as`, `status`, `reason`) and in
+`rejected_properties`. Read those first; the queries below audit what is stored.
+
+Write the stereotype as the technology id (`WBA::WBABusinessApplication`) or, when only one loaded
+technology defines it, the bare name. The server translates the id (or a profile name, if you
+write one) to the profile-qualified form EA binds. A bare name that two loaded technologies define is written as given and EA binds the
+first match; `stereotype.bound_as` shows which. Substitute your own technology id and profile
+name.
 
 ### Three stereotype storage locations
 
 | Store | Table | Column | What writes here | What reads here |
 |---|---|---|---|---|
 | Simple stereotype | `t_object` | `Stereotype` | `ea_model("create_element")` with `stereotype=`, `ea_model("update_element")` with `properties={"Stereotype":}` | EA browser, most queries |
-| StereotypeEx (full MDG path) | `t_object` | `StereotypeEx` | `ea_model("update_element")` with `properties={"StereotypeEx":}` | EA validation, profile-aware tools |
+| StereotypeEx (full MDG path) | none: a COM property, **not a `t_object` column** (the query is rejected if you select it) | n/a | `ea_model("create_element")`, `ea_model("create_element_in_language")` and `ea_model("update_element")` with `properties={"StereotypeEx":}` | `get_element` (its `stereotype` shows `StereotypeEx` when set), EA's profile-aware tools |
 | MDG profile application | `t_xref` | `Description` | Whichever of these applies a stereotype matching a loaded MDG profile: `ea_model("create_element_in_language")`, `ea_model("create_element")` with `stereotype=`, `ea_model("create_elements_bulk")` in either form, `ea_model("update_element")` with `StereotypeEx` when EA accepts it | EA MDG engine, diagram rendering |
 
 ### How each tool writes stereotypes
@@ -198,61 +224,97 @@ name that prefixes the stereotype's FQName in `t_xref`. They can be different st
 ```
 ea_model(operation="create_element", params={"type": "<base-metaclass>", "stereotype": "<stereotype>", ...})
   -> writes t_object.Stereotype = "<stereotype>"
-  -> writes t_xref row (MDG profile application) when the stereotype matches a loaded
-     MDG profile, with FQName=<profile>::<stereotype>
-  -> `type` is yours to get right; a wrong base metaclass can make EA reject the stereotype
+  -> sets the StereotypeEx property to the qualified name
+  -> writes the t_xref row (MDG profile application) when the stereotype matches a loaded
+     MDG profile; what EA stores there is FQName=<profile>::<stereotype>
+  -> `type` is yours to get right; a base metaclass the stereotype does not suit makes EA drop it
 
 ea_model(operation="create_element_in_language", params={"language_id": "<technology-id>", "language_type": "<stereotype>", ...})
-  -> writes t_object.Stereotype = "<stereotype>"
-  -> writes t_object.StereotypeEx = "<stereotype>=<profile>::<stereotype>;"
-  -> writes t_xref row (MDG profile application, BaseClass="element")
-  -> resolves the base metaclass for you; same binding as create_element, without the type risk
+  -> writes the same three stores as create_element
+  -> resolves the base metaclass for you, so it has no type risk
 
-ea_model(operation="update_element", params={"element_id": ..., "properties": {"StereotypeEx": "<stereotype>=<profile>::<stereotype>;"}})
-  -> writes t_object.StereotypeEx
-  -> does two Update() calls internally (first for other props, second specifically for StereotypeEx)
-  -> returns stereotype_warning if EA rejected the value (readback is empty after Update)
-  -> writes the t_xref row when EA accepts the value; a rejected value (stereotype_warning)
-     leaves no profile binding — less reliable than create_element_in_language
+ea_model(operation="update_element", params={"element_id": ..., "properties": {"StereotypeEx": "<stereotype>"}})
+  -> applies the stereotype after the fact, with a second Update() call of its own
+  -> a stereotype EA drops is listed in rejected_properties (and stereotype_warning), never
+     in applied_properties, and `stereotype.status` is `rejected`
 ```
 
 ### How to verify stereotype persistence
 
+**Read it back after every call that sets a stereotype.** A call can return success and leave
+the element with no stereotype, or with only a bare name. One read answers it:
+
 ```sql
--- 1. Check t_object (basic + StereotypeEx)
-SELECT Object_ID, Name, Stereotype, StereotypeEx
-FROM t_object
-WHERE Object_ID = <element_id>
+-- 1. The stored name and the profile application together
+--    (t_object has Stereotype, not StereotypeEx; the profile binding is in t_xref)
+SELECT o.Object_ID, o.Name, o.Object_Type, o.Stereotype, x.Description
+FROM t_object o
+LEFT JOIN t_xref x ON x.Client = o.ea_guid
+                  AND x.[Type] = 'element property' AND x.Name = 'Stereotypes'
+WHERE o.Object_ID = <element_id>
 
--- 2. Check t_xref (MDG profile application)
-SELECT XrefID, [Type], [Name], Client, Supplier, [Description]
-FROM t_xref
-WHERE Client = '<element_guid>'
-  AND [Type] = 'element'
-
--- 3. Check tagged values (confirms MDG profile is active)
+-- 2. Tagged values (the profile's tags appear once the profile is applied)
 SELECT Property, [Value]
 FROM t_objectproperties
 WHERE Object_ID = <element_id>
 ```
 
-If step 2 returns no rows, the MDG profile was not applied — the element's stereotype
-is cosmetic only. A row whose `Description` has no `FQName` means the technology was not loaded
-when the stereotype was applied. To fix, delete and recreate the element using
-`create_element_in_language`, with the technology loaded.
+Or call `ea_model("get_element")` and read `stereotype`. Read the result like this:
 
-### Diagnosing `update_element` StereotypeEx failures
+| What query 1 returns | Meaning |
+|---|---|
+| `Stereotype` empty | EA dropped the stereotype. Nothing was applied, whatever the response said. |
+| `Stereotype` set, `Description` empty (no row) | A label only. The profile was never applied. |
+| `Description` has `GUID=` and no `FQName=` | **Unlinked.** The stereotype is a plain name, not the technology's. Usually the technology was not loaded when it was applied. |
+| `Description` has `FQName=<profile>::<stereotype>` | **Linked.** The technology's own stereotype, with its tag set. |
 
-`update_element` now returns `stereotype_warning` in the response when the StereotypeEx
-write was rejected by EA. Check for this key:
+Through COM (`ea-com`) the same split shows as `FQStereotype` (`<profile>::<stereotype>` when
+linked, the bare name when not) and `MetaType` (the stereotype name when linked, `Object` when
+not). That reading comes from a research run on EA 17.0 and has not been re-checked for this
+skill. The same research found a profile stereotype applied to an `Object` element is dropped
+silently, where on a `Class` it links and brings the profile's full tag set, so confirm the
+base metaclass first (the mapping above).
+
+To fix an unlinked or dropped element, delete and recreate it with
+`create_element_in_language` with the technology loaded, carrying its tags across (an element
+with connectors or diagram placements needs those recreated too).
+
+### Diagnosing a dropped stereotype
+
+After any create or update that carries a stereotype, check `rejected_properties` and
+`stereotype.status`. A `rejected` status leaves the call `ok: true`, and means the element's base
+metaclass does not suit the stereotype (a Component given a Class-only stereotype, say). You
+cannot change `Object_Type` after creation: recreate the element with
+`create_element_in_language`.
 
 ```python
 result = ea_model(operation="update_element", params={"element_id": <id>, "properties": {"StereotypeEx": "..."}})
-if result.get("stereotype_warning"):
-    # EA rejected the stereotype — use create_element_in_language instead
-    print(result["stereotype_warning"])
+if result["stereotype"]["status"] == "rejected":
+    print(result["stereotype"]["reason"])   # recreate via create_element_in_language
 ```
 
-The most common rejection cause: the element's `Object_Type` (`t_object.Object_Type`)
-doesn't match what the MDG profile expects as the base metaclass. You cannot change
-`Object_Type` after creation — recreate via `create_element_in_language`.
+---
+
+## 3. A file stored on an Artifact
+
+A file kept inside the model on an Artifact element is stored in two places, and EA needs both.
+
+| Where | What |
+|---|---|
+| `t_document` | One row: `DocType='ExtDoc'`, `DocID` and `ElementID` = the artifact's `ea_guid`, `BinContent` = a zip archive that holds one entry, `str.dat`. |
+| `t_object` (the artifact) | `Style='ExtDoc=1;'` and `NType=32`. |
+
+Without `ExtDoc=1;` on the artifact EA will not open the file when you double-click it, even
+though the `t_document` row is there. After storing a file, read back what you wrote: the row
+exists for that GUID, the artifact carries both marks, and the stored bytes unzip to the file
+you stored.
+
+```sql
+SELECT d.DocID, d.DocType, LENGTH(d.BinContent) AS bytes, o.Style, o.NType
+FROM t_object o
+LEFT JOIN t_document d ON d.ElementID = o.ea_guid AND d.DocType = 'ExtDoc'
+WHERE o.Object_ID = <artifact_id>
+```
+
+Name `BinContent` explicitly and never `SELECT *` on `t_document`; the column holds the file.
+This layout was measured on EA 17.0 against a MySQL-backed cloud repository.

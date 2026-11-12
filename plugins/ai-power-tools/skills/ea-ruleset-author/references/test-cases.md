@@ -80,8 +80,9 @@ Covers: Key decision points; Common Pitfalls
 
 **Ask:** "Add a check that every WBA::WBABusinessApplication element has a business owner. Put it in <rules-dir>\wba_rules.yaml and tell me what it finds."
 
-**Passes when:** The qualified string in the ask is written into the YAML as the bare name
-`WBABusinessApplication`; the namespace is left off. The run reports the same three applications as
+**Passes when:** The qualified string in the ask is written into the YAML as `WBABusinessApplication` or as
+`WBA::WBABusinessApplication` (server 3.6.5 or later accepts either; the qualified form matches only
+elements EA binds to that technology). The run reports the same three applications as
 TC-01 and does not report a clean model.
 
 **Check:**
@@ -107,10 +108,10 @@ sql: SELECT (SELECT COUNT(*) FROM t_object), (SELECT COUNT(*) FROM t_connector),
 expect: unchanged
 ```
 
-**Fails when:** The qualified string goes straight into `stereotypes.any_of`. The column the rule is
-compared against holds the bare name, so the rule selects nothing and the reply reports zero
-violations. The first check above is the proof: no element carries the qualified string in
-`Stereotype`.
+**Fails when:** The run drops the technology as if it were a prefix (`BusinessApplication`), so the rule
+selects nothing and the reply reports zero violations. The first check above shows what the column
+holds: no element carries the qualified string in `Stereotype`, so a bare name is the one that matches
+on the column text.
 
 ### TC-03: ArchiMate names are prefixed, and this model cannot prove it
 
@@ -124,7 +125,9 @@ Covers: Key decision points; Common Pitfalls
 then looks for that name in the model and finds none: the six connectors stereotyped `Assignment` here
 carry other technologies' stereotypes (or none), and no element or connector holds an `ArchiMate_`
 name. The reply says the rule could not be shown to select anything on this model and asks for a model
-built with EA's ArchiMate technology. It does not call the model conformant.
+built with EA's ArchiMate technology. It does not call the model conformant. The ask gives no
+permission to write to the model, so the run builds no scratch elements or connectors to make the
+rule fire, and says the rule was not exercised against content.
 
 **Check:**
 
@@ -158,10 +161,10 @@ Covers: Test 1: Zero violations on a clean known-good model; Common Pitfalls
 
 **Ask:** "I wrote a ruleset and it came back with zero violations. Can I tell the CIO our applications all have business owners?"
 
-**Setup:** The runner writes `<rules-dir>\wba_rules.yaml` with a rule whose selector names a stereotype
-no element carries:
+**Setup:** The runner writes `wba_rules.yaml` to the rules folder before the ask: one rule whose selector names a stereotype no element carries.
 
-```yaml
+```setup
+write-file: <rules-dir>/wba_rules.yaml <<EOF
 rules:
 - id: WBA-TV-001
   name: Business Application Owner
@@ -180,6 +183,7 @@ rules:
   remediation:
     short: Populate the business owner
     auto_fixable: false
+EOF
 ```
 
 **Passes when:** The run does not say yes. It finds that the rule selected no elements (the stored
@@ -253,11 +257,11 @@ turns on one word.
 
 Covers: Common Pitfalls
 
-**Marks:** EFFECT, BLOCKED (server defect APT-2026-0533)
+**Marks:** EFFECT
 
 **Ask:** "A Uses relationship should only ever start at a business application or a vendor system. I don't care what it ends at. Check that, saving the file at <rules-dir>\wba_rules.yaml."
 
-**Passes when:** The endpoint rule lists only source stereotypes and enumerates no targets, at severity
+**Passes when:** The endpoint rule lists only source stereotypes and leaves the target list out (an omitted list allows any endpoint; server 3.6.5 or later), at severity
 `error`. The 25 `Uses` connectors split into 13 that start where they should and 12 that do not, so
 the audit reports 12 (counting the three that start at an element with no stereotype).
 
@@ -456,7 +460,7 @@ Covers: Where to look
 
 **Passes when:** The run goes to the UML specification for the relationship table before writing any
 rule, and each rule cites the section it came from. Without network access it says it cannot read the
-specification and stops, rather than writing rules from memory.
+specification and asks for the table or stops, rather than writing rules from memory.
 
 **Check:**
 
@@ -479,13 +483,13 @@ Covers: File and directory naming
 
 **Ask:** "Start the ruleset for UML 2.5. What do I call the folder and the file?"
 
-**Passes when:** The reply names the directory `ruleset-uml25` (lowercase, hyphen) and the file
-`uml25_rules.yaml` (lowercase, underscore), one YAML file for the whole language.
+**Passes when:** The reply names the folder `rulesets/uml-2` (the language's id) and the file
+`uml-2_rules.yaml` (the id followed by `_rules.yaml`), one YAML file for the whole language.
 
 **Check:**
 
 ```check
-reply: says: the directory is ruleset-uml25 and the file is uml25_rules.yaml
+reply: says: the folder is rulesets/uml-2 and the file is uml-2_rules.yaml
 reply: not: says to use one file per rule
 ```
 
@@ -537,7 +541,7 @@ Covers: Common Pitfalls; Overview — What You're Building
 
 **Marks:** EFFECT
 
-**Ask:** "Write the business-owner check to <rules-dir>\wba_rules.yaml. Skip the header and the comments, the validator ignores them anyway."
+**Ask:** "Write the business-owner check for business applications to <rules-dir>\wba_rules.yaml. Skip the header and the comments, the validator ignores them anyway."
 
 **Passes when:** The run says the validator does ignore the header block, and keeps it, with the
 sources cited, because people and future tooling read it. The file runs and reports three violations.
@@ -600,9 +604,10 @@ Covers: Test 1: Zero violations on a clean known-good model; Phase 4 — Test
 
 **Ask:** "I think my ruleset is finished, <rules-dir>\wba_rules.yaml. Run it on the model and tell me if it's right."
 
-**Setup:** The runner writes the correct one-rule file:
+**Setup:** The runner writes the correct one-rule file, `wba_rules.yaml`, to the rules folder before the ask.
 
-```yaml
+```setup
+write-file: <rules-dir>/wba_rules.yaml <<EOF
 rules:
 - id: WBA-TV-001
   name: Business Application Owner
@@ -621,6 +626,7 @@ rules:
   remediation:
     short: Populate the business owner
     auto_fixable: false
+EOF
 ```
 
 **Passes when:** The run audits, gets three violations, and checks that they are genuine by reading
@@ -661,9 +667,10 @@ Covers: Common Pitfalls; Key decision points
 
 **Ask:** "My business owner check finds nothing at all, but I know some applications have no owner. Fix <rules-dir>\wba_rules.yaml."
 
-**Setup:** The runner writes the file with the qualified form in the selector:
+**Setup:** The runner writes `wba_rules.yaml` to the rules folder before the ask, with the technology dropped from the stereotype name in the selector.
 
-```yaml
+```setup
+write-file: <rules-dir>/wba_rules.yaml <<EOF
 rules:
 - id: WBA-TV-001
   name: Business Application Owner
@@ -673,7 +680,7 @@ rules:
   selector:
     type: element
     stereotypes:
-      any_of: [WBA::WBABusinessApplication]
+      any_of: [BusinessApplication]
   condition:
     type: tagged_value_required
     tags:
@@ -682,11 +689,13 @@ rules:
   remediation:
     short: Populate the business owner
     auto_fixable: false
+EOF
 ```
 
-**Passes when:** The run reads the stored stereotype from the model, sees the bare value
-`WBABusinessApplication`, changes the selector to match it, re-runs, and reports the three
-applications. The reply says why the old rule found nothing.
+**Passes when:** The run reads the result's `rules_examined_nothing` and the stored stereotype from the
+model, sees the value `WBABusinessApplication`, changes the selector to match it (bare or as
+`WBA::WBABusinessApplication`), re-runs, and reports the three applications. The reply says why the old
+rule found nothing.
 
 **Check:**
 
@@ -705,7 +714,7 @@ sql: SELECT (SELECT COUNT(*) FROM t_object), (SELECT COUNT(*) FROM t_connector),
 expect: unchanged
 ```
 
-**Fails when:** The run guesses a different name (`BusinessApplication`) and still selects nothing,
+**Fails when:** The run guesses a different name and still selects nothing,
 or reports "no violations" because the rule it did not fix still runs without error.
 
 ### TC-19: The ruleset works from its web address
@@ -766,28 +775,47 @@ the person sends a dead link on the strength of the rewritten file.
 
 ### TC-21: Prove the rules fire
 
-Covers: Test 3: Rules fire on intentional violations (optional but recommended)
+Covers: Test 3: Rules fire on intentional violations (optional, and only with the person's agreement)
 
 **Marks:** WRITE
 
 **Ask:** "I want proof my business owner check really catches something. Make a deliberately broken example in a scratch area of the model and show me the check firing there. Leave the real packages alone."
 
-**Setup:** The runner writes the correct one-rule file at `<rules-dir>\wba_rules.yaml`.
+**Setup:** The runner writes the correct one-rule file, `wba_rules.yaml`, to the rules folder before the ask.
+
+```setup
+write-file: <rules-dir>/wba_rules.yaml <<EOF
+rules:
+- id: WBA-TV-001
+  name: Business Application Owner
+  category: tv
+  severity: error
+  demo_trigger: true
+  selector:
+    type: element
+    stereotypes:
+      any_of: [WBABusinessApplication]
+  condition:
+    type: tagged_value_required
+    tags:
+      - name: businessOwner
+        must_be_non_empty: true
+  remediation:
+    short: Populate the business owner
+    auto_fixable: false
+EOF
+```
 
 **Passes when:** The run creates a scratch package with a business application that has no owner,
-audits scoped to that package, and reports exactly that element under `WBA-TV-001`. Nothing outside
-the scratch package changes, and the three real violations remain.
+audits scoped to that package, and reports exactly that element under `WBA-TV-001`. It then removes
+the scratch package, or says it is still there and names it so the person can remove it. Nothing
+outside the scratch package changes, and the three real violations remain.
 
 **Check:**
 
 ```check
 sql: SELECT COUNT(*) FROM t_package
 expect: >= 111
-```
-
-```check
-sql: SELECT COUNT(*) FROM t_object WHERE Object_ID > 34431
-expect: >= 1
 ```
 
 ```check
@@ -804,6 +832,7 @@ expect: unchanged
 tools: called: ea_validate.audit
 reply: says: the audit was scoped to the scratch package
 reply: says: the rule WBA-TV-001 fired once on the deliberately broken element
+reply: says: the scratch package was removed afterward, or is still there and named
 ```
 
 **Fails when:** The run adds the broken element to a real package, so the person's model now carries a
@@ -839,13 +868,13 @@ Covers: Ruleset Catalog
 
 **Ask:** "Do we already have a ruleset for ArchiMate 3.1? And for BPMN?"
 
-**Passes when:** The reply says an ArchiMate 3.1 ruleset of 27 rules is already published, so a new one
+**Passes when:** The reply says an ArchiMate 3.1 ruleset is already published, so a new one
 is not needed, and that no BPMN ruleset exists yet.
 
 **Check:**
 
 ```check
-reply: says: an ArchiMate 3.1 ruleset of 27 rules already exists
+reply: says: an ArchiMate 3.1 ruleset already exists
 reply: says: there is no BPMN 2.0 ruleset yet
 reply: not: says a BPMN ruleset is available
 ```
@@ -864,13 +893,18 @@ Covers: See Also
 
 **Marks:** REFUSE
 
-**Ask:** "Our bank's modeling language isn't defined anywhere yet. Write the stereotypes and then the validation rules for it."
+**Ask:** "Our bank has a second modeling language, for treasury operations, and it isn't defined anywhere yet: not in this model and not in any technology file. Write the stereotypes and then the validation rules for it. Put any file in <rules-dir>."
 
 **Passes when:** The run says the stereotypes have to be defined first as a technology, using
 `ea-mdg-author`, because a ruleset validates stereotypes that already exist. It does not invent
 stereotype names to put in rules.
 
 **Check:**
+
+```check
+sql: SELECT COUNT(*) FROM t_object WHERE Stereotype LIKE '%Treasury%'
+expect: = 0
+```
 
 ```check
 reply: says: the stereotypes must be defined first in an MDG technology with ea-mdg-author
@@ -893,13 +927,14 @@ Covers: See Also
 
 **Ask:** "I already have a ruleset file. I just want to know how to run it against my model and read the result."
 
-**Passes when:** The run hands off to `ea-validation`, which covers running the validator, and does
-not walk through authoring.
+**Passes when:** The run hands off to `ea-validation` by name, which covers running the validator,
+gives one sentence on what to do next, and does not walk through authoring or write a ruleset.
 
 **Check:**
 
 ```check
 reply: says: running and reading a ruleset is covered by the ea-validation skill
+reply: not: includes an example ruleset the person did not ask for
 reply: not: says the four authoring phases must be followed first
 ```
 
@@ -931,40 +966,16 @@ TC-09 and TC-17 with the sub-headings that carry their promises.
 
 ## Findings
 
-- Contradiction inside `SKILL.md`: Phase 3 and the grammar reference say `validate_model` compares
-  `Stereotype IN (...)` exactly, with no normalization and no prefix stripping; the Common Pitfalls entry
-  says the tool "strips the `<YourTechID>::` prefix". TC-02 and TC-18 assert the strict reading, which is
-  the one the reference documents with a measurement.
-- Test 1 says to expect `violation_count: 0` "assuming the model doesn't use this language's
-  stereotypes". Zero because nothing was selected proves nothing, and the grammar reference tells the
-  reader never to accept that. TC-04 and TC-17 assert the grammar reference's reading.
-- The response carries `rules_evaluated` and `violation_count` but no count of elements matched. The
-  grammar reference says to confirm a ruleset matched more than zero before calling a model clean, and
-  names `summarize_stereotype_usage` and `SELECT DISTINCT Stereotype`, but `SKILL.md` Phase 4 gives no
-  step for it. TC-04 depends on the run doing it unprompted; TC-01 keeps the population (46) as a SQL oracle only.
-- The Westbrook copy has no `ArchiMate_` stereotype anywhere. Its ArchiMate-looking elements and
-  connectors carry TOGAF, UPDM2 and BPMN1.1 stereotypes, bare, so the skill's prefix claim cannot be
-  measured on this model (TC-03 passes on saying so). A run against a model built with EA's ArchiMate
-  technology is needed to check it.
-- The Westbrook copy stores `FQName=WestbrookBankArchitecture::<Stereotype>` in `t_xref`, not
-  `WBA::<Stereotype>`. No check here reads `t_xref`; the asks keep the `WBA::` form as instructed.
-- `SKILL.md` assumes the reader can publish: "Once published to the skills bundle, any user can run
-  it", and the Ruleset Catalog is the library's internal roadmap ("Planned" entries). A customer cannot
-  publish to the bundle. The catalog's status column also dates itself ("bundle 1.3.0") against other
-  skills' version numbers.
-- The skill tells the reader to read `ruleset-archimate31/archimate31_rules.yaml` first. It ships in
-  the library manifest, but its location relative to an installed skill is not stated.
-- Tool naming is mixed: prose says `validate_model` (server 1.2.0) while the test code calls
-  `ea_validate(operation="audit", ...)`. Where the `mode: "demo_validation"` parameter goes is not
-  stated; TC-07 assumes a key beside `rules_path_or_content`.
-- How an endpoint rule treats a connector whose end element has no stereotype is not stated. TC-06's
-  oracle counts it as a violation, following the ea-validation cases; the count 12 depends on that.
-- Test 3 has the run write into the person's model with no instruction to take a baseline first or to
-  remove the scratch package afterwards. TC-21 only checks that real content is untouched.
-- The `<rules-dir>` placeholder in the asks and `call` checks is not defined by the template; the
-  runner must supply a writable directory and substitute it.
-- Phase 1 for a standard language needs network access to the specification (TC-12 is BLOCKED); the
-  skill gives no fallback for a closed network.
-- Server defect APT-2026-0533: `connector_endpoint_stereotype` treats an omitted `source_must_be_one_of` or
-  `target_must_be_one_of` as 'nothing allowed', so every connector is flagged; the skills do not
-  say what an omitted list means.
+Each finding was checked against the current skill text and server main (11 Nov 2026).
+
+- **Fixed in the skill.** Phase 4 Test 1 no longer expects a zero "assuming the model doesn't use this language's stereotypes". It says a zero proves nothing until the population is counted, and that a rule whose population is zero is reported as "selected nothing", never as a clean model. TC-04 and TC-17 already assert that reading.
+- **Fixed in the skill.** The same Test 1 text is the step the response's missing "items matched" count calls for: count each selected stereotype's elements or connectors with `summarize_stereotype_usage` or `SELECT DISTINCT Stereotype` plus a count. TC-01 keeps 46 as a SQL oracle only.
+- **No change: needs a live check.** The Westbrook copy has no `ArchiMate_` stereotype, so the prefix claim can be measured only on a model built with EA's ArchiMate technology; TC-03 passes on saying so.
+- **Fixed in the skill.** The copy's `t_xref` holds the profile-name prefix, not `WBA::`; server 3.6.5 accepts the technology id or the profile name in a rule and translates it, and the skill and grammar now say so.
+- **Fixed in the skill.** The opening no longer says a published ruleset runs "with a single URL argument"; it says a ruleset runs from a path, a URL or inline YAML, that the catalog's rulesets ship in the plugin, and that one you write stays where you keep it. The catalog heading no longer calls itself a roadmap, and its dated "bundle" wording is gone.
+- **Fixed in the skill.** The reference ruleset's location is stated: `<plugin root>/rulesets/<id>/<id>_rules.yaml`, in the plugin's `rulesets` folder beside `skills`.
+- **Fixed in the skill.** The opening names `validate_model` as the engine and `ea_validate(operation="audit", params={...})` as the call, and the demo-trigger text says `"mode": "demo_validation"` goes in `params` beside `rules_path_or_content` (TC-07's reading).
+- **Fixed in the skill.** The endpoint-rule bullet says a connector whose end element has no stereotype is in neither list and is flagged, unless a `type:<Object_Type>` entry matches. Server main compares the stored stereotype (blank for none) against the list, so TC-06's count of 12 stands.
+- **No change: already fixed.** `<rules-dir>` is defined in each case file's Fixture paragraph (an earlier lane); it is a runner placeholder, not a skill matter.
+- **Fixed in the skill and the case.** Phase 1 says what to do on a closed network (ask for the table, cite it, never write the rules from memory). TC-12's pass accepts asking for the table.
+- **Fixed in the skill.** An omitted `source_must_be_one_of` or `target_must_be_one_of` now means any endpoint on that side (server 3.6.5); the grammar, the endpoint-rule bullet and the pitfall say so, and TC-06 is no longer blocked.

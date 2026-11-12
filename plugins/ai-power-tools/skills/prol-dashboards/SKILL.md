@@ -107,7 +107,9 @@ Column sets, dialect rules and the top-N pattern are in
 > cosmetics only. Two different controls, one obvious mistake.
 
 > **Editing a generated query is a one-way door**, and **changing the chart type afterwards wipes
-> the name, the query and the result query.** Settle the type first.
+> the name, the query and the result query.** Settle the type first. If the person asks to change
+> the type of a chart that already exists, say what will be wiped and get their yes before you
+> change it.
 
 ## 5. Presentation controls that change the data, not the styling
 
@@ -205,7 +207,7 @@ Ordered cheapest first.
 
 1. **Did the session expire?** Four minutes. See `prolaborate-session.md`.
 2. **Did the click land?** Clicks that target an element by reference can fail silently on this interface where a
-   click at the element's position on screen works; the first interaction after a page load is often swallowed. Verify state, retry once.
+   click at the element's position on screen works; the first interaction after a page load is often swallowed, and so is a click on a tab that is not in front (`prolaborate-session.md` §8). Verify state, retry once.
 3. **`No results found`?** Suspect the dialect before the data. Compare against `VIEW SAMPLE`.
 4. **Chart renders but looks wrong?** Check §5 — a silent presentation toggle, not the query.
 5. **Numbers disagree with the model?** Check whether the connector stereotype is qualified. Element
@@ -215,6 +217,23 @@ Ordered cheapest first.
    than guessing either form.**
 6. **Two failed attempts at the same thing is the signal.** Stop, say what you observed, and hand
    back rather than improvising.
+
+## 11. Moving, defaults, one-widget fixes and the library
+
+These were measured on a real move between repositories. Each has its detail in a reference file.
+
+- **Export and import between repositories.** Export from the Dashboards list, import in the target.
+  Layout and widgets come across; links to other repositories' ids, package numbers in queries and
+  links to library widgets do not, and the import adds no modeling languages. Work the checklist in
+  [references/moving-and-library.md](references/moving-and-library.md).
+- **Changing one widget without touching the layout.** Edit the dashboard page's own outgoing save
+  and change only that widget. Steps and traps are in
+  [references/payloads.md](references/payloads.md) §6.
+- **Personal versus repository default.** Make Default on a dashboard's page is personal; More on the
+  list sets the repository default. Status is changed only on the Edit page. See
+  [references/moving-and-library.md](references/moving-and-library.md) §2.
+- **The Widgets Library** has its own export and import, and a Rich Text item is edited through its
+  editor instance. See [references/moving-and-library.md](references/moving-and-library.md) §3.
 
 ## Reference files
 
@@ -226,4 +245,5 @@ Ordered cheapest first.
 | [references/data-probes.md](references/data-probes.md) | Census and tagged-value probes, cardinality thresholds |
 | [references/worked-example.md](references/worked-example.md) | A full Westbrook Bank dashboard, end to end |
 | [references/test-cases.md](references/test-cases.md) | Acceptance tests for this skill |
-| [references/payloads.md](references/payloads.md) | Dashboard read/write payloads and vocabulary |
+| [references/payloads.md](references/payloads.md) | Dashboard read/write payloads and vocabulary, and the one-widget save |
+| [references/moving-and-library.md](references/moving-and-library.md) | Export and import between repositories, default and status, the Widgets Library |

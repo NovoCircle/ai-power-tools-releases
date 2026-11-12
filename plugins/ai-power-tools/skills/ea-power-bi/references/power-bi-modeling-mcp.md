@@ -15,28 +15,35 @@ Either route gives the same server (`powerbi-authoring-local`).
 
 - **The Power BI Authoring MCP extension for Visual Studio Code.** After the install, the server is
   `%USERPROFILE%\.vscode\extensions\analysis-services.powerbi-modeling-mcp-<version>-win32-x64\server\powerbi-modeling-mcp.exe`.
-- **The npm package `@microsoft/powerbi-modeling-mcp`,** run with `npx`. Node.js is required.
+- **The npm package `@microsoft/powerbi-modeling-mcp`,** run with `npx`. Node.js is required. The
+  commands below pin version 1.0.0, the version measured here. To move to a newer one, read its
+  release notes and license terms first, change the version in the command or the configuration
+  entry, register it again, and check a read-only call still works. Never register `@latest`: it
+  runs whatever Microsoft has published most recently, at every start, with no review.
 
 Microsoft's page: `https://github.com/microsoft/powerbi-modeling-mcp`.
 
 ## Accept the license agreement first
 
-The server blocks every other tool call until Microsoft's agreement is accepted. The customer reads
-it, then accepts it one of three ways:
+The server blocks every other tool call until Microsoft's agreement is accepted. The registration
+commands below do not accept it. The customer reads it, then accepts it one of three ways:
 
 - set the environment variable `PBI_MODELING_MCP_ACCEPT_EULA` to `true`
 - add `--accepteula` to the server's arguments (the executable also takes `--accept-eula`)
 - in an interactive session, authorize the assistant to call the server's `accept_eula` tool
 
-Never accept on the customer's behalf without their say-so.
+Never accept on the customer's behalf without their say-so: add the acceptance to the registration
+only after the customer has read the agreement and said yes. For Claude Code, add
+`--env PBI_MODELING_MCP_ACCEPT_EULA=true` before the server name; for Claude Desktop, add
+`"env": { "PBI_MODELING_MCP_ACCEPT_EULA": "true" }` to the entry.
 
 ## Register it with Claude Code
 
 ```
-claude mcp add --transport stdio --env PBI_MODELING_MCP_ACCEPT_EULA=true powerbi-authoring-local -- npx -y @microsoft/powerbi-modeling-mcp@latest --start --readonly
+claude mcp add --transport stdio powerbi-authoring-local -- npx -y @microsoft/powerbi-modeling-mcp@1.0.0 --start --readonly
 ```
 
-For the extension's file, replace `npx -y @microsoft/powerbi-modeling-mcp@latest` with the full path
+For the extension's file, replace `npx -y @microsoft/powerbi-modeling-mcp@1.0.0` with the full path
 to `powerbi-modeling-mcp.exe`. Add `--scope user` to make it available in every project.
 
 ## Register it with Claude Desktop
@@ -47,8 +54,7 @@ restart Claude Desktop:
 ```json
 "powerbi-authoring-local": {
   "command": "npx",
-  "args": ["-y", "@microsoft/powerbi-modeling-mcp@latest", "--start", "--readonly"],
-  "env": { "PBI_MODELING_MCP_ACCEPT_EULA": "true" }
+  "args": ["-y", "@microsoft/powerbi-modeling-mcp@1.0.0", "--start", "--readonly"]
 }
 ```
 
@@ -59,7 +65,7 @@ doubled in JSON) and drop `-y` and the package name from `args`.
 
 | Flag | Effect |
 |---|---|
-| `--start` | Starts the server. Required |
+| `--start` | Starts the server. The commands here keep it, as Microsoft's README shows. The executable's `--help` lists `--readonly` and `--readwrite` as starting it without `--start`; that was not run here, so do not rely on leaving it out |
 | `--readonly` | Blocks every write to the semantic model. **Recommend it for inspection** |
 | `--readwrite` | The default. Allows writes |
 | `--require-confirmation` | Asks for confirmation before each write. Microsoft's README and the executable's `--help` describe the default confirmation differently, so add this flag when the customer wants prompts |

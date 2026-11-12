@@ -1,0 +1,146 @@
+# SoaML 1.0.1 Conformance Ruleset
+# Language:     SoaML 1.0.1 (OMG formal/12-05-10), as modeled with Sparx's built-in `SoaML` technology
+# Enforced by:  AI Power Tools for Sparx EA - validate_model tool
+# Generated from the language skill's rules and relationships; do not edit by hand.
+#
+# STEREOTYPE NAMES ARE UNQUALIFIED, LOWER CAMEL CASE, AND THAT IS MEASURED.
+#
+# validate_model selects with `Stereotype IN (...)` on t_object and t_connector. For Sparx's SoaML technology that column holds
+# the bare name in lower camel case (`participant`, `servicePoint`, `serviceChannel`, `expose`, `milestone`); the qualified form
+# `SoaML::servicePoint` is only in the t_xref row named `Stereotypes`. Measured on EA 17.1 build 1716 by creating one element or
+# connector per stereotype in a test model and reading it back: 25 names bound, FQName `SoaML::<name>`. EA matches a name
+# without regard to case when it creates an object (`SoaML::Participant` stores `participant`), but a selector compares the
+# stored string exactly, so the selectors below use the stored lower camel case.
+#
+# THE STANDARD'S TWO PORT NAMES ARE FOUR STEREOTYPES. The standard's Service is stored as `service` or `servicePoint` and its
+# Request as `request` or `requestPoint` (EA offers both the profile's names and the metamodel's names). A rule about a Service
+# or a Request names both.
+#
+# WHAT THE VALIDATOR CAN SEE, AND WHAT IT CANNOT. A rule selects an element by its stereotype, by its EA type (so
+# `serviceInterface` on a Class and on an Interface can be told apart) and by its tags; selects a connector by its stereotype or its
+# EA connector type (a generalization, realization, usage or association has no stereotype); counts and pairs connectors; and checks
+# where an element sits (`contained_in`, for example the owner of a port). No rule in this file uses types or containers yet. A rule
+# cannot read what a port or a part is typed by, the flags that are not tagged values (a port's conjugation, a class's active flag,
+# direction), or operations and their parameters. Most of SoaML's rules are about those, so only three of the language skill's rules
+# are in this file; the others are review guidance.
+#
+# SoaML'S CATEGORIZATION AND BUSINESS MOTIVATION CONCEPTS HAVE NO STEREOTYPE in Sparx's technology (Catalog, Category, Category
+# Value, Categorization, Motivation Realization), so their rules cannot be written.
+#
+# Sources:
+#   [S1] OMG, Service oriented architecture Modeling Language (SoaML) Version 1.0.1, formal/12-05-10
+#        https://www.omg.org/spec/SoaML/1.0.1/
+#   [S2] Sparx Systems, the SoaML technology built into Enterprise Architect 17.1 (MDG technology id SoaML)
+
+meta:
+  version: "0.1"
+  language: soaml-1
+  organization: "(your organization)"
+  mdg_family: SoaML
+  description: >
+    Conformance rules for SoaML 1.0.1 models built with Sparx Enterprise Architect's SoaML technology: which ports a service
+    channel may join, which way an expose runs, and that a milestone carries a progress value. Each rule names the rules.md id it
+    implements.
+  severity_levels:
+    error: A requirement of the standard (rules.md strength must)
+    warning: Guidance of the standard (rules.md strength should)
+    info: Advisory note; not a conformance violation
+
+tables:
+  soaml-1-service-channel:
+    source: "OMG SoaML 1.0.1 (formal/12-05-10) 6.4.15 [1], p. 63, written in the stored stereotypes of Sparx's SoaML technology: a Request is request or requestPoint, a Service is service or servicePoint. The standard names one end a Request and the other a Service and does not order the ends, so both orders are listed"
+    connectors:
+      s: serviceChannel
+    cells:
+      request:
+        service: "s"
+        servicePoint: "s"
+      requestPoint:
+        service: "s"
+        servicePoint: "s"
+      service:
+        request: "s"
+        requestPoint: "s"
+      servicePoint:
+        request: "s"
+        requestPoint: "s"
+  soaml-1-expose:
+    source: "OMG SoaML 1.0.1 (formal/12-05-10) 6.4.7 (Description), p. 46, written in the stored stereotypes of Sparx's SoaML technology: the source of an expose is a service interface and its target the exposed capability"
+    connectors:
+      e: expose
+    cells:
+      serviceInterface:
+        capability: "e"
+
+rules:
+  - id: SOAML1-CHAN-001
+    name: A service channel joins a Request and a Service
+    implements: SOAML-CHAN-001
+    description: One end of a Service Channel is a Request and the other a Service. In Sparx's SoaML technology a Request
+      is a port stereotyped request or requestPoint and a Service is a port stereotyped service or servicePoint; the ends
+      are not ordered. A channel to a port with no stereotype, to the generic port stereotype, to a participant or to another
+      kind of element has no Request or Service end and is reported. [OMG SoaML 1.0.1 (formal/12-05-10) 6.4.15 [1], p. 63]
+    category: chan
+    severity: error
+    demo_trigger: false
+    coverage: partial
+    not_checked: '''In an architecture'' is not checked. The engine of 2026-10-21 can now read containment, but the ruleset
+      was generated before it and the rule is not written. Compatibility of the Request and Service (SOAML-CHAN-002 and 003)
+      is not checked either.'
+    selector:
+      type: connector
+      connector_stereotype: serviceChannel
+    condition:
+      type: relationship_table
+      table: soaml-1-service-channel
+      unknown_endpoint: error
+    remediation:
+      short: Join a request or requestPoint port to a service or servicePoint port.
+      auto_fixable: false
+
+  - id: SOAML1-CAPA-001
+    name: An expose runs from a service interface to a capability
+    implements: SOAML-CAPA-001
+    description: The source of an Expose is a Service Interface and its target is the exposed Capability. In Sparx's SoaML
+      technology the dependency is stereotyped expose, the source serviceInterface and the target capability. An expose that
+      starts or ends at any other kind of element, or that runs the wrong way, is reported. [OMG SoaML 1.0.1 (formal/12-05-10)
+      6.4.7 (Description), p. 46]
+    category: capa
+    severity: error
+    demo_trigger: false
+    coverage: full
+    selector:
+      type: connector
+      connector_stereotype: expose
+    condition:
+      type: relationship_table
+      table: soaml-1-expose
+      unknown_endpoint: error
+    remediation:
+      short: Draw the expose from the service interface to the capability.
+      auto_fixable: false
+
+  - id: SOAML1-BEHV-001
+    name: A milestone has a progress value
+    implements: SOAML-BEHV-001
+    description: A Milestone has an integer progress value. In Sparx's SoaML technology a milestone is a note stereotyped
+      milestone with the tagged value progress, stored empty until set. [OMG SoaML 1.0.1 (formal/12-05-10) 6.4.9 (Attributes),
+      p. 51]
+    category: behv
+    severity: error
+    demo_trigger: false
+    coverage: partial
+    not_checked: 'That the value is an integer: the tagged value is free text and the rule grammar has no numeric type check.'
+    selector:
+      type: element
+      stereotypes:
+        any_of:
+        - milestone
+    condition:
+      type: tagged_value_required
+      tags:
+      - name: progress
+        must_be_non_empty: true
+    remediation:
+      short: Set the tagged value progress to a whole number.
+      auto_fixable: false

@@ -90,9 +90,10 @@ UNDECIDED = "undecided"
 DECISIONS = (INCLUDE, EXCLUDE, UPDATE_MDG, UNDECIDED)
 
 #: Object types that are diagram furniture, not model content. Mirrors
-#: `reporting.definition.NOT_MODEL_CONTENT`: an unstereotyped element of one of
-#: these never gets a table, so offering it as a gap would be a question the
-#: build then ignores.
+#: `reporting.definition.NOT_MODEL_CONTENT` in the server: an unstereotyped
+#: element of one of these never gets a table, so offering it as a gap would be
+#: a question the build then ignores. `governance_gap` imports this one copy;
+#: `test_inclusion.py` checks it against the server's when that source is at hand.
 NOT_MODEL_CONTENT = frozenset({"Package", "Note", "Text", "Boundary"})
 
 MDG_STEREOTYPE_ADDED = "mdg_stereotype_added"
@@ -127,6 +128,9 @@ class Observed:
     declared: bool
     guids: frozenset
     example: str = ""
+    #: Element: every metaclass the key was seen on (a bound stereotype can sit
+    #: on several). Empty for a connector.
+    metaclasses: tuple = ()
 
     @property
     def id(self) -> str:
@@ -148,6 +152,8 @@ class Gap:
     bound: bool
     count: int
     example: str
+    #: Every metaclass an element gap was seen on; `metaclass` is the most common.
+    metaclasses: tuple = ()
 
     @property
     def id(self) -> str:
@@ -187,10 +193,15 @@ class Analysis:
     observed: list = field(default_factory=list)
     unbound_connectors: list = field(default_factory=list)
     multi_stereotyped: list = field(default_factory=list)
+    #: Elements and connectors that carry only EA's own internal stereotypes. The
+    #: census leaves them out of every count; the server's "everything" does not.
+    ea_internal_elements: int = 0
+    ea_internal_connectors: int = 0
 
     @property
     def gaps(self) -> list:
-        return [Gap(o.kind, o.key, o.stereotype, o.metaclass, o.bound, o.count, o.example)
+        return [Gap(o.kind, o.key, o.stereotype, o.metaclass, o.bound, o.count, o.example,
+                    o.metaclasses)
                 for o in self.observed if not o.declared]
 
     @property
@@ -270,7 +281,9 @@ class NewItem:
 def _element_selected(selection, o: Observed) -> bool:
     if selection == ALL:
         return True
-    return any(e.get("stereotype", "") == o.stereotype and e.get("metaclass", "") == o.metaclass
+    # A bound stereotype seen on several metaclasses is selected by an entry for any of them.
+    metaclasses = o.metaclasses or (o.metaclass,)
+    return any(e.get("stereotype", "") == o.stereotype and e.get("metaclass", "") in metaclasses
                for e in selection)
 
 
@@ -322,7 +335,8 @@ def analyze(element_census: ElementCensus, connector_census: ConnectorCensus, md
             kind=ELEMENT, key=ent.key,
             stereotype=ent.fqname if ent.is_profile_bound else ent.stereotype,
             metaclass=ent.primary_metaclass, bound=ent.is_profile_bound, declared=is_declared,
-            guids=frozenset(ent.guids), example=_example(ent.guids, el_names)))
+            guids=frozenset(ent.guids), example=_example(ent.guids, el_names),
+            metaclasses=tuple(sorted(ent.metaclasses))))
 
     untyped_el: dict[str, set] = defaultdict(set)
     for row in objects:
@@ -333,7 +347,7 @@ def analyze(element_census: ElementCensus, connector_census: ConnectorCensus, md
     for metaclass, guids in untyped_el.items():
         observed.append(Observed(kind=ELEMENT, key=f"|{metaclass}", stereotype="", metaclass=metaclass,
                                  bound=False, declared=False, guids=frozenset(guids),
-                                 example=_example(guids, el_names)))
+                                 example=_example(guids, el_names), metaclasses=(metaclass,)))
 
     unbound_names = set(connector_census.unbound_qualified)
     grouped: dict[str, dict] = {}
@@ -387,7 +401,9 @@ def analyze(element_census: ElementCensus, connector_census: ConnectorCensus, md
     return Analysis(namespace=namespace, declared_elements=tuple(sorted(declared_el)),
                     declared_connectors=tuple(sorted(declared_cn)),
                     mdg_version=str(mdg.get("version") or ""),
-                    observed=observed, unbound_connectors=unbound, multi_stereotyped=multi)
+                    observed=observed, unbound_connectors=unbound, multi_stereotyped=multi,
+                    ea_internal_elements=len(element_census.excluded_guids),
+                    ea_internal_connectors=len(connector_census.excluded_guids))
 
 
 # --------------------------------------------------------------------------
@@ -441,7 +457,10 @@ def resolve_answer(analysis: Analysis, option: int, decisions: dict | None = Non
             if decisions[gid] == EXCLUDE:
                 excluded.append(gid)
             elif gap.kind == ELEMENT:
-                elements.append({"stereotype": gap.stereotype, "metaclass": gap.metaclass})
+                # The server keys a bound stereotype by its most common metaclass and, on a
+                # tie, by whichever it saw first. One entry per metaclass matches either way.
+                for metaclass in (gap.metaclasses or (gap.metaclass,)):
+                    elements.append({"stereotype": gap.stereotype, "metaclass": metaclass})
             else:
                 conns.append(gap.key)
         elements.sort(key=lambda e: (e["stereotype"], e["metaclass"]))

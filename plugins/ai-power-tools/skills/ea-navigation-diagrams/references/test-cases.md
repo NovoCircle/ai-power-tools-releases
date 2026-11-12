@@ -8,11 +8,11 @@ This skill promises to turn a hierarchy that already exists in an EA repository 
 
 **Shared setups.** The runner builds these on the copy before the agent starts; the agent never builds its own. A case names the one it needs.
 
-- **A. Half-built set.** In the Instances on AWS package, seven elements have children: AWS Cloud (34228), VPC (34233), Auto Scaling group (34221), Auto Scaling group (34225), Availability zone (34231), Availability zone (34222) and Availability zone (34236). AWS Cloud, VPC and Auto Scaling group 34221 are fully navigable: a child diagram named after the element, owned by it, holding it as a container with its children, and the element flagged composite. Availability zones 34231 and 34222 have such a diagram but are not flagged. Auto Scaling group 34225 is flagged but has no diagram. Availability zone 34236 has neither. The existing diagrams carry the style of the Westbrook Application Landscape diagram.
+- **A. Half-built set.** In the Instances on AWS package, seven elements have children: AWS Cloud (34228), VPC (34233), Auto Scaling group (34221), Auto Scaling group (34225), Availability zone (34231), Availability zone (34222) and Availability zone (34236). AWS Cloud, VPC and Auto Scaling group 34221 are fully navigable: a child diagram named after the element, owned by it, holding it as a container with its children, the element flagged composite, and EA's `DefaultDiagram` row in `t_xref` for the pair. Availability zones 34231 and 34222 have such a diagram but are not flagged and have no such row. Auto Scaling group 34225 is flagged but has no diagram. Availability zone 34236 has neither. The existing diagrams carry the style of the Westbrook Application Landscape diagram.
 - **B. Full set.** Every one of those seven elements has a child diagram and the composite flag, and the package has one landing diagram holding the root.
 - **C. Requirement parentage.** In the 02 Traceability package, the sub-requirements become children of the four top requirements, mirroring the aggregation connectors (REQ-011 and REQ-012 under REQ-001, REQ-021 and REQ-022 under REQ-002, REQ-031 under REQ-003, REQ-041 under REQ-004). Ten elements, two levels, four parents.
 - **D. Product Families.** A new package of two families (Deposit Products, Lending Products) with seven products each as children: 16 elements, two parents.
-- **E. Unflagged diagram.** The VPC owns a child diagram holding it and its eight children, and `NType` is still 0.
+- **E. Unflagged diagram.** The VPC owns a child diagram holding it and its eight children, `NType` is still 0 and there is no `DefaultDiagram` row.
 - **F. Hand-built diagram.** The VPC owns a child diagram named VPC, author Westbrook Architecture Team, flagged composite, arranged by hand, with a note saying so.
 
 ## Cases
@@ -41,6 +41,12 @@ expect: rows: [[8]]
 ```
 
 ```check
+# the third part: EA's DefaultDiagram row, which is what makes double-click open the diagram
+sql: SELECT COUNT(*) FROM t_xref x JOIN t_object o ON x.Client = o.ea_guid JOIN t_diagram d ON d.ea_guid = x.Supplier AND d.ParentID = o.Object_ID WHERE x.Name = 'DefaultDiagram' AND x.[Type] = 'element property' AND o.Object_ID = 34233
+expect: = 1
+```
+
+```check
 # the VPC and its eight direct children
 sql: SELECT COUNT(*) FROM t_diagramobjects x JOIN t_diagram d ON x.Diagram_ID = d.Diagram_ID JOIN t_object o ON d.ParentID = o.Object_ID JOIN t_package p ON o.Package_ID = p.Package_ID WHERE p.Name = 'Instances on AWS' AND o.Name = 'VPC'
 expect: = 9
@@ -62,7 +68,7 @@ expect: unchanged
 
 ### TC-02: A diagram under the element that does not navigate
 
-Covers: The mechanism — two parts, both required
+Covers: The mechanism: three parts, all required
 
 **Marks:** WRITE
 
@@ -70,7 +76,7 @@ Covers: The mechanism — two parts, both required
 
 **Setup:** E. The VPC already owns a child diagram (`t_diagram.ParentID` is the VPC) holding the VPC and its children, and the VPC is not flagged (`NType = 0`).
 
-**Passes when:** The run recognizes that a diagram owned by the element is only half the mechanism, sets the element's composite flag, and leaves the existing diagram alone. No second diagram is created for the VPC.
+**Passes when:** The run recognizes that a diagram owned by the element is only part of the mechanism, sets the composite flag and EA's link row (through the composite operation), and leaves the existing diagram alone. No second diagram is created for the VPC.
 
 **Check:**
 
@@ -83,6 +89,12 @@ expect: rows: [[8]]
 ```check
 # the existing diagram was reused, not duplicated
 sql: SELECT COUNT(*) FROM t_diagram WHERE ParentID = 34233
+expect: = 1
+```
+
+```check
+# the DefaultDiagram row now links the VPC to that diagram
+sql: SELECT COUNT(*) FROM t_xref x JOIN t_object o ON x.Client = o.ea_guid JOIN t_diagram d ON d.ea_guid = x.Supplier AND d.ParentID = o.Object_ID WHERE x.Name = 'DefaultDiagram' AND x.[Type] = 'element property' AND o.Object_ID = 34233
 expect: = 1
 ```
 
@@ -104,7 +116,7 @@ tools: called: ea_model.set_composite_diagram
 
 ### TC-03: Audit finds both ways a set can be broken
 
-Covers: The mechanism — two parts, both required
+Covers: The mechanism: three parts, all required
 
 **Marks:** INVARIANT
 
@@ -136,11 +148,11 @@ reply: says: it changed nothing
 
 ### TC-04: What EA stores for a drill-down
 
-Covers: The mechanism — two parts, both required
+Covers: The mechanism: three parts, all required
 
 **Ask:** "Our schema notes say a diagram's ParentID points at its parent diagram. If I want a double-click on an element to open a diagram, what does EA actually store, and what has to be set?"
 
-**Passes when:** The run answers from the skill, not from the schema note: the diagram's ParentID holds the owning element's Object_ID (not a parent diagram and not a package), and the element's composite flag must also be set, because either half alone does not navigate. It adds that an element-owned diagram appears under the element in the Browser rather than in the package's diagram list.
+**Passes when:** The run answers from the skill, not from the schema note: the diagram's ParentID holds the owning element's Object_ID (not a parent diagram and not a package), and the element's composite flag and EA's `DefaultDiagram` row in `t_xref` must also be set, because no one part alone navigates. It adds that an element-owned diagram appears under the element in the Browser rather than in the package's diagram list.
 
 **Check:**
 
@@ -154,7 +166,8 @@ expect: unchanged
 reply: says: t_diagram.ParentID holds the Object_ID of the owning element
 reply: not: says ParentID holds a parent diagram or a package
 reply: says: the element's NType must also be 8
-reply: says: that either half alone does not navigate
+reply: says: a t_xref row named DefaultDiagram must also exist
+reply: says: that no one part alone navigates
 ```
 
 **Fails when:** The run repeats the schema note and says ParentID is the parent diagram, or says setting ParentID is enough. Both read as confident answers and neither produces an error, so the person builds the half that does not work.
@@ -293,7 +306,7 @@ reply: says: makes one offer per package, two in all
 reply: not: makes an offer after each batch or each element of the load
 ```
 
-**Fails when:** The run offers after the first package while the second is still loading, or repeats the offer once per batch of elements, or makes one combined offer that gives neither package its own counts and target.
+**Fails when:** The run offers after the first package while the second is still loading, or repeats the offer once per batch of elements, or makes one combined offer that gives neither package its own counts and target, so the person cannot accept one map and decline the other.
 
 ### TC-09: An unrelated edit gets no sales pitch
 
@@ -512,6 +525,12 @@ expect: = 2
 ```
 
 ```check
+# each of the two now has EA's DefaultDiagram row as well
+sql: SELECT COUNT(*) FROM t_xref x JOIN t_object o ON x.Client = o.ea_guid JOIN t_diagram d ON d.ea_guid = x.Supplier AND d.ParentID = o.Object_ID WHERE x.Name = 'DefaultDiagram' AND x.[Type] = 'element property' AND o.Object_ID IN (34231, 34222)
+expect: = 2
+```
+
+```check
 # the element with neither stays as it was
 sql: SELECT NType FROM t_object WHERE Object_ID = 34236
 expect: rows: [[0]]
@@ -596,7 +615,7 @@ Covers: Build procedure; Phase 0 — read the hierarchy; Phase 1 — pick or cop
 
 **Ask:** "I want people who do not know modeling to explore the Instances on AWS package by clicking down from the top. Set that up."
 
-**Passes when:** The run reads the hierarchy, finds one root and seven parents, and creates one diagram per parent plus one landing diagram: eight diagrams, each parent diagram named after its element and owned by it, each parent flagged composite, the thirteen leaves left unflagged. The diagrams use the default style because the model has no navigation diagram to copy. The reply reports the diagrams and where they are, the elements that are now navigable, the leaves, the entry-point diagram, the Browser reload, and that several diagram names repeat.
+**Passes when:** The run reads the hierarchy, finds one root and seven parents, and creates one diagram per parent plus one landing diagram: eight diagrams, each parent diagram named after its element and owned by it, each parent flagged composite, the thirteen leaves left unflagged. The diagrams use the default style because the model has no navigation diagram to copy. The reply reports the diagrams and where they are, that 7 elements are now navigable and 13 are leaves (the counts are stated, not only "the leaves"), the entry-point diagram, the Browser reload, and that several diagram names repeat.
 
 **Check:**
 
@@ -614,6 +633,12 @@ expect: = 2
 
 ```check
 sql: SELECT COUNT(*) FROM t_object o JOIN t_package p ON o.Package_ID = p.Package_ID WHERE p.Name = 'Instances on AWS' AND o.NType = 8
+expect: = 7
+```
+
+```check
+# every parent also has EA's DefaultDiagram row
+sql: SELECT COUNT(*) FROM t_xref x JOIN t_object o ON x.Client = o.ea_guid JOIN t_package p ON o.Package_ID = p.Package_ID JOIN t_diagram d ON d.ea_guid = x.Supplier AND d.ParentID = o.Object_ID WHERE x.Name = 'DefaultDiagram' AND x.[Type] = 'element property' AND p.Name = 'Instances on AWS'
 expect: = 7
 ```
 
@@ -865,9 +890,9 @@ Covers: Phase 3 — place the objects; Known traps
 
 **Marks:** WRITE
 
-**Ask:** "Build drill-down diagrams for Instances on AWS. Show the boxes you can drill into next in pale turquoise: red 175, green 238, blue 238."
+**Ask:** "Build drill-down diagrams for Instances on AWS. Show every child box, the boxes inside each parent, in pale turquoise: red 175, green 238, blue 238."
 
-**Passes when:** The children are filled with the integer 15658671 (the bytes reversed, blue-green-red) and the container keeps the stereotype default (-1), so the picture separates the thing you drilled into from the things you can drill into next.
+**Passes when:** Every child box, all 19 of them across the seven diagrams whether or not it drills down further, is filled with the integer 15658671 (the bytes reversed, blue-green-red), and the container keeps the stereotype default (-1), so the picture separates the thing you drilled into from the things inside it.
 
 **Check:**
 
@@ -907,7 +932,7 @@ Covers: Phase 4 — flag the parents composite
 
 **Setup:** E. The VPC owns a child diagram and is not flagged.
 
-**Passes when:** The run sets the flag with the dedicated composite operation instead of the UPDATE the person offered, because that operation writes both halves together and reports whether they landed consistent. It reads the consistent field and tells the person the result.
+**Passes when:** The run sets the flag with the dedicated composite operation instead of the UPDATE the person offered, because that operation writes all three parts together and reports whether they landed consistent. It reads the consistent and default_diagram_xref fields and tells the person the result.
 
 **Check:**
 
@@ -922,15 +947,21 @@ expect: = 1
 ```
 
 ```check
+# the SQL update the person offered sets the flag only; the operation also writes the DefaultDiagram row
+sql: SELECT COUNT(*) FROM t_xref x JOIN t_object o ON x.Client = o.ea_guid JOIN t_diagram d ON d.ea_guid = x.Supplier AND d.ParentID = o.Object_ID WHERE x.Name = 'DefaultDiagram' AND x.[Type] = 'element property' AND o.Object_ID = 34233
+expect: = 1
+```
+
+```check
 tools: called: ea_model.set_composite_diagram
 ```
 
 ```check
 reply: says: the composite operation reported the link as consistent
-reply: says: it used that operation rather than a SQL update because it writes both halves together
+reply: says: it used that operation rather than a SQL update because it writes all three parts together
 ```
 
-**Fails when:** The run does the one-line UPDATE the person suggested. The final state is the same and nothing checks that the diagram half and the flag half agree, which is the check the operation exists to make.
+**Fails when:** The run does the one-line UPDATE the person suggested. The final state is the same and it leaves the DefaultDiagram row unwritten, so the VPC still does not open on double-click, and nothing checks that the parts agree, which is the check the operation exists to make.
 
 ### TC-24: Looks at the pictures before saying done
 
@@ -1071,6 +1102,12 @@ expect: rows: [[0]]
 ```
 
 ```check
+# clearing the link also removes EA's DefaultDiagram row
+sql: SELECT COUNT(*) FROM t_xref x JOIN t_object o ON x.Client = o.ea_guid WHERE x.Name = 'DefaultDiagram' AND x.[Type] = 'element property' AND o.Object_ID = 34225
+expect: = 0
+```
+
+```check
 # no leaf keeps a flag or an owned diagram
 sql: SELECT COUNT(*) FROM t_object o JOIN t_package p ON o.Package_ID = p.Package_ID WHERE p.Name = 'Instances on AWS' AND ((o.NType = 8) <> EXISTS (SELECT 1 FROM t_diagram d WHERE d.ParentID = o.Object_ID AND d.Package_ID NOT IN (SELECT Package_ID FROM t_package WHERE Name = '_to-delete (superseded diagrams)')))
 expect: = 0
@@ -1187,7 +1224,7 @@ reply: not: says EA hung or crashed without having looked at its window
 
 Where the output can look right and be wrong, these four properties can be checked without a known-good answer. They hold for any hierarchy, so a customer's runner applies them to the package it uses.
 
-1. **Both halves agree.** For every element in scope, it owns a child diagram if and only if it is flagged composite (`NType = 8`). A diagram without the flag is a box that looks navigable and is not; a flag without a diagram is a marker that opens nothing. Leaves are therefore unflagged and parents are flagged. The audit operation reports the same defect, and the SQL form needs no EA call. Carried by TC-18, and re-asserted wherever a case writes.
+1. **The parts agree.** For every element in scope, it owns a child diagram if and only if it is flagged composite (`NType = 8`) and has EA's `DefaultDiagram` row in `t_xref` for that diagram (the SQL form of this property cannot see the row; the cases that write add their own check for it). A diagram without the flag is a box that looks navigable and is not; a flag without a diagram is a marker that opens nothing. Leaves are therefore unflagged and parents are flagged. The audit operation reports the same defect, and the SQL form needs no EA call. Carried by TC-18, and re-asserted wherever a case writes.
 2. **Contents.** Each parent diagram holds exactly its parent and the parent's direct children, with the parent as the container. The expected object total is derived, not remembered: roots on the landing diagram plus, for every parent, one plus its child count. Carried by TC-18 and TC-19.
 3. **Geometry.** Every child box lies inside its container; the container's sequence number is the highest on its diagram, or it paints over its children; the container sits at the stated origin, which proves no layout pass ran after placement; no two siblings overlap. EA's Y axis is negative downward, so a box's top is the larger number. Carried by TC-19.
 4. **No connectors, every object styled.** No connector is drawn on any navigation diagram, and every object carries a style string. Carried by TC-19.
@@ -1200,12 +1237,13 @@ Where the output can look right and be wrong, these four properties can be check
 
 ## Findings
 
-- Phase 5's verification query counts rows with `Diagram_ID BETWEEN <lo> AND <hi>`, which assumes the new diagram IDs are contiguous, while Phase 2 says never to assume that. Another writer, or an interleaved create, makes the range wrong. The cases select the set by owner and package instead.
-- Dangling references: the skill points at "the 6-of-21 defect described below" and "see the 6-of-21 defect above", and at "the source report's own audit language", but nothing describes the defect or names the report. The offer examples carry specific counts of unknown origin; a maintainer should confirm they are not a real customer's figures. These cases use Westbrook counts instead.
-- "Existing diagrams are never deleted or overwritten" conflicts with "an element that lost all its children should have its diagram removed" and with "regenerate the whole set ... replace exactly its own output". The skill does not say how to tell a generated diagram from a hand-built one (the batch marker is a temporary Version value), or whether the diagram of an emptied parent is deleted or moved to the holding package. TC-27 asserts only the end state and that the reply says what happened; TC-28 asserts the hand-built case.
-- Option 3, "Fix only the flags", handles only `diagram_without_flag`. The skill gives no remedy for `flag_without_diagram`, and does not say whether passing a null diagram to the composite operation also resets `NType`. TC-16 asserts the stray flag is left alone and reported.
-- A hierarchy carried only by connectors or a level tag qualifies under "When to offer this", but the threshold table, Phase 0 and Phase 3 all read `t_object.ParentID`. The skill does not say what to build when parentage is flat. TC-05 asserts only that the disagreement is reported and the source named.
-- Phase 2 prescribes raw `INSERT` rows, GUID expressions and a tagged bulk `UPDATE`, while the Known traps table, Phase 4 and the closing paragraph of the bulk-call section steer toward `create_diagram` and "where the API does work, use it". Which is the default is unclear, and Phase 4's reasoning against hand-written writes applies equally to Phase 2.
-- "Verify in EA's UI" requires a screenshot of EA; Phase 5 requires rendering a PNG through the API. The skill does not say whether the exported PNG satisfies the first when computer use is unavailable. TC-29 passes either way, provided the reply states what was and was not looked at.
-- Not checkable from the final state or the transcript: the `t_diagramlinks` column name and the `describe_table` argument name (method errors that leave no trace); the "filtering on a column you are also setting" pitfall; and the `consistent: false` branch of the composite operation, which cannot be provoked on demand. The raw-SQL prohibition in Phase 4 also leaves the same final state, and `execute_sql` is used for reads, so a `not-called` check on it would be wrong; TC-23 relies on the reply.
-- The skill names each child diagram after its element but does not say what to do with an element whose name is blank or contains a quote. The cloud sample packages in the fixture hold 24 unnamed elements and a name with quote marks; the cases avoid those packages.
+- Phase 5's verification query counts rows with `Diagram_ID BETWEEN <lo> AND <hi>`, which assumes the new diagram IDs are contiguous, while Phase 2 says never to assume that. Another writer, or an interleaved create, makes the range wrong. The cases select the set by owner and package instead. **Triaged 11 Nov: fixed.** Phase 5 now selects the set with `IN (<ids from Phase 2>)`, and Phase 2 says to keep that list.
+- Dangling references: the skill points at "the 6-of-21 defect described below" and "see the 6-of-21 defect above", and at "the source report's own audit language", but nothing describes the defect or names the report. The offer examples carry specific counts of unknown origin; a maintainer should confirm they are not a real customer's figures. These cases use Westbrook counts instead. **Triaged 11 Nov: fixed.** The two "6-of-21" references are replaced by a plain description of the defect, "the source report" wording is gone, and the offer examples use `<...>` slots instead of counts. Whether the old figures were a real customer's is not known; they no longer ship.
+- "Existing diagrams are never deleted or overwritten" conflicts with "an element that lost all its children should have its diagram removed" and with "regenerate the whole set ... replace exactly its own output". The skill does not say how to tell a generated diagram from a hand-built one (the batch marker is a temporary Version value), or whether the diagram of an emptied parent is deleted or moved to the holding package. TC-27 asserts only the end state and that the reply says what happened; TC-28 asserts the hand-built case. **Triaged 11 Nov: fixed.** "Rebuilding" now says only diagrams the task created (ids kept from Phase 2) are generated, a diagram you cannot show you created is the person's, and an emptied parent is unlinked with `set_composite_diagram` and `diagram_id: null` (which resets both halves; confirmed in the server code) and its diagram goes to the holding package. TC-27 and TC-28 already match.
+- Option 3, "Fix only the flags", handles only `diagram_without_flag`. The skill gives no remedy for `flag_without_diagram`, and does not say whether passing a null diagram to the composite operation also resets `NType`. TC-16 asserts the stray flag is left alone and reported. **Triaged 11 Nov: fixed.** Option 3 now says a `flag_without_diagram` mismatch is reported, with the two ways out (build the diagram, or clear the flag with `diagram_id: null`, which also resets `NType` on server main), and is not cleared unasked. TC-16 already asserts the stray flag is left alone and reported.
+- A hierarchy carried only by connectors or a level tag qualifies under "When to offer this", but the threshold table, Phase 0 and Phase 3 all read `t_object.ParentID`. The skill does not say what to build when parentage is flat. TC-05 asserts only that the disagreement is reported and the source named. **Triaged 11 Nov: fixed.** Phase 0 now reads parent and child pairs from containment connectors when `ParentID` is flat (checking the direction of one pair), and says a level tag alone cannot be built from. Not run live. TC-05 still asserts the disagreement is reported.
+- Phase 2 prescribes raw `INSERT` rows, GUID expressions and a tagged bulk `UPDATE`, while the Known traps table, Phase 4 and the closing paragraph of the bulk-call section steer toward `create_diagram` and "where the API does work, use it". Which is the default is unclear, and Phase 4's reasoning against hand-written writes applies equally to Phase 2. **Triaged 11 Nov: partly fixed.** Phase 2 now names `create_diagram` (with `StyleEx`, `ParentID` and the marker) as the default and the raw `INSERT` as the fallback, and marks as not yet verified that the two routes end in the same state. `create_diagram` does not accept `PDATA`, `Swimlanes` or the show/hide flags, so the follow-up `UPDATE` stays. Waits on the live check in the report.
+- "Verify in EA's UI" requires a screenshot of EA; Phase 5 requires rendering a PNG through the API. The skill does not say whether the exported PNG satisfies the first when computer use is unavailable. TC-29 passes either way, provided the reply states what was and was not looked at. **Triaged 11 Nov: fixed.** The no-computer-use bullet now says the API's PNG counts as looking at the diagram but shows no dialog or Browser, that the marker's visibility in it is unconfirmed, and to say which was looked at. TC-29 is unchanged.
+- Not checkable from the final state or the transcript: the `t_diagramlinks` column name and the `describe_table` argument name (method errors that leave no trace); the "filtering on a column you are also setting" pitfall; and the `consistent: false` branch of the composite operation, which cannot be provoked on demand. The raw-SQL prohibition in Phase 4 also leaves the same final state, and `execute_sql` is used for reads, so a `not-called` check on it would be wrong; TC-23 relies on the reply. **Triaged 11 Nov: no change, not a defect.** The column and argument names were checked against the code (`DiagramID` on `t_diagramlinks`, `table` on `describe_table`) and are right; the `consistent: false` branch cannot be provoked on demand.
+- The skill names each child diagram after its element but does not say what to do with an element whose name is blank or contains a quote. The cloud sample packages in the fixture hold 24 unnamed elements and a name with quote marks; the cases avoid those packages. **Triaged 11 Nov: fixed.** Known traps now has a row: a blank name becomes `(unnamed <Object_ID>)` and is mentioned; a single quote is doubled in raw SQL. The cases still avoid those packages.
+- **The third part of the mechanism.** From server 3.6.5 a link is three parts: `ParentID`, `NType = 8` and EA's `DefaultDiagram` row. **Fixed in the cases:** TC-01, TC-02, TC-05, TC-18, TC-23 and TC-27 check the `t_xref` row, and the shared setups say whether it is present. TC-03 still has no element with both halves present and the row missing (`missing_default_diagram_xref`), so the audit's new problem value is not exercised: a case gap that needs a setup that writes the two parts without the row. A copied package keeping its links (`duplicate_package`, `composite_owner_not_copied`) has no case either.

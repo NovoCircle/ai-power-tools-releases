@@ -7,12 +7,10 @@ description: Turn a Sparx EA model into an answer a non-modeler can act on -- po
 
 *Tools: `ea_analyze(operation="get_element_business_view"|"summarize_tagged_value_usage"|"summarize_stereotype_usage", params={...})`,
 `ea_repository(operation="aggregate_portfolio", params={...})`,
-`ea_mdg(operation="resolve_display_term", params={...})` (AI Power Tools for EA, v3.6.4+)*
+`ea_mdg(operation="resolve_display_term", params={...})` (AI Power Tools for EA, v3.6.4+; `resolve_display_term` reading the technology EA has loaded needs 3.6.5)*
 
 This skill is read-only. None of the calls below create, update, or delete anything, and
-none require a write confirmation. If a task built on this skill ever needs a scratch
-element to demonstrate something, use a package named exactly `_sl44_scratch` and delete
-it when done -- but the workflows here don't need one.
+none require a write confirmation.
 
 Run the `ea-start-here` preflight first if you haven't already this session (is the server
 alive, which model is open, which technologies are active). This skill assumes that part
@@ -50,8 +48,8 @@ This is the most valuable habit in this skill. A roll-up over a tag that is only
 some elements of a type produces a confident, wrong number -- it doesn't fail, it doesn't
 warn, it just answers with whatever fraction of the data happens to be populated.
 
-Verified against the live Westbrook Bank model (all counts below are real, not
-illustrative):
+Measured on a 2026-09-23 snapshot of the Westbrook Bank example. The example has changed
+since, so read the counts as the shape of an answer and run Step 0 on your own model:
 
 | Stereotype | Total elements | `criticality` | `lifecycle` | `businessOwner` | `technicalOwner` | `dataClassification` |
 |---|---|---|---|---|---|---|
@@ -71,7 +69,7 @@ if you don't check:
    which reads exactly like "no data assets exist" instead of "this type doesn't track
    criticality." See `references/coverage-data.md` for the full transcript.
 2. **`WBABusinessService` and everything except `lifecycle`.** The tag *is* set on all 8
-   elements -- but the value is an empty string on every one of them. A check that only
+   elements -- but the value is blank (an empty string, or no value) on every one of them. A check that only
    asks "is the tag present" reports 100% coverage. The real, usable coverage is 0%, and
    `populated_count` is the figure that shows it.
 3. **`WBABusinessApplication` and the ownership/classification tags.** Real elements, real
@@ -100,13 +98,24 @@ have a non-blank value, and that is the coverage figure. Read it as: does `popul
 equal the denominator? If not, don't present the roll-up as complete -- say what fraction it
 covers.
 
-The `technicalOwner` note for `WBAVendorSystem`: coverage is structurally 35/35, but 8
-real assignments to one team are split across two spellings --
-`Infrastructure & Cloud Team` (6) and `Infrastructure &amp; Cloud Team` (2), an
-HTML-entity-encoded ampersand that never got cleaned up on import. A `technicalOwner`
-roll-up here reports two teams with 6 and 2 systems each, when the true answer is one team
-with 8. Coverage counting misses this entirely -- it's a distinct-value problem, not a
-blank-value problem. Full detail in `references/coverage-data.md`.
+The `technicalOwner` note for `WBAVendorSystem`: coverage is structurally 35/35, but 8 real
+assignments to one team are split across two spellings (`Infrastructure & Cloud Team` 6,
+`Infrastructure &amp; Cloud Team` 2). Coverage counting misses it: this is a distinct-value
+problem, not a blank-value one. Detail in `references/coverage-data.md`.
+
+---
+
+## Say only what you checked
+
+State a count, or "none", only after the query that shows it; otherwise say it was not checked.
+"Customer Master Data has no connections" needs a `get_element_business_view` call behind it, and
+"11 applications are under both GLBA and FFIEC" needs a count of the elements in both.
+
+**An element with two stereotypes** belongs to both populations, and two counts can treat it
+differently: a count on the primary stereotype leaves it out of the second type, a roll-up over
+every element bound to that stereotype includes it (Westbrook's Core Deposit System of Record is
+a System of Record and a Business Application, so one count includes it and the other does not). Pick the basis the person
+asked about, name the element, and say which count you gave.
 
 ---
 
@@ -119,7 +128,7 @@ ea_repository(operation="aggregate_portfolio", params={
 })
 ```
 
-Real result against the live model, 52 elements:
+From the same snapshot, 52 elements:
 
 | Criticality | Count |
 |---|---|
@@ -130,25 +139,30 @@ Real result against the live model, 52 elements:
 
 That's a complete answer here because `criticality` has no coverage gap on this
 stereotype (Step 0 confirmed it) -- say so, e.g. "22 of 52 business applications are
-Business-Critical" rather than manufacturing false precision if a gap existed.
+Business-Critical" (the snapshot in `references/coverage-data.md`) rather than manufacturing false precision if a gap existed.
 
 Useful, verified behavior of this operation:
 
 - **`count_only: true`** drops the per-element `elements` list and returns just the
   group counts -- use it once you've confirmed the elements aren't needed, to keep the
   response small.
-- **`package_id`** scopes the roll-up to one package's subtree. Against the Westbrook
-  demo, the whole-repository count for `WBABusinessApplication` x `criticality` is 52;
-  scoped to the "Westbrook Bank" root package it drops to 45 -- the other 7 live
-  elsewhere in the repository (a scratch/test area, in this case). Scope explicitly
-  when a stakeholder asked about one line of business, not the whole repository.
+- **`package_id`** scopes the roll-up to one package's subtree, so the count is lower than the
+  whole-repository count whenever some elements of the type sit outside that package. Scope
+  explicitly when a stakeholder asked about one line of business, and say which scope you used.
 - **`group_by_tag` is case-insensitive** (`"Criticality"` and `"criticality"` return
   identical results) -- don't spend time getting the case exactly right.
 - **A misspelled or non-existent `stereotype` returns the same shape as a real
   stereotype with zero coverage on that tag**: `{"total_elements": 0, "groups": []}`.
   There is no separate "stereotype not found" error. If a roll-up comes back empty,
   confirm the stereotype name against `summarize_stereotype_usage` before concluding
-  anything about the data.
+  anything about the data. The exception is a qualified `stereotype` (`WBA::WBABusinessApplication`
+  or the profile name) that matches nothing: `stereotype_resolution.qualifier_unmatched` is true
+  and `fqnames` shows what the bare name does carry (server 3.6.5 or later). A bare name that
+  matches nothing still returns zero, so confirm names against `summarize_stereotype_usage` first.
+- **Each element is counted once**, even when it carries two stereotypes, so the groups add up to
+  `total_elements`. When that happens the result lists the elements in
+  `multi_stereotype_elements` and says so in `note`; mention it to the reader instead of
+  presenting the roll-up as clean.
 - A tag that holds **several values in one string** (Westbrook's `regulatoryScope`:
   `"GLBA, FFIEC"`) is grouped whole by default, so `"GLBA"` and `"GLBA, FFIEC"` are separate
   groups and the `"GLBA"` group alone undercounts. The response's `multi_valued_count` says
@@ -160,6 +174,15 @@ Useful, verified behavior of this operation:
 
 ---
 
+## The standard report format
+
+When the person asks for "the standard stakeholder report format", or for an answer that must
+compare with next month's, use [`references/standard-report-format.md`](references/standard-report-format.md):
+question, scope, figure, completeness of each property behind it (filled over total, from Step 0),
+elements counted, run date and technology version, and the same answer as a table a dashboard reads.
+
+---
+
 ## Business view: `get_element_business_view`
 
 ```
@@ -167,10 +190,17 @@ ea_analyze(operation="get_element_business_view", params={"element_id": 91})
 ```
 
 This is the per-element view: every tag with its value, and the element's connections.
-For a technology your organization built, each `label` is the tag's technical name, and
-`type` and `target_type` are the stereotype's technical name unless the technology's XML
-was parsed this session (see Display terms below). Translate them before handing the result
-to a stakeholder.
+Each `label`, `type` and `target_type` comes from the display-term lookup (see Display terms
+below). On server 3.6.5 or later, with your technology loaded in EA, it is the alias or
+description the technology declares; a term the technology does not declare stays a technical
+name, so check the labels before handing the result to a stakeholder. The samples below were
+captured on an earlier server, where a technology's tags came back as technical names.
+
+The samples below show the four keys a reply is built from. The operation also returns
+`element_id`, `type_description` (an empty string today), `raw_stereotype` (the stereotype as
+EA stores it: the technical name to quote when `type` has been replaced by an alias) and
+`raw_object_type` (the element's EA type, such as `Component`).
+
 Result for a well-populated `WBABusinessApplication`:
 
 ```json
@@ -191,9 +221,12 @@ Result for a well-populated `WBABusinessApplication`:
 }
 ```
 
-One call gives everything a stakeholder summary needs. The label `Uses` is a connector
+One call gives everything a stakeholder summary needs. `connections` lists every connector the
+element has, one entry each, in both directions (`uses` when it starts at the element, `used_by`
+when it ends there); the sample is trimmed to one. The label `Uses` is a connector
 stereotype the WBA technology declares (the model stores it bare; see the canon reference,
-section 6 -- do not prefix it `WBA::`).
+section 6 -- do not prefix it `WBA::`). The business view shows the label without the profile
+qualifier, and uses the connector stereotype's alias when it has one.
 
 **What happens when a tag isn't set:** the property is left out of the list entirely,
 not shown with an empty value. A `WBADataAsset` element (which, per Step 0, never carries
@@ -226,39 +259,23 @@ ea_mdg(operation="resolve_display_term", params={"kind": "stereotype", "technica
 -> {"alias": "Application", "mdg_id": "ArchiMate3", "found": true}
 ```
 
-`kind` is one of `stereotype`, `tagged_value`, `connector_stereotype` and `diagram_type`. A
-tag is `tagged_value`; there is no `tag`. A kind the server does not recognize is not
-rejected: it comes back `found: false`, exactly like a genuine miss, so check the spelling
-before concluding a term has no business name.
+`resolve_display_term` reads the technology EA has loaded, so a stereotype, a tag description or
+a diagram type of your own technology resolves to the alias or description the technology
+declares (server 3.6.5 or later). A term the technology does not declare falls back to the
+built-in tables, and then to the technical name with `found: false`. The result has
+`technical_name`, `alias`, `description`, `mdg_id`, `kind` and `found`.
 
-**It resolves terms from the server's own tables, not from the technology EA has loaded.**
-Those tables cover languages that ship with EA, such as ArchiMate, plus the stereotypes of
-any technology parsed with `ea_mdg(operation="parse_mdg_xml", ...)` in this session, which
-adds them with their aliases. Nothing adds a technology's tags. So for a technology your
-organization built, tags never resolve, and stereotypes resolve only after its XML has been
-parsed this session. Run on 2026-10-08 against the 3.6.0 server source, with Westbrook's
-technology standing in for yours and no XML parsed:
+`kind` is one of `stereotype`, `tagged_value`, `connector_stereotype` and `diagram_type`. A tag
+is `tagged_value`; there is no `tag`. Any other value returns `ok: false` with
+`error: "invalid_kind"` and `valid_kinds`, so a misspelled kind is no longer a silent miss.
 
-```
-ea_mdg(operation="resolve_display_term", params={"kind": "stereotype", "technical_name": "WBABusinessApplication"})
--> {"alias": "WBABusinessApplication", "mdg_id": "", "found": false}
-ea_mdg(operation="resolve_display_term", params={"kind": "tagged_value", "technical_name": "criticality"})
--> {"alias": "criticality", "mdg_id": "", "found": false}
-```
-
-`get_element_business_view` (`type`, each `label`, `target_type`) and `aggregate_portfolio`
-(`alias`) take their labels from the same lookup, so for your own technology the tag labels
-are always technical names, and the stereotype names are too unless its XML was parsed.
-When you need a business term:
-
-- **A stereotype:** use the alias your technology declares. `ea_mdg(operation="get_mdg_from_runtime",
-  params={"tech_id": "<id>"})` returns each stereotype with its `alias` without changing what
-  the lookup knows; the reporting layer names its tables by the same alias.
-- **A tag, or a stereotype with no alias:** derive it. Split the camelCase name
-  (`businessOwner` -> "Business Owner") and drop the technology's prefix from a stereotype
-  (`WBABusinessApplication` -> "Business Application").
-- Call `resolve_display_term` for terms from a language that ships with EA, or for a
-  stereotype of a technology parsed this session, where it does find them.
+When `found` is false, derive the label by splitting the camelCase name (`businessOwner` ->
+"Business Owner") and dropping the technology prefix from a stereotype (`WBABusinessApplication`
+-> "Business Application"). `get_element_business_view` and `aggregate_portfolio` take their
+labels from the same lookup. Before 3.6.5 the lookup read only the server's own tables (the
+languages that ship with EA, plus any technology parsed with `parse_mdg_xml` in the session): a
+technology's tags never resolved, and `get_mdg_from_runtime` was the place to read a stereotype's
+alias.
 
 ---
 
@@ -336,16 +353,11 @@ edits, is `../ea-import-export/SKILL.md` section 3c.
   `Infrastructure &amp; Cloud Team` is the concrete case here; treat any roll-up with a
   suspiciously large number of near-duplicate group values as a signal to check for this
   before reporting team-by-team counts.
-- **Comma-joined multi-value tags undercount a whole-value roll-up.** When
-  `multi_valued_count` is not 0, roll up again with `split_values: true`; see the
-  `regulatoryScope` example above.
 - **A missing property in `get_element_business_view` doesn't self-explain.** It's silent
   on whether the field is unset or not tracked for that stereotype. Cross-check against
   `summarize_tagged_value_usage` for that stereotype when it matters.
-- **Your own technology's terms come back as technical names.** `resolve_display_term`,
-  the business view and the roll-up know the languages that ship with EA and the stereotypes
-  of a technology parsed this session, never its tags. Take a stereotype's alias from
-  `get_mdg_from_runtime` and derive a tag's label, as above.
+- **A term with `found: false` has no alias in the loaded technology.** Derive it as above
+  (split the camelCase name, drop the technology prefix) rather than showing the technical name.
 
 Full worked numbers, including the complete per-stereotype coverage matrix and the
 `regulatoryScope` multi-value breakdown, are in `references/coverage-data.md`.
@@ -354,12 +366,9 @@ Full worked numbers, including the complete per-stereotype coverage matrix and t
 
 ## A note on latency
 
-Every operation in this skill is a repository read through the MCP server, not a UI
-action -- there's no dialog to wait out and no "(Not Responding)" state to watch for.
-If a task built on top of this skill also drives the EA desktop UI directly (opening a
-diagram to walk a stakeholder through it, for example), see
-`../_shared/references/latency.md` for wait guidance before screenshotting; it doesn't
-apply to the calls in this skill itself.
+Every operation here is a repository read through the MCP server, with no dialog to wait out.
+If you also drive the EA desktop UI (opening a diagram to walk someone through it), see
+`../_shared/references/latency.md` for wait guidance before screenshotting.
 
 ## Verify in EA's UI
 
@@ -369,10 +378,10 @@ COM connection rather than as an error you can catch. Neither shows up in a tool
 - **If a call seems to hang, screenshot EA and read the dialog before concluding anything.**
   It names the cause. Dismiss from the front — dialogs stack, and a later call can be queued
   behind one raised by an earlier one. Windows reporting EA as "Responding" means nothing.
-- **After any diagram create or edit, reload the diagram, screenshot it, and look.**
-  `ok: true` means rows were written, not that elements landed where you intended, that
-  styling applied, or that the result is readable.
-- **Without computer use**, say so and ask the user to look — never report a hang you have
-  not diagnosed or a diagram you have not seen.
+- **This skill creates no diagram.** If you open one to walk someone through it, reload it,
+  screenshot it, and look: `ok: true` means rows were written, not that the result is readable.
+- **Without computer use**, say so. Ask the user to paste a screenshot of the EA window or
+  dialog into the conversation, read the cause from it, and ask the user to dismiss the dialog
+  before you retry. Never report a hang you have not diagnosed or a diagram you have not seen.
 
 Full procedure: [`../_shared/references/ea-ui-verification.md`](../_shared/references/ea-ui-verification.md)

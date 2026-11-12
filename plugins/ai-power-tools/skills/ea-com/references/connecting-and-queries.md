@@ -3,7 +3,13 @@
 Full detail behind the "Connecting" and "SQL access" sections of `../SKILL.md`.
 Every snippet on this page was run against a live EA session with the Westbrook Bank
 demo model open, and the output shown is what that run actually printed (element
-names and counts are read from the model, so they reflect its current content).
+names and counts are read from the model, so they reflect its current content). The
+Westbrook Bank model is an illustration; use your own model's names. Build numbers:
+unless a block names one, it was run on EA 17.0 build 1704.
+
+`GetActiveObject` attaches to whichever EA registered first. With more than one EA running,
+attach to a specific instance instead:
+[`instances-and-sessions.md`](instances-and-sessions.md).
 
 ## Connecting
 
@@ -48,7 +54,7 @@ working `Repository` whose `.ConnectionString` matched the open project.
 
 ```python
 repo.ConnectionString   # -> "<model-dir>\WestbrookBank.qea"
-repo.Models             # -> collection of root ("Model") packages; .Count == 3 in Westbrook Bank
+repo.Models             # -> collection of root ("Model") packages; read .Count, it changes as roots are added (3 when measured, more in the current Westbrook copy)
 ```
 
 `repo` (the `Repository` COM object returned by `app.Repository`) is your escape
@@ -82,13 +88,27 @@ Verified live:
 ```python
 >>> sql("SELECT Object_ID, Name, Stereotype FROM t_object WHERE Stereotype = 'WBABusinessApplication'")
 [{'Object_ID': '64', 'Name': 'Legacy Report Distribution Server', 'Stereotype': 'WBABusinessApplication'}, ...]
-# 45 rows total
+# one row per matching element
 
 >>> sql("SELECT Object_ID, Name FROM t_object WHERE Name = 'Definitely Not A Real Element Name 12345'")
 []
 ```
 
 Both the populated and empty-result cases return a plain list, no exception.
+
+### A name with an apostrophe
+
+Query patterns here put names and GUIDs into the SQL with f-strings. A name that contains an
+apostrophe (the Westbrook model has a vendor system called `Moody's Analytics CreditLens`) ends the
+string early, and the malformed statement can raise the blocking dialog described below. Double the
+quote before it goes in, or look the row up by `Object_ID` or `ea_guid` instead of by name:
+
+```python
+def q(text):
+    return str(text).replace("'", "''")
+
+sql(f"SELECT Object_ID FROM t_object WHERE Name = '{q(name)}'")   # name = "Moody's Analytics CreditLens"
+```
 
 ## execute() — DML
 
@@ -102,6 +122,20 @@ Verified live: `repo.Execute("UPDATE t_objectproperties SET Value = '...' WHERE 
 returned `None` even though the update visibly succeeded on read-back. Do not treat
 `execute()`'s return value as a success flag — always follow it with a `sql()` read
 of the row you changed.
+
+### Dialect differences on cloud and DBMS repositories
+
+`Execute` gives no error when a statement fails on some back ends, so every write must be read
+back. Measured on EA 17.0 cloud repositories with a MySQL back end:
+
+| Need | Result |
+|---|---|
+| Current time with `GETDATE()` | Fails silently: no error, no row written |
+| Current time with `NOW()` | Works |
+| Binary literal `0x...` | Works |
+
+Use the back end's own functions and quoting. Other back ends were not measured here: read back
+anything you write on a back end you have not tried.
 
 ## GetElementsByQuery vs GetElementSet
 
@@ -124,13 +158,13 @@ with `type=2` ("SQL query against `t_object`"):
 >>> elements = repo.GetElementSet(
 ...     "SELECT Object_ID FROM t_object WHERE Stereotype = 'WBABusinessApplication'", 2)
 >>> elements.Count
-45
+<number of matching elements>
 >>> [ (e.Name, e.Stereotype) for e in elements ][:2]
 [('Legacy Report Distribution Server', 'WBABusinessApplication'),
  ('SFTP Batch Gateway', 'WBABusinessApplication')]
 ```
 
-Verified live for both the populated case (45 elements, correct `.Name`/`.Stereotype`)
+Verified live for both the populated case (every matching element, correct `.Name`/`.Stereotype`)
 and the empty case (`GetElementSet("...WHERE Stereotype = 'NoSuchStereotypeXYZ'", 2)`
 returned a collection with `.Count == 0`, no error).
 
@@ -143,7 +177,14 @@ doesn't exist raises a blocking "SQL API Open FAILED" dialog inside EA's UI *bef
 it, and only then comes back as an XML error payload (parsed by `sql()` above as an
 empty list), not a Python exception.
 
-Reproduced live, twice:
+Reproduced live five times across three runs on build 1704, and the dialog text below was
+captured on build 1716. A headless EA shows the same dialog on the user's desktop.
+`GetLastError()` returns `''` afterwards, so the empty result cannot be told from "no rows".
+
+`SuppressEADialogs = True` did not stop this dialog on build 1704: set before `OpenFile` it reads
+back False; set after `OpenFile` it reads back True and the dialog still appears. A different
+dialog was suppressed on build 1716, so a setting that works for one dialog says nothing about
+this one.
 
 ```python
 >>> sql("SELECT COUNT(*) AS n FROM t_stereotype")
@@ -174,9 +215,38 @@ The same thing happens for any bad column name, including the classic
 EA dialog: `SQL API Open FAILED with error: no such column: a.Default_Value`.
 After dismissal: `[]`.
 
+**Alias every computed column.** `SQLQuery("select count(*) from t_object")` raised EA's modal
+"Error processing XML document: invalid or illegal XML character" and the call blocked for 158 s
+until someone dismissed it (one observation, build 1716). The same query with `as n` ran in
+milliseconds. An unaliased expression gives the result an invalid XML element name. Write
+`count(*) as n`, `max(x) as m`, `a || b as ab` every time. `EXPLAIN` does not catch this.
+
 Follow the "any COM call that may trigger a dialog" guidance in
 [`../../_shared/references/latency.md`](../../_shared/references/latency.md) for
 *every* `SQLQuery()` call whose SQL you haven't already validated, not just for DML.
+
+### Check the statement first (`.qea` files)
+
+For a `.qea` file, run `EXPLAIN` on each statement through Python's `sqlite3`, opened read-only,
+before it goes to EA. A wrong column fails there as an ordinary Python exception, with no dialog.
+It caught a real mistake (`t_object.Notes`; the column is `Note`):
+
+```python
+import sqlite3
+
+def check_sql(qea_path, query):
+    """Raise sqlite3.OperationalError for a bad table or column, before EA sees the statement."""
+    con = sqlite3.connect(f"file:{qea_path}?mode=ro", uri=True)
+    try:
+        con.execute("EXPLAIN " + query)
+    finally:
+        con.close()
+```
+
+This works for SQLite-backed files only. It checks names, not whether EA's SQL dialect layer
+accepts the statement. For an unattended run also use the dialog watchdog in
+[`instances-and-sessions.md`](instances-and-sessions.md). A question dialog is never answered
+automatically: stop and report it.
 
 ## Useful tables
 
@@ -190,14 +260,18 @@ Follow the "any COM call that may trigger a dialog" guidance in
 | `t_operation` | Operations/methods on elements |
 | `t_objectproperties` | Tagged values |
 | `t_xref` | Cross-references (stereotypes, constraints) |
+| `t_document` | Documents held in the model: embedded technologies (`DocType='TECHNOLOGY'`), files stored on Artifacts (`DocType='ExtDoc'`) |
+| `usys_system` | Settings stored per model, one row per setting |
 
 ## SQLite schema notes (EA 17, verified live)
 
 ### Stereotypes: query t_object, not t_stereotype
 
-`t_stereotype` does not exist in this EA 17 SQLite-backed schema (see the dialog
-trap above). Always query `t_object` for stereotype information, including
-MDG-defined stereotypes:
+`t_stereotype` (singular) does not exist in this EA 17 SQLite-backed schema (see the dialog
+trap above). Query `t_object` for the stereotypes in use, including MDG-defined stereotypes. The
+table of stereotype *definitions* is `t_stereotypes` (plural: `Stereotype`, `AppliesTo`,
+`Description`, `ea_guid`; 159 rows in the Westbrook copy), so use that one when the question is
+what is defined rather than what is used:
 
 ```python
 >>> sql("SELECT DISTINCT Stereotype FROM t_object WHERE Stereotype IS NOT NULL AND Stereotype != ''")[:3]
@@ -213,6 +287,20 @@ MDG-defined stereotypes:
 
 `[Default]` requires bracket quoting because `DEFAULT` is a SQL reserved word.
 `a.Default_Value` (no such column) triggers the blocking dialog above.
+
+### Settings that travel with a model copy: the Prolaborate repository id
+
+EA's Model Options (Cloud) holds a Prolaborate Repo ID for each model, stored in
+`usys_system` as `ProLabRepoID`. A model copied into another repository (see the
+`ea-import-export` skill's transfer procedure) still carries the old value, so it points at the
+old Prolaborate repository. Read it; change it in EA's Model Options, not by SQL.
+
+```python
+sql("SELECT Property, Value FROM usys_system WHERE Property = 'ProLabRepoID'")
+```
+
+(Column names for `usys_system` were read from a cloud model; confirm them with `describe_table` or
+`SELECT * FROM usys_system` on yours.)
 
 ### Tagged values
 

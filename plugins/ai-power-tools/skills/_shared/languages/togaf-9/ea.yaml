@@ -1,0 +1,1661 @@
+# EA facts for TOGAF 9.1 as Sparx Enterprise Architect's built-in TOGAF technology stores them.
+# Generated from a read-back of the technology in EA; do not edit by hand.
+# Every stereotype and tag below was created in EA and read back. `concepts` maps the 55 concepts of the language guide to the stored stereotypes
+# (status: same-name, near-name, ieee1471, not-in-ea).
+# Westbrook Bank appears only in howto.md, as an illustration.
+
+language: togaf-9
+technology: TOGAF
+api_technology_id: TOGAF
+profiles:
+  TOGAF: stereotypes qualified TOGAF::<name>; 204 stored names
+  IEEE1471: stereotypes qualified IEEE1471::<name>; 16 names, not a technology id of its own
+  FEAF: not cataloged (a separate framework)
+display_name: TOGAF
+stereotype_prefix: ''
+stereotype_storage: bare name in t_object.Stereotype and t_connector.Stereotype, without spaces and in the case the technology gives it (BusinessService,
+  OrganizationUnit, ADM_Preliminary, `influence`); the qualified form TOGAF::<name> or IEEE1471::<name> is the FQName in the t_xref row named Stereotypes
+  and is what AddNew and StereotypeEx take. Only the FIRST stereotype of an element is in t_object.Stereotype. The Resources tab shows display text with
+  spaces, not the stored name.
+measured_on:
+  ea: 17.1 build 1716
+  date: '2026-10-21'
+  technology_version: '3.0'
+  technology_file: 'none: the technology is built into EA and its definition is encrypted; measured by creating objects'
+version_note: The guide describes TOGAF 9.1, the standard it cites. Which edition EA's technology follows is not proven. The evidence supports 9.1. EA reports
+  version 3.0 (Repository.GetTechnologyVersion('TOGAF')), a number of its own that names no edition, and the technology file is encrypted. One Sparx regional
+  page says TOGAF 9.1 is supported in build 3.0 of the technology, and Sparx's 17.1 guide says version 9.x. All six shipped TOGAF patterns are named to9.1-*,
+  and five of them were exported after 9.2 launched. The stored names include PlatformService and have no TechnologyService, BusinessCapability or ValueStream,
+  which a third-party list gives as 9.2 names. That list is not The Open Group's text, so reading The Open Group's 9.2 metamodel chapter is what would settle
+  it. The Open Group has also published the TOGAF Standard 10th Edition (2022); neither later edition was studied.
+counts:
+  resources_tab_rows: 206
+  stored_names_distinct: 204
+  togaf_stereotypes_bound: 204
+  togaf_elements: 125
+  togaf_connectors: 75
+  togaf_attribute_stereotypes: 4
+  ieee1471_bound: 16
+  ieee1471_rows_on_resources_tab: 16
+  diagram_types_bound: 7
+  diagram_types_on_resources_tab: 17
+  concepts_in_language_file: 55
+  concepts_same_name: 30
+  concepts_near_name: 6
+  concepts_not_in_ea: 7
+  concepts_ieee1471: 12
+diagram_types:
+  TOGAF_ADM:
+    token: TOGAF Diagrams::TOGAF_ADM
+    stored_diagram_type: Custom
+    style_ex: MDGDgm=TOGAF Diagrams::TOGAF_ADM;
+    standard_views: []
+  TOGAF_EnterpriseContinuum:
+    token: TOGAF Diagrams::TOGAF_EnterpriseContinuum
+    stored_diagram_type: Logical
+    style_ex: MDGDgm=TOGAF Diagrams::TOGAF_EnterpriseContinuum;
+    standard_views: []
+  TOGAF_Interface:
+    token: TOGAF Diagrams::TOGAF_Interface
+    stored_diagram_type: Logical
+    style_ex: MDGDgm=TOGAF Diagrams::TOGAF_Interface;
+    standard_views: []
+  IEEE1471_ConceptualFramework:
+    token: TOGAF Diagrams::IEEE1471_ConceptualFramework
+    stored_diagram_type: Logical
+    style_ex: MDGDgm=TOGAF Diagrams::IEEE1471_ConceptualFramework;
+    standard_views: []
+  TOGAF_ACM:
+    token: TOGAF Diagrams::TOGAF_ACM
+    stored_diagram_type: Custom
+    style_ex: MDGDgm=TOGAF Diagrams::TOGAF_ACM;
+    standard_views: []
+    note: the type the Sparx catalogs model pattern uses; the standard's catalogs have no diagram type
+  TOGAF_SIB:
+    token: TOGAF Diagrams::TOGAF_SIB
+    stored_diagram_type: Custom
+    style_ex: MDGDgm=TOGAF Diagrams::TOGAF_SIB;
+    standard_views: []
+  TOGAF_DataMap:
+    token: TOGAF_DataArchitecture::TOGAF_DataMap
+    stored_diagram_type: UMLDiagram
+    style_ex: MDGDgm=TOGAF_DataArchitecture::TOGAF_DataMap;
+    standard_views: []
+  TOGAF_OrganizationStructure:
+    token: TOGAF Diagrams::TOGAF_OrganizationStructure
+    binds: false
+    note: the starter model pattern records this token; it does not bind (EA makes a plain Class diagram). On the Resources tab (EA 17.1 build 1716, 2026-11-04)
+      the type Organization Structure sits in the group TOGAF_BusinessArchitecture, not in TOGAF Diagrams; whether a token with that group binds was not
+      tested
+  standard_artifacts:
+    note: The seven tokens above are the ones that bound among the tokens tried through the API. The Resources tab lists 17 diagram types (see resources_tab_diagram_types),
+      so ten types are not in this list. Compared by name only, one tab type, Benefits, has the same name as an artifact (the Benefits diagram); four are
+      FEAF reference models, and the other twelve share no name with any of the 56 artifacts. Whether any tab type is meant for an artifact, or can draw
+      one, was not tested.
+  resources_tab_diagram_types:
+    measured_on: EA 17.1 build 1716, 2026-11-04, read on screen (Browser > Resources > MDG Technologies > System Technologies > TOGAF > Diagram Types)
+    count: 17
+    note: the tab shows display names inside four groups, not tokens; only the seven tokens above were matched to a type. Some names were cut off at the
+      panel edge.
+    groups:
+      FEAF Diagrams:
+      - (FEAF) Business Reference Model
+      - (FEAF) Service Component Reference
+      - (FEAF) Technical Reference
+      - (FEAF) Performance Reference
+      TOGAF_BusinessArchitecture:
+      - Business Motivation Model
+      - Organization Structure
+      - Business Logistics
+      - Business Process
+      - Benefits
+      TOGAF_DataArchitecture:
+      - Data Map
+      TOGAF Diagrams:
+      - TOGAF Interface
+      - Conceptual Framework
+      - Architecture Content
+      - Architecture Development
+      - Service Model
+      - Enterprise Continuum
+      - Standards Information Base
+concepts:
+  Actor:
+    status: same-name
+    stereotypes:
+    - stored: Actor
+      qualified: TOGAF::Actor
+      metaclass: Actor
+      created_by: qualified type
+      tags:
+        ID:
+          description: Unique identifier for the architecture artifact.
+        Category:
+          description: User-definable categorization.
+        Source:
+          description: Location from where the information was collected.
+        Owner:
+          description: Owner of the architecture entity.
+        '#FTEs':
+          description: Estimated number of FTEs(Full Time Equivalents) that operate as this Actor.
+        ActorGoal:
+          description: Objectives that this actor has, in general terms.
+        ActorTasks:
+          description: Tasks that this actor performs, in general terms.
+  ApplicationComponent:
+    status: same-name
+    stereotypes:
+    - stored: ApplicationComponent
+      qualified: TOGAF::ApplicationComponent
+      metaclass: Component
+      created_by: qualified type
+      tags:
+        ID:
+          description: Unique identifier for the architecture entity.
+        Category:
+          description: User-definable categorization.
+        Source:
+          description: Location from where the information was collected.
+        Owner:
+          description: Owner of the architecture entity.
+        StandardsClass:
+          values:
+          - Non-Standard
+          - Proposed
+          - Provisional
+          - Standard
+          - Phasing-Out
+          - Retired
+        StandardCreationDate:
+          description: If the product is a standard, when the standard was created.
+        LastStandardReviewDate:
+          description: Last date that the standard was reviewed.
+        NextStandardReviewDate:
+          description: Next date for the standard to be reviewed.
+        RetireDate:
+          description: Date when the standard was/will be retired.
+  Assumption:
+    status: same-name
+    stereotypes:
+    - stored: Assumption
+      qualified: TOGAF::Assumption
+      metaclass: Artifact
+      created_by: qualified type
+      tags:
+        Rationale:
+          description: Justification for the assumption made.
+        ID:
+          description: Unique identifier for the architecture artifact.
+        Type:
+          values:
+          - Enterprise
+          - Business
+          - System
+          - Application
+          - Technology
+          - Data
+        Statement: {}
+        Source:
+          description: Location from where the information was collected.
+        Owner:
+          description: Owner of the architecture entity.
+  BusinessService:
+    status: same-name
+    stereotypes:
+    - stored: BusinessService
+      qualified: TOGAF::BusinessService
+      metaclass: Activity
+      created_by: qualified type
+      tags:
+        ID:
+          description: Unique identifier for the architecture entity.
+        Category:
+          description: User-definable categorization.
+        Source:
+          description: Location from where the information was collected.
+        Owner:
+          description: Owner of the architecture entity.
+        StandardsClass:
+          values:
+          - Non-Standard
+          - Proposed
+          - Provisional
+          - Standard
+          - Phasing-Out
+          - Retired
+        StandardCreationDate:
+          description: If the product is a standard, when the standard was created.
+        LastStandardReviewDate:
+          description: Last date that the standard was reviewed.
+        NextStandardReviewDate:
+          description: Next date for the standard to be reviewed.
+        RetireDate:
+          description: Date when the standard was/will be retired.
+  Capability:
+    status: same-name
+    stereotypes:
+    - stored: Capability
+      qualified: TOGAF::Capability
+      metaclass: Class
+      created_by: qualified type
+      tags:
+        ID:
+          description: Unique identifier for the architecture entity.
+        Category:
+          description: User-definable categorization.
+        Source:
+          description: Location from where the information was collected.
+        Owner:
+          description: Owner of the architecture entity.
+        BusinessValue:
+          description: Describes how this capability provides value to the enterprise.
+        Increments:
+          values:
+          - None
+          - Initial
+          - UnderDevelopment
+          - Defined
+          - Managed
+          - Measured
+          description: Lists possible maturity/quality levels for the capability.
+  Constraint:
+    status: same-name
+    stereotypes:
+    - stored: Constraint
+      qualified: TOGAF::Constraint
+      metaclass: Constraint
+      created_by: qualified type
+      tags:
+        ID:
+          description: Unique identifier for the architecture artifact.
+        Category:
+          description: User-definable categorization.
+        Source:
+          description: Location from where the information was collected.
+        Owner:
+          description: Owner of the architecture entity.
+        Impact: {}
+        Probability:
+          values:
+          - High
+          - Medium
+          - low
+  Contract:
+    status: same-name
+    stereotypes:
+    - stored: Contract
+      qualified: TOGAF::Contract
+      metaclass: Collaboration
+      created_by: qualified type
+      tags:
+        ID:
+          description: Unique identifier for the architecture entity.
+        Category:
+          description: User-definable categorization.
+        Source:
+          description: Location from where the information was collected.
+        Owner:
+          description: Owner of the architecture entity.
+        BehaviorCharacteristics:
+          description: Functional behavior to be supported within the scope of the contract.
+        ConsumingService:
+          description: Service name 'caller'
+        ProvidingService:
+          description: Service name 'called'
+        ServiceQualityCharacteristics:
+          description: Non-functional behavior to be supported within the scope of the contract
+        AvailabilityCharacteristics:
+          description: Degree to which something is available for use.
+        ServiceTimes:
+          description: Hours during which the service must be available.
+        ManageabilityCharacteristics:
+          description: Ability to gather information about the state of something and control it.
+        ServiceabilityCharacteristics:
+          description: Ability to identify problems and take corrective action, such as to repair or upgrade a component in a running system.
+        PerformanceCharacteristics:
+          description: Ability of a component to perform its tasks in an appropriate time.
+        ResponseRequirements:
+          description: Response times that the service provider must meet for particular operations.
+        ReliabilityCharacteristics:
+          description: Resistance to failure
+        QualityOfInformationRequired:
+          description: Contracted requirements on accuracy and completeness of information.
+        ContractControlRequirements:
+          description: Level of governance and enforcement applied to the contractual parameters for overall service.
+        ResultControlRequirements:
+          description: Measures in place to ensure that each service request meets contracted criteria.
+        RecoverabilityCharacteristics:
+          description: Ability to restore a system to a working state after an interruption.
+        LocatabilityCharacteristics:
+          description: Ability of a system to be found when needed.
+        SecurityCharacteristics:
+          description: Ability of a system to prevent unauthorized access to functions and data.
+        PrivacyCharacteristics:
+          description: Protection of data from unauthorized access.
+        IntegrityCharacteristics:
+          description: Ability of a system to ensure that data has not been corrupted.
+        CredibilityCharacteristics:
+          description: Ability of a system to ensure that the service request originates from an authorized source.
+        LocalizationCharacteristics:
+          description: Ability of a service to support localized variants for different consumer groups.
+        InternationalizationCharacteristics:
+          description: Ability of a service to support international variations in business logic and data representation (such as character set).
+        ScalabilityCharacteristics:
+          description: Ability of the service to grow or shrink its performance or capacity appropriately to the demands of the environment in which it
+            operates.
+        PortabilityCharacteristics:
+          description: Portability characteristics of data, people, applications, and components.
+        ExtensibilityCharacteristics:
+          description: Ability to accept new functionality.
+        CapacityCharacteristics:
+          description: Contracted capacity of the service provider to meet requests.
+        Throughput:
+          description: Required throughput capacity.
+        ThroughputPeriod:
+          description: Time period needed to deliver throughput capacity.
+        Growth:
+          description: Expected future growth rate of service request.
+        GrowthPeriod:
+          description: Time period needed to reach the expected growth rate.
+        PeakProfileShortTerm:
+          description: Short-term profile of peak service traffic.
+        PeakProfileLongTerm:
+          description: Long-term profile of peak service traffic.
+  Control:
+    status: same-name
+    stereotypes:
+    - stored: Control
+      qualified: TOGAF::Control
+      metaclass: Object
+      created_by: qualified type
+      tags:
+        ID:
+          description: Unique identifier for the architecture entity.
+        Category:
+          description: User-definable categorization.
+        Source:
+          description: Location from where the information was collected.
+        Owner:
+          description: Owner of the architecture entity.
+    note: the tab lists Control twice; the object is an Object; no connector stereotype Control binds
+  DataEntity:
+    status: same-name
+    stereotypes:
+    - stored: DataEntity
+      qualified: TOGAF::DataEntity
+      metaclass: Class
+      created_by: qualified type
+      tags:
+        ID:
+          description: Unique identifier for the architecture entity.
+        Category:
+          description: User-definable categorization.
+        Source:
+          description: Location from where the information was collected.
+        Owner:
+          description: Owner of the architecture entity.
+        PrivacyClassification:
+          description: Level of restriction placed on access to the data.
+        RetentionClassification:
+          description: Level of retention to be placed on the data.
+  Driver:
+    status: near-name
+    stereotypes:
+    - stored: BusinessDriver
+      qualified: TOGAF::BusinessDriver
+      metaclass: Requirement
+      created_by: qualified type
+      tags:
+        _aliasID:
+          default: Business Driver
+        ID:
+          description: Unique identifier for the architecture entity.
+        Version: {}
+        Category:
+          description: User-definable categorization.
+        Source:
+          description: Location from where the information was collected.
+        Owner:
+          description: Owner of the architecture entity.
+    note: EA's BusinessDriver; tags ID, Version, Category, Source, Owner
+  Event:
+    status: same-name
+    stereotypes:
+    - stored: Event
+      qualified: TOGAF::Event
+      metaclass: Event
+      created_by: qualified type
+      tags:
+        ID:
+          description: Unique identifier for the architecture entity.
+        Category:
+          description: User-definable categorization.
+        Source:
+          description: Location from where the information was collected.
+        Owner:
+          description: Owner of the architecture entity.
+  Function:
+    status: near-name
+    stereotypes:
+    - stored: BusinessFunction
+      qualified: TOGAF::BusinessFunction
+      metaclass: Activity
+      created_by: qualified type
+      tags:
+        ID:
+          description: Unique identifier for the architecture artifact.
+        StandardsClass:
+          values:
+          - Non-Standard
+          - Proposed
+          - Provisional
+          - Standard
+          - Phasing-Out
+          - Retired
+        StandardCreationDate:
+          description: If the product is a standard, when the standard was created.
+        LastStandardReviewDate:
+          description: Last date that the standard was reviewed.
+        NextStandardReviewDate:
+          description: Next date for the standard to be reviewed.
+        RetireDate:
+          description: Date when the standard was/will be retired.
+    note: EA's BusinessFunction; carries the standards-class tags
+  Gap:
+    status: same-name
+    stereotypes:
+    - stored: Gap
+      qualified: TOGAF::Gap
+      metaclass: Class
+      created_by: qualified type
+      tags:
+        ID:
+          description: Unique identifier for the architecture entity.
+        Category:
+          values:
+          - Intentionally eliminated
+          - Unintentionally eliminated
+          - New-To be produced or developed
+          - To be enhanced
+          description: User-definable categorization.
+        Source:
+          description: Location from where the information was collected.
+        Owner:
+          description: Owner of the architecture entity.
+        RefTarget Artifact:
+          description: Name of the target architecture artifact that is linked to the gap element.
+        RefBaseline Artifact:
+          description: Name of the baseline architecture artifact that is linked to the gap element.
+  Goal:
+    status: same-name
+    stereotypes:
+    - stored: Goal
+      qualified: TOGAF::Goal
+      metaclass: Requirement
+      created_by: qualified type
+      tags:
+        ID:
+          description: Unique identifier for the architecture artifact.
+        Goal_Type: {}
+        KPI:
+          description: Key Performance Indicator
+        Measure: {}
+        CSF:
+          description: Critical Success Factor
+        Threat: {}
+        Strength: {}
+        Weakness: {}
+        Opportunity: {}
+        Assumption: {}
+        UnitResponsible:
+          description: Organization Unit that has major responsibility to achieve the goal.
+        Source:
+          description: Location from where the information was collected.
+        Owner:
+          description: Owner of the architecture entity.
+        Category:
+          description: User-definable categorization.
+  InformationSystemService:
+    status: near-name
+    stereotypes:
+    - stored: ITService
+      qualified: TOGAF::ITService
+      metaclass: Class
+      created_by: qualified type
+      tags:
+        ID:
+          description: Unique identifier for the architecture entity.
+        DefinitionText: {}
+        ContactPoint: {}
+        Availability: {}
+        ChargeToUser:
+          description: Cost of using the service that will be charged to the user.
+        Owner:
+          description: Owner of the architecture entity.
+        DependentSystems:
+          description: Systems that will impact/ impacted on.
+        Category:
+          description: User-definable categorization.
+        Source:
+          description: Location from where the information was collected.
+        StandardClass:
+          values:
+          - Non-Standard
+          - Proposed
+          - Provisional
+          - Standard
+          - Phasing-Out
+          - Retired
+        StandardCreationDate:
+          description: If the product is a standard, when the standard was created.
+        LastStandardReviewDate:
+          description: Last date that the standard was reviewed.
+        NextStandardReviewDate:
+          description: Next date for the standard to be reviewed.
+        RetireDate:
+          description: Date when the standard was/will be retired.
+    note: 'Working assumption, 2026-10-21: Information System Service is ITService. Measured: TOGAF::ITService is a stereotype on
+      a Class that carries the five standards-class tags of the standard (the first spelled StandardClass, not StandardsClass) beside ITIL-like tags (DefinitionText,
+      ContactPoint, ChargeToUser). TOGAF9-ATTR-002 reads StandardClass on it, and TOGAF9-DEF-003 (a service is owned and governed by an Organization Unit)
+      selects it as well. The guide has one relationship row for it (Automates some or all of) and EA has no connector stereotype of that name, so it is
+      not in the relationship table; as a specialization of Business Service it has the table cells of BusinessService, as source and as target'
+  Location:
+    status: same-name
+    stereotypes:
+    - stored: Location
+      qualified: TOGAF::Location
+      metaclass: Node
+      created_by: qualified type
+      tags:
+        ID:
+          description: Unique identifier for the architecture artifact.
+        Category:
+          description: User-definable categorization.
+        Description: {}
+        Source:
+          description: Location from where the information was collected.
+        Street: {}
+        City: {}
+        Owner:
+          description: Owner of the architecture entity.
+        Province: {}
+        AreaCode: {}
+        Country: {}
+        EmailID: {}
+        PhoneNumber: {}
+  LogicalApplicationComponent:
+    status: same-name
+    stereotypes:
+    - stored: LogicalApplicationComponent
+      qualified: TOGAF::LogicalApplicationComponent
+      metaclass: Component
+      created_by: qualified type
+      tags:
+        ID:
+          description: Unique identifier for the architecture entity.
+        Category:
+          description: User-definable categorization.
+        Source:
+          description: Location from where the information was collected.
+        Owner:
+          description: Owner of the architecture entity.
+        StandardsClass:
+          values:
+          - Non-Standard
+          - Proposed
+          - Provisional
+          - Standard
+          - Phasing-Out
+          - Retired
+        StandardCreationDate:
+          description: If the product is a standard, when the standard was created.
+        LastStandardReviewDate:
+          description: Last date that the standard was reviewed.
+        NextStandardReviewDate:
+          description: Next date for the standard to be reviewed.
+        RetireDate:
+          description: Date when the standard was/will be retired.
+  LogicalDataComponent:
+    status: same-name
+    stereotypes:
+    - stored: LogicalDataComponent
+      qualified: TOGAF::LogicalDataComponent
+      metaclass: Component
+      created_by: qualified type
+      tags:
+        ID:
+          description: Unique identifier for the architecture entity.
+        Categoy:
+          description: User-definable categorization.
+        Source:
+          description: Location from where the information was collected.
+        Owner:
+          description: Owner of the architecture entity.
+        StandardsClass:
+          values:
+          - Non-Standard
+          - Proposed
+          - Provisional
+          - Standard
+          - Phasing-Out
+          - Retired
+        StandardCreationDate:
+          description: If the product is a standard, when the standard was created.
+        LastStandardReviewDate:
+          description: Last date that the standard was reviewed.
+        NextStandardReviewDate:
+          description: Next date for the standard to be reviewed.
+        RetireDate:
+          description: Date when the standard was/will be retired.
+  LogicalTechnologyComponent:
+    status: same-name
+    stereotypes:
+    - stored: LogicalTechnologyComponent
+      qualified: TOGAF::LogicalTechnologyComponent
+      metaclass: Component
+      created_by: qualified type
+      tags:
+        ID:
+          description: Unique identifier for the architecture entity.
+        Category:
+          description: Technology Components are categorized according to the TOGAF TRM, which may be extended to meet the needs of an individual organization.
+        Source:
+          description: Location from where the information was collected.
+        Owner:
+          description: Owner of the architecture entity.
+        StandardsClass:
+          values:
+          - Non-Standard
+          - Proposed
+          - Provisional
+          - Standard
+          - Phasing-Out
+          - Retired
+        StandardCreationDate:
+          description: If the product is a standard, when the standard was created.
+        LastStandardReviewDate:
+          description: Last date that the standard was reviewed.
+        NextStandardReviewDate:
+          description: Next date for the standard to be reviewed.
+        RetireDate:
+          description: Date when the standard was/will be retired.
+  Measure:
+    status: same-name
+    stereotypes:
+    - stored: Measure
+      qualified: TOGAF::Measure
+      metaclass: Class
+      created_by: qualified type
+      tags:
+        ID:
+          description: Unique identifier for the architecture entity.
+        Category:
+          description: User-definable categorization.
+        Source:
+          description: Location from where the information was collected.
+        Owner:
+          description: Owner of the architecture entity.
+  Objective:
+    status: same-name
+    stereotypes:
+    - stored: Objective
+      qualified: TOGAF::Objective
+      metaclass: Artifact
+      created_by: qualified type
+      tags:
+        ID:
+          description: Unique identifier for the architecture entity.
+        Category:
+          description: User-definable categorization.
+        Source:
+          description: Location from where the information was collected.
+        Owner:
+          description: Owner of the architecture entity.
+  OrganizationUnit:
+    status: same-name
+    stereotypes:
+    - stored: OrganizationUnit
+      qualified: TOGAF::OrganizationUnit
+      metaclass: Actor
+      created_by: qualified type
+      tags:
+        PersonIncharge: {}
+        ID:
+          description: Unique identifier for the architecture artifact.
+        HeadCount:
+          description: Number of FTEs wor king within the organization.
+  PhysicalApplicationComponent:
+    status: same-name
+    stereotypes:
+    - stored: PhysicalApplicationComponent
+      qualified: TOGAF::PhysicalApplicationComponent
+      metaclass: Component
+      created_by: qualified type
+      tags:
+        LifeCycleStatus: {}
+        InitialLiveDate:
+          description: Date when the first release of the application was/will be released into production.
+        DateOfLastRelease:
+          description: Date when the last release of the application was released into production.
+        DateOfNextRelease:
+          description: Date when the next release of the application will be released into production.
+        RetirementDate:
+          description: Date when the application was/will be retired.
+        AvailabilityCharacteristics:
+          description: Degree to which application is available for use.
+        ServiceTimes:
+          description: Hours during which the application must be available.
+        ManageabilityCharacteristics:
+          description: Ability to gather information about the state of something and control it.
+        ServiceabilityCharacteristics:
+          description: Ability to identify problems and take corrective action, such as to repair or upgrade a component in a running system.
+        PerformanceCharacteristics:
+          description: Ability of a component to perform its tasks in an appropriate time.
+        ReliabilityCharacteristics:
+          description: Resistance to failure.
+        RecoverabilityCharacteristics:
+          description: Ability to restore a system to a working state after an interruption.
+        LocatabilityCharacteristics:
+          description: Ability of a system to be found when needed.
+        SecurityCharacteristics:
+          description: Ability of a system to prevent unauthorized access to functions and data.
+        PrivacyCharacteristics:
+          description: Protection of data from unauthorized access.
+        IntegrityCharacteristics:
+          description: Ability of a system to ensure that data has not been corrupted.
+        CredibilityCharacteristics:
+          description: Ability of a system to ensure that the service request originates from an authorized source.
+        LocalizationCharacteristics:
+          description: Ability of a service to support localized variants for different consumer groups.
+        InternationalizationCharacteristics:
+          description: Ability of a service to support international variations in business logic and data representation (such as character set).
+        InteroperabilityCharacteristics:
+          description: Ability of the service to interoperate with different technical environments, inside and outside of the organization.
+        ScalabilityCharacteristics:
+          description: Ability of the service to grow or shrink its performance or capacity appropriately to the demands of the environment in which it
+            operates.
+        PortabilityCharacteristics:
+          description: Of data, people, applications, and components.
+        ExtensibilityCharacteristics:
+          description: Ability to accept new functionality.
+        CapacityCharacteristics:
+          description: Contracted capacity of the service provider to meet requests.
+        Throughput:
+          description: Required throughput capacity.
+        ThroughputPeriod:
+          description: Time period needed to deliver throughput capacity.
+        Growth:
+          description: Expected future growth rate of service request.
+        GrowthPeriod:
+          description: Time period needed to reach the expected growth rate.
+        PeakProfileShortTerm:
+          description: Short-term profile of peak service traffic.
+        PeakProfileLongTerm:
+          description: Long-term profile of peak service traffic.
+        ID:
+          description: Unique identifier for the architecture entity.
+        Category:
+          description: User-definable categorization.
+        Source:
+          description: Location from where the information was collected.
+        Owner:
+          description: Owner of the architecture entity.
+        StandardsClass:
+          values:
+          - Non-Standard
+          - Proposed
+          - Provisional
+          - Standard
+          - Phasing-Out
+          - Retired
+        StandardCreationDate:
+          description: If the product is a standard, when the standard was created.
+        LastStandardReviewDate:
+          description: Last date that the standard was reviewed.
+        NextStandardReviewDate:
+          description: Next date for the standard to be reviewed.
+        RetireDate:
+          description: Date when the standard was/will be retired.
+  PhysicalDataComponent:
+    status: same-name
+    stereotypes:
+    - stored: PhysicalDataComponent
+      qualified: TOGAF::PhysicalDataComponent
+      metaclass: Component
+      created_by: qualified type
+      tags:
+        ID:
+          description: Unique identifier for the architecture entity.
+        Categoy:
+          description: User-definable categorization.
+        Source:
+          description: Location from where the information was collected.
+        Owner:
+          description: Owner of the architecture entity.
+        StandardsClass:
+          values:
+          - Non-Standard
+          - Proposed
+          - Provisional
+          - Standard
+          - Phasing-Out
+          - Retired
+        StandardCreationDate:
+          description: If the product is a standard, when the standard was created.
+        LastStandardReviewDate:
+          description: Last date that the standard was reviewed.
+        NextStandardReviewDate:
+          description: Next date for the standard to be reviewed.
+        RetireDate:
+          description: Date when the standard was/will be retired.
+  PhysicalTechnologyComponent:
+    status: same-name
+    stereotypes:
+    - stored: PhysicalTechnologyComponent
+      qualified: TOGAF::PhysicalTechnologyComponent
+      metaclass: Component
+      created_by: qualified type
+      tags:
+        ProductName:
+          description: Name of the product making up the technology component.
+        ModuleName:
+          description: Module, or other sub-product, name making up the technology component.
+        Vendor:
+          description: Vendor providing the technology component.
+        Version:
+          description: Version of the product making up the technology component.
+        ID:
+          description: Unique identifier for the architecture entity.
+        Category:
+          description: Technology Components are categorized according to the TOGAF TRM, which may be extended to meet the needs of an individual organization.
+        Source:
+          description: Location from where the information was collected.
+        Owner:
+          description: Owner of the architecture entity.
+        StandardsClass:
+          values:
+          - Non-Standard
+          - Proposed
+          - Provisional
+          - Standard
+          - Phasing-Out
+          - Retired
+        StandardCreationDate:
+          description: If the product is a standard, when the standard was created.
+        LastStandardReviewDate:
+          description: Last date that the standard was reviewed.
+        NextStandardReviewDate:
+          description: Next date for the standard to be reviewed.
+        RetireDate:
+          description: Date when the standard was/will be retired.
+  PlatformService:
+    status: same-name
+    stereotypes:
+    - stored: PlatformService
+      qualified: TOGAF::PlatformService
+      metaclass: Activity
+      created_by: qualified type
+      tags:
+        ID:
+          description: Unique identifier for the architecture artifact.
+        Category:
+          description: Platform Services are categorized according to the TOGAF TRM, which may be extended to meet the needs of an individual organization.
+        Source:
+          description: Location from where the information was collected.
+        Owner:
+          description: Owner of the architecture entity.
+        StandardsClass:
+          values:
+          - Non-Standard
+          - Proposed
+          - Provisional
+          - Standard
+          - Phasing-Out
+          - Retired
+    note: the tab prints 'Platform Sevice'; the stored name is PlatformService
+  Principle:
+    status: same-name
+    stereotypes:
+    - stored: Principle
+      qualified: TOGAF::Principle
+      metaclass: Class
+      created_by: qualified type
+      tags:
+        ID:
+          description: Unique identifier for the architecture entity.
+        Statement:
+          description: Statement of what the principle is.
+        Rationale:
+          description: Statement of why the principle is required and the outcome to be reached.
+        Implications:
+          description: Statement of what the principle means in practical terms.
+        Type:
+          values:
+          - Business
+          - Data
+          - Application
+          - Technology
+          - Architecture
+          - Testing
+          - Management
+          - Security
+          - Guiding
+          - Integration
+        Version: {}
+        Source:
+          description: Location from where the information was collected.
+        Owner:
+          description: Owner of the architecture entity.
+        Priority:
+          description: Priority of this principle relative to other principles.
+        Metric:
+          description: Identifies mechanisms that will be used to measure whether the principle has been met or not.
+  Process:
+    status: same-name
+    stereotypes:
+    - stored: Process
+      qualified: TOGAF::Process
+      metaclass: Activity
+      created_by: qualified type
+      tags:
+        ID:
+          description: Unique identifier for the architecture entity.
+        Category:
+          description: User-definable categorization.
+        Source:
+          description: Location from where the information was collected.
+        Owner:
+          description: Owner of the architecture entity.
+        StandardsClass:
+          values:
+          - Non-Standard
+          - Proposed
+          - Provisional
+          - Standard
+          - Phasing-Out
+          - Retired
+        StandardCreationDate:
+          description: If the product is a standard, when the standard was created.
+        LastStandardReviewDate:
+          description: Last date that the standard was reviewed.
+        NextStandardReviewDate:
+          description: Next date for the standard to be reviewed.
+        RetireDate:
+          description: Date when the standard was/will be retired.
+        ProcessCriticality:
+          description: Criticality of this process to business operations.
+        ProcessVolumetrics:
+          description: Data on frequency of process execution.
+        ProcessType:
+          description: Whether this process is supported by IT or is a manual process.
+  Product:
+    status: same-name
+    stereotypes:
+    - stored: Product
+      qualified: TOGAF::Product
+      metaclass: Class
+      created_by: qualified type
+      tags:
+        ID:
+          description: Unique identifier for the architecture entity.
+        Category:
+          description: User-definable categorization.
+        Source:
+          description: Location from where the information was collected.
+        Owner:
+          description: Owner of the architecture entity.
+  Requirement:
+    status: near-name
+    stereotypes:
+    - stored: BusinessRequirement
+      qualified: TOGAF::BusinessRequirement
+      metaclass: Requirement
+      created_by: qualified type
+      tags:
+        ID:
+          description: Unique identifier for the architecture entity.
+        Category:
+          description: User-definable categorization.
+        Source:
+          description: Location from where the information was collected.
+        Owner:
+          description: Owner of the architecture entity.
+        Rationale:
+          description: Statement of why the requirement exists.
+        AcceptanceCriteria:
+          description: Statement of what tests will be carried out to ensure that the requirement will be met.
+    note: EA's BusinessRequirement; tags Rationale, AcceptanceCriteria agree with the standard's attributes (no tag for the statement or for shall/should/may)
+  Role:
+    status: same-name
+    stereotypes:
+    - stored: Role
+      qualified: TOGAF::Role
+      metaclass: Object
+      created_by: qualified type
+      tags:
+        ID:
+          description: Unique identifier for the architecture entity.
+        Category:
+          description: User-definable categorization.
+        Source:
+          description: Location from where the information was collected.
+        Owner:
+          description: Owner of the architecture entity.
+        NumberOf_FTEs_Operating:
+          description: Estimated number of FTEs (Full-Time Equivalent) that operate in this Role
+  Service:
+    status: not-in-ea
+    reason: no stereotype of the TOGAF or IEEE1471 profile stores it (tried as TOGAF::Service and IEEE1471::Service in four forms)
+    note: abstract in the guide; EA has BusinessService, ITService (the guide's Information System Service) and PlatformService, no parent
+  ServiceQuality:
+    status: same-name
+    stereotypes:
+    - stored: ServiceQuality
+      qualified: TOGAF::ServiceQuality
+      metaclass: Class
+      created_by: qualified type
+      tags:
+        ID:
+          description: Unique identifier for the architecture entity.
+        Category:
+          description: User-definable categorization.
+        Source:
+          description: Location from where the information was collected.
+        Owner:
+          description: Owner of the architecture entity.
+  TechnologyComponent:
+    status: same-name
+    stereotypes:
+    - stored: TechnologyComponent
+      qualified: TOGAF::TechnologyComponent
+      metaclass: Component
+      created_by: qualified type
+      tags:
+        ID:
+          description: Unique identifier for the architecture entity.
+        Category:
+          description: Technology Components are categorized according to the TOGAF TRM, which may be extended to meet the needs of an individual organization.
+        Source:
+          description: Location from where the information was collected.
+        Owner:
+          description: Owner of the architecture entity.
+        StandardsClass:
+          values:
+          - Non-Standard
+          - Proposed
+          - Provisional
+          - Standard
+          - Phasing-Out
+          - Retired
+        StandardCreationDate:
+          description: If the product is a standard, when the standard was created.
+        LastStandardReviewDate:
+          description: Last date that the standard was reviewed.
+        NextStandardReviewDate:
+          description: Next date for the standard to be reviewed.
+        RetireDate:
+          description: Date when the standard was/will be retired.
+  WorkPackage:
+    status: same-name
+    stereotypes:
+    - stored: WorkPackage
+      qualified: TOGAF::WorkPackage
+      metaclass: Package
+      created_by: metaclass + StereotypeEx
+      tags:
+        ID:
+          description: Unique identifier for the architecture entity.
+        Category:
+          values:
+          - Work Package
+          - Work Stream
+          - Project
+          - Program
+          - Portfolio
+        Source:
+          description: Location from where the information was collected.
+        Owner:
+          description: Owner of the architecture entity.
+        CapabilityDelivered:
+          description: Describes the contribution this work package makes to capability delivery.
+        Business Value Summary: {}
+    note: stored on an element of type Package (the qualified type is refused); EA's Project (a Class) is a different stereotype
+  Deliverable:
+    status: not-in-ea
+    reason: no stereotype of the TOGAF or IEEE1471 profile stores it (tried as TOGAF::Deliverable and IEEE1471::Deliverable in four forms)
+    note: no stereotype; the nearest are RequestForArchitectureWork and StatementOfArchitectureWork (Artifacts) for two named deliverables
+  Artifact:
+    status: not-in-ea
+    reason: no stereotype of the TOGAF or IEEE1471 profile stores it (tried as TOGAF::Artifact and IEEE1471::Artifact in four forms)
+    note: no stereotype
+  Catalog:
+    status: not-in-ea
+    reason: no stereotype of the TOGAF or IEEE1471 profile stores it (tried as TOGAF::Catalog and IEEE1471::Catalog in four forms)
+    note: no stereotype; EA's catalogs pattern holds six model views on a TOGAF_ACM diagram
+  Matrix:
+    status: not-in-ea
+    reason: no stereotype of the TOGAF or IEEE1471 profile stores it (tried as TOGAF::Matrix and IEEE1471::Matrix in four forms)
+    note: no stereotype; EA's own matrices are not part of the technology
+  Diagram:
+    status: not-in-ea
+    reason: no stereotype of the TOGAF or IEEE1471 profile stores it (tried as TOGAF::Diagram and IEEE1471::Diagram in four forms)
+    note: no stereotype
+  BuildingBlock:
+    status: not-in-ea
+    reason: no stereotype of the TOGAF or IEEE1471 profile stores it (tried as TOGAF::BuildingBlock and IEEE1471::BuildingBlock in four forms)
+    note: no stereotype; ABB and SBB cover the two kinds
+  ArchitectureBuildingBlock:
+    status: near-name
+    stereotypes:
+    - stored: ABB
+      qualified: TOGAF::ABB
+      metaclass: Component
+      created_by: qualified type
+      tags:
+        ID:
+          description: Unique identifier for the architecture artifact.
+        Owning Organization Unit: {}
+        Rationale:
+          description: Statement of why the requirement exists.
+        Description: {}
+        Serviceportfolio: {}
+    note: stored ABB; the tab shows 'Architecture Building Block'
+  SolutionBuildingBlock:
+    status: near-name
+    stereotypes:
+    - stored: SBB
+      qualified: TOGAF::SBB
+      metaclass: Component
+      created_by: qualified type
+      tags:
+        ID:
+          description: Unique identifier for the architecture artifact.
+        Supplier OrganizationUnit: {}
+        Description: {}
+    note: stored SBB; the tab shows 'Solutions Building Block'
+  System:
+    status: ieee1471
+    stereotypes:
+    - stored: System
+      qualified: IEEE1471::System
+      metaclass: Component
+      created_by: qualified type
+      tags:
+        ID:
+          description: Unique identifier for the architecture artifact.
+  Architecture:
+    status: ieee1471
+    stereotypes:
+    - stored: Architecture
+      qualified: IEEE1471::Architecture
+      metaclass: Class
+      created_by: qualified type
+      tags:
+        ID:
+          description: Unique identifier for the architecture artifact.
+    - stored: Architecture
+      qualified: TOGAF::Architecture
+      metaclass: Class
+      created_by: metaclass + StereotypeEx
+      tags: {}
+    note: the same stored name exists in both profiles (TOGAF::Architecture and IEEE1471::Architecture)
+  ArchitectureDescription:
+    status: ieee1471
+    stereotypes:
+    - stored: ArchitecturalDescription
+      qualified: IEEE1471::ArchitecturalDescription
+      metaclass: Artifact
+      created_by: metaclass + StereotypeEx
+      tags:
+        ID:
+          description: Unique identifier for the architecture artifact.
+    note: the stored name is ArchitecturalDescription
+  Stakeholder:
+    status: ieee1471
+    stereotypes:
+    - stored: Stakeholder
+      qualified: IEEE1471::Stakeholder
+      metaclass: Actor
+      created_by: qualified type
+      tags:
+        ID:
+          description: Unique identifier for the architecture artifact.
+        Class:
+          values:
+          - High
+          - Medium
+          - Low
+        Power:
+          values:
+          - Keep Satisfied
+          - Keep Informed
+          - Key Players
+        LevelOfInterest:
+          values:
+          - High
+          - Medium
+          - Low
+        RequiredSupport: {}
+        CurrentCommitment: {}
+  Concern:
+    status: ieee1471
+    stereotypes:
+    - stored: Concern
+      qualified: IEEE1471::Concern
+      metaclass: UseCase
+      created_by: qualified type
+      tags: {}
+  View:
+    status: ieee1471
+    stereotypes:
+    - stored: View
+      qualified: IEEE1471::View
+      metaclass: Class
+      created_by: qualified type
+      tags:
+        ID:
+          description: Unique identifier for the architecture artifact.
+  Viewpoint:
+    status: ieee1471
+    stereotypes:
+    - stored: Viewpoint
+      qualified: IEEE1471::Viewpoint
+      metaclass: Class
+      created_by: qualified type
+      tags:
+        ID:
+          description: Unique identifier for the architecture artifact.
+  LibraryViewpoint:
+    status: ieee1471
+    stereotypes:
+    - stored: LibraryViewpoint
+      qualified: IEEE1471::LibraryViewpoint
+      metaclass: Package
+      created_by: metaclass + StereotypeEx
+      tags:
+        ID:
+          description: Unique identifier for the architecture artifact.
+    note: IEEE1471::LibraryViewpoint on an element of type Package
+  Model:
+    status: ieee1471
+    stereotypes:
+    - stored: Model
+      qualified: IEEE1471::Model
+      metaclass: Class
+      created_by: qualified type
+      tags:
+        ID:
+          description: Unique identifier for the architecture artifact.
+  Mission:
+    status: ieee1471
+    stereotypes:
+    - stored: Mission
+      qualified: IEEE1471::Mission
+      metaclass: Artifact
+      created_by: metaclass + StereotypeEx
+      tags:
+        ID:
+          description: Unique identifier for the architecture artifact.
+        Category:
+          description: User-definable categorization.
+        Source:
+          description: Location from where the information was collected.
+        Owner:
+          description: Owner of the architecture entity.
+    note: IEEE1471::Mission; the qualified type is refused, made as an Artifact with StereotypeEx
+  Environment:
+    status: ieee1471
+    stereotypes:
+    - stored: Environment
+      qualified: IEEE1471::Environment
+      metaclass: Class
+      created_by: qualified type
+      tags:
+        ID:
+          description: Unique identifier for the architecture artifact.
+    - stored: Environment
+      qualified: TOGAF::Environment
+      metaclass: Class
+      created_by: qualified type
+      tags:
+        ID:
+          description: Unique identifier for the architecture artifact.
+        Source:
+          description: Location from where the information was collected.
+        Owner:
+          description: Owner of the architecture entity.
+        Category:
+          description: User-definable categorization.
+    note: the same stored name exists in both profiles (TOGAF::Environment and IEEE1471::Environment)
+  Rationale:
+    status: ieee1471
+    stereotypes:
+    - stored: Rationale
+      qualified: IEEE1471::Rationale
+      metaclass: Artifact
+      created_by: qualified type
+      tags: {}
+ea_only:
+  adm_phases:
+    what: The ten phases of the Architecture Development Method as packages (element of type Package); each carries the tag IterationNumber. Not content-metamodel
+      entities.
+    names:
+    - ADM_ArchitectureChangeManagement
+    - ADM_ArchitectureVision
+    - ADM_BusinessArchitecture
+    - ADM_ImplementationGovernance
+    - ADM_InformationSystemsArchitecture
+    - ADM_MigrationPlanning
+    - ADM_OpportunitiesAndSolutions
+    - ADM_Preliminary
+    - ADM_RequirementsManagement
+    - ADM_TechnologyArchitecture
+  continuum_and_reference:
+    what: 'Enterprise Continuum, Architecture Continuum, Solutions Continuum, Standards Information Base (packages), Architecture, Baseline and Target Architecture,
+      Vision, Request for / Statement of Architecture Work: TOGAF but not the content metamodel (chapters 4 to 6, 39 and 40 of the standard).'
+    names:
+    - ArchitectureBoard
+    - ArchitectureContinuum
+    - ArchitectureVision
+    - BaselineArchitecture
+    - EnterpriseContinuum
+    - FrameworkDefinition
+    - RequestForArchitectureWork
+    - SIB
+    - Solution
+    - SolutionsContinuum
+    - StatementOfArchitectureWork
+    - TargetArchitecture
+  generic_enterprise_items:
+    what: Business, motivation, risk, location, channel, asset and organization items that Sparx's technology adds (strategy, risk, SWOT, assets, channels
+      such as Phone and SnailMail, contracts such as SLA and OLA). The standard has no counterpart; they are not cataloged beyond binding them.
+    names:
+    - Assessment
+    - Asset
+    - BOD
+    - Benefit
+    - BranchOffice
+    - BusinessConstraint
+    - BusinessEntity
+    - BusinessProcess
+    - BusinessRule
+    - BusinessScenario
+    - ClientPlace
+    - CorporateValue
+    - CourseOfAction
+    - DataComponent
+    - DesiredResult
+    - Directive
+    - DocumentAsset
+    - End
+    - EquipmentAsset
+    - ExternalInfluencer
+    - ExternalOrganization
+    - Feature
+    - FixedAsset
+    - Guideline
+    - Habit
+    - HeadQuarters
+    - ITGovernanceStrategy
+    - ITServiceComponent
+    - ITServiceDomain
+    - ITServicePortfolio
+    - InPerson
+    - Influencer
+    - Infrastructure
+    - InternalInfluencer
+    - Internet
+    - IntersectingEntity
+    - Intranet
+    - KPI
+    - Liability
+    - ManagementPrerogative
+    - Means
+    - Offering
+    - OfficeBlock
+    - OperationLevelAgreement
+    - Outcome
+    - Personnel
+    - Phone
+    - Policy
+    - PotentialImpact
+    - PrincipalEntity
+    - Project
+    - Regulation
+    - Resource
+    - Reward
+    - Risk
+    - SalesAgent
+    - ServiceLevelAgreement
+    - SnailMail
+    - Standard
+    - Strategy
+    - StructureEntity
+    - Supplier
+    - Tactic
+    - Technology
+    - Vision
+  swot_attribute_stereotypes:
+    what: Stereotypes applied to class attributes, not to elements.
+    names:
+    - Strength
+    - Weakness
+    - Opportunity
+    - Threat
+  relationship_stereotypes_in_the_table:
+    what: Connector stereotypes that carry a relationship name of the standard's table (34.7); generated into the ruleset's relationship table.
+    names:
+    - Access
+    - AppliesTo
+    - BelongsTo
+    - Communicate
+    - Consume
+    - Contain
+    - Create
+    - Decompose
+    - Deliver
+    - Encapsulate
+    - EnsureCorrectOperationOf
+    - Extend
+    - Generate
+    - GovernsAndMeasures
+    - Identify
+    - Implement
+    - InteractsWith
+    - IsAccessedAndUpdatedThrough
+    - IsHostedIn
+    - IsProcessedBy
+    - Meets
+    - Motivate
+    - OperatesIn
+    - OperatesOn
+    - Orchestrate
+    - Owns
+    - OwnsAndGoverns
+    - ParticipatesIn
+    - Perform
+    - PerformsTaskIn
+    - Produce
+    - Provide
+    - ProvideGovernedInterface
+    - ProvidesPlatformFor
+    - Resolve
+    - SetPerformanceCriteriaFor
+    - Supply
+    - Supports
+    - influence
+  relationship_stereotypes_outside_the_table:
+    what: Connector stereotypes with no row in the standard's table (EA's own, mostly from its enterprise modeling and motivation modeling).
+    names:
+    - ABBMapping
+    - ADM_Flow
+    - ActsAs
+    - Amplify
+    - AssetMapping
+    - BusinessDependency
+    - Claim
+    - DataExchange
+    - Deploy
+    - Determine
+    - Discharge
+    - Effects
+    - Enable
+    - Establish
+    - FormulatedBasedOn
+    - FoundationDependency
+    - Governs
+    - Guides
+    - ITDependency
+    - InContract
+    - Include
+    - InformationDependency
+    - Invokes
+    - LeverageDirection
+    - Make
+    - Manage
+    - Quantify
+    - Recognize
+    - Require
+    - Responsible
+    - SBBMapping
+    - SignificantTo
+    - Supervise
+    - Use
+    - WorkFlowDependency
+    - WorksFor
+  ieee1471_other:
+    what: Stakeholder-class stereotypes of the IEEE1471 profile that the guide does not list.
+    names:
+    - Competitor
+    - Customer
+    - Partner
+    - Supplier
+toolbox:
+  status: read on screen, measured on EA 17.1 build 1716, 2026-11-04; one diagram opened (type shown as Architecture Content)
+  toolboxes:
+  - (FEAF) Business Reference Model
+  - (FEAF) Performance Reference
+  - (FEAF) ServiceComponent Ref...
+  - (FEAF) Technical Reference Model
+  - Conceptual Framework
+  - Architecture Content Model
+  - Architecture Development Me...
+  - Benefits
+  - Business Motivation Model
+  - Business Logistics
+  - Business Process
+  - Data Map
+  - Enterprise Continuum
+  - TOGAF Framework
+  - Organization Structure
+  - Service Model
+  pages_of_an_Architecture_Content_diagram:
+  - ACM
+  - Data Modeling Extension
+  - Governance Extension
+  - Infrastructure Consolidation Ext...
+  - Motivation Extension
+  - Process Modeling Extension
+  - Services Extension
+  - ACM Relations (44 entries)
+  note: the toolbox spells the item Platform Service correctly (the Resources tab prints Platform Sevice); the Services Extension page holds IT Service.
+    The other 15 toolboxes were not opened.
+quick_links:
+  status: read on screen, measured on EA 17.1 build 1716, 2026-11-04; one source, the BusinessFunction 'Authorize card payment'
+  targets_offered:
+  - Actor
+  - OrganizationUnit
+  - Process
+  - Role
+  - BusinessFunction
+  - BusinessService
+  - Assumption
+  - Principle
+  - BusinessRequirement
+  - Gap
+  - BusinessConstraint
+  submenus_opened:
+    Actor:
+    - Interacts With
+    - Perform
+    - Support
+    OrganizationUnit:
+    - Owns
+    Process:
+    - Supports
+    - Realization
+    - ControlFlow
+    - Decompose
+    Role:
+    - Access
+    BusinessFunction:
+    - Decompose
+    - Communicate
+    BusinessService:
+    - Provide Governed Interface
+  note: the Actor submenu shows 'Support'; the tab has the stereotype Supports. Not checked further.
+harvest:
+  stereotypes_tags_metaclass: creating one object per Resources-tab row through EA's COM API and reading back t_object, t_xref, t_objectproperties, t_attribute,
+    t_connector, t_connectortag (EA 17.1 build 1716, headless)
+  resources_tab_rows: 'ui: the Resources tab read on screen, 2026-10-20; the tab''s sort order (by stored name) was used to confirm the abbreviations
+    ABB, SBB, SIB, BOD, SLA, OLA'
+  diagram_tokens: 'probe: 252 spellings against a headless EA; the model patterns'' tokens as candidates'
+  concept_map: name and tag agreement against the language file
+  on_screen_2026_11_04: 'EA 17.1 build 1716: IEEE1471 profile lists 16 rows (an earlier count of 17 was a miscount); the TOGAF profile rows
+    matched the stored row list name for name; Diagram Types, Toolboxes, one diagram''s toolbox pages and one quick-link source were read'
+  not_harvested:
+  - the other 15 toolboxes' pages
+  - quick links from sources other than one BusinessFunction
+  - FEAF
+
+# EA's names for this language's layout. tools/gen_conventions.py reads layout_map.
+layout_map:
+  technology: TOGAF
+  display_name: TOGAF 9 (TOGAF Diagrams MDG)
+  extends: UML
+  stereotype_prefix: ''
+  notes: |
+    `radial` for TOGAF_Interface. The ADM wheel is a hub with eight phases at equal steps around it, and the preliminary phase sits outside the ring. The steps are equal, so `radial` fits and `radial-tree`, which weights its branches, has nothing to weigh.
+
+    Radius, start angle and sweep aren't stated, because only one diagram shows them.
+
+    Route. `straight` is our default. The connectors on this diagram route differently from those on a plain Logical diagram, and which route name that is hasn't been confirmed, so this value may change.
+
+    Not bound, for want of enough elements to support a default size: TOGAF_EnterpriseContinuum, TOGAF_ADM, TOGAF_ACM, TOGAF_OrganizationStructure and IEEE1471_ConceptualFramework.
+
+    No viewpoints. TOGAF publishes a catalog of them, but nothing here records which concepts each one accepts, so none is listed.
+
+    `TOGAF` is the id EA reports, measured on EA 17.1 build 1716.
+  diagram_types:
+    TOGAF_Interface:
+      token: TOGAF Diagrams::TOGAF_Interface
+      base: Logical
+      stereotype_prefix: ADM_
+      default_type: large-box
+      arrangement: radial
+      title: frame-header
+      route: straight
+      channels:
+        fill: 'The phase circle''s own paint. Each ADM phase is drawn by its stereotype''s shape script
+          as a gradient-filled circle, and 10 of 10 elements carry no fill override at all: `Backcolor`
+          is -1 and no `BCol` appears in `ObjectStyle`: so EA paints every one of them. The corpus row
+          records no color encoding either: the gradient is decoration, not a variable. Whether a written
+          fill would be honored was not tested, which is a second reason not to offer it.'
+        claimed:
+          position: 'The bearing on the ring IS the phase, and the ADM is a cycle: moving Phase C to Phase
+            F''s bearing says the architecture work happens in a different order. Measured as eight spokes
+            at 45-degree intervals around the Requirements Management hub.'
+          size: Hub against spoke. The one 146x147 element is the hub of the cycle and the eight 114x116
+            ones are its phases, so resizing an element restates which of the two it is.
+          icon: 'The circle is the shape script''s, and 0 of 10 elements carries an alternate image: no
+            `ImageID` in `ObjectStyle`. Setting one would replace the phase circle with a picture, which
+            is why this is claimed rather than free.'
+          line_style: Normative in UML, and all 17 connectors on the measured diagram are Dependencies,
+            whose dashed line is what separates them from an association. Channels do not inherit, so
+            this restates the base notation's claim rather than relying on it.
+        free:
+        - border
+        - border_width
+        - line_color
+        - font_color
+        - opacity

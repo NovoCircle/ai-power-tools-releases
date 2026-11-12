@@ -1,0 +1,841 @@
+# EA facts for VDML 1.0 (language file vdml-1), as Sparx Enterprise Architect's built-in VDML technology stores them.
+# Measured by reading back what EA stores.
+# `concepts` maps every concept of the language skill to what EA offers: a stereotype, a connector stereotype, a tag value or nothing.
+# Westbrook Bank appears only in howto.md, as an illustration.
+
+language: vdml-1
+technology: VDML
+display_name: VDML 1.0 (EA names it Value Delivery Metamodel (VDML))
+profile: VDML
+stereotype_prefix: ''
+stereotype_storage: bare name in t_object.Stereotype and t_connector.Stereotype (Role, BoundaryPort, DeliverableFlow); the qualified
+  form VDML::<name> is the FQName in the t_xref row named Stereotypes and is what AddNew takes
+measured_on:
+  ea: 17.1 build 1716
+  date: '2026-10-21'
+counts:
+  stereotype_names_on_resources_tab: 24
+  resources_tab_rows: 25
+  element_stereotypes_bound: 17
+  connector_stereotypes_bound: 7
+  concept_names_refused: 53
+  diagram_types: 8
+  tag_rows_read: 23
+  concepts_in_language_file: 71
+  concepts_by_representation:
+    stereotype: 15
+    stereotype (shared): 7
+    none: 41
+    stereotype and tag: 2
+    connector stereotype: 6
+version_note: The skill describes VDML 1.0. OMG published 1.1 in 2018. EA's technology states no version; its
+  model patterns carry none and its display name is the 1.0 title. What the catalog shows is consistent with 1.0 (the stereotypes are
+  the 1.0 class names, with no 1.1 additions identified), but nothing measured here settles it; 1.1 was not researched.
+diagram_types:
+  ActivityNetwork:
+    ea_name: ActivityNetwork
+    token: VDML::ActivityNetwork
+    stored_diagram_type: Logical
+    style_ex: MDGDgm=VDML::ActivityNetwork;
+  CapabilityHeatmap:
+    ea_name: CapabilityHeatmap
+    token: VDML::CapabilityHeatmap
+    stored_diagram_type: Logical
+    style_ex: MDGDgm=VDML::CapabilityHeatmap;
+  CapabilityLibrary:
+    ea_name: CapabilityLibrary
+    token: VDML::CapabilityLibrary
+    stored_diagram_type: Logical
+    style_ex: MDGDgm=VDML::CapabilityLibrary;
+  CapabilityManagement:
+    ea_name: CapabilityManagement
+    token: VDML::CapabilityManagement
+    stored_diagram_type: Logical
+    style_ex: MDGDgm=VDML::CapabilityManagement;
+  CollaborationStructure:
+    ea_name: CollaborationStructure
+    token: VDML::CollaborationStructure
+    stored_diagram_type: Logical
+    style_ex: MDGDgm=VDML::CollaborationStructure;
+  MeasurementDependency:
+    ea_name: MeasurementDependency
+    token: VDML::MeasurementDependency
+    stored_diagram_type: Logical
+    style_ex: MDGDgm=VDML::MeasurementDependency;
+  RoleCollaboration:
+    ea_name: RoleCollaboration
+    token: VDML::RoleCollaboration
+    stored_diagram_type: Logical
+    style_ex: MDGDgm=VDML::RoleCollaboration;
+  ValuePropositionExchange:
+    ea_name: ValuePropositionExchange
+    token: VDML::ValuePropositionExchange
+    stored_diagram_type: Logical
+    style_ex: MDGDgm=VDML::ValuePropositionExchange;
+stereotypes:
+  Activity:
+    metaclass: Object
+    fqname: VDML::Activity
+    created_as: element in a package
+    tags:
+    - name: isExpand
+      default: 'False'
+      values: True,False
+    metaclasses_bound_on:
+    - Collaboration
+    - Component
+    - Node
+    - Object
+  Actor:
+    metaclass: Object
+    fqname: VDML::Actor
+    created_as: element in a package
+    tags: []
+  BoundaryPort:
+    metaclass: Port
+    fqname: VDML::BoundaryPort
+    created_as: child of a host element (Port; creating it in a package fails with 'Invalid parent for Port (Package)')
+    tags:
+    - name: InputOutput
+      default: Either
+      values: Input,Output,Either
+    - name: withCondition
+      default: 'False'
+      values: True,False
+    metaclasses_bound_on:
+    - Port
+  BusinessNetwork:
+    metaclass: Object
+    fqname: VDML::BusinessNetwork
+    created_as: element in a package
+    tags: []
+  Capability:
+    metaclass: Object
+    fqname: VDML::Capability
+    created_as: element in a package
+    tags:
+    - name: isExpand
+      default: 'False'
+      values: True,False
+    - name: showExpand
+      default: 'False'
+      values: True,False
+    metaclasses_bound_on:
+    - Collaboration
+    - Component
+    - Node
+    - Object
+  CapabilityMethod:
+    metaclass: Object
+    fqname: VDML::CapabilityMethod
+    created_as: element in a package
+    tags: []
+  CapabilityOffer:
+    metaclass: Port
+    fqname: VDML::CapabilityOffer
+    created_as: child of a host element (Port; creating it in a package fails with 'Invalid parent for Port (Package)')
+    tags: []
+    metaclasses_bound_on:
+    - Collaboration
+    - Component
+    - Node
+    - Object
+    - Port
+    note: 'two rows on the Resources tab: the Port form (what a plain VDML::CapabilityOffer creates, Object_Type Port, child of a host)
+      and the Object form (StereotypeEx on an Object, in a package)'
+  Collaboration:
+    metaclass: Object
+    fqname: VDML::Collaboration
+    created_as: element in a package
+    tags: []
+  Community:
+    metaclass: Object
+    fqname: VDML::Community
+    created_as: element in a package
+    tags: []
+  MeasuredCharacteristic:
+    metaclass: Object
+    fqname: VDML::MeasuredCharacteristic
+    created_as: element in a package
+    tags: []
+  OrgUnit:
+    metaclass: Object
+    fqname: VDML::OrgUnit
+    created_as: element in a package
+    tags:
+    - name: isExpand
+      default: 'False'
+      values: True,False
+    metaclasses_bound_on:
+    - Collaboration
+    - Component
+    - Node
+    - Object
+  Pool:
+    metaclass: Object
+    fqname: VDML::Pool
+    created_as: element in a package
+    tags: []
+  Port:
+    metaclass: Part
+    fqname: VDML::Port
+    created_as: element in a package (Part, no host needed)
+    tags:
+    - name: InputOutput
+      default: Either
+      values: Input,Output,Either
+    metaclasses_bound_on:
+    - Part
+  Role:
+    metaclass: Object
+    fqname: VDML::Role
+    created_as: element in a package
+    tags:
+    - name: isExpand
+      default: 'False'
+      values: True,False
+    metaclasses_bound_on:
+    - Collaboration
+    - Component
+    - Node
+    - Object
+  RoleSwimlane:
+    metaclass: ActivityPartition
+    fqname: VDML::RoleSwimlane
+    created_as: element in a package
+    tags: []
+  Store:
+    metaclass: Object
+    fqname: VDML::Store
+    created_as: element in a package
+    tags: []
+    metaclasses_bound_on:
+    - Collaboration
+    - Component
+    - Node
+    - Object
+  ValueProposition:
+    metaclass: Object
+    fqname: VDML::ValueProposition
+    created_as: element in a package
+    tags: []
+connector_stereotypes:
+  CapabilityAssociation:
+    metaclass: Dependency
+    fqname: VDML::CapabilityAssociation
+    direction: Unspecified
+    tags: []
+  CapabilityDependency:
+    metaclass: Dependency
+    fqname: VDML::CapabilityDependency
+    direction: Unspecified
+    tags:
+    - name: _Bezier
+      default: '1'
+      values: ''
+    note: EA also put a hidden tag _Bezier (Default 1) on this connector
+  DeliverableFlow:
+    metaclass: Dependency
+    fqname: VDML::DeliverableFlow
+    direction: Source -> Destination
+    tags:
+    - name: isTangible
+      default: 'True'
+      values: True,False
+  InternalPortDelegation:
+    metaclass: Dependency
+    fqname: VDML::InternalPortDelegation
+    direction: Source -> Destination
+    tags: []
+  MeasurementRelationship:
+    metaclass: Dependency
+    fqname: VDML::MeasurementRelationship
+    direction: Source -> Destination
+    tags:
+    - name: influence
+      default: positive
+      values: positive,negative
+  RoleAssignment:
+    metaclass: Dependency
+    fqname: VDML::RoleAssignment
+    direction: Source -> Destination
+    tags: []
+  RoleContainment:
+    metaclass: Dependency
+    fqname: VDML::RoleContainment
+    direction: Source -> Destination
+    tags: []
+concepts:
+  Activity:
+    representation: stereotype
+    stereotype: Activity
+    metaclass: Object
+    tags:
+    - isExpand
+    note: tag isExpand draws the expand button; the Role that performs it is the swim-lane it sits in (parent), not a link
+  Actor:
+    representation: stereotype
+    stereotype: Actor
+    metaclass: Object
+    tags: []
+  Person:
+    representation: stereotype (shared)
+    stereotype: Actor
+    metaclass: Object
+    tags: []
+    note: no Person stereotype; an Actor stands for a person too
+  Role:
+    representation: stereotype
+    stereotype: Role
+    metaclass: Object
+    tags:
+    - isExpand
+    note: one stereotype for every kind of Role; tag isExpand
+  Position:
+    representation: stereotype (shared)
+    stereotype: Role
+    metaclass: Object
+    tags:
+    - isExpand
+    note: no Position stereotype; a Role in an OrgUnit is a plain Role
+  Party:
+    representation: stereotype (shared)
+    stereotype: Role
+    metaclass: Object
+    tags:
+    - isExpand
+    note: no Party stereotype; a Role in a BusinessNetwork is a plain Role
+  Member:
+    representation: stereotype (shared)
+    stereotype: Role
+    metaclass: Object
+    tags:
+    - isExpand
+    note: no Member stereotype; a Role in a Community is a plain Role
+  Performer:
+    representation: stereotype (shared)
+    stereotype: Role
+    metaclass: Object
+    tags:
+    - isExpand
+    note: no Performer stereotype; a Role in a CapabilityMethod is a plain Role
+  Collaboration:
+    representation: stereotype
+    stereotype: Collaboration
+    metaclass: Object
+    tags: []
+    note: the plain Collaboration; BusinessNetwork, Community, OrgUnit and CapabilityMethod are their own stereotypes
+  BusinessNetwork:
+    representation: stereotype
+    stereotype: BusinessNetwork
+    metaclass: Object
+    tags: []
+  Community:
+    representation: stereotype
+    stereotype: Community
+    metaclass: Object
+    tags: []
+  OrgUnit:
+    representation: stereotype
+    stereotype: OrgUnit
+    metaclass: Object
+    tags:
+    - isExpand
+    note: tag isExpand; owns its Pools, CapabilityOffers and CapabilityMethods as children (parent), not as links
+  CapabilityMethod:
+    representation: stereotype
+    stereotype: CapabilityMethod
+    metaclass: Object
+    tags: []
+    note: owned by an OrgUnit as its child (parent)
+  Store:
+    representation: stereotype
+    stereotype: Store
+    metaclass: Object
+    tags: []
+  Pool:
+    representation: stereotype
+    stereotype: Pool
+    metaclass: Object
+    tags: []
+    note: a separate stereotype; the standard's Pool specializes Store
+  Participant:
+    representation: none
+    note: abstract; an Actor, a Role or a Collaboration of any kind fills a Role (the source of a RoleAssignment)
+  PortContainer:
+    representation: none
+    note: abstract; Activity, Store, Pool and Collaboration host ports (BoundaryPort and CapabilityOffer accepted on all five)
+  Port:
+    representation: stereotype
+    stereotype: Port
+    metaclass: Part
+    tags:
+    - InputOutput
+    note: a Collaboration's own port, a Part element drawn as a pyramid; tag InputOutput (Input, Output, Either)
+  InputPort:
+    representation: stereotype and tag
+    stereotype: BoundaryPort
+    metaclass: Port
+    tags:
+    - InputOutput
+    - withCondition
+    note: an Activity, Store or Pool port; the direction is the tag InputOutput = Input
+    tag_value: InputOutput=Input
+  OutputPort:
+    representation: stereotype and tag
+    stereotype: BoundaryPort
+    metaclass: Port
+    tags:
+    - InputOutput
+    - withCondition
+    note: an Activity, Store or Pool port; the direction is the tag InputOutput = Output
+    tag_value: InputOutput=Output
+  DeliverableFlow:
+    representation: connector stereotype
+    stereotype: DeliverableFlow
+    metaclass: Dependency
+    tags:
+    - isTangible
+    note: also the flow between Roles (Role Collaboration diagram) and a ValueProposition's provider and recipient link; the deliverable
+      (BusinessItem) is the connector's name; tag isTangible
+  PortDelegation:
+    representation: none
+    note: abstract
+  InputDelegation:
+    representation: connector stereotype
+    stereotype: InternalPortDelegation
+    metaclass: Dependency
+    tags: []
+    note: EA stores both delegations as one connector stereotype between a Collaboration Port and a BoundaryPort
+  OutputDelegation:
+    representation: connector stereotype
+    stereotype: InternalPortDelegation
+    metaclass: Dependency
+    tags: []
+    note: see InputDelegation
+  Assignment:
+    representation: connector stereotype
+    stereotype: RoleAssignment
+    metaclass: Dependency
+    tags: []
+    note: from the Participant to the Role; no roleResource form, no context-held form
+  CapabilityOffer:
+    representation: stereotype
+    stereotype: CapabilityOffer
+    metaclass: Port
+    tags: []
+    note: two forms (Port and Object); no heat index tag
+  Capability:
+    representation: stereotype
+    stereotype: Capability
+    metaclass: Object
+    tags:
+    - isExpand
+    - showExpand
+    note: one stereotype for definition and category; tags isExpand, showExpand; the hierarchy is the parent of the element
+  CapabilityDefinition:
+    representation: stereotype (shared)
+    stereotype: Capability
+    metaclass: Object
+    tags:
+    - isExpand
+    - showExpand
+    note: no separate stereotype
+  CapabilityCategory:
+    representation: stereotype (shared)
+    stereotype: Capability
+    metaclass: Object
+    tags:
+    - isExpand
+    - showExpand
+    note: no separate stereotype
+  CapabilityDependency:
+    representation: connector stereotype
+    stereotype: CapabilityDependency
+    metaclass: Dependency
+    tags: []
+    note: in Sparx's pattern it joins a CapabilityOffer and a CapabilityMethod (the dotted dependency of 8.8), not two capability definitions
+      through a deliverable
+  ValueProposition:
+    representation: stereotype
+    stereotype: ValueProposition
+    metaclass: Object
+    tags: []
+    note: no components, no weights; provider and recipient are DeliverableFlow connectors
+  MeasuredCharacteristic:
+    representation: stereotype
+    stereotype: MeasuredCharacteristic
+    metaclass: Object
+    tags: []
+  MeasurementRelationship:
+    representation: connector stereotype
+    stereotype: MeasurementRelationship
+    metaclass: Dependency
+    tags:
+    - influence
+    note: tag influence (positive, negative)
+  ValueDeliveryModel:
+    representation: none
+    note: no element; the model or a package is the container
+  AnalysisContext:
+    representation: none
+    note: no stereotype
+  Scenario:
+    representation: none
+    note: no stereotype
+  DelegationContext:
+    representation: none
+    note: no stereotype
+  CalendarService:
+    representation: none
+    note: no stereotype
+  ResourceUse:
+    representation: none
+    note: no stereotype
+  BusinessItem:
+    representation: none
+    note: no stereotype; the name of a DeliverableFlow stands for the deliverable
+  ValuePropositionComponent:
+    representation: none
+    note: no stereotype
+  ValueAdd:
+    representation: none
+    note: no stereotype
+  ValueElement:
+    representation: none
+    note: no stereotype
+  ReleaseControl:
+    representation: none
+    note: no stereotype
+  BusinessItemLibrary:
+    representation: none
+    note: no stereotype
+  BusinessItemLibraryElement:
+    representation: none
+    note: no stereotype
+  BusinessItemDefinition:
+    representation: none
+    note: no stereotype
+  BusinessItemCategory:
+    representation: none
+    note: no stereotype
+  ValueLibrary:
+    representation: none
+    note: no stereotype
+  ValueDefinition:
+    representation: none
+    note: no stereotype
+  ValueCategory:
+    representation: none
+    note: no stereotype
+  CapabilityLibrary:
+    representation: none
+    note: no element; the CapabilityLibrary diagram type shows the Capability hierarchy
+  PracticeLibrary:
+    representation: none
+    note: no stereotype
+  PracticeDefinition:
+    representation: none
+    note: no stereotype
+  PracticeCategory:
+    representation: none
+    note: no stereotype
+  RoleLibrary:
+    representation: none
+    note: no stereotype
+  RoleDefinition:
+    representation: none
+    note: no stereotype
+  RoleCategory:
+    representation: none
+    note: no stereotype
+  VdmlElement:
+    representation: none
+    note: abstract; EA's own name, description and tagged values
+  MeasurableElement:
+    representation: none
+    note: abstract
+  Attribute:
+    representation: none
+    note: EA's tagged values, not a VDML element
+  Annotation:
+    representation: none
+    note: EA's notes and the UML Note, not a VDML element
+  Expression:
+    representation: none
+    note: no stereotype
+  Operand:
+    representation: none
+    note: no stereotype
+  SmmModel:
+    representation: none
+    note: SMM class; no stereotype
+  MeasureLibrary:
+    representation: none
+    note: SMM class; no stereotype
+  Measure:
+    representation: none
+    note: SMM class; no stereotype
+  Characteristic:
+    representation: none
+    note: SMM class; MeasuredCharacteristic is the VDML class
+  Measurement:
+    representation: none
+    note: SMM class; no stereotype
+  Observation:
+    representation: none
+    note: SMM class; no stereotype
+  MeasureRelationship:
+    representation: none
+    note: SMM class; MeasurementRelationship is the stereotype
+cannot_represent:
+  concepts_with_no_stereotype_tag_or_uml_home:
+  - AnalysisContext
+  - Annotation
+  - Attribute
+  - BusinessItem
+  - BusinessItemCategory
+  - BusinessItemDefinition
+  - BusinessItemLibrary
+  - BusinessItemLibraryElement
+  - CalendarService
+  - CapabilityLibrary
+  - Characteristic
+  - DelegationContext
+  - Expression
+  - MeasurableElement
+  - Measure
+  - MeasureLibrary
+  - MeasureRelationship
+  - Measurement
+  - Observation
+  - Operand
+  - Participant
+  - PortContainer
+  - PortDelegation
+  - PracticeCategory
+  - PracticeDefinition
+  - PracticeLibrary
+  - ReleaseControl
+  - ResourceUse
+  - RoleCategory
+  - RoleDefinition
+  - RoleLibrary
+  - Scenario
+  - SmmModel
+  - ValueAdd
+  - ValueCategory
+  - ValueDefinition
+  - ValueDeliveryModel
+  - ValueElement
+  - ValueLibrary
+  - ValuePropositionComponent
+  - VdmlElement
+  unbound_names_refused_by_EA:
+  - ValueDeliveryModel
+  - AnalysisContext
+  - Scenario
+  - DelegationContext
+  - Participant
+  - Person
+  - CalendarService
+  - Assignment
+  - Party
+  - Member
+  - Position
+  - Performer
+  - ResourceUse
+  - BusinessItem
+  - PortContainer
+  - InputPort
+  - OutputPort
+  - PortDelegation
+  - InputDelegation
+  - OutputDelegation
+  - ValuePropositionComponent
+  - ValueAdd
+  - ValueElement
+  - ReleaseControl
+  - CapabilityDefinition
+  - CapabilityCategory
+  - BusinessItemLibrary
+  - BusinessItemLibraryElement
+  - BusinessItemDefinition
+  - BusinessItemCategory
+  - ValueLibrary
+  - ValueDefinition
+  - ValueCategory
+  - CapabilityLibrary
+  - PracticeLibrary
+  - PracticeDefinition
+  - PracticeCategory
+  - RoleLibrary
+  - RoleDefinition
+  - RoleCategory
+  - VdmlElement
+  - MeasurableElement
+  - Attribute
+  - Annotation
+  - Expression
+  - Operand
+  - SmmModel
+  - MeasureLibrary
+  - Measure
+  - Characteristic
+  - Measurement
+  - Observation
+  - MeasureRelationship
+ea_only:
+  BoundaryPort: one stereotype for the standard's InputPort and OutputPort; the direction is the tag InputOutput (Input, Output, Either);
+    tag withCondition
+  RoleSwimlane: a Role drawn as a swim-lane in an Activity Network (an ActivityPartition); a drawing device, not a second kind of Role
+  CapabilityAssociation: the dashed Capability Management link between a CapabilityOffer and what supports it (CapabilityMethod, Store,
+    Pool); not a class of the standard
+  RoleContainment: the standard's association between a Collaboration and its Role, drawn as a connector
+  isExpand: 'tag on Activity, Capability, OrgUnit, Role: shows the expand button; not a VDML property'
+  showExpand: 'tag on Capability: shows the plus or minus; not a VDML property'
+  _Bezier: a hidden tag EA put on a CapabilityDependency connector (Default 1); EA's own, not VDML's
+toolbox:
+  status: read on screen, measured on EA 17.1 build 1716, 2026-11-04; only the Activity Network toolbox was opened (on the diagram 'Home
+    Loan Delivery')
+  toolboxes:
+  - ActivityNetwork
+  - CapabilityHeatmap
+  - CapabilityLibrary
+  - CapabilityManagement
+  - CollaborationStructure
+  - MeasurementDependency
+  - PropositionExchange
+  - RoleCollaboration
+  diagram_types_on_the_resources_tab:
+  - Role Collaboration
+  - Value Proposition Exchange
+  - Activity Network
+  - Collaboration Structure
+  - Capability Library
+  - Capability Heatmap
+  - Capability Management
+  - Measurement Dependency
+  pages_of_the_activity_network_toolbox:
+    VDML:
+    - Role Swimlane
+    - Activity
+    - Store
+    - Pool
+    - Port (Boundary)
+    - Port (Floating)
+    - Deliverable Flow
+    - Internal Port Delegation
+  not_done: the other seven toolboxes were not opened
+quick_links:
+  status: read on screen, measured on EA 17.1 build 1716, 2026-11-04; one source, the Activity 'Take application'
+  result: 'only ''Create Multiple Elements...'' (and Filter to Toolbox): no VDML-specific quick link from an activity'
+harvest:
+  created_and_read_back:
+  - 17 element stereotypes (metaclass, binding, tags with Values and Default), 7 connector stereotypes (with tags), the 8 diagram type
+    tokens, the Port rule, the hosts that accept a port, CapabilityOffer's two forms, 53 concept names EA refuses
+  resources_tab:
+  - the 24 stereotype names (25 rows) and the technology id; the catalog adds none
+  model_patterns:
+  - the endpoints of connectors and the direction of flows (EA's ModelPatterns\vdml-*.xml, read as files)
+  on_screen_2026_11_04: 'EA 17.1 build 1716: Diagram Types lists 8 types in a group VDML, Toolboxes lists 8; the Activity Network toolbox
+    page and one quick-link source were read; profile rows were not recounted'
+  not_harvested:
+  - toolbox pages of the other seven toolboxes
+  - quick links from sources other than one Activity
+  - model templates
+  - constraints
+  - the definition file (encrypted)
+  ea_build: 17.1 build 1716
+
+# EA's names for this language's layout. tools/gen_conventions.py reads layout_map.
+layout_map:
+  technology: VDML
+  display_name: Value Delivery Metamodel (VDML)
+  extends: UML
+  stereotype_prefix: ''
+  notes: |
+    Each EA diagram type here draws the guide diagram type named on its `guide` line. The display name is the one EA shows, which states no version. Route names are conventions, not measurements.
+
+    `VDML` is the id EA reports, measured on EA 17.1 build 1716.
+  diagram_types:
+    ActivityNetwork:
+      guide: Activity Network
+      base: Logical
+      size_keys:
+        Pool: Pool
+        Store: Store
+        BoundaryPort: InputPort
+        InputPort: InputPort
+        OutputPort: OutputPort
+        ValueProposition: ValueProposition
+    CapabilityHeatmap:
+      guide: Capability Heatmap
+      base: Logical
+      size_keys:
+        Pool: Pool
+        Store: Store
+        BoundaryPort: InputPort
+        InputPort: InputPort
+        OutputPort: OutputPort
+        ValueProposition: ValueProposition
+    CapabilityLibrary:
+      guide: CapabilityLibrary
+      base: Logical
+      size_keys:
+        Pool: Pool
+        Store: Store
+        BoundaryPort: InputPort
+        InputPort: InputPort
+        OutputPort: OutputPort
+        ValueProposition: ValueProposition
+    CapabilityManagement:
+      guide: Capability Management
+      base: Logical
+      size_keys:
+        Pool: Pool
+        Store: Store
+        BoundaryPort: InputPort
+        InputPort: InputPort
+        OutputPort: OutputPort
+        ValueProposition: ValueProposition
+    CollaborationStructure:
+      guide: Collaboration Structure
+      base: Logical
+      size_keys:
+        Pool: Pool
+        Store: Store
+        BoundaryPort: InputPort
+        InputPort: InputPort
+        OutputPort: OutputPort
+        ValueProposition: ValueProposition
+    MeasurementDependency:
+      guide: Measurement Dependency
+      base: Logical
+      size_keys:
+        Pool: Pool
+        Store: Store
+        BoundaryPort: InputPort
+        InputPort: InputPort
+        OutputPort: OutputPort
+        ValueProposition: ValueProposition
+    RoleCollaboration:
+      guide: Role Collaboration
+      base: Logical
+      size_keys:
+        Pool: Pool
+        Store: Store
+        BoundaryPort: InputPort
+        InputPort: InputPort
+        OutputPort: OutputPort
+        ValueProposition: ValueProposition
+    ValuePropositionExchange:
+      guide: ValueProposition Exchange
+      base: Logical
+      size_keys:
+        Pool: Pool
+        Store: Store
+        BoundaryPort: InputPort
+        InputPort: InputPort
+        OutputPort: OutputPort
+        ValueProposition: ValueProposition

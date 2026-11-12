@@ -1,8 +1,10 @@
 # The governance gate
 
-Everything here was run against a live repository before it was written down. The figures come
-from the Westbrook Bank reference model and are there to show the *shape* of an answer, not as
-numbers to expect.
+The mechanics here were run against a live repository before they were written down. The figures
+come from the Westbrook Bank reference model and are there to show the *shape* of an answer, not as
+numbers to expect. The outcome counts in section 3 are one measured run of the current rules on a
+fresh copy of that model (the extract was read with SQL, not through the server's extract).
+Substitute your own technology, stereotypes and model.
 
 ---
 
@@ -10,8 +12,14 @@ numbers to expect.
 
 An element with no stereotype lands in no entity table unless the inclusion choice admits it (the
 choice to include everything gives it a table keyed by its metaclass), so by default it is not in
-the reporting layer. That is correct behavior — the business tables are the technology's
+the reporting layer. That is correct behavior: the business tables are the technology's
 vocabulary, and an element carrying no vocabulary term has no table to go in.
+
+The gate lists exactly the elements the saved inclusion choice leaves without a table. Under "only
+what my MDG defines" that is every unstereotyped element and every element carrying a stereotype the
+technology does not declare. Under "everything in the repository" it is none of them. Under "show me
+the gaps" it is the ones the person did not include. Diagram furniture (`Package`, `Note`, `Text`,
+`Boundary`) is never listed: it never gets a table, under any choice.
 
 It becomes a problem when the element carries governance data anyway. On the reference model
 three Components carry the complete tag set:
@@ -32,7 +40,8 @@ untagged, unstereotyped element is merely undrawn; a tagged one is a governance 
 
 `governance_gap` speaks plain column names and the rows come from EA's tables, so the caller maps
 between them. This is deliberate: it keeps `governance_gap` pure and free of any knowledge of
-`t_object`. Read the rows with `ea_analyze(operation="execute_sql", ...)`:
+`t_object`. Read the rows with `ea_analyze(operation="execute_sql", ...)` (the rows come back under
+the `rows` key, every value a string):
 
 | Name | Read with |
 |---|---|
@@ -40,6 +49,7 @@ between them. This is deliberate: it keeps `governance_gap` pure and free of any
 | `props` | `SELECT Object_ID, Property, Value FROM t_objectproperties`, filtered to the in-scope `objects` |
 | `packages` | `SELECT Package_ID, Parent_ID, ea_guid, Name FROM t_package` |
 | `mdg` | the dict `ea_mdg(operation="get_mdg_from_runtime", params={"tech_id": "<id>"})` returns |
+| `profile` | the saved profile; its `inclusion` section is the inclusion choice (`resolve_answer(...).inclusion`) |
 
 `declared_shapes` lives in `ea_census`, not in `governance_gap`:
 
@@ -67,30 +77,30 @@ tags = [{
     "value":   p.get("Value") or "",
 } for p in props]
 
-findings = assess(find_ungoverned(elements, tags), declared_shapes(mdg), elements)
+declared = declared_shapes(mdg)
+findings = assess(find_ungoverned(elements, tags, inclusion=profile["inclusion"], declared=declared),
+                  declared, elements)
 print(format_report(findings))
 ```
 
-Prefer the package's path from the root over its bare name for `package_path` — a customer reading
+Prefer the package's path from the root over its bare name for `package_path`: a customer reading
 "Investment Services" cannot tell which of two similarly named packages is meant. The entity
 tables' `package_path` column is built the same way.
 
-`find_ungoverned` skips `Package` elements by default. EA stores every package twice — once in
-the package tree and once as an object so it can sit on a diagram — and nobody stereotypes the
-object twin.
+`find_ungoverned` needs the inclusion choice, so the gate runs after the §2b question is answered.
+It skips diagram furniture by default. EA stores every package twice, once in the package tree and
+once as an object so it can sit on a diagram, and nobody stereotypes the object twin.
 
 ---
 
-## 3. The three outcomes, and why they must stay apart
+## 3. The four outcomes, and why they must stay apart
 
-### `no_candidate` — there is nothing to apply
+### `no_candidate`: there is nothing to apply
 
 The loaded technology extends no stereotype for that element's metaclass, so no stereotype can
 legally be applied to it. On the reference model, run over the Westbrook Bank package, this is
 **46 elements**: 10 Requirements and 36 UML behavior elements (use cases, actions, states,
-actors), because the technology extends `Component`, `Class`, `Activity` and `Node` only. (The
-15 infrastructure Nodes were this case until WBA 1.1.1 declared `WBATechnologyNode`; see
-`unrankable` below.)
+actors), because the technology extends `Component`, `Class`, `Activity` and `Node` only.
 
 The useful answer here is not a suggestion. It is:
 
@@ -101,75 +111,90 @@ Extending the technology is `ea-mdg-model-build`'s job, and generating one from 
 repository already contains is exactly what that capability does.
 
 **Never invent a suggestion here.** Applying a stereotype whose base metaclass does not match is
-the documented way to get EA to accept the write and silently drop it — `update_element` warns
+the documented way to get EA to accept the write and silently drop it; `update_element` warns
 about precisely this.
 
-### `ranked` — one candidate is backed by evidence
+### `ranked`: one candidate is backed by evidence
 
 A suggestion is only made when something in the repository distinguishes one candidate. The
 signal that does this in practice is **package locality**: what stereotype do the element's
-stereotyped neighbors carry?
+stereotyped neighbors carry? Tag fit takes no part in the ranking; it only rules a candidate out
+(see `unrankable`).
 
-Under WBA 1.0 the three governed Components on the reference model came out this way: they sit
-in a package whose other three stereotyped elements are all `WBAVendorSystem`. That is a
-suggestion with a stated basis, and the `reason` field carries it:
+The three governed Components on the reference model come out this way: they sit in a package whose
+other three stereotyped elements are all `WBAVendorSystem`, and that stereotype declares every tag
+the three carry (it declares nine, they carry six). That is a suggestion with a stated basis, and
+the `reason` field carries it:
 
 ```
 3 stereotyped element(s) in the same package carry 'WBAVendorSystem', and no other
 candidate for metaclass Component is backed by that evidence.
 ```
 
-Under 1.1.1 the same three elements, from the same snapshot, come out `unrankable` instead (see
-below), so the reference model no longer shows a `ranked` outcome. Offer a ranked suggestion
-**with the reason**. Do not present it as certain — it is evidence, not proof, and the
-customer knows their model.
+Offer a ranked suggestion **with the reason**. Do not present it as certain: it is evidence, not
+proof, and the customer knows their model.
 
-### `unrankable` — several candidates, nothing to separate them
+### `single_candidate`: one candidate, not confirmed
+
+Exactly one stereotype extends the element's metaclass (and its tags allow it), and nothing in the
+element's package confirms it. On the reference model that is the **15 infrastructure Nodes**: the
+technology declares `WBATechnologyNode` on `Node`, the Nodes carry no tags and no neighbor carries
+it. The gate names the stereotype, says "one candidate, not confirmed", and asks. It never ranks on
+the metaclass alone, and it does not call this unrankable, because nothing needs separating: there
+is one candidate and no evidence for or against it.
+
+### `unrankable`: nothing to choose by, or nothing that fits
 
 Say so and ask. Do not pick one.
 
-This is not a weakness in the implementation, it is a property of most technologies. On the
-reference technology (1.1.1) **ten of the fifteen element stereotypes declare an identical
-six-tag set**, so for an element carrying those six tags, tag overlap scores three of the seven
-Component stereotypes at exactly 1.0 (`WBABusinessService`, `WBARegulatedFunction`,
-`WBASystemOfRecord`); `WBABusinessApplication` scores 0.857, `WBAVendorSystem` 0.667 and the two
-AI stereotypes 0.6. Choosing the alphabetically first would be a guess wearing a number.
+- **Several candidates, nothing to separate them.** This is a property of most technologies. On the
+  reference technology **ten of the fifteen element stereotypes declare an identical six-tag set**,
+  so for an element carrying those six tags, tag names cannot tell the Component candidates apart.
+  Choosing the alphabetically first would be a guess wearing a number. On the Westbrook Bank package
+  one Activity is this case, with three candidates and no sibling evidence.
+- **Every candidate ruled out.** The element carries a tag that none of the candidates for its
+  metaclass declares, so none can be offered. The report says so and lists no candidates: extend the
+  technology, or accept the exclusion.
 
-Run over the Westbrook Bank package (WBA 1.1.1, 2026-10-07), 65 elements carry no stereotype: 3
-governed, none ranked, 19 needing a choice and 46 with no candidate. The 19 are:
+Tag fit is a veto and nothing else: a stereotype is ruled out only when the element carries a tag
+it does not declare. A stereotype that declares more tags than the element carries is not ranked
+down for it; the extra tags are tags the element has yet to fill.
 
-- **The three governed Components.** `WBAVendorSystem` still has the three sibling votes, but it
-  now declares nine tags (`vendor`, `product` and `pciScopeJustification` on top of the six), so
-  it scores below four other candidates on tag fit, and a suggestion is made only when one
-  candidate leads on both. The report lists `WBAVendorSystem` first, among five to choose from.
-- **The 15 Nodes.** There is now one candidate, `WBATechnologyNode`, but the Nodes carry no tags
-  and no neighbor carries it, so nothing in the repository backs it. The report lists it and
-  asks; it does not rank on the metaclass alone.
-- **One Activity**, with three candidates and nothing to separate them.
+Run over the Westbrook Bank package under option 1 (WBA 1.1.1), 65 elements carry no stereotype:
+3 governed and ranked, 15 with one candidate not confirmed, 1 needing a choice and 46 with no
+candidate. That is one measured run on a fresh copy, with the extract read by SQL and not through
+the server. The earlier measurement, under a ranking that used tag fit as a second signal, was none
+ranked, 19 needing a choice and 46 with no candidate.
+
+Option 1 also lists 21 elements that carry an ad hoc stereotype the technology does not declare,
+so 86 elements in all. Of those 21, 17 were unrankable (three `model document` classes and one
+activity carry tags no declared stereotype has), 3 had one candidate and 1 had none. A report that
+quotes the 65 should say whether it counts these 21.
 
 ---
 
 ## 4. Applying a stereotype
 
-**Take a baseline first.** This is the only step in the whole skill that writes to the
-customer's model, and a bulk stereotype application across a repository is exactly the change
-`ea-change-management` exists to make reversible.
+**Take a baseline first.** With the unbound-connector fix in [`the-inclusion-choice.md`](the-inclusion-choice.md)
+§3, this is one of the two steps in the whole skill that write to the customer's model, and a bulk
+stereotype application across a repository is exactly the change `ea-change-management` exists to
+make reversible.
 
 ```python
 ea_model(operation="update_element",
-         params={"element_id": 34206,
+         params={"element_id": <the element's id>,
                  "properties": {"StereotypeEx": "WBAVendorSystem"}})
 ```
 
 ### Pass the bare name
 
 Measured 2026-10-02 on EA build 1716, with the technology loaded. Both the bare name
-(`WBAVendorSystem`) and the qualified form (`WestbrookBankArchitecture::WBAVendorSystem`)
+(`WBAVendorSystem`) and the qualified form (`WBA::WBAVendorSystem`)
 produce an identical, **profile-bound** application: EA resolves the name against the loaded
 technology and writes the full `FQName` into `t_xref` itself.
 
 ```
-@STEREO;Name=WBAVendorSystem;GUID={...};FQName=WestbrookBankArchitecture::WBAVendorSystem;@ENDSTEREO;
+@STEREO;Name=WBAVendorSystem;GUID={...};FQName=WBA::WBAVendorSystem;@ENDSTEREO;
 ```
 
 This matters because the census counts an application as the technology's only when `FQName` is
@@ -178,17 +203,17 @@ its entity table after all, and the build would look like it had failed to apply
 
 Verified end to end: applying the bare name to two scratch Components moved the
 `WBAVendorSystem` census count from 35 to 37, and both elements were placed under
-`WestbrookBankArchitecture::WBAVendorSystem`.
+`WBA::WBAVendorSystem`.
 
 ### When the technology is not loaded
 
 The resolution above depends on the technology being loaded in the session. If it is not, EA has
-nothing to resolve the bare name against and will record an ad-hoc application — the stereotype
-name with no `FQName` — which the census will report as ungoverned drift rather than placing it
+nothing to resolve the bare name against and will record an ad-hoc application (the stereotype
+name with no `FQName`), which the census will report as ungoverned drift rather than placing it
 in a table.
 
 So before applying anything, confirm the technology is loaded. `ea-mdg-assess` distinguishes
-installed, embedded and loaded, which are four different states and are routinely confused.
+installed, embedded and loaded, which are three different states and are routinely confused.
 `IsTechnologyLoaded` is the test; the presence of a row in `t_trxtypes` is not.
 
 ### Verify, do not assume
@@ -197,7 +222,7 @@ installed, embedded and loaded, which are four different states and are routinel
 stereotype landed. After applying, re-run the census and confirm the element is placed:
 
 ```python
-census.placement.get(guid)   # -> ['WestbrookBankArchitecture::WBAVendorSystem']
+census.placement.get(guid)   # -> ['WBA::WBAVendorSystem']
 ```
 
 ---
@@ -205,8 +230,8 @@ census.placement.get(guid)   # -> ['WestbrookBankArchitecture::WBAVendorSystem']
 ## 5. If the customer declines
 
 Declining is a valid answer, not an error. Say plainly what the consequence is, then build the
-reporting layer without them. Leave unstereotyped diagram furniture (`Package`, `Note`, `Text`,
-`Boundary`) out of the count you report: it is never model content and never gets a table, as
+reporting layer without them. The report never lists unstereotyped diagram furniture (`Package`,
+`Note`, `Text`, `Boundary`): it is never model content and never gets a table, as
 `the-inclusion-choice.md` says, so counting it as "will not appear" would alarm the reader for
 nothing.
 
@@ -216,3 +241,7 @@ nothing.
 Record the counts with the build report (`SKILL.md` §9) so the layer can answer later what was left
 out and whether a human was asked. A layer that cannot say what it excluded invites the reader to
 assume it excluded nothing.
+
+**With no one to ask** (an unattended run), the gate applies nothing: a stereotype is a model write,
+and a write needs the person's yes. It reports the list and carries on as if declined, so a person can
+decide later.

@@ -13,9 +13,10 @@ TYPES ARE DECLARED, NEVER INFERRED
 ----------------------------------
 TEXT -> string, INTEGER -> int64, REAL -> float64, BOOLEAN -> bool, DATETIME ->
 timestamp (microseconds, no zone). A refresh must not change a column's type
-because of which rows happen to be populated, and pyarrow refuses a value that
-does not fit its column rather than repairing it. Every field is
-nullable. An empty table is still written, with its schema.
+because of which rows happen to be populated. pyarrow refuses a string in a
+numeric column, a number in a boolean column and an integer too big for int64
+(named here by table and column), but it TRUNCATES a float written to an int64
+column (1.5 becomes 1); the server never sends one. Every field is nullable. An empty table is still written, with its schema.
 
 pyarrow is REQUIRED for this step. It is imported here, not in the core, so the
 rest of the toolchain stays installable without a compiled wheel. Excel and CSV
@@ -34,7 +35,7 @@ import argparse
 import json
 import re
 import sys
-from datetime import date, datetime
+from datetime import datetime
 from pathlib import Path
 
 try:  # pragma: no cover - environment-dependent
@@ -85,35 +86,17 @@ def _specs(defn: dict) -> list[dict]:
     return powerbi_model._business_specs(defn) + list(defn["physical"])
 
 
-#: A time with no date is EA's stored default for a date it never set
-#: (`t_package.LastLoadDate` reads "12:00:00 AM"). It is anchored on the OLE
-#: automation zero date, which is what the repository's own date type counts from,
-#: so the value stays recognizable rather than being given a date it never had.
-TIME_ONLY_DATE = date(1899, 12, 30)
-
-#: Formats the server hands over, tried in order. The business tables carry ISO
-#: text; the physical tables carry EA's own US 12-hour text.
-_DATETIME_FORMATS = ("%m/%d/%Y %I:%M:%S %p",)
-
-
 def _datetime(value, table: str, column: str):
+    """An ISO date and time, or None. The server converts every date to ISO
+    (`YYYY-MM-DD HH:MM:SS`) before it hands rows over; anything else is refused."""
     if value is None or isinstance(value, datetime):
         return value
     try:
         return datetime.fromisoformat(value)
     except (TypeError, ValueError):
-        pass
-    for fmt in _DATETIME_FORMATS:
-        try:
-            return datetime.strptime(value, fmt)
-        except ValueError:
-            pass
-    try:
-        return datetime.combine(TIME_ONLY_DATE, datetime.strptime(value, "%I:%M:%S %p").time())
-    except (TypeError, ValueError):
         raise ParquetTablesError(
-            f"{table}.{column}: {value!r} is not a date and time (expected "
-            f"'YYYY-MM-DD HH:MM:SS' or 'M/D/YYYY h:mm:ss AM')") from None
+            f"{table}.{column}: {value!r} is not an ISO date and time (expected "
+            f"'YYYY-MM-DD HH:MM:SS')") from None
 
 
 def _columns(spec: dict) -> list[dict]:
@@ -136,7 +119,7 @@ def _table(spec: dict, rows: list[dict]):
             values = [_datetime(v, spec["name"], c["name"]) for v in values]
         try:
             arrays.append(pa.array(values, type=schema.field(c["name"]).type))
-        except (pa.ArrowInvalid, pa.ArrowTypeError) as e:
+        except (pa.ArrowInvalid, pa.ArrowTypeError, OverflowError) as e:
             raise ParquetTablesError(
                 f"{spec['name']}.{c['name']} is declared {c['type']} but holds a value "
                 f"that is not: {e}") from None

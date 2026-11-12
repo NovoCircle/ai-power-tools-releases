@@ -1,0 +1,2757 @@
+# EA facts for UAF 1.0 as Sparx Enterprise Architect's built-in UAF technology stores it.
+# Every stereotype and tag below was created in EA and read back. `concepts` maps a concept of the language skill to the stored stereotype
+# (and the metaclass rows it has, with how each row was established), its kind of EA object and its tags (the four common tags are in `common_tags`).
+# Westbrook Bank appears only in howto.md and the samples, as an illustration.
+
+language: uaf-1
+technology: UAF
+display_name: UAF
+profile: UAFP
+stereotype_prefix: UAFP
+stereotype_storage: 'bare upper camel case name in t_object.Stereotype, t_connector.Stereotype, t_attribute.Stereotype and
+  t_operation.Stereotype (Capability, OperationalPerformer, IsCapableToPerform); the qualified form UAFP::<name> is in the
+  t_xref row named Stereotypes (FQName) and is what AddNew and StereotypeEx take. The prefix is the profile name UAFP, not
+  the technology id UAF: UAF::<name> binds nothing. EA matches the name after UAFP:: without regard to case and stores the
+  canonical form. A second stereotype on the same object is kept in t_xref only; the Stereotype column holds the first'
+measured_on:
+  ea: 17.1 build 1716
+  date: '2026-10-21'
+  technology_version: '1.1'
+  technology_file: 'none: the technology is one of EA''s InternalTechnologies (encrypted); measured by creating objects'
+  standard_version_named_by_ea: UAF 1.0 (the technology's perspective text); GetTechnologyVersion returns 1.1
+  language_skill_version: UAF 1.0 (OMG formal/17-12-01)
+  version_note: 'The skill describes UAF 1.0. EA''s technology reports version 1.1 while its perspective text says 1.0. OMG
+    has 1.1 (2020), 1.2 (2022) and 1.3 (2026). The newer versions were not researched.
+    What this file records is the profile EA ships: 178 names and 184 rows on the Resources tab'
+counts:
+  resources_tab_distinct_names: 178
+  resources_tab_rows: 184
+  stereotype_names_bound: 172
+  stereotype_metaclass_pairs: 178
+  element_stereotypes_in_a_package: 114
+  port: 3
+  activity_parameter: 3
+  operation: 3
+  package: 2
+  connector: 47
+  slots_not_bound: 6
+  concepts_in_skill: 235
+  concepts_with_a_same_name_name_on_the_tab: 176
+  concepts_bound: 170
+  concepts_on_the_tab_but_not_bound: 6
+  concepts_with_no_name_on_the_tab: 59
+  ea_only_names: 2
+  uaf_own_diagram_types: 0
+  sysml_diagram_tokens_created: 8
+diagram_types_note: The technology has no Diagram Types node and creates no UAF diagram type (UAF::UAF and UAFP::UAF fall
+  back to a plain Class diagram). It draws every view on a SysML 1.4 diagram type, as its model patterns show. These tokens
+  were created and read back; they are the diagram types of a UAF model in EA.
+diagram_types:
+  BlockDefinition:
+    ea_name: BlockDefinition
+    token: SysML1.4::BlockDefinition
+    base: SysML1.4
+    stored_diagram_type: Logical
+    style_ex: MDGDgm=SysML1.4::BlockDefinition;
+    created: true
+    model_patterns_using_it: 54
+    standard_views_drawn_on_it_by_ea_patterns:
+    - Actual Resources Connectivity
+    - Actual Resources Structure
+    - Dictionary
+    - Environment
+    - Information Model
+    - Measurements
+    - Measurements Library
+    - Operational Connectivity
+    - Operational Constraints
+    - Operational Processes
+    - Operational Structure
+    - Operational Taxonomy
+    - Operational Traceability
+    - Personnel Connectivity
+    - Personnel Constraints
+    - Personnel Processes
+    - Personnel Roadmap
+    - Personnel Structure
+    - Personnel Taxonomy
+    - Personnel Traceability
+    - Project Connectivity
+    - Project Roadmap
+    - Project Structure
+    - Project Taxonomy
+    - Project Traceability
+    - Resource Connectivity
+    - Resource Constraints
+    - Resource Processes
+    - Resource Roadmap
+    - Resource Taxonomy
+    - Resource Traceability
+    - Security Connectivity
+    - Security Constraints
+    - Security Structure
+    - Security Taxonomy
+    - Security Traceability
+    - Service Connectivity
+    - Service Processes
+    - Service Roadmap
+    - Service Structure
+    - Service Taxonomy
+    - Service Traceability
+    - Standard Taxonomy
+    - Standards Roadmap
+    - Standards Traceability
+    - Strategic Connectivity
+    - Strategic Constraints
+    - Strategic Deployment
+    - Strategic Phasing
+    - Strategic States St-St
+    - Strategic Structure
+    - Strategic Taxonomy
+    - Strategic Traceability
+    - Summary and Overview SmOv
+  InternalBlock:
+    ea_name: InternalBlock
+    token: SysML1.4::InternalBlock
+    base: SysML1.4
+    stored_diagram_type: CompositeStructure
+    style_ex: MDGDgm=SysML1.4::InternalBlock;
+    created: true
+    model_patterns_using_it: 2
+    standard_views_drawn_on_it_by_ea_patterns:
+    - Resource Structure
+    - Standards Structure
+  Activity:
+    ea_name: Activity
+    token: SysML1.4::Activity
+    base: SysML1.4
+    stored_diagram_type: Activity
+    style_ex: MDGDgm=SysML1.4::Activity;
+    created: true
+    model_patterns_using_it: 2
+    standard_views_drawn_on_it_by_ea_patterns:
+    - Project Processes
+    - Security Processes
+  Sequence:
+    ea_name: Sequence
+    token: SysML1.4::Sequence
+    base: SysML1.4
+    stored_diagram_type: Sequence
+    style_ex: MDGDgm=SysML1.4::Sequence;
+    created: true
+    model_patterns_using_it: 4
+    standard_views_drawn_on_it_by_ea_patterns:
+    - Operational Interaction Scenarios
+    - Personnel Interaction Scenarios
+    - Resource Interaction Scenarios
+    - Service Interaction Scenarios
+  StateMachine:
+    ea_name: StateMachine
+    token: SysML1.4::StateMachine
+    base: SysML1.4
+    stored_diagram_type: Statechart
+    style_ex: MDGDgm=SysML1.4::StateMachine;
+    created: true
+    model_patterns_using_it: 4
+    standard_views_drawn_on_it_by_ea_patterns:
+    - Operational States
+    - Personnel States
+    - Resource States
+    - Service States
+  Requirement:
+    ea_name: Requirement
+    token: SysML1.4::Requirement
+    base: SysML1.4
+    stored_diagram_type: Custom
+    style_ex: MDGDgm=SysML1.4::Requirement;
+    created: true
+    model_patterns_using_it: 1
+    standard_views_drawn_on_it_by_ea_patterns:
+    - Requirements
+  Parametric:
+    ea_name: Parametric
+    token: SysML1.4::Parametric
+    base: SysML1.4
+    stored_diagram_type: CompositeStructure
+    style_ex: MDGDgm=SysML1.4::Parametric;
+    created: true
+    model_patterns_using_it: 1
+    standard_views_drawn_on_it_by_ea_patterns:
+    - Service Constraints
+  Package:
+    ea_name: Package
+    token: SysML1.4::Package
+    base: SysML1.4
+    stored_diagram_type: Package
+    style_ex: MDGDgm=SysML1.4::Package;
+    created: true
+    model_patterns_using_it: 0
+    standard_views_drawn_on_it_by_ea_patterns: []
+slots_not_bound:
+- ActualMeasurement
+- ActualOrganizationRole
+- ActualProjectMilestoneRole
+- ActualProjectRole
+- ActualResourceRole
+- ProjectStatus
+common_tags:
+  names:
+  - URI
+  - conformsTo
+  - actualMeasurementSet
+  - measurementSet
+  note: URI and conformsTo are on every stereotype that specializes UAFElement (169 of 172); actualMeasurementSet and measurementSet
+    on 98. They are left out of `tags` below
+concepts:
+  Alias:
+    stereotype: Alias
+    qualified: UAFP::Alias
+    kind: element
+    metaclass:
+    - Note (default)
+    tags:
+      nameOwner: {}
+  Definition:
+    stereotype: Definition
+    qualified: UAFP::Definition
+    kind: element
+    metaclass:
+    - Note (default)
+    tags:
+      author: {}
+  SameAs:
+    stereotype: SameAs
+    qualified: UAFP::SameAs
+    kind: connector
+    metaclass:
+    - Dependency (default)
+  ActualCondition:
+    stereotype: ActualCondition
+    qualified: UAFP::ActualCondition
+    kind: element
+    metaclass:
+    - Object (default)
+    tags:
+      endDate: {}
+      startDate: {}
+  ActualEnvironment:
+    stereotype: ActualEnvironment
+    qualified: UAFP::ActualEnvironment
+    kind: element
+    metaclass:
+    - Object (default)
+    tags:
+      endDate: {}
+      startDate: {}
+  ActualLocation:
+    stereotype: ActualLocation
+    qualified: UAFP::ActualLocation
+    kind: element
+    metaclass:
+    - Object (default)
+    tags:
+      address: {}
+      customKind: {}
+      locationKind:
+        values:
+        - SolidVolume
+        - Surface
+        - Line
+        - Point
+        - GeoStationaryPoint
+        - PlanarSurface
+        - PolygonArea
+        - RectangularArea
+        - ElipticalArea
+        - CircularArea
+        - Other
+      locationNamedByAddress:
+        values:
+        - 'True'
+        - 'False'
+        default: 'False'
+      endDate: {}
+      startDate: {}
+  ActualMeasurement:
+    stereotype: null
+    status: on-the-tab-but-not-creatable
+    note: listed on the Resources tab (UAFP) and defined as a UML slot; no recipe tried binds it
+  ActualMeasurementKind:
+    stereotype: null
+    status: no-stereotype
+    reason: enumeration
+  ActualMeasurementSet:
+    stereotype: ActualMeasurementSet
+    qualified: UAFP::ActualMeasurementSet
+    kind: element
+    metaclass:
+    - Object (default)
+    tags:
+      appliesFor: {}
+      endDate: {}
+      startDate: {}
+  ActualPropertySet:
+    stereotype: ActualPropertySet
+    qualified: UAFP::ActualPropertySet
+    kind: element
+    metaclass:
+    - Object (default)
+    tags:
+      endDate: {}
+      startDate: {}
+  Condition:
+    stereotype: Condition
+    qualified: UAFP::Condition
+    kind: element
+    metaclass:
+    - DataType (default)
+    tags:
+      quantityKind: {}
+      unit: {}
+  Environment:
+    stereotype: Environment
+    qualified: UAFP::Environment
+    kind: element
+    metaclass:
+    - DataType (default)
+    tags:
+      environmentKind:
+        values:
+        - TerrainType
+        - WeatherConditions
+        - LightConditions
+        - CBRNEnvironment
+        - SituationType
+      quantityKind: {}
+      unit: {}
+  EnvironmentKind:
+    stereotype: null
+    status: no-stereotype
+    reason: enumeration
+  EnvironmentProperty:
+    stereotype: EnvironmentProperty
+    qualified: UAFP::EnvironmentProperty
+    kind: element
+    metaclass:
+    - Part (default)
+  GeoPoliticalExtentType:
+    stereotype: GeoPoliticalExtentType
+    qualified: UAFP::GeoPoliticalExtentType
+    kind: element
+    metaclass:
+    - DataType (default)
+    tags:
+      customKind: {}
+      geoPoliticalExtentTypeKind:
+        values:
+        - GeoFeatureType
+        - RegionOfCountryType
+        - CountryType
+        - RegionOfWorldType
+        - FacilityType
+        - SiteType
+        - InstallationType
+        - OtherType
+      quantityKind: {}
+      unit: {}
+      activity: {}
+      function: {}
+  GeoPoliticalExtentTypeKind:
+    stereotype: null
+    status: no-stereotype
+    reason: enumeration
+  Location:
+    stereotype: Location
+    qualified: UAFP::Location
+    kind: element
+    metaclass:
+    - DataType (default)
+    tags:
+      customKind: {}
+      locationTypeKind:
+        values:
+        - OtherType
+        - SolidVolumeType
+        - SurfaceType
+        - LineType
+        - PointType
+        - GeoStationaryPointType
+        - PlanarSurfaceType
+        - PolygonAreaType
+        - RectangularAreaType
+        - ElipticalAreaType
+        - CircularAreaType
+      quantityKind: {}
+      unit: {}
+  LocationHolder:
+    stereotype: null
+    status: no-stereotype
+    reason: abstract grouping
+  LocationKind:
+    stereotype: null
+    status: no-stereotype
+    reason: enumeration
+  LocationTypeKind:
+    stereotype: null
+    status: no-stereotype
+    reason: enumeration
+  MeasurableElement:
+    stereotype: null
+    status: no-stereotype
+    reason: abstract grouping
+  Measurement:
+    stereotype: Measurement
+    qualified: UAFP::Measurement
+    kind: element
+    metaclass:
+    - Part (default)
+    tags:
+      environmentalContext: {}
+  MeasurementSet:
+    stereotype: MeasurementSet
+    qualified: UAFP::MeasurementSet
+    kind: element
+    metaclass:
+    - DataType (default)
+    tags:
+      appliesFor: {}
+      quantityKind: {}
+      unit: {}
+  PropertySet:
+    stereotype: null
+    status: no-stereotype
+    reason: abstract grouping
+  ActualState:
+    stereotype: null
+    status: no-stereotype
+    reason: abstract grouping
+  ISO8601DateTime:
+    stereotype: null
+    status: no-stereotype
+    reason: no stereotype in EA's profile
+  Exchange:
+    stereotype: null
+    status: no-stereotype
+    reason: abstract grouping
+  Resource:
+    stereotype: null
+    status: no-stereotype
+    reason: abstract grouping
+  Activity:
+    stereotype: null
+    status: no-stereotype
+    reason: abstract grouping
+  CapableElement:
+    stereotype: null
+    status: no-stereotype
+    reason: abstract grouping
+  IsCapableToPerform:
+    stereotype: IsCapableToPerform
+    qualified: UAFP::IsCapableToPerform
+    kind: connector
+    metaclass:
+    - Abstraction (default)
+  PerformsInContext:
+    stereotype: PerformsInContext
+    qualified: UAFP::PerformsInContext
+    kind: connector
+    metaclass:
+    - Abstraction (default)
+  ArchitectureMetadata:
+    stereotype: ArchitectureMetadata
+    qualified: UAFP::ArchitectureMetadata
+    kind: element
+    metaclass:
+    - Note (default)
+    tags:
+      category: {}
+      dublinCoreElement: {}
+      metaDataScheme: {}
+      name: {}
+  Information:
+    stereotype: Information
+    qualified: UAFP::Information
+    kind: element
+    metaclass:
+    - Note (default)
+    tags:
+      informationKind:
+        values:
+        - Information
+        - DomainInformation
+        - PositionReferenceFrame
+        - PedigreeInformation
+        - Data
+  InformationKind:
+    stereotype: null
+    status: no-stereotype
+    reason: enumeration
+  Metadata:
+    stereotype: Metadata
+    qualified: UAFP::Metadata
+    kind: element
+    metaclass:
+    - Note (default)
+    tags:
+      category: {}
+      dublinCoreElement: {}
+      metaDataScheme: {}
+      name: {}
+  Rule:
+    stereotype: null
+    status: no-stereotype
+    reason: abstract grouping
+  RuleKind:
+    stereotype: null
+    status: no-stereotype
+    reason: enumeration
+  ArchitecturalReference:
+    stereotype: ArchitecturalReference
+    qualified: UAFP::ArchitecturalReference
+    kind: connector
+    metaclass:
+    - Dependency (default)
+  Implements:
+    stereotype: Implements
+    qualified: UAFP::Implements
+    kind: connector
+    metaclass:
+    - Abstraction (default)
+  ActualEnterprisePhase:
+    stereotype: ActualEnterprisePhase
+    qualified: UAFP::ActualEnterprisePhase
+    kind: element
+    metaclass:
+    - Object (default)
+    tags:
+      statementTask: {}
+      goal: {}
+      vision: {}
+      operationalArchitectureOfEnterprisePhase: {}
+      resourceArchitectureOfEnterprisePhase: {}
+      endDate: {}
+      startDate: {}
+  Capability:
+    stereotype: Capability
+    qualified: UAFP::Capability
+    kind: element
+    metaclass:
+    - Class (default)
+    tags:
+      isEncapsulated:
+        values:
+        - 'true'
+        - 'false'
+  EnterpriseGoal:
+    stereotype: EnterpriseGoal
+    qualified: UAFP::EnterpriseGoal
+    kind: element
+    metaclass:
+    - Class (default)
+    - Requirement (family, inferred)
+    tags:
+      benefits: {}
+      enterprisePhase: {}
+      id: {}
+      text: {}
+  EnterprisePhase:
+    stereotype: EnterprisePhase
+    qualified: UAFP::EnterprisePhase
+    kind: element
+    metaclass:
+    - Class (default)
+    tags:
+      isEncapsulated:
+        values:
+        - 'true'
+        - 'false'
+  EnterpriseVision:
+    stereotype: EnterpriseVision
+    qualified: UAFP::EnterpriseVision
+    kind: element
+    metaclass:
+    - Class (default)
+    tags:
+      enterprisePhase: {}
+      isEncapsulated:
+        values:
+        - 'true'
+        - 'false'
+  VisionStatement:
+    stereotype: VisionStatement
+    qualified: UAFP::VisionStatement
+    kind: element
+    metaclass:
+    - Note (default)
+  WholeLifeEnterprise:
+    stereotype: WholeLifeEnterprise
+    qualified: UAFP::WholeLifeEnterprise
+    kind: element
+    metaclass:
+    - Class (default)
+    tags:
+      isEncapsulated:
+        values:
+        - 'true'
+        - 'false'
+  CapabilityProperty:
+    stereotype: CapabilityProperty
+    qualified: UAFP::CapabilityProperty
+    kind: element
+    metaclass:
+    - Part (default)
+  StructuralPart:
+    stereotype: StructuralPart
+    qualified: UAFP::StructuralPart
+    kind: element
+    metaclass:
+    - Part (default)
+  TemporalPart:
+    stereotype: TemporalPart
+    qualified: UAFP::TemporalPart
+    kind: element
+    metaclass:
+    - Part (default)
+  ActualEnduringTask:
+    stereotype: ActualEnduringTask
+    qualified: UAFP::ActualEnduringTask
+    kind: element
+    metaclass:
+    - Object (default)
+    tags:
+      endDate: {}
+      startDate: {}
+  CapabilityForTask:
+    stereotype: CapabilityForTask
+    qualified: UAFP::CapabilityForTask
+    kind: connector
+    metaclass:
+    - Abstraction (default)
+  EnduringTask:
+    stereotype: EnduringTask
+    qualified: UAFP::EnduringTask
+    kind: element
+    metaclass:
+    - Class (default)
+    tags:
+      isEncapsulated:
+        values:
+        - 'true'
+        - 'false'
+  AchievedEffect:
+    stereotype: AchievedEffect
+    qualified: UAFP::AchievedEffect
+    kind: connector
+    metaclass:
+    - Dependency (default)
+    tags:
+      desiredEffect: {}
+  Achiever:
+    stereotype: null
+    status: no-stereotype
+    reason: abstract grouping
+  DesiredEffect:
+    stereotype: DesiredEffect
+    qualified: UAFP::DesiredEffect
+    kind: connector
+    metaclass:
+    - Dependency (default)
+    tags:
+      achievedEffect: {}
+  Desirer:
+    stereotype: null
+    status: no-stereotype
+    reason: abstract grouping
+  Exhibits:
+    stereotype: Exhibits
+    qualified: UAFP::Exhibits
+    kind: connector
+    metaclass:
+    - Abstraction (default)
+    tags:
+      environmentalConditions: {}
+  MapsToCapability:
+    stereotype: MapsToCapability
+    qualified: UAFP::MapsToCapability
+    kind: connector
+    metaclass:
+    - Abstraction (default)
+  OrganizationInEnterprise:
+    stereotype: OrganizationInEnterprise
+    qualified: UAFP::OrganizationInEnterprise
+    kind: connector
+    metaclass:
+    - Abstraction (default)
+  ArbitraryConnector:
+    stereotype: ArbitraryConnector
+    qualified: UAFP::ArbitraryConnector
+    kind: connector
+    metaclass:
+    - Dependency (default)
+  ConceptItem:
+    stereotype: null
+    status: no-stereotype
+    reason: abstract grouping
+  ConceptRole:
+    stereotype: ConceptRole
+    qualified: UAFP::ConceptRole
+    kind: element
+    metaclass:
+    - Part (default)
+  HighLevelOperationalConcept:
+    stereotype: HighLevelOperationalConcept
+    qualified: UAFP::HighLevelOperationalConcept
+    kind: element
+    metaclass:
+    - Class (default)
+    tags:
+      isEncapsulated:
+        values:
+        - 'true'
+        - 'false'
+  KnownResource:
+    stereotype: KnownResource
+    qualified: UAFP::KnownResource
+    kind: element
+    metaclass:
+    - Class (default)
+    tags:
+      categoryCategorizesAsset: {}
+      physicalLocation: {}
+      requiredEnvironment: {}
+      isEncapsulated:
+        values:
+        - 'true'
+        - 'false'
+      isStandardConfiguration:
+        values:
+        - 'True'
+        - 'False'
+        default: 'false'
+      projectMilestone: {}
+      activity: {}
+      function: {}
+      versionReleasedAtMilestone: {}
+      versionWithdrawnAtMilestone: {}
+  OperationalAgent:
+    stereotype: null
+    status: no-stereotype
+    reason: abstract grouping
+  OperationalArchitecture:
+    stereotype: OperationalArchitecture
+    qualified: UAFP::OperationalArchitecture
+    kind: element
+    metaclass:
+    - Class (default)
+    tags:
+      describedBy: {}
+      categoryCategorizesAsset: {}
+      physicalLocation: {}
+      requiredEnvironment: {}
+      isEncapsulated:
+        values:
+        - 'true'
+        - 'false'
+  OperationalMethod:
+    stereotype: OperationalMethod
+    qualified: UAFP::OperationalMethod
+    kind: operation
+    metaclass:
+    - Operation (method of a class)
+    note: a stereotype of an operation of a class (host.Methods ... StereotypeEx); EA refuses it as an element
+  OperationalParameter:
+    stereotype: OperationalParameter
+    qualified: UAFP::OperationalParameter
+    kind: parameter
+    metaclass:
+    - ActivityParameter (child element)
+    note: an ActivityParameter element; create it as a child of an activity
+  OperationalPerformer:
+    stereotype: OperationalPerformer
+    qualified: UAFP::OperationalPerformer
+    kind: element
+    metaclass:
+    - Class (default)
+    tags:
+      categoryCategorizesAsset: {}
+      physicalLocation: {}
+      requiredEnvironment: {}
+      isEncapsulated:
+        values:
+        - 'true'
+        - 'false'
+  OperationalPort:
+    stereotype: OperationalPort
+    qualified: UAFP::OperationalPort
+    kind: port
+    metaclass:
+    - Port (child element)
+    note: a Port element; create it as a child of a class (Invalid parent for Port (Package) otherwise)
+  OperationalRole:
+    stereotype: OperationalRole
+    qualified: UAFP::OperationalRole
+    kind: element
+    metaclass:
+    - Part (default)
+    tags:
+      physicalLocation: {}
+      requiredEnvironment: {}
+  ProblemDomain:
+    stereotype: ProblemDomain
+    qualified: UAFP::ProblemDomain
+    kind: element
+    metaclass:
+    - Part (default)
+    tags:
+      physicalLocation: {}
+      requiredEnvironment: {}
+  OperationalConnector:
+    stereotype: OperationalConnector
+    qualified: UAFP::OperationalConnector
+    kind: connector
+    metaclass:
+    - Connector (default)
+  OperationalExchange:
+    stereotype: OperationalExchange
+    qualified: UAFP::OperationalExchange
+    kind: connector
+    metaclass:
+    - InformationFlow (default)
+    tags:
+      operationalExchangeKind:
+        values:
+        - MaterielExchange
+        - OrganizationalExchange
+        - EnergyExchange
+        - InformationExchange
+        - ConfigurationExchange
+        - GeoPoliticalExtentExchange
+      trustlevel: {}
+      itemProperty: {}
+  OperationalExchangeItem:
+    stereotype: null
+    status: no-stereotype
+    reason: abstract grouping
+  OperationalExchangeKind:
+    stereotype: null
+    status: no-stereotype
+    reason: enumeration
+  OperationalInterface:
+    stereotype: OperationalInterface
+    qualified: UAFP::OperationalInterface
+    kind: element
+    metaclass:
+    - Class (default)
+    tags:
+      isEncapsulated:
+        values:
+        - 'true'
+        - 'false'
+  OperationalSignal:
+    stereotype: OperationalSignal
+    qualified: UAFP::OperationalSignal
+    kind: element
+    metaclass:
+    - Signal (default)
+    tags:
+      activity: {}
+  OperationalSignalProperty:
+    stereotype: OperationalSignalProperty
+    qualified: UAFP::OperationalSignalProperty
+    kind: element
+    metaclass:
+    - Part (default)
+  OperationalActivity:
+    stereotype: OperationalActivity
+    qualified: UAFP::OperationalActivity
+    kind: element
+    metaclass:
+    - Activity (default)
+    tags:
+      affectedOperationalExchangeItem: {}
+      activityPerformableUnderCondition: {}
+  OperationalActivityAction:
+    stereotype: OperationalActivityAction
+    qualified: UAFP::OperationalActivityAction
+    kind: element
+    metaclass:
+    - Action (default)
+  OperationalActivityEdge:
+    stereotype: null
+    status: no-stereotype
+    reason: abstract grouping
+  OperationalControlFlow:
+    stereotype: OperationalControlFlow
+    qualified: UAFP::OperationalControlFlow
+    kind: connector
+    metaclass:
+    - ControlFlow (default)
+  OperationalObjectFlow:
+    stereotype: OperationalObjectFlow
+    qualified: UAFP::OperationalObjectFlow
+    kind: connector
+    metaclass:
+    - ObjectFlow (default)
+  StandardOperationalActivity:
+    stereotype: StandardOperationalActivity
+    qualified: UAFP::StandardOperationalActivity
+    kind: element
+    metaclass:
+    - Activity (default)
+    tags:
+      affectedOperationalExchangeItem: {}
+      activityPerformableUnderCondition: {}
+  OperationalStateDescription:
+    stereotype: OperationalStateDescription
+    qualified: UAFP::OperationalStateDescription
+    kind: element
+    metaclass:
+    - StateMachine (default)
+  OperationalMessage:
+    stereotype: OperationalMessage
+    qualified: UAFP::OperationalMessage
+    kind: connector
+    metaclass:
+    - Sequence (default)
+  InformationElement:
+    stereotype: InformationElement
+    qualified: UAFP::InformationElement
+    kind: element
+    metaclass:
+    - Class (default)
+    tags:
+      categoryCategorizesAsset: {}
+      physicalLocation: {}
+      requiredEnvironment: {}
+      isEncapsulated:
+        values:
+        - 'true'
+        - 'false'
+      activity: {}
+  OperationalConstraint:
+    stereotype: OperationalConstraint
+    qualified: UAFP::OperationalConstraint
+    kind: element
+    metaclass:
+    - Constraint (default)
+    tags:
+      ruleKind:
+        values:
+        - StructuralAssertion
+        - ActionAssertion
+        - Derivation
+        - Contract
+        - Constraint
+        - Guidance
+        - SecurityPolicy
+        - Caveat
+  SubjectOfOperationalConstraint:
+    stereotype: null
+    status: no-stereotype
+    reason: abstract grouping
+  ServiceSpecification:
+    stereotype: ServiceSpecification
+    qualified: UAFP::ServiceSpecification
+    kind: element
+    metaclass:
+    - Class (default)
+    tags:
+      isEncapsulated:
+        values:
+        - 'true'
+        - 'false'
+      versionReleasedAtMilestone: {}
+      versionWithdrawnAtMilestone: {}
+  ServiceMethod:
+    stereotype: ServiceMethod
+    qualified: UAFP::ServiceMethod
+    kind: operation
+    metaclass:
+    - Operation (method of a class)
+    note: a stereotype of an operation of a class (host.Methods ... StereotypeEx); EA refuses it as an element
+  ServiceParameter:
+    stereotype: ServiceParameter
+    qualified: UAFP::ServiceParameter
+    kind: parameter
+    metaclass:
+    - ActivityParameter (child element)
+    note: an ActivityParameter element; create it as a child of an activity
+  ServicePort:
+    stereotype: ServicePort
+    qualified: UAFP::ServicePort
+    kind: port
+    metaclass:
+    - Port (child element)
+    note: a Port element; create it as a child of a class (Invalid parent for Port (Package) otherwise)
+  ServiceSpecificationRole:
+    stereotype: ServiceSpecificationRole
+    qualified: UAFP::ServiceSpecificationRole
+    kind: element
+    metaclass:
+    - Part (default)
+  ServiceConnector:
+    stereotype: ServiceConnector
+    qualified: UAFP::ServiceConnector
+    kind: connector
+    metaclass:
+    - Connector (default)
+  ServiceInterface:
+    stereotype: ServiceInterface
+    qualified: UAFP::ServiceInterface
+    kind: element
+    metaclass:
+    - Class (default)
+    tags:
+      isEncapsulated:
+        values:
+        - 'true'
+        - 'false'
+  ServiceFunction:
+    stereotype: ServiceFunction
+    qualified: UAFP::ServiceFunction
+    kind: element
+    metaclass:
+    - Activity (default)
+    tags:
+      activityPerformableUnderCondition: {}
+  ServiceFunctionAction:
+    stereotype: ServiceFunctionAction
+    qualified: UAFP::ServiceFunctionAction
+    kind: element
+    metaclass:
+    - Action (default)
+  ServiceStateDescription:
+    stereotype: ServiceStateDescription
+    qualified: UAFP::ServiceStateDescription
+    kind: element
+    metaclass:
+    - StateMachine (default)
+  ServiceMessage:
+    stereotype: ServiceMessage
+    qualified: UAFP::ServiceMessage
+    kind: connector
+    metaclass:
+    - Sequence (default)
+  ServicePolicy:
+    stereotype: ServicePolicy
+    qualified: UAFP::ServicePolicy
+    kind: element
+    metaclass:
+    - Constraint (default)
+    tags:
+      ruleKind:
+        values:
+        - StructuralAssertion
+        - ActionAssertion
+        - Derivation
+        - Contract
+        - Constraint
+        - Guidance
+        - SecurityPolicy
+        - Caveat
+  Consumes:
+    stereotype: Consumes
+    qualified: UAFP::Consumes
+    kind: connector
+    metaclass:
+    - Abstraction (default)
+  Organization:
+    stereotype: Organization
+    qualified: UAFP::Organization
+    kind: element
+    metaclass:
+    - Class (default)
+    tags:
+      isStandardConfiguration:
+        values:
+        - 'True'
+        - 'False'
+        default: 'false'
+      projectMilestone: {}
+      categoryCategorizesAsset: {}
+      physicalLocation: {}
+      requiredEnvironment: {}
+      isEncapsulated:
+        values:
+        - 'true'
+        - 'false'
+      activity: {}
+      function: {}
+      versionReleasedAtMilestone: {}
+      versionWithdrawnAtMilestone: {}
+      stakeholderConcern: {}
+  OrganizationalResource:
+    stereotype: null
+    status: no-stereotype
+    reason: abstract grouping
+  Person:
+    stereotype: Person
+    qualified: UAFP::Person
+    kind: element
+    metaclass:
+    - Class (default)
+    tags:
+      isStandardConfiguration:
+        values:
+        - 'True'
+        - 'False'
+        default: 'false'
+      projectMilestone: {}
+      categoryCategorizesAsset: {}
+      physicalLocation: {}
+      requiredEnvironment: {}
+      isEncapsulated:
+        values:
+        - 'true'
+        - 'false'
+      activity: {}
+      function: {}
+      versionReleasedAtMilestone: {}
+      versionWithdrawnAtMilestone: {}
+      stakeholderConcern: {}
+  Post:
+    stereotype: Post
+    qualified: UAFP::Post
+    kind: element
+    metaclass:
+    - Class (default)
+    tags:
+      isStandardConfiguration:
+        values:
+        - 'True'
+        - 'False'
+        default: 'false'
+      projectMilestone: {}
+      categoryCategorizesAsset: {}
+      physicalLocation: {}
+      requiredEnvironment: {}
+      isEncapsulated:
+        values:
+        - 'true'
+        - 'false'
+      activity: {}
+      function: {}
+      versionReleasedAtMilestone: {}
+      versionWithdrawnAtMilestone: {}
+      stakeholderConcern: {}
+  Responsibility:
+    stereotype: Responsibility
+    qualified: UAFP::Responsibility
+    kind: element
+    metaclass:
+    - Class (default)
+    tags:
+      isStandardConfiguration:
+        values:
+        - 'True'
+        - 'False'
+        default: 'false'
+      projectMilestone: {}
+      categoryCategorizesAsset: {}
+      physicalLocation: {}
+      requiredEnvironment: {}
+      isEncapsulated:
+        values:
+        - 'true'
+        - 'false'
+      activity: {}
+      function: {}
+      versionReleasedAtMilestone: {}
+      versionWithdrawnAtMilestone: {}
+      stakeholderConcern: {}
+  Command:
+    stereotype: Command
+    qualified: UAFP::Command
+    kind: connector
+    metaclass:
+    - InformationFlow (default)
+    tags:
+      exchangeKind:
+        values:
+        - ResourceCommunication
+        - ResourceMovement
+        - ResourceEnergyFlow
+        - GeoPoliticalExtentExchange
+      itemProperty: {}
+  Control:
+    stereotype: Control
+    qualified: UAFP::Control
+    kind: connector
+    metaclass:
+    - InformationFlow (default)
+    tags:
+      exchangeKind:
+        values:
+        - ResourceCommunication
+        - ResourceMovement
+        - ResourceEnergyFlow
+        - GeoPoliticalExtentExchange
+      itemProperty: {}
+  CompetenceToConduct:
+    stereotype: CompetenceToConduct
+    qualified: UAFP::CompetenceToConduct
+    kind: connector
+    metaclass:
+    - Abstraction (default)
+  Competence:
+    stereotype: Competence
+    qualified: UAFP::Competence
+    kind: element
+    metaclass:
+    - Class (default)
+    tags:
+      isEncapsulated:
+        values:
+        - 'true'
+        - 'false'
+  CompetenceForRole:
+    stereotype: CompetenceForRole
+    qualified: UAFP::CompetenceForRole
+    kind: connector
+    metaclass:
+    - Abstraction (default)
+  RequiresCompetence:
+    stereotype: RequiresCompetence
+    qualified: UAFP::RequiresCompetence
+    kind: connector
+    metaclass:
+    - Abstraction (default)
+  ResponsibleFor:
+    stereotype: ResponsibleFor
+    qualified: UAFP::ResponsibleFor
+    kind: connector
+    metaclass:
+    - Abstraction (default)
+    tags:
+      endDate: {}
+      responsibleRoleKind:
+        values:
+        - Manager
+        - ResponsibleOwner
+      startDate: {}
+  ResponsibleRoleKind:
+    stereotype: null
+    status: no-stereotype
+    reason: enumeration
+  CapabilityConfiguration:
+    stereotype: CapabilityConfiguration
+    qualified: UAFP::CapabilityConfiguration
+    kind: element
+    metaclass:
+    - Class (default)
+    tags:
+      doctrine: {}
+      describedBy: {}
+      isStandardConfiguration:
+        values:
+        - 'True'
+        - 'False'
+        default: 'false'
+      projectMilestone: {}
+      categoryCategorizesAsset: {}
+      physicalLocation: {}
+      requiredEnvironment: {}
+      isEncapsulated:
+        values:
+        - 'true'
+        - 'false'
+      activity: {}
+      function: {}
+      versionReleasedAtMilestone: {}
+      versionWithdrawnAtMilestone: {}
+  NaturalResource:
+    stereotype: NaturalResource
+    qualified: UAFP::NaturalResource
+    kind: element
+    metaclass:
+    - Class (default)
+    tags:
+      isStandardConfiguration:
+        values:
+        - 'True'
+        - 'False'
+        default: 'false'
+      projectMilestone: {}
+      categoryCategorizesAsset: {}
+      physicalLocation: {}
+      requiredEnvironment: {}
+      isEncapsulated:
+        values:
+        - 'true'
+        - 'false'
+      activity: {}
+      function: {}
+      versionReleasedAtMilestone: {}
+      versionWithdrawnAtMilestone: {}
+  PhysicalResource:
+    stereotype: null
+    status: no-stereotype
+    reason: abstract grouping
+  ResourceArchitecture:
+    stereotype: ResourceArchitecture
+    qualified: UAFP::ResourceArchitecture
+    kind: element
+    metaclass:
+    - Class (default)
+    tags:
+      describedBy: {}
+      isStandardConfiguration:
+        values:
+        - 'True'
+        - 'False'
+        default: 'false'
+      projectMilestone: {}
+      categoryCategorizesAsset: {}
+      physicalLocation: {}
+      requiredEnvironment: {}
+      isEncapsulated:
+        values:
+        - 'true'
+        - 'false'
+      activity: {}
+      function: {}
+      versionReleasedAtMilestone: {}
+      versionWithdrawnAtMilestone: {}
+  ResourceArtifact:
+    stereotype: ResourceArtifact
+    qualified: UAFP::ResourceArtifact
+    kind: element
+    metaclass:
+    - Class (default)
+    tags:
+      isStandardConfiguration:
+        values:
+        - 'True'
+        - 'False'
+        default: 'false'
+      projectMilestone: {}
+      categoryCategorizesAsset: {}
+      physicalLocation: {}
+      requiredEnvironment: {}
+      isEncapsulated:
+        values:
+        - 'true'
+        - 'false'
+      activity: {}
+      function: {}
+      versionReleasedAtMilestone: {}
+      versionWithdrawnAtMilestone: {}
+  ResourcePerformer:
+    stereotype: null
+    status: no-stereotype
+    reason: abstract grouping
+  Software:
+    stereotype: Software
+    qualified: UAFP::Software
+    kind: element
+    metaclass:
+    - Class (default)
+    tags:
+      isStandardConfiguration:
+        values:
+        - 'True'
+        - 'False'
+        default: 'false'
+      projectMilestone: {}
+      categoryCategorizesAsset: {}
+      physicalLocation: {}
+      requiredEnvironment: {}
+      isEncapsulated:
+        values:
+        - 'true'
+        - 'false'
+      activity: {}
+      function: {}
+      versionReleasedAtMilestone: {}
+      versionWithdrawnAtMilestone: {}
+  System:
+    stereotype: System
+    qualified: UAFP::System
+    kind: element
+    metaclass:
+    - Class (default)
+    tags:
+      describedBy: {}
+      isStandardConfiguration:
+        values:
+        - 'True'
+        - 'False'
+        default: 'false'
+      projectMilestone: {}
+      categoryCategorizesAsset: {}
+      physicalLocation: {}
+      requiredEnvironment: {}
+      isEncapsulated:
+        values:
+        - 'true'
+        - 'false'
+      activity: {}
+      function: {}
+      versionReleasedAtMilestone: {}
+      versionWithdrawnAtMilestone: {}
+  ResourceMethod:
+    stereotype: ResourceMethod
+    qualified: UAFP::ResourceMethod
+    kind: operation
+    metaclass:
+    - Operation (method of a class)
+    note: a stereotype of an operation of a class (host.Methods ... StereotypeEx); EA refuses it as an element
+  ResourceParameter:
+    stereotype: ResourceParameter
+    qualified: UAFP::ResourceParameter
+    kind: parameter
+    metaclass:
+    - ActivityParameter (child element)
+    note: an ActivityParameter element; create it as a child of an activity
+  ResourcePort:
+    stereotype: ResourcePort
+    qualified: UAFP::ResourcePort
+    kind: port
+    metaclass:
+    - Port (child element)
+    tags:
+      implements: {}
+    note: a Port element; create it as a child of a class (Invalid parent for Port (Package) otherwise)
+  ResourceRole:
+    stereotype: ResourceRole
+    qualified: UAFP::ResourceRole
+    kind: element
+    metaclass:
+    - Part (default)
+    tags:
+      roleKind:
+        values:
+        - Part
+        - Component
+        - UsedConfiguration
+        - HumanResource
+        - Platform
+        - System
+        - SubOrganization
+        - PostRole
+        - ResponsibilityRole
+        - Equipment
+        - SubSystemPart
+        - UsedPhysicalArchitecture
+        - HostedSoftware
+        - ArtifactComponent
+        - NaturalResourceComponent
+        - Other
+      physicalLocation: {}
+      requiredEnvironment: {}
+  RoleKind:
+    stereotype: null
+    status: no-stereotype
+    reason: enumeration
+  ResourceConnector:
+    stereotype: ResourceConnector
+    qualified: UAFP::ResourceConnector
+    kind: connector
+    metaclass:
+    - Connector (default)
+    tags:
+      boundaryCondition: {}
+      implements: {}
+  ResourceExchange:
+    stereotype: ResourceExchange
+    qualified: UAFP::ResourceExchange
+    kind: connector
+    metaclass:
+    - InformationFlow (default)
+    tags:
+      exchangeKind:
+        values:
+        - ResourceCommunication
+        - ResourceMovement
+        - ResourceEnergyFlow
+        - GeoPoliticalExtentExchange
+      itemProperty: {}
+  ResourceExchangeItem:
+    stereotype: null
+    status: no-stereotype
+    reason: abstract grouping
+  ResourceInteractionKind:
+    stereotype: null
+    status: no-stereotype
+    reason: enumeration
+  ResourceInterface:
+    stereotype: ResourceInterface
+    qualified: UAFP::ResourceInterface
+    kind: element
+    metaclass:
+    - Class (default)
+    tags:
+      isEncapsulated:
+        values:
+        - 'true'
+        - 'false'
+  ResourceSignal:
+    stereotype: ResourceSignal
+    qualified: UAFP::ResourceSignal
+    kind: element
+    metaclass:
+    - Signal (default)
+    tags:
+      function: {}
+  ResourceSignalProperty:
+    stereotype: ResourceSignalProperty
+    qualified: UAFP::ResourceSignalProperty
+    kind: element
+    metaclass:
+    - Part (default)
+  Function:
+    stereotype: Function
+    qualified: UAFP::Function
+    kind: element
+    metaclass:
+    - Activity (default)
+    tags:
+      affectedResourceExchangeItem: {}
+      activityPerformableUnderCondition: {}
+  FunctionAction:
+    stereotype: FunctionAction
+    qualified: UAFP::FunctionAction
+    kind: element
+    metaclass:
+    - Action (default)
+  FunctionControlFlow:
+    stereotype: FunctionControlFlow
+    qualified: UAFP::FunctionControlFlow
+    kind: connector
+    metaclass:
+    - ControlFlow (default)
+  FunctionEdge:
+    stereotype: null
+    status: no-stereotype
+    reason: abstract grouping
+  FunctionObjectFlow:
+    stereotype: FunctionObjectFlow
+    qualified: UAFP::FunctionObjectFlow
+    kind: connector
+    metaclass:
+    - ObjectFlow (default)
+  ResourceStateDescription:
+    stereotype: ResourceStateDescription
+    qualified: UAFP::ResourceStateDescription
+    kind: element
+    metaclass:
+    - StateMachine (default)
+  ResourceMessage:
+    stereotype: ResourceMessage
+    qualified: UAFP::ResourceMessage
+    kind: connector
+    metaclass:
+    - Sequence (default)
+  DataElement:
+    stereotype: DataElement
+    qualified: UAFP::DataElement
+    kind: element
+    metaclass:
+    - Class (default)
+    tags:
+      categoryCategorizesAsset: {}
+      physicalLocation: {}
+      requiredEnvironment: {}
+      isEncapsulated:
+        values:
+        - 'true'
+        - 'false'
+      function: {}
+  DataModel:
+    stereotype: DataModel
+    qualified: UAFP::DataModel
+    kind: package
+    metaclass:
+    - Package (package element)
+    tags:
+      dataModelKind:
+        values:
+        - Conceptual
+        - Logical
+        - Physical
+    note: a stereotype of a package, set on the package's own element (package.Element.StereotypeEx)
+  DataModelKind:
+    stereotype: null
+    status: no-stereotype
+    reason: enumeration
+  ResourceConstraint:
+    stereotype: ResourceConstraint
+    qualified: UAFP::ResourceConstraint
+    kind: element
+    metaclass:
+    - Constraint (default)
+    tags:
+      ruleKind:
+        values:
+        - StructuralAssertion
+        - ActionAssertion
+        - Derivation
+        - Contract
+        - Constraint
+        - Guidance
+        - SecurityPolicy
+        - Caveat
+  SubjectOfResourceConstraint:
+    stereotype: null
+    status: no-stereotype
+    reason: abstract grouping
+  Forecast:
+    stereotype: Forecast
+    qualified: UAFP::Forecast
+    kind: connector
+    metaclass:
+    - Dependency (default)
+    tags:
+      forecastPeriod: {}
+  SubjectOfForecast:
+    stereotype: null
+    status: no-stereotype
+    reason: abstract grouping
+  Technology:
+    stereotype: Technology
+    qualified: UAFP::Technology
+    kind: element
+    metaclass:
+    - Class (default)
+    tags:
+      isStandardConfiguration:
+        values:
+        - 'True'
+        - 'False'
+        default: 'false'
+      projectMilestone: {}
+      categoryCategorizesAsset: {}
+      physicalLocation: {}
+      requiredEnvironment: {}
+      isEncapsulated:
+        values:
+        - 'true'
+        - 'false'
+      activity: {}
+      function: {}
+      versionReleasedAtMilestone: {}
+      versionWithdrawnAtMilestone: {}
+  VersionedElement:
+    stereotype: null
+    status: no-stereotype
+    reason: abstract grouping
+  VersionOfConfiguration:
+    stereotype: VersionOfConfiguration
+    qualified: UAFP::VersionOfConfiguration
+    kind: element
+    metaclass:
+    - Part (default)
+  VersionSuccession:
+    stereotype: VersionSuccession
+    qualified: UAFP::VersionSuccession
+    kind: connector
+    metaclass:
+    - Dependency (default)
+  WholeLifeConfiguration:
+    stereotype: WholeLifeConfiguration
+    qualified: UAFP::WholeLifeConfiguration
+    kind: element
+    metaclass:
+    - Class (default)
+    tags:
+      wholeLifeConfigurationKind:
+        values:
+        - Service
+        - ResourcePerformer
+        - OrganizationalResource
+      isEncapsulated:
+        values:
+        - 'true'
+        - 'false'
+  WholeLifeConfigurationKind:
+    stereotype: null
+    status: no-stereotype
+    reason: enumeration
+  ProtocolImplementation:
+    stereotype: null
+    status: no-stereotype
+    reason: abstract grouping
+  Asset:
+    stereotype: null
+    status: no-stereotype
+    reason: abstract grouping
+  OperationalMitigation:
+    stereotype: OperationalMitigation
+    qualified: UAFP::OperationalMitigation
+    kind: element
+    metaclass:
+    - Class (default)
+    tags:
+      describedBy: {}
+      categoryCategorizesAsset: {}
+      physicalLocation: {}
+      requiredEnvironment: {}
+      isEncapsulated:
+        values:
+        - 'true'
+        - 'false'
+  ResourceMitigation:
+    stereotype: ResourceMitigation
+    qualified: UAFP::ResourceMitigation
+    kind: element
+    metaclass:
+    - Class (default)
+    tags:
+      describedBy: {}
+      isStandardConfiguration:
+        values:
+        - 'True'
+        - 'False'
+        default: 'false'
+      projectMilestone: {}
+      categoryCategorizesAsset: {}
+      physicalLocation: {}
+      requiredEnvironment: {}
+      isEncapsulated:
+        values:
+        - 'true'
+        - 'false'
+      activity: {}
+      function: {}
+      versionReleasedAtMilestone: {}
+      versionWithdrawnAtMilestone: {}
+  SecurityEnclave:
+    stereotype: SecurityEnclave
+    qualified: UAFP::SecurityEnclave
+    kind: element
+    metaclass:
+    - Class (default)
+    tags:
+      describedBy: {}
+      isStandardConfiguration:
+        values:
+        - 'True'
+        - 'False'
+        default: 'false'
+      projectMilestone: {}
+      categoryCategorizesAsset: {}
+      physicalLocation: {}
+      requiredEnvironment: {}
+      isEncapsulated:
+        values:
+        - 'true'
+        - 'false'
+      activity: {}
+      function: {}
+      versionReleasedAtMilestone: {}
+      versionWithdrawnAtMilestone: {}
+  AssetRole:
+    stereotype: null
+    status: no-stereotype
+    reason: abstract grouping
+  SecurityProperty:
+    stereotype: null
+    status: no-stereotype
+    reason: no stereotype in EA's profile
+  EnhancedSecurityControl:
+    stereotype: EnhancedSecurityControl
+    qualified: UAFP::EnhancedSecurityControl
+    kind: element
+    metaclass:
+    - Activity (default)
+    - Class (family, inferred)
+    - Requirement (family, inferred)
+    tags:
+      mitigatingActualResource: {}
+      id: {}
+      text: {}
+  Enhances:
+    stereotype: Enhances
+    qualified: UAFP::Enhances
+    kind: connector
+    metaclass:
+    - Dependency (default)
+  Protects:
+    stereotype: Protects
+    qualified: UAFP::Protects
+    kind: connector
+    metaclass:
+    - Dependency (default)
+  ProtectsInContext:
+    stereotype: ProtectsInContext
+    qualified: UAFP::ProtectsInContext
+    kind: connector
+    metaclass:
+    - Dependency (default)
+  SecurityProcess:
+    stereotype: SecurityProcess
+    qualified: UAFP::SecurityProcess
+    kind: element
+    metaclass:
+    - Activity (default)
+    tags:
+      affectedResourceExchangeItem: {}
+      activityPerformableUnderCondition: {}
+      affectedOperationalExchangeItem: {}
+  SecurityProcessAction:
+    stereotype: SecurityProcessAction
+    qualified: UAFP::SecurityProcessAction
+    kind: element
+    metaclass:
+    - Action (default)
+  ActualRisk:
+    stereotype: ActualRisk
+    qualified: UAFP::ActualRisk
+    kind: element
+    metaclass:
+    - Object (default)
+    tags:
+      mitigatingActualResource: {}
+      affectedActualResource: {}
+      actualRiskOwner: {}
+      endDate: {}
+      startDate: {}
+  Risk:
+    stereotype: Risk
+    qualified: UAFP::Risk
+    kind: element
+    metaclass:
+    - Class (default)
+    tags:
+      isEncapsulated:
+        values:
+        - 'true'
+        - 'false'
+  SecurityConstraint:
+    stereotype: SecurityConstraint
+    qualified: UAFP::SecurityConstraint
+    kind: element
+    metaclass:
+    - Constraint (default)
+    tags:
+      ruleKind:
+        values:
+        - StructuralAssertion
+        - ActionAssertion
+        - Derivation
+        - Contract
+        - Constraint
+        - Guidance
+        - SecurityPolicy
+        - Caveat
+  SecurityControl:
+    stereotype: SecurityControl
+    qualified: UAFP::SecurityControl
+    kind: element
+    metaclass:
+    - Class (default)
+    - Requirement (family, inferred)
+    tags:
+      mitigatingActualResource: {}
+      id: {}
+      text: {}
+  SecurityControlFamily:
+    stereotype: SecurityControlFamily
+    qualified: UAFP::SecurityControlFamily
+    kind: element
+    metaclass:
+    - Class (default)
+    - Requirement (family, inferred)
+    tags:
+      mitigatingActualResource: {}
+      id: {}
+      text: {}
+  SubjectOfSecurityConstraint:
+    stereotype: null
+    status: no-stereotype
+    reason: abstract grouping
+  Affects:
+    stereotype: Affects
+    qualified: UAFP::Affects
+    kind: connector
+    metaclass:
+    - Dependency (default)
+  AffectsInContext:
+    stereotype: AffectsInContext
+    qualified: UAFP::AffectsInContext
+    kind: connector
+    metaclass:
+    - Dependency (default)
+  Mitigates:
+    stereotype: Mitigates
+    qualified: UAFP::Mitigates
+    kind: connector
+    metaclass:
+    - Dependency (default)
+  OwnsRisk:
+    stereotype: OwnsRisk
+    qualified: UAFP::OwnsRisk
+    kind: connector
+    metaclass:
+    - Abstraction (default)
+  OwnsRiskInContext:
+    stereotype: OwnsRiskInContext
+    qualified: UAFP::OwnsRiskInContext
+    kind: connector
+    metaclass:
+    - Abstraction (default)
+  ActualMilestoneKind:
+    stereotype: null
+    status: no-stereotype
+    reason: enumeration
+  Project:
+    stereotype: Project
+    qualified: UAFP::Project
+    kind: element
+    metaclass:
+    - Class (default)
+    tags:
+      isEncapsulated:
+        values:
+        - 'true'
+        - 'false'
+  ProjectKind:
+    stereotype: null
+    status: no-stereotype
+    reason: enumeration
+  ProjectMilestone:
+    stereotype: ProjectMilestone
+    qualified: UAFP::ProjectMilestone
+    kind: element
+    metaclass:
+    - Class (default)
+    tags:
+      resource: {}
+      isEncapsulated:
+        values:
+        - 'true'
+        - 'false'
+  ProjectMilestoneRole:
+    stereotype: ProjectMilestoneRole
+    qualified: UAFP::ProjectMilestoneRole
+    kind: element
+    metaclass:
+    - Part (default)
+  ProjectRole:
+    stereotype: ProjectRole
+    qualified: UAFP::ProjectRole
+    kind: element
+    metaclass:
+    - Part (default)
+  ProjectStatus:
+    stereotype: null
+    status: on-the-tab-but-not-creatable
+    note: listed on the Resources tab (UAFP) and defined as a UML slot; no recipe tried binds it
+  ProjectTheme:
+    stereotype: ProjectTheme
+    qualified: UAFP::ProjectTheme
+    kind: element
+    metaclass:
+    - Part (default)
+  StatusIndicators:
+    stereotype: StatusIndicators
+    qualified: UAFP::StatusIndicators
+    kind: element
+    metaclass:
+    - Enumeration (default)
+    - DataType (outside)
+    tags:
+      quantityKind: {}
+      unit: {}
+  MilestoneDependency:
+    stereotype: MilestoneDependency
+    qualified: UAFP::MilestoneDependency
+    kind: connector
+    metaclass:
+    - Dependency (default)
+  ProjectSequence:
+    stereotype: ProjectSequence
+    qualified: UAFP::ProjectSequence
+    kind: connector
+    metaclass:
+    - Dependency (default)
+  ProjectActivity:
+    stereotype: ProjectActivity
+    qualified: UAFP::ProjectActivity
+    kind: element
+    metaclass:
+    - Activity (default)
+    tags:
+      affectedResourceExchangeItem: {}
+      activityPerformableUnderCondition: {}
+  ProjectActivityAction:
+    stereotype: ProjectActivityAction
+    qualified: UAFP::ProjectActivityAction
+    kind: element
+    metaclass:
+    - Action (default)
+  ActualProject:
+    stereotype: ActualProject
+    qualified: UAFP::ActualProject
+    kind: element
+    metaclass:
+    - Object (default)
+    tags:
+      projectKind:
+        values:
+        - Programme
+        - Portfolio
+        - Project
+        - PersonnelDevelopment
+      ownedMilestone: {}
+      actualCondition: {}
+      actualProjectMilestone: {}
+      endDate: {}
+      startDate: {}
+      stakeholderConcern: {}
+  ActualProjectMilestone:
+    stereotype: ActualProjectMilestone
+    qualified: UAFP::ActualProjectMilestone
+    kind: element
+    metaclass:
+    - Object (default)
+    tags:
+      actualMilestoneKind:
+        values:
+        - InService
+        - Deployed
+        - NoLongerUsed
+        - OutOfService
+        - Other
+      actualResource: {}
+      versionReleased: {}
+      versionWithdrawn: {}
+      endDate: {}
+      startDate: {}
+  ActualProjectMilestoneRole:
+    stereotype: null
+    status: on-the-tab-but-not-creatable
+    note: listed on the Resources tab (UAFP) and defined as a UML slot; no recipe tried binds it
+  ActualProjectRole:
+    stereotype: null
+    status: on-the-tab-but-not-creatable
+    note: listed on the Resources tab (UAFP) and defined as a UML slot; no recipe tried binds it
+  Protocol:
+    stereotype: Protocol
+    qualified: UAFP::Protocol
+    kind: element
+    metaclass:
+    - Class (default)
+    tags:
+      mandatedDate: {}
+      retiredDate: {}
+      ratifiedBy: {}
+      isEncapsulated:
+        values:
+        - 'true'
+        - 'false'
+  ProtocolStack:
+    stereotype: ProtocolStack
+    qualified: UAFP::ProtocolStack
+    kind: element
+    metaclass:
+    - Class (default)
+    tags:
+      mandatedDate: {}
+      retiredDate: {}
+      ratifiedBy: {}
+      isEncapsulated:
+        values:
+        - 'true'
+        - 'false'
+  Standard:
+    stereotype: Standard
+    qualified: UAFP::Standard
+    kind: element
+    metaclass:
+    - Class (default)
+    tags:
+      mandatedDate: {}
+      retiredDate: {}
+      ratifiedBy: {}
+      isEncapsulated:
+        values:
+        - 'true'
+        - 'false'
+  ProtocolLayer:
+    stereotype: ProtocolLayer
+    qualified: UAFP::ProtocolLayer
+    kind: element
+    metaclass:
+    - Part (default)
+  ActualOrganization:
+    stereotype: ActualOrganization
+    qualified: UAFP::ActualOrganization
+    kind: element
+    metaclass:
+    - Object (default)
+    tags:
+      serviceType: {}
+      shortName: {}
+      ratifiedStandards: {}
+      actualCondition: {}
+      actualProjectMilestone: {}
+      endDate: {}
+      startDate: {}
+      stakeholderConcern: {}
+  ActualOrganizationalResource:
+    stereotype: null
+    status: no-stereotype
+    reason: abstract grouping
+  ActualPerson:
+    stereotype: ActualPerson
+    qualified: UAFP::ActualPerson
+    kind: element
+    metaclass:
+    - Object (default)
+    tags:
+      actualCondition: {}
+      actualProjectMilestone: {}
+      endDate: {}
+      startDate: {}
+      stakeholderConcern: {}
+  ActualPost:
+    stereotype: ActualPost
+    qualified: UAFP::ActualPost
+    kind: element
+    metaclass:
+    - Object (default)
+    tags:
+      actualCondition: {}
+      actualProjectMilestone: {}
+      endDate: {}
+      startDate: {}
+      stakeholderConcern: {}
+  ActualResource:
+    stereotype: ActualResource
+    qualified: UAFP::ActualResource
+    kind: element
+    metaclass:
+    - Object (default)
+    tags:
+      actualCondition: {}
+      actualProjectMilestone: {}
+      endDate: {}
+      startDate: {}
+  ActualResponsibility:
+    stereotype: ActualResponsibility
+    qualified: UAFP::ActualResponsibility
+    kind: element
+    metaclass:
+    - Object (default)
+    tags:
+      actualCondition: {}
+      actualProjectMilestone: {}
+      endDate: {}
+      startDate: {}
+      stakeholderConcern: {}
+  ActualResponsibleResource:
+    stereotype: null
+    status: no-stereotype
+    reason: abstract grouping
+  FieldedCapability:
+    stereotype: FieldedCapability
+    qualified: UAFP::FieldedCapability
+    kind: element
+    metaclass:
+    - Object (default)
+    tags:
+      actualCondition: {}
+      actualProjectMilestone: {}
+      endDate: {}
+      startDate: {}
+  ActualOrganizationRole:
+    stereotype: null
+    status: on-the-tab-but-not-creatable
+    note: listed on the Resources tab (UAFP) and defined as a UML slot; no recipe tried binds it
+  ActualResourceRole:
+    stereotype: null
+    status: on-the-tab-but-not-creatable
+    note: listed on the Resources tab (UAFP) and defined as a UML slot; no recipe tried binds it
+  ActualResourceRelationship:
+    stereotype: ActualResourceRelationship
+    qualified: UAFP::ActualResourceRelationship
+    kind: connector
+    metaclass:
+    - InformationFlow (default)
+    tags:
+      itemProperty: {}
+  FillsPost:
+    stereotype: FillsPost
+    qualified: UAFP::FillsPost
+    kind: connector
+    metaclass:
+    - Abstraction (default)
+    tags:
+      endDate: {}
+      startDate: {}
+  ActualService:
+    stereotype: ActualService
+    qualified: UAFP::ActualService
+    kind: element
+    metaclass:
+    - Object (default)
+    tags:
+      appliesFor: {}
+      endDate: {}
+      startDate: {}
+  ProvidedServiceLevel:
+    stereotype: ProvidedServiceLevel
+    qualified: UAFP::ProvidedServiceLevel
+    kind: element
+    metaclass:
+    - Object (default)
+    tags:
+      appliesFor: {}
+      endDate: {}
+      startDate: {}
+  ProvidesCompetence:
+    stereotype: ProvidesCompetence
+    qualified: UAFP::ProvidesCompetence
+    kind: connector
+    metaclass:
+    - Dependency (default)
+  RequiredServiceLevel:
+    stereotype: RequiredServiceLevel
+    qualified: UAFP::RequiredServiceLevel
+    kind: element
+    metaclass:
+    - Object (default)
+    tags:
+      appliesFor: {}
+      endDate: {}
+      startDate: {}
+  OwnsProcess:
+    stereotype: OwnsProcess
+    qualified: UAFP::OwnsProcess
+    kind: connector
+    metaclass:
+    - Abstraction (default)
+  ArchitecturalDescription:
+    stereotype: ArchitecturalDescription
+    qualified: UAFP::ArchitecturalDescription
+    kind: package
+    metaclass:
+    - Package (package element)
+    tags:
+      approvalAuthority: {}
+      architect: {}
+      assumptionAndConstraint: {}
+      creatingOrganization: {}
+      dateCompleted: {}
+      purpose: {}
+      recommendations: {}
+      summaryOfFindings: {}
+      toBe:
+        values:
+        - 'True'
+        - 'False'
+        default: 'True'
+      toolsUsed: {}
+      view: {}
+      viewpoint: {}
+    note: a stereotype of a package, set on the package's own element (package.Element.StereotypeEx)
+  Architecture:
+    stereotype: null
+    status: no-stereotype
+    reason: abstract grouping
+  Concern:
+    stereotype: Concern
+    qualified: UAFP::Concern
+    kind: element
+    metaclass:
+    - Class (default)
+    tags:
+      systemConcern: {}
+      isEncapsulated:
+        values:
+        - 'true'
+        - 'false'
+  Stakeholder:
+    stereotype: null
+    status: no-stereotype
+    reason: abstract grouping
+  UAFElement:
+    stereotype: null
+    status: no-stereotype
+    reason: abstract grouping
+  View:
+    stereotype: View
+    qualified: UAFP::View
+    kind: element
+    metaclass:
+    - Class (default)
+    tags:
+      viewpoint: {}
+      stakeholder: {}
+  Viewpoint:
+    stereotype: Viewpoint
+    qualified: UAFP::Viewpoint
+    kind: element
+    metaclass:
+    - Class (default)
+    tags:
+      languages: {}
+      methods: {}
+      purpose: {}
+      concern: {}
+      stakeholder: {}
+      concernList: {}
+      language: {}
+      method: {}
+      presentation: {}
+  ActivityPerformableUnderCondition:
+    stereotype: null
+    status: no-stereotype
+    reason: no stereotype in EA's profile
+  SecurityControlAction:
+    stereotype: null
+    status: no-stereotype
+    reason: no stereotype in EA's profile
+  Caveat:
+    stereotype: null
+    status: no-stereotype
+    reason: no stereotype in EA's profile
+  SecurityAvailability:
+    stereotype: null
+    status: no-stereotype
+    reason: no stereotype in EA's profile
+  SecurityCategory:
+    stereotype: null
+    status: no-stereotype
+    reason: no stereotype in EA's profile
+  SecurityClassification:
+    stereotype: null
+    status: no-stereotype
+    reason: no stereotype in EA's profile
+  SecurityClassificationKind:
+    stereotype: null
+    status: no-stereotype
+    reason: enumeration
+  SecurityIntegrity:
+    stereotype: null
+    status: no-stereotype
+    reason: no stereotype in EA's profile
+  SecurityMeasurement:
+    stereotype: null
+    status: no-stereotype
+    reason: abstract grouping
+ea_only:
+  DataRole:
+    kind: Part
+    note: not a concept of the UAF 1.0 skill; possibly a version difference (not researched). A Part
+  InformationRole:
+    kind: Part
+    note: not a concept of the UAF 1.0 skill; possibly a version difference (not researched)
+relationship_ends:
+  note: the concrete stereotypes the ruleset allows at the two ends of each relationship (generated from language.yaml); the
+    standard's abstract end concepts are expanded
+  relationships:
+    AchievedEffect:
+      connector_type: Dependency
+      rules_md_ids:
+      - UAF-END-019
+      - UAF-END-020
+      source_count: 8
+      target_count: 19
+    ActualResourceRelationship:
+      connector_type: InformationFlow
+      rules_md_ids:
+      - UAF-END-085
+      - UAF-END-086
+      source_count: 7
+      target_count: 7
+    Affects:
+      connector_type: Dependency
+      rules_md_ids:
+      - UAF-END-071
+      - UAF-END-072
+      source_count: 1
+      target_count: 20
+    AffectsInContext:
+      connector_type: Dependency
+      rules_md_ids:
+      - UAF-END-073
+      - UAF-END-074
+      source_count: 1
+      target_count: 4
+    ArbitraryConnector:
+      connector_type: Dependency
+      rules_md_ids:
+      - UAF-END-029
+      - UAF-END-030
+      source_count: 1
+      target_count: 1
+    ArchitecturalReference:
+      connector_type: Dependency
+      rules_md_ids:
+      - UAF-END-012
+      - UAF-END-013
+      source_count: 1
+      target_count: 1
+    CapabilityForTask:
+      connector_type: Abstraction
+      rules_md_ids:
+      - UAF-END-017
+      - UAF-END-018
+      source_count: 1
+      target_count: 1
+    Command:
+      connector_type: InformationFlow
+      rules_md_ids:
+      - UAF-END-041
+      - UAF-END-042
+      source_count: 5
+      target_count: 5
+    CompetenceForRole:
+      connector_type: Abstraction
+      rules_md_ids:
+      - UAF-END-047
+      - UAF-END-048
+      source_count: 2
+      target_count: 1
+    CompetenceToConduct:
+      connector_type: Abstraction
+      rules_md_ids:
+      - UAF-END-045
+      - UAF-END-046
+      source_count: 3
+      target_count: 1
+    Consumes:
+      connector_type: Abstraction
+      rules_md_ids:
+      - UAF-END-039
+      - UAF-END-040
+      source_count: 3
+      target_count: 1
+    Control:
+      connector_type: InformationFlow
+      rules_md_ids:
+      - UAF-END-043
+      - UAF-END-044
+      source_count: 9
+      target_count: 9
+    DesiredEffect:
+      connector_type: Dependency
+      rules_md_ids:
+      - UAF-END-021
+      - UAF-END-022
+      source_count: 19
+      target_count: 19
+    Enhances:
+      connector_type: Dependency
+      rules_md_ids:
+      - UAF-END-063
+      - UAF-END-064
+      source_count: 1
+      target_count: 3
+    Exhibits:
+      connector_type: Abstraction
+      rules_md_ids:
+      - UAF-END-023
+      - UAF-END-024
+      source_count: 23
+      target_count: 1
+    FillsPost:
+      connector_type: Abstraction
+      rules_md_ids:
+      - UAF-END-087
+      - UAF-END-088
+      source_count: 1
+      target_count: 1
+    Forecast:
+      connector_type: Dependency
+      rules_md_ids:
+      - UAF-END-059
+      - UAF-END-060
+      source_count: 19
+      target_count: 19
+    FunctionControlFlow:
+      connector_type: ControlFlow
+      rules_md_ids:
+      - UAF-END-056
+      - UAF-END-057
+      source_count: 3
+      target_count: 3
+    Implements:
+      connector_type: Abstraction
+      rules_md_ids:
+      - UAF-END-014
+      - UAF-END-015
+      source_count: 24
+      target_count: 14
+    IsCapableToPerform:
+      connector_type: Abstraction
+      rules_md_ids:
+      - UAF-END-005
+      - UAF-END-006
+      source_count: 19
+      target_count: 6
+    MapsToCapability:
+      connector_type: Abstraction
+      rules_md_ids:
+      - UAF-END-025
+      - UAF-END-026
+      source_count: 6
+      target_count: 1
+    MilestoneDependency:
+      connector_type: Dependency
+      rules_md_ids:
+      - UAF-END-081
+      - UAF-END-082
+      source_count: 1
+      target_count: 1
+    Mitigates:
+      connector_type: Dependency
+      rules_md_ids:
+      - UAF-END-075
+      - UAF-END-076
+      source_count: 3
+      target_count: 1
+    OperationalConnector:
+      connector_type: Connector
+      rules_md_ids:
+      - UAF-END-031
+      source_count: 3
+      target_count: 3
+    OperationalControlFlow:
+      connector_type: ControlFlow
+      rules_md_ids:
+      - UAF-END-034
+      - UAF-END-035
+      source_count: 2
+      target_count: 2
+    OperationalExchange:
+      connector_type: InformationFlow
+      rules_md_ids:
+      - UAF-END-032
+      - UAF-END-033
+      source_count: 2
+      target_count: 2
+    OrganizationInEnterprise:
+      connector_type: Abstraction
+      rules_md_ids:
+      - UAF-END-027
+      - UAF-END-028
+      source_count: 1
+      target_count: 1
+    OwnsProcess:
+      connector_type: Abstraction
+      rules_md_ids:
+      - UAF-END-091
+      - UAF-END-092
+      source_count: 5
+      target_count: 3
+    OwnsRisk:
+      connector_type: Abstraction
+      rules_md_ids:
+      - UAF-END-077
+      - UAF-END-078
+      source_count: 5
+      target_count: 1
+    OwnsRiskInContext:
+      connector_type: Abstraction
+      rules_md_ids:
+      - UAF-END-079
+      - UAF-END-080
+      source_count: 2
+      target_count: 1
+    PerformsInContext:
+      connector_type: Abstraction
+      rules_md_ids:
+      - UAF-END-007
+      - UAF-END-008
+      source_count: 5
+      target_count: 5
+    ProjectSequence:
+      connector_type: Dependency
+      rules_md_ids:
+      - UAF-END-083
+      - UAF-END-084
+      source_count: 1
+      target_count: 1
+    Protects:
+      connector_type: Dependency
+      rules_md_ids:
+      - UAF-END-065
+      - UAF-END-066
+      source_count: 3
+      target_count: 20
+    ProvidesCompetence:
+      connector_type: Dependency
+      rules_md_ids:
+      - UAF-END-089
+      - UAF-END-090
+      source_count: 5
+      target_count: 1
+    RequiresCompetence:
+      connector_type: Abstraction
+      rules_md_ids:
+      - UAF-END-049
+      - UAF-END-050
+      source_count: 5
+      target_count: 1
+    ResourceConnector:
+      connector_type: Connector
+      rules_md_ids:
+      - UAF-END-053
+      source_count: 3
+      target_count: 3
+    ResourceExchange:
+      connector_type: InformationFlow
+      rules_md_ids:
+      - UAF-END-054
+      - UAF-END-055
+      source_count: 15
+      target_count: 15
+    ResponsibleFor:
+      connector_type: Abstraction
+      rules_md_ids:
+      - UAF-END-051
+      - UAF-END-052
+      source_count: 3
+      target_count: 2
+    SameAs:
+      connector_type: Dependency
+      rules_md_ids:
+      - UAF-END-003
+      - UAF-END-004
+      source_count: 120
+      target_count: 120
+    ServiceConnector:
+      connector_type: Connector
+      rules_md_ids:
+      - UAF-END-037
+      source_count: 2
+      target_count: 2
+    VersionSuccession:
+      connector_type: Dependency
+      rules_md_ids:
+      - UAF-END-061
+      - UAF-END-062
+      source_count: 1
+      target_count: 1
+toolbox:
+  status: read on screen, measured on EA 17.1 build 1716, 2026-11-04; the toolbox was shown by double-clicking it in the Resources
+    tab (a display change only)
+  toolboxes:
+  - UAF
+  pages:
+  - UAF Actual Resources
+  - Dictionary
+  - Metadata
+  - Operational
+  - Parameters
+  - Personnel
+  - Project
+  - Resources
+  - Security
+  - Services
+  - Standards
+  - Strategic
+  - Summary and Overview
+  operational_page_items:
+  - Arbitrary Connector
+  - Concept Role
+  - High Level Operational Co...
+  - Information Element
+  - Known Resource
+  - Operational Activity
+  - Operational Activity Action
+  - Operational Architecture
+  - Operational Connector
+  - Operational Constraint
+  - Operational Control Flow
+  - Operational Exchange
+  - Operational Interface
+  - Operational Message
+  - Operational Method
+  - Operational Object Flow
+  - Operational Parameter
+  - Operational Performer
+  - Operational Port
+  - Operational Role
+  - Operational Signal
+  - Operational State Descripti...
+  - Problem Domain
+  - Standard Operational Activ...
+  security_page_items:
+  - Actual Risk
+  - Affects
+  - Data Role
+  - Enhanced Security Control
+  - Enhances
+  - Information Role
+  - Mitigates
+  - Operational Mitigation
+  - Owns Risk
+  - Protects
+  - Protects In Context
+  - Resource Mitigation
+  - Risk
+  - Security Constraint
+  - Security Control
+  - Security Control Family
+  - Security Enclave
+  - Security Process
+  - Security Process Action
+  note: the Security page has no Security Property, Caveat or Security Classification, matching the profile (SecurityProperty
+    is not among the 184 rows)
+  not_done: the items of the other 11 pages were not opened; the kit's sample diagram is a SysML diagram, so the UAF toolbox
+    was not seen on a UAF diagram
+quick_links:
+  status: read on screen, measured on EA 17.1 build 1716, 2026-11-04; one source, a UAF Capability on a SysML block definition
+    diagram
+  result: 'the menu offers SysML target types only (Actor, Block, Constraint Block, Requirement, Property and so on): no UAF-specific
+    quick link, for example no IsCapableToPerform'
+  not_done: a UAF quick link from a diagram that uses the UAF toolbox was not read
+harvest:
+  stereotype_names_and_rows: 'ui: Browser > Resources > MDG Technologies > System Technologies > UAF > UML Profiles > UAFP
+    (read on screen 2026-10-20)'
+  prefix: 'sample-content: prefix test (UAF:: and UAFP:: on all 178 names, scratch model)'
+  metaclass_and_tags: 'sample-content: read-back (t_object.Object_Type, t_xref, t_objectproperties,
+    t_connector, t_connectortag, t_operationtag)'
+  metaclass_of_extra_rows: 'sample-content: acceptance matrix; the second and third rows
+    of EnhancedSecurityControl, EnterpriseGoal, SecurityControl, SecurityControlFamily are inferred from the standard''s uml_base
+    and base'
+  diagram_types: 'model-pattern: the model patterns (ModelPatterns ua1.0-*.xml) for the tokens; sample-content: created
+    and read back'
+  toolbox_and_quick_links: 'ui, EA 17.1 build 1716, 2026-11-04: the UAF toolbox pages and two pages'' items, and one quick-link
+    source, were read; the profile UAFP rows (184) matched the stored row list name for name and repeat for repeat; the metaclass
+    of a row is not printed on the tab'
+
+# EA's names for this language's layout. tools/gen_conventions.py reads layout_map.
+layout_map:
+  technology: UAF
+  display_name: UAF / UPDM Framework
+  extends: UML
+  stereotype_prefix: ''
+  notes: |
+    CLASSIFICATION OF THE FAMILY. Only the UPDM Framework diagram is bound: it is (a) composed, a stack of labeled bands each holding a uniform grid of view tiles, which is layered bands. It is a one-diagram sample, and the corpus row and the model agree on the arrangement.
+
+    NOT BOUND, TIMELINE (c). The corpus holds a programme-timeline row, titled AcV-2 Programme Timelines by its own frame. It is a set of colored column bands, one per quarter, with each milestone placed by its date tag inside its column and dashed sequence links running between them. The diagram type dictates the arrangement: horizontal position is a date, and the columns look like EA swimlanes, so we should not be placing coordinates. It needs a separate design and no grammar is invented for it here. It is arguably the time-phased roadmap that `computed-geometry` names, which is not built. The example model holds NO such diagram (its acquisition-view diagram types are AcV-1 and PV-3), and the MDG data that would declare the type is encrypted, so its technology id and diagram type name cannot be resolved here and are deliberately not recorded as a key.
+
+    NOT BOUND, GRAPH (b). Thirty diagram types under the other seven token groups are ordinary graphs or trees where EA's own layout is acceptable and we tidy afterwards: UAFP_AV::AV-3, UAFP_AcV/PV::AcV-1, UAFP_AcV/PV::PV-3, UAFP_OV::OV-1, UAFP_OV::OV-2, UAFP_OV::OV-4 Actual, UAFP_OV::OV-4 Typical, UAFP_OV::OV-5, UAFP_OV::OV-6a, UAFP_OV::OV-7, UAFP_SOV::SOV-1, UAFP_SOV::SOV-2, UAFP_SOV::SOV-3, UAFP_SOV::SOV-4a, UAFP_SOV::SOV-5, UAFP_SV/SvcV::SV-1, UAFP_SV/SvcV::SV-10a, UAFP_SV/SvcV::SV-11, UAFP_SV/SvcV::SV-4, UAFP_SV/SvcV::SV-5, UAFP_SV/SvcV::SV-6, UAFP_SV/SvcV::SV-7, UAFP_SV/SvcV::SV-9, UAFP_StV/CV::StV-1, UAFP_StV/CV::StV-2, UAFP_StV/CV::StV-4, UAFP_StV/CV::StV-5, UAFP_StV/CV::StV-6, UAFP_TV/StdV::TV-1, UAFP_TV/StdV::TV-2. The basis is the base diagram type EA records (Logical, Object or Activity) plus what the one or two model diagrams of each type hold: classes, parts and activities joined by associations, dependencies and generalizations, with no activity partitions and almost no containment. Three of them may deserve a composed grammar once someone measures them, each rests on ONE diagram, and none is claimed: UAFP_OV::OV-4 Typical is a generalization tree (9 generalizations among 16 classes, a layered-bands candidate), and UAFP_SV/SvcV::SV-1 and one of the two UAFP_StV/CV::StV-4 diagrams nest their parts (5 of 11 and 7 of 8 contained, nested-grid candidates). UAFP_SV/SvcV::SV-4 covers two different shapes, an activity graph and an action flow with pins nested in actions (18 of 24 contained), and should be split before it is bound.
+
+    NOT BOUND, EA-SEMANTIC (c). UAFP_OV::OV-6b, UAFP_SOV::SOV-4b and UAFP_SV/SvcV::SV-10b are state machines: transition topology with states nested in composite states (7 of 8, 9 of 10 and 21 of 22 elements contained), which EA owns as containment. UAFP_OV::OV-6c is a sequence diagram: lifeline order and message order, with 7 lifeline parts and no drawn connectors on the model diagram. Each needs a separate design and no grammar is invented for them here.
+
+    `UAF` is the id EA reports, measured on EA 17.1 build 1716.
+  diagram_types:
+    UPDM Framework:
+      token: UAFP_Framework::UPDM Framework
+      token_reason: "A token read from diagrams in EA's example model, and not one ea.yaml lists: the UAF technology on EA 17.1 build 1716 shows no diagram types and was not seen to create this one. Whether it can be created there is not measured."
+      base: Logical
+      default_type: large-box
+      arrangement: layered-bands
+      title: frame-header
+      route: straight
+      channels:
+        fill: 'View category. The corpus row shows one color per band (All, Strategic, Operational, Service
+          Oriented, Systems, Acquisition and Technical views). It is not stored per diagram: none of the
+          47 elements carries a fill override, so EA paints it. Recoloring a tile breaks the category
+          reading, and whether a written fill is honored was not tested.'
+        claimed:
+          position: Which band a tile sits in says which view category it belongs to. Ordering within
+            a band is not measured.
+          icon: The view-tile glyph in each tile's corner, painted from the stereotype (corpus row, n=1
+            diagram). Not measured in the model.
+        free:
+        - border
+        - border_width
+        - font_color
+        - opacity

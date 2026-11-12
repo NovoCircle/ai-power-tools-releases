@@ -16,7 +16,12 @@ If yes, proceed with Steps 2–4. If no, stop.
 ### Step 2 — Identify candidate elements
 
 Use `ea_analyze(operation="execute_sql", ...)` (read-only) to find elements whose `Object_Type` matches the base type(s)
-of your stereotypes and that do not yet have the MDG stereotype set:
+of your stereotypes and that do not yet have the MDG stereotype set. Take the base types from the
+technology's own definition (the `<Apply type="...">` of each stereotype), not from a fixed value:
+the example below uses `Class` because `WBADataAsset` is applied to `Class`, and
+`WBASystemOfRecord` would need `Component`. A stored `Object_Type` can also differ from the declared
+base type, so before filtering run `SELECT Object_Type, COUNT(*) AS n FROM t_object GROUP BY Object_Type`
+and put any type that holds plausible candidates in front of the person rather than leaving it out.
 
 ```python
 # Example: find all Class elements that aren't already stereotyped as WBA types

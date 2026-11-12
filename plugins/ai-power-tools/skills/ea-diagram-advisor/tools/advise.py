@@ -172,6 +172,10 @@ class ScopeProfile:
     # summarized away: "I could not place 40% of this scope" is the single most
     # useful thing to know before trusting the recommendation.
     unattributed_stereotypes: Mapping[str, int] = field(default_factory=dict)
+    # The part of `unattributed_stereotypes` that has more than one possible
+    # owner, as against none at all. "No recorded owner" and "ambiguous" are
+    # different things to tell a user, so they are kept apart.
+    ambiguous_stereotypes: Mapping[str, int] = field(default_factory=dict)
 
     @property
     def dominant(self) -> Optional[str]:
@@ -238,6 +242,26 @@ def _known_concepts(binding: Any) -> set:
     return concepts
 
 
+def _own_concepts(binding: Any) -> set:
+    """The concepts a binding's own document states, without its base notation's.
+
+    A binding drawn on another notation (`extends`) is resolved with that
+    notation's sizing underneath, so `_known_concepts` also returns names it
+    only inherited from that base. Whether a prefixed language DEFINES a bare name is a question
+    about the language itself, so this reads `own_sizing`, the part the
+    binding's own document said, and its viewpoints.
+    """
+    concepts: set = set()
+    for diagram_type in getattr(binding, "diagram_types", {}).values():
+        own = getattr(diagram_type, "own_sizing", None)
+        if own is None:
+            own = getattr(diagram_type, "sizing", {})
+        concepts.update(k for k in own if k != "default")
+    for viewpoint in getattr(binding, "viewpoints", {}).values():
+        concepts.update(getattr(viewpoint, "admits", ()))
+    return concepts
+
+
 def _attribute(stereotype: str, bindings: Sequence[Any],
                known_concepts: Optional[Mapping[str, Any]] = None) -> tuple:
     """Which technology owns `stereotype`, and the bare concept name.
@@ -261,9 +285,17 @@ def _attribute(stereotype: str, bindings: Sequence[Any],
     bound_technologies = {b.technology for b in bindings}
     claims: list[tuple] = []
     best_prefix = None
+    # Prefixed languages that define this name BARE. A bare stored name carries
+    # no prefix to tell them apart, so a language that matches it by name alone
+    # shares the name with these and cannot be said to own it.
+    shadowed: list[str] = []
     for binding in ordered:
         prefix = getattr(binding, "stereotype_prefix", "") or ""
         if prefix and not stereotype.startswith(prefix):
+            bare_vocabulary = _own_concepts(binding)
+            bare_vocabulary |= set((known_concepts or {}).get(binding.technology, ()))
+            if stereotype in bare_vocabulary:
+                shadowed.append(binding.technology)
             continue
         concept = stereotype[len(prefix):] if prefix else stereotype
         vocabulary = set(_known_concepts(binding))
@@ -297,6 +329,11 @@ def _attribute(stereotype: str, bindings: Sequence[Any],
             return AMBIGUOUS, stereotype
         return UNATTRIBUTED, stereotype
     if len(claims) == 1:
+        if best_prefix == 0 and shadowed:
+            # A bare name one unprefixed language matches by name and a
+            # prefixed language also defines. Exactly one language defines it
+            # only when nobody else does, so this is reported, never attributed.
+            return AMBIGUOUS, stereotype
         return claims[0]
     # TWO OR MORE LANGUAGES CLAIM IT AT THE SAME PREFIX LENGTH, and there is no
     # honest way to choose between them from the stereotype alone. Returning
@@ -339,6 +376,7 @@ def profile_scope(stereotype_counts: Mapping[str, int],
     concepts: dict[str, int] = {}
     by_technology: dict[str, set] = {}
     unattributed: dict[str, int] = {}
+    ambiguous_names: dict[str, int] = {}
     total = 0
     for stereotype, count in (stereotype_counts or {}).items():
         if not (stereotype or "").strip():
@@ -354,6 +392,8 @@ def profile_scope(stereotype_counts: Mapping[str, int],
 
         if technology in (UNATTRIBUTED, AMBIGUOUS):
             unattributed[stereotype] = unattributed.get(stereotype, 0) + count
+        if technology == AMBIGUOUS:
+            ambiguous_names[stereotype] = ambiguous_names.get(stereotype, 0) + count
         technologies[technology] = technologies.get(technology, 0) + count
         concepts[concept] = concepts.get(concept, 0) + count
         by_technology.setdefault(technology, set()).add(concept)
@@ -363,6 +403,7 @@ def profile_scope(stereotype_counts: Mapping[str, int],
         concepts=dict(concepts),
         by_technology={k: tuple(sorted(v)) for k, v in by_technology.items()},
         unattributed_stereotypes=dict(unattributed),
+        ambiguous_stereotypes=dict(ambiguous_names),
         bound_technologies=frozenset(b.technology for b in bindings),
         total=total,
     )
@@ -673,10 +714,16 @@ def recommend(profile: ScopeProfile, bindings: Sequence[Any],
     # ---- everything below is deliberately non-standard ---------------------
     spans = profile.spans
     languages = ", ".join(spans)
+    if len(spans) == 1:
+        # One language is not "spanned". The scope is homogeneous and still has
+        # no conformant view, which is a different thing to tell the reader.
+        reach = (f"It uses one language ({languages}) that has no conformant "
+                 f"view.")
+    else:
+        reach = f"It spans {len(spans)}: {languages}."
     non_conformance = (
-        f"This view is NOT conformant to any single modeling language. It "
-        f"spans {len(spans)}: {languages}. Record that on the diagram and in "
-        f"the response."
+        f"This view is NOT conformant to any single modeling language. "
+        f"{reach} Record that on the diagram and in the response."
     )
 
     out = []
@@ -716,6 +763,13 @@ def recommend(profile: ScopeProfile, bindings: Sequence[Any],
 
     # 2. A neutral custom view, belonging to no language.
     neutral_reasons = [evidence]
+    own_binding = _binding_for(profile.dominant, bindings) if profile.is_bound else None
+    if own_binding is not None and not getattr(own_binding, "viewpoints", None):
+        neutral_reasons.append(
+            f"the {profile.dominant} binding defines no viewpoints, so there "
+            f"is no standard view to recommend for this content; the options "
+            f"below are not a ranking of its views"
+        )
     if not profile.is_bound and profile.dominant == UNATTRIBUTED:
         unbound = profile.technologies.get(UNATTRIBUTED, 0)
         neutral_reasons.append(

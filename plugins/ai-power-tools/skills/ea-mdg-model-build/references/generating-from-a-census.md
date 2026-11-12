@@ -8,25 +8,23 @@ Route here from `ea-mdg-assess` §2a, which is where path B is chosen and record
 
 ---
 
-Two cases, and they start differently.
+There is nothing to duplicate on a first version, so build the tree and populate it from a census,
+in the steps below. (A later version of a technology that already has a tree is duplicated instead;
+that is Phase 1 of `ea-mdg-model-build`.)
 
-**A later version of a technology that already has one** — duplicate the existing tree. That is
-the rest of this phase.
-
-**A first version, generated from what the repository already contains** — there is nothing to
-duplicate, so build the tree and populate it from a census. Route here from `ea-mdg-assess` §2a,
-which is where path B is chosen and recorded.
-
-1. **Census first, profile-aware.** `_shared/tools/ea_census.py`. Not `summarize_stereotype_usage`:
-   it reads `t_object.Stereotype`, a bare name that does not identify the language, so it cannot
-   tell a governed element from an ad hoc one carrying the same name. The census gives you
-   `(stereotype, metaclass)` pairs, tag names with populated-value coverage, and inferred enum
-   domains — which is exactly the content of the profile you are about to create.
+1. **Census first, profile-aware.** Run `_shared/tools/ea_census.py` over the rows listed in
+   `ea-mdg-assess` §2a, read once each, not over SQL calls you write per stereotype. It resolves
+   which technology each stereotype is bound to and gives you `(stereotype, metaclass)` pairs, tag
+   names with populated-value coverage, and inferred enum domains, which is exactly the content of the
+   profile you are about to create. `summarize_stereotype_usage` is profile-aware from server 3.6.0
+   (`resolved_items`, `split_stereotypes`) and suits a quick count, but it returns stereotype counts
+   only, so it cannot stand in for this census; before 3.6.0 it reads the bare
+   `t_object.Stereotype` name, which does not identify the language.
 
 2. **Create the four packages** with `ea_model(operation="create_package", ...)`, sequentially —
    EA's package tree is not thread-safe and parallel creates produce intermittent COM errors.
 
-3. **Stereotype the three child packages, and get this right**: the child package's stereotype is
+3. **Stereotype the child packages (one `«profile»`, one `«diagram profile»`, one `«toolbox profile»` per toolbox), and get this right**: the child package's stereotype is
    what routes its content into a section of the built MDG.
 
    | Child package stereotype | Lands in |

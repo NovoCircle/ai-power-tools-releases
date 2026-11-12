@@ -119,8 +119,9 @@ is read from its Notes, where EA keeps the text. **EA writes
 NULL and empty text identically, so the two cannot be told apart in any result.** A value that does
 not convert to its declared type is NULL on a typed column, and the value check reports it.
 
-Table names are limited to 123 characters (SQL Server's 128, less the `Con_` prefix and room for a
-suffix); a longer name stops the build with the offending names listed.
+A table name is limited to 123 characters, the whole name, `Con_` included: SQL Server allows 128,
+and 5 are reserved for the " tags" suffix of the tag-row table. A longer name stops the build with
+the offending names listed.
 
 ---
 
