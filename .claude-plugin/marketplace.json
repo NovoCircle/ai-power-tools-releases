@@ -23,10 +23,10 @@
         "source": "git-subdir",
         "url": "https://github.com/NovoCircle/modeling-languages-releases.git",
         "path": "plugins/modeling-languages",
-        "ref": "modeling-languages--v1.0.0",
-        "sha": "2dab6d5b979e591548ff750fe5a1675efa365d0f"
+        "ref": "modeling-languages--v1.0.1",
+        "sha": "69241d0ecafd18ea683b9fd1526cbcb8a23f1e94"
       },
-      "version": "1.0.0",
+      "version": "1.0.1",
       "description": "Modeling Languages: one guide for each modeling language, covering its concepts, relationships, constraints, data types, how the standard draws it, and one shared layout standard for sizes and spacing. The guides describe the languages, not any diagramming tool, so any tool's skills can read them."
     }
   ]
