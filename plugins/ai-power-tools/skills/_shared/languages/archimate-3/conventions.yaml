@@ -7,6 +7,17 @@ technology: ArchiMate3
 display_name: ArchiMate 3
 extends: UML
 stereotype_prefix: ArchiMate_
+bare_stereotype:
+  accepted: false
+  source: 'ea.yaml stereotype_storage: EA 17.1 build 1716, 2026-10-20, stores ArchiMate_<Concept> in t_object.Stereotype
+    and t_connector.Stereotype, so a stored name without the ArchiMate_ prefix is not an ArchiMate concept;
+    it belongs to whichever unprefixed language defines it.'
+name_below:
+  room: 18
+  source: 'EA 17.1 build 1716, live render of a layered-bands Application diagram, 17 Nov 2026: an ArchiMate_Device
+    draws its name under its shape, the 10 px text reaching 14 px below the shape''s bottom edge; 4 px
+    more keeps it off a container''s border. Device is the one concept measured; the room is set for the
+    whole technology because a layout cannot tell which concepts a band will hold.'
 notes: |
   EA's ArchiMate3 MDG declares five diagram types, all based on Logical. There is no Strategy diagram type: strategy concepts (Capability, Resource, CourseOfAction, ValueStream) are stereotypes drawn on a Business diagram.
 

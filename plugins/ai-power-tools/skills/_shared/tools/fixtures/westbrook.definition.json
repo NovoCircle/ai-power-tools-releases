@@ -130,7 +130,8 @@
      "name": "technicalOwner",
      "type": "TEXT"
     }
-   ]
+   ],
+   "description_generated": false
   },
   {
    "name": "AI Model",
@@ -251,7 +252,8 @@
      "name": "technicalOwner",
      "type": "TEXT"
     }
-   ]
+   ],
+   "description_generated": false
   },
   {
    "name": "AI Service",
@@ -372,7 +374,8 @@
      "name": "technicalOwner",
      "type": "TEXT"
     }
-   ]
+   ],
+   "description_generated": false
   },
   {
    "name": "Business Application",
@@ -466,7 +469,8 @@
      "name": "technicalOwner",
      "type": "TEXT"
     }
-   ]
+   ],
+   "description_generated": false
   },
   {
    "name": "Business Service",
@@ -551,7 +555,8 @@
      "name": "technicalOwner",
      "type": "TEXT"
     }
-   ]
+   ],
+   "description_generated": false
   },
   {
    "name": "Customer Touchpoint",
@@ -636,7 +641,8 @@
      "name": "technicalOwner",
      "type": "TEXT"
     }
-   ]
+   ],
+   "description_generated": false
   },
   {
    "name": "Data Asset",
@@ -721,7 +727,8 @@
      "name": "technicalOwner",
      "type": "TEXT"
     }
-   ]
+   ],
+   "description_generated": false
   },
   {
    "name": "Data Entity",
@@ -806,7 +813,8 @@
      "name": "technicalOwner",
      "type": "TEXT"
     }
-   ]
+   ],
+   "description_generated": false
   },
   {
    "name": "External Call",
@@ -891,7 +899,8 @@
      "name": "technicalOwner",
      "type": "TEXT"
     }
-   ]
+   ],
+   "description_generated": false
   },
   {
    "name": "Governed Element",
@@ -976,7 +985,8 @@
      "name": "technicalOwner",
      "type": "TEXT"
     }
-   ]
+   ],
+   "description_generated": false
   },
   {
    "name": "Regulated Activity",
@@ -1061,7 +1071,8 @@
      "name": "technicalOwner",
      "type": "TEXT"
     }
-   ]
+   ],
+   "description_generated": false
   },
   {
    "name": "Regulated Function",
@@ -1146,7 +1157,8 @@
      "name": "technicalOwner",
      "type": "TEXT"
     }
-   ]
+   ],
+   "description_generated": false
   },
   {
    "name": "System of Record",
@@ -1231,7 +1243,8 @@
      "name": "technicalOwner",
      "type": "TEXT"
     }
-   ]
+   ],
+   "description_generated": false
   },
   {
    "name": "Technology Node",
@@ -1316,7 +1329,8 @@
      "name": "technicalOwner",
      "type": "TEXT"
     }
-   ]
+   ],
+   "description_generated": false
   },
   {
    "name": "Vendor System",
@@ -1428,7 +1442,8 @@
      "name": "vendor",
      "type": "TEXT"
     }
-   ]
+   ],
+   "description_generated": false
   },
   {
    "name": "VendorApplication (not in MDG)",
@@ -1531,7 +1546,8 @@
      "name": "vendor",
      "type": "TEXT"
     }
-   ]
+   ],
+   "description_generated": true
   },
   {
    "name": "WBADataAsset (not in MDG)",
@@ -1580,7 +1596,8 @@
      "name": "regulatoryScope",
      "type": "TEXT"
     }
-   ]
+   ],
+   "description_generated": true
   },
   {
    "name": "Node (not in MDG)",
@@ -1610,7 +1627,8 @@
      "name": "package_path",
      "type": "TEXT"
     }
-   ]
+   ],
+   "description_generated": true
   }
  ],
  "connectors": [
@@ -1670,7 +1688,8 @@
      "name": "slaTier",
      "type": "TEXT"
     }
-   ]
+   ],
+   "description_generated": false
   },
   {
    "name": "Con_AI Service Uses AI Model",
@@ -1728,7 +1747,8 @@
      "name": "slaTier",
      "type": "TEXT"
     }
-   ]
+   ],
+   "description_generated": false
   },
   {
    "name": "Con_Business Application Flows Business Application",
@@ -1786,7 +1806,8 @@
      "name": "slaTier",
      "type": "TEXT"
     }
-   ]
+   ],
+   "description_generated": false
   },
   {
    "name": "Con_Business Application Uses Business Application",
@@ -1844,7 +1865,8 @@
      "name": "slaTier",
      "type": "TEXT"
     }
-   ]
+   ],
+   "description_generated": false
   },
   {
    "name": "Con_Business Application Uses Business Service",
@@ -1902,7 +1924,8 @@
      "name": "slaTier",
      "type": "TEXT"
     }
-   ]
+   ],
+   "description_generated": false
   },
   {
    "name": "Con_Business Application Uses System of Record",
@@ -1960,7 +1983,8 @@
      "name": "slaTier",
      "type": "TEXT"
     }
-   ]
+   ],
+   "description_generated": false
   },
   {
    "name": "Con_Business Application Uses Technology Node",
@@ -2018,7 +2042,8 @@
      "name": "slaTier",
      "type": "TEXT"
     }
-   ]
+   ],
+   "description_generated": false
   },
   {
    "name": "Con_Business Application Uses Vendor System",
@@ -2076,7 +2101,8 @@
      "name": "slaTier",
      "type": "TEXT"
     }
-   ]
+   ],
+   "description_generated": false
   },
   {
    "name": "Con_Business Application realizes Business Service",
@@ -2134,7 +2160,8 @@
      "name": "slaTier",
      "type": "TEXT"
     }
-   ]
+   ],
+   "description_generated": false
   },
   {
    "name": "Con_Customer Touchpoint Flows Regulated Activity",
@@ -2192,7 +2219,8 @@
      "name": "slaTier",
      "type": "TEXT"
     }
-   ]
+   ],
+   "description_generated": false
   },
   {
    "name": "Con_Regulated Activity Flows External Call",
@@ -2250,7 +2278,8 @@
      "name": "slaTier",
      "type": "TEXT"
     }
-   ]
+   ],
+   "description_generated": false
   },
   {
    "name": "Con_Regulated Function Uses External Call",
@@ -2308,7 +2337,8 @@
      "name": "slaTier",
      "type": "TEXT"
     }
-   ]
+   ],
+   "description_generated": false
   },
   {
    "name": "Con_Regulated Function Uses Regulated Activity",
@@ -2366,7 +2396,8 @@
      "name": "slaTier",
      "type": "TEXT"
     }
-   ]
+   ],
+   "description_generated": false
   },
   {
    "name": "Con_System of Record realizes Data Entity",
@@ -2424,7 +2455,8 @@
      "name": "slaTier",
      "type": "TEXT"
     }
-   ]
+   ],
+   "description_generated": false
   },
   {
    "name": "Con_Vendor System Uses Technology Node",
@@ -2482,7 +2514,8 @@
      "name": "slaTier",
      "type": "TEXT"
     }
-   ]
+   ],
+   "description_generated": false
   },
   {
    "name": "Con_Business Application BMM Uses Node (not in MDG)",
@@ -2524,7 +2557,8 @@
      "name": "base_type",
      "type": "TEXT"
     }
-   ]
+   ],
+   "description_generated": true
   },
   {
    "name": "Con_Business Application Dependency Business Application (not in MDG)",
@@ -2566,7 +2600,8 @@
      "name": "base_type",
      "type": "TEXT"
     }
-   ]
+   ],
+   "description_generated": true
   },
   {
    "name": "Con_Business Application Dependency Vendor System (not in MDG)",
@@ -2608,7 +2643,8 @@
      "name": "base_type",
      "type": "TEXT"
     }
-   ]
+   ],
+   "description_generated": true
   },
   {
    "name": "Con_Business Service Dependency Vendor System (not in MDG)",
@@ -2650,7 +2686,8 @@
      "name": "base_type",
      "type": "TEXT"
     }
-   ]
+   ],
+   "description_generated": true
   },
   {
    "name": "Con_Data Entity Association Data Entity (not in MDG)",
@@ -2708,7 +2745,8 @@
      "name": "slaTier",
      "type": "TEXT"
     }
-   ]
+   ],
+   "description_generated": true
   },
   {
    "name": "Con_Vendor System BMM Uses Node (not in MDG)",
@@ -2750,7 +2788,8 @@
      "name": "base_type",
      "type": "TEXT"
     }
-   ]
+   ],
+   "description_generated": true
   },
   {
    "name": "Con_VendorApplication BMM Uses Business Application (not in MDG)",
@@ -2792,7 +2831,8 @@
      "name": "base_type",
      "type": "TEXT"
     }
-   ]
+   ],
+   "description_generated": true
   },
   {
    "name": "Con_VendorApplication Association Business Application (not in MDG)",
@@ -2834,7 +2874,8 @@
      "name": "base_type",
      "type": "TEXT"
     }
-   ]
+   ],
+   "description_generated": true
   }
  ],
  "tag_row_tables": [],
@@ -2889,7 +2930,8 @@
     "source_table": null,
     "target_table": null,
     "in_mdg": "yes",
-    "description": null
+    "description": null,
+    "description_source": ""
    },
    {
     "table_name": "AI Model",
@@ -2900,7 +2942,8 @@
     "source_table": null,
     "target_table": null,
     "in_mdg": "yes",
-    "description": null
+    "description": null,
+    "description_source": ""
    },
    {
     "table_name": "AI Service",
@@ -2911,7 +2954,8 @@
     "source_table": null,
     "target_table": null,
     "in_mdg": "yes",
-    "description": null
+    "description": null,
+    "description_source": ""
    },
    {
     "table_name": "Business Application",
@@ -2922,7 +2966,8 @@
     "source_table": null,
     "target_table": null,
     "in_mdg": "yes",
-    "description": null
+    "description": null,
+    "description_source": ""
    },
    {
     "table_name": "Business Service",
@@ -2933,7 +2978,8 @@
     "source_table": null,
     "target_table": null,
     "in_mdg": "yes",
-    "description": null
+    "description": null,
+    "description_source": ""
    },
    {
     "table_name": "Customer Touchpoint",
@@ -2944,7 +2990,8 @@
     "source_table": null,
     "target_table": null,
     "in_mdg": "yes",
-    "description": null
+    "description": null,
+    "description_source": ""
    },
    {
     "table_name": "Data Asset",
@@ -2955,7 +3002,8 @@
     "source_table": null,
     "target_table": null,
     "in_mdg": "yes",
-    "description": null
+    "description": null,
+    "description_source": ""
    },
    {
     "table_name": "Data Entity",
@@ -2966,7 +3014,8 @@
     "source_table": null,
     "target_table": null,
     "in_mdg": "yes",
-    "description": null
+    "description": null,
+    "description_source": ""
    },
    {
     "table_name": "External Call",
@@ -2977,7 +3026,8 @@
     "source_table": null,
     "target_table": null,
     "in_mdg": "yes",
-    "description": null
+    "description": null,
+    "description_source": ""
    },
    {
     "table_name": "Governed Element",
@@ -2988,7 +3038,8 @@
     "source_table": null,
     "target_table": null,
     "in_mdg": "yes",
-    "description": null
+    "description": null,
+    "description_source": ""
    },
    {
     "table_name": "Regulated Activity",
@@ -2999,7 +3050,8 @@
     "source_table": null,
     "target_table": null,
     "in_mdg": "yes",
-    "description": null
+    "description": null,
+    "description_source": ""
    },
    {
     "table_name": "Regulated Function",
@@ -3010,7 +3062,8 @@
     "source_table": null,
     "target_table": null,
     "in_mdg": "yes",
-    "description": null
+    "description": null,
+    "description_source": ""
    },
    {
     "table_name": "System of Record",
@@ -3021,7 +3074,8 @@
     "source_table": null,
     "target_table": null,
     "in_mdg": "yes",
-    "description": null
+    "description": null,
+    "description_source": ""
    },
    {
     "table_name": "Technology Node",
@@ -3032,7 +3086,8 @@
     "source_table": null,
     "target_table": null,
     "in_mdg": "yes",
-    "description": null
+    "description": null,
+    "description_source": ""
    },
    {
     "table_name": "Vendor System",
@@ -3043,7 +3098,8 @@
     "source_table": null,
     "target_table": null,
     "in_mdg": "yes",
-    "description": null
+    "description": null,
+    "description_source": ""
    },
    {
     "table_name": "VendorApplication (not in MDG)",
@@ -3054,7 +3110,8 @@
     "source_table": null,
     "target_table": null,
     "in_mdg": "no",
-    "description": "Included as observed: outside the MDG."
+    "description": "Included as observed: outside the MDG.",
+    "description_source": "generated"
    },
    {
     "table_name": "WBADataAsset (not in MDG)",
@@ -3065,7 +3122,8 @@
     "source_table": null,
     "target_table": null,
     "in_mdg": "no",
-    "description": "Included as observed: outside the MDG."
+    "description": "Included as observed: outside the MDG.",
+    "description_source": "generated"
    },
    {
     "table_name": "Node (not in MDG)",
@@ -3076,7 +3134,8 @@
     "source_table": null,
     "target_table": null,
     "in_mdg": "no",
-    "description": "Included as observed: outside the MDG."
+    "description": "Included as observed: outside the MDG.",
+    "description_source": "generated"
    },
    {
     "table_name": "Con_AI Gateway Uses AI Service",
@@ -3087,7 +3146,8 @@
     "source_table": "AI Gateway",
     "target_table": "AI Service",
     "in_mdg": "yes",
-    "description": null
+    "description": null,
+    "description_source": ""
    },
    {
     "table_name": "Con_AI Service Uses AI Model",
@@ -3098,7 +3158,8 @@
     "source_table": "AI Service",
     "target_table": "AI Model",
     "in_mdg": "yes",
-    "description": null
+    "description": null,
+    "description_source": ""
    },
    {
     "table_name": "Con_Business Application Flows Business Application",
@@ -3109,7 +3170,8 @@
     "source_table": "Business Application",
     "target_table": "Business Application",
     "in_mdg": "yes",
-    "description": null
+    "description": null,
+    "description_source": ""
    },
    {
     "table_name": "Con_Business Application Uses Business Application",
@@ -3120,7 +3182,8 @@
     "source_table": "Business Application",
     "target_table": "Business Application",
     "in_mdg": "yes",
-    "description": null
+    "description": null,
+    "description_source": ""
    },
    {
     "table_name": "Con_Business Application Uses Business Service",
@@ -3131,7 +3194,8 @@
     "source_table": "Business Application",
     "target_table": "Business Service",
     "in_mdg": "yes",
-    "description": null
+    "description": null,
+    "description_source": ""
    },
    {
     "table_name": "Con_Business Application Uses System of Record",
@@ -3142,7 +3206,8 @@
     "source_table": "Business Application",
     "target_table": "System of Record",
     "in_mdg": "yes",
-    "description": null
+    "description": null,
+    "description_source": ""
    },
    {
     "table_name": "Con_Business Application Uses Technology Node",
@@ -3153,7 +3218,8 @@
     "source_table": "Business Application",
     "target_table": "Technology Node",
     "in_mdg": "yes",
-    "description": null
+    "description": null,
+    "description_source": ""
    },
    {
     "table_name": "Con_Business Application Uses Vendor System",
@@ -3164,7 +3230,8 @@
     "source_table": "Business Application",
     "target_table": "Vendor System",
     "in_mdg": "yes",
-    "description": null
+    "description": null,
+    "description_source": ""
    },
    {
     "table_name": "Con_Business Application realizes Business Service",
@@ -3175,7 +3242,8 @@
     "source_table": "Business Application",
     "target_table": "Business Service",
     "in_mdg": "yes",
-    "description": null
+    "description": null,
+    "description_source": ""
    },
    {
     "table_name": "Con_Customer Touchpoint Flows Regulated Activity",
@@ -3186,7 +3254,8 @@
     "source_table": "Customer Touchpoint",
     "target_table": "Regulated Activity",
     "in_mdg": "yes",
-    "description": null
+    "description": null,
+    "description_source": ""
    },
    {
     "table_name": "Con_Regulated Activity Flows External Call",
@@ -3197,7 +3266,8 @@
     "source_table": "Regulated Activity",
     "target_table": "External Call",
     "in_mdg": "yes",
-    "description": null
+    "description": null,
+    "description_source": ""
    },
    {
     "table_name": "Con_Regulated Function Uses External Call",
@@ -3208,7 +3278,8 @@
     "source_table": "Regulated Function",
     "target_table": "External Call",
     "in_mdg": "yes",
-    "description": null
+    "description": null,
+    "description_source": ""
    },
    {
     "table_name": "Con_Regulated Function Uses Regulated Activity",
@@ -3219,7 +3290,8 @@
     "source_table": "Regulated Function",
     "target_table": "Regulated Activity",
     "in_mdg": "yes",
-    "description": null
+    "description": null,
+    "description_source": ""
    },
    {
     "table_name": "Con_System of Record realizes Data Entity",
@@ -3230,7 +3302,8 @@
     "source_table": "System of Record",
     "target_table": "Data Entity",
     "in_mdg": "yes",
-    "description": null
+    "description": null,
+    "description_source": ""
    },
    {
     "table_name": "Con_Vendor System Uses Technology Node",
@@ -3241,7 +3314,8 @@
     "source_table": "Vendor System",
     "target_table": "Technology Node",
     "in_mdg": "yes",
-    "description": null
+    "description": null,
+    "description_source": ""
    },
    {
     "table_name": "Con_Business Application BMM Uses Node (not in MDG)",
@@ -3252,7 +3326,8 @@
     "source_table": "Business Application",
     "target_table": "Node (not in MDG)",
     "in_mdg": "no",
-    "description": "Included as observed: both ends are included elements."
+    "description": "Included as observed: both ends are included elements.",
+    "description_source": "generated"
    },
    {
     "table_name": "Con_Business Application Dependency Business Application (not in MDG)",
@@ -3263,7 +3338,8 @@
     "source_table": "Business Application",
     "target_table": "Business Application",
     "in_mdg": "no",
-    "description": "Included as observed: both ends are included elements."
+    "description": "Included as observed: both ends are included elements.",
+    "description_source": "generated"
    },
    {
     "table_name": "Con_Business Application Dependency Vendor System (not in MDG)",
@@ -3274,7 +3350,8 @@
     "source_table": "Business Application",
     "target_table": "Vendor System",
     "in_mdg": "no",
-    "description": "Included as observed: both ends are included elements."
+    "description": "Included as observed: both ends are included elements.",
+    "description_source": "generated"
    },
    {
     "table_name": "Con_Business Service Dependency Vendor System (not in MDG)",
@@ -3285,7 +3362,8 @@
     "source_table": "Business Service",
     "target_table": "Vendor System",
     "in_mdg": "no",
-    "description": "Included as observed: both ends are included elements."
+    "description": "Included as observed: both ends are included elements.",
+    "description_source": "generated"
    },
    {
     "table_name": "Con_Data Entity Association Data Entity (not in MDG)",
@@ -3296,7 +3374,8 @@
     "source_table": "Data Entity",
     "target_table": "Data Entity",
     "in_mdg": "no",
-    "description": "Included as observed: both ends are included elements."
+    "description": "Included as observed: both ends are included elements.",
+    "description_source": "generated"
    },
    {
     "table_name": "Con_Vendor System BMM Uses Node (not in MDG)",
@@ -3307,7 +3386,8 @@
     "source_table": "Vendor System",
     "target_table": "Node (not in MDG)",
     "in_mdg": "no",
-    "description": "Included as observed: both ends are included elements."
+    "description": "Included as observed: both ends are included elements.",
+    "description_source": "generated"
    },
    {
     "table_name": "Con_VendorApplication BMM Uses Business Application (not in MDG)",
@@ -3318,7 +3398,8 @@
     "source_table": "VendorApplication (not in MDG)",
     "target_table": "Business Application",
     "in_mdg": "no",
-    "description": "Included as observed: both ends are included elements."
+    "description": "Included as observed: both ends are included elements.",
+    "description_source": "generated"
    },
    {
     "table_name": "Con_VendorApplication Association Business Application (not in MDG)",
@@ -3329,7 +3410,8 @@
     "source_table": "VendorApplication (not in MDG)",
     "target_table": "Business Application",
     "in_mdg": "no",
-    "description": "Included as observed: both ends are included elements."
+    "description": "Included as observed: both ends are included elements.",
+    "description_source": "generated"
    }
   ]
  },

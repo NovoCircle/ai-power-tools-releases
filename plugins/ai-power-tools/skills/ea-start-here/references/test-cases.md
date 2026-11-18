@@ -23,7 +23,7 @@ a stop, a question or a hand-off), `INVARIANT` (must pass on every run), `BLOCKE
 state a runner may not be able to arrange). Every case that is not `WRITE` carries the
 model-unchanged check.
 
-**Skill-choice cases** (TC-14 to TC-19, TC-21, TC-24) grade the route the reply takes, not the
+**Skill-choice cases** (TC-14 to TC-19, TC-21, TC-24, TC-36 to TC-42) grade the route the reply takes, not the
 words it uses. A reply that follows the named skill's route passes whether or not it writes the
 skill's name, because a customer does not need the name. A case says so when the name matters (a
 hand-off sentence).
@@ -1136,6 +1136,160 @@ reply: not: says EA is hung, has crashed or has timed out
 **Fails when:** The run says "EA seems to have hung" and offers to restart it. The cause is a
 dialog the person can clear in seconds, and a restart abandons whatever is open.
 
+### TC-36: Getting a package out goes to the import and export skill
+
+Covers: 2. Which skill for which task
+
+**Ask:** "I need the Domestic Payments package as a file I can load into another repository. How would you do it? Don't run anything yet."
+
+**Passes when:** The run follows the route of `ea-import-export`, the skill for getting a package or diagram out of EA and bringing XMI back in: an XMI export of the package, then a comparison of the element counts before the file is trusted.
+
+**Check:**
+
+```check
+sql: SELECT (SELECT COUNT(*) FROM t_object), (SELECT COUNT(*) FROM t_connector), (SELECT COUNT(*) FROM t_diagram), (SELECT COUNT(*) FROM t_package), (SELECT COUNT(*) FROM t_objectproperties)
+expect: unchanged
+```
+
+```check
+reply: says: the package is exported as XMI and the exported element count is compared with the package's
+reply: not: answers with a hand-written SQL dump of the package
+```
+
+**Fails when:** The run builds the file by querying `t_object` and writing rows out. The person gets data that cannot be imported.
+
+### TC-37: A plain-language roll-up goes to the stakeholder reporting skill
+
+Covers: 2. Which skill for which task
+
+**Ask:** "The steering committee wants a one-page answer: how many of our applications are Mission-Critical, in words they can read. How would you produce it? Don't change anything."
+
+**Passes when:** The run follows the route of `ea-stakeholder-reporting`, the skill for turning model facts into an answer a non-modeler can act on: a roll-up by the tagged value, then a plain-language summary.
+
+**Check:**
+
+```check
+sql: SELECT (SELECT COUNT(*) FROM t_object), (SELECT COUNT(*) FROM t_connector), (SELECT COUNT(*) FROM t_diagram), (SELECT COUNT(*) FROM t_package), (SELECT COUNT(*) FROM t_objectproperties)
+expect: unchanged
+```
+
+```check
+reply: says: it rolls the applications up by criticality and writes the result in plain words
+reply: not: hands over a raw query result with column names and no summary
+```
+
+**Fails when:** The run returns a grid of ids and tag values. The committee asked for words they can read.
+
+### TC-38: Comparing against last week goes to the change management skill
+
+Covers: 2. Which skill for which task
+
+**Ask:** "Before we bulk-edit the Domestic Payments package, I want to be able to see afterwards exactly what changed and put it back. What do you do first? Don't edit anything."
+
+**Passes when:** The run follows the route of `ea-change-management`, the skill for taking and comparing baselines: it proposes a baseline of the package before any edit.
+
+**Check:**
+
+```check
+sql: SELECT (SELECT COUNT(*) FROM t_object), (SELECT COUNT(*) FROM t_connector), (SELECT COUNT(*) FROM t_diagram), (SELECT COUNT(*) FROM t_package), (SELECT COUNT(*) FROM t_objectproperties)
+expect: unchanged
+```
+
+```check
+reply: says: it takes a baseline of the package before the edit and compares against it afterwards
+reply: not: proposes copying the model file as the safety net
+```
+
+**Fails when:** The run starts the bulk edit, or suggests a copy of the `.qea` file. Neither gives a package-level comparison.
+
+### TC-39: A tangled model goes to the model hygiene skill
+
+Covers: 2. Which skill for which task
+
+**Ask:** "Our model has grown messy: elements nobody connects to and the same tag spelled two ways. Where do we start? Don't change anything."
+
+**Passes when:** The run follows the route of `ea-model-hygiene`, the skill for cleaning up a model that has grown: a read-only audit that lists unconnected elements and inconsistent tag use before any fix is proposed.
+
+**Check:**
+
+```check
+sql: SELECT (SELECT COUNT(*) FROM t_object), (SELECT COUNT(*) FROM t_connector), (SELECT COUNT(*) FROM t_diagram), (SELECT COUNT(*) FROM t_package), (SELECT COUNT(*) FROM t_objectproperties)
+expect: unchanged
+```
+
+```check
+reply: says: it audits first, listing elements with no connectors and tags applied inconsistently
+reply: not: deletes or renames anything before the person has seen the list
+```
+
+**Fails when:** The run deletes the unconnected elements it finds, or renames tags on its own. The person asked where to start.
+
+### TC-40: Choosing a diagram type goes to the diagram advisor
+
+Covers: 2. Which skill for which task
+
+**Ask:** "I want to show the architecture board how the payment applications depend on each other. Which kind of diagram should I use? Don't create anything."
+
+**Passes when:** The run follows the route of `ea-diagram-advisor`, the skill for choosing which diagram type or viewpoint shows what someone wants to understand, and answers with a recommended diagram type and the reason.
+
+**Check:**
+
+```check
+sql: SELECT (SELECT COUNT(*) FROM t_object), (SELECT COUNT(*) FROM t_connector), (SELECT COUNT(*) FROM t_diagram), (SELECT COUNT(*) FROM t_package), (SELECT COUNT(*) FROM t_objectproperties)
+expect: unchanged
+```
+
+```check
+reply: says: it recommends a diagram type for application dependencies and gives the reason
+reply: not: creates a diagram
+```
+
+**Fails when:** The run creates a diagram in the first type it thinks of. The person asked which type to use.
+
+### TC-41: An untidy generated diagram goes to the diagram composition skill
+
+Covers: 2. Which skill for which task
+
+**Ask:** "The diagram you generated has boxes of different sizes and lines crossing everywhere. How would you make it read as deliberate? Don't change it yet."
+
+**Passes when:** The run follows the route of `ea-diagram-composition`, the skill for laying out and styling a generated diagram: it names peer boxes at one size, spacing and line crossings, and says it will check the result by looking at the diagram.
+
+**Check:**
+
+```check
+sql: SELECT (SELECT COUNT(*) FROM t_object), (SELECT COUNT(*) FROM t_connector), (SELECT COUNT(*) FROM t_diagram), (SELECT COUNT(*) FROM t_package), (SELECT COUNT(*) FROM t_objectproperties)
+expect: unchanged
+```
+
+```check
+reply: says: it sets peer boxes to one size, spaces them evenly and reduces crossings
+reply: not: moves shapes by raw SQL on the diagram tables
+```
+
+**Fails when:** The run edits diagram geometry with SQL and never looks at the result.
+
+### TC-42: Which modeling language is in use goes to the MDG assessment skill
+
+Covers: 2. Which skill for which task
+
+**Ask:** "Some of our elements carry stereotypes I don't recognize, and I'm not sure whether a technology is loaded. Before anyone writes an MDG, what is the situation? Don't change anything."
+
+**Passes when:** The run follows the route of `ea-mdg-assess`, the skill for working out which modeling-language situation a repository is in: it assesses the repository first, then separates installed, embedded and loaded.
+
+**Check:**
+
+```check
+sql: SELECT (SELECT COUNT(*) FROM t_object), (SELECT COUNT(*) FROM t_connector), (SELECT COUNT(*) FROM t_diagram), (SELECT COUNT(*) FROM t_package), (SELECT COUNT(*) FROM t_objectproperties)
+expect: unchanged
+```
+
+```check
+reply: says: it assesses the repository and separates installed, embedded and loaded
+reply: not: starts writing an MDG technology file
+```
+
+**Fails when:** The run starts authoring XML. Nobody has yet found out whether a technology exists.
+
 ## Invariants
 
 **Preflight order (TC-01).** For any task that touches the model, the transcript contains the server
@@ -1154,12 +1308,12 @@ a wrong model. TC-03, TC-10 and TC-02 test the reading.
 ## Headings not covered
 
 None. Every heading of `SKILL.md` is named by at least one case. The routing table in "2. Which skill
-for which task" has a row for every other shipped EA skill; TC-14 to TC-21 exercise the rows where the
+for which task" has a row for every other shipped EA skill. TC-14 to TC-21 exercise the rows where the
 wrong route is plausible (reporting, Power BI, navigation, icons, ruleset authoring, COM, and the UI
-fallback), and the rows for modeling, MDG authoring and deployment, validation and diagnostics are
-exercised through TC-22, TC-23, TC-27 and TC-24. The rows for the import and export, stakeholder
-reporting, change management, model hygiene, diagram advisor, diagram composition and MDG assessment
-skills have no case yet.
+fallback), the rows for modeling, MDG authoring and deployment, validation and diagnostics are
+exercised through TC-22, TC-23, TC-27 and TC-24, and TC-36 to TC-42 send a task to each of the
+import and export, stakeholder reporting, change management, model hygiene, diagram advisor, diagram
+composition and MDG assessment rows.
 
 ## Findings
 
@@ -1169,9 +1323,8 @@ each says what was done.
 - The routing table in section 2 now has a row for each of the seven skills it used to omit, and
   the release check fails when a shipped EA skill has no row. No case yet sends a task to one of
   those seven.
-  **Skill: already fixed (the table has the rows). No change to the skill. The missing cases are a
-  test gap, not a skill defect: one routing case each for the rows listed under "Headings not
-  covered".**
+  **Skill: already fixed (the table has the rows). The missing cases are a test gap, not a skill
+  defect, and are now added: TC-36 to TC-42, one routing case for each of the seven rows.**
 - Section 4 says the other `ea_validate` operations "return `not_yet_implemented`". Section 5 says an
   operation not in the operation list "returns an error listing the valid names", and the generated
   list shows `ea_validate` with one operation. One of the two is wrong; TC-27 does not assert which

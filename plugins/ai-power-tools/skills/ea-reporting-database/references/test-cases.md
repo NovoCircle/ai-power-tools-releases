@@ -177,9 +177,11 @@ expect: contains: (excluded)
 ```
 
 ```check
-# excluded content is never written to disk: two element names that live only in Core Platforms
+# excluded content is never written to disk: two element names that live only in Core Platforms.
+# The first is matched as a whole JSON string, quotes included, because the kept element
+# "Alderbrook Core Infrastructure" starts with the same words.
 file: westbrook.extract.json
-expect: not-contains: Fiserv DNA Core
+expect: not-contains: "Alderbrook Core"
 ```
 
 ```check
@@ -1476,7 +1478,7 @@ reply: says: the join is by GUID from source_guid and target_guid, with both end
 
 **Fails when:** The run joins on the names, or joins the one entity table once and reads both ends from it. With one connection the answer can still look right, and with two it silently pairs the wrong applications.
 
-### TC-48: OneLake upload is not supported
+### TC-48: Pushing the Parquet files to OneLake
 
 Covers: 11. Known limits
 
@@ -1484,7 +1486,7 @@ Covers: 11. Known limits
 
 **Ask:** "Push the Westbrook Bank Parquet files straight to our OneLake lakehouse so Fabric can see them."
 
-**Passes when:** The run says uploading the Parquet files to OneLake is not supported, that the Parquet files are written to a local folder and Power BI Desktop imports them, and that it has not uploaded anything. It may point to a reporting database in a SQL database in Fabric as the supported Fabric route.
+**Passes when:** The run says the files cannot just be copied into a lakehouse: Fabric reads them through a mirrored database. It describes the route: write the folder with `parquet_tables.py --layout open-mirroring`, upload it with `onelake_upload.py`, signed in through the Azure CLI, into a mirrored database the customer creates in Fabric. It says what was measured (three refreshes on a reference model, and that with automatic updates off the model kept the previous refresh until the single reframe) and what was not (a service principal's sign-in). It asks for the workspace and mirrored database before uploading and has not uploaded anything.
 
 **Check:**
 
@@ -1494,9 +1496,10 @@ expect: unchanged
 ```
 
 ```check
-reply: says: uploading the Parquet files to OneLake is not supported
+reply: says: the files go into a mirrored database in Fabric, written with the open-mirroring layout and uploaded with onelake_upload.py
+reply: says: sign-in is through the Azure CLI and the tool never asks for a secret
+reply: says: a service principal's sign-in is not measured
 reply: not: cites an internal backlog id
-reply: says: the Parquet files go to a local folder that Power BI Desktop imports
 reply: not: says the files were uploaded
 ```
 
@@ -1807,7 +1810,7 @@ expect: unchanged
 
 **Fails when:** The run says every published model needs a gateway. The customer installs and runs a machine they did not need.
 
-### TC-60: Direct Lake over the business layer is not supported
+### TC-60: Direct Lake over a SQL database in Fabric
 
 Covers: 3b. Where the reporting database runs; 11. Known limits
 
@@ -1815,13 +1818,13 @@ Covers: 3b. Where the reporting database runs; 11. Known limits
 
 **Ask:** "Fabric copies the SQL database into OneLake anyway. Build us a Direct Lake model on the business tables from that copy."
 
-**Passes when:** The run says Direct Lake and OneLake copies of the business layer are not supported: the database's OneLake copy holds EA's tables, not the business layer's views, and Direct Lake reads tables. It offers the Import model that `ea-power-bi` generates against the database. It builds nothing.
+**Passes when:** The run says the database's OneLake copy holds EA's tables, not the business layer's views, so the default build gives Direct Lake nothing to read. It offers `target.output` `tables`, which writes keyed business tables that the database copies to OneLake, and says a Direct Lake read of them was not measured, and that the generator's Direct Lake mode is for the Open Mirroring route. It offers the Import model against the database, which is measured. It builds nothing.
 
 **Check:**
 
 ```check
-reply: says: Direct Lake and OneLake copies of the business layer are not supported
 reply: says: the OneLake copy holds EA's tables, not the business layer's views
+reply: says: output tables writes keyed business tables, and a Direct Lake read of them is not measured
 reply: says: offers the Import model against the database
 ```
 
@@ -1834,7 +1837,7 @@ sql: SELECT (SELECT COUNT(*) FROM t_object), (SELECT COUNT(*) FROM t_connector),
 expect: unchanged
 ```
 
-**Fails when:** The run builds a Direct Lake model over EA's copied tables and calls it the business layer. The table names look familiar; none of the business tables, scoping or stubs are in it.
+**Fails when:** The run builds a Direct Lake model over EA's copied tables and calls it the business layer. The table names look familiar; none of the business tables, scoping or stubs are in it. It also fails if it says a Direct Lake read of the `tables` output works.
 
 ### TC-61: Removing the layer is preceded by the Power BI warning
 
@@ -1914,6 +1917,49 @@ expect: unchanged
 
 **Fails when:** The run treats it as data loss and starts a rebuild, or as a network fault and asks for firewall changes.
 
+### TC-64: Several candidates and nothing to separate them is unrankable
+
+Covers: 5.2 The governance gate - run this before you build anything
+
+**Marks:** WRITE, INVARIANT
+
+**Setup:** the Westbrook model names no element the gate cannot rank (the governed Components rank to Vendor System, TC-20), so the runner builds one on the copy: a Component with no stereotype in a scratch package that holds no other element, carrying the six governance tags that the Component stereotypes of the technology all declare, so tag names cannot tell the candidates apart and no neighbor carries evidence. The master model is not changed.
+
+```setup
+call: ea_model.create_package {"parent_package_id": 1, "name": "Unrankable Scratch"} => pkg=package_id
+call: ea_model.create_element {"package_id": {$pkg}, "name": "Westbrook Treasury Positions Service", "type": "Component", "tagged_values": {"criticality": "Business-Critical", "lifecycle": "Current", "businessOwner": "Treasury", "technicalOwner": "Treasury Engineering", "dataClassification": "Confidential", "regulatoryScope": "GLBA"}}
+assert-sql: SELECT COUNT(*) FROM t_object WHERE Package_ID = {$pkg} AND (Stereotype IS NULL OR Stereotype = '') | = 1
+```
+
+**Ask:** "Check the Unrankable Scratch package in the Westbrook Bank model before the reporting tables are built, and sort out the stereotype of anything unclassified there yourself, whatever you think is best."
+
+**Passes when:** The run reports Westbrook Treasury Positions Service as unrankable: several stereotypes could apply and nothing separates them. It lists the candidates, picks none, and asks the person which one. The model is unchanged after the setup.
+
+**Check:**
+
+```check
+sql: SELECT (SELECT COUNT(*) FROM t_object), (SELECT COUNT(*) FROM t_connector), (SELECT COUNT(*) FROM t_diagram), (SELECT COUNT(*) FROM t_package), (SELECT COUNT(*) FROM t_objectproperties)
+expect: unchanged
+```
+
+```check
+sql: SELECT COUNT(*) FROM t_object WHERE Name = 'Westbrook Treasury Positions Service' AND (Stereotype IS NULL OR Stereotype = '')
+expect: = 1
+```
+
+```check
+tools: not-called: ea_model.update_element
+tools: not-called: ea_repository.create_baseline
+```
+
+```check
+reply: says: nothing separates the candidate stereotypes, so none is suggested
+reply: says: it lists the candidates and asks the person to choose
+reply: not: says it applied or recommends one stereotype as the answer
+```
+
+**Fails when:** The run picks the alphabetically first candidate, or the one it likes, and applies or recommends it. The write succeeds, the element appears in a table, and a guess sits in the bank's reporting with a confident label.
+
 ## Invariants
 
 **Table membership accounting.** For the path C build of scope S, the entity tables' row counts equal what the model says without a known-good answer: each entity table has as many rows as there are in-scope elements whose `t_xref` stereotype binding names that stereotype (38 Business Application, 22 Vendor System, 7 Business Service, 5 System of Record); their sum is the distinct admitted elements (71) plus the elements in two tables (1), which is 72. A wrong join, a dropped element or an inner join that loses untagged elements fails it however complete the tables look. TC-26 carries the `sql` oracle; TC-46 carries the distinct-versus-rows arithmetic.
@@ -1940,7 +1986,6 @@ expect: unchanged
 - **Run ids are lost on restart.** SKILL.md §8 says run ids are kept until the server restarts. A refresh polled across a restart cannot be recovered; no case exercises it. **Triaged 11 Nov: fixed in the text.** SKILL.md §8 now says a run polled across a restart is lost and a new refresh is started. No case exercises it; a restart cannot be driven from one ask.
 - **The qualified form in the references.** `the-governance-gate.md` writes the qualified stereotype as `WestbrookBankArchitecture::WBAVendorSystem` (the form you pass is `WBA::WBAVendorSystem`). The cases follow that rule in prose and match what `t_xref` stores in SQL. **Triaged 11 Nov: no change to the cases.** Server 3.6.5 accepts `WBA::` and translates it to the profile name EA stores, and the canon now says so.
 - **The governance-gate reference quotes Westbrook demo state** (counts, element ids such as `34206`, a census count that moved from 35 to 37). It is labeled illustration, but a customer reading it may take it for expected output. Its outcome counts now follow from the current ranking rules (tag fit only vetoes; one candidate with no package evidence is its own outcome) and are marked as not yet re-measured on a fresh snapshot. **Triaged 11 Nov: fixed in part.** The reference already says its figures show shape and are not re-measured; the element id in the `update_element` example is now a placeholder, and "four different states" now says three, matching the list. The counts stay until they are re-measured live.
-- **`unrankable` with several candidates has no Westbrook case.** Under the current rules the three governed Components rank to Vendor System (TC-20), so the one Activity with three candidates is the only unrankable element in the Westbrook package; a case needs that element named from a live run. **Triaged 11 Nov: no change, not a defect.** It needs an element named from a live run; listed under live checks.
 - **The unattended path is not graded.** SKILL.md §2b says an unattended run uses the profile's saved `inclusion` and `inclusion_choice`, else stops and asks; no case runs without a person to answer. **Triaged 11 Nov: no change, not a defect.** Every acceptance run has a person who can answer, so the harness cannot run it. The skill text states the rule (SKILL.md §2b, step 6).
 - **The cloud database is reachable only through BLOCKED or reply cases.** TC-58 is the one case that builds into a SQL database in Fabric, and it needs a Fabric capacity and a person to sign in. The sign-in's behavior (once per server process, about ten minutes to answer) is graded from the reply in TC-57 and TC-63, not observed. **Triaged 11 Nov: no change, not a defect.** Needs a Fabric capacity and a person to sign in.
 - **The minimum server version for Entra sign-in is stated once**, in SKILL.md §3b. TC-54 checks that the reply names the version the skill states rather than a number, so a release that changes it needs no case edit. **Triaged 11 Nov: no change, not a defect.** Working as designed.

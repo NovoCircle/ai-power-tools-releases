@@ -164,6 +164,8 @@ Covers: Sparx EA COM API — Python Automation
 **Passes when:** The run produces a standalone script that uses `win32com.client` and the standard
 library, runs it, and reports 46.
 
+**Reading:** business applications are counted by the primary stereotype (the `Stereotype` column), which gives 46. Counting the second stereotype of Core Deposit System of Record gives 47; this case does not expect that reading.
+
 **Check:**
 
 ```check
@@ -428,6 +430,8 @@ Covers: Another live trap: malformed SQL blocks on a modal dialog, not a Python 
 singular-named stereotype table, which does not exist in this schema. It reports 46 business
 applications and 35 vendor systems among the rows.
 
+**Reading:** business applications are counted by the primary stereotype (the `Stereotype` column), which gives 46. Counting the second stereotype of Core Deposit System of Record gives 47; this case does not expect that reading.
+
 **Check:**
 
 ```check
@@ -569,9 +573,9 @@ tools: not-called: ea_mdg.install_mdg
 ```
 
 ```check
-# the embedded technology documents are untouched
+# the embedded technology documents are untouched (the Westbrook example model holds one build)
 sql: SELECT COUNT(*) FROM t_document WHERE DocType = 'TECHNOLOGY'
-expect: = 3
+expect: = 1
 ```
 
 ```check
@@ -742,6 +746,8 @@ the old connection string, reconnects with retries, and reports only after a fre
 path and 46 business applications). It looks at the screen after the restart and does not reuse
 any object it held before.
 
+**Reading:** business applications are counted by the primary stereotype (the `Stereotype` column), which gives 46. Counting the second stereotype of Core Deposit System of Record gives 47; this case does not expect that reading.
+
 **Check:**
 
 ```check
@@ -804,6 +810,8 @@ against a table that does not exist) before the agent starts. Computer use is av
 
 **Passes when:** The first query does not return. The run takes a screenshot of EA, reads the
 dialog, reports its cause, dismisses it from the front, and then answers 46 from a fresh query.
+
+**Reading:** business applications are counted by the primary stereotype (the `Stereotype` column), which gives 46. Counting the second stereotype of Core Deposit System of Record gives 47; this case does not expect that reading.
 
 **Check:**
 

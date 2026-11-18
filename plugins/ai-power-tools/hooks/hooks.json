@@ -1,0 +1,19 @@
+{
+  "description": "Approve AI Power Tools reads and ask before writes (Claude Code only)",
+  "hooks": {
+    "PreToolUse": [
+      {
+        "matcher": "^mcp__(AI-Power-Tools-for-Sparx-EA|plugin_ai-power-tools_AI-Power-Tools-for-Sparx-EA)__ea_(model|diagram|analyze|mdg|repository|validate)$",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "python",
+            "args": ["${CLAUDE_PLUGIN_ROOT}/hooks/ea_permission_hook.py"],
+            "timeout": 10,
+            "onFailure": "continue"
+          }
+        ]
+      }
+    ]
+  }
+}

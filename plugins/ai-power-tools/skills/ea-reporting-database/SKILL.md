@@ -1,6 +1,6 @@
 ---
 name: ea-reporting-database
-description: Build the reporting layer for a Sparx EA repository - business tables named and shaped by the technology that governs the model (one table per stereotype, one per allowed connector combination, a Table Directory) over EA's own tables - as SQL views inside the EA database, as a reporting database on SQL Server or in Microsoft Fabric, or as Parquet files, and prove it matches the repository. Use when someone wants to query, roll up, or report across a whole model rather than element by element, wants EA content in a database or files that an agent, a SQL client or Power BI can read, wants to choose what is reportable, or asks to keep the data fresh on a schedule. For Power BI specifically - a dataset, a .pbip, TMDL or a semantic model - build the layer here, then continue with ea-power-bi.
+description: Build the reporting layer for a Sparx EA repository - business tables named and shaped by the technology that governs the model (one table per stereotype, one per allowed connector combination, a Table Directory) over EA's own tables - as SQL views inside the EA database, as a reporting database on SQL Server or in Microsoft Fabric, or as Parquet files that can go on into Microsoft Fabric, and prove it matches the repository. Use when someone wants to query, roll up, or report across a whole model rather than element by element, wants EA content in a database or files that an agent, a SQL client or Power BI can read, wants to choose what is reportable, or asks to keep the data fresh on a schedule. For Power BI specifically - a dataset, a .pbip, TMDL or a semantic model - build the layer here, then continue with ea-power-bi.
 ---
 
 # A reporting layer from an EA repository
@@ -8,7 +8,7 @@ description: Build the reporting layer for a Sparx EA repository - business tabl
 *Tools: `ea_repository(operation=..., params={...})` with `build_business_layer`, `check_business_layer`,
 `build_reporting_database`, `replay_reporting_database`, `remove_business_layer`, `start_reporting_refresh`,
 `get_reporting_refresh`; `ea_mdg(operation="get_mdg_from_runtime")`; `ea_analyze(operation="execute_sql")`
-(AI Power Tools for Sparx EA, v3.6.4+); the census modules in `../_shared/tools/`*
+(AI Power Tools for Sparx EA, v3.6.4+); `../_shared/tools/`: the census modules, `parquet_tables.py`, `onelake_upload.py`*
 
 **This skill writes to the model in two places, each only when the user chooses it and after a
 baseline: applying a stereotype through the governance gate (§5.2), and fixing a connector bound to
@@ -22,14 +22,15 @@ the repository open for every operation here except a replay (§6).
 ## 1. What this produces
 
 The same tables on every path - names, columns, types and rows - so a report built on one path
-works on another:
+works on another (the one exception is the one-row `Source` table, below):
 
 | Tables | What they hold |
 |---|---|
 | **Entity tables** | One per element stereotype, named by the technology's alias (`Business Application`), or the stereotype name where there is no alias. Elements outside the technology that the inclusion choice (§2b) admits get a table per observed stereotype, named `... (not in MDG)` |
 | **`Con_` tables** | One per allowed combination of source stereotype, connector stereotype and target stereotype - matching the technology's metamodel diagram one for one. Named `Con_<source table> <connector stereotype> <target table>`. Combinations outside the technology appear only when the inclusion choice admits them, marked `(not in MDG)` |
 | **Tag-row tables** | Only where a column cannot hold the data: tags the technology does not declare, and declared tags that hold a list of element references. Everything else is a typed column on its entity or `Con_` table |
-| **Table Directory** | One row per business table: its name, kind, stereotype, alias, description from the technology |
+| **Table Directory** | One row per business table: its name, kind, stereotype, alias, description from the technology, and `primary_key` (the table's key columns, which Fabric needs on every table it exposes) |
+| **`Source`** | One row, two columns: `source_id`, the repository's id from the profile (NULL when the profile sets none), and `source_row`, always 1, its key. A view or table on paths A and B; the Parquet tables file (path C) has no `Source` table, so on path C the id is `source.id` in the definition JSON only |
 | **EA's physical tables** | The nine EA tables the business tables read (packages, objects, tagged values, connectors, connector tags, diagrams, diagram placements, attributes, operations), scoped to what the profile includes |
 
 Column by column: [`references/the-schema.md`](references/the-schema.md).
@@ -89,8 +90,8 @@ three to them, with the consequence of each attached, before building anything.
 | For whom | Can reach the EA database and may create views in it | Has no direct database access (a cloud connection, for example) and can run SQL Server or has a Fabric capacity | Has no direct database access and no database to run |
 | Where the business tables are | SQL views in their own schema inside the EA database. EA's tables reach Power BI through scoped views in the same schema | SQL views in a separate reporting database, on SQL Server or a SQL database in Microsoft Fabric (§3b), that AI Power Tools fills with a copy of EA's tables, read over COM | One Parquet file per table in a folder. AI Power Tools writes the rows as JSON; the local step in `ea-power-bi` writes the files |
 | Profile `target.kind` | `ea_database` | `reporting_database` | `parquet` |
-| Data | Live: the views read EA's tables as they stand | A snapshot, rebuilt in full on every refresh | A snapshot, rewritten on every refresh |
-| Needs | SQL Server. The Windows account running AI Power Tools needs `CREATE SCHEMA`, `CREATE VIEW` and `SELECT` on EA's tables | SQL Server and a Windows account allowed to create the reporting database, or a SQL database in Fabric and a person to sign in (§3b). EA running with the repository open | `pyarrow` for the local step. EA running with the repository open |
+| Data | Live: the views read EA's tables as they stand | A snapshot. A refresh loads the new rows in place when no table's shape changed, and swaps the tables in on a first build or a changed shape (§8) | A snapshot, rewritten on every refresh |
+| Needs | SQL Server. The Windows account running AI Power Tools needs `CREATE SCHEMA`, `CREATE VIEW` and `SELECT` on EA's tables | SQL Server and a Windows account allowed to create the reporting database, or a SQL database in Fabric and a person to sign in (§3b). EA running with the repository open | `pyarrow` for the local step. EA running with the repository open. To go on into Fabric: the Azure CLI, signed in, and a mirrored database (§3c) |
 | Preflight | No preflight operation: the rights are checked first, and the §2b census finds unbound connectors | Yes (§5.3) | Yes (§5.3) |
 | Kept extract (§6) | None - there is no extract | Yes | Yes |
 
@@ -101,7 +102,7 @@ three to them, with the consequence of each attached, before building anything.
    DirectQuery queries it; its speed at the scale of a large repository is not measured.
 2. *If not, can you run a SQL Server, or do you have a Microsoft Fabric capacity?* Then the
    reporting database (§3b): a snapshot, and queries never touch the production database.
-3. *If not, Parquet.* No database anywhere. Power BI Desktop imports the files. It is a snapshot.
+3. *If not, Parquet.* No database anywhere. Power BI Desktop imports the files. It is a snapshot; with a Fabric capacity they can go on into a mirrored database (§3c).
 
 Someone with direct access may still choose B or C - to keep views out of the production database,
 or to leave areas out of what Power BI can see. All three paths support leaving packages out (§4).
@@ -120,15 +121,25 @@ nothing is written.
 
 Microsoft Entra sign-in needs AI Power Tools for Sparx EA 3.6.4 or later.
 
-**A person completes the sign-in**, once per server process, in Microsoft's sign-in window, which
-comes to the front at the first operation that opens the database; later calls reuse it. A server
-restart or an expired sign-in shows it again; unanswered for about ten minutes, the operation stops
-and writes nothing. No unattended sign-in: a scheduled refresh needs someone there when the server
+**A person completes the sign-in**, once per server process, in Microsoft's sign-in window; a restart or
+an expired sign-in shows it again, and unanswered for about ten minutes the operation stops and writes
+nothing. No unattended sign-in to the database: a scheduled refresh needs someone there when the server
 first connects.
 
 **Power BI** imports it; a published model refreshes with **no gateway**, using OAuth2 (`ea-power-bi`
-§6). **Direct Lake and OneLake copies of the business layer are not supported.** Detail, with what
-was measured: [`references/the-cloud-database.md`](references/the-cloud-database.md).
+§6). For Direct Lake, or for tables copied to OneLake, see §3c. Detail, with what was measured:
+[`references/the-cloud-database.md`](references/the-cloud-database.md).
+
+## 3c. Reaching Microsoft Fabric
+
+Fabric needs tables, not views. Three routes put the business layer there (server parts: 3.6.6 or later); steps and
+measurements: [`references/the-cloud-database.md`](references/the-cloud-database.md) §5 to §7. Measured on Westbrook Bank, Fabric trial, 13 Nov 2026, a small model: say what was and was not.
+
+| Route | What it does | Measured | Not measured |
+|---|---|---|---|
+| **Path C into a mirrored database (Open Mirroring)** | `parquet_tables.py --layout open-mirroring`, then `onelake_upload.py`, which waits for Fabric to apply every table and reframes the Direct Lake model once. Sign-in is through the Azure CLI: a person's cached sign-in, or the CLI signed in as a service principal by the customer's administrator; the tool never asks for or stores a secret. **Tell the customer to turn off "Keep your Direct Lake data up to date" once, when they publish the model** (semantic model settings, Refresh): with it on, Fabric reframes table by table and a report can show two refreshes mixed for a few minutes. Microsoft documents that setting only in the portal, and a reader of the SQL analytics endpoint can still see the mix | Three refreshes: 40 tables, exact names, counts equal to the build, 57 deletes applied, the wait about 2 to 3.5 minutes, a Direct Lake model reading all 40; with automatic updates off, the model held the previous refresh until the single reframe | A service principal's sign-in; a person's cached sign-in lasting the weeks a schedule needs |
+| **Path B into a SQL database in Fabric, `target.output` `tables` or `script`** | `tables`: keyed business tables in `dbo`, which Fabric copies to OneLake. `script`: no business tables; the views, two scope tables and `<profile>.fabric-views.sql` for a SQL analytics endpoint | Built and tested on a local SQL Server, then in Fabric (16 Nov 2026): `tables`, two builds (swap, then in place), `check_business_layer` aligned (1008 cells, 0 differences), the business tables copied to OneLake and a Direct Lake model reading all 31 with counts equal to the build; `script`, 36 views created on the SQL analytics endpoint, none refused, the 32 business views matching the tables cell for cell (1551 cells, 0 differences); `check_business_layer` against the endpoint also matched (1008 cells, 0 differences), and a DirectQuery model over it matched on all 31 | A service principal's sign-in |
+| **Path B on a local SQL Server, mirrored into Fabric** | Needs Standard, Enterprise or Developer edition and an on-premises data gateway. The in-place refresh (§8) keeps the mirror alive | Refreshes two and three made no structural change. Then in Fabric (16 Nov 2026), through an on-premises data gateway: the mirror stayed healthy across three refreshes, each in place, every mirrored table equal to the local counts after each (applied in about 2 to 7 minutes). Setup needs `db_owner` for the mirror login, a sysadmin to enable change data capture, a database owner the server can resolve, and a primary key on every table (`references/the-cloud-database.md`). The test turned encryption off for a self-signed certificate; use a trusted certificate and keep it on | A service principal's sign-in; a person's cached sign-in lasting the weeks a schedule needs |
 
 ## 4. The profile
 
@@ -136,7 +147,7 @@ Everything the build needs is in one saved profile, a JSON file the user keeps. 
 reuses it. Illustration with Westbrook Bank's `WBA` technology; substitute your own:
 
 ```json
-{"technology": "WBA",
+{"technology": "WBA", "source_id": "westbrook-bank",
  "scope": {"roots": ["{11111111-2222-3333-4444-555555555555}"],
            "exclude": ["{66666666-7777-8888-9999-000000000000}"]},
  "inclusion": {"observed_elements": [], "observed_connectors": []},
@@ -144,16 +155,18 @@ reuses it. Illustration with Westbrook Bank's `WBA` technology; substitute your 
             "database": "EAReporting", "schema": "logical"}}
 ```
 
-The parts, and the scope rules (no masking; list every root package you do not want in `scope.exclude`,
-or it is flagged on every run; a stale exclusion is flagged): [`references/the-profile.md`](references/the-profile.md).
-**Before choosing `roots`, look at the top-level package layout and ask whether any subtree describes
-the modeling language rather than the estate** (a metamodel or pattern library, documented with the
-same stereotypes). The census cannot tell it from model content, because it reads the stereotype an
-element carries, not where the element sits. Scoping is the only remedy. Package GUIDs come from
-`execute_sql`: `SELECT ea_guid, Name, Parent_ID FROM t_package`. Paste `resolve_answer(...).inclusion`
-into `inclusion` and `answer.record()` into `inclusion_choice`: without that record a refresh cannot flag drift. A reporting-database build refuses a database that holds an EA repository's own tables.
-For a cloud database, `target` adds `"authentication": "entra-interactive"` and optionally `"user"`,
-the account the sign-in window suggests (§3b); `user` with `windows`, or Entra on path A, is refused.
+**Propose the repository's id before you write the profile:** a slug of the repository name (rule and example:
+[`references/the-profile.md`](references/the-profile.md)). Show it and ask the person to confirm or change it; never write a guess silently. Write the confirmed
+value as `"source_id"` before the first build. A profile without one still builds; when a result carries the `source_id` warning, relay it, offer to add one, and add
+it only once the person confirms. The parts, and the scope rules (no masking; list every root package you do not want in `scope.exclude`, or it is flagged on every
+run; a stale exclusion is flagged): [`references/the-profile.md`](references/the-profile.md). **Before choosing `roots`, look at the top-level package layout and ask
+whether any subtree describes the modeling language rather than the estate** (a metamodel or pattern library, documented with the same stereotypes). The census
+cannot tell it from model content, because it reads the stereotype an element carries, not where the element sits. Scoping is the only remedy. Package GUIDs come
+from `execute_sql`: `SELECT ea_guid, Name, Parent_ID FROM t_package`. Paste `resolve_answer(...).inclusion` into `inclusion` and `answer.record()` into
+`inclusion_choice`: without that record a refresh cannot flag drift. A reporting-database build refuses a database that holds an EA repository's own tables. For a
+cloud database, `target` adds `"authentication": "entra-interactive"` and `"user"`, the account the sign-in window suggests (needed with Microsoft's OLE DB Driver
+18, which refuses an interactive sign-in without it, measured 13 Nov 2026); `user` with `windows`, or Entra on path A, is refused. Path B also takes `"output"`
+(§3c).
 
 ## 5. The build, step by step
 
@@ -223,14 +236,15 @@ they need, then two lists; each entry is explained in
 | Path | Call | What it does |
 |---|---|---|
 | A | `build_business_layer` with `profile_path` | Checks the rights first and, if any is missing, names it and **changes nothing**. Otherwise recreates the business views and the scoped views of EA's tables in the profile's schema inside one transaction. Never alters an EA table |
-| B | `build_reporting_database` with `profile_path` | Extracts EA's tables over COM in id ranges, cuts the excluded packages, keeps links across the cut with an `(excluded)` stub at the far end, loads a staging schema with EA's own indexes, **swaps it in inside one transaction** (a reader never sees a partial database), then builds the business views. Keeps the post-cut extract (§6) |
+| B | `build_reporting_database` with `profile_path` | Extracts EA's tables over COM in id ranges, cuts the excluded packages, keeps links across the cut with an `(excluded)` stub at the far end, then loads the reporting database inside one transaction (a reader never sees a partial database): in place when every table already has the current shape, otherwise by loading a staging schema with EA's own indexes and swapping it in (§8). Then builds the business views (and, with `output` `tables` or `script`, the tables (`tables`) or the scope tables and script (`script`) of §3c). Keeps the post-cut extract (§6) |
 | C | `build_reporting_database` with `profile_path` | The same extract and cut; computes the business tables' rows and writes them as JSON in `<profile>.tables.json`, next to the profile. Keeps the post-cut extract. **Writing the Parquet files is a separate local step** - `ea-power-bi` |
 
 Every build also writes the **definition** - tables, columns, types, row counts, descriptions -
 as `<profile>.definition.json` beside the profile (`definition_path` overrides it); `ea-power-bi`
-generates the Power BI project from it. Its top-level keys are `technology`, `source`, `entities`, `connectors`, `tag_row_tables`, `directory` and `physical`. **Every build is a full rebuild with no history**: anything
+generates the Power BI project from it. Its top-level keys are `technology`, `source` (which carries `id`, the profile's `source_id`, or null), `entities`, `connectors`, `tag_row_tables`, `directory` and `physical`, and on paths A and B `source_table` (`name`, `rows`, `all_columns`, `primary_key`). **Every build is a full rebuild with no history**: anything
 deleted or moved in EA follows, and a failed or stopped build leaves the previous data live. The
-result returns row counts per table, the flags, the alignment summary and timings. Read the timings
+result returns row counts per table, the flags, the alignment summary and timings, and on a reporting
+database `load_mode`, `ddl` and `load_reason` (§8). It also returns `source_id` and, when the profile sets none, a `warnings` entry: relay the warning and offer to add the id to the profile. On paths B and C an optional `new_tag_spellings` key appears only when a tag spelling was seen for the first time (§6); relay it. `check_business_layer`, `replay_reporting_database` and `remove_business_layer` return `source_id` and the warning too. Read the timings
 aloud: they are the only sizing evidence the customer has (§11).
 
 ### 5.5 Check
@@ -259,7 +273,7 @@ say so rather than reporting zero differences.
 
 After every build on paths B and C, the **post-cut extract** - the rows loaded, stubs included, with
 the scope, row counts, issued queries and run id - is kept as `<profile>.extract.json` beside the
-profile and **replaces the previous run's**: no history.
+profile and **replaces the previous run's**: no history. The extract also records the spelling each tag column was first given. A later refresh keeps that column name even when another spelling of the same tag appears (tag names that differ only by case share one column); the result lists each such spelling in `new_tag_spellings` (the column and the new spelling). Tell the person: the values spelled the new way are in the existing column, and no report column was renamed. Direct access has no extract and returns no `new_tag_spellings`.
 
 **Excluded content is never written to disk, at any stage**: the raw extract holds the areas the
 user left out, so it is not kept. The kept extract holds what the user chose to include; treat it
@@ -281,7 +295,7 @@ ea_repository(operation="remove_business_layer", params={"profile_path": "<profi
 
 Drops every view in the profile's schema, then the schema, and reports the views dropped. On
 direct access that is all of AI Power Tools' footprint in the EA database. EA's own tables, and a
-reporting database's copied tables, are not touched.
+reporting database's copied tables, are not touched; the tables a `tables` or `script` build made go with the views.
 
 **Say this before removing: a Power BI project built on the layer stops refreshing**, in Desktop and
 the service, until the layer is rebuilt from the saved profile - `build_business_layer` (A),
@@ -289,33 +303,9 @@ the service, until the layer is rebuilt from the saved profile - `build_business
 
 ## 8. Keeping it fresh: the refresh
 
-```
-ea_repository(operation="start_reporting_refresh", params={"profile_path": "<profile>.json"})
-ea_repository(operation="get_reporting_refresh",  params={"run_id": "<run id>"})
-```
+Call `start_reporting_refresh` with `profile_path`, then poll `get_reporting_refresh` with the run id until it says `succeeded` or `failed` (run ids last until the server restarts). What a refresh does on each path, the Path C steps into Fabric, scheduling and the drift flags: [`references/the-refresh.md`](references/the-refresh.md). Read it before running a refresh.
 
-`start_reporting_refresh` returns a run id at once; `get_reporting_refresh` returns `running`,
-`succeeded` or `failed` and, at the end, the full result or why it stopped. Run ids are kept until
-the server restarts; a run polled across a restart is lost, so start a new refresh.
-
-| Path | What a refresh does |
-|---|---|
-| A | Regenerates the views. The data is live, so there is nothing to refresh; regenerate only when the technology or the inclusion choice changes |
-| B | Preflight, extract, cut, load, swap-in, business views |
-| C | Preflight, extract, cut, and rewrites the rows and definition. **The Parquet files and the Power BI project are not rewritten until the local step in `ea-power-bi` runs again** |
-
-**A failed run, or one stopped by its preflight (B, C), leaves the previous data live** and says why.
-
-**Scheduling is an AI agent's job, never Windows Task Scheduler.** A scheduled AI agent (a scheduled
-task in Claude Cowork connected to the EA machine) calls `start_reporting_refresh`, polls
-`get_reporting_refresh`, and reports the row counts, every flag (new roots left out, stale
-exclusions, unbound connectors, doubly-stereotyped elements), timings and any failure. **EA must be
-running with the repository open on that machine**, because the extract is COM.
-
-A refresh uses the saved inclusion choice and does not ask again, but **it flags drift** when the
-profile holds the `inclusion_choice` record (§4): `not_covered_by_inclusion_choice` (keys neither in
-the technology, included, nor excluded) and `mdg_version_changed`. Builds return the same flags; show
-them and re-run §2b. Power BI side: `ea-power-bi` §6.
+**A failed run, or one stopped by its preflight (B, C), leaves the previous data live** and says why. **Scheduling is an AI agent's job, never Windows Task Scheduler**, and EA must be running with the repository open on that machine. A refresh uses the saved inclusion choice, flags drift (`not_covered_by_inclusion_choice`, `mdg_version_changed`) and does not ask again: show the flags and re-run §2b.
 
 ## 9. Reporting the result
 
@@ -352,9 +342,7 @@ The five that cost the most; the full list is in [`references/the-schema.md`](re
   large repository is not measured. Measured on one model, and not what a customer should expect: a
   repository of about 80,000 rows through a cloud connection took 10-11 s to extract, 38-46 s to
   load, under 1 s to swap in, and about 2 minutes for a full reporting-database refresh.
-- **Sign-in**: the Windows account running AI Power Tools, or for a reporting database a Microsoft Entra sign-in a person completes (§3b). No unattended Entra sign-in.
-- **No OneLake upload of the Parquet files, and no Direct Lake or OneLake copy of the business
-  layer.** Parquet is written to a local folder and Power BI Desktop imports it.
+- **Sign-in**: the Windows account running AI Power Tools, or for a reporting database a Microsoft Entra sign-in a person completes (§3b). No unattended Entra sign-in to a database. The OneLake upload signs in through the Azure CLI instead (§3c).
 - **Only a RefGUIDList tag is split into a tag-row table.** A CheckList tag stays a column (`1,1,0`).
 - **`.eapx` (Jet) repositories are untested.** Measured on a local `.qea` and a cloud-connected repository.
 - **No masking.** Exclusion is by whole package.
@@ -371,9 +359,10 @@ screen before retrying. Every error code (`missing_rights`, `preflight_blocked`,
 - [`references/the-schema.md`](references/the-schema.md) - every table kind and its columns;
   [`references/the-profile.md`](references/the-profile.md) - the profile's parts and scope rules
 - [`references/troubleshooting.md`](references/troubleshooting.md) - symptoms, causes, fixes;
-  [`references/the-cloud-database.md`](references/the-cloud-database.md) - a SQL database in Fabric, and the Entra sign-in
+  [`references/the-cloud-database.md`](references/the-cloud-database.md) - a SQL database in Fabric, the Entra sign-in, and the three routes into Fabric
 - [`references/the-kept-extract.md`](references/the-kept-extract.md) - the kept extract, and replay;
   [`references/the-inclusion-choice.md`](references/the-inclusion-choice.md) - the three-way choice, its counts, and the refresh;
+  [`references/the-refresh.md`](references/the-refresh.md) - the refresh on each path, Fabric, scheduling;
   [`references/the-governance-gate.md`](references/the-governance-gate.md) - the pre-build gate;
   [`references/the-preflight.md`](references/the-preflight.md) - the preflight's lists
 - [`../ea-power-bi/SKILL.md`](../ea-power-bi/SKILL.md) - the Power BI project and the Parquet step

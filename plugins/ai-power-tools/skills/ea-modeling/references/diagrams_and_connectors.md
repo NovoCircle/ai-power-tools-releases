@@ -241,6 +241,13 @@ is refused with `ambiguous_stereotype` and a list of `candidates`, and nothing i
 `language_id` (the technology id, for example `WBA`) or write the qualified form. Do not retry
 with a guess. `create_connector` and each `create_connectors_bulk` spec take `language_id`.
 
+By default `create_connector` refuses a stereotype that the technology declares for other connector
+types than the one you asked for (`stereotype_does_not_fit_connector_type`, with the types it fits in
+`fits`, nothing created). Repeat the call with one of those types. To create the connector with the
+type you asked for anyway, pass `allow_misfit_stereotype=true`, then check `rejected_properties` in the
+reply, because EA may drop the stereotype. `stereotype_fit_override` in the reply says the same:
+`kept` is false when EA dropped it.
+
 To set a direction, pass `direction` (`Source -> Destination`, `Destination -> Source` or
 `Bi-Directional`) with the connector, or as a key in a `create_connectors_bulk` spec. Read
 `direction_result`, not the raw Direction field: `status` is `stored`, `navigability_only` (the
@@ -424,6 +431,8 @@ brackets. `set_element_icon` adds the image to the model's image library (`t_ima
 project — on another backend, load the artwork through EA's Image Manager and use
 `set_element_image`. `find_icon` returns `icon_libraries_not_found` when it cannot locate
 `ModelPatterns`; the `EA_MODEL_PATTERNS` environment variable points it at the folder.
+
+When you rebuild a diagram from one of EA's own patterns, pass `asset_guid` instead of `icon`: each placement's `AIG` token in the diagram's StyleEx OPTIONS names the exact library asset the pattern drew, so no name search is needed. Give exactly one of `icon` or `asset_guid`; a GUID that no shipped library holds is refused, and then you choose with `find_icon` as usual.
 
 **Choose the icon; don't match names automatically.** A diagram's captions are not icon names.
 `Amazon S3 output bucket` wants `Amazon Simple Storage Service (S3)` or `Bucket with objects`,

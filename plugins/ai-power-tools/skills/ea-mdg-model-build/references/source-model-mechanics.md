@@ -43,10 +43,11 @@ without an error.
 
 - **Diagrams are copied** (their objects and links) on server 2.3.0 and later. A skill note that
   says otherwise is out of date. Composite flags on copied diagrams are a separate matter; check them.
-- **Data a copy can lose**, found in three acceptance runs on 3.6.4: Quick Linker connector tag
-  values, attribute-to-enumeration links (`ClassifierID` is left unset on purpose), and literal
-  order. Until the server copies these, a damaged profile package looks complete in the Browser and
-  fails later.
+- **Data a copy can lose.** Three acceptance runs on 3.6.4 lost Quick Linker connector tag values,
+  attribute-to-enumeration links and literal order; the server now copies all three (a link is remapped to the copy only when the enumeration is inside the copied subtree; one outside still points at the original). It still does
+  not copy element classifier references, connector end properties, tags on attributes, operations
+  and packages, or element parentage, so a damaged profile package can still look complete in the
+  Browser and fail later.
 - **Compare source and copy before using the copy**, and report the result:
   1. Quick Linker connector tags: for each `stereotyped relationship` connector, the `stereotype`
      tag value in the copy equals the source's (`t_connectortag`).
@@ -67,15 +68,19 @@ baseline travels with the repository.
 2. For each artifact (each profile export, the `.mts`, the deployed MDG file), create one element of
    type `Artifact` in `Files`, named for the file and the version it came from (for example
    `WBA profile 1.1.1`). Put the file's text in the element's notes, and keep the disk copy as well.
-3. Read back the element's notes length and compare it with the file's length. If the notes do not
-   take the whole file, attach the file to the element (an element's Files collection stores a
-   path, not the content) and say so: a path is not an archive, so keep the disk copy somewhere that
-   survives.
+3. Read back the element's notes length and compare it with the file's length. If they differ, say
+   so and keep the disk copy somewhere that survives. Don't fall back to the element's Files
+   collection (it stores a path, not the content) or to a linked document (EA converts the file to
+   RTF): neither is an archive.
 4. State in the reply that tagged value types are repository-wide, so once a new type is added any
    export from the old profile packages is no longer the old version, and that the old version
    cannot be recovered afterwards without this archive.
 
-Not yet verified live: that the notes field takes a whole MDG file at full size.
+Measured on EA 17.1 (16 Nov 2026), setting the notes through COM (`Notes`, then `Update()`): a
+29,004-byte MDG file stored in an `Artifact`'s notes (`t_object.Note`) read back byte for byte,
+also from the model file after EA closed, with line endings and non-ASCII characters kept. No limit
+was hit up to 10 million characters. Setting the notes through the server's create or update
+operation was not measured, so the read-back in step 3 stays.
 
 ## Renaming a tag: two steps
 

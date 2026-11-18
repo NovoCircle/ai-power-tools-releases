@@ -34,7 +34,7 @@ packages the user excludes.
 |---|---|---|---|
 | "I can reach the EA database, it is SQL Server, and I may create views" | **A - direct access**: views in their own schema inside the EA database | **DirectQuery** (live), or Import | The views live in the production database and EA's own tables are never altered. DirectQuery queries that database, and its speed at the scale of a large repository is not measured. Regenerate the views when the technology or the inclusion choice changes |
 | "I cannot reach the database, or do not want views in it, but I can run SQL Server or have a Fabric capacity" | **B - reporting database**: views in a separate database, on SQL Server or a SQL database in Microsoft Fabric | **Import** | A snapshot, rebuilt in full on every refresh with no history. A failed refresh leaves the previous data live. Queries never touch the production database. A published model refreshes from a SQL database in Fabric with no gateway |
-| "No database access, and no database to run" | **C - Parquet files** | **Import** | A snapshot, rewritten on every refresh, read by Power BI Desktop on this machine. `pyarrow` is needed to write the files. A published model cannot refresh from the files: uploading them to OneLake is not supported |
+| "No database access, and no database to run" | **C - Parquet files** | **Import** | A snapshot, rewritten on every refresh, read by Power BI Desktop on this machine. `pyarrow` is needed to write the files. A published model refreshes only by way of Fabric: with a Fabric capacity the files go into a mirrored database (Open Mirroring) and a Direct Lake model reads them, measured on Westbrook with parts not yet measured (`SKILL.md` 4.2b). Without one, a published model cannot refresh from the files |
 | "I want Power BI to read the repository live" | **A in DirectQuery**, and only if they can reach the database | DirectQuery | Say plainly that every query reads the production database. For any other estate there is no live option: B and C are snapshots, and a snapshot is not a substitute for live data |
 
 **Do not quietly build a snapshot when the customer asked for live data.** The report keeps working
@@ -79,8 +79,11 @@ What Power BI does next depends on the path:
   database in Fabric it needs **no gateway** (measured; OAuth2 credentials, `SKILL.md` §6). From a
   local SQL Server it goes through an on-premises data gateway, which has **not been tested with
   this model**: do not assert it either way.
-- **C:** rewrite the files (the local step in `SKILL.md` 4.2), then Refresh in Desktop. A published
-  model cannot refresh from files: uploading them to OneLake is not supported.
+- **C:** rewrite the files (the local step in `SKILL.md` 4.2), then Refresh in Desktop. For a
+  published model, go on into Fabric (`SKILL.md` 4.2b): the scheduled agent writes the Open Mirroring
+  folder, runs `onelake_upload.py` and reports its result, and a Direct Lake model reframes once after
+  every table has applied. Tell the customer to turn off "Keep your Direct Lake data up to date" once.
+  Without a Fabric capacity a published model cannot refresh from files.
 
 **"Can I move the files?"**
 

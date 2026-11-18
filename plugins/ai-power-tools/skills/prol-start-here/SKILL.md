@@ -1,6 +1,6 @@
 ---
 name: prol-start-here
-description: Start here for any Sparx Prolaborate task driven through the web interface. Runs a short session preflight — which tenant, which signed-in identity, which version, which repositories — then routes to the right Prolaborate skill for dashboards, relationship matrices or impact analysis. Use this first whenever a session involves Prolaborate, before reaching for a more specific prol- skill.
+description: Start here for any Sparx Prolaborate task driven through the web interface. Runs a short session preflight (which tenant, which signed-in identity, which version, which repositories) and then routes to the right Prolaborate skill for dashboards, relationship matrices, impact analysis, reading reviews, reading a repository's configuration or managing modeling languages. Use this first whenever a session involves Prolaborate, before reaching for a more specific prol- skill.
 ---
 
 # Prolaborate — start here
@@ -41,8 +41,8 @@ depends on the browser you are driving (as of October 2026):
 - **Claude in Chrome** — uses the person's own Chrome, so their existing Prolaborate sign-in is
   already there. If they are signed out, they sign in in that tab.
 - **VS Code** — pages the agent opens are an isolated session with no sign-in. Ask the person to
-  open Prolaborate in VS Code's integrated browser, sign in, and choose **Share with Agent**; then
-  drive that shared page.
+  open Prolaborate in VS Code's integrated browser, sign in, and share the page with the agent (see
+  Browser control by surface below); then drive that shared page.
 
 ### 1.2 Is there a live token?
 
@@ -65,8 +65,7 @@ you what will be refused before you drive a flow that gets refused.
 |---|---|
 | `name`, `sub` | Who the action will be attributed to. State it back before anything consequential |
 | `rol` = `ADMIN` | Super Admin. Two consequences, and the second is the one people miss. **Nothing you verify here proves a normal user can do it.** And you currently have unrestricted reach across the whole repository, with no authorization check standing between you and a mistake — so be **more** careful, not less |
-| `profile.isreadonly` | The person cannot write. Say so up front rather than letting an action fail |
-| `profile.groups` | Drives Access Permissions, so it explains what is visible and what is not |
+| `isreadonly`, `groups` | Not in the access token on 5.6.1.5 (one Super Admin token seen). Take group membership from the API (`GetUserGroupsByRepAndUser`); it drives Access Permissions, so it explains what is visible. Treat "cannot write" as unknown until a read or a refused action shows it (`../_shared/references/prolaborate-session.md` section 4) |
 
 ### 1.4 Which version?
 
@@ -102,14 +101,22 @@ values off the screen or by guessing.
 
 ## Browser control by surface
 
-*As of October 2026.* These skills only say what to do in the browser — open the page, read the
-table, click Save — so any client with browser control can follow them. Claude Desktop (browser pane
-or Claude in Chrome) is where they were written and exercised. VS Code 1.141.2 has built-in browser
-tools (on by default) that can open and read pages, click, type, handle dialogs, take screenshots and
-run Playwright code, and the sign-in route above is how to give them a signed-in page. **VS Code
-support is documented but not yet run end to end for these skills.** If a step behaves differently
-there, say what you observed rather than working around it. Where a flow opens a new tab, make sure
-the browser control can see that tab, which in VS Code may mean sharing it with the agent too.
+*Checked 16 Nov 2026.* These skills only say what to do in the browser (open the page, read the
+table, click Save), so any client with browser control can follow them. In Claude, the person signs
+in inside the browser the assistant uses (see 1.1). In VS Code (1.146, Copilot harness), the person
+opens Prolaborate in VS Code's integrated browser, signs in, and shares the page with the agent: the
+share icon to the left of the element picker, then **Allow** at "Share this browser page with the
+agent?". Until the page is shared, say that no page is shared and ask.
+
+- Each page-script run asks the person to confirm.
+- Some read calls are POSTs that VS Code labels as changing remote state. That is expected for those
+  reads.
+- In that run `prol-start-here`, `prol-dashboards` and `prol-impact-analysis` worked unchanged.
+  `prol-matrix` worked but found no matrix on that repository, which is data, not the skill.
+
+If a step behaves differently on another surface, say what you observed rather than working around
+it. Where a flow opens a new tab, make sure the browser control can see that tab, which in VS Code
+may mean sharing it with the agent too.
 
 ---
 
@@ -120,6 +127,9 @@ the browser control can see that tab, which in VS Code may mean sharing it with 
 | Building, editing or reading dashboards and their widgets | `prol-dashboards` |
 | Relationship matrices — filtering, reading, sharing, exporting | `prol-matrix` |
 | Impact and dependency analysis, and Analyzer views | `prol-impact-analysis` |
+| Reading reviews: open reviews by state, stalled reviews, who has not responded, what changed since a date, a drafted chase message the person sends | `prol-reviews` |
+| Reading how a repository is configured: groups and their members, access profiles, sections, integrated applications, the license | `prol-admin` |
+| Loading, updating, configuring or retiring a modeling language (an MDG) in Prolaborate, and its profiles and forms | `prol-modeling-languages` |
 | Authoring model content, MDG, diagrams, validation, baselines | **Not Prolaborate.** Go to `ea-start-here` |
 
 When a request spans both products — "review what changed and then fix the model" — do the
@@ -128,17 +138,19 @@ repository through different paths and should not be mixed in one flow.
 
 ### Areas with no skill yet
 
-There is deliberately **no row** for these. Prolaborate does them; this library has not been
-taught them, and a route to a skill that does not exist is worse than no route at all.
+Prolaborate does more than this library has been taught. Reading reviews, reading a repository's
+configuration and managing modeling languages have rows above. **The writes below have no row**, and a
+route to a skill that does not exist is worse than no route at all.
 
 | Area | What to do |
 |---|---|
-| **Reviews** — creating, participating, approving, chasing status | Say there is no skill for it yet. Reading a review's state through the interface is fine; **do not create, comment on or approve anything**, because every write is immediately visible to other people and reviews carry real names |
-| **Administration** — users, groups, access permissions, sections, repository configuration, integrated applications | Say there is no skill for it yet, and **stop**. This is the highest-consequence area of the product and it is out of scope until guardrails are agreed |
+| **Reviews, writes** | Creating a review, commenting, approving, closing, deleting, inviting, or sending a reminder. Say no skill does it, and **stop**. Every write is immediately visible to other people and reviews carry real names. Reading goes to `prol-reviews`, which drafts a chase message for the person to send |
+| **Administration, changes** | Adding, changing or removing users, group members, access permissions, sections, repository settings, integrated applications or the license. Say no skill does it, and **stop**. This is the highest-consequence area of the product. Reading how it is configured goes to `prol-admin`. The one configuration change a skill makes is a modeling language and its profiles, which goes to `prol-modeling-languages` under its own boundary: a go for each change |
 
 > **Do not improvise in either area.** They are the two places where a wrong move is visible to
-> other people or hard to undo. "There is no skill for this yet" is the correct answer, and it is
-> a better one than a confident guess.
+> other people or hard to undo. "No skill does this" is the correct answer, and it is a better one
+> than a confident guess. A request that mixes a read and a write is split: do the read with its skill
+> and stop at the write.
 
 ---
 

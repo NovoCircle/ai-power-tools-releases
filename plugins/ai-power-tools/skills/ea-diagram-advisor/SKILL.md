@@ -59,10 +59,12 @@ Two traps here, both measured:
   size, ask for it separately. Reporting "40% unattributed" against the wrong denominator is worse
   than not reporting it.
 
-**When the scope is mostly unstereotyped, the histogram says nothing, so read the metaclasses.** Run
-the same query with `Stereotype = ''` and `GROUP BY Object_Type`. Classes, activities or states are
-evidence for a base diagram type. They cannot be attributed to any MDG, so call the profile weak and
-say the choice rests on the metaclasses.
+**When the scope is mostly unstereotyped, the histogram says nothing, so pass the metaclasses.** Run
+the same query with `Stereotype = ''` and `GROUP BY Object_Type`, fold the rows into
+`{object_type: count}`, and pass that to `profile_scope` as `metaclass_counts`. Give `recommend` a
+`metaclass_base_types` mapping from each metaclass to the base diagram type that holds it. When no
+element in the scope carries a stereotype, the answer is marked weak and says the choice rests on
+the metaclasses alone. Say that to the reader.
 
 **3. Get each technology's vocabulary** from `get_mdg_from_runtime(tech_id=...)`, and pass it as
 `known_concepts`. Notes that cost time to learn:
@@ -78,9 +80,10 @@ say the choice rests on the metaclasses.
   in the model is not listed, read the technology ids straight out of the repository rather than
   concluding it is absent.
 
-`traverse_element_subgraph` is worth having for the element set, with one caveat: **it returns every
-interior edge twice**. Deduplicate on source, target, type and stereotype before counting anything,
-or every connector figure comes out roughly doubled.
+`traverse_element_subgraph` is worth having for the element set. From server 3.6.5 it returns each
+connector once. A server older than 3.6.5 returned every interior edge twice, so only when the
+server is older, deduplicate on connector id (or on source, target, type and stereotype) before
+counting anything, or every connector figure comes out roughly doubled.
 
 ### Silent failures this step must not trust
 

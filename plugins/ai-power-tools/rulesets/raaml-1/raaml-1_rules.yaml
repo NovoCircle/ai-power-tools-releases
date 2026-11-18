@@ -655,7 +655,7 @@ rules:
     description: "The client of a RelevantTo relationship is a Situation. In Sparx's RAAML technology a situation is a class carrying the stereotype Situation or one of the situation markers (FMEAItem, FailureMode, the event and gate kinds, UnsafeControlAction and the others in the table); RelevantTo is a Dependency whose source is the client. A RelevantTo that starts at a known non-situation (a Goal, a Controller and so on, or an element that is no class: a requirement, actor or use case with no stereotype) is reported. [OMG RAAML 1.0 (formal/22-12-06) 9.1.2 (RelevantTo) [1], p. 23]"
     category: rel
     severity: error
-    demo_trigger: false
+    demo_trigger: true
     coverage: partial
     not_checked: "A class with no situation stereotype can still be a situation by generalization (the standard does not require the marker), and the validator cannot follow a generalization to its root, so such a class is not reported. An element of another EA type with no RAAML stereotype (a requirement, actor, use case, component, node, artifact or note) can never be a situation and is reported."
     selector:
@@ -715,7 +715,7 @@ rules:
     description: "Every Causality relationship, and every specialization of it (Activation, ErrorPropagation, ErrorRealization, ProcessModelFactor, ProcessModelConsequence, UnsafeControlActionHarmPotential), joins two situations. A connector with a known non-situation at either end is reported. [OMG RAAML 1.0 (formal/22-12-06) 9.1.1 (Causality), p. 21]"
     category: rel
     severity: error
-    demo_trigger: false
+    demo_trigger: true
     coverage: partial
     not_checked: "A class with no situation stereotype can still be a situation by generalization (the standard does not require the marker), and the validator cannot follow a generalization to its root, so such a class is not reported. An element of another EA type with no RAAML stereotype (a requirement, actor, use case, component, node, artifact or note) can never be a situation and is reported. That an Activation runs from a cause to a dysfunctional event, and ErrorPropagation and ErrorRealization between dysfunctional events (RAAML-REL-006 to 008), is not checked: all of them carry the marker Situation, so the validator cannot tell them apart."
     selector:
@@ -845,7 +845,7 @@ rules:
     description: "The client of an InContextOf relationship is a Goal or a Strategy. Any other GSN node as the client is reported. [OMG RAAML 1.0 (formal/22-12-06) 9.6.1 (InContextOf) [1], p. 87]"
     category: gsn
     severity: error
-    demo_trigger: false
+    demo_trigger: true
     coverage: partial
     not_checked: "A client or supplier with no GSN stereotype is not judged (the standard allows a non-GSN element as the supplier)."
     selector:
@@ -904,7 +904,7 @@ rules:
     description: "When the client of a SupportedBy relationship is a Strategy, the supplier is a Goal. A strategy supported by a Solution, another Strategy or a contextual node is reported. [OMG RAAML 1.0 (formal/22-12-06) 9.6.1 (SupportedBy) [2], p. 88]"
     category: gsn
     severity: error
-    demo_trigger: false
+    demo_trigger: true
     coverage: full
     selector:
       type: "connector"
@@ -942,7 +942,7 @@ rules:
     description: "An FMEA item has exactly one failure mode. In Sparx's RAAML technology the failure mode is joined to the item by an Association stereotyped FailureMode; the rule counts those connectors that end at the FMEAItem. [OMG RAAML 1.0 (formal/22-12-06) 9.3.1 (AbstractFMEAItem), p. 39]"
     category: card
     severity: error
-    demo_trigger: false
+    demo_trigger: true
     coverage: partial
     not_checked: "The count assumes the part is drawn to the whole, the direction of Sparx's own FMEA model pattern (cause, failure mode and effect classes are the source, the FMEA item the target). A connector drawn the other way is not counted. A failure mode held as a part property (a Port or a typed part) is not counted: containment is not reachable."
     selector:
@@ -1051,7 +1051,7 @@ rules:
     description: "A gate (AND, OR, NOT, XOR, SEQ, MAJORITY VOTE) has exactly one output event. The rule counts the Associations that leave the gate, whether or not they carry the stereotype output, and reports a gate with none or with more than one. Sparx's FTA Pattern (read on screen, EA 17.1 build 1716, 2026-11-04) joins events and gates with plain Associations that carry no stereotype: an input runs from the event (source) to the gate (target) and the output runs from the gate (source) to the top event (target). [OMG RAAML 1.0 (formal/22-12-06) 9.4.1 (Gate), p. 50]"
     category: card
     severity: error
-    demo_trigger: false
+    demo_trigger: true
     coverage: partial
     not_checked: "INHIBIT is not covered: its enabling conditions are also Associations (stereotyped condition) and a pattern that shows their direction does not exist, and a count by connector type cannot leave them out. Every Association that leaves the gate is counted, so a Causality or any other Association on a gate is counted too. An output drawn from the event to the gate (the way an earlier version of this ruleset and its samples drew it) is not counted and the gate is reported as having no output."
     selector:
@@ -1097,7 +1097,7 @@ rules:
     description: "An ASIL assignment has exactly one ASIL value (and at most one override value). The ASILAssignment stereotype carries the tagged values ASIL and ASILOverride; the rule reports an assignment whose ASIL is empty. [OMG RAAML 1.0 (formal/22-12-06) 9.7.2 (ASILAssignment), p. 112]"
     category: card
     severity: error
-    demo_trigger: false
+    demo_trigger: true
     coverage: partial
     not_checked: "That the value is one of the ASIL levels is not checked: the tagged value is free text. ASILAssignment extends any UML element, so it is usually a second stereotype on a requirement or a situation; only an element whose first stereotype is ASILAssignment is read."
     selector:
@@ -1140,7 +1140,7 @@ rules:
     description: "An identifier carrier holds exactly one identifier string. The `ID carrier` stereotype carries the tagged value ID; the rule reports a carrier whose ID is empty. [OMG RAAML 1.0 (formal/22-12-06) 9.1.2 (IDCarrier), p. 24]"
     category: card
     severity: error
-    demo_trigger: false
+    demo_trigger: true
     coverage: partial
     not_checked: "ID carrier extends any UML element, so it is usually a second stereotype on the element that has the identifier (a goal, a requirement); only an element whose first stereotype is ID carrier is read. A first stereotype is the only one t_object.Stereotype holds."
     selector:

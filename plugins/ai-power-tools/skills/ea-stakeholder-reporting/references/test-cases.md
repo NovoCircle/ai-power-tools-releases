@@ -911,8 +911,6 @@ compute X and N independently from the model.
 
 ## Headings not covered
 
-- `A note on latency`: states that no waiting is needed for reads and points to another file for
-  UI work; there is nothing the skill does, refuses or warns about that a run can show.
 - `Say only what you checked` and `The standard report format`: not yet graded by a case. The first
   is the discipline behind every figure the cases above check; the second needs a live run of the
   book's owner-gap question against the Westbrook copy, expecting the 0 of 12 owner gap in the
@@ -931,7 +929,7 @@ compute X and N independently from the model.
   `technicalOwner` 44 of 52 versus 45 of 46, `dataClassification` 45 of 52 versus 46 of 46,
   `regulatoryScope` blank on 10 versus 3, the GLBA split count 28 versus 29, and the
   comma-joined count 16 versus 17. The skill says every count is "real, not illustrative"; either
-  the fixture changed since 2026-09-23 or the figures are stale. The cases use the model's counts. **Triaged 11 Nov: fixed.** SKILL.md Step 0 no longer says the counts are live and real; it says they are a 2026-09-23 snapshot that has since changed, as `coverage-data.md` already did. The copy now gives different figures; whether the model changed or the figures were stale cannot be told from here. The cases use the model's counts.
+  the fixture changed since 2026-09-23 or the figures are stale. The cases use the model's counts. **Triaged 11 Nov: fixed.** SKILL.md Step 0 no longer says the counts are live and real; it says they are a 2026-09-23 snapshot that has since changed, as `coverage-data.md` already did. The copy now gives different figures; whether the model changed or the figures were stale cannot be told from here. The cases use the model's counts. **Update 16 Nov:** `SKILL.md` and `coverage-data.md` now carry the figures re-measured on the copy (47 bound, 46 primary), so the differences listed here no longer apply.
 - The skill says scoping to the root Westbrook Bank package drops 52 applications to 45 because
   7 live "elsewhere in the repository (a scratch/test area)". In the copy all 46 applications sit
   under the Westbrook Bank root, so that scoping claim cannot be reproduced. TC-08 scopes to a
@@ -958,4 +956,4 @@ compute X and N independently from the model.
   a modal dialog the runner opens by driving the desktop, which is why it is marked `BLOCKED`. **Triaged 11 Nov: fixed.** The bullet now says this skill creates no diagram and applies only if one is opened to walk someone through it. TC-20 is unchanged (the hang procedure).
 - The new section (`Diagram descriptions: a diagram in words`) is read-only, but its text points to `ea-import-export` for storing or refreshing a description. TC-23 grades that the run says the description is out of date and does not write; whether it names the right next step is graded from the reply. **Triaged 11 Nov: no change, not a defect.** Section 3c of `ea-import-export` exists and is the right next step; whether the run names it is graded from the reply.
 - TC-22 grades "generated, not stored" through the manifest's `description_source`, which the run must have read; a reply that paraphrases a stored description would also say "generated". The `tools` check cannot see which source the run reported. **Triaged 11 Nov: no change, not a defect.** A limit of the `tools` check; the server returns `description_source` as the skill says.
-- Display terms, roll-up qualifiers and multi-stereotype elements changed with server 3.6.5. **Fixed in the cases:** TC-15 and TC-16 accept the lookup's answer from the loaded technology or a derived label, and TC-16 expects `invalid_kind` for kind `tag`. No case asks for a qualified `stereotype` (`qualifier_unmatched`, `fqnames`) or an element with two stereotypes (`multi_stereotype_elements`): a case gap that needs a model with such an element. The worked counts in `SKILL.md` and `coverage-data.md` are unchanged and need a fresh run to confirm.
+- Display terms, roll-up qualifiers and multi-stereotype elements changed with server 3.6.5. **Fixed in the cases:** TC-15 and TC-16 accept the lookup's answer from the loaded technology or a derived label, and TC-16 expects `invalid_kind` for kind `tag`. No case asks for a qualified `stereotype` (`qualifier_unmatched`, `fqnames`) or an element with two stereotypes (`multi_stereotype_elements`): a case gap that needs a model with such an element. The worked counts in `SKILL.md` and `coverage-data.md` were re-measured on 2026-11-16 on a copy of the demo model (server 3.6.5) and now match it: 47 bound business applications, 46 by primary stereotype, criticality 21/12/8/6 over the 47.

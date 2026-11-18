@@ -302,7 +302,7 @@ rules:
     is left alone.
   category: rel
   severity: warning
-  demo_trigger: false
+  demo_trigger: true
   selector:
     type: connector
     connector_stereotypes: any_of_table
@@ -320,7 +320,7 @@ rules:
     A data object directly in a package passes, because a partial model is valid.
   category: ctrl
   severity: error
-  demo_trigger: false
+  demo_trigger: true
   selector:
     type: element
     stereotypes:
@@ -364,7 +364,7 @@ rules:
     Objective. A data object directly in a package passes, because a partial model is valid.
   category: ctrl
   severity: error
-  demo_trigger: false
+  demo_trigger: true
   selector:
     type: element
     stereotypes:
@@ -430,7 +430,7 @@ rules:
     for Value Stream. A data object directly in a package passes, because a partial model is valid.
   category: ctrl
   severity: error
-  demo_trigger: false
+  demo_trigger: true
   selector:
     type: element
     stereotypes:
@@ -496,7 +496,7 @@ rules:
     for Digital Product. A data object directly in a package passes, because a partial model is valid.
   category: ctrl
   severity: error
-  demo_trigger: false
+  demo_trigger: true
   selector:
     type: element
     stereotypes:
@@ -562,7 +562,7 @@ rules:
     Product Design. A data object directly in a package passes, because a partial model is valid.
   category: ctrl
   severity: error
-  demo_trigger: false
+  demo_trigger: true
   selector:
     type: element
     stereotypes:
@@ -628,7 +628,7 @@ rules:
     Build Package. A data object directly in a package passes, because a partial model is valid.
   category: ctrl
   severity: error
-  demo_trigger: false
+  demo_trigger: true
   selector:
     type: element
     stereotypes:
@@ -694,7 +694,7 @@ rules:
     A data object directly in a package passes, because a partial model is valid.
   category: ctrl
   severity: error
-  demo_trigger: false
+  demo_trigger: true
   selector:
     type: element
     stereotypes:
@@ -760,7 +760,7 @@ rules:
     for Interaction. A data object directly in a package passes, because a partial model is valid.
   category: ctrl
   severity: error
-  demo_trigger: false
+  demo_trigger: true
   selector:
     type: element
     stereotypes:
@@ -870,7 +870,7 @@ rules:
     data object directly in a package passes, because a partial model is valid.
   category: ctrl
   severity: error
-  demo_trigger: false
+  demo_trigger: true
   selector:
     type: element
     stereotypes:
@@ -958,7 +958,7 @@ rules:
     A data object directly in a package passes, because a partial model is valid.
   category: ctrl
   severity: error
-  demo_trigger: false
+  demo_trigger: true
   selector:
     type: element
     stereotypes:
@@ -1112,7 +1112,7 @@ rules:
     A data object directly in a package passes, because a partial model is valid.
   category: ctrl
   severity: error
-  demo_trigger: false
+  demo_trigger: true
   selector:
     type: element
     stereotypes:
@@ -1178,7 +1178,7 @@ rules:
     Actual Product Instance. A data object directly in a package passes, because a partial model is valid.
   category: ctrl
   severity: error
-  demo_trigger: false
+  demo_trigger: true
   selector:
     type: element
     stereotypes:
@@ -1244,7 +1244,7 @@ rules:
     data object directly in a package passes, because a partial model is valid.
   category: ctrl
   severity: error
-  demo_trigger: false
+  demo_trigger: true
   selector:
     type: element
     stereotypes:
@@ -1310,7 +1310,7 @@ rules:
     Item. A data object directly in a package passes, because a partial model is valid.
   category: ctrl
   severity: error
-  demo_trigger: false
+  demo_trigger: true
   selector:
     type: element
     stereotypes:
@@ -1332,7 +1332,7 @@ rules:
     component. A component in no group passes, because a partial model is valid.
   category: grp
   severity: error
-  demo_trigger: false
+  demo_trigger: true
   selector:
     type: element
     stereotypes:
@@ -1836,7 +1836,7 @@ rules:
   description: The group shape's list holds the Level 1 groups and the Level 2 groups with defined content.
   category: grp
   severity: error
-  demo_trigger: false
+  demo_trigger: true
   selector:
     type: element
     stereotypes:
@@ -1871,7 +1871,7 @@ rules:
     or inside a supporting function, whose content the draft doesn't define.
   category: grp
   severity: error
-  demo_trigger: false
+  demo_trigger: true
   selector:
     type: element
     stereotypes:
@@ -1927,7 +1927,7 @@ rules:
     that belongs under another one. A component directly in Build that belongs there passes.
   category: grp
   severity: error
-  demo_trigger: false
+  demo_trigger: true
   selector:
     type: element
     stereotypes:
@@ -2191,7 +2191,7 @@ rules:
   description: The standard's concepts say which kinds of shape System of Record Integration joins.
   category: line
   severity: error
-  demo_trigger: false
+  demo_trigger: true
   selector:
     type: connector
     connector_stereotype: IT4IT_SystemOfRecordIntegration
@@ -2278,7 +2278,7 @@ rules:
   description: The standard's concepts say which kinds of shape Depends On joins.
   category: line
   severity: error
-  demo_trigger: false
+  demo_trigger: true
   selector:
     type: connector
     connector_stereotype: IT4IT_DependsOn
@@ -2418,7 +2418,7 @@ rules:
     catches a Data Relationship with any other shape at either end.
   category: line
   severity: error
-  demo_trigger: false
+  demo_trigger: true
   selector:
     type: connector
     connector_stereotype: IT4IT_DataRelationship

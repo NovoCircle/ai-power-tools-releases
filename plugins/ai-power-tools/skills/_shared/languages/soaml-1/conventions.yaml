@@ -20,30 +20,6 @@ diagram_types:
       default:
         w: 100
         h: 70
-      Collaboration:
-        w: 130
-        h: 80
-      CollaborationUse:
-        w: 130
-        h: 80
-      Milestone:
-        w: 120
-        h: 60
-      Port:
-        w: 15
-        h: 15
-      Request:
-        w: 15
-        h: 15
-      Service:
-        w: 15
-        h: 15
-      ServiceContract:
-        w: 130
-        h: 80
-      ServicesArchitecture:
-        w: 130
-        h: 80
       collaboration:
         w: 130
         h: 80

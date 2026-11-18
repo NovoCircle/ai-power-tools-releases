@@ -35,7 +35,7 @@ independent read through EA. See `../ea-reporting-database/SKILL.md`.
 ## The gap this closes
 
 An architect has a model. A stakeholder wants an answer in their own language: "Business
-Application", not `WBABusinessApplication`; "22 mission-critical apps", not a stereotype
+Application", not `WBABusinessApplication`; "12 mission-critical apps", not a stereotype
 query. The model has the data. The gap is translation, plus one thing translation alone
 doesn't fix: **a roll-up is only as honest as the tagged value is complete**, and nothing
 in the tool output warns you when it isn't. That warning is on you.
@@ -48,18 +48,20 @@ This is the most valuable habit in this skill. A roll-up over a tag that is only
 some elements of a type produces a confident, wrong number -- it doesn't fail, it doesn't
 warn, it just answers with whatever fraction of the data happens to be populated.
 
-Measured on a 2026-09-23 snapshot of the Westbrook Bank example. The example has changed
-since, so read the counts as the shape of an answer and run Step 0 on your own model:
+Measured on 2026-11-16 on a copy of the Westbrook Bank demo model (EA 17.1 build 1716, server
+3.6.5, technology `WBA` loaded). It is our demo model, not one your organization has, so read the
+counts as the shape of an answer and run Step 0 on your own model:
 
 | Stereotype | Total elements | `criticality` | `lifecycle` | `businessOwner` | `technicalOwner` | `dataClassification` |
 |---|---|---|---|---|---|---|
-| `WBABusinessApplication` | 52 | 52/52 | 52/52 | 42/52 | 44/52 | 45/52 |
+| `WBABusinessApplication` | 47 | 47/47 | 47/47 | 44/47 | 46/47 | 47/47 |
 | `WBAVendorSystem` | 35 | 35/35 | 35/35 | 35/35 | 35/35 (see note) | 35/35 |
 | `WBADataAsset` | 12 | 0/12 | 0/12 | 0/12 | 0/12 | 12/12 |
 | `WBABusinessService` | 8 | 0/8 (real) | 8/8 | 0/8 (real) | 0/8 (real) | 0/8 (real) |
 
-Three genuinely different coverage failures live in that table, and they look identical
-if you don't check:
+The 47 include one element, Core Deposit System of Record, that carries the stereotype second
+(see "Say only what you checked"). Three genuinely different coverage failures live in that
+table, and they look identical if you don't check:
 
 1. **`WBADataAsset` and `criticality`/`lifecycle`/`businessOwner`/`technicalOwner`.** The
    tag isn't set on a single one of the 12 elements. It doesn't show up at all in
@@ -72,10 +74,9 @@ if you don't check:
    elements -- but the value is blank (an empty string, or no value) on every one of them. A check that only
    asks "is the tag present" reports 100% coverage. The real, usable coverage is 0%, and
    `populated_count` is the figure that shows it.
-3. **`WBABusinessApplication` and the ownership/classification tags.** Real elements, real
-   gaps: `businessOwner` is missing on 10 of 52, `technicalOwner` on 8, `dataClassification`
-   on 7, `regulatoryScope` on 10. `criticality` and `lifecycle` happen to be fully
-   populated here. Nothing about the stereotype tells you which tags will be complete --
+3. **`WBABusinessApplication` and the ownership and regulatory-scope tags.** Real elements, real
+   gaps: `businessOwner` is missing on 3 of 47, `technicalOwner` on 1, `regulatoryScope` on 3.
+   `criticality`, `lifecycle` and `dataClassification` happen to be fully populated here. Nothing about the stereotype tells you which tags will be complete --
    you have to check each one.
 
 **The check, every time, before the roll-up:**
@@ -128,18 +129,19 @@ ea_repository(operation="aggregate_portfolio", params={
 })
 ```
 
-From the same snapshot, 52 elements:
+On the same demo model, 47 elements (the roll-up counts each element once, including Core Deposit
+System of Record):
 
 | Criticality | Count |
 |---|---|
-| Business-Critical | 22 |
-| Mission-Critical | 14 |
+| Business-Critical | 21 |
+| Mission-Critical | 12 |
 | Standard | 8 |
-| Important | 8 |
+| Important | 6 |
 
 That's a complete answer here because `criticality` has no coverage gap on this
-stereotype (Step 0 confirmed it) -- say so, e.g. "22 of 52 business applications are
-Business-Critical" (the snapshot in `references/coverage-data.md`) rather than manufacturing false precision if a gap existed.
+stereotype (Step 0 confirmed it) -- say so, e.g. "21 of 47 business applications are
+Business-Critical" (the counts in `references/coverage-data.md`) rather than manufacturing false precision if a gap existed.
 
 Useful, verified behavior of this operation:
 
@@ -181,6 +183,11 @@ compare with next month's, use [`references/standard-report-format.md`](referenc
 question, scope, figure, completeness of each property behind it (filled over total, from Step 0),
 elements counted, run date and technology version, and the same answer as a table a dashboard reads.
 
+**A report without the Author line.** EA's built-in report templates print the modeler's login name
+as each element's author, and the server can't change that. For a report that leaves the team, build
+a copy of the template without it and name it in `generate_report`:
+[`references/report-without-author.md`](references/report-without-author.md).
+
 ---
 
 ## Business view: `get_element_business_view`
@@ -194,38 +201,46 @@ Each `label`, `type` and `target_type` comes from the display-term lookup (see D
 below). On server 3.6.5 or later, with your technology loaded in EA, it is the alias or
 description the technology declares; a term the technology does not declare stays a technical
 name, so check the labels before handing the result to a stakeholder. The samples below were
-captured on an earlier server, where a technology's tags came back as technical names.
+captured on 2026-11-16 on server 3.6.5 against the Westbrook Bank demo model with `WBA` loaded, and
+are pasted as measured.
 
-The samples below show the four keys a reply is built from. The operation also returns
-`element_id`, `type_description` (an empty string today), `raw_stereotype` (the stereotype as
-EA stores it: the technical name to quote when `type` has been replaced by an alias) and
-`raw_object_type` (the element's EA type, such as `Component`).
+The samples below show everything the reply holds. `raw_stereotype` is the stereotype as EA
+stores it: the technical name to quote when `type` has been replaced by an alias.
+`raw_object_type` is the element's EA type, such as `Component`. `type_description` is an empty
+string for the demo technology.
 
 Result for a well-populated `WBABusinessApplication`:
 
 ```json
 {
+  "element_id": 91,
   "name": "Westbrook Fraud Decision Engine",
-  "type": "WBABusinessApplication",
+  "type": "Business Application",
+  "type_description": "",
+  "raw_stereotype": "WBABusinessApplication",
+  "raw_object_type": "Component",
   "properties": [
-    {"label": "businessOwner", "value": "Fraud Risk Management", "technical_name": "businessOwner"},
+    {"label": "business Owner", "value": "Fraud Risk Management", "technical_name": "businessOwner"},
     {"label": "criticality", "value": "Mission-Critical", "technical_name": "criticality"},
-    {"label": "dataClassification", "value": "Confidential", "technical_name": "dataClassification"},
+    {"label": "data Classification", "value": "Confidential", "technical_name": "dataClassification"},
     {"label": "lifecycle", "value": "Current", "technical_name": "lifecycle"},
-    {"label": "regulatoryScope", "value": "FFIEC", "technical_name": "regulatoryScope"},
-    {"label": "technicalOwner", "value": "Risk Technology Team", "technical_name": "technicalOwner"}
+    {"label": "regulatory Scope", "value": "FFIEC", "technical_name": "regulatoryScope"},
+    {"label": "technical Owner", "value": "Risk Technology Team", "technical_name": "technicalOwner"}
   ],
   "connections": [
-    {"direction": "uses", "label": "Uses", "target_name": "NICE Actimize Fraud Risk Management", "target_type": "WBAVendorSystem"}
+    {"direction": "uses", "label": "Uses", "target_name": "NICE Actimize Fraud Risk Management", "target_type": "Vendor System"},
+    {"direction": "uses", "label": "Realisation", "target_name": "REQ-004 Fraud Screening on Every Loan Application", "target_type": "Requirement"},
+    {"direction": "uses", "label": "Dependency", "target_name": "NICE Actimize Fraud Risk Management", "target_type": "Vendor System"}
   ]
 }
 ```
 
 One call gives everything a stakeholder summary needs. `connections` lists every connector the
 element has, one entry each, in both directions (`uses` when it starts at the element, `used_by`
-when it ends there); the sample is trimmed to one. The label `Uses` is a connector
+when it ends there); this element has three, all starting at it. The label `Uses` is a connector
 stereotype the WBA technology declares (the model stores it bare; see the canon reference,
-section 6 -- do not prefix it `WBA::`). The business view shows the label without the profile
+section 6 -- do not prefix it `WBA::`). A connector with no stereotype shows its base type
+(`Realisation`, `Dependency`). The business view shows the label without the profile
 qualifier, and uses the connector stereotype's alias when it has one.
 
 **What happens when a tag isn't set:** the property is left out of the list entirely,
@@ -235,11 +250,15 @@ properties:
 
 ```json
 {
+  "element_id": 163,
   "name": "Customer Master Data",
-  "type": "WBADataAsset",
+  "type": "Data Asset",
+  "type_description": "",
+  "raw_stereotype": "WBADataAsset",
+  "raw_object_type": "Object",
   "properties": [
-    {"label": "dataClassification", "value": "Confidential", "technical_name": "dataClassification"},
-    {"label": "regulatoryScope", "value": "GLBA, FFIEC", "technical_name": "regulatoryScope"}
+    {"label": "data Classification", "value": "Confidential", "technical_name": "dataClassification"},
+    {"label": "regulatory Scope", "value": "GLBA, FFIEC", "technical_name": "regulatoryScope"}
   ],
   "connections": []
 }
@@ -256,7 +275,7 @@ inferring it from one element's output.
 
 ```
 ea_mdg(operation="resolve_display_term", params={"kind": "stereotype", "technical_name": "ApplicationComponent"})
--> {"alias": "Application", "mdg_id": "ArchiMate3", "found": true}
+-> {"technical_name": "ApplicationComponent", "alias": "Application", "description": "", "mdg_id": "ArchiMate3", "kind": "stereotype", "found": true}
 ```
 
 `resolve_display_term` reads the technology EA has loaded, so a stereotype, a tag description or
@@ -271,11 +290,10 @@ is `tagged_value`; there is no `tag`. Any other value returns `ok: false` with
 
 When `found` is false, derive the label by splitting the camelCase name (`businessOwner` ->
 "Business Owner") and dropping the technology prefix from a stereotype (`WBABusinessApplication`
--> "Business Application"). `get_element_business_view` and `aggregate_portfolio` take their
-labels from the same lookup. Before 3.6.5 the lookup read only the server's own tables (the
-languages that ship with EA, plus any technology parsed with `parse_mdg_xml` in the session): a
-technology's tags never resolved, and `get_mdg_from_runtime` was the place to read a stereotype's
-alias.
+-> "Business Application"). On the demo model a found tag alias keeps a lowercase first word
+(`business Owner`), so check the case before you quote one. `get_element_business_view` and
+`aggregate_portfolio` take their labels from the same lookup. Before 3.6.5 the lookup read only the
+server's own tables, so a technology's tags never resolved; `get_mdg_from_runtime` read the alias.
 
 ---
 
@@ -362,15 +380,10 @@ edits, is `../ea-import-export/SKILL.md` section 3c.
 Full worked numbers, including the complete per-stereotype coverage matrix and the
 `regulatoryScope` multi-value breakdown, are in `references/coverage-data.md`.
 
----
-
-## A note on latency
-
-Every operation here is a repository read through the MCP server, with no dialog to wait out.
-If you also drive the EA desktop UI (opening a diagram to walk someone through it), see
-`../_shared/references/latency.md` for wait guidance before screenshotting.
-
 ## Verify in EA's UI
+
+Every operation here is a repository read with no dialog to wait out; if you also drive EA's UI,
+see `../_shared/references/latency.md` for wait guidance before screenshotting.
 
 EA reports success it has not earned, and reports failure as a modal dialog that blocks the
 COM connection rather than as an error you can catch. Neither shows up in a tool response.

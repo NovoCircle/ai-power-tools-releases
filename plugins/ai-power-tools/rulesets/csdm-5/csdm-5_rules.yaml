@@ -351,7 +351,7 @@ rules:
     the list is a warning. Any shape the table doesn't name is left alone.
   category: rel
   severity: warning
-  demo_trigger: false
+  demo_trigger: true
   selector:
     type: connector
     connector_stereotypes: any_of_table
@@ -478,7 +478,7 @@ rules:
     because all fields are optional.
   category: svc
   severity: error
-  demo_trigger: false
+  demo_trigger: true
   selector:
     type: element
     stereotypes:
@@ -501,7 +501,7 @@ rules:
     54-55). A service with no stage set isn't selected.
   category: svc
   severity: warning
-  demo_trigger: false
+  demo_trigger: true
   selector:
     type: element
     stereotypes:
@@ -548,7 +548,7 @@ rules:
     may also provide it (Figure 16).
   category: rel
   severity: warning
-  demo_trigger: false
+  demo_trigger: true
   selector:
     type: element
     stereotypes:

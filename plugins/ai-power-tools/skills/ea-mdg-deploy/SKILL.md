@@ -182,12 +182,14 @@ for a model-driven technology, and `install_mdg(scope="model")` is the scriptabl
 
 1. Select the `«mdg technology»` package in the Browser.
 2. **Specialize > Publish Technology > Save Package as MDG Technology**.
-3. **Expect a confirmation dialog.** EA raises a blocking one every time it generates a
-   technology, and no server operation runs this command, so it is driven on screen. Dismiss it,
-   or confirm by screenshot that none is open, before the next COM call: a COM call made while it
-   is open blocks. No step here works without it.
+3. **A confirmation dialog may come first.** On EA 17.1 (build 1716), in one observed run, EA
+   went straight to the Save As dialog. Other builds may show a blocking confirmation dialog
+   first; if it appears, dismiss it. No server operation runs this command, so it is driven on
+   screen. Before the next COM call, confirm by screenshot that no dialog is open: a COM call made
+   while one is open blocks.
 4. A Save As dialog appears (`XML Export File (*.xml)`). Choose the path.
-5. EA reports `MDG Technology successfully saved to file`.
+5. EA reports `MDG Technology successfully saved to file`. On EA 17.1 (build 1716) this message
+   was the only dialog the save raised.
 6. **Read System Output, cleared first.** The panel keeps old lines across model switches and EA
    restarts, so before step 2 right-click in it and choose **Clear**; every line afterwards then
    belongs to this save. If you cannot clear it, treat lines present before the action as old. It
@@ -385,9 +387,11 @@ COM connection rather than as an error you can catch. Neither shows up in a tool
 - **If a call seems to hang, screenshot EA and read the dialog before concluding anything.**
   It names the cause. Dismiss from the front — dialogs stack, and a later call can be queued
   behind one raised by an earlier one. Windows reporting EA as "Responding" means nothing.
-- **After any diagram create or edit, reload the diagram, screenshot it, and look.**
-  `ok: true` means rows were written, not that elements landed where you intended, that
-  styling applied, or that the result is readable.
+- **After an install, open the result in EA and look.** Check that the technology is listed and enabled in
+  Manage Technology, that its diagram types appear in the new-diagram dropdown, and that the Toolbox
+  offers its pages (restart EA first where the install route says so). If you create a test diagram of a
+  custom type, reload it and screenshot it. `ok: true` means rows were written, not that EA offers the
+  technology.
 - **Without computer use**, say so. Ask the user to paste a screenshot of the EA window or
   dialog into the conversation, read the cause from it, and ask the user to dismiss the dialog
   before you retry. Never report a hang you have not diagnosed or a diagram you have not seen.

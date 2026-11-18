@@ -290,8 +290,9 @@ Covers: Step 1 — measure the scope
 
 **Ask:** "How are things wired around the Origination Platform? Count every connection among it and its direct neighbors, including any links between the neighbors themselves."
 
-**Passes when:** The run walks the element's subgraph and deduplicates connectors on source, target,
-type and stereotype before counting. The element and its direct neighbors (six elements) are linked
+**Passes when:** The run walks the element's subgraph and counts each connector once: as returned
+on a server from 3.6.5, which returns each connector once, or deduplicated on connector id (or source,
+target, type and stereotype) on an older server, which returned interior edges twice. The element and its direct neighbors (six elements) are linked
 by 6 connectors, and the reply says 6, counting the one link between two of the neighbors as well as the connectors that touch the element itself.
 
 **Check:**
@@ -313,8 +314,8 @@ reply: says: there are 6 connectors among the element and its direct neighbors
 reply: not: gives 12 connectors
 ```
 
-**Fails when:** The run counts the edges as the traversal returns them, every interior edge twice,
-and reports 12. The graph looks denser than it is, and any later statement about density, hubs or
+**Fails when:** The run reports 12: on a server older than 3.6.5 it counted the edges as the traversal
+returned them, every interior edge twice, or on any server it counted a connector more than once. The graph looks denser than it is, and any later statement about density, hubs or
 "how tangled this is" inherits the doubling.
 
 ### TC-09: No stereotypes is not no elements

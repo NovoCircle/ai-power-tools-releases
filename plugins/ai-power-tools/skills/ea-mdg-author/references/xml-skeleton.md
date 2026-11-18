@@ -62,7 +62,8 @@ Back to [SKILL.md](../SKILL.md).
 
 **Critical rules:**
 - `<MDG.Technology id="WBA">` and `<Documentation id="WBA">` must match exactly — this is the tech ID used in COM API calls
-- The UMLProfile `<Documentation id="WBA">` must also match the technology id for toolbox `WBA::StereotypeName` namespace resolution to work
+- Toolbox item tags are prefixed with the UMLProfile's `name`, not its `id`: with the profile above, `WBADomainProfile::StereotypeName(UML::<metaclass>)`. `WBA::StereotypeName` gives EA's "No profile found with id 'WBA'" when the item is used. The profile's `id` can be the technology id or a generated id; both work (measured on EA 17.1; [diagrams-toolboxes.md](diagrams-toolboxes.md#checking-a-toolbox-form-on-a-scratch-model))
+- A diagram type's `toolbox` property names the toolbox's UML profile (`WBA::WBA Toolboxes` here), not a page
 - All three sections use the same `<UMLProfile profiletype="uml2">` wrapper
 
 ---

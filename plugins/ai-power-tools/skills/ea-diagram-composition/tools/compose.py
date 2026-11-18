@@ -104,8 +104,11 @@ places hangs off anything else. It carries `rows`, `columns`, `row_pitch`,
 from __future__ import annotations
 
 import math
+import unicodedata
 from collections.abc import Mapping, Sequence
 from typing import Any, Optional
+
+from lint import LABEL_MARGIN
 
 __all__ = [
     "LayoutError",
@@ -118,6 +121,10 @@ __all__ = [
     "WIDTH_MISFIT",
     "check_misfit_answer",
     "resolve_width_misfit",
+    "fits_names",
+    "width_to_fit",
+    "one_line_width",
+    "HEADER_ADVANCE_PX",
     "compose_layered_bands",
     "compose_lanes",
     "compose_nested_grid",
@@ -179,6 +186,25 @@ DEFAULT_FIT_ANSWER = FIT_WIDEN
 #: The `conflict` tag every `FitConflict` carries, so a consumer branches on a
 #: constant rather than on a sentence.
 WIDTH_MISFIT = "width_does_not_fit_content"
+
+#: The `adjustment` tag on a band whose stated `label_height` was too short for
+#: its title and was raised. Reported in `result["adjustments"]`, not as a
+#: conflict: a strip too short for its title has no second answer to ask about.
+TITLE_STRIP_RAISED = "title_strip_raised"
+
+#: The `adjustment` tag when `spec.name_below_room` asked for more room under a
+#: band's last row than `band_pad_y` gave, and the bands with items were raised.
+BAND_BOTTOM_RAISED = "band_bottom_raised"
+
+#: The `adjustment` tag when `spec.title_clear_of_lines` widened the bands on the
+#: right so the titles EA centers across them clear the items' centers, where
+#: lines between bands run.
+BAND_WIDENED_FOR_TITLE = "band_widened_for_title"
+
+#: The `adjustment` tag when `spec.title_clear_of_lines` was asked for and could
+#: not be met without moving the rows: under `align="center"` a row with an odd
+#: number of items has one under the title, and the rows stay centered.
+TITLE_NOT_CLEARED = "title_not_cleared"
 
 
 class FitConflict(dict):
@@ -323,6 +349,398 @@ def resolve_width_misfit(
 
 
 # ---------------------------------------------------------------------------
+# Text fit - the one estimate in this file, and why it is a maximum
+# ---------------------------------------------------------------------------
+# Per-character advance of the header font, in pixels. It exists ONLY to predict
+# a width before anything has been drawn. DETECTION needs no estimate at all:
+# EA's SVG carries `textLength`, its own measured advance, on every rendered run,
+# so the linter compares EA's numbers with EA's rects. A composer has no render
+# to read, which is the whole reason a number is needed here.
+#
+# CALIBRATED AS A MAXIMUM, NOT A MEAN, and that is the point of it. Read off live
+# renders (EA 17.1, the header font at its default size), per character over the
+# SPACE-FREE runs - which is what has to fit on one line, because EA breaks on
+# spaces and never inside a word:
+#
+#      4 chars /  17 px = 4.25
+#      8 chars /  39 px = 4.88
+#     10 chars /  48 px = 4.80
+#     12 chars /  54 px = 4.50
+#     10 chars /  55 px = 5.50   <- the maximum
+#     31 chars / 152 px = 4.90
+#
+# The mean of that population is 4.9 and taking it would UNDER-PREDICT the
+# widest measured string by 6%. Under-prediction is precisely the failure being
+# prevented: a box that is nearly wide enough is a box EA still grows, and the
+# render then disagrees with the geometry every other check reads. So the
+# interval is [5.50, inf) - below 5.5 a measured string is known to be
+# under-predicted, above it the only cost is width - and the bottom of that
+# interval is taken, because a prevention floor should be the smallest figure
+# that is not known to be wrong.
+#
+# Over-prediction is cheap and self-correcting. At 5.5 the 36-character name
+# from the live sweep is predicted at 198 px where EA drew 169, so the box comes
+# out about 30 px wider than it strictly had to be - and the next verify
+# measures the truth exactly rather than inheriting the estimate.
+#
+# NOT VALIDATED FOR: any font other than the one measured (the measurement
+# varied neither the size nor a per-element style override), and non-Latin or
+# full-width glyphs. A run of wide capitals is the case that could still exceed
+# it. The linter stays the backstop for all of those, because it measures
+# instead of predicting.
+#
+# AND A STATED POPULATION WITH NO GUARD IS THE SAME DEFECT ONE LAYER DOWN, so
+# the "not validated for" paragraph above is now enforced rather than merely
+# written: `CALIBRATED_REPERTOIRE` is the character set the measurement covered,
+# `unvalidated_glyphs` names what a caller's name carries outside it, and
+# `SpecFit.extrapolated` reports it wherever `fit_spec` is used. See
+# `width_to_fit` for what the guard does about a full-width glyph, and why that
+# is a derivation rather than a second guess.
+HEADER_ADVANCE_PX = 5.5
+
+#: The characters `HEADER_ADVANCE_PX` was calibrated on: printable ASCII, which
+#: is what the measured strings contained. Anything else is an EXTRAPOLATION -
+#: possibly a fine one for Latin-1 or Cyrillic, which occupy the same width class,
+#: and definitely not for a full-width glyph.
+CALIBRATED_REPERTOIRE = frozenset(chr(c) for c in range(0x20, 0x7F))
+
+#: What a full-width glyph is charged, as a MULTIPLE of the calibrated advance.
+#: Derived, not measured: Unicode East Asian Width `W` and `F` mean the glyph
+#: occupies two character cells, and 5.5 is the widest advance any single cell in
+#: the calibrated population reached, so two cells cannot be narrower than
+#: `2 * HEADER_ADVANCE_PX`. It is a FLOOR on the prediction and therefore errs
+#: toward a wider box, which this module's own reasoning calls the cheap and
+#: self-correcting direction. A measurement in the target font would replace it.
+FULL_WIDTH_CELLS = 2
+
+
+def _longest_unbroken_run(name: str) -> str:
+    """The longest run in a name that EA cannot break - what must fit one line.
+
+    EA WRAPS ON SPACES ONLY. Measured: a 31-character name with no spaces in a
+    100-wide box was drawn as a single unwrapped line running 52 px past both
+    borders, and the same name with spaces in it came back as one text run per
+    line at a 13 px pitch. So a multi-word name breaks itself and only its
+    longest word has to fit; a name with no spaces has to fit whole.
+
+    Split on the space character alone, not on whitespace generally. A tab or a
+    newline inside an element name was never measured, and treating one as a
+    break would predict a narrower box on no evidence - keeping the run joined
+    predicts a wider one, which is the safe direction.
+    """
+    return max(name.split(" "), key=len, default="")
+
+
+def width_to_fit(name: str) -> int:
+    """The narrowest box width at which this name reads as fitting.
+
+    `longest unbroken run x HEADER_ADVANCE_PX`, plus `LABEL_MARGIN` of clearance
+    on each side. Two thresholds are in play and the wider one is targeted:
+
+    * EA stops growing the drawn box once the text fits the usable inner width,
+      measured at `w - 6` for the narrower of the two shapes probed and `w - 5`
+      for the other, +/-1. Call it `w - 7` to cover both with the tolerance.
+    * The label stops reading as touching the border at `LABEL_MARGIN` px of
+      clearance per side, so `w - 2 * LABEL_MARGIN`.
+
+    `2 * LABEL_MARGIN` is 16, which is wider than 7, so aiming at the clearance
+    satisfies the growth threshold as well. Aiming at 7 instead would trade the
+    error for the warning and call it fixed.
+
+    WHAT THIS DOES NOT PROMISE, because EA's wrap is greedy. It packs as many
+    words onto a line as the break width holds, so a MULTI-WORD name can still
+    come out reading as cramped: at a width that leaves the whole name fitting
+    one line with only 5 px each side, EA puts it on one line rather than
+    breaking it, and nothing here moves that. Guaranteeing clearance for a
+    multi-word name means sizing the box to the WHOLE name - a 58-character
+    title would demand a 335-wide box - which overrides the notation's own
+    measured convention for content that renders perfectly well today. Measured
+    live: multi-word names produced no findings at all, and unbreakable ones
+    produced every one. So this fits the run EA cannot break and leaves the rest
+    to the rule that measures rather than predicts.
+    """
+    run = _longest_unbroken_run(name)
+    if not run:
+        return 0
+    return math.ceil(_advance(run)) + 2 * LABEL_MARGIN
+
+
+def _advance(run: str) -> float:
+    """The predicted pixel advance of one unbreakable run.
+
+    Inside `CALIBRATED_REPERTOIRE` this is `len(run) * HEADER_ADVANCE_PX`, which
+    is the whole of the calibration. Outside it:
+
+    * a FULL-WIDTH glyph is charged `FULL_WIDTH_CELLS * HEADER_ADVANCE_PX`,
+      because it occupies two character cells and no cell in the calibrated
+      population was wider than 5.5. That is a floor derived from a Unicode
+      property and the measured maximum, not a second estimate;
+    * anything else out of repertoire is charged the calibrated advance, because
+      there is nothing better to charge it and no reason to think it is wider.
+      This is the case `unvalidated_glyphs` exists to make visible: the number
+      is an extrapolation and the linter, which measures, is the backstop.
+    """
+    if not run:
+        return 0.0
+    wide = sum(1 for ch in run if unicodedata.east_asian_width(ch) in ("W", "F"))
+    return (len(run) + wide * (FULL_WIDTH_CELLS - 1)) * HEADER_ADVANCE_PX
+
+
+def unvalidated_glyphs(name: str) -> tuple[str, ...]:
+    """The distinct characters of `name` that `HEADER_ADVANCE_PX` never measured.
+
+    Sorted and de-duplicated, empty for a name entirely inside
+    `CALIBRATED_REPERTOIRE`. This is the GUARD on that constant: a width predicted
+    for a name containing any of these is an extrapolation past the population the
+    constant was calibrated on, and a caller that cares must verify by measuring
+    rather than trust the prediction. `fit_spec` surfaces it as
+    `SpecFit.extrapolated` so a caller does not have to remember to ask.
+
+    It reports rather than raising. A model whose element names are in Japanese or
+    Russian is a legitimate model and must still compose; what it must not do is
+    compose against a number that quietly claims a provenance it does not have.
+    """
+    return tuple(sorted({ch for ch in name if ch not in CALIBRATED_REPERTOIRE}))
+
+
+
+
+# ---------------------------------------------------------------------------
+# Sizing every composer to the names it is given
+# ---------------------------------------------------------------------------
+# EA grows a drawn box to fit a name it cannot break, whatever width the stored
+# rect says. A composer that places `item_width`-wide boxes without looking at the
+# names in them therefore composes geometry that the render does not match, and
+# every rule that reads the stored rects then reads a box EA does not paint. The
+# check below is the same one `bindings.spec(names=...)` makes, applied at the
+# engine so that a caller who never went through a binding gets it too.
+#
+# The engine keeps the width it was given: stated geometry is a request, and the
+# composers have always honored it whatever the names are (a binding's
+# `spec(names=...)` is where a width is fitted, and it widens by default). What the
+# engine adds is the report. A name that cannot fit the stated width comes back on
+# the result's `conflicts` as a `FitConflict` that says which name, the width it
+# needs and the width asked for, with `answered` False, so the render that follows
+# is never a surprise. `on_misfit="widen"` is the caller answering that it wants
+# the width raised, and then the engine raises it; `"overlap"` records the choice.
+#
+# A spec that came from `bindings.spec(...)` already says what it was fitted to
+# (it carries `conflicts`) and is left alone. A per-band `item_width` stated in the
+# layout input is the caller sizing one group on purpose and is not looked at here.
+
+#: One drawn line of header text takes this much height, and a title strip keeps a
+#: little over. Measured on EA 17.1 at the default font: baselines 13 px apart, a
+#: two-line title filling a 28 px strip.
+TITLE_LINE_PITCH = 13
+TITLE_STRIP_SLACK = 2
+#: EA draws a container's title across its top, a line's baseline 14 px down. The
+#: room above whatever the container holds, so the title is not drawn over it.
+TITLE_CLEARANCE = 18
+
+
+def wrapped_line_count(text: str, width: float) -> int:
+    """How many lines EA will put a title on in `width` px, estimated high.
+
+    Greedy on spaces, as EA wraps, with every character charged the calibrated
+    maximum advance, so the count errs toward more lines and a taller strip, which
+    is the cheap direction. A word wider than `width` takes a line of its own.
+    """
+    lines, used = 1, 0.0
+    for word in " ".join(str(text).split()).split(" "):
+        size = _advance(word)
+        if used == 0.0:
+            used = size
+        elif used + _advance(" ") + size <= width:
+            used += _advance(" ") + size
+        else:
+            lines += 1
+            used = size
+    return lines
+
+
+def title_strip_height(text: str, width: float) -> int:
+    """The strip a title of this text needs across `width` px."""
+    return wrapped_line_count(text, width) * TITLE_LINE_PITCH + TITLE_STRIP_SLACK
+
+
+def _is_width(value: Any) -> bool:
+    """A positive number, so a wrong type or size is left to the engine to refuse."""
+    return (isinstance(value, (int, float)) and not isinstance(value, bool)
+            and math.isfinite(value) and value > 0)
+
+
+def _collect_item_names(value: Any, every_node: bool, out: list,
+                        holder: Optional[Mapping] = None, path: str = "") -> None:
+    """The boxes in a layout input, not the titles of its groups.
+
+    Appends `(name, holder, path)` where `holder` is the nearest container that
+    states its own numeric `item_width` (the caller sizing one group on purpose)
+    or None when the spec's width applies, and `path` says where that container is.
+    """
+    if isinstance(value, Mapping):
+        children = [(key, value[key]) for key in ("items", "tiles")
+                    if isinstance(value.get(key), (list, tuple))]
+        if children and _is_width(value.get("item_width")):
+            holder = value
+        name = value.get("name")
+        if isinstance(name, str) and (every_node or not children):
+            out.append((name, holder, path))
+        for key, child in children:
+            _collect_item_names(child, every_node, out, holder,
+                                f"{path}.{key}" if path else key)
+    elif isinstance(value, (list, tuple)):
+        for index, entry in enumerate(value):
+            _collect_item_names(entry, every_node, out, holder,
+                                f"{path}[{index}]")
+
+
+def _rewrite_widths(value: Any, fixes: Mapping[int, int]) -> Any:
+    """A copy of a layout input with `item_width` raised on the containers in `fixes`."""
+    if isinstance(value, Mapping):
+        copy = dict(value)
+        if id(value) in fixes:
+            copy["item_width"] = fixes[id(value)]
+        for key in ("items", "tiles"):
+            if isinstance(value.get(key), (list, tuple)):
+                copy[key] = _rewrite_widths(value[key], fixes)
+        return copy
+    if isinstance(value, (list, tuple)):
+        return [_rewrite_widths(entry, fixes) for entry in value]
+    return value
+
+
+def one_line_width(name: str) -> int:
+    """The width at which a name sits on one line, clear of the border.
+
+    EA fills each wrapped line to about its box width, so a name that wraps always
+    leaves a line a few px from the border. A box that holds the whole name on one
+    line is the one that does not, so that is the width the engine widens to.
+    """
+    return math.ceil(_advance(" ".join(str(name).split()))) + 2 * LABEL_MARGIN
+
+
+def _name_conflict(where, requested, needed, driver, applied, answered,
+                   detail_where=""):
+    kept = (f" The stated width is kept (on_misfit={FIT_OVERLAP!r})."
+            if applied == FIT_OVERLAP else "")
+    return FitConflict(
+        where=where, requested_width=requested, required_width=needed,
+        applied=applied, answered=answered, driver=driver, driver_kind="item_name",
+        detail=(f"{driver!r} needs {needed}px to sit on one line"
+                f"{detail_where}.{kept}"))
+
+
+def fits_names(default_width, layout: Sequence[str], *, width_key: str = "item_width",
+               every_node: bool = False, hub: bool = False,
+               also: Sequence[tuple] = (), measured: bool = False):
+    """Decorate a composer so a name its width cannot hold is reported.
+
+    `layout` names the parameters that hold boxes, `default_width` returns the
+    width the composer uses when the spec states none, `every_node` is for the
+    grammars where a node with children is itself a box (a ring), and `hub` adds
+    the middle box. `also` is more widths to check, each `(spec key, default
+    callable, parameters)`, for a grammar whose headers are sized on their own
+    (a matrix's row headers). Each name is checked against the width that applies
+    to it: a container's own `item_width` where it states one, else the spec's.
+    `measured` is for a grammar whose box widths are not known before layout (a
+    treemap's tiles come from weights): the names are checked against the widths
+    the composition came back with. The wrapped composer also accepts `on_misfit`.
+    """
+    checks = [(width_key, default_width, tuple(layout), every_node, hub)]
+    checks += [(key, default, tuple(params), True, False)
+               for key, default, params in also]
+
+    def decorate(fn):
+        import functools
+        import inspect
+        sig = inspect.signature(fn)
+        takes_answer = "on_misfit" in sig.parameters
+
+        @functools.wraps(fn)
+        def wrapper(*args, **kwargs):
+            # A composer that declares `on_misfit` keeps its own signature, so
+            # an answer passed by position still binds where it always did.
+            if takes_answer:
+                bound = sig.bind(*args, **kwargs)
+                on_misfit = bound.arguments.get("on_misfit")
+            else:
+                on_misfit = kwargs.pop("on_misfit", None)
+                bound = sig.bind(*args, **kwargs)
+            check_misfit_answer(f"spec.{width_key}", on_misfit)
+            bound.apply_defaults()
+            spec = bound.arguments.get("spec")
+            conflicts = []
+            # Widening is the default: a box grows until its name fits on one line,
+            # and the reply says what grew. `on_misfit="overlap"` keeps the stated width.
+            applied = FIT_OVERLAP if on_misfit == FIT_OVERLAP else FIT_WIDEN
+            answered = on_misfit is not None
+            if (not measured and (spec is None or isinstance(spec, Mapping))
+                    and not hasattr(spec, "conflicts")):
+                fitted = dict(spec or {})
+                fixes: dict = {}
+                for key, default, params, nodes, with_hub in checks:
+                    entries: list = []
+                    for param in params:
+                        _collect_item_names(bound.arguments.get(param), nodes, entries,
+                                            None, param)
+                    if with_hub:
+                        _collect_item_names(bound.arguments.get("hub"), True, entries,
+                                            None, "hub")
+                    stated = fitted.get(key, default())
+                    if not _is_width(stated):
+                        continue      # the engine refuses a width that is no number
+                    spec_need, spec_driver = int(stated), ""
+                    per_holder: dict = {}
+                    for name, holder, path in entries:
+                        want = one_line_width(name)
+                        if holder is None:
+                            if want > spec_need:
+                                spec_need, spec_driver = want, name
+                        elif want > int(holder["item_width"]):
+                            best = per_holder.get(id(holder))
+                            if best is None or want > best[0]:
+                                per_holder[id(holder)] = (want, name, holder, path)
+                    if spec_driver:
+                        conflicts.append(_name_conflict(
+                            f"spec.{key}", int(stated), spec_need, spec_driver,
+                            applied, answered))
+                        if applied == FIT_WIDEN:
+                            fitted[key] = spec_need
+                    for want, name, holder, path in per_holder.values():
+                        base = path.rsplit(".", 1)[0] if "." in path else path
+                        conflicts.append(_name_conflict(
+                            f"{base}.item_width", int(holder["item_width"]), want,
+                            name, applied, answered,
+                            detail_where=f" in the group at {base}"))
+                        if applied == FIT_WIDEN:
+                            fixes[id(holder)] = want
+                if conflicts and applied == FIT_WIDEN:
+                    bound.arguments["spec"] = fitted
+                    if fixes:
+                        for _, _, params, _, _ in checks:
+                            for param in params:
+                                bound.arguments[param] = _rewrite_widths(
+                                    bound.arguments.get(param), fixes)
+            result = fn(*bound.args, **bound.kwargs)
+            if measured and isinstance(result, dict):
+                for item in result.get("items") or []:
+                    name = item.get("name")
+                    if not isinstance(name, str):
+                        continue
+                    width = int(item["right"]) - int(item["left"])
+                    want = width_to_fit(name)
+                    if want > width:
+                        conflicts.append(_name_conflict(
+                            f"items[{item.get('id')}].width", width, want, name,
+                            FIT_OVERLAP, False, detail_where=" in this tile"))
+            if conflicts and isinstance(result, dict):
+                result["conflicts"] = list(result.get("conflicts") or []) + conflicts
+            return result
+        return wrapper
+    return decorate
+
+
+# ---------------------------------------------------------------------------
 # Defaults
 # ---------------------------------------------------------------------------
 # Units are EA diagram units, which for practical purposes are pixels at 100%
@@ -372,13 +790,17 @@ DEFAULT_SPEC: dict[str, Any] = {
     "band_gap": 30,           # vertical gap between one band and the next
     "band_pitch": None,       # optional MINIMUM band-top to band-top step
     "min_band_width": None,   # None -> item_width + 2 * band_pad_x
+    # Opt-in, and set by a binding from what EA is measured to draw. Left off, the
+    # bands come out exactly as they always have. See `compose_layered_bands`.
+    "title_clear_of_lines": False,  # widen so centered band titles clear item centers
+    "name_below_room": 0,           # room under the last row for a name drawn below a shape
 
     # Lane container padding and stacking.
     "lane_pad": 12,
     "lane_gap": 0,                # swimlanes normally abut; 0 makes them touch
     "item_gap_flow": 60,          # gap between successive slots along the flow
     "flow_pitch": None,           # optional MINIMUM slot-start to slot-start step
-    "min_lane_thickness": None,   # None -> item cross extent + 2 * lane_pad
+    "min_lane_thickness": None,   # None -> item cross extent + lane_pad + the title clearance
 
     # Nested-grid containers. `grid_pad` is constant on every side; the top
     # inset is `grid_pad + label_height`, so the title strip is cleared rather
@@ -429,8 +851,9 @@ _POSITIVE_KEYS = frozenset({
 _NON_NEGATIVE_KEYS = frozenset({
     "item_gap_x", "item_gap_y", "item_gap_flow",
     "band_pad_x", "band_pad_y", "band_gap", "lane_pad", "lane_gap",
-    "grid_pad",
+    "grid_pad", "name_below_room",
 })
+_BOOL_KEYS = frozenset({"title_clear_of_lines"})
 _OPTIONAL_POSITIVE_KEYS = frozenset({
     "h_pitch", "row_pitch", "band_pitch", "flow_pitch",
     "min_band_width", "min_lane_thickness",
@@ -539,6 +962,8 @@ def _as_int(value: Any, where: str) -> int:
     """
     if isinstance(value, bool) or not isinstance(value, (int, float)):
         raise LayoutError(f"{where}: expected a number, got {type(value).__name__}")
+    if not math.isfinite(value):
+        raise LayoutError(f"{where}: expected a number, got {value!r}")
     return int(round(value))
 
 
@@ -588,6 +1013,10 @@ def _resolve_spec(spec: Mapping[str, Any] | None) -> dict[str, Any]:
                 raise LayoutError(
                     f"{where}: expected one of {_ALIGNMENTS}, got {value!r}"
                 )
+            out[key] = value
+        elif key in _BOOL_KEYS:
+            if not isinstance(value, bool):
+                raise LayoutError(f"{where}: expected true or false, got {value!r}")
             out[key] = value
         elif key in _ANY_INT_KEYS:
             out[key] = _as_int(value, where)
@@ -819,6 +1248,60 @@ def _common_band_width(
     )
 
 
+def _band_item_centers(plans: Sequence[Mapping[str, Any]], s: Mapping[str, Any],
+                       content_width: int) -> list[float]:
+    """The x of every item's center, placed as `compose_layered_bands` places it."""
+    content_left = s["origin_left"] + s["band_pad_x"]
+    centers = []
+    for p in plans:
+        m = p["metrics"]
+        for j in range(len(p["items"])):
+            row, col = divmod(j, p["per_row"])
+            items_this_row = min(p["per_row"], len(p["items"]) - row * p["per_row"])
+            row_width = (items_this_row - 1) * m["h_pitch"] + m["item_width"]
+            row_left = (content_left + (content_width - row_width) // 2
+                        if s["align"] == "center" else content_left)
+            centers.append(row_left + col * m["h_pitch"] + m["item_width"] / 2)
+    return centers
+
+
+def _title_room_clear_of_columns(plans: Sequence[Mapping[str, Any]],
+                                 s: Mapping[str, Any], band_width: int,
+                                 content_width: int) -> int:
+    """Width to add on the right so no title below the first sits over an item's center.
+
+    The first band's title has nothing above it for a line to come from. A title's
+    width is its whole text at the calibrated maximum advance, capped at what one
+    line of the band holds, with `LABEL_MARGIN` either side. Returns 0 when the
+    titles already clear, or when no width up to four band widths would clear them
+    (a title wider than every gap between centers clears only past the last one,
+    which that limit covers for any band the composer draws).
+    """
+    for extra in range(0, 4 * band_width + 1, 2):
+        if _titles_clear(plans, s, band_width, content_width, band_width + extra):
+            return extra
+    return 0
+
+
+def _titles_clear(plans: Sequence[Mapping[str, Any]], s: Mapping[str, Any],
+                  band_width: int, content_width: int, width: int) -> bool:
+    """Whether, at `width`, every title below the first clears every item's center.
+
+    The rows are placed for `band_width`; `width` is what the bands are drawn at.
+    """
+    if len(plans) < 2:
+        return True
+    centers = _band_item_centers(plans, s, content_width)
+    middle = s["origin_left"] + width / 2
+    for p in plans[1:]:
+        half = min(_advance(" ".join(p["name"].split())),
+                   width - 2 * LABEL_MARGIN) / 2 + LABEL_MARGIN
+        if any(middle - half < x < middle + half for x in centers):
+            return False
+    return True
+
+
+@fits_names(lambda: DEFAULT_SPEC["item_width"], ("bands",))
 def compose_layered_bands(
     bands: Sequence[Mapping[str, Any]],
     spec: Mapping[str, Any] | None = None,
@@ -858,6 +1341,20 @@ def compose_layered_bands(
       drawn past the band's right edge. Either way the conflict comes back in
       `result["conflicts"]`. **Ask the user which they want for that diagram** -
       see `FitConflict`, whose `question` field is the question to put.
+    * A `label_height` too short for the band's title (one line needs 15px; a
+      title that wraps needs more) is raised to what the title needs, and each
+      raise comes back in `result["adjustments"]` with the stated and applied
+      heights and a `note`. There is nothing to ask: a shorter strip draws the
+      title through the items.
+    * Two keys are off unless a spec sets them; a binding sets them from what EA
+      is measured to draw, and an unbound spec leaves the bands as they were.
+      `title_clear_of_lines` widens every band on the right, past the rows, until
+      each title below the first (which EA centers across the band) clears every
+      item's center, where a line between bands runs (`band_widened_for_title`).
+      Under `align="center"` the rows stay centered and a title that cannot clear
+      is reported (`title_not_cleared`). `name_below_room` is the room under the
+      last row for a name drawn below its shape; a smaller `band_pad_y` is raised
+      to it (`band_bottom_raised`). Both come back in `result["adjustments"]`.
 
     Returns the result dict described in the module docstring. Raises
     `LayoutError` for any input that cannot yield sane geometry.
@@ -933,6 +1430,98 @@ def compose_layered_bands(
     containers: list[dict[str, Any]] = []
     out_items: list[dict[str, Any]] = []
 
+    # A title that wraps in a narrow band needs a taller strip than the one
+    # stated, or its lower lines are drawn through the items below it. Grown
+    # here, because the width the title wraps at is the whole stack's, which is
+    # only known now.
+    # Each raise is reported in `adjustments`, so a stated height that was not
+    # used never disappears without a word.
+    adjustments: list[dict[str, Any]] = []
+    for p in plans:
+        need = title_strip_height(p["name"], band_width - 2 * LABEL_MARGIN)
+        stated = p["metrics"]["label_height"]
+        if need > stated:
+            p["band_height"] += need - stated
+            p["metrics"] = {**p["metrics"], "label_height": need}
+            where = f"bands[{p['index']}].label_height"
+            adjustments.append({
+                "adjustment": TITLE_STRIP_RAISED,
+                "where": where,
+                "driver": p["name"],
+                "stated_height": int(stated),
+                "applied_height": int(need),
+                "note": (
+                    f"{where}: {stated}px was stated, and the title "
+                    f"{p['name']!r} needs {need}px across a {band_width}px band, "
+                    f"so the title strip was raised to {need}px and the band is "
+                    f"{need - stated}px taller."
+                ),
+            })
+
+    # Room under the last row for a name drawn BELOW its shape. Opt-in: a binding
+    # sets `name_below_room` for a notation EA is measured to draw that way (an
+    # ArchiMate Device's name reaches 14 px under the shape, so a 12 px pad put it
+    # across the band's border). Raised only on bands that hold items.
+    below = s["name_below_room"]
+    if below > pad_y and any(p["items"] for p in plans):
+        for p in plans:
+            if p["items"]:
+                p["band_height"] += below - pad_y
+        adjustments.append({
+            "adjustment": BAND_BOTTOM_RAISED,
+            "where": "spec.band_pad_y",
+            "driver": "",
+            "stated_height": int(pad_y),
+            "applied_height": int(below),
+            "note": (
+                f"spec.band_pad_y: {pad_y}px was stated, and spec.name_below_room "
+                f"asks {below}px for a name drawn under its shape, so each band "
+                f"with items is {below - pad_y}px taller."
+            ),
+        })
+
+    # EA draws a band's title centered across its top, and a line between two
+    # bands runs straight up from an item's center through the title strip of
+    # the band it leaves. Opt-in (`title_clear_of_lines`, which a binding sets
+    # where the band titles are drawn): the bands are widened on the right, past
+    # the rows, until every title below the first clears every item's center.
+    # The rows keep their places. A centered layout stays centered, and since a
+    # centered row of an odd number of items has one under the title, that case
+    # is reported instead of widened.
+    title_room = 0
+    if s["title_clear_of_lines"]:
+        if s["align"] == "center":
+            if not _titles_clear(plans, s, band_width, content_width, band_width):
+                adjustments.append({
+                    "adjustment": TITLE_NOT_CLEARED,
+                    "where": "spec.title_clear_of_lines",
+                    "driver": "",
+                    "note": (
+                        "spec.title_clear_of_lines: a band's title sits over an "
+                        "item's center, where a line between bands runs, and the "
+                        "rows are centered (align='center'), so widening cannot "
+                        "move it. Use align='left' to have the bands widened."
+                    ),
+                })
+        else:
+            title_room = _title_room_clear_of_columns(
+                plans, s, band_width, content_width)
+    if title_room:
+        adjustments.append({
+            "adjustment": BAND_WIDENED_FOR_TITLE,
+            "where": "spec.title_clear_of_lines",
+            "driver": "",
+            "stated_width": int(band_width),
+            "applied_width": int(band_width + title_room),
+            "note": (
+                f"spec.title_clear_of_lines: the titles EA centers across each band "
+                f"sat over an item's center, where a line between bands runs, so "
+                f"every band is {title_room}px wider ({band_width + title_room}px) "
+                f"and the titles clear those lines."
+            ),
+        })
+    drawn_width = band_width + title_room
+
     band_top = s["origin_top"]
     for p in plans:
         m = p["metrics"]
@@ -941,13 +1530,13 @@ def compose_layered_bands(
         # on the rows inside the band, not on the band.
         band_left = s["origin_left"]
 
-        band_rect = rect(band_left, band_top, band_width, p["band_height"])
+        band_rect = rect(band_left, band_top, drawn_width, p["band_height"])
         container = {
             "id": p["band"].get("id") or f"band_{p['index']}",
             "name": p["name"],
             "kind": "band",
             "index": p["index"],
-            "label": rect(band_left, band_top, band_width, m["label_height"]),
+            "label": rect(band_left, band_top, drawn_width, m["label_height"]),
             **band_rect,
         }
         containers.append(container)
@@ -997,6 +1586,10 @@ def compose_layered_bands(
         # key. Empty is the answer "nothing had to be decided", which is a
         # different statement from "this engine does not report".
         "conflicts": [conflict] if conflict is not None else [],
+        # Always present, like `conflicts`. Changes made without a question to
+        # put: the geometry has one right answer, but the caller stated
+        # something else and should be told.
+        "adjustments": adjustments,
     }
 
 
@@ -1011,6 +1604,7 @@ def _lane_metrics(lane: Mapping[str, Any], spec: Mapping[str, Any], where: str) 
     }
 
 
+@fits_names(lambda: DEFAULT_SPEC["item_width"], ("lanes",))
 def compose_lanes(
     lanes: Sequence[Mapping[str, Any]],
     spec: Mapping[str, Any] | None = None,
@@ -1038,10 +1632,15 @@ def compose_lanes(
 
     Other behavior worth knowing:
 
-    * Lane thickness follows the largest item in that lane, across the lane.
-    * Items are centered across the lane's thickness.
+    * Lane thickness follows the largest item in that lane, across the lane,
+      plus `lane_pad` and, in a horizontal lane, the title clearance above the
+      items: EA draws a lane's title across its top.
+    * Items are centered across the lane's thickness, except that a horizontal
+      lane keeps the title clearance above them.
     * A lane's label area is reserved inside its container rect and returned as
-      `label`; the container rect covers the whole lane, label included.
+      `label`; the container rect covers the whole lane, label included. In a
+      vertical lane the label strip is the tallest any lane's title needs across
+      the lane's thickness, never less than `label_height`.
     * `lane_gap` defaults to 0, so lanes abut the way swimlanes normally do.
       Abutting rects touch but do not overlap.
     * An empty lane is valid and still gets a label area and its minimum
@@ -1077,6 +1676,9 @@ def compose_lanes(
         if min_thickness is None:
             min_thickness = cross_extent + 2 * pad
         thickness = max(cross_extent + 2 * pad, min_thickness)
+        if horizontal:
+            # EA draws a lane's title across its top, so the items start below it.
+            thickness = max(thickness, cross_extent + TITLE_CLEARANCE + pad)
         plans.append({
             "lane": lane,
             "name": name,
@@ -1107,7 +1709,15 @@ def compose_lanes(
         cursor += step
     total_flow = (slot_starts[-1] + slot_extents[-1]) if slot_count else 0
 
-    label_along_flow = s["label_width"] if horizontal else s["label_height"]
+    # A vertical lane's title wraps across the lane's thickness, and every lane
+    # shares one title strip so the slots stay aligned: the strip is the tallest
+    # any lane's title needs, never less than the stated one.
+    title_strip = s["label_height"]
+    if not horizontal:
+        title_strip = max([s["label_height"]] + [
+            title_strip_height(p["name"], p["thickness"] - 2 * LABEL_MARGIN)
+            for p in plans])
+    label_along_flow = s["label_width"] if horizontal else title_strip
     lane_length = label_along_flow + pad + total_flow + pad
 
     containers: list[dict[str, Any]] = []
@@ -1122,11 +1732,12 @@ def compose_lanes(
             lane_rect = rect(lane_left, lane_top, lane_length, thickness)
             label = rect(lane_left, lane_top, s["label_width"], thickness)
             flow_origin = lane_left + s["label_width"] + pad
-            cross_offset = (thickness - m["item_height"]) // 2
+            cross_offset = max((thickness - m["item_height"]) // 2,
+                               TITLE_CLEARANCE)
         else:
             lane_rect = rect(lane_left, lane_top, thickness, lane_length)
-            label = rect(lane_left, lane_top, thickness, s["label_height"])
-            flow_origin = lane_top - s["label_height"] - pad
+            label = rect(lane_left, lane_top, thickness, title_strip)
+            flow_origin = lane_top - title_strip - pad
             cross_offset = (thickness - m["item_width"]) // 2
 
         container = {
@@ -1422,6 +2033,7 @@ def _place_grid(
             out_items.append(record)
 
 
+@fits_names(lambda: DEFAULT_SPEC["item_width"], ("nodes",))
 def compose_nested_grid(
     nodes: Sequence[Mapping[str, Any]],
     spec: Mapping[str, Any] | None = None,
@@ -1691,6 +2303,7 @@ def _max_reach(item_w: int, item_h: int) -> float:
     return math.hypot(item_w / 2.0, item_h / 2.0)
 
 
+@fits_names(lambda: DEFAULT_SPEC["item_width"], ("nodes",), every_node=True, hub=True)
 def compose_radial(
     nodes: Sequence[Mapping[str, Any]],
     spec: Mapping[str, Any] | None = None,
@@ -2158,6 +2771,7 @@ def _cycle_split(count: int) -> int:
     return _ceil_div(count, 2)
 
 
+@fits_names(lambda: DEFAULT_SPEC["item_width"], ("items",))
 def compose_two_column_cycle(
     items: Sequence[Mapping[str, Any]],
     spec: Mapping[str, Any] | None = None,

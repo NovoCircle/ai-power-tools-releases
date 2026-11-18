@@ -37,6 +37,8 @@ Covers: 1. First check that this is actually the gap
 reporting skills cover this) and does not open Sparx's user guide, does not drive EA's screen, and
 does not describe itself as working from the guide.
 
+**Reading:** business applications are counted by the primary stereotype (the `Stereotype` column): 11 Mission-Critical of 46. Counting the second stereotype of Core Deposit System of Record gives 12 of 47; this case does not expect that reading.
+
 **Check:**
 
 ```check
@@ -476,7 +478,8 @@ Covers: 5. Find the page
 
 **Ask:** "I'm scripting EA and I see Element.SetAppearance(Scope, Item, Value). What do the three arguments mean?"
 
-**Passes when:** The run searches the method name, finds the Element Class page in the Automation
+**Passes when:** The run first notes that the MCP operation `set_element_appearance` sets colors but does
+not explain the method's arguments, then searches the method name, finds the Element Class page in the Automation
 Interface section, and extracts only the block around `SetAppearance`. It reports what the guide
 documents: `Scope` 1 is the base appearance across the model; `Item` 0 is background color, 1 font
 color, 2 border color, 3 border width; `Value` is the value to set. It does not paste the page.

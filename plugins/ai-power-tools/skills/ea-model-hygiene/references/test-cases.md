@@ -526,6 +526,8 @@ Covers: 3. Spotting inconsistency
 
 **Passes when:** The run compares tag coverage inside the one stereotype. The reply says the six standard tags are present on every `WBABusinessApplication` (46 of 46), says `pciScopeJustification` is set on only two of them, and leaves it as a question: optional by design, or a field only some contributors knew to fill in. It does not fill any value. The model is unchanged.
 
+**Reading:** the 46 `WBABusinessApplication` elements are those whose primary stereotype is Business Application (the `Stereotype` column). Core Deposit System of Record carries a second, Business Application, and is not among them; this case does not expect the 47-element reading.
+
 **Check:**
 
 ```check
@@ -641,7 +643,7 @@ reply: not: calls a diagram that now sits in a different package a corruption
 
 **Fails when:** The run recreates the element in the new package (new id, old one deleted), so the connectors and placements are lost or rebuilt by hand, or it reports the cross-package diagram as damage.
 
-### TC-20: There is no move for a whole package
+### TC-20: Moving a whole package
 
 Covers: 4. Moving elements safely
 
@@ -649,7 +651,7 @@ Covers: 4. Moving elements safely
 
 **Ask:** "Move the Trust & Estate package so it sits under Enterprise Functions instead of Wealth Management."
 
-**Passes when:** The reply says there is no operation that moves a package. It offers the two routes (update both records that place the package, its row and its mirror object, or duplicate the package and delete the original) with their cost, and either completes one of them with both applications intact or stops and asks which. It does not report a move done through an operation that does not exist.
+**Passes when:** The run moves the package with `move_package` (`package_id` and `new_parent_id`), and reports the package's parent and its mirror object's package from the reply, both at Enterprise Functions. Both applications are still in the package. It does not report the move done while `consistent` is false.
 
 **Check:**
 
@@ -664,8 +666,8 @@ expect: = 1
 ```
 
 ```check
-# the parent is the old one (stopped to ask) or the new one (completed)
-sql: SELECT p2.Name IN ('Wealth Management', 'Enterprise Functions') FROM t_package p JOIN t_package p2 ON p.Parent_ID = p2.Package_ID WHERE p.Name LIKE 'Trust%Estate'
+# the parent is the new one
+sql: SELECT p2.Name = 'Enterprise Functions' FROM t_package p JOIN t_package p2 ON p.Parent_ID = p2.Package_ID WHERE p.Name LIKE 'Trust%Estate'
 expect: = 1
 ```
 
@@ -676,11 +678,11 @@ expect: = 0
 ```
 
 ```check
-tools: not-called: ea_model.move_package
-reply: says: there is no operation that moves a package
+tools: called: ea_model.move_package
+reply: says: the package and its mirror object both sit under Enterprise Functions
 ```
 
-**Fails when:** The run calls an operation that does not exist and reports the package moved, or deletes the original package before confirming the copy holds both applications.
+**Fails when:** The run moves the package by editing only one of its two records, reports it moved while `consistent` is false, or deletes and recreates the package.
 
 ### TC-21: A root-level package goes under the Model root
 
@@ -971,7 +973,7 @@ None. Every heading in the skill has at least one case.
 
 Each finding was checked against the current skill text, server main (read only) and a read-only copy of the Westbrook file. Each ends with its disposition.
 
-- Counts in the skill did not match the current Westbrook copy: 52 business applications (now 46), "140 orphans out of 170 elements" (the scan over the whole bank tree now flags 89 of 213 non-package elements, 81 of 119 in the narrower scope the cases use), 229 elements in total, `WBAAIModel` at zero use (now 3 elements), one `ExternalReference` element (none). **Fixed in `SKILL.md`:** section 1 quotes the current counts with their scope and says they move (the counts came from SQL that leaves package rows out, which is what the scan does from server 3.6.5; re-run the scan on the whole bank tree and compare); the `WBAAIModel` observation is gone. **No change to `references/consistency-audits.md`:** its tables are a dated snapshot (23 Sep 2026, WBA 1.0) and the file already says the current counts differ and no number is to be quoted as fact. The cases read counts from the model.
+- Counts in the skill did not match the current Westbrook copy: 52 business applications (now 46), "140 orphans out of 170 elements" (the scan over the whole bank tree now flags 89 of 213 non-package elements, 81 of 119 in the narrower scope the cases use), 229 elements in total, `WBAAIModel` at zero use (now 3 elements), one `ExternalReference` element (none). **Fixed in `SKILL.md`:** section 1 quotes the current counts with their scope and says they move (the counts came from SQL that leaves package rows out, which is what the scan does from server 3.6.5; re-run the scan on the whole bank tree and compare); the `WBAAIModel` observation is gone. **No change to `references/consistency-audits.md`:** its tables are a dated snapshot (23 Sep 2026, WBA 1.0) and the file already says the current counts differ and no number is to be quoted as fact. The cases read counts from the model. **Re-measured 16 Nov (server 3.6.5, demo copy):** the scan over the whole bank tree flags 89 of 213 non-package elements, 13 pass the three tests (6 business applications, 4 vendor systems, 3 model documents), the narrower scope flags 81 of 119 with 10 candidates, and all 12 data assets are unconnected and on a diagram. No case needed a change.
 - Section 1's capability-hierarchy containers (unstereotyped elements nested by `ParentID`) do not exist in the current copy: no non-package element in the bank packages has a `ParentID`. **Fixed:** the bullet now says the check applies to a model that nests capability elements and that the Westbrook copy has none. The promise is testable only with the setup in TC-05.
 - Step 3's composite check cannot detect the case it names: `find_composite_diagram_mismatches` lists broken links, so a healthy drill-down parent returns zero mismatches. **Fixed:** step 3 now gives the `t_diagram.ParentID = <id>` query that answers the question for one element and says what the mismatch call does and does not show. TC-11 still checks the outcome and does not require the mismatch call.
 - `pre-delete-safety.md` scoped step 3 for `Westbrook Account Master` to "Consumer Banking, package 5"; in the current copy the element is in `Core Platforms` (under `IT Operations`), and the 70-element figure is Consumer Banking's. **Fixed** in `references/pre-delete-safety.md`.

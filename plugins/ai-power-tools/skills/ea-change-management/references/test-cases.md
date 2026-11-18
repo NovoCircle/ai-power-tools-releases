@@ -1207,8 +1207,9 @@ Covers: 7. Reviewing and cleaning up baselines
 
 **Ask:** "List every snapshot in the whole model with its size."
 
-**Passes when:** The agent walks the root packages, calls `list_baselines` once per package, and
-reports all 17 baselines (10 on `Model`, 7 on `Westbrook Bank`). It does not report one package's list as the model's.
+**Passes when:** The agent calls `list_baselines` once with no `package_id`, and
+reports all 17 baselines (10 on `Model`, 7 on `Westbrook Bank`). It does not walk the packages
+to call it once per package, and it does not report one package's list as the model's.
 
 **Check:**
 
@@ -1223,13 +1224,13 @@ expect: unchanged
 ```
 
 ```check
-tools: called: ea_model.list_root_packages
 tools: called: ea_repository.list_baselines
 reply: says: 17 baselines, 10 on Model and 7 on Westbrook Bank
 ```
 
 **Fails when:** The agent calls `list_baselines` against the first root and reports its 10 as
-the whole model, or against `Westbrook Bank` and reports 7.
+the whole model, or against `Westbrook Bank` and reports 7, or makes one call per package where
+a single call with no `package_id` lists them all.
 
 ### TC-39: Clean up needs a named yes
 

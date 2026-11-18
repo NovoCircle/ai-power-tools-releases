@@ -201,7 +201,7 @@ rules:
       event listener that holds an EntryCriterion port is reported. [OMG CMMN 1.1 5.4.5 p. 30; 7.5.2.6]
     category: criteria
     severity: error
-    demo_trigger: false
+    demo_trigger: true
     coverage: full
     selector:
       type: element
@@ -321,7 +321,7 @@ rules:
       111; Table 6.1). A CasePlanModel that holds an EntryCriterion port is reported. [OMG CMMN 1.1 8.4.1 p. 111]
     category: structure
     severity: error
-    demo_trigger: false
+    demo_trigger: true
     coverage: full
     selector:
       type: element

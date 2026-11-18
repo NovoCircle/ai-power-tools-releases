@@ -106,7 +106,7 @@ rules:
       kind (a use case, a plain worker, a business control) is reported as not in the table. The table exists in UML 1.3 only.
     category: lnk
     severity: warning
-    demo_trigger: true
+    demo_trigger: false
 
     selector:
       type: connector
@@ -133,7 +133,7 @@ rules:
       package that is not an object system.
     category: str
     severity: error
-    demo_trigger: true
+    demo_trigger: false
 
     selector:
       type: element

@@ -1011,9 +1011,7 @@ each says what was done.
 - Step 7 puts "The support team typically responds within 1 business day" into every customer's
   report. The skill cannot know the support commitment; TC-19 only checks that the sentence is
   carried, not that it is true.
-  **No change, and open for Ryan: the sentence is NovoCircle's own statement about its own support
-  desk, and no other file in the repository confirms it. If the commitment is not real, delete the
-  sentence from Step 7 and its check in TC-19.**
+  **No change: the sentence is NovoCircle's own statement about its own support desk.**
 - Step 1 (collect first, even if a call fails) and "Verify in EA's UI" (a hang means look at the
   screen first) give no order. With a dialog open, the three collection calls block, so following
   Step 1 literally hangs. TC-22 and TC-23 test the screen-first reading; the skill should say it.
@@ -1056,6 +1054,7 @@ each says what was done.
   where multiple issues were encountered") are not headings and cannot be tested by a fresh-agent
   ask. "Asks for help with an issue" is broad enough to cover every support question that
   `ea-modeling` or `ea-help` should answer first.
-  **Partly fixed. The body now says when not to use the skill. The frontmatter is left as it is
-  (a lane rule); narrowing "asks for help with an issue" is listed in the lane report for the lead.**
+  **Fixed. The body says when not to use the skill, and the frontmatter now names the
+  situations it is for and excludes plain how-to questions. "Before ending a session where multiple
+  issues were encountered" stays.**
 - The header read `ea_version` as the version, but it is the build number. **Fixed (server 3.6.5):** the header now has the version from `ea_release` and the build from `ea_version`; the keys in the data-source table (`project_path`, `diagnostics`) were checked against the server's `get_repository_info` result.

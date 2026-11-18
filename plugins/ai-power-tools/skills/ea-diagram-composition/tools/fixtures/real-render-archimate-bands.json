@@ -1,0 +1,165 @@
+{
+ "name": "Westbrook Bank application landscape",
+ "note": "Captured from a live EA 17.1 render (verify_diagram with include_svg) of the layered-bands ArchiMate diagram the benchmark builds. Westbrook content only. EA draws each Boundary's title centered across its top and each ArchiMate Device's name under its shape.",
+ "objects": [
+  {
+   "element_id": 56187,
+   "name": "Account Servicing",
+   "left": 52,
+   "top": -68,
+   "right": 152,
+   "bottom": -138,
+   "type": "Class",
+   "stereotype": "ArchiMate_BusinessService",
+   "sequence": 1
+  },
+  {
+   "element_id": 56188,
+   "name": "Payments",
+   "left": 232,
+   "top": -68,
+   "right": 332,
+   "bottom": -138,
+   "type": "Class",
+   "stereotype": "ArchiMate_BusinessService",
+   "sequence": 1
+  },
+  {
+   "element_id": 56189,
+   "name": "Lending",
+   "left": 412,
+   "top": -68,
+   "right": 512,
+   "bottom": -138,
+   "type": "Class",
+   "stereotype": "ArchiMate_BusinessService",
+   "sequence": 1
+  },
+  {
+   "element_id": 56190,
+   "name": "Core Banking",
+   "left": 52,
+   "top": -208,
+   "right": 152,
+   "bottom": -278,
+   "type": "Class",
+   "stereotype": "ArchiMate_ApplicationComponent",
+   "sequence": 1
+  },
+  {
+   "element_id": 56191,
+   "name": "Payment Hub",
+   "left": 232,
+   "top": -208,
+   "right": 332,
+   "bottom": -278,
+   "type": "Class",
+   "stereotype": "ArchiMate_ApplicationComponent",
+   "sequence": 1
+  },
+  {
+   "element_id": 56192,
+   "name": "Loan Origination",
+   "left": 412,
+   "top": -208,
+   "right": 512,
+   "bottom": -278,
+   "type": "Class",
+   "stereotype": "ArchiMate_ApplicationComponent",
+   "sequence": 1
+  },
+  {
+   "element_id": 56193,
+   "name": "Card Platform",
+   "left": 52,
+   "top": -348,
+   "right": 152,
+   "bottom": -418,
+   "type": "Class",
+   "stereotype": "ArchiMate_Device",
+   "sequence": 1
+  },
+  {
+   "element_id": 56194,
+   "name": "Integration Bus",
+   "left": 232,
+   "top": -348,
+   "right": 332,
+   "bottom": -418,
+   "type": "Class",
+   "stereotype": "ArchiMate_Device",
+   "sequence": 1
+  },
+  {
+   "element_id": 56195,
+   "name": "Business",
+   "left": 40,
+   "top": -40,
+   "right": 524,
+   "bottom": -150,
+   "type": "Boundary",
+   "stereotype": "",
+   "sequence": 2
+  },
+  {
+   "element_id": 56196,
+   "name": "Application",
+   "left": 40,
+   "top": -180,
+   "right": 524,
+   "bottom": -290,
+   "type": "Boundary",
+   "stereotype": "",
+   "sequence": 2
+  },
+  {
+   "element_id": 56197,
+   "name": "Technology",
+   "left": 40,
+   "top": -320,
+   "right": 524,
+   "bottom": -430,
+   "type": "Boundary",
+   "stereotype": "",
+   "sequence": 2
+  }
+ ],
+ "links": [
+  {
+   "connector_id": 10103,
+   "name": "realizes",
+   "route": "OrthogonalSquare",
+   "source_element_id": 56190,
+   "target_element_id": 56187
+  },
+  {
+   "connector_id": 10104,
+   "name": "realizes",
+   "route": "OrthogonalSquare",
+   "source_element_id": 56191,
+   "target_element_id": 56188
+  },
+  {
+   "connector_id": 10105,
+   "name": "realizes",
+   "route": "OrthogonalSquare",
+   "source_element_id": 56192,
+   "target_element_id": 56189
+  },
+  {
+   "connector_id": 10106,
+   "name": "realizes",
+   "route": "OrthogonalSquare",
+   "source_element_id": 56193,
+   "target_element_id": 56190
+  },
+  {
+   "connector_id": 10107,
+   "name": "realizes",
+   "route": "OrthogonalSquare",
+   "source_element_id": 56194,
+   "target_element_id": 56191
+  }
+ ],
+ "svg_text": "<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"no\"?>\n<!DOCTYPE svg PUBLIC \"-//W3C//DTD SVG 1.0//EN\" \"http://www.w3.org/TR/2001/REC-SVG-20010904/DTD/svg10.dtd\">\n\n<svg xmlns=\"http://www.w3.org/2000/svg\" xmlns:xlink=\"http://www.w3.org/1999/xlink\" width=\"15.05cm\" height=\"12.25cm\" viewBox=\"0 0 569 463\">\n<title></title>\n<desc>Created with Enterprise Architect (Build: 1716) 2</desc>\n\n<g style=\"fill:#FFFFFF;fill-opacity:1.00;\">\n\t <rect x=\"0\" y=\"0\" width=\"569\" height=\"463\" shape-rendering=\"auto\"/>\n</g><g style=\"stroke-width:1;stroke-linecap:square;stroke-linejoin:miter; fill:#000000;fill-opacity:0.00; stroke:#000000; stroke-opacity:1.00;\">\n  <path d=\"M 6 6 L 6 457 L 563 457 L 563 6 L 6 6\" shape-rendering=\"auto\"/>\n</g>\n<g style=\"stroke-width:1;stroke-linecap:square;stroke-linejoin:miter; fill:#FFFFFF;fill-opacity:1.00; stroke:#000000; stroke-opacity:1.00;\">\n  <polygon points=\"6 26 189 26 202 12 202 6 6 6 6 26\" shape-rendering=\"auto\"   style=\"fill-rule:evenodd;\"/>\n</g>\n<g style=\"stroke-width:1;stroke-linecap:square;stroke-linejoin:miter; fill:#000000;fill-opacity:1.00; stroke:#000000; stroke-opacity:0.00;\">\n\t<text x=\"11.00\" y=\"19.00\" textLength=\"176\" style=\"font-family:Calibri; font-weight:700; font-style:normal; font-size:10px; fill:#000000;fill-opacity:1.00; stroke:#000000; stroke-opacity:0.00; stroke-width:0; white-space: pre;\" xml:space=\"preserve\" transform=\"rotate(-0.00 11.00 19.00)\">class Westbrook Bank application landscape</text>\n</g>\n<g style=\"stroke-width:1;stroke-linecap:round;stroke-linejoin:bevel; fill:#000000;fill-opacity:0.00; stroke:#9A8484; stroke-opacity:1.00;\">\n <rect x=\"35\" y=\"40\" width=\"484\" height=\"110\" rx=\"0.00\" shape-rendering=\"auto\"  />\n</g>\n<g style=\"stroke-width:1;stroke-linecap:round;stroke-linejoin:bevel; fill:#595959;fill-opacity:1.00; stroke:#000000; stroke-opacity:0.00;\">\n\t<text x=\"260.00\" y=\"54.00\" textLength=\"34\" style=\"font-family:Calibri; font-weight:0; font-style:normal; font-size:10px; fill:#595959;fill-opacity:1.00; stroke:#000000; stroke-opacity:0.00; stroke-width:0; white-space: pre;\" xml:space=\"preserve\" transform=\"rotate(-0.00 260.00 54.00)\">Business</text>\n</g>\n<g style=\"stroke-width:1;stroke-linecap:round;stroke-linejoin:bevel; fill:#000000;fill-opacity:0.00; stroke:#9A8484; stroke-opacity:1.00;\">\n <rect x=\"35\" y=\"180\" width=\"484\" height=\"110\" rx=\"0.00\" shape-rendering=\"auto\"  />\n</g>\n<g style=\"stroke-width:1;stroke-linecap:round;stroke-linejoin:bevel; fill:#595959;fill-opacity:1.00; stroke:#000000; stroke-opacity:0.00;\">\n\t<text x=\"255.00\" y=\"194.00\" textLength=\"44\" style=\"font-family:Calibri; font-weight:0; font-style:normal; font-size:10px; fill:#595959;fill-opacity:1.00; stroke:#000000; stroke-opacity:0.00; stroke-width:0; white-space: pre;\" xml:space=\"preserve\" transform=\"rotate(-0.00 255.00 194.00)\">Application</text>\n</g>\n<g style=\"stroke-width:1;stroke-linecap:round;stroke-linejoin:bevel; fill:#000000;fill-opacity:0.00; stroke:#9A8484; stroke-opacity:1.00;\">\n <rect x=\"35\" y=\"320\" width=\"484\" height=\"110\" rx=\"0.00\" shape-rendering=\"auto\"  />\n</g>\n<g style=\"stroke-width:1;stroke-linecap:round;stroke-linejoin:bevel; fill:#595959;fill-opacity:1.00; stroke:#000000; stroke-opacity:0.00;\">\n\t<text x=\"254.00\" y=\"334.00\" textLength=\"46\" style=\"font-family:Calibri; font-weight:0; font-style:normal; font-size:10px; fill:#595959;fill-opacity:1.00; stroke:#000000; stroke-opacity:0.00; stroke-width:0; white-space: pre;\" xml:space=\"preserve\" transform=\"rotate(-0.00 254.00 334.00)\">Technology</text>\n</g>\n<g style=\"stroke-width:1;stroke-linecap:round;stroke-linejoin:bevel; fill:#FFFFB5;fill-opacity:1.00; stroke:#9A8484; stroke-opacity:1.00;\">\n <rect x=\"47\" y=\"68\" width=\"100\" height=\"70\" rx=\"10.00\" shape-rendering=\"auto\"  />\n</g>\n<g style=\"stroke-width:1;stroke-linecap:round;stroke-linejoin:bevel; fill:#595959;fill-opacity:1.00; stroke:#000000; stroke-opacity:0.00;\">\n\t<text x=\"61.00\" y=\"100.00\" textLength=\"71\" style=\"font-family:Calibri; font-weight:700; font-style:normal; font-size:10px; fill:#595959;fill-opacity:1.00; stroke:#000000; stroke-opacity:0.00; stroke-width:0; white-space: pre;\" xml:space=\"preserve\" transform=\"rotate(-0.00 61.00 100.00)\">Account Servicing</text>\n</g>\n<g style=\"stroke-width:1;stroke-linecap:round;stroke-linejoin:bevel; fill:#FFFFB5;fill-opacity:1.00; stroke:#9A8484; stroke-opacity:1.00;\">\n <rect x=\"227\" y=\"68\" width=\"100\" height=\"70\" rx=\"10.00\" shape-rendering=\"auto\"  />\n</g>\n<g style=\"stroke-width:1;stroke-linecap:round;stroke-linejoin:bevel; fill:#595959;fill-opacity:1.00; stroke:#000000; stroke-opacity:0.00;\">\n\t<text x=\"257.00\" y=\"100.00\" textLength=\"40\" style=\"font-family:Calibri; font-weight:700; font-style:normal; font-size:10px; fill:#595959;fill-opacity:1.00; stroke:#000000; stroke-opacity:0.00; stroke-width:0; white-space: pre;\" xml:space=\"preserve\" transform=\"rotate(-0.00 257.00 100.00)\">Payments</text>\n</g>\n<g style=\"stroke-width:1;stroke-linecap:round;stroke-linejoin:bevel; fill:#FFFFB5;fill-opacity:1.00; stroke:#9A8484; stroke-opacity:1.00;\">\n <rect x=\"407\" y=\"68\" width=\"100\" height=\"70\" rx=\"10.00\" shape-rendering=\"auto\"  />\n</g>\n<g style=\"stroke-width:1;stroke-linecap:round;stroke-linejoin:bevel; fill:#595959;fill-opacity:1.00; stroke:#000000; stroke-opacity:0.00;\">\n\t<text x=\"441.00\" y=\"100.00\" textLength=\"31\" style=\"font-family:Calibri; font-weight:700; font-style:normal; font-size:10px; fill:#595959;fill-opacity:1.00; stroke:#000000; stroke-opacity:0.00; stroke-width:0; white-space: pre;\" xml:space=\"preserve\" transform=\"rotate(-0.00 441.00 100.00)\">Lending</text>\n</g>\n<g style=\"stroke-width:1;stroke-linecap:round;stroke-linejoin:bevel; fill:#B5FFFF;fill-opacity:1.00; stroke:#9A8484; stroke-opacity:1.00;\">\n  <path d=\"M 47 208 L 147 208 L 147 278 L 47 278 L 47 208 Z\" shape-rendering=\"auto\"/>\n</g>\n<g style=\"stroke-width:1;stroke-linecap:round;stroke-linejoin:bevel; fill:#595959;fill-opacity:1.00; stroke:#000000; stroke-opacity:0.00;\">\n\t<text x=\"70.00\" y=\"240.00\" textLength=\"54\" style=\"font-family:Calibri; font-weight:700; font-style:normal; font-size:10px; fill:#595959;fill-opacity:1.00; stroke:#000000; stroke-opacity:0.00; stroke-width:0; white-space: pre;\" xml:space=\"preserve\" transform=\"rotate(-0.00 70.00 240.00)\">Core Banking</text>\n</g>\n<g style=\"stroke-width:1;stroke-linecap:round;stroke-linejoin:bevel; fill:#B5FFFF;fill-opacity:1.00; stroke:#9A8484; stroke-opacity:1.00;\">\n  <path d=\"M 227 208 L 327 208 L 327 278 L 227 278 L 227 208 Z\" shape-rendering=\"auto\"/>\n</g>\n<g style=\"stroke-width:1;stroke-linecap:round;stroke-linejoin:bevel; fill:#595959;fill-opacity:1.00; stroke:#000000; stroke-opacity:0.00;\">\n\t<text x=\"250.00\" y=\"240.00\" textLength=\"54\" style=\"font-family:Calibri; font-weight:700; font-style:normal; font-size:10px; fill:#595959;fill-opacity:1.00; stroke:#000000; stroke-opacity:0.00; stroke-width:0; white-space: pre;\" xml:space=\"preserve\" transform=\"rotate(-0.00 250.00 240.00)\">Payment Hub</text>\n</g>\n<g style=\"stroke-width:1;stroke-linecap:round;stroke-linejoin:bevel; fill:#B5FFFF;fill-opacity:1.00; stroke:#9A8484; stroke-opacity:1.00;\">\n  <path d=\"M 407 208 L 507 208 L 507 278 L 407 278 L 407 208 Z\" shape-rendering=\"auto\"/>\n</g>\n<g style=\"stroke-width:1;stroke-linecap:round;stroke-linejoin:bevel; fill:#595959;fill-opacity:1.00; stroke:#000000; stroke-opacity:0.00;\">\n\t<text x=\"424.00\" y=\"240.00\" textLength=\"66\" style=\"font-family:Calibri; font-weight:700; font-style:normal; font-size:10px; fill:#595959;fill-opacity:1.00; stroke:#000000; stroke-opacity:0.00; stroke-width:0; white-space: pre;\" xml:space=\"preserve\" transform=\"rotate(-0.00 424.00 240.00)\">Loan Origination</text>\n</g>\n<g style=\"stroke-width:1;stroke-linecap:round;stroke-linejoin:bevel; fill:#C9E7B7;fill-opacity:1.00; stroke:#9A8484; stroke-opacity:1.00;\">\n <rect x=\"47\" y=\"348\" width=\"100\" height=\"49\" rx=\"12.00\" shape-rendering=\"auto\"  />\n <rect x=\"52\" y=\"351\" width=\"90\" height=\"42\" rx=\"10.00\" shape-rendering=\"auto\"  />\n  <path d=\"M 57 418 L 67 397 L 127 397 L 137 418 Z\" shape-rendering=\"auto\"/>\n</g>\n<g style=\"stroke-width:1;stroke-linecap:round;stroke-linejoin:bevel; fill:#595959;fill-opacity:1.00; stroke:#000000; stroke-opacity:0.00;\">\n\t<text x=\"49.00\" y=\"430.00\" textLength=\"54\" style=\"font-family:Calibri; font-weight:0; font-style:normal; font-size:10px; fill:#595959;fill-opacity:1.00; stroke:#000000; stroke-opacity:0.00; stroke-width:0; white-space: pre;\" xml:space=\"preserve\" transform=\"rotate(-0.00 49.00 430.00)\">Card Platform</text>\n</g>\n<g style=\"stroke-width:1;stroke-linecap:round;stroke-linejoin:bevel; fill:#C9E7B7;fill-opacity:1.00; stroke:#9A8484; stroke-opacity:1.00;\">\n <rect x=\"227\" y=\"348\" width=\"100\" height=\"49\" rx=\"12.00\" shape-rendering=\"auto\"  />\n <rect x=\"232\" y=\"351\" width=\"90\" height=\"42\" rx=\"10.00\" shape-rendering=\"auto\"  />\n  <path d=\"M 237 418 L 247 397 L 307 397 L 317 418 Z\" shape-rendering=\"auto\"/>\n</g>\n<g style=\"stroke-width:1;stroke-linecap:round;stroke-linejoin:bevel; fill:#595959;fill-opacity:1.00; stroke:#000000; stroke-opacity:0.00;\">\n\t<text x=\"229.00\" y=\"430.00\" textLength=\"60\" style=\"font-family:Calibri; font-weight:0; font-style:normal; font-size:10px; fill:#595959;fill-opacity:1.00; stroke:#000000; stroke-opacity:0.00; stroke-width:0; white-space: pre;\" xml:space=\"preserve\" transform=\"rotate(-0.00 229.00 430.00)\">Integration Bus</text>\n</g>\n<g style=\"stroke-width:1;stroke-linecap:square;stroke-linejoin:round; fill:#000000;fill-opacity:0.00; stroke:#69738C; stroke-opacity:1.00;\" stroke-dasharray=\"6,3\">\n  <path d=\"M 97 138 L 97 208 M 97 138\" shape-rendering=\"auto\"/>\n</g>\n<g style=\"stroke-width:1;stroke-linecap:round;stroke-linejoin:bevel; fill:#FAF1EC;fill-opacity:1.00; stroke:#69738C; stroke-opacity:1.00;\">\n  <polygon points=\"103 153 91 153 97 138\" shape-rendering=\"auto\"   style=\"fill-rule:evenodd;\"/>\n</g>\n<g style=\"stroke-width:1;stroke-linecap:square;stroke-linejoin:round; fill:#000000;fill-opacity:0.00; stroke:#69738C; stroke-opacity:1.00;\" stroke-dasharray=\"6,3\">\n  <path d=\"M 277 138 L 277 208 M 277 138\" shape-rendering=\"auto\"/>\n</g>\n<g style=\"stroke-width:1;stroke-linecap:round;stroke-linejoin:bevel; fill:#FAF1EC;fill-opacity:1.00; stroke:#69738C; stroke-opacity:1.00;\">\n  <polygon points=\"283 153 271 153 277 138\" shape-rendering=\"auto\"   style=\"fill-rule:evenodd;\"/>\n</g>\n<g style=\"stroke-width:1;stroke-linecap:square;stroke-linejoin:round; fill:#000000;fill-opacity:0.00; stroke:#69738C; stroke-opacity:1.00;\" stroke-dasharray=\"6,3\">\n  <path d=\"M 457 138 L 457 208 M 457 138\" shape-rendering=\"auto\"/>\n</g>\n<g style=\"stroke-width:1;stroke-linecap:round;stroke-linejoin:bevel; fill:#FAF1EC;fill-opacity:1.00; stroke:#69738C; stroke-opacity:1.00;\">\n  <polygon points=\"463 153 451 153 457 138\" shape-rendering=\"auto\"   style=\"fill-rule:evenodd;\"/>\n</g>\n<g style=\"stroke-width:1;stroke-linecap:square;stroke-linejoin:round; fill:#000000;fill-opacity:0.00; stroke:#69738C; stroke-opacity:1.00;\" stroke-dasharray=\"6,3\">\n  <path d=\"M 97 278 L 97 348 M 97 278\" shape-rendering=\"auto\"/>\n</g>\n<g style=\"stroke-width:1;stroke-linecap:round;stroke-linejoin:bevel; fill:#FAF1EC;fill-opacity:1.00; stroke:#69738C; stroke-opacity:1.00;\">\n  <polygon points=\"103 293 91 293 97 278\" shape-rendering=\"auto\"   style=\"fill-rule:evenodd;\"/>\n</g>\n<g style=\"stroke-width:1;stroke-linecap:square;stroke-linejoin:round; fill:#000000;fill-opacity:0.00; stroke:#69738C; stroke-opacity:1.00;\" stroke-dasharray=\"6,3\">\n  <path d=\"M 277 278 L 277 348 M 277 278\" shape-rendering=\"auto\"/>\n</g>\n<g style=\"stroke-width:1;stroke-linecap:round;stroke-linejoin:bevel; fill:#FAF1EC;fill-opacity:1.00; stroke:#69738C; stroke-opacity:1.00;\">\n  <polygon points=\"283 293 271 293 277 278\" shape-rendering=\"auto\"   style=\"fill-rule:evenodd;\"/>\n</g>\n<g style=\"stroke-width:1;stroke-linecap:round;stroke-linejoin:bevel; fill:#595959;fill-opacity:1.00; stroke:#000000; stroke-opacity:0.00;\">\n\t<text x=\"262.00\" y=\"169.00\" textLength=\"30\" style=\"font-family:Calibri; font-weight:0; font-style:normal; font-size:10px; fill:#595959;fill-opacity:1.00; stroke:#000000; stroke-opacity:0.00; stroke-width:0; white-space: pre;\" xml:space=\"preserve\" transform=\"rotate(-0.00 262.00 169.00)\">realizes</text>\n\t<text x=\"82.00\" y=\"309.00\" textLength=\"30\" style=\"font-family:Calibri; font-weight:0; font-style:normal; font-size:10px; fill:#595959;fill-opacity:1.00; stroke:#000000; stroke-opacity:0.00; stroke-width:0; white-space: pre;\" xml:space=\"preserve\" transform=\"rotate(-0.00 82.00 309.00)\">realizes</text>\n\t<text x=\"262.00\" y=\"309.00\" textLength=\"30\" style=\"font-family:Calibri; font-weight:0; font-style:normal; font-size:10px; fill:#595959;fill-opacity:1.00; stroke:#000000; stroke-opacity:0.00; stroke-width:0; white-space: pre;\" xml:space=\"preserve\" transform=\"rotate(-0.00 262.00 309.00)\">realizes</text>\n\t<text x=\"442.00\" y=\"169.00\" textLength=\"30\" style=\"font-family:Calibri; font-weight:0; font-style:normal; font-size:10px; fill:#595959;fill-opacity:1.00; stroke:#000000; stroke-opacity:0.00; stroke-width:0; white-space: pre;\" xml:space=\"preserve\" transform=\"rotate(-0.00 442.00 169.00)\">realizes</text>\n\t<text x=\"82.00\" y=\"169.00\" textLength=\"30\" style=\"font-family:Calibri; font-weight:0; font-style:normal; font-size:10px; fill:#595959;fill-opacity:1.00; stroke:#000000; stroke-opacity:0.00; stroke-width:0; white-space: pre;\" xml:space=\"preserve\" transform=\"rotate(-0.00 82.00 169.00)\">realizes</text>\n</g>\n</svg>\n"
+}

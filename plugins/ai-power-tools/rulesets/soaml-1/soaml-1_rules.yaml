@@ -128,7 +128,7 @@ rules:
       p. 51]
     category: behv
     severity: error
-    demo_trigger: false
+    demo_trigger: true
     coverage: partial
     not_checked: 'That the value is an integer: the tagged value is free text and the rule grammar has no numeric type check.'
     selector:

@@ -152,7 +152,7 @@ supplies nothing, or whose properties are all rejected, returns `ok: false`
 `ok: true` with the refused properties in `rejected_properties` and `rejected_tagged_values`.
 `sql_result_unreadable` means a read could not be parsed (for example it was too large): narrow
 the query, and do not read it as "no rows". `duplicate_package` returns `partial: true` and
-`rejected_writes` when EA refuses part of the copy. An unknown id returns a `*_not_found` result
+`rejected_writes` when EA refuses part of the copy. A copy whose stereotype binding could not be kept is listed in `stereotypes_not_bound`. When EA drops the qualified stereotype write on a copy (for example a source bound to a technology EA has not loaded), `duplicate_package` writes the source's own stereotype text on the copy instead and lists it in `stereotypes_not_bound` with `fell_back_to_source_text`, `written_instead` and `stored_after_fallback`; check those copies, because the text may not bind to the technology the source is bound to. An unknown id returns a `*_not_found` result
 (`element_not_found`, `package_not_found`, `connector_not_found` and so on); an empty tag list now
 means the element has no tags. These results come from server 3.6.5 or later.
 
@@ -167,38 +167,22 @@ Then re-verify with SQL.
 
 ### Fixing a wrong parent (package in wrong location)
 
-There is no `move_package` operation. A package is stored twice: a `t_package` row, and a mirror
-`t_object` row (`Object_Type = 'Package'`, the same `ea_guid`) whose `Package_ID` is the id of
-the package that contains it. A raw edit of `t_package.Parent_ID` alone leaves the mirror in the
-old place, and the package tree and its twin record disagree. Move **both**, then read both back.
+Use `move_package`. A package is stored twice: a `t_package` row, and a mirror `t_object` row
+(`Object_Type = 'Package'`, the same `ea_guid`) whose `Package_ID` is the id of the package that
+contains it. `move_package` moves both through EA and reads both back:
+```
+ea_model(operation="move_package", params={"package_id": <id>, "new_parent_id": <new_parent>})
+# -> {"ok": true, "parent_id": <new_parent>, "mirror_package_id": <new_parent>, "consistent": true, ...}
+```
+The new parent is a package, or a top-level model. Check `consistent` is `true` before you report
+the package as moved; `ok: false` with `move_inconsistent` means the two records disagree, so
+read both before doing anything else.
 
-1. Get the package's GUID and note its contents count:
-   ```
-   ea_analyze(operation="execute_sql", params={"sql": "SELECT Package_ID, ea_guid, Parent_ID FROM t_package WHERE Package_ID = <id>"})
-   ea_analyze(operation="execute_sql", params={"sql": "SELECT COUNT(*) AS n FROM t_object WHERE Package_ID = <id>"})
-   ```
-2. Update both records (two calls, same new parent id):
-   ```
-   ea_analyze(operation="execute_sql", params={"sql": "UPDATE t_package SET Parent_ID = <new_parent> WHERE Package_ID = <id>"})
-   ea_analyze(operation="execute_sql", params={"sql": "UPDATE t_object SET Package_ID = <new_parent> WHERE Object_Type = 'Package' AND ea_guid = '<guid from step 1>'"})
-   ```
-3. Read both back; the two numbers must be equal and equal the new parent:
-   ```
-   ea_analyze(operation="execute_sql", params={"sql": """
-       SELECT p.Package_ID, p.Parent_ID, m.Object_ID, m.Package_ID AS mirror_parent
-       FROM t_package p
-       JOIN t_object m ON m.ea_guid = p.ea_guid AND m.Object_Type = 'Package'
-       WHERE p.Package_ID = <id>"""})
-   ```
-   Then re-run the contents count from step 1: it must be unchanged.
-4. A raw write does not reach an EA session that already has the package cached. Ask the
-   person to reload the package in the Browser (right-click it, *Contents*, *Reload Current
-   Package*) or reopen the model.
-
-If the write is refused (a permission layer in your client can refuse `execute_sql` writes),
-stop and ask the person to approve it, or to move the package in EA itself by dragging it in
-the Project Browser. Do not report the package as moved until step 3 shows both records at the
-new parent. When a `move_package` operation exists, use it instead.
+What it refuses, without changing anything: a parent of 0 (EA refuses it too, so this call cannot
+make a package a new top-level model), a move under the package's own descendant (EA would accept
+it and corrupt the tree), a move onto itself, and a move of a top-level model. The contents move
+with the package; the count in `SELECT COUNT(*) AS n FROM t_object WHERE Package_ID = <id>` before
+and after should match.
 
 Or delete and recreate the package, which is only viable if it has no children yet.
 

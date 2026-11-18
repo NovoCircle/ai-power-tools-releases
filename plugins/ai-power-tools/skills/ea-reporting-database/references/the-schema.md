@@ -78,9 +78,11 @@ Present **only where a column cannot hold the data**:
   **CheckList stays a column**: it holds the stored flags (`1,1,0`), which mean nothing without the
   type's item labels.
 
-Named `<table> tags`. Columns: for an entity table, `ea_guid`, `tag`, `value`, `property_id`; for a
-`Con_` table, `connector_guid`, `tag`, `value`. The Table Directory says which tags a tag-row table
-holds.
+Named `<table> tags`. Columns: for an entity table, `ea_guid`, `tag`, `value`, `property_id`, and
+`value_no` where the table splits a list tag into one row per value; for a `Con_` table,
+`connector_guid`, `tag`, `value`, `property_id` (3.6.6 and later; earlier versions had no `property_id`
+on a `Con_` tag-row table). `property_id` is EA's id for the stored tag; `value_no` is the value's place
+in the list. The Table Directory says which tags a tag-row table holds.
 
 ---
 
@@ -98,7 +100,33 @@ technology.
 | `metaclass` | The base type, for element tables |
 | `source_table`, `target_table` | For a `Con_` table, the entity tables at its two ends; for a tag-row table, `source_table` is the table it belongs to |
 | `in_mdg` | `yes` when the technology declares it, otherwise `no` |
-| `description` | From the technology's notes |
+| `description` | The technology's note for the table when `description_source` is `technology`; otherwise a text the build wrote so a report author sees something useful |
+| `description_source` | `technology` (the description is the technology's own note), `generated` (the build wrote it: tables outside the technology and tag-row tables), or empty (no description). A definition from an older build has no such field; read it as `technology`. The Power BI generator uses a description only when the source is `technology`, so a generated text never replaces a template |
+| `primary_key` | The table's key columns, comma separated; empty for a table with none (3.6.6 and later). Fabric's GraphQL API needs a key on every table it exposes, so this says which tables qualify |
+
+**Keys, by table kind.** Entity table: `ea_guid`. `Con_` table: `connector_guid`. Tag-row table:
+`property_id`, plus `value_no` where a list tag is split into one row per value (SQL Server cannot key on
+the unbounded `value` text). Table Directory: `table_name`. The one-row `Source` table is keyed by `source_row`, always 1 (`source_id` can be NULL, so it cannot be the key).
+The definition JSON carries a `primary_key` list on every table. Open Mirroring and the `tables` output
+use these keys.
+
+---
+
+## 4b. Source
+
+One row, on paths A and B (a view in the business schema, or a table with `target.output` `tables`).
+The Parquet tables file has no `Source` table; on path C the id is `source.id` in the definition JSON.
+
+| Column | Holds |
+|---|---|
+| `source_id` | The repository's id from the profile's `source_id`; NULL when the profile sets none |
+| `source_row` | Always 1; the table's key |
+
+```sql
+SELECT [source_id] FROM [logical].[Source];
+```
+
+`Source` is not in the Table Directory and is a reserved table name.
 
 ---
 

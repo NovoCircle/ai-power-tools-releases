@@ -68,7 +68,7 @@ import math
 from collections.abc import Mapping, Sequence
 from typing import Any, Optional
 
-from compose import DEFAULT_SPEC, LayoutError, bounding_box, rect
+from compose import DEFAULT_SPEC, LayoutError, bounding_box, fits_names, rect
 
 __all__ = [
     "DEFAULT_TREE_SPEC",
@@ -570,6 +570,7 @@ def _collides(items: Sequence[Mapping[str, Any]], margin: int) -> Optional[tuple
     return None
 
 
+@fits_names(lambda: DEFAULT_TREE_SPEC["item_width"], ("nodes",), every_node=True, hub=True)
 def compose_radial_tree(
     nodes: Sequence[Mapping[str, Any]],
     spec: Mapping[str, Any] | None = None,

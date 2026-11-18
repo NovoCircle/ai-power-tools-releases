@@ -125,7 +125,7 @@ _HERE = Path(__file__).resolve().parent
 if str(_HERE) not in sys.path:
     sys.path.insert(0, str(_HERE))
 
-from compose import LayoutError, bounding_box, rect  # noqa: E402
+from compose import LayoutError, TITLE_CLEARANCE, fits_names, bounding_box, rect  # noqa: E402
 
 __all__ = [
     "DEFAULT_MATRIX_SPEC",
@@ -185,7 +185,8 @@ DEFAULT_MATRIX_SPEC: dict[str, Any] = {
     "column_header_height": 44,
 
     # "left" or "center": where a cell's last, partly filled sub-grid row sits
-    # within the block. The block itself is always centered in its cell.
+    # within the block. The block is centered across its cell and starts below
+    # the title clearance at the top of it.
     "align": "left",
 }
 
@@ -456,6 +457,9 @@ def _address(cell: Mapping[str, Any], field: str, keyed: Mapping[Any, int],
 # ---------------------------------------------------------------------------
 # The grammar
 # ---------------------------------------------------------------------------
+@fits_names(lambda: DEFAULT_MATRIX_SPEC["item_width"], ("cells",),
+            also=(("row_header_width", lambda: DEFAULT_MATRIX_SPEC["row_header_width"],
+                   ("rows",)),))
 def compose_matrix(
     rows: Sequence[Mapping[str, Any]],
     columns: Sequence[Mapping[str, Any]],
@@ -535,9 +539,10 @@ def compose_matrix(
     The same argument, one level down, separates the elements inside a cell:
     their pitches are `item_width + item_gap_x` and `item_height + item_gap_y`,
     both gaps positive. And every element is inside its own cell's border,
-    because the block is centered in a cell at least `2 * cell_pad` wider and
-    taller than the widest and tallest block in the matrix, so each margin is at
-    least `cell_pad >= 0`. Elements in different cells are therefore at least a
+    because the block is centered across a cell at least `2 * cell_pad` wider
+    than the widest block in the matrix and at least `cell_pad` plus the title
+    clearance taller than the tallest, so each side margin is at least
+    `cell_pad >= 0` and the top margin is at least the title clearance. Elements in different cells are therefore at least a
     cell gap apart as well.
 
     Headers clear the grid by the same two gaps: the grid starts at
@@ -618,7 +623,9 @@ def compose_matrix(
     tallest = max(tallest, s["item_height"])
 
     cell_width = max(widest + 2 * s["cell_pad"], s["min_cell_width"] or 0)
-    cell_height = max(tallest + 2 * s["cell_pad"], s["min_cell_height"] or 0)
+    # A cell's title is drawn across its top, so the items start below it.
+    cell_height = max(tallest + s["cell_pad"] + max(s["cell_pad"], TITLE_CLEARANCE),
+                      s["min_cell_height"] or 0)
     column_pitch = cell_width + s["cell_gap_x"]
     row_pitch = cell_height + s["cell_gap_y"]
 
@@ -708,7 +715,8 @@ def compose_matrix(
             block_height = (sub_rows * s["item_height"]
                             + (sub_rows - 1) * s["item_gap_y"])
             block_left = cell_left + (cell_width - block_width) // 2
-            block_top = cell_top - (cell_height - block_height) // 2
+            block_top = cell_top - max((cell_height - block_height) // 2,
+                                       TITLE_CLEARANCE)
 
             for j, item in enumerate(items):
                 sr, sc = divmod(j, sub_columns)

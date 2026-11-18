@@ -1,0 +1,30 @@
+{
+  "entities": {
+    "application": "Business Application",
+    "vendor_system": "Vendor System",
+    "depended_on": "Business Service"
+  },
+  "tags": {
+    "lifecycle": "lifecycle",
+    "criticality": "criticality",
+    "regulatory_scope": "regulatoryScope",
+    "data_classification": "dataClassification",
+    "business_owner": "businessOwner",
+    "vendor": "vendor"
+  },
+  "connectors": {
+    "depends_on": "Con_Business Application Uses Business Service"
+  },
+  "terms": {
+    "retired": ["Sunset", "Archive"],
+    "critical": ["Mission-Critical", "Business-Critical"]
+  },
+  "params": {
+    "criticality_value": "Mission-Critical",
+    "scope_value": "GLBA",
+    "vendor_value": "Acme Software",
+    "classification_value": "Restricted",
+    "subject_application": "Westbrook Customer Self-Service Web",
+    "subject_depended_on": "Westbrook Account Master"
+  }
+}

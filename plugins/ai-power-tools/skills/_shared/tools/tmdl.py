@@ -213,12 +213,75 @@ class SqlSource:
         ]
 
 
+#: The OneLake DFS host a Direct Lake model reads from.
+ONELAKE_HOST = "https://onelake.dfs.fabric.microsoft.com"
+
+
+@dataclass
+class DirectLakeSource:
+    """Direct Lake on OneLake over a Fabric item's Delta tables (path C, mirrored).
+
+    The partition form (`partition <t> = entity`, `mode: directLake`, `entityName`,
+    `schemaName`, `expressionSource`) was measured 2026-10-16 on a Direct Lake model
+    over a lakehouse, read back through the Power BI Modeling MCP. The model-level
+    expression it points at (`AzureStorage.DataLake` over the item's OneLake URL) is
+    the form Power BI writes for Direct Lake on OneLake; it has NOT been opened in
+    Power BI Desktop from this generator yet. Direct Lake on the SQL endpoint is not
+    emitted: the item's *New semantic model* dialog offers the OneLake flavor, and the
+    SQL-endpoint flavor falls back to DirectQuery silently, which would hide a
+    problem a Direct Lake model should show.
+
+    `workspace_id` and `item_id` are the customer's Fabric ids, supplied at
+    generation time; nothing here has a default.
+    """
+    workspace_id: str
+    item_id: str
+    name: str = "Mirrored"
+    schema: str = "dbo"
+    mode: str = "directLake"
+
+    @property
+    def expression_name(self) -> str:
+        return f"DirectLake - {self.name}"
+
+    def partition(self, table: SemanticTable) -> list[str]:
+        return [f"{T}partition {ident(table.name)} = entity",
+                f"{T}{T}mode: directLake",
+                f"{T}{T}source",
+                f"{T * 3}entityName: {property_value('entityName', table.source_name)}",
+                f"{T * 3}schemaName: {property_value('schemaName', self.schema)}",
+                f"{T * 3}expressionSource: {ident(self.expression_name)}",
+                ""]
+
+    def expressions(self) -> dict[str, list[str]]:
+        """Model-level expressions: name -> M lines."""
+        url = f"{ONELAKE_HOST}/{self.workspace_id}/{self.item_id}"
+        return {self.expression_name: [
+            "let",
+            f'    Source = AzureStorage.DataLake("{m_literal(url)}", [HierarchicalNavigation=true])',
+            "in",
+            "    Source"]}
+
+
+def render_expressions(source) -> str:
+    """`expressions.tmdl`, or "" when the source has no model-level expressions."""
+    exprs = source.expressions() if hasattr(source, "expressions") else {}
+    lines: list[str] = []
+    for name, body in exprs.items():
+        lines.append(f"expression {ident(name)} =")
+        lines += [f"{T}{T}{line}" for line in body]
+        lines += [f"{T}lineageTag: {lineage_tag('expression', name)}", ""]
+    return NEWLINE.join(lines)
+
+
 def partition_block(table: SemanticTable, source) -> list[str]:
     """The partition, and the ONLY part of a table file that varies by path.
 
     `test_tmdl.py` asserts that: render a model for two sources and everything
     outside this block is byte-identical.
     """
+    if isinstance(source, DirectLakeSource):
+        return source.partition(table)
     if source.mode not in PARTITION_MODES:
         raise ValueError(
             f"partition mode {source.mode!r} is not one of "
@@ -326,7 +389,7 @@ def render_relationships(model: SemanticModel) -> str:
 # ------------------------------------------------------- model and friends
 
 
-def render_model(model: SemanticModel) -> str:
+def render_model(model: SemanticModel, expressions: tuple = ()) -> str:
     names = [t.name for t in model.tables]
     lines = [
         "model Model",
@@ -350,6 +413,7 @@ def render_model(model: SemanticModel) -> str:
         "",
     ]
     lines += [f"ref table {ident(n)}" for n in names]
+    lines += [f"ref expression {ident(n)}" for n in expressions]
     lines += ["", f"ref cultureInfo {model.culture}", ""]
     return NEWLINE.join(lines)
 
@@ -381,12 +445,15 @@ def render_definition(model: SemanticModel, source) -> dict[str, str]:
     Keyed by path relative to `definition/`, with forward slashes. The caller
     writes them - see the module docstring on `newline=""`.
     """
+    exprs = source.expressions() if hasattr(source, "expressions") else {}
     out = {
         "database.tmdl": render_database(),
-        "model.tmdl": render_model(model),
+        "model.tmdl": render_model(model, tuple(exprs)),
         "relationships.tmdl": render_relationships(model),
         f"cultures/{model.culture}.tmdl": render_culture(model.culture),
     }
+    if exprs:
+        out["expressions.tmdl"] = render_expressions(source)
     for table in model.tables:
         out[f"tables/{table_file_name(table.name)}.tmdl"] = render_table(table, source)
     return out

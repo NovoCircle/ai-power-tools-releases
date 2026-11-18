@@ -143,6 +143,7 @@ from typing import Any
 
 from compose import (
     LayoutError,
+    fits_names,
     _as_int,
     _check_item,
     _require_list,
@@ -349,6 +350,7 @@ def _support_height(spec: Mapping[str, Any]) -> int:
     return derived
 
 
+@fits_names(lambda: DEFAULT_CHEVRON_SPEC["item_width"], ("stages",))
 def compose_chevron_stack(
     stages: Sequence[Mapping[str, Any]],
     supports: Sequence[Mapping[str, Any]] | None = None,

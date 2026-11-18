@@ -68,6 +68,8 @@ __all__ = [
     "check_connector_labels",
     "check_collapsed_connectors_annotated",
     "check_labels_fit",
+    "check_lines_through_shapes",
+    "check_label_collisions",
     "is_stalled",
     "LABEL_MARGIN",
 ]
@@ -1366,7 +1368,7 @@ def _label_of(runs) -> str:
 
 
 def _same_column(a: Mapping[str, Any], b: Mapping[str, Any]) -> bool:
-    """Two runs of one wrapped block: centred on one line or starting on one edge."""
+    """Two runs of one wrapped block: centered on one line or starting on one edge."""
     centre = abs((a["x"] + a["length"] / 2) - (b["x"] + b["length"] / 2))
     return centre <= _WRAP_ALIGN or abs(a["x"] - b["x"]) <= _WRAP_ALIGN
 
@@ -1418,6 +1420,100 @@ def _rejoin_wrapped_names(grouped: dict, known) -> None:
             grouped[index] = current
 
 
+def _judge_scripted_labels(objects, svg_text, runs, by_name, judged_ids,
+                           report) -> int:
+    """Judge names on elements EA draws with a shape script, against the stored box.
+
+    A shape script (a notation's own element shapes) emits paths, not a `<rect>`,
+    so the rect-based pass above has no outline to measure a name against and used
+    to leave every such element unjudged. The element's STORED rect is the outline
+    the modeler set, and it is what the drawing is meant to stay inside, so the
+    name is measured against that, moved into the SVG's space the way every other
+    render rule does it.
+
+    Measured on EA 17.1 for one notation's ten octagonal shapes at the standard
+    100 x 70: every one draws its text in the same frame. EA wraps on spaces to
+    about 88 px, so a name that breaks is inside the shape, a name with a run of
+    about 95 px is drawn from 6 px inside the left edge and reaches past the right
+    edge, and an unbreakable run wider than the shape is drawn centered and runs out
+    of both sides (a 26-character run drew 123 px wide, 9 px outside on the left
+    and 14 px outside on the right).
+
+    A cut corner is not modeled: lines that fit between the
+    vertical edges clear the corners at these sizes, and a name too tall for the
+    shape is not judged here. Only a name whose lines are exactly the element's
+    name, drawn starting inside its box, is judged; text EA draws beside or below
+    a shape (a label outside it) is left unjudged and named in `not_run`.
+
+    Returns the number of boxes examined.
+    """
+    drawing = _read_drawing(objects, svg_text)
+    candidates = [shape for shape in drawing.shapes
+                  if shape["id"] in by_name.values()
+                  and shape["id"] not in judged_ids
+                  and not shape["container"] and not shape["text"]
+                  and shape["name"] and by_name.get(shape["name"]) == shape["id"]]
+    if not candidates:
+        return 0
+    owned: dict = {}
+    for run in runs:
+        left, right, base = run["x"], run["x"] + run["length"], run["y"]
+        best, best_key = None, None
+        for shape in candidates:
+            if not (shape["y0"] - _BASELINE_SLACK <= base <= shape["y1"] + _BASELINE_SLACK):
+                continue
+            overlap = min(right, shape["x1"]) - max(left, shape["x0"])
+            if overlap <= 0:
+                continue
+            key = (overlap, -abs((left + right) / 2 - (shape["x0"] + shape["x1"]) / 2))
+            if best is None or key > best_key:
+                best, best_key = shape, key
+        if best is not None:
+            owned.setdefault(best["id"], []).append(run)
+
+    examined = 0
+    for shape in candidates:
+        mine = owned.get(shape["id"])
+        if not mine:
+            continue
+        label = _label_of(mine)
+        first = min(mine, key=lambda r: r["y"])
+        middle = first["x"] + first["length"] / 2
+        if label != shape["name"] or not (shape["x0"] <= middle <= shape["x1"]):
+            continue
+        examined += 1
+        judged_ids.add(shape["id"])
+        report.metrics["scripted_labels_judged"] = (
+            report.metrics.get("scripted_labels_judged", 0) + 1)
+        text_left = min(r["x"] for r in mine)
+        text_right = max(r["x"] + r["length"] for r in mine)
+        overflow_x = (max(0.0, shape["x0"] - text_left)
+                      + max(0.0, text_right - shape["x1"]))
+        overflow_y = max(0.0, max(r["y"] for r in mine) - shape["y1"])
+        if overflow_x > 0 or overflow_y > 0:
+            report.add(Finding(
+                rule="label-clipped", severity="error",
+                message=(f"{label!r} overflows its element by "
+                         f"{int(max(overflow_x, overflow_y))}px and is cut off "
+                         f"in an export"),
+                subjects=(shape["id"],),
+                correction="widen or heighten this element, or shorten the name",
+            ))
+            continue
+        if len(mine) == 1:
+            side = min(text_left - shape["x0"], shape["x1"] - text_right)
+            if side < LABEL_MARGIN:
+                report.add(Finding(
+                    rule="label-cramped", severity="warning",
+                    message=(f"{label!r} comes within {int(side)}px of its "
+                             f"element border and reads as touching it"),
+                    subjects=(shape["id"],),
+                    correction=f"widen this element so the label clears its "
+                               f"border by at least {LABEL_MARGIN}px",
+                ))
+    return examined
+
+
 def check_labels_fit(objects: Sequence[Mapping[str, Any]],
                      svg_text: Optional[str],
                      report: LintReport) -> None:
@@ -1458,7 +1554,16 @@ def check_labels_fit(objects: Sequence[Mapping[str, Any]],
         )
         return
 
-    runs = _svg_text_runs(svg_text)
+    # EA draws a container's title twice at one position. Two copies of a line
+    # make the block read as its own name twice and match nothing, so a run
+    # drawn again over itself counts once.
+    runs = []
+    _seen_runs: set = set()
+    for run in _svg_text_runs(svg_text):
+        key = (run["x"], run["y"], run["length"], run["text"])
+        if key not in _seen_runs:
+            _seen_runs.add(key)
+            runs.append(run)
     boxes = [b for b in _svg_boxes(svg_text)
              if b[2] >= _MIN_BOX and b[3] >= _MIN_BOX]
     # A NAME TWO ELEMENTS SHARE IDENTIFIES NEITHER. This used to keep the
@@ -1482,11 +1587,13 @@ def check_labels_fit(objects: Sequence[Mapping[str, Any]],
     # in `references/verification.md`.
     _ids_by_name: dict[str, list] = {}
     _stored_width: dict[Any, int] = {}
+    _container_ids: dict[Any, bool] = {}
     for obj in objects:
         name = " ".join((obj.get("name") or "").split())
         if name:
             _ids_by_name.setdefault(name, []).append(obj["element_id"])
         _stored_width[obj["element_id"]] = _width(obj)
+        _container_ids[obj["element_id"]] = _kind_of(obj) in _CONTAINER_TYPES
     by_name: dict[str, Any] = {name: ids[0]
                                for name, ids in _ids_by_name.items()
                                if len(ids) == 1}
@@ -1528,7 +1635,6 @@ def check_labels_fit(objects: Sequence[Mapping[str, Any]],
             unmatched += 1
             continue
         subjects = (by_name[label],)
-        judged_ids.add(subjects[0])
 
         # The matched box must be able to BE this element's outline. A shape
         # script emits several rects per element -- an icon box, a compartment
@@ -1542,6 +1648,9 @@ def check_labels_fit(objects: Sequence[Mapping[str, Any]],
         if stored_w and w < stored_w - _RENDER_SLACK:
             unmatched += 1
             continue
+        # Judged from here on. Only now, so an element whose name fell to a
+        # narrower box is still open to the shape-script pass below.
+        judged_ids.add(subjects[0])
 
         # EA GROWS THE DRAWN BOX rather than clipping a name it cannot break.
         # Measured: a 30-character unbreakable name in a 100-wide element
@@ -1583,6 +1692,22 @@ def check_labels_fit(objects: Sequence[Mapping[str, Any]],
             ))
             continue
         side_margin = min(text_left - x, (x + w) - text_right)
+        # A container's title that EA wrapped fills each line with as many words as
+        # fit the width it was given, so a line of several words sitting near the
+        # border is EA's wrap, not a margin the layout chose, and widening the
+        # container only re-wraps it. A line of ONE word that near the border is
+        # not that: a word cannot be broken, so it is judged. An element's own
+        # wrapped name is judged too: that is the case this rule was written for.
+        if len(mine) > 1 and _container_ids.get(subjects[0]):
+            # Each line on its own: a several-word line near the border is EA's
+            # wrap and is not held against the title, but a one-word line near it
+            # still is, whatever the other lines do.
+            tight = [r for r in mine if min(
+                r["x"] - x, (x + w) - (r["x"] + r["length"])) < LABEL_MARGIN]
+            if tight and all(" " in r["text"].strip() for r in tight):
+                report.metrics["wrapped_titles_not_cramp_judged"] = (
+                    report.metrics.get("wrapped_titles_not_cramp_judged", 0) + 1)
+                continue
         if side_margin < LABEL_MARGIN:
             report.add(Finding(
                 rule="label-cramped", severity="warning",
@@ -1592,6 +1717,8 @@ def check_labels_fit(objects: Sequence[Mapping[str, Any]],
                 correction=f"widen this element so the label clears its border "
                            f"by at least {LABEL_MARGIN}px",
             ))
+    measured += _judge_scripted_labels(
+        objects, svg_text, runs, by_name, judged_ids, report)
     report.metrics["labels_measured"] = measured
     report.metrics["labels_unmatched"] = unmatched
     # `labels_measured` counts boxes, not elements checked. Name the elements
@@ -1615,6 +1742,493 @@ def check_labels_fit(objects: Sequence[Mapping[str, Any]],
             f"element name, so nothing was judged -- this notation is probably "
             f"drawn with shape scripts, which emit paths rather than rects"
         )
+
+
+# ---------------------------------------------------------------------------
+# Lines and labels, read from the render
+# ---------------------------------------------------------------------------
+# EA routes the lines itself and the model stores no route for them, so the only
+# place a line's path exists is the SVG EA drew. These two rules read that SVG.
+# The shapes come from the stored rects, moved into the SVG's own space, and the
+# lines and the text come from the markup.
+#
+# The geometry is ported from the measurement script that first counted these
+# faults on rendered diagrams: segment against rectangle by Liang-Barsky
+# clipping, text boxes from the text run's position, length and font size.
+
+_PATH_RE = re.compile(r'<path\s+d="(?P<d>[^"]*)"')
+_FONT_SIZE_RE = re.compile(r"font-size:\s*(?P<px>[\d.]+)px")
+_ROTATE_RE = re.compile(r"rotate\(\s*(?P<deg>-?[\d.]+)")
+_NUMBER_RE = re.compile(r"-?\d+(?:\.\d+)?")
+
+# A line's end sits on the border of the shape it joins. This is how far inside
+# or outside that border an end may be and still count as joined to it.
+_LINE_END_TOLERANCE = 4.0
+# A line that only grazes a shape's border is not running through it. The
+# shape is shrunk by this much on every side before a line is tested.
+_LINE_SHAPE_SHRINK = 2.0
+# Where EA crops its export, when no drawn box can be matched to a stored one:
+# the leftmost shape lands at x=35 and the topmost at y=40. Measured on EA's
+# exports of several diagrams; a fallback, and the report says when it was used.
+_CROP_LEFT = 35.0
+_CROP_TOP = 40.0
+# The frame header EA draws above the content sits above this line in the SVG.
+_FRAME_HEADER_BAND = 30.0
+# Text boxes are estimated. A run with no `textLength` is sized from its
+# characters at this fraction of the font size, and every box spans this much of
+# the font size above the baseline and this much below it.
+_CHAR_WIDTH = 0.55
+_ASCENT = 0.8
+_DESCENT = 0.2
+_DEFAULT_FONT_SIZE = 10.0
+# Two label boxes sharing less area than this are touching, not colliding.
+_LABEL_OVERLAP_AREA = 2.0
+_LABEL_TOLERANCE = 1.0
+# EA draws a connector's stereotype and guard as a label on the line, centred
+# within a few pixels of it. A line passing this close to a label's centre, and
+# closer than every other line, is the line the label belongs to.
+_OWN_LINE_REACH = 10.0
+_DECORATION_RE = re.compile(r"^(«[^»]+»|<<[^>]+>>|\[[^\]]+\])$")
+
+
+def _is_decoration(text: str) -> bool:
+    """A stereotype in guillemets or a guard in square brackets."""
+    return bool(_DECORATION_RE.match(text))
+
+
+def _centre_distance(point: tuple, points: Sequence[tuple]) -> float:
+    """Shortest distance from a point to a polyline."""
+    best = math.inf
+    for (ax, ay), (bx, by) in zip(points, points[1:]):
+        dx, dy = bx - ax, by - ay
+        length = dx * dx + dy * dy
+        t = 0.0 if length == 0 else max(0.0, min(
+            1.0, ((point[0] - ax) * dx + (point[1] - ay) * dy) / length))
+        best = min(best, math.hypot(point[0] - ax - t * dx, point[1] - ay - t * dy))
+    return best
+
+
+def _decoration_texts(link: Mapping[str, Any]) -> set:
+    """The stereotype and guard texts a connector's data gives, in every form EA draws."""
+    out = set()
+    for key in ("stereotype", "guard", "condition"):
+        raw = " ".join(str(link.get(key) or "").split())
+        if not raw:
+            continue
+        bare = raw.strip("[]«» ")
+        if not bare:
+            continue
+        out.update({raw, bare, f"«{bare}»", f"[{bare}]", f"<<{bare}>>"})
+    return out
+
+
+def _svg_polylines(svg: str) -> list[list[tuple]]:
+    """Every open path made only of straight segments, as a list of points.
+
+    Closed paths are outlines. Paths with curves or arcs are decoration or shape
+    outlines and are not read, because a curve cannot be tested as straight
+    segments and guessing one would put a finding on a line nobody drew.
+    """
+    out: list[list[tuple]] = []
+    seen: set = set()
+    for match in _PATH_RE.finditer(svg):
+        d = match.group("d")
+        if re.search(r"[^ML\d\s.,+-]", d):
+            continue
+        for sub in re.split(r"(?=M)", d):
+            numbers = [float(n) for n in _NUMBER_RE.findall(sub)]
+            points = list(zip(numbers[0::2], numbers[1::2]))
+            if len(points) < 2 or points[0] == points[-1]:
+                continue
+            key = tuple(points)
+            if key not in seen:
+                seen.add(key)
+                out.append(points)
+    return out
+
+
+def _svg_labels(svg: str) -> list[dict]:
+    """Every drawn text run as an estimated box, in the SVG's own space.
+
+    EA writes the run's baseline start (`x`, `y`), its measured advance
+    (`textLength`), a font size and, for vertical text, a rotation of -90. The
+    box is that length by the font size, so its height and any wrapping are
+    estimates. A run with no `textLength` is sized from its characters, which is
+    a rougher estimate again; `estimated` says which.
+    """
+    out = []
+    for m in _SVG_TEXT_RE.finditer(svg):
+        body = re.sub(r"<[^>]+>", "", m.group("body"))
+        for entity, char in _ENTITIES:
+            body = body.replace(entity, char)
+        text = " ".join(body.split())
+        if not text:
+            continue
+        attrs = m.group("attrs") or ""
+        size = _FONT_SIZE_RE.search(attrs)
+        font = float(size.group("px")) if size else _DEFAULT_FONT_SIZE
+        estimated = m.group("tl") is None
+        length = (float(m.group("tl")) if not estimated
+                  else len(text) * font * _CHAR_WIDTH)
+        x, y = float(m.group("x")), float(m.group("y"))
+        turn = _ROTATE_RE.search(attrs)
+        degrees = float(turn.group("deg")) if turn else 0.0
+        if abs(degrees + 90.0) < 1.0:
+            box = {"x0": x - font * _ASCENT, "x1": x + font * _DESCENT,
+                   "y0": y - length, "y1": y}
+        else:
+            box = {"x0": x, "x1": x + length,
+                   "y0": y - font * _ASCENT, "y1": y + font * _DESCENT}
+        out.append({"text": text, "estimated": estimated, **box})
+    return out
+
+
+def _box_overlap(a: Mapping[str, float], b: Mapping[str, float],
+                 tolerance: float = 0.0) -> float:
+    width = min(a["x1"], b["x1"]) - max(a["x0"], b["x0"]) - tolerance
+    height = min(a["y1"], b["y1"]) - max(a["y0"], b["y0"]) - tolerance
+    return max(width, 0.0) * max(height, 0.0)
+
+
+def _box_contains(outer: Mapping[str, float], inner: Mapping[str, float]) -> bool:
+    return (outer["x0"] <= inner["x0"] and outer["y0"] <= inner["y0"]
+            and outer["x1"] >= inner["x1"] and outer["y1"] >= inner["y1"])
+
+
+def _box_area(box: Mapping[str, float]) -> float:
+    return (box["x1"] - box["x0"]) * (box["y1"] - box["y0"])
+
+
+def _segment_hits_box(p: tuple, q: tuple, box: Mapping[str, float],
+                      shrink: float = _LINE_SHAPE_SHRINK) -> bool:
+    """Whether the segment p-q passes through the inside of the box.
+
+    Liang-Barsky clipping against the box shrunk by `shrink` on every side, so a
+    segment that only touches the border is not a hit.
+    """
+    x0, y0 = box["x0"] + shrink, box["y0"] + shrink
+    x1, y1 = box["x1"] - shrink, box["y1"] - shrink
+    if x1 <= x0 or y1 <= y0:
+        return False
+    dx, dy = q[0] - p[0], q[1] - p[1]
+    low, high = 0.0, 1.0
+    for step, room in ((-dx, p[0] - x0), (dx, x1 - p[0]),
+                       (-dy, p[1] - y0), (dy, y1 - p[1])):
+        if step == 0:
+            if room < 0:
+                return False
+        else:
+            t = room / step
+            if step < 0:
+                low = max(low, t)
+            else:
+                high = min(high, t)
+    return high - low > 1e-6
+
+
+def _point_on_box(point: tuple, box: Mapping[str, float],
+                  tolerance: float = _LINE_END_TOLERANCE) -> bool:
+    return (box["x0"] - tolerance <= point[0] <= box["x1"] + tolerance
+            and box["y0"] - tolerance <= point[1] <= box["y1"] + tolerance)
+
+
+@dataclass
+class _Drawing:
+    """What EA drew, in the SVG's own space."""
+
+    shapes: list
+    lines: list           # (points, end_a, end_b, every shape either end touches)
+    labels: list
+    open_paths: int
+    offset: Optional[tuple]
+    offset_method: Optional[str]
+
+
+def _read_drawing(objects: Sequence[Mapping[str, Any]], svg_text: str) -> _Drawing:
+    """Put the stored shapes and the drawn lines and labels in one space.
+
+    The stored rects use EA's coordinates and the SVG is cropped, so the two
+    differ by a shift. It is found by matching each drawn box to a stored
+    element of the same size (the most common shift wins), and when no box
+    matches, as when every element is drawn by a shape script that emits paths,
+    by EA's own crop. Which of the two was used is returned.
+    """
+    stored = []
+    for obj in objects:
+        x0, y0, x1, y1 = _normalize_rect(obj)
+        stored.append({"id": obj.get("element_id"),
+                       "name": " ".join((obj.get("name") or "").split()),
+                       "kind": _kind_of(obj),
+                       "x0": float(x0), "y0": float(y0),
+                       "x1": float(x1), "y1": float(y1)})
+
+    votes: dict = {}
+    for x, y, w, h in _svg_boxes(svg_text):
+        for s in stored:
+            sw, sh = s["x1"] - s["x0"], s["y1"] - s["y0"]
+            if sw > 10 and abs(w - sw) <= 1 and abs(h - sh) <= 1:
+                key = (round(x - s["x0"]), round(y - s["y0"]))
+                votes[key] = votes.get(key, 0) + 1
+    offset: Optional[tuple] = None
+    method: Optional[str] = None
+    if votes:
+        offset, method = max(votes, key=votes.get), "box-match"
+    elif stored:
+        offset = (_CROP_LEFT - min(s["x0"] for s in stored),
+                  _CROP_TOP - min(s["y0"] for s in stored))
+        method = "crop"
+
+    shapes = []
+    if offset is not None:
+        for s in stored:
+            shapes.append({**s,
+                           "x0": s["x0"] + offset[0], "x1": s["x1"] + offset[0],
+                           "y0": s["y0"] + offset[1], "y1": s["y1"] + offset[1]})
+        # A shape that holds another is a container whatever EA calls it, and a
+        # line may cross a container on its way between two things inside it.
+        for s in shapes:
+            s["container"] = s["kind"] in _CONTAINER_TYPES or any(
+                o is not s and _box_contains(s, o) and _box_area(o) < _box_area(s)
+                for o in shapes)
+            s["text"] = s["kind"] == "text"
+
+    solid = [s for s in shapes if not s["container"] and not s["text"]]
+    lines = []
+    open_paths = 0
+    for points in _svg_polylines(svg_text):
+        open_paths += 1
+        ends = [[s for s in solid if _point_on_box(p, s)]
+                for p in (points[0], points[-1])]
+        if not ends[0] or not ends[1]:
+            continue
+        a = min(ends[0], key=_box_area)
+        b = min(ends[1], key=_box_area)
+        if a is b:
+            continue          # a mark inside one shape, not a line between two
+        lines.append((points, a, b, ends[0] + ends[1]))
+
+    labels = [t for t in _svg_labels(svg_text) if t["y1"] >= _FRAME_HEADER_BAND]
+    # EA draws a container's title twice at one position. That is one title, not
+    # two labels colliding, so one copy of it is dropped. Only that copy: two
+    # connectors whose labels are identical at one position are a real
+    # collision, even when their text is also a container's title.
+    #
+    # A wrapped title is drawn a line at a time, so a line of it is a title text
+    # too: the whole name, or the words EA put on one line of it. A text that is
+    # only part of a word of a title ("flow" in "Workflow") is not.
+    def _title_texts(name: str) -> set:
+        words = name.split()
+        return {" ".join(words[i:j])
+                for i in range(len(words)) for j in range(i + 1, len(words) + 1)}
+
+    # Each title text is the title of the smallest container it is drawn inside
+    # whose name holds it. Of the positions where that text is drawn more than
+    # once inside the container, the topmost is the title's own, and it loses
+    # one copy; every other copy is a label in its own right.
+    containers = sorted((s for s in shapes if s.get("container") and s["name"]),
+                        key=_box_area)
+    titles = [_title_texts(c["name"]) for c in containers]
+    groups: dict = {}
+    for n, label in enumerate(labels):
+        middle = ((label["x0"] + label["x1"]) / 2, (label["y0"] + label["y1"]) / 2)
+        for k, c in enumerate(containers):
+            if label["text"] in titles[k] and _point_on_box(middle, c):
+                position = tuple(sorted(label.items()))
+                groups.setdefault((k, label["text"]), {}).setdefault(
+                    position, []).append(n)
+                break
+    dropped = set()
+    for by_position in groups.values():
+        doubled = [copies for copies in by_position.values() if len(copies) > 1]
+        if doubled:
+            dropped.add(min(doubled, key=lambda c: labels[c[0]]["y0"])[1])
+    labels = [label for n, label in enumerate(labels) if n not in dropped]
+    return _Drawing(shapes=shapes, lines=lines, labels=labels,
+                    open_paths=open_paths, offset=offset, offset_method=method)
+
+
+def _shown(shape: Mapping[str, Any]) -> str:
+    return repr(shape["name"]) if shape.get("name") else f"element {shape['id']}"
+
+
+def check_lines_through_shapes(objects: Sequence[Mapping[str, Any]],
+                               links: Sequence[Mapping[str, Any]],
+                               svg_text: Optional[str],
+                               report: LintReport) -> None:
+    """A line drawn straight through an element it does not join.
+
+    An error: the reader sees a connection that is not there, or an element
+    cut in two. Judged on the SVG EA actually drew, so it holds whether EA
+    routed the line or a composer stored the route.
+
+    A line is read as one open path of straight segments whose two ends sit on
+    two different shapes. The shapes it joins are never obstacles, and neither
+    is a container, because a line may cross the frame of a group on its way
+    between two things in it. A line with an end on a container or on nothing,
+    and a path with curves, is not judged, and `lines_measured` is the count of
+    those that were.
+
+    Requires `include_svg=True`, and says on `report.not_run` when it did not
+    have it.
+    """
+    report.metrics["lines_measured"] = 0
+    if not svg_text:
+        report.not_run.append(
+            "lines-through-shapes: no svg_text in the payload; call "
+            "verify_diagram with include_svg=True")
+        return
+    if not objects:
+        return
+    drawing = _read_drawing(objects, svg_text)
+    report.metrics["svg_offset_method"] = drawing.offset_method
+    report.metrics["lines_measured"] = len(drawing.lines)
+    report.metrics["line_paths_unattributed"] = drawing.open_paths - len(drawing.lines)
+    if drawing.open_paths and not drawing.lines:
+        report.not_run.append(
+            f"lines-through-shapes: {drawing.open_paths} open path(s) were "
+            f"drawn and none had both ends on an element, so no line was "
+            f"judged")
+
+    solid = [s for s in drawing.shapes if not s["container"] and not s["text"]]
+    for points, a, b, touched in drawing.lines:
+        for shape in solid:
+            if any(shape is t for t in touched):
+                continue
+            if any(_segment_hits_box(p, q, shape)
+                   for p, q in zip(points, points[1:])):
+                report.add(Finding(
+                    rule="lines-through-shapes", severity="error",
+                    message=(f"the line from {_shown(a)} to {_shown(b)} runs "
+                             f"through {_shown(shape)}"),
+                    subjects=(a["id"], b["id"], shape["id"]),
+                    correction="route the line around the element, or move "
+                               "the element out of the way of the line",
+                ))
+
+
+def check_label_collisions(objects: Sequence[Mapping[str, Any]],
+                           links: Sequence[Mapping[str, Any]],
+                           svg_text: Optional[str],
+                           report: LintReport) -> None:
+    """A label drawn on a shape, on another label, or under another line.
+
+    Warnings, because the boxes are ESTIMATED. Text is read from EA's SVG as a
+    start point, a measured length and a font size. Its height is the font size,
+    and a name that wraps or a font that differs from the one named will move
+    the real edge. A collision here is a place to look, not a measurement of
+    the overlap.
+
+    A label belongs to the element whose box holds it, or to the element whose
+    name it is, or to a connector whose name it is. It may sit on what it
+    belongs to, and a connector label may be crossed by its own connector's line.
+    A connector's own line is found three ways: the label is the connector's
+    name, the label is the stereotype or guard the connector's data gives, or
+    the label is a stereotype in guillemets or a guard in square brackets and
+    that line passes closer to its centre than any other line does, within a
+    few pixels, which is where EA draws them. Anything else it touches is
+    reported.
+
+    Requires `include_svg=True`, and says on `report.not_run` when it did not
+    have it.
+    """
+    report.metrics["label_boxes_measured"] = 0
+    if not svg_text:
+        report.not_run.append(
+            "label-collision: no svg_text in the payload; call "
+            "verify_diagram with include_svg=True")
+        return
+    if not objects:
+        return
+    drawing = _read_drawing(objects, svg_text)
+    labels = drawing.labels
+    report.metrics["label_boxes_measured"] = len(labels)
+    report.metrics["label_boxes_estimated_from_characters"] = sum(
+        1 for t in labels if t["estimated"])
+    report.metrics["svg_offset_method"] = drawing.offset_method
+
+    pairs_by_name: dict = {}
+    decoration_pairs: dict = {}
+    for link in links:
+        pair = frozenset((_element_key(link.get("source_element_id")),
+                          _element_key(link.get("target_element_id"))))
+        name = " ".join(str(link.get("name") or "").split())
+        if name:
+            pairs_by_name.setdefault(name, set()).add(pair)
+        for text in _decoration_texts(link):
+            decoration_pairs.setdefault(text, set()).add(pair)
+
+    solid = [s for s in drawing.shapes if not s["container"] and not s["text"]]
+    for label in labels:
+        centre = ((label["x0"] + label["x1"]) / 2, (label["y0"] + label["y1"]) / 2)
+        connector_pairs = pairs_by_name.get(label["text"])
+        inside = [s for s in solid if _point_on_box(centre, s, 0.0)]
+        owner = None
+        if inside and not (connector_pairs and not any(
+                label["text"] in s["name"] for s in inside)):
+            owner = min(inside, key=_box_area)
+        elif not connector_pairs:
+            named = [s for s in drawing.shapes
+                     if s["name"] and label["text"] in s["name"]]
+            if named:
+                owner = min(named, key=lambda s: math.hypot(
+                    (s["x0"] + s["x1"]) / 2 - centre[0],
+                    (s["y0"] + s["y1"]) / 2 - centre[1]))
+        label["owner"] = owner
+
+    def _report(kind: str, message: str, subjects: tuple, correction: str) -> None:
+        report.add(Finding(
+            rule="label-collision", severity="warning",
+            message=f"{kind}: {message} (label boxes are estimated from text "
+                    f"length and font size)",
+            subjects=subjects, correction=correction))
+
+    for label in labels:
+        for shape in drawing.shapes:
+            if shape["text"] or shape is label["owner"]:
+                continue
+            if shape["container"]:
+                if _box_overlap(shape, label) > 0 and not _box_contains(shape, label):
+                    _report("label on a container border",
+                            f"{label['text']!r} straddles the border of {_shown(shape)}",
+                            (shape["id"],),
+                            "move the label inside the container or clear of it")
+                continue
+            if _box_overlap(shape, label, _LABEL_TOLERANCE) > 0:
+                _report("label on a shape",
+                        f"{label['text']!r} is drawn over {_shown(shape)}",
+                        (shape["id"],),
+                        "move the label clear of the element, or widen the "
+                        "gap between the elements so it fits")
+
+    for i, a in enumerate(labels):
+        for b in labels[i + 1:]:
+            if _box_overlap(a, b, _LABEL_TOLERANCE) > _LABEL_OVERLAP_AREA:
+                _report("label on a label",
+                        f"{a['text']!r} and {b['text']!r} overlap", (),
+                        "move one of the two labels, or shorten a name")
+
+    for label in labels:
+        pairs = (pairs_by_name.get(label["text"], set())
+                 | decoration_pairs.get(label["text"], set()))
+        own_line = None
+        if _is_decoration(label["text"]) and drawing.lines:
+            centre = ((label["x0"] + label["x1"]) / 2, (label["y0"] + label["y1"]) / 2)
+            reach, own_line = min(((_centre_distance(centre, ln[0]), ln)
+                                   for ln in drawing.lines), key=lambda r: r[0])
+            if reach > _OWN_LINE_REACH:
+                own_line = None
+        for points, a, b, touched in drawing.lines:
+            if frozenset((_element_key(a["id"]), _element_key(b["id"]))) in pairs:
+                continue          # a label may sit by its own connector
+            if own_line is not None and own_line[0] is points:
+                continue          # a stereotype or guard drawn on its own line
+            if any(_segment_hits_box(p, q, label, shrink=0.0)
+                   for p, q in zip(points, points[1:])):
+                _report("label crossed by a line",
+                        f"{label['text']!r} is crossed by the line from "
+                        f"{_shown(a)} to {_shown(b)}",
+                        (a["id"], b["id"]),
+                        "move the label, or route the line away from it")
 
 
 # ---------------------------------------------------------------------------
@@ -1696,6 +2310,8 @@ def lint_diagram(
     check_title_present(objects, title_convention, report)
     check_collapsed_connectors_annotated(objects, links, profile, report)
     check_labels_fit(objects, verified.get("svg_text"), report)
+    check_lines_through_shapes(objects, links, verified.get("svg_text"), report)
+    check_label_collisions(objects, links, verified.get("svg_text"), report)
     if "missing-connector-labels" not in suppressed:
         check_connector_labels(links, report)
 

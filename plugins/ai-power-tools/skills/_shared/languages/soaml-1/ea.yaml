@@ -501,20 +501,12 @@ layout_map:
       base: Component
       size_keys:
         collaboration: Collaboration
-        Collaboration: Collaboration
         collaborationUse: CollaborationUse
-        CollaborationUse: CollaborationUse
         serviceContract: ServiceContract
-        ServiceContract: ServiceContract
         servicesArchitecture: ServicesArchitecture
-        ServicesArchitecture: ServicesArchitecture
         milestone: Milestone
-        Milestone: Milestone
         port: Port
-        Port: Port
         request: Request
         requestPoint: Request
-        Request: Request
         service: Service
         servicePoint: Service
-        Service: Service

@@ -101,6 +101,8 @@ Covers: EA Modeling via MCP — Patterns and Practices; 9. Verification Queries
 of them has a note. It reaches the answer without guessing column names: tag values come from the
 element tagged-value table, and the element note is read from the singular `Note` column.
 
+**Reading:** business applications are counted by the primary stereotype (the `Stereotype` column): 11 Mission-Critical of 46. Counting the second stereotype of Core Deposit System of Record gives 12 of 47; this case does not expect that reading.
+
 **Check:**
 
 ```check
@@ -1335,6 +1337,8 @@ Covers: 15. Token Economy and Session Hygiene
 
 **Passes when:** The run uses the summary operation, not a package-by-package listing, and
 reports 46 business applications and 35 vendor systems among the counts.
+
+**Reading:** the counts are by the primary stereotype (the `Stereotype` column): 46 business applications. Core Deposit System of Record, whose primary stereotype is System of Record, carries a second one (Business Application) and is not counted here; this case does not expect the roll-up that would make it 47.
 
 **Check:**
 

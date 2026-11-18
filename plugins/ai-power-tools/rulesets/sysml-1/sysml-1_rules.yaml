@@ -303,7 +303,7 @@ rules:
       connector stereotyped conform that starts at the view. [OMG SysML 1.5 (formal/17-05-01) 7.3.2.7 [1]]'
     category: mod
     severity: error
-    demo_trigger: false
+    demo_trigger: true
     coverage: full
     selector:
       type: element
@@ -328,7 +328,7 @@ rules:
       text is empty. [OMG SysML 1.5 (formal/17-05-01) 16.3.2.1 (attributes)]
     category: req
     severity: error
-    demo_trigger: false
+    demo_trigger: true
     coverage: partial
     not_checked: 'That the id is unique: the rule checks that an id is present, not that no other requirement uses it.'
     selector:
@@ -361,7 +361,7 @@ rules:
       SysML 1.5 (formal/17-05-01) 16.3.2.2 [1]]
     category: req
     severity: error
-    demo_trigger: false
+    demo_trigger: true
     coverage: full
     selector:
       type: connector
@@ -558,7 +558,7 @@ rules:
       stereotype is reported too. [OMG SysML 1.5 (formal/17-05-01) 16.3.2.7 [1]]'
     category: req
     severity: error
-    demo_trigger: false
+    demo_trigger: true
     coverage: full
     selector:
       type: connector
@@ -719,7 +719,7 @@ rules:
       it as inout). The rule reports a flow port whose direction is empty. [OMG SysML 1.5 (formal/17-05-01) C.3.2.3 [2]]
     category: dep
     severity: error
-    demo_trigger: false
+    demo_trigger: true
     coverage: partial
     not_checked: 'Whether the port is atomic (typed by a value type, block or signal, not a flow specification) and that it
       is not conjugated: both follow a reference or a flag, not a tag.'
@@ -748,7 +748,7 @@ rules:
       too. [OMG SysML 1.5 (formal/17-05-01) 16.3.2.5 [3]]'
     category: req
     severity: error
-    demo_trigger: false
+    demo_trigger: true
     coverage: partial
     not_checked: A requirement that carries no requirement stereotype (a plain class, or a Requirement element with none)
       is not seen as one.

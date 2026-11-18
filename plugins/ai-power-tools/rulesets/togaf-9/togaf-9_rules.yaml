@@ -121,7 +121,7 @@ rules:
     description: "A relationship between two entities should be one that the content metamodel lists for that source entity, target entity and relationship name (the table of 34.7). EA stores the relationship name as the connector stereotype (Contain, Decompose, OwnsAndGoverns and so on) and the entities as the element stereotypes of the TOGAF profile. A connector whose stereotype the table knows, drawn between two entities the table knows, but not allowed between that pair, is reported as a warning: the standard presents the table as the possible relationships and invites tailoring. [TOGAF 9.1 (The Open Group, document G116) 33.2; 34.2.1; 34.7]"
     category: rel
     severity: warning
-    demo_trigger: false
+    demo_trigger: true
     coverage: partial
     not_checked: "Only the 104 table rows whose relationship name has an EA connector stereotype are in the table (39 stereotypes); the other 39 rows (Is realized by, Has, Relates to and others) are drawn with plain UML connectors, which the validator cannot select. A connector is judged only when both ends carry an entity stereotype the table names (EA's generic items such as Asset are not judged). The direction of each stereotype is read from its verb; EA does not enforce a direction and no Sparx pattern shows one. Information System Service is ITService (a working assumption, 2026-10-21). It specializes Business Service in the language file, so ITService has every table cell Business Service has, as source and as target; its own row in the guide ('Automates some or all of') has no EA connector stereotype and is not in the table."
     selector:
@@ -163,7 +163,7 @@ rules:
     description: "A Principle has at least a supporting rationale and a measure of importance (priority). EA's Principle stereotype carries the tagged values Rationale and Priority; the rule reports a Principle whose Rationale or Priority is empty. [TOGAF 9.1 (The Open Group, document G116) 34.5; 34.6]"
     category: def
     severity: warning
-    demo_trigger: false
+    demo_trigger: true
     coverage: full
     selector:
       type: "element"

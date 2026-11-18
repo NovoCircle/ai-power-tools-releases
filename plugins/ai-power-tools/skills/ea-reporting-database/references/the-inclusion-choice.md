@@ -111,6 +111,26 @@ a = analyze(census_elements(objects, index), census_connectors(connectors, index
             objects, connectors)          # namespace= if it cannot be inferred
 ```
 
+**Two counts that differ from the server's preflight, and why.** On the Westbrook Bank demo model
+(EA 17.1 build 1716, server 3.6.5, read-only checks), the `objects` read above for the single root
+package `Westbrook Bank` returned 283 rows, and the server's plan for the same scope loaded 284
+`t_object` rows. The census counted 283 elements in the same scope, so the two agree on content. The
+one extra row is the root package's own mirror row (Object_ID 4, type `Package`): EA stores it in the
+root's parent, so `Package_ID IN (<in-scope ids>)` does not match it, while the server keeps a package
+row when the package itself is in scope. Over all four top-level packages the two counts were equal
+(534 and 534), where no root's own row lay outside the scope. Expect a difference of one row per
+root whose own row sits in a package outside the scope. It does not change the census or the option counts: package
+rows are not model content.
+
+The same check explains 13 against 15 declared keys. `a.options()[1]` reported 13 declared element
+keys and 3 declared connector keys. The server's metamodel for the same technology declares 15 element
+stereotypes and 3 connector stereotypes. Both read the same 15 and 3 names (`analyze` lists them in
+`a.declared_elements` and `a.declared_connectors`); `Coverage` counts only the declared keys that
+occur in the scope, and two declared stereotypes, `WBAGovernedElement` and `WBATechnologyNode`, have no
+element in the demo model. So the 13 is "declared and present", the 15 is "declared". Neither count was
+wrong. The Westbrook figures illustrate the shape. Your model gives its own numbers, and no model needs
+to be the demo model.
+
 Before the profile exists there are no roots yet: take them from the user, then run this. A
 connector with one end in an excluded package stays in scope through its other end; the build
 keeps it with an `(excluded)` stub at the far end.

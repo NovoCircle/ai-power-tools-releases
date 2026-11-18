@@ -2352,7 +2352,7 @@ rules:
       to a class with no UAF stereotype is reported. [OMG UAF 1.0 (formal/17-12-01) 7.1.1]
     category: end
     severity: error
-    demo_trigger: false
+    demo_trigger: true
     coverage: partial
     not_checked: 'End concepts that EA cannot put on an element (no stereotype, a slot, or a stereotype of a connector or
       an operation), so an end of that kind is not recognized: AchievedEffect, ActivityPerformableUnderCondition, ActualMeasurement,
@@ -2629,7 +2629,7 @@ rules:
       (formal/17-12-01) 7.1.3.3, 7.1.5.2, 7.1.8.1]
     category: end
     severity: error
-    demo_trigger: false
+    demo_trigger: true
     coverage: full
     selector:
       type: connector
@@ -2659,7 +2659,7 @@ rules:
       not in the table, is reported. [OMG UAF 1.0 (formal/17-12-01) 7.1.3.3]
     category: end
     severity: error
-    demo_trigger: false
+    demo_trigger: true
     coverage: partial
     not_checked: 'End concepts that EA cannot put on an element (no stereotype, a slot, or a stereotype of a connector or
       an operation), so an end of that kind is not recognized: SecurityControlAction.'
@@ -2718,7 +2718,7 @@ rules:
       in the table, is reported. [OMG UAF 1.0 (formal/17-12-01) 7.1.3.6]
     category: end
     severity: error
-    demo_trigger: false
+    demo_trigger: true
     coverage: partial
     not_checked: 'End concepts that EA cannot put on an element (no stereotype, a slot, or a stereotype of a connector or
       an operation), so an end of that kind is not recognized: Command, Control, OperationalConnector, OperationalExchange,
@@ -2746,7 +2746,7 @@ rules:
       with one that is not in the table, is reported. [OMG UAF 1.0 (formal/17-12-01) 7.1.4.3]
     category: end
     severity: error
-    demo_trigger: false
+    demo_trigger: true
     coverage: full
     selector:
       type: connector
@@ -2798,7 +2798,7 @@ rules:
       not in the table, is reported. [OMG UAF 1.0 (formal/17-12-01) 7.1.4.4]
     category: end
     severity: error
-    demo_trigger: false
+    demo_trigger: true
     coverage: partial
     not_checked: 'End concepts that EA cannot put on an element (no stereotype, a slot, or a stereotype of a connector or
       an operation), so an end of that kind is not recognized: ActualMeasurement, ActualProjectMilestoneRole, ActualProjectRole.'
@@ -2901,7 +2901,7 @@ rules:
       stereotype, or with one that is not in the table, is reported. [OMG UAF 1.0 (formal/17-12-01) 7.1.5.1]
     category: end
     severity: error
-    demo_trigger: false
+    demo_trigger: true
     coverage: full
     selector:
       type: connector
@@ -2950,7 +2950,7 @@ rules:
       UAF 1.0 (formal/17-12-01) 7.1.5.3]
     category: end
     severity: error
-    demo_trigger: false
+    demo_trigger: true
     coverage: full
     selector:
       type: connector
@@ -3026,7 +3026,7 @@ rules:
       is not in the table, is reported. [OMG UAF 1.0 (formal/17-12-01) 7.1.6.8]
     category: end
     severity: error
-    demo_trigger: false
+    demo_trigger: true
     coverage: full
     selector:
       type: connector
@@ -3176,7 +3176,7 @@ rules:
       an end with no stereotype, or with one that is not in the table, is reported. [OMG UAF 1.0 (formal/17-12-01) 7.1.7.5]
     category: end
     severity: error
-    demo_trigger: false
+    demo_trigger: true
     coverage: full
     selector:
       type: connector
@@ -3555,7 +3555,7 @@ rules:
       [OMG UAF 1.0 (formal/17-12-01) 7.1.12.3]
     category: end
     severity: error
-    demo_trigger: false
+    demo_trigger: true
     coverage: full
     selector:
       type: connector
@@ -3652,7 +3652,7 @@ rules:
       Software to a System is not. [OMG UAF 1.0 (formal/17-12-01) 7.1.8.9]'
     category: val
     severity: error
-    demo_trigger: false
+    demo_trigger: true
     coverage: partial
     not_checked: Which level of the specialization hierarchy counts as 'the same specialization' is read as the direct specializations
       of SubjectOfForecast; the standard gives only the examples Software to Software and Standard to Standard.
@@ -3675,7 +3675,7 @@ rules:
       value means the property has not been set. [OMG UAF 1.0 (formal/17-12-01) 7.1.2]
     category: card
     severity: error
-    demo_trigger: false
+    demo_trigger: true
     coverage: full
     selector:
       type: element
@@ -3723,7 +3723,7 @@ rules:
       with its default), so an empty value means the property has not been set. [OMG UAF 1.0 (formal/17-12-01) 7.1.2]
     category: card
     severity: error
-    demo_trigger: false
+    demo_trigger: true
     coverage: full
     selector:
       type: element
@@ -3796,7 +3796,7 @@ rules:
       means the property has not been set. [OMG UAF 1.0 (formal/17-12-01) 7.1.3.4]
     category: card
     severity: error
-    demo_trigger: false
+    demo_trigger: true
     coverage: full
     selector:
       type: element
@@ -3894,7 +3894,7 @@ rules:
       set. [OMG UAF 1.0 (formal/17-12-01) 7.1.10.5]
     category: card
     severity: error
-    demo_trigger: false
+    demo_trigger: true
     coverage: full
     selector:
       type: element
@@ -3967,7 +3967,7 @@ rules:
       empty value means the property has not been set. [OMG UAF 1.0 (formal/17-12-01) 7.1.13]
     category: card
     severity: error
-    demo_trigger: false
+    demo_trigger: true
     coverage: full
     selector:
       type: element
@@ -3992,7 +3992,7 @@ rules:
       none of the listed stereotypes, including one that sits in an ordinary package. [OMG UAF 1.0 (formal/17-12-01) 7.1.5.4]
     category: own
     severity: error
-    demo_trigger: false
+    demo_trigger: true
     coverage: full
     selector:
       type: element
@@ -4047,7 +4047,7 @@ rules:
       one that sits in an ordinary package. [OMG UAF 1.0 (formal/17-12-01) 7.1.5.7]
     category: own
     severity: error
-    demo_trigger: false
+    demo_trigger: true
     coverage: full
     selector:
       type: element
@@ -4122,7 +4122,7 @@ rules:
       including one that sits in an ordinary package. [OMG UAF 1.0 (formal/17-12-01) 7.1.8.4]
     category: own
     severity: error
-    demo_trigger: false
+    demo_trigger: true
     coverage: full
     selector:
       type: element
@@ -4238,7 +4238,7 @@ rules:
       including one that sits in an ordinary package. [OMG UAF 1.0 (formal/17-12-01) 7.1.2]
     category: typ
     severity: error
-    demo_trigger: false
+    demo_trigger: true
     coverage: full
     selector:
       type: element
@@ -4340,7 +4340,7 @@ rules:
       including one that sits in an ordinary package. [OMG UAF 1.0 (formal/17-12-01) 7.1.4.2]
     category: typ
     severity: error
-    demo_trigger: false
+    demo_trigger: true
     coverage: full
     selector:
       type: element
@@ -4468,7 +4468,7 @@ rules:
       including one that sits in an ordinary package. [OMG UAF 1.0 (formal/17-12-01) 7.1.5.2]
     category: typ
     severity: error
-    demo_trigger: false
+    demo_trigger: true
     coverage: full
     selector:
       type: element
@@ -4636,7 +4636,7 @@ rules:
       one that sits in an ordinary package. [OMG UAF 1.0 (formal/17-12-01) 7.1.8.2]
     category: typ
     severity: error
-    demo_trigger: false
+    demo_trigger: true
     coverage: full
     selector:
       type: element
@@ -4725,7 +4725,7 @@ rules:
       including one that sits in an ordinary package. [OMG UAF 1.0 (formal/17-12-01) 7.1.10.2]
     category: typ
     severity: error
-    demo_trigger: false
+    demo_trigger: true
     coverage: full
     selector:
       type: element

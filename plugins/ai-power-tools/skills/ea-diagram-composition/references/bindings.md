@@ -178,6 +178,8 @@ mistakes are told what they probably meant.
 | `display_name` | no | Non-empty string. Defaults to `technology`. |
 | `extends` | no | Technology id of another binding in the same catalog — **the notation this one is built on**. Cannot be this binding's own id; cycles are refused by name. Every shipped MDG binding names the base notation here; see §5.6. |
 | `stereotype_prefix` | no | String, `""` included. See §5.3 — `""` is a statement, not an omission. |
+| `bare_stereotype` | no | Mapping `accepted` (true or false) and `source`: whether a stored stereotype name without the prefix counts as this language. Absent means the binding says nothing. |
+| `name_below` | no | Mapping `room` (a positive whole number of px) and `source`: the room EA needs under a shape for a name it draws below it, as measured for this notation. `spec()` hands it to a `layered-bands` composer as `name_below_room`. Not inherited through `extends`. Absent means nothing was measured. |
 | `notes` | no | Non-empty string. |
 | `diagram_types` | yes | Mapping, at least one entry. |
 | `viewpoints` | no | Mapping. Absent is a legitimate answer for a notation that publishes no catalog. |
@@ -228,11 +230,16 @@ Values are copied into the spec verbatim. See §5.1.
 > | Read by | Spec keys |
 > |---|---|
 > | both composers | `origin_left`, `origin_top`, `item_width`, `item_height`, `label_height` |
-> | `layered-bands` only | `item_gap_x`, `item_gap_y`, `h_pitch`, `row_pitch`, `wrap_width`, `align`, `band_pad_x`, `band_pad_y`, `band_gap`, `band_pitch`, `min_band_width` |
+> | `layered-bands` only | `item_gap_x`, `item_gap_y`, `h_pitch`, `row_pitch`, `wrap_width`, `align`, `band_pad_x`, `band_pad_y`, `band_gap`, `band_pitch`, `min_band_width`, `title_clear_of_lines`, `name_below_room` |
 > | `lanes` only | `item_gap_flow`, `flow_pitch`, `lane_pad`, `lane_gap`, `min_lane_thickness`, `label_width` |
 >
 > The label key depends on orientation in `lanes`: a horizontal lane reserves `label_width` down its
 > left, a vertical lane reserves `label_height` across its top. A band always uses `label_height`.
+>
+> **Two `layered-bands` keys come from the binding, not from `spacing`.** `spec()` sets
+> `title_clear_of_lines: true` for a `layered-bands` diagram type whose `title` is `drawn`, and
+> `name_below_room` from the technology's `name_below.room` when it has one. An override still
+> wins. A spec built without a binding leaves both off. See `grammars.md` §4.
 >
 > **`compose_lanes` never reads `item_gap_x` or `item_gap_y`.** All three BPMN diagram types are
 > `grammar: lanes` and all three set both, so in `bpmn2.0.yaml` those two are recorded measurements

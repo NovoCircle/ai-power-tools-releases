@@ -29,7 +29,7 @@ under the model root. The ids in the checks are the Westbrook copy's (diagram 4 
 Landscape, package 10 is Customer Engagement, package 20 its child AI Services); a customer reads
 theirs from `t_diagram` and `t_package`. The wording of a generated description depends on the
 technology that governs the diagram, so the checks look for names, markers and structure, never for
-exact sentences. A case marked BLOCKED needs a state COM cannot produce, or machine-wide EA state, and
+exact sentences. **Deliberate test input:** the Westbrook copy holds one element with a plain `VendorApplication` stereotype that no technology qualifies (on the Customer Engagement Landscape). It is kept on purpose to exercise the unresolved-name path: the description words it "vendor application" and counts it as one unresolved name, so a description or audit result for the Customer Engagement Landscape reports `names_unresolved: 1`, and any diagram without that element reports 0. A case does not treat that 1 as a defect. A case marked BLOCKED needs a state COM cannot produce, or machine-wide EA state, and
 runs only where the runner provides it.
 
 **Marks.** `WRITE` (the run changes the copy), `EFFECT` (the run writes a file outside the model;
@@ -297,7 +297,7 @@ expect: contains: ACI Worldwide Payment Engine
 
 ```check
 file: domestic-payments.xml
-expect: contains: Fiserv ACH Processing Module
+expect: contains: Alderbrook Payments Module
 ```
 
 ```check
@@ -949,6 +949,8 @@ Covers: 3c. Accessible diagram publishing — diagram descriptions
 
 **Passes when:** The run generates the description and writes it into the diagram's Notes (a preview first is fine). Afterwards the Notes hold exactly one description block between its two marker lines, the text names every element placed on the diagram, and no other diagram's Notes changed. The run says the words are generated from the diagram, so the same diagram always gets the same words.
 
+**Reading:** the Customer Engagement Landscape holds the plain `VendorApplication` test element, so the result reports `names_unresolved: 1` (the AI Services Solution Architecture reports 0). That count is expected and is not graded as a fault.
+
 **Check:**
 
 ```check
@@ -987,6 +989,8 @@ Covers: 3c. Accessible diagram publishing — diagram descriptions
 **Ask:** "Describe the Customer Engagement Landscape in its notes. I want it readable by someone who cannot see the diagram, in our business terms."
 
 **Passes when:** The run writes the description. The first line is a single short sentence of at most 150 characters, usable as alt text. The text uses the technology's business names for kinds and relationships and contains no stereotype identifiers, technology ids or profile names ("WBA" as a word, "WestbrookBankArchitecture"), or drawing words (boundary, connector, collapsed, swimlane, placement). It says nothing about positions, colors or line styles.
+
+**Reading:** the Customer Engagement Landscape holds the plain `VendorApplication` test element, so the result reports `names_unresolved: 1` (the AI Services Solution Architecture reports 0). That count is expected and is not graded as a fault.
 
 **Check:**
 
@@ -1085,6 +1089,8 @@ notes-set: AI Services Solution Architecture | Draft, do not circulate.
 
 **Passes when:** The run writes the description for the Customer Engagement Landscape and leaves the AI Services Solution Architecture's Notes exactly as they were, reporting that diagram as not written because its Notes already hold text (`notes_not_empty`). One diagram's refusal does not stop the other.
 
+**Reading:** the Customer Engagement Landscape holds the plain `VendorApplication` test element, so the result reports `names_unresolved: 1` (the AI Services Solution Architecture reports 0). That count is expected and is not graded as a fault.
+
 **Check:**
 
 ```check
@@ -1165,6 +1171,8 @@ call: ea_diagram.add_element_to_diagram {"diagram_id": {diagram:Customer Engagem
 **Ask:** "We added Card Disputes to the Customer Engagement Landscape. Bring that diagram's description up to date."
 
 **Passes when:** The run refreshes the description (mode `refresh`). The diagram changed and nobody edited the words, so the new text is written without a question. Afterwards the Notes name Card Disputes, hold one block, and the audit reads the diagram as `current`.
+
+**Reading:** the Customer Engagement Landscape holds the plain `VendorApplication` test element, so the result reports `names_unresolved: 1` (the AI Services Solution Architecture reports 0). That count is expected and is not graded as a fault.
 
 **Check:**
 
@@ -1500,5 +1508,5 @@ Each finding was checked against the current skill text and server main (read on
 - TC-18 and the latency section depend on a `computer-use` tool name. **No change:** the template grammar now has `computer-use.<op>` (per the step-4 review); a case-file matter.
 - TC-26 and TC-38 need checks the runner cannot express (a parameter absent, a field equal to an earlier hash). **No change:** runner design.
 - The `setup` blocks of TC-23, TC-25, TC-28, TC-32 to TC-38 and TC-43 are checked only against a fake caller. **No change:** needs a live run.
-- TC-30 fails against server 3.6.x until the description generator stops writing the technology id for the Westbrook model. **Covered by** the server-fix text that follows the server merge (item 0937) if EA-S01 addresses it; otherwise a server defect, listed in the report.
+- TC-30 fails against server 3.6.x until the description generator stops writing the technology id for the Westbrook model. **Covered by** the server-fix text that follows the server merge (item 0937) if the server fix addresses it; otherwise a server defect, listed in the report.
 - TC-39 and TC-40 grade `diagram_changed` and `notes_changed` on the reply only. **No change:** known limit; the race cannot be set up in a single ask.

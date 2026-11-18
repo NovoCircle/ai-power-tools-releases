@@ -39,8 +39,8 @@ All calls used `package_id` for a Westbrook Bank component package with 4 elemen
 
 1. **The `output_path` extension gates success, not `template`.** Every `.rtf` call succeeded
    regardless of whether `template` named anything real; every `.html` call failed regardless of
-   `template`. On server 3.6.5 or later the extension must be `.rtf`, `.doc`, `.docx` or `.pdf`;
-   anything else is refused with `unsupported_report_format`. An empty `output_path` is refused
+   `template`. On server 3.6.5 or later the extension must be `.rtf` (EA 17.1 writes no file for
+   `.doc`, `.docx` or `.pdf`); anything else is refused with `unsupported_report_format`. An empty `output_path` is refused
    (`path_required`).
 2. **A non-empty `template` value is required, but its content doesn't matter when the project
    has no custom templates.** Three unrelated strings — two nonsense, one plausible — all

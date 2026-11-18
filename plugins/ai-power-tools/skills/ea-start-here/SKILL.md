@@ -23,7 +23,7 @@ informs you, and 1.4 is a check you make before a write, so neither one stops a 
 ### 1.1 Is the server alive, and does it match these skills?
 
 ```
-ping(skills_version="3.6.5")
+ping(skills_version="3.6.6")
 ```
 
 Returns the server identity and version. The `skills_version` tells the server which release of
@@ -46,30 +46,22 @@ Read the response before anything else:
 
   Operations these skills name may be missing until that is done.
 - **There is no `ping` tool, or no AI Power Tools tools at all** — say in one sentence that this
-  session has no AI Power Tools tools, then work out which of three causes applies. Ask the user
-  where the session is running if you cannot tell.
-  1. **A Claude Cowork or other cloud session.** Local MCP servers are not available in cloud
-     sessions today, so the server cannot be reached from them. Remedy: use the Claude Desktop Code
-     tab, or any session that runs on the Windows machine where Enterprise Architect runs.
-  2. **Claude Desktop timed out connecting local servers when the session started.** This is the
-     usual cause in a local session that has no tools. The app waits a short time for its local
-     servers and then starts the session without them. Remedy:
-     reconnect the AI Power Tools extension in **Settings > Extensions**, or start a new session.
-  3. **The extension is not installed, or it is turned off.** The extension is the server. To
-     install it:
-     1. Download `https://github.com/NovoCircle/ai-power-tools-releases/releases/latest/download/AI-Power-Tools-for-Enterprise-Architect.mcpb`
-     2. Open Claude Desktop's **Settings > Extensions** and drag the file in.
-     3. Click **Install**, and keep the extension enabled.
+  session has no AI Power Tools tools, then work out the cause (ask where it runs if unclear).
+  1. **A Claude Cowork or other cloud session.** Local MCP servers are not available there today.
+  2. **Claude Desktop timed out connecting local servers at session start.** This is the usual cause
+     in a local session. The app starts the session without them. Reconnect the extension in
+     **Settings > Extensions**, or start a new session.
+  3. **The extension is not installed, or it is turned off.** The extension is the server. Download
+     `https://github.com/NovoCircle/ai-power-tools-releases/releases/latest/download/AI-Power-Tools-for-Enterprise-Architect.mcpb`,
+     drag it onto **Settings > Extensions**, click **Install**, and keep it enabled. Suggest no other
+     way to install the server.
 
-     Do not suggest installing the server any other way.
-
-  Then stop the model work: with no server there is no EA access, so do not attempt
-  `ea_repository` or any other EA call. What is still possible, in any of these sessions, is
-  reading what the server or its engines already wrote into a folder the user has connected:
-  XMI and image exports, generated reports, Parquet files, and generated Power BI projects. Offer
-  that, and ask which folder to look at. Files a cloud session reads from a connected folder are
-  processed on Anthropic's servers. A session without the server cannot change the model.
-  These limits describe current builds, not a permanent rule.
+  For cause 1, the remedy is a local session: the Claude Desktop Code tab, or any session on the
+  Windows machine where Enterprise Architect runs. Then stop the model work: with no server there is no
+  EA access, so make no `ea_repository` or other EA call. You can still read what the server already
+  wrote into a folder the user has connected (XMI and image exports, reports, Parquet files, Power BI
+  projects). Offer that and ask which folder. A cloud session processes those files on Anthropic's
+  servers. A session without the server cannot change the model. These limits describe current builds.
 
 Note the version. Skills declare a minimum server version, and a mismatch explains a missing
 operation faster than any amount of debugging.
@@ -136,6 +128,33 @@ change, "mark everything in a package") first says which elements and how many, 
 repository, and waits for a yes. The exception is a request that already names the elements, or
 says to go ahead without checking back.
 
+### Permission prompts: reads approved, writes asked (Claude Code only)
+
+Every AI Power Tools tool (`ea_model`, `ea_diagram`, `ea_analyze`, `ea_mdg`, `ea_repository`,
+`ea_validate`) mixes reads and writes, and Claude Code's permission rules match the tool name
+only, so a rule can approve all of a tool or none of it. This plugin ships a Claude Code hook
+that looks at the operation inside each call. A read runs without a prompt, and a write (a
+create, update or delete, a reporting change, or a file written to disk) asks first. Opening a
+project or model, launching EA and closing the project run without a prompt. `execute_sql`
+is approved only when the call passes `allow_writes=False` and every AI Power Tools server that
+counts is 3.6.6 or later, so pass it on every SELECT. The servers that count are the ones Claude Code
+started and, in the Claude desktop app (the Microsoft Store build), the ones the app started for its
+extensions. If any of them is older than 3.6.6, or the hook cannot tell, every SQL query asks. Read mode is not a sandbox: on a server database, a
+user-defined function called by a SELECT can still write. An
+operation the hook does not know goes through your normal permission settings. The hook runs
+`python` from the PATH.
+
+When Python isn't on the PATH, the hook gives no answer, and Claude Code asks for each call as it
+normally would.
+
+Use Claude Code 2.1.321 or later with the hook. From that version Claude Code looks for `python` on
+the PATH only, never in the project folder first, so a `python` program in a project folder does not
+run as the hook. Earlier versions were not checked.
+
+It works in Claude Code only. Claude Desktop and VS Code do not run plugin hooks, so there you
+still approve each tool as before. The hook adds to your permission rules and settings; it does
+not replace them. A deny rule you set still blocks.
+
 ---
 
 ## 2. Which skill for which task
@@ -155,7 +174,10 @@ says to go ahead without checking back.
 | Getting a package or diagram out of EA (XMI, PNG, SVG, Visio, RTF), describing a diagram, or bringing XMI back in | **ea-import-export** |
 | Turning model facts into an answer a non-modeler can act on: roll-ups by tagged value, plain-language summaries, business terms | **ea-stakeholder-reporting** |
 | Taking or comparing baselines, or finding what changed, when and by whom, before a risky bulk edit | **ea-change-management** |
+| Changing a package outside production and merging it back: a branch model, a three-way diff, a decision per conflict, validation, then the merge | **ea-branch-and-merge** |
 | Cleaning up a model that has grown: elements with no connectors, stale composite links, stereotypes or tags applied inconsistently | **ea-model-hygiene** |
+| Answering an architecture question with a counted result: what a change reaches, how much is traced along a chain, what differs between as-is and to-be, where the model is fragile | **ea-architecture-analysis** |
+| Finding, drafting and writing the descriptions (Notes) of elements in bulk: audit what is empty or thin, draft from the model, enrich from a file or a web search | **ea-element-descriptions** |
 | Querying, rolling up or reporting across a whole model rather than element by element — or getting EA content into a database that can be queried directly | **ea-reporting-database** |
 | Getting EA content into Power BI — a dataset, a `.pbip`, TMDL, a semantic model, or a question about refreshing one | **ea-power-bi** |
 | Writing YAML conformance rules, or running a ruleset against a model | **ea-validation** |
@@ -276,7 +298,7 @@ inventing a parallel vocabulary.
 
 Each language below has a guide in a separate plugin, Modeling Languages (`modeling-languages`),
 and a how-to in this one. Modeling Languages has its own repository and its own version numbers,
-and this plugin declares it as a dependency. It arrives in the marketplace with EA 3.6.5. The guide
+and this plugin declares it as a dependency, so it installs with this plugin. The guide
 says what the language is: its concepts, rules and notation. The how-to says how to build it in EA.
 
 | Language | Id | Guide skill | How-to |
@@ -305,7 +327,7 @@ Each language's conformance ruleset is in this plugin at `../../rulesets/<id>/<i
 from this skill's folder.
 
 **If `modeling-languages:<id>` isn't available,** tell the user the language guides are in a
-separate plugin, Modeling Languages, with its own versions, and that it arrives with EA 3.6.5.
+separate plugin, Modeling Languages, with its own versions.
 Where it is listed, they run `claude plugin install modeling-languages@novocircle`; in Claude
 Desktop they upload `modeling-languages.plugin` from the latest release at
 `https://github.com/NovoCircle/modeling-languages-releases/releases`. Then stop the language work. Other
@@ -319,7 +341,7 @@ COM connection rather than as an error you can catch. Neither shows up in a tool
 - **If a call seems to hang, screenshot EA and read the dialog before concluding anything.**
   It names the cause. Dismiss from the front — dialogs stack, and a later call can be queued
   behind one raised by an earlier one. Windows reporting EA as "Responding" means nothing.
-- **After any diagram create or edit, open the diagram in EA, reload it, screenshot it, and look.**
+- **This skill edits no diagram itself. After any diagram create or edit made through the skill you route to, open the diagram in EA, reload it, screenshot it, and look.**
   `ok: true` means rows were written, not that elements landed where you intended, that
   styling applied, or that the result is readable.
 - **A reply about how a diagram looks needs an EA screenshot.** The PNG that `verify_diagram`

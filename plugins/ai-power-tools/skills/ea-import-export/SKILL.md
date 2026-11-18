@@ -21,7 +21,7 @@ trip is recorded here, only the failed one (§4), so check an XMI result yoursel
 | Give diagrams a description that a screen reader or an AI can read, and keep it current | `ea_diagram(operation="create_diagram_description")` / `update_diagram_description` / `audit_diagram_descriptions` | Words in the diagram's Notes, generated from the diagram — see §3c. |
 | Move a package into another repository, or feed a tool that reads XMI | `ea_repository(operation="export_xmi")` / `import_xmi` | §4 says what the server checks on export; compare `elements_in_export` with `elements_in_package`, and take a baseline of the target package before an import. |
 | Move a whole model to another repository (every package, diagram and setting) | EA's own Settings > Transfer > Native XML | No operation here does it; it is an EA UI procedure. Every numeric id changes. Read §4b before you start. |
-| A formatted document (headings, tagged values, prose) rather than a picture | `ea_repository(operation="generate_report")` | RTF, Word (`.doc`, `.docx`) or PDF; see §5. |
+| A formatted document (headings, tagged values, prose) rather than a picture | `ea_repository(operation="generate_report")` | RTF only (EA writes no file for `.doc`, `.docx` or `.pdf`); see §5. |
 
 Do **not** use the plain `ea_diagram(operation="get_diagram")` read call as an export path even
 though it returns image bytes in its `preview_size_bytes`/`saved_path` fields — it is a
@@ -210,8 +210,7 @@ person's words, so a machine must not choose. The result carries `current_text`,
 `current_text_hash`, `generated_text` and `generated_hash`.
 
 1. **Show the picture.** Read `get_diagram_manifest` for the diagram (the picture is on by default
-   for one diagram). Save the `svg_text` it returns to an `.svg` file in the person's working or
-   output folder and give the person the path to open; no browser tool is needed. The manifest
+   for one diagram). Save the `svg_text` it returns to an `.svg` file in the `<output-folder>` (§5b) and give the person the path to open; no browser tool is needed. The manifest
    reloads the diagram only when that is safe. If it reports `open_with_unsaved_changes`, there is no picture: tell the
    person to save the diagram in EA and run the refresh again. Do not render the picture with
    `get_diagram_svg`, which always reloads and closes the diagram.
@@ -323,7 +322,7 @@ The procedure, the id-table code and the full checklist are in
 ea_repository(operation="generate_report", params={
     "template": "Simple",
     "package_id": 21,
-    "output_path": "<output-dir>\\<file-name-the-person-gave>.rtf",
+    "output_path": "<output-folder>\\<file-name-the-person-gave>.rtf",
 })
 ```
 
@@ -332,7 +331,7 @@ prefix, suffix or otherwise rename a requested file, for example with the packag
 
 Three things that are easy to get wrong (server 3.6.5 or later):
 
-1. **`output_path` must end in `.rtf`, `.doc`, `.docx` or `.pdf`;** other extensions, `.html` included, are refused with `unsupported_report_format`. EA ignores the extension and does not write HTML from this call. An empty `output_path` is refused (`path_required`).
+1. **`output_path` must end in `.rtf`;** other extensions, `.doc`, `.docx`, `.pdf` and `.html` included, are refused with `unsupported_report_format`, because EA's report call writes only RTF (measured on EA 17.1: it writes a file for `.rtf` and nothing for the others). An empty `output_path` is refused (`path_required`).
 2. **`template` is not validated against anything.** An unknown template name silently falls back to a default document, so a misspelled name still produces a report: a `"generated"` status is not confirmation your named template was used, so open the output and check its heading. `SELECT * FROM t_rtfreport` shows only the templates stored in the model (an unmodified model has none).
 3. **An empty `template` is refused with `template_required`;** the call no longer hangs. Supply a non-empty name (for example `"Simple"`). If any call seems to hang, look at EA's screen for a blocking dialog before you conclude anything.
 

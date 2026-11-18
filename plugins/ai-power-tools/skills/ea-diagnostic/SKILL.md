@@ -1,6 +1,6 @@
 ---
 name: ea-diagnostic
-description: Generate a structured diagnostic report when a customer encounters issues with AI Power Tools for Sparx EA, then guide submission to help@novocircle.com. Invoke when a user asks for help with an issue, when an unexpected error occurs that cannot be resolved in the session, when a workaround was applied but the underlying bug should be reported, or before ending a session where multiple issues were encountered.
+description: Generate a structured diagnostic report when a customer encounters issues with AI Power Tools for Sparx EA, then guide submission to help@novocircle.com. Invoke when an unexpected error cannot be resolved in the session, when a workaround was applied but the underlying bug should be reported, when the person asks to report a problem or contact support, or before ending a session where multiple issues were encountered. Do not invoke for plain how-to questions: ea-modeling, ea-help and the other task skills answer those first.
 ---
 
 # AI Power Tools for Sparx EA — Diagnostic Report Skill
@@ -23,6 +23,13 @@ Before writing a single issue entry, call the following MCP tools and record the
 ea_repository(operation="get_repository_info")   # project path, EA version and build, diagnostics state
 ping()                                           # MCP server version
 ea_mdg(operation="assess_mdg_situation")         # loaded MDGs, their IDs, versions, and source paths
+```
+
+A fourth read feeds the footer (Step 6), not the header. It does not need EA to answer, because it
+reads the drawing preferences EA keeps for the current user:
+
+```
+ea_repository(operation="get_ea_preferences")    # appearance preferences, by name, with the EA version
 ```
 
 **If EA may be showing a dialog, look at the screen first.** A dialog open in EA blocks all three
@@ -177,11 +184,39 @@ If EA_MCP_DIAGNOSTICS was not active during this session, set `EA_MCP_DIAGNOSTIC
 environment before launching EA / the MCP server, then reproduce the issue to capture structured
 logs for the next report.
 
+### Appearance preferences
+<When an issue is about how a diagram looks, draws or exports, or differs between two machines or two
+people: the preferences that differ from the baseline (see below). Otherwise write "Not relevant to the
+issues reported.">
+
 ### Transcript note
 If this report was generated during a live session, the conversation transcript may contain
 additional detail — error messages, intermediate tool outputs, and reasoning steps that were
 not captured here. The support team may ask for a transcript excerpt if needed.
 ```
+
+**The Appearance preferences section.** Drawing preferences (shadows, rounded corners, gradients, default
+colors and font, theme) sit outside the model, so the same diagram can render differently on two
+machines. Compare `get_ea_preferences` with
+[`../_shared/references/ea-appearance-baseline.yaml`](../_shared/references/ea-appearance-baseline.yaml), name
+by name: a preference with `expected` set must match it, otherwise one with `default` filled must
+match EA's default, otherwise there is nothing to compare. Write the section as:
+
+```markdown
+### Appearance preferences
+**Read from:** <EA version as get_ea_preferences returns it>
+**Compared:** <N> of <M> baseline preferences (<K> had no baseline value)
+**Differs from the baseline:**
+| Preference | Baseline | This machine |
+|---|---|---|
+| <name> | <expected or default> | <value, or "not set on this machine"> |
+```
+
+Write "No difference from the baseline" when every compared preference matches, and
+`UNAVAILABLE: <error message returned>` when the call failed. While the baseline file is marked
+unmapped, its defaults are empty and only a value the site put in `expected` is compared: say so in the
+section. This skill reports the preferences and changes nothing. Setting one stays with the person, in
+EA's Preferences dialog.
 
 ---
 
@@ -248,7 +283,7 @@ A finished report always has these sections in this order:
 - **Workaround applied** must include the actual code or numbered steps, not a prose description alone.
 - **Recommended fix** must name the specific file, tool, or skill and the exact change needed — not just "fix the bug".
 - Severity must be one of the four defined values: Critical, High, Medium, Low.
-- Affected component must be specific: use the exact MCP tool name (e.g. `create_connector`), skill section reference (e.g. `ea-modeling §8`), or EA UI element name — not a category label like "the server".
+- Affected component must be specific: use the exact MCP tool name (e.g. `create_connector`), skill section reference (e.g. `ea-modeling §7`), or EA UI element name — not a category label like "the server".
 - Do not redact error messages — paste them verbatim.
 - If auto-collection calls fail, record the failure and continue — a partial report is better than no report.
 

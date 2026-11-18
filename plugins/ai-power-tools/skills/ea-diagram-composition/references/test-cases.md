@@ -692,7 +692,7 @@ Covers: Judgment that scripts cannot encode
 ```check
 # EA draws a connector between two placed elements even when no presentation row exists,
 # so a connector is left off only by a row marked hidden
-sql: SELECT COUNT(*) FROM t_diagramlinks WHERE DiagramID = 7 AND Hidden = 1
+sql: SELECT COUNT(*) FROM t_diagramlinks WHERE DiagramID = (SELECT Diagram_ID FROM t_diagram WHERE Name = 'Account Management Landscape') AND Hidden = 1
 expect: >= 1
 ```
 

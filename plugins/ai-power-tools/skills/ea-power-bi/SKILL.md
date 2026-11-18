@@ -1,12 +1,12 @@
 ---
 name: ea-power-bi
-description: Put a Sparx EA repository into Power BI as a generated semantic model - a complete .pbip project with TMDL, declared relationships, a count measure per entity table, a description on every business table, column and measure, key columns and EA's own tables hidden, and an Overview report page - reading the business layer that ea-reporting-database builds, whether as SQL views in the EA database (DirectQuery or Import), as views in a reporting database on SQL Server or in Microsoft Fabric (Import), or as Parquet files (Import). Use when someone wants EA content in Power BI, asks for a dataset, a .pbip, TMDL or a semantic model, asks which of the three paths to take, asks how to refresh or publish, wants Microsoft 365 Copilot to answer from the model or to understand their business terms, or asks why Power BI's own relationship detection does not give them what they expect.
+description: Put a Sparx EA repository into Power BI as a generated semantic model - a complete .pbip project with TMDL, declared relationships, a count measure per entity table, a description on every business table, column and measure, key columns and EA's own tables hidden, and an Overview report page - reading the business layer that ea-reporting-database builds, whether as SQL views in the EA database (DirectQuery or Import), as views in a reporting database on SQL Server or in Microsoft Fabric (Import), or as Parquet files (Import, or Direct Lake and DirectQuery once the files are mirrored into Fabric). Use when someone wants EA content in Power BI, asks for a dataset, a .pbip, TMDL or a semantic model, asks which of the three paths to take, asks how to refresh or publish, wants Microsoft 365 Copilot to answer from the model or to understand their business terms, or asks why Power BI's own relationship detection does not give them what they expect.
 ---
 
 # EA data in Power BI, as a generated semantic model
 
 *Tools: the generators in [`../_shared/tools/`](../_shared/tools/) - `powerbi_model.py` (the
-project), `parquet_tables.py` (path C's Parquet files), with `semantic_model.py`, `tmdl.py`,
+project), `parquet_tables.py` and `onelake_upload.py` (path C), with `semantic_model.py`, `tmdl.py`,
 `pbip.py` and `descriptions.py` underneath. The repository side of the work is `ea-reporting-database` (AI Power Tools for Sparx EA, v3.6.4+), which
 builds the business layer this skill turns into a model.*
 
@@ -32,10 +32,10 @@ the storage mode, differ. The choice is **a fact about the customer's estate, no
 | | **Direct access (path A)** | **Reporting database (path B)** | **Parquet files (path C)** |
 |---|---|---|---|
 | Rows come from | SQL views in their own schema inside the EA database | SQL views in a separate reporting database, on SQL Server or a SQL database in Microsoft Fabric, that AI Power Tools fills over COM | One Parquet file per table in a folder |
-| Storage mode | **DirectQuery**, or Import | **Import** | **Import** |
+| Storage mode | **DirectQuery**, or Import | **Import** | **Import**; or **Direct Lake** once the files are mirrored into Fabric (4.2b) |
 | Data | Live in DirectQuery; a snapshot in Import | A snapshot, rebuilt in full on every refresh | A snapshot, rewritten on every refresh |
 | Needs on the Power BI machine | A SQL Server login that can read the views | A SQL Server login that can read the reporting database; for a SQL database in Fabric, a Microsoft work account | Read access to the Parquet folder. `pyarrow` is needed only to write the files |
-| Cost to state | DirectQuery queries the production database; its speed at the scale of a large repository is not measured | A SQL Server to run and keep, or a Fabric capacity | Power BI Desktop only. A published model cannot refresh from the files: uploading them to OneLake is not supported |
+| Cost to state | DirectQuery queries the production database; its speed at the scale of a large repository is not measured | A SQL Server to run and keep, or a Fabric capacity | Power BI Desktop for Import. A published model needs a mirrored database in Fabric and a Direct Lake model (4.2b) |
 
 [`references/the-path-choice.md`](references/the-path-choice.md) has the wording, what each answer
 commits the customer to, and the two questions that follow (refresh, moving files). Put all three
@@ -48,7 +48,9 @@ expensive to explain.
 
 **Business tables, visible.** Every entity table, `Con_` table, tag-row table and the Table
 Directory, named exactly as `ea-reporting-database` §1 gives them - `Con_` and `(not in MDG)`
-included.
+included. **The one-row `Source` table is not in the generated model on any route**: the generator ignores the definition's `source_table`,
+and the Parquet tables file has no `Source`. The repository's id stays in the definition JSON (`source.id`, null when the profile set none)
+and in the `Source` view on paths A and B. Adding it to a report is a generator change.
 
 **Key columns, hidden - not absent.** `ea_guid`, `source_guid`, `target_guid`, `connector_guid`,
 `connector_id` and `property_id` are `isHidden` on every business table: they mean nothing to a
@@ -132,7 +134,7 @@ python <skills-dir>/_shared/tools/powerbi_model.py <profile>.definition.json <pr
 ```
 
 `--mode directQuery` is for path A only when the customer wants live data; use `import` otherwise,
-and always for path B (the generator refuses DirectQuery over a reporting database). The SQL server
+and always for path B (the generator refuses DirectQuery or Direct Lake over a reporting database). The SQL server
 and database come from the definition, the schema is taken **per table** (business tables in the
 profile's schema, EA's tables in theirs), and the script prints the table, relationship,
 inactive-relationship and measure counts, then the size line. **Read them aloud.**
@@ -157,6 +159,10 @@ byte-identical for the same input and the same pyarrow version. It prints the si
 
 The folder is written into the project as an **absolute path**. Move the folder or the project
 and the partitions point nowhere; regenerate rather than editing a path by hand.
+
+### 4.2b Path C into Fabric (Open Mirroring)
+
+`parquet_tables.py ... --layout open-mirroring`, `onelake_upload.py`, then `powerbi_model.py --mode directLake`: **Direct Lake on OneLake** over the mirrored tables, with the same tables, relationships and measures as every other path (Fabric's own model has no relationships: never offer it instead). **Tell the customer to turn off "Keep your Direct Lake data up to date" once, when they publish the model.** Commands, measured and not measured: [`references/publishing-and-copilot.md`](references/publishing-and-copilot.md) §4.
 
 ### 4.3 Both
 
@@ -249,7 +255,7 @@ the repository open on that machine), and Power BI then picks the new data up:
 | A, DirectQuery | Nothing: every query reads the views live. Regenerate the views only when the technology or inclusion choice changes |
 | A, Import | Refresh the model in Power BI Desktop |
 | B | Refresh the model in Power BI Desktop. A published model refreshes in the Power BI service: from a SQL database in Fabric with **no gateway** (measured); from a local SQL Server through an on-premises data gateway (described, not tested) |
-| C | Re-run `parquet_tables.py` (4.2) to rewrite the files, then refresh the model in Power BI Desktop. A published model cannot refresh from the files: uploading them to OneLake is not supported. For a published model that refreshes, use path B into a SQL database in Fabric |
+| C | Re-run `parquet_tables.py` (4.2) to rewrite the files, then refresh the model in Power BI Desktop. Column names are stable between refreshes: a tag column keeps the spelling it was first given. If the build or replay result lists `new_tag_spellings`, tell the person; their values are in the existing column, and no measure or visual needs repair. For a published model that refreshes, go on into Fabric (4.2b): the upload tool reframes the Direct Lake model once after every table applies; or use path B into a SQL database in Fabric |
 
 **A published model on a SQL database in Fabric** refreshes with **OAuth2** credentials set on the
 semantic model in the service, and no gateway. **If the dialog says "You need to use SSL (HTTPS)
@@ -359,9 +365,7 @@ CSV.
   (Prep data for AI): none is generated. Never promise right answers: one model was measured.
 - **Service refresh**: measured from a SQL database in Fabric, no gateway; through a gateway from a
   local SQL Server, described and not tested - do not assert it either way.
-- **No Direct Lake and no OneLake copy of the business layer.** Parquet upload to OneLake is not
-  supported; a SQL database in Fabric copies its tables to OneLake, not the business layer's views.
-  The Fabric route is path B into a SQL database in Fabric, in Import. Never "medallion architecture".
+- **Direct Lake: say what was measured and nothing past it** (`publishing-and-copilot.md` §4). Fabric holds tables, never the business layer's views. Never "medallion architecture".
 - **No performance or scale figures** for DirectQuery or for large repositories. Measured sizes are
   one model each.
 - **No live connection except path A in DirectQuery**, which queries the production database.
@@ -381,11 +385,11 @@ CSV.
 - [`references/the-path-choice.md`](references/the-path-choice.md) - the decision table for A, B and
   C, the questions to ask, and what each answer commits the customer to
 - [`references/measured-power-bi-behavior.md`](references/measured-power-bi-behavior.md) - every
-  measured fact behind this skill, with its date and instrument
+  measured fact behind this skill, with its date and instrument, including the Fabric run (§12)
 - [`references/publishing-and-copilot.md`](references/publishing-and-copilot.md) - service refresh
   from a SQL database in Fabric, and what Microsoft 365 Copilot needs and does
-- [`references/power-bi-modeling-mcp.md`](references/power-bi-modeling-mcp.md) - Microsoft's own Power BI
-  Modeling MCP server, which the customer installs: registering it in Claude, and inspecting a project
+- [`references/power-bi-modeling-mcp.md`](references/power-bi-modeling-mcp.md) - Microsoft's Power BI Modeling MCP server: registering it, inspecting a project
+- [`references/question-catalog.md`](references/question-catalog.md) - architecture questions, bound and answer-checked
 - [`../ea-reporting-database/SKILL.md`](../ea-reporting-database/SKILL.md) - the repository side:
   the inclusion choice, the profile, preflight, build, check, replay and refresh
 - [`../_shared/references/westbrook-example.md`](../_shared/references/westbrook-example.md) - the

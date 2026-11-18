@@ -3,7 +3,8 @@
 Generating a diagram is half the job. This file is the other half: what to check, what the check
 can and cannot see, and how to stop.
 
-The loop is **compose → place → style → route → verify → lint → correct**, and it is bounded. Three
+The loop is **compose → place → style → route → verify → lint → correct**, and it is bounded. Before the
+first verify, check the machine's drawing preferences against the baseline (§2a). Three
 correction passes, then you report what is left. A loop that runs until it is satisfied either
 terminates or lies about having finished.
 
@@ -46,6 +47,43 @@ an implementation that stores it and never draws it.
 
 So: **check color by looking at the render.** In the SVG, `fill="#RRGGBB"` and `stroke="#RRGGBB"`
 are readable with a regex. No image decoding required.
+
+---
+
+## 2a. Is this machine drawing the way the baseline says?
+
+A diagram is only as comparable as the drawing preferences behind it. EA keeps some of them per user and per
+machine, outside the model: shadows, rounded corners, gradient fills, default colors, the default font, the
+theme. Two people verifying one diagram on two machines can get two different renders, and a lint run on one
+says nothing about the other. This check finds that before you read a render.
+
+Run it once per session, before the first `verify_diagram` whose render you will judge, and again when a
+render looks different from an earlier one for no reason you can find in the model.
+
+```
+ea_repository(operation="get_ea_preferences", params={})
+```
+
+It reads the appearance preferences EA keeps for the current user and returns them by name with the EA
+version. It reads only. Then compare them with
+[`../../_shared/references/ea-appearance-baseline.yaml`](../../_shared/references/ea-appearance-baseline.yaml),
+name by name:
+
+1. A preference with `expected` set must match `expected`.
+2. Otherwise, a preference with `default` filled must match EA's default.
+3. Otherwise there is nothing to compare: list it as "no baseline value".
+4. A name the machine does not have set is EA's default. Say "not set on this machine" and compare the
+   default where the file has one.
+
+Report the drift as a list: the preference, what the baseline says, what the machine has. Say how many
+preferences were compared and how many had no baseline value, because a drift check that compared three of
+twenty says less than it looks. **While the baseline file is marked unmapped, its defaults are empty and
+only a value a site has put in `expected` is compared.** Say that.
+
+**Setting a preference stays with the person.** Give them the preference's name and the value, tell them to
+change it in EA's Preferences dialog, and ask them to restart EA before verifying again, because EA reads
+these at start. Do not change the registry, and do not drive the dialog for them. After they change one, read
+the preferences again and confirm the drift is gone.
 
 ---
 
@@ -150,6 +188,10 @@ passed clean roles or passed none, and a vacuous zero has already been quoted as
   diagram look machine-made.
 - **Ragged and staggered stacks, uneven spokes and ring angles** — all warnings.
 - **Crossings** — a count, `info` only: compare between passes rather than aiming for zero.
+- **Lines through shapes**: a line EA drew straight through an element it does not join (an error).
+  Reads the SVG. Needs `include_svg`.
+- **Label collisions**: a label drawn on an element, on another label or under another line (a warning,
+  because the boxes are estimated). Reads the SVG. Needs `include_svg`.
 - **Unrouted connectors** — no explicit route, so the diagram depends on EA's default.
 - **Inconsistent connector labels** — some named and some not, so the blank ones read as oversights.
 
@@ -165,9 +207,9 @@ a convention in several notations, not an error, and a rule that reported every 
 report correct diagrams as broken.
 
 - **error** — the diagram is wrong. Overlapping elements, a row or column with no whitespace,
-  elements in one role at different sizes. `report.clean` is false.
+  elements in one role at different sizes, a line drawn through an element. `report.clean` is false.
 - **warning** — look at it. Often correct in context: an unset route, an unexplained set of fills, a
-  ragged stack, a staggered stack, uneven spokes, a bunched ring. Does not block.
+  ragged stack, a staggered stack, uneven spokes, a bunched ring, a label collision. Does not block.
 - **info** — a measurement, not a judgment: out-of-canvas placement (it renders but exports cut off)
   and the crossings count.
 
@@ -296,8 +338,23 @@ plausibly be that element's outline. Both guards exist because of what happened 
 - A shape script also emits several rects per element, and judging a name against an icon box
   reported a 37px overflow against a rectangle the name was never drawn inside.
 
-So on a shape-scripted notation these rules mostly stay silent, and `labels_unmatched` on the report
-says how much went unjudged. A quality warning that fires wrongly across a whole notation is how a
+A shape-scripted element has no rect to measure a name against, so the linter measures it against
+the element's **stored box**, moved into the render's space, when the drawn text is exactly the
+element's name and starts inside that box (`scripted_labels_judged` counts them). Measured on EA 17.1
+for the ten octagonal ArchiMate Motivation shapes at 100 x 70: EA wraps on spaces to about 88 px, a
+run of about 95 px starts 6 px inside the left edge and reaches past the right edge, and an
+unbreakable run wider than the shape is drawn centered and runs out of both sides. A cut corner is not
+modeled. Text EA draws beside or below a shape is left unjudged and named on `not_run`.
+
+A **container's title** that EA wrapped onto several lines is not called `label-cramped` when the
+line nearest the border holds more than one word: EA fills each line with as many words as fit, so
+that margin is EA's wrap, and widening only re-wraps it (`wrapped_titles_not_cramp_judged` counts
+them). A line of one word that close to the border is judged, because a word cannot be broken. An
+element's own wrapped name is still judged. A container title EA draws twice at one
+position counts once.
+
+So on a notation whose shapes the linter cannot attribute these rules still stay silent, and
+`labels_unmatched` on the report says how much went unjudged. A quality warning that fires wrongly across a whole notation is how a
 linter gets switched off, and a missed cramped label costs far less than that.
 
 #### Then measured against live EA, which moved two of these from belief to fact
@@ -334,6 +391,55 @@ with another on the same view is not label-checked.**
 
 Neither of these was reachable hermetically. The first needs EA's own renderer to decline to emit a
 rect; the second needs EA to grow a box.
+
+---
+
+## 3b. Lines and labels, read from what EA drew
+
+The composer stores no route for a connector, so EA draws the line, and the model holds no path to check.
+The only place the line exists is the SVG EA exported. Two rules read it, so they judge what a reader sees
+whether EA routed the line or a stored route did. Both need `include_svg=True`; without it each says so on
+`report.not_run` and judges nothing.
+
+**`lines-through-shapes` (error).** A line is read as one open path of straight segments whose two ends sit
+on two different elements. It is reported when it passes through the inside of a third element. The two
+elements it joins are never obstacles, and a container is not one either: a shape that holds other shapes
+is a container whatever EA calls it, because a line may cross the frame of a group on its way between two
+things inside it. A line that only grazes a border is not reported. `lines_measured` is how many lines were
+judged, and it is the denominator: a zero with no lines read is not a clean result. A path with curves, or a
+line with an end on a container or on nothing, is not judged.
+
+**`label-collision` (warning).** Three kinds of collision, one rule:
+
+- a label drawn on an element it does not belong to, or straddling a container's border;
+- a label drawn on another label;
+- a label crossed by a line other than its own connector's.
+
+A label belongs to the element whose box holds it, to the element whose name it is, or to the connector
+whose name it is. It may sit on what it belongs to.
+
+**These are warnings because the label boxes are estimated.** EA gives each text run's start point and its
+measured length. The box is that length by the font size, so its height, a name that wraps, and a font other
+than the one the SVG names all move the real edge. A collision is a place to look in the render, not a
+measurement of how far two things overlap. `label_boxes_measured` is the count of boxes judged, and
+`label_boxes_estimated_from_characters` is how many of them had no measured length and were sized from their
+characters, which is rougher still.
+
+**How the drawing is lined up with the stored geometry.** The stored rects use EA's coordinates and the SVG is
+cropped, so the two differ by a shift. It is found by matching each drawn box to a stored element of the same
+size. When no box matches (every element drawn by a shape script emits paths and no rect), EA's own crop is
+used instead, and `svg_offset_method` on the report says `crop`. The crop is a fallback measured on a few
+exports: when it was used, look at the render before you trust a line finding.
+
+**What to do about a finding.** The composer has no router, so there is no automatic fix. A line through
+an element is corrected by moving or resizing elements so the straight line clears, or by setting the link's
+route points (`set_diagram_link`) and verifying again. A label collision is corrected by moving the label,
+shortening the name, or widening the gap. Then lint again, inside the three-pass budget.
+
+**What they do not see.** A line with a curve; a line whose end is on a container; two lines drawn on top of
+each other; a label whose text EA wrapped differently than the box assumes; and any diagram EA drew with no
+SVG. A clean result here means no line through an element and no label collision that this reading found. It
+does not mean the diagram routes well.
 
 ---
 
@@ -449,7 +555,8 @@ date, so re-run it rather than repeating the figures above.
   reported **1** where the drawn paths proper-cross **0** times. The count is honest about being
   approximate and is still the right metric for comparing two versions of one diagram, but under
   orthogonal routing it is neither an upper nor a lower bound on what the reader sees, and no rule
-  sees the overlap at all.
+  sees the overlap at all. `lines-through-shapes` reads the drawn path, so it sees a line through an
+  element, but it does not see two lines sharing a segment.
 - **Color set as the element's DEFAULT appearance rather than on the placement (servers before
   3.6.5 only).** `unexplained-color` counts `distinct_fills`, and on those servers `fill` is decoded
   from the placement's own style string only. Measured live on EA 17.1 on such a server: the same

@@ -182,11 +182,11 @@ was stored: `stereotype.status` is `bound` or `rejected`, and `stereotype.bound_
 qualified name EA recorded. Use your own technology id and profile name; before 3.6.5 only the
 profile-qualified form binds.
 
-**Read the result after every call that sets a stereotype.** When EA drops a stereotype (a
-Component given a Class-only stereotype, say) the call still returns `ok: true`, with the
-stereotype in `rejected_properties` and `stereotype.status` `rejected`. The base metaclass does not
-suit it: recreate the element with `create_element_in_language`, carrying tags, connectors
-and placements across, or say what the recreate dropped. `create_element` and
+**Read the result after every call that sets a stereotype.** When EA drops a stereotype the call still
+returns `ok: true`, with it in `rejected_properties` and `stereotype.status` `rejected`. The usual cause is that
+no loaded technology defines it (not installed, disabled, installed without restarting EA, or misspelled);
+a differing base metaclass can be one (kept on a Component, dropped on an Object). Check the name, the type
+and `list_available_modeling_languages`, restart EA if just installed, and set it again. Recreate only if the type is wrong. `create_element` and
 `create_element_in_language` both write all three places EA keeps a stereotype:
 `t_object.Stereotype`, the `StereotypeEx` property (not a `t_object` column) and the `t_xref`
 profile row EA's MDG engine reads. Query `t_xref` by hand ([`references/element_creation.md`](references/element_creation.md)
@@ -320,8 +320,7 @@ Full check patterns: [`references/package_and_defects.md`](references/package_an
 
 If interrupted mid-build: reconnect, audit what exists vs. the spec with SQL counts, and
 resume from the next uncompleted item — never rebuild what's there. A wrong name or connector
-stereotype fixes with `update_*`. A wrong package parent has no move tool: update both records
-that place the package and read both back, or delete-and-recreate if childless. Recipes:
+stereotype fixes with `update_*`. A wrong package parent: `move_package`. Recipes:
 [`references/package_and_defects.md`](references/package_and_defects.md) §5.
 
 ---

@@ -80,3 +80,14 @@ Run validation after every MDG install to confirm it finds violations on test da
 ```
 ea_validate(operation="audit", params={"rules_path_or_content": "WBA_rules.yaml", "mode": "demo_validation"})
 ```
+
+### Beyond required tags
+
+The sidecar can say more than "this tag is filled in". Connector ends (a lifecycle rule across a `Uses`
+connector), cardinality at each end, what an element is typed by, what it specializes, what it owns, how deep
+a chain of connectors may run, and whether a name or tag value is unique are all in the grammar: see
+`ea-ruleset-author/references/rule-grammar.md`, "The extended grammar". Existing rules keep their meaning.
+
+Waivers do not go into the rules. A signed and dated exception for one element lives beside the ruleset, in a
+file named `<tech_id>_rules.exceptions.yaml` (or under `exceptions:` in the ruleset), and `meta.exclude_packages` leaves a whole package out.
+Both are described in `ea-validation`.

@@ -28,8 +28,11 @@ rather than written from scratch. Section 2a covers when to do that and which pa
 ea_mdg(operation="assess_mdg_situation", params={})
 ```
 
-No parameters. It reads the repository's stereotype usage and the currently-loaded languages,
-and returns a scenario number, a plain-language description, and a `recommended_next_skill`.
+One optional parameter, `include_conformance` (default false). Leave it off for the first look. Turn it on
+(`params={"include_conformance": true}`) when a technology is loaded and the question is whether the model
+follows it; it reads more tables, so say so on a large model. The call reads the repository's stereotype usage
+and the currently-loaded languages, and returns a scenario number, a plain-language description, and a
+`recommended_next_skill`.
 
 An illustration of the shape of the answer, from the Westbrook Bank demo repository (substitute your
 own technology and numbers; the figures are not a result you can reproduce):
@@ -45,6 +48,10 @@ own technology and numbers; the figures are not a result you can reproduce):
   "recommended_next_skill": "ea-mdg-author"
 }
 ```
+
+When a client technology is loaded and no element is stereotyped yet, the answer is scenario 2 with
+`"state": "language_loaded_nothing_stereotyped"` and a description that says so: nothing is ad hoc, so it
+is not scenario 3. Tell the person the language is loaded and the model has not used it yet.
 
 **`ad_hoc_stereotype_count` is a count of elements, not of distinct stereotypes.** The assessment
 looks at every element in the whole repository whose primary stereotype (the `t_object.Stereotype`
@@ -64,10 +71,9 @@ Read section 5 before you act on `recommended_next_skill`.
 | 2 | Client MDG loaded, ad hoc usage under 5% of stereotyped elements | The technology is doing its job — the repository conforms | `ea-mdg-author` for further changes, or nothing at all |
 | 3 | Client MDG loaded, ad hoc usage at or over 5% | The technology exists but people are stereotyping outside it — new concepts, duplicate ad hoc versions of existing ones, or drift | Extend the existing technology: `ea-mdg-author` if it's XML-authored, `ea-mdg-model-build` if it has a source model (check its profile package first — see `ea-start-here` §2) |
 
-A fourth scenario, "external reference model needed," is named in the operation's own
-documentation but was never observed to be returned in this session, on any input — the
-underlying logic only ever produces 1, 2, or 3. Don't design a workflow around scenario 4 without
-confirming the current server actually emits it.
+The server returns scenario 1, 2 or 3 only; there is no scenario 4. Earlier documentation
+mentioned a fourth, "external reference model needed"; it was never returned, so don't design a
+workflow around it.
 
 The 5% threshold and the "ad hoc" label come from one thing: whether a stereotype in use matches
 an entry in a loaded language's known stereotype set. Section 3 shows how to recompute that
@@ -179,7 +185,7 @@ against the Westbrook Bank repository:
 
 The first and third rows were observed against WBA 1.0. In the Westbrook example with WBA 1.1.1 at Location: Model,
 `get_mdg_from_runtime` answers 18 stereotypes (15 element and 3 connector), 3 diagram types and 3
-toolbox pages, and Manage Technology lists one enabled `WBA` with the two older builds disabled.
+toolbox pages, and Manage Technology lists one `WBA`, enabled: the example model holds a single build.
 
 `get_mdg_from_runtime` reads the technology EA loaded — from the copy imported into the model, or
 from the registered `.xml` EA loads at startup — so its stereotype list is the deployed
@@ -213,6 +219,28 @@ From server 3.6.0, `summarize_stereotype_usage` also returns `resolved_items` (e
 profile). Use them when the bare name is not enough to tell which language an element belongs to.
 
 `assess_mdg_situation` also returns `buckets`, which shows how each count was built: which loaded language each stereotype was matched to, whether it matched by stereotype name or by metatype, and how many elements carry more than one stereotype. When this count disagrees with `summarize_stereotype_usage`, compare the two through `buckets` before concluding either is wrong.
+
+### Check the model against the technology's definition
+
+Call `ea_mdg(operation="assess_mdg_situation", params={"include_conformance": true})` and read
+`conformance.technologies[]`. Each client or model-embedded technology (`language`) has four checks, each a count plus
+at most `conformance.cap` (20) examples. Report the four counts first, then only the first few examples. A count above
+the number of examples listed means more exist.
+
+| Check | Say it as | Reads |
+|---|---|---|
+| `wrong_type` | Elements whose stereotype does not extend their type | `element_count`, `elements` (`element_id`, `object_type`, `stereotype`, `extends`). Give the element ids |
+| `no_binding` | Stereotype names with no binding | `element_count`, `stereotypes` (`name`, `element_count`, `element_ids`). Present these as findings to confirm in EA before acting, not as proof |
+| `tag_drift` | Renamed or missing tags | Per stereotype, `tags_not_in_definition` (with `definition_spelling` when only the case differs) and `definition_tags_on_no_element`. Elements bound to more than one stereotype of the technology are left out |
+| `out_of_enumeration` | Values outside the definition's list | `value_count`, `values` (`element_id`, `stereotype`, `tag`, `value`, `allowed`) |
+
+If `conformance.not_readable` lists a technology, say its definition could not be read and that its conformance was not
+checked. It is not a technology that conforms. Treat it as the `mdg_loaded_no_definition` case in section 3. If the
+conformance check itself fails, the rest of the assessment is still returned and `conformance` is
+`{"error": "conformance_failed", "detail": ...}`.
+
+This is a count against the technology's definition, not the validation ruleset. For rules a person owns, use
+`ea-validation`.
 
 ## 5. When the recommendation doesn't fit — override it
 

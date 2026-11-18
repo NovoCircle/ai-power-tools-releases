@@ -87,9 +87,9 @@ Four properties on `dt`, one question each. Read them in this order:
   has no composer; `ea-semantic` is dictated by the diagram type). Say so and stop. Do not compose the
   nearest shape you do have.
 - **Producible and composed** — Step 2 onward.
-- **Producible, not composed** (`graph`) — skip Step 2. Create the elements, call
-  `ea_diagram("layout_diagram")` with the spacing from `dt.spec()`, then style (Step 3) and verify (Step 4). If the diagram is open in EA with unsaved changes,
-  `layout_diagram` is refused; ask the person to save and call again.
+- **Producible, not composed** (`graph`) — skip Step 2. Create the elements, call `ea_diagram("layout_diagram")`
+  with the spacing from `dt.spec()` (EA does not hold to it: [`grammars.md`](references/grammars.md) §8), then
+  style (Step 3) and verify (Step 4). With unsaved changes open in EA, `layout_diagram` is refused; save first.
 
 Do not stop at `grammar_is_implemented`: it is False for a `graph` type EA would have laid out
 perfectly well. A viewpoint can override its diagram type's grammar and carries the same properties
@@ -237,8 +237,8 @@ Then style, in this order:
 
 **Tidy peers after EA's layout (`graph` types).** EA leaves peers at different widths and heights, and
 the widths can differ from run to run. Set every peer to one width and one height (the binding's size,
-or the width the widest label needs, from `dt.spec(names=...)`), turn autosize off for them so EA does
-not resize them again, then verify: peers share one width and one height.
+or the width the widest label needs, from `dt.spec(names=...)`), then verify: peers share one width and
+one height.
 
 **A connector needs a stored link row before it can be styled.** EA draws the relationship between
 two placed elements whether or not a row exists, so a visible line is *not* evidence you can style
@@ -266,6 +266,9 @@ z-order, decoded connector routing and color, canvas extents.
 out-of-band write returns a stale image that looks completely plausible. `verify_diagram` reloads
 unconditionally and has no flag to forget. Use it rather than `get_diagram_png` when the question
 is "is this right".
+
+**Check the machine's drawing preferences first** (they sit outside the model): compare
+`ea_repository("get_ea_preferences")` with the baseline, as [`references/verification.md`](references/verification.md) section 2a says.
 
 For **"what color did EA actually draw"**, pass `include_svg` and read `stroke=` / `fill=` from
 the markup. A color property read back only echoes what was written.
@@ -318,6 +321,10 @@ was measured, so the count beside it is vacuous, not a result. `report.not_run` 
 not be judged: a ring with no sweep, or groups too small to compare anything within.
 The label rules (`label-clipped`, `label-cramped`) and `render-exceeds-rect` (the box EA drew wider
 than its stored rect) need `include_svg`; without it they say so on `not_run`.
+
+Two more rules read the SVG: `lines-through-shapes` (**error**: a line through an element it does not
+join) and `label-collision` (**warning**: a label on an element, a label, or a line). Both need
+`include_svg`. **Label boxes are estimated from text length and font size.** Denominators: `lines_measured`, `label_boxes_measured`.
 
 **The loop is bounded: three passes, then report what is left.** `lint.is_stalled(previous, report)`
 catches the other failure, a pass that changed nothing. Stop at the first stall.

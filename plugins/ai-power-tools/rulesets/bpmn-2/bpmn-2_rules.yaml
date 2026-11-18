@@ -239,7 +239,7 @@ rules:
       flow; link it with an association. [OMG BPMN 2.0.2 (formal/13-12-09) 8.4.1 pp. 64 to 65]
     category: connection
     severity: error
-    demo_trigger: false
+    demo_trigger: true
     coverage: full
     selector:
       type: connector
@@ -351,7 +351,7 @@ rules:
       flow. [OMG BPMN 2.0.2 (formal/13-12-09) 7.6.1 to 7.6.2 pp. 41 to 42]
     category: connection
     severity: error
-    demo_trigger: false
+    demo_trigger: true
     coverage: full
     selector:
       type: connector
@@ -645,7 +645,7 @@ rules:
       empty. [OMG BPMN 2.0.2 (formal/13-12-09) Table 9.1 p. 109]'
     category: connection
     severity: error
-    demo_trigger: false
+    demo_trigger: true
     coverage: full
     selector:
       type: element
@@ -742,7 +742,7 @@ rules:
       BPMN 2.0.2 (formal/13-12-09) 10.5.2 p. 244]
     category: event
     severity: error
-    demo_trigger: false
+    demo_trigger: true
     coverage: partial
     not_checked: The condition-free outgoing flows half of the rule is not checked (needs the flow's tag).
     selector:
@@ -810,7 +810,7 @@ rules:
     description: An end event is the target of at least one sequence flow. [OMG BPMN 2.0.2 (formal/13-12-09) 10.5.3 p. 248]
     category: event
     severity: error
-    demo_trigger: false
+    demo_trigger: true
     coverage: full
     selector:
       type: element
@@ -834,7 +834,7 @@ rules:
       BPMN 2.0.2 (formal/13-12-09) 10.5.3 p. 248]
     category: event
     severity: error
-    demo_trigger: false
+    demo_trigger: true
     coverage: full
     selector:
       type: element
@@ -1248,7 +1248,7 @@ rules:
       (formal/13-12-09) 10.6.1 p. 289]
     category: gateway
     severity: error
-    demo_trigger: false
+    demo_trigger: true
     coverage: partial
     not_checked: Gateways whose gatewayDirection is Unspecified (EA's default) are not checked; BPMN-GATE-001 (merge or split)
       needs 'incoming at least two OR outgoing at least two', which the rule grammar cannot say.
@@ -1422,7 +1422,7 @@ rules:
       BPMN 2.0.2 (formal/13-12-09) 10.6.6 p. 296]
     category: gateway
     severity: error
-    demo_trigger: false
+    demo_trigger: true
     coverage: partial
     not_checked: That the outgoing flows carry no condition needs the flow's tag.
     selector:
@@ -1611,7 +1611,7 @@ rules:
       (pp. 102 to 104)]
     category: service
     severity: error
-    demo_trigger: false
+    demo_trigger: true
     coverage: partial
     not_checked: The interface's name is the element name and is not checked. The stereotype name `Interface` is shared with
       other notations.

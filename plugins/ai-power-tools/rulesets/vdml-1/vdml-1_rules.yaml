@@ -153,7 +153,7 @@ rules:
       sits in.
     category: relationship
     severity: error
-    demo_trigger: false
+    demo_trigger: true
     coverage: partial
     selector:
       type: connector
@@ -248,7 +248,7 @@ rules:
       outgoing DeliverableFlow is reported. A port tagged Either is not judged.
     category: cardinality
     severity: error
-    demo_trigger: false
+    demo_trigger: true
     coverage: partial
     selector:
       type: element
@@ -359,7 +359,7 @@ rules:
       CapabilityOffer half.
     category: containment
     severity: error
-    demo_trigger: false
+    demo_trigger: true
     coverage: partial
     selector:
       type: element
@@ -453,7 +453,7 @@ rules:
       target is not a Role, or whose source is not a participant, is reported.
     category: relationship
     severity: error
-    demo_trigger: false
+    demo_trigger: true
     coverage: partial
     selector:
       type: connector
@@ -525,7 +525,7 @@ rules:
       connectors is reported.
     category: cardinality
     severity: error
-    demo_trigger: false
+    demo_trigger: true
     coverage: partial
     selector:
       type: element

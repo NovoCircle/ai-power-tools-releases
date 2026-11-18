@@ -28,11 +28,12 @@ mechanism in full, if that is your actual task rather than an audit).
 **no connectors**. That is the entire definition -- not "unused," not "unreferenced," not "safe
 to delete." Treating its output as a delete list is the most common way this skill goes wrong.
 
-Run it against a real capability model and the numbers are startling. On the Westbrook copy as
-last counted (one SQL run on an unmodified copy), a scan over the whole bank tree flagged 89 of
-213 non-package elements, and only 13 of those pass the three tests below (three of the 13 are
-model documents). The counts move as the copy
-changes; the shape does not. Most of what the scan flags is not decay:
+Run it against a real capability model and the numbers are startling. On the Westbrook Bank demo
+model (a copy, EA 17.1 build 1716, server 3.6.5, measured 2026-11-16), `find_orphan_elements` over
+the whole bank tree flagged 89 of 213 non-package elements, and a SQL read of the same tree agreed
+(213 non-package elements, 89 with no connector). Only 13 of those 89 pass the three tests below
+(three of the 13 are model documents). Over the whole repository the scan flagged 181 of 427. The
+counts move as the model changes; the shape does not. They come from our demo model, not one you have. Most of what the scan flags is not decay:
 
 - **Capability-hierarchy containers**, in a model that nests capability elements by `ParentID`
   (the current Westbrook copy models its capability tree as packages and has none, so the check
@@ -251,11 +252,10 @@ different package than the element itself -- that is expected, not corruption, a
 "which package owns this diagram" and "which package owns this element" are different questions.
 
 What *does* change: the element's Browser location, and any package-scoped recursive count
-(`ea-modeling` covers the recursive-count trap in more detail). There is no `move_package` --
-moving a whole subtree means updating both records that place the package, its `t_package` row
-and its mirror `t_object` row (see `ea-modeling`'s package reference for the recipe and its
-read-back), or a `duplicate_package` plus `delete_package` on the original, which gives every
-element a new GUID.
+(`ea-modeling` covers the recursive-count trap in more detail). Moving a whole subtree is `move_package`
+(`package_id`, `new_parent_id`): it moves the package's `t_package` row and its mirror `t_object`
+row together and reports both (see `ea-modeling`'s package reference). A `duplicate_package`
+plus `delete_package` on the original also works, but gives every element a new GUID.
 
 ---
 
@@ -279,6 +279,8 @@ element a new GUID.
   noticeably slower on the whole-model root than on a single top-level package. Scope to the
   smallest package that answers the question, especially while other sessions are active against
   the same repository.
+- **A slow repository may be carrying EA's audit log.** `ea_analyze(operation="assess_audit_log")`
+  (read only) says whether auditing is on and how many rows and bytes the log holds; no dates, no trim.
 
 For general wait-before-verify guidance when a check needs the EA UI (opening a diagram to
 confirm a deletion visually, for example) rather than just another MCP call, see
@@ -361,6 +363,11 @@ element's relationships and nothing further out.
 the same three limits: depth capped at 10, `max_nodes` (2000), `wall_clock_ms` (8000). Any
 response with `"truncated": true` hit one of them and is **partial** -- narrow the depth or the
 connector types and re-run rather than reporting the partial result as complete.
+
+**Analysis questions go to `ea-architecture-analysis`.** These operations take one start element. For
+a question about a whole change, a whole set or a whole architecture -- what several elements reach, how
+much of a set is traced, what differs between two states, where the model depends on one element --
+use that skill: it agrees the rule first and counts in one pass.
 
 ---
 

@@ -42,9 +42,14 @@ passed, so a rerun skips MDG-typed items too (server 3.6.5 or later; before that
 duplicated them).
 
 Set `parent_id` in a spec to nest the element under an existing element in the same package. A
-parent created in the same call cannot be named, so create parents first. A parent that does not
-exist is `parent_not_found` and one in another package is `parent_in_other_package`, each with the
+parent that does not exist is `parent_not_found` and one in another package is `parent_in_other_package`, each with the
 `spec_index`; the result returns the stored `parent_id`.
+
+To build a tree in one call (server 3.6.6 or later), give a child `parent_index`: the position, from 0,
+of an earlier spec in the same call. It is created under the element that spec made (or found, when
+that spec was skipped). Give `parent_id` or `parent_index`, not both. A `parent_index` that names the
+spec itself, a later spec or a spec that failed fails only that spec, with its `spec_index` and the
+`parent_index`. Before 3.6.6, create parents first.
 
 **Single element (still valid for one-offs):**
 
@@ -115,6 +120,11 @@ ea_model(operation="create_elements_bulk", params={"specs": [
     },
 ]})
 ```
+
+A technology's metaclass name is not always EA's element type name: a stereotype declared on
+`SysBoundary` (BPMN 2.0 `Group`) is created as EA's `Boundary` (server 3.6.6 or later). A stereotype
+that applies to an attribute or a connector is not an element: the spec is refused with
+`metaclass_not_an_element` and the metaclass named; use `create_attribute` or `create_connector`.
 
 ### Stereotype → Object_Type mapping
 
@@ -227,7 +237,7 @@ ea_model(operation="create_element", params={"type": "<base-metaclass>", "stereo
   -> sets the StereotypeEx property to the qualified name
   -> writes the t_xref row (MDG profile application) when the stereotype matches a loaded
      MDG profile; what EA stores there is FQName=<profile>::<stereotype>
-  -> `type` is yours to get right; a base metaclass the stereotype does not suit makes EA drop it
+  -> `type` is yours to get right: it must be the type the language gives the stereotype
 
 ea_model(operation="create_element_in_language", params={"language_id": "<technology-id>", "language_type": "<stereotype>", ...})
   -> writes the same three stores as create_element
@@ -282,10 +292,13 @@ with connectors or diagram placements needs those recreated too).
 ### Diagnosing a dropped stereotype
 
 After any create or update that carries a stereotype, check `rejected_properties` and
-`stereotype.status`. A `rejected` status leaves the call `ok: true`, and means the element's base
-metaclass does not suit the stereotype (a Component given a Class-only stereotype, say). You
-cannot change `Object_Type` after creation: recreate the element with
-`create_element_in_language`.
+`stereotype.status`. A `rejected` status leaves the call `ok: true`, and means no loaded technology
+defines the stereotype (a technology installed without restarting EA, a disabled technology, a
+misspelled name). A base metaclass that differs from the element's type can be a cause: EA kept a Class stereotype on a
+Component and dropped it on an Object (other types not measured), and the reason names the metaclasses
+the technology declares. Fix the name, load the technology, or use an element type that fits the stereotype, then set the stereotype again. Only when the element's type is wrong for the
+language do you need a new element, because you cannot change `Object_Type` after creation: recreate it
+with `create_element_in_language`.
 
 ```python
 result = ea_model(operation="update_element", params={"element_id": <id>, "properties": {"StereotypeEx": "..."}})

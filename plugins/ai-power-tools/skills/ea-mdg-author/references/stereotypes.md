@@ -40,13 +40,16 @@ Back to [SKILL.md](../SKILL.md).
     <Tag name="regulatoryScope" type="String"
          description="Regulatory regimes that apply, e.g. PCI-DSS, GDPR, SOX"
          default="" unit="" values=""/>
+    <Tag name="pciScopeJustification" type="String"
+         description="Why the application is in or out of PCI scope"
+         default="" unit="" values=""/>
   </TaggedValues>
 </Stereotype>
 ```
 
 This is the real `WBABusinessApplication` stereotype from the Westbrook Bank technology — note the
-doubled prefix (`WBA` namespace, `WBABusinessApplication` name) and the six base tagged values
-every WBA stereotype carries. Applying it to `Component` (not `Class`) matches the metaclass the
+doubled prefix (`WBA` namespace, `WBABusinessApplication` name), the six base tagged values
+every WBA stereotype carries, and `pciScopeJustification`, which only some stereotypes declare (the full list is in `_shared/references/westbrook-example.md`, section 3). Applying it to `Component` (not `Class`) matches the metaclass the
 technology actually declares; getting this wrong is the single most consequential error in an MDG.
 
 **Attribute rules:**

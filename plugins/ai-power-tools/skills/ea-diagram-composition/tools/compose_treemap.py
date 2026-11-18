@@ -216,7 +216,7 @@ _HERE = Path(__file__).resolve().parent
 if str(_HERE) not in sys.path:
     sys.path.insert(0, str(_HERE))
 
-from compose import LayoutError, bounding_box, rect  # noqa: E402
+from compose import LayoutError, fits_names, bounding_box, rect  # noqa: E402
 
 __all__ = [
     "DEFAULT_TREEMAP_SPEC",
@@ -749,6 +749,8 @@ def _aspect(width: int, height: int) -> Fraction:
 # ---------------------------------------------------------------------------
 # The grammar
 # ---------------------------------------------------------------------------
+@fits_names(lambda: DEFAULT_TREEMAP_SPEC["min_tile_side"], ("groups",), width_key="min_tile_side",
+            measured=True)
 def compose_treemap(
     groups: Sequence[Mapping[str, Any]],
     spec: Mapping[str, Any] | None = None,

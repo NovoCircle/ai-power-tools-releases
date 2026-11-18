@@ -31,6 +31,8 @@ description: Author and run YAML sidecar conformance rules against a Sparx EA mo
 
 ## Sidecar YAML shape
 
+A ruleset may carry `meta: {min_server_version: "3.6.6"}`. The server checks it right after parsing the YAML, before any rule runs: an older server returns `ruleset_needs_newer_server` with no violations (a value that is not a version returns `invalid_ruleset_meta`). Use it so an older server refuses a ruleset instead of reporting a false clean result.
+
 A YAML file with a top-level `rules` list. Each rule has:
 
 ```yaml
@@ -78,26 +80,55 @@ Write a stereotype as the technology id (`WBA::Uses`) or the bare name. A qualif
 
 | `condition.type` | Use for |
 |---|---|
-| `tagged_value_required` | One or more tags on the selected element or connector must be non-empty. To restrict values use `tagged_value_constraint` with `value_must_be_one_of`; putting `value_must_be_one_of` under `tagged_value_required` is refused. |
-| `tagged_value_constraint` | One or more tags must take a value from `value_must_be_one_of`. |
-| `connector_count` | Element must have between `min` and `max` connectors of a given stereotype, of a given EA type with `connector_type`, or, with neither, of any kind (`direction: incoming \| outgoing`; use only these two). `min` and `max` must be non-negative whole numbers with `min` not above `max`. |
+| `tagged_value_required` | One or more tags on the selected element or connector must be present and non-empty. A tag may also carry `value_must_be_one_of`: the tag must then be present and its value must be in the list. A missing tag is a violation, and so is a value outside the list; that violation names the allowed values. |
+| `tagged_value_constraint` | One or more tags must take a value from `value_must_be_one_of`. A missing or empty tag passes it, so use it when the tag is optional, and use `tagged_value_required` with `value_must_be_one_of` when the tag is mandatory as well. |
+| `connector_count` | Element must have between `min` and `max` connectors of a given stereotype, of a given EA type with `connector_type`, or, with neither, of any kind (`direction: incoming \| outgoing`; omitted means outgoing, and anything else, including `both`, is refused with `invalid_rule_shape`: write one rule per direction). `min` and `max` must be non-negative whole numbers with `min` not above `max`. |
 | `connector_endpoint_stereotype` | Connector source and target must be in `source_must_be_one_of` and `target_must_be_one_of`. Leave a list out to allow any endpoint on that side. At least one list must be present, and neither may be empty. |
 | `relationship_table` | The connector's source and target, as a pair, must allow its stereotype in a table from the ruleset's top-level `tables:`. A violation names the pair, the table and what the table allows there. Quote any cell, source or target that could be read as a YAML boolean (`"no"`, `"yes"`, `"on"`, `"off"`); an unquoted one is refused. Needs a server that supports it (released after 3.6.4); an older server ignores the rule and reports nothing for it. |
-| `contained_in` | The element's containers, outward (the element it is attached to, else its package, then the packages above), must match `path`, one step per level by stereotype, `type:<Object_Type>` or name. Needs a server released after 3.6.4; an older server reports nothing for it. |
+| `contained_in` | The element's containers, outward (the element it is attached to, else its package, then the packages above), must match `path`, one step per level by stereotype, `type:<Object_Type>` or name. A step written with the technology id or profile name (`WBA::...`) matches a package bound to that technology; a bare name matches any; the model root package has no element row, so it never matches a qualified step. Needs a server released after 3.6.4; an older server reports nothing for it. |
 | `contains_count` | The element must hold between `min` and `max` direct children of the `child` kind; a package element's children are what its package holds. Needs a server released after 3.6.4. |
-| `tagged_value_type_shipped` | A profile's tagged-value types (blank-`Type` attributes on stereotype-defining classes, per `ea-mdg-model-build`'s Phase 2 convention) must also appear in a **built MDG file's RefData** — i.e. must actually have been ticked on the MDG Technology Wizard's Tagged Value Types page, not just defined in `t_propertytypes`. Requires `built_mdg_path` (file path or raw XML). |
+| `tagged_value_type_shipped` | A profile's tagged-value types must ship in the **built MDG file**. A blank-`Type` attribute (per `ea-mdg-model-build`'s Phase 2 convention) defined in `t_propertytypes` must appear in its RefData, i.e. have been ticked on the MDG Technology Wizard's Tagged Value Types page. An enumeration tag must appear on its stereotype in the built file as a `<Tag type="enumeration">` with a non-empty `values`. Requires `built_mdg_path` (file path or raw XML). |
+
+More conditions, all documented in `ea-ruleset-author/references/rule-grammar.md` ("The extended grammar"): `connector_ends`
+(tags and multiplicity at both ends), `related` (count what an element links to, by connector, container,
+children, type, ancestor, attributes, operations, parameters, diagrams or a tag that points at an element),
+`chain` (depth and loops), `unique`, `forbidden`, and `any_of`, `all_of` and `not` to combine them. A selector can
+also take `where` (element), `source` and `target` (connector), or select diagrams with `{type: diagram, diagram_types: [...]}`.
+Existing rules keep their meaning. Westbrook's lifecycle rule, in YAML:
+
+```yaml
+- id: WBA-LFY-001
+  severity: error
+  selector:
+    type: connector
+    connector_stereotypes: [WBA::Uses, WBA::Flows]
+    source: {tags: [{name: lifecycle, value_in: [Current, Strategic]}]}
+  condition:
+    type: connector_ends
+    target: {tags: [{name: lifecycle, value_not_in: [Deprecated, Retired]}]}
+```
 
 ### How a tag value is read
 
 - `tagged_value_required` with `must_be_non_empty` fails when the tag row is missing, empty or only
   spaces. A tag EA created empty when it bound the stereotype and a tag that was never created both
   count as empty.
+- `tagged_value_constraint` and `value_in` filters skip an element with no value; `tagged_value_required` reports
+  it. To catch a missing value, use `tagged_value_required`, and read the per-tag `examined` and `filled` counts in `rule_stats`
+  (examined minus filled is how many had no value).
+- A tag entry may carry `min`, `max` (inclusive numbers) and `integer: true` instead of a list. A value that is not a
+  number is reported as such; a blank value is skipped, as above.
 - `tagged_value_constraint` checks only a tag that holds a value: a missing or empty tag passes it.
   A value of only spaces is compared like any other and fails unless the list includes it. To
-  require a value from a set, use both conditions in two rules.
-- If an element has two rows for one tag (one filled, one blank), the validator reads whichever
-  row the database returns first, and the result can differ from one model to the next. Remove the
-  extra row before you trust either result.
+  require a value from a set, give `tagged_value_required` a `value_must_be_one_of` list: it then fails
+  a missing or empty tag and a value outside the list, in one rule. (Two rules, one of each condition,
+  say the same thing.)
+- If an element has two rows for one tag, the validator reads every row and ignores blank ones, so row
+  order never changes the verdict: a tag is filled when any row holds a value, and each distinct
+  non-blank value is checked. A `tagged_value_filter` clause keeps the element when any row's value is in
+  `value_in`. Remove a stray extra row anyway, because EA shows only one of them.
+- In `tagged_value_filter`, `tag` must be text and `value_in` a list of text values (or one text value).
+  A number, a yes/no or a null is refused with `invalid_rule_shape` naming the key: quote the values.
 
 ### Example: a connector endpoint rule
 
@@ -252,12 +283,12 @@ Rulesets ship in this plugin, one folder per language. Each path below is from t
 From a skill folder a path is `../../rulesets/<id>/<id>_rules.yaml`. On desktop chat and Claude Cowork,
 which cannot read the plugin's files by path, pass the YAML as inline content.
 
-The ArchiMate ruleset is at `rulesets/archimate-3/archimate-3_rules.yaml` in this plugin. It replaces
-`ruleset-archimate31`. It has 4 rules in place of 24: one checks every relationship against the
-standard's table, the 14 rules the standard doesn't require are gone, and the six collaboration and
-interaction rules become two warnings, because the standard states those numbers in prose. On a server
-older than 3.6.5,
-the old set is at `https://raw.githubusercontent.com/NovoCircle/ai-power-tools-releases/main/legacy/ruleset-archimate31/archimate31_rules.yaml`,
+The ArchiMate ruleset is at `rulesets/archimate-3/archimate-3_rules.yaml` in this plugin. It has 4 rules:
+one checks every relationship against the standard's allowed-relationship table, one stops a junction
+taking composition, aggregation or specialization, and two warnings cover a collaboration with fewer than
+two members and an interaction with no performer, because the standard states those numbers in prose. On a
+server older than 3.6.5,
+the older, longer ArchiMate set is at `https://raw.githubusercontent.com/NovoCircle/ai-power-tools-releases/main/legacy/ruleset-archimate31/archimate31_rules.yaml`,
 because that server can't read this one.
 
 ```python
@@ -302,7 +333,18 @@ result = ea_validate(operation="audit", params={
 
 ### Reading the result
 
-A clean result is not a pass if rules examined nothing. The result also carries `rule_stats` (one entry per evaluated rule: `rule_id`, `selector`, `examined`, `examined_nothing`, and `qualifier_unresolved` when a qualified name matches no loaded technology) and `rules_examined_nothing` (the rule ids). Check `rules_examined_nothing`: a rule listed there matched no item, usually because its stereotype is spelled wrong or its technology is not loaded (`qualifier_unresolved`). Fix the rule, or say plainly that it judged nothing. For `tagged_value_type_shipped`, each entry adds `types_examined` and `types_compared`.
+A clean result is not a pass if rules examined nothing. The result also carries `rule_stats` (one entry per evaluated rule: `rule_id`, `selector`, `examined`, `examined_nothing`, and `qualifier_unresolved` when a qualified name matches no loaded technology) and `rules_examined_nothing` (the rule ids). Check `rules_examined_nothing`: a rule listed there matched no item, usually because its stereotype is spelled wrong or its technology is not loaded (`qualifier_unresolved`). Fix the rule, or say plainly that it judged nothing. For `tagged_value_type_shipped`, each entry adds `types_examined` and `types_compared` (enumeration tags, whose Type names an enumeration of the profile, are counted with the blank-Type ones). If a read fails, the result lists the affected rules in `unreadable` (`rule_id`, `detail`) and marks their `rule_stats` entry `unreadable: true`; the other rules still run. A result with `unreadable` is not a clean pass: rerun those rules.
+
+## Exclusions, exceptions, owners and reports
+
+A ruleset can leave packages out (`meta.exclude_packages`), carry dated exceptions for single elements (an
+`exceptions:` block or a `<ruleset>.exceptions.yaml` file beside it) and name an owner tag (`meta.owner_tag`).
+A report shows a package's owner from that tag and reads "not set" when it has no value, so when a report shows
+"not set", tell the person to set `meta.owner_tag` and fill the tag on their package elements.
+An audit then adds `suppressed`, `exceptions_expired`, `exceptions_unmatched` and `excluded_packages` to its
+result, and `history_dir` keeps counts for `ea_validate(operation="get_report")`, which renders a monthly or a
+tollgate report in markdown. Read `references/exceptions-and-reports.md` before you run an audit with any of
+these, and never report a clean run without saying how many findings were suppressed and what was excluded.
 
 ## Authoring tips
 

@@ -177,6 +177,34 @@ a flat set.
   it is the only one of the two that keeps every item inside its band. **Ask; do not take the
   default as agreement.** This is the same mechanism, the same record and the same two answers as a
   name too long for its box — see [`bindings.md`](bindings.md) §5.7.1.
+- **A box widens until its name sits on one line, by default, in every composer.** EA fills each
+  wrapped line to about its box width, so a name that wraps always leaves a line a few pixels from
+  the border; a box that holds the whole name on one line does not. The engine therefore raises
+  `item_width` (a group's own `item_width` where it states one, a matrix's `row_header_width` for
+  its row headers) to `one_line_width(name)` and says what grew in `result["conflicts"]`
+  (`FitConflict`: the name, the width it needs, `applied: "widen"`, `answered: False`). The
+  caller's spec and layout input are not edited. `on_misfit="overlap"` turns it off: the stated
+  width is kept and the same record is returned with `applied: "overlap"`. A treemap's tile
+  widths come from its weights, so it only reports a name wider than the tile it got.
+  `bindings.spec(names=...)` fits the same figure up front. A band's title that wraps in a narrow band
+  gets a taller title strip, reported in `result["adjustments"]` with the stated and applied
+  heights (so is a `label_height` below the 15px one line needs), and a horizontal lane or a matrix cell keeps the title clearance above
+  its items, because EA draws a container's title across its top.
+- **Titles and names clear of what EA draws around them, where a binding says so.** Two spec keys
+  are off unless set, and `bindings.spec()` sets them only for diagram types with evidence behind
+  them; an unbound spec lays the bands out exactly as before. EA draws a band's title centered
+  across its top, and a line between two bands runs straight up from an item's center through the
+  title strip of the band it leaves, so a title over a column is crossed by its line.
+  `title_clear_of_lines: true` widens every band on the right, past the rows, until each title
+  below the first clears every item's center (`band_widened_for_title`); the rows keep their
+  places. Under `align: "center"` the rows stay centered, and a title that cannot clear is reported
+  (`title_not_cleared`) rather than moved. `name_below_room` is the room under the last row for a
+  name EA draws below its shape; a smaller `band_pad_y` is raised to it on the bands that hold
+  items (`band_bottom_raised`). Both come back in `result["adjustments"]`. Measured on EA 17.1
+  (build 1716) on a three-band ArchiMate diagram: the titles were drawn centered over the middle
+  column's lines, and a Device's name reached 14 px under its shape, across a 12 px band pad. The
+  ArchiMate binding sets both keys; no other shipped binding has a drawn band title or a measured
+  name below its shapes, so none sets them.
 - **Band heights that follow their contents.** A band with two items should not be as tall as a band
   with twelve. Fixed band heights leave holes that read as missing content. Height is where this
   grammar carries its variation; width is not, which is why the two are treated differently.
@@ -582,6 +610,14 @@ other grammars is the honest choice.
 
 A graph or a tree. **We compute no coordinates: EA's own layout places the elements and we tidy
 afterward.** This grammar is fully **producible**, and it has no composer because it needs none.
+
+### Spacing is EA's, not the standard's
+
+`layout_diagram` takes the standard's across gap (`item_gap_x`) as `column_spacing` and its down gap
+(`item_gap_y`) as `layer_spacing`. EA treats both as hints. Measured on UML and CSDM diagrams: a page
+margin of 110 and 65 against the standard's 40, and gaps from 140 to 830 against 80 and 50. A diagram
+EA lays out itself is not held to the standard. Only diagrams the composition engine places are. Report a
+`graph` diagram's spacing as EA's result, and do not call it conformant.
 
 ### What it suits
 

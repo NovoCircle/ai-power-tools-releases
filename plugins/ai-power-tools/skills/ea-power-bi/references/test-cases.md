@@ -1040,14 +1040,15 @@ Covers: 6. Refresh
 
 **Setup:** A project generated for path C exists.
 
-**Passes when:** The run says the reporting layer is refreshed first, the Parquet files are rewritten by running the Parquet step again, then the model is refreshed in Power BI Desktop. It says a published model cannot refresh from these files, because uploading them to OneLake is not supported, and that a published model that refreshes needs path B, for example into a SQL database in Fabric.
+**Passes when:** The run says the reporting layer is refreshed first, the Parquet files are rewritten by running the Parquet step again, then the model is refreshed in Power BI Desktop. It says a published model can refresh from these files by way of a mirrored database in Fabric (Open Mirroring, then a Direct Lake model), which was measured on a reference model with parts not yet measured, or by moving to path B, for example into a SQL database in Fabric. It does not say the files can be published as they are.
 
 **Check:**
 
 ```check
 reply: says: to rewrite the files with the Parquet step and then refresh the model in Power BI Desktop
-reply: says: a published model cannot refresh from Parquet files because uploading them to OneLake is not supported
+reply: says: a published model refreshes from the Parquet files by way of a mirrored database in Fabric, or by moving to path B
 reply: says: path B into a SQL database in Fabric gives a published model that refreshes
+reply: not: says a published model refreshes directly from the local Parquet files
 reply: not: cites an internal backlog id
 ```
 
@@ -1466,7 +1467,7 @@ expect: unchanged
 
 **Fails when:** The run extends the measured `.qea` and cloud-connected results to Jet.
 
-### TC-50: No Direct Lake and no OneLake copy of the business layer
+### TC-50: Direct Lake: what was measured, and what was not
 
 Covers: 9. What you may not claim
 
@@ -1474,14 +1475,15 @@ Covers: 9. What you may not claim
 
 **Ask:** "Can we land this in Fabric OneLake so Direct Lake reads it and it refreshes on its own?"
 
-**Passes when:** The run says Direct Lake and OneLake copies of the business layer are not supported, that uploading the Parquet files to OneLake is not supported, and that the supported Fabric route is path B into a SQL database in Fabric, read in Import, which refreshes in the Power BI service with no gateway. It does not call the design a medallion architecture.
+**Passes when:** The run says Direct Lake over the business layer was measured for path C: the Parquet files written in the Open Mirroring layout, uploaded into a mirrored database, and a generated Direct Lake model over the mirrored tables. It says that with automatic updates off the model kept the previous refresh until the single reframe (measured 16 Nov 2026), and that Direct Lake over path B tables in a SQL database in Fabric, and a service principal's sign-in are not measured, and that "Keep your Direct Lake data up to date" is turned off once when the model is published. It says path B into a SQL database in Fabric, read in Import, is also measured and needs no gateway. It does not call the design a medallion architecture and does not claim an unmeasured part works.
 
 **Check:**
 
 ```check
-reply: says: Direct Lake and OneLake copies of the business layer are not supported
-reply: says: the supported Fabric route is a reporting database in a SQL database in Fabric, read in Import
-reply: not: says it will build a Direct Lake model or upload files to OneLake
+reply: says: Direct Lake was measured over Parquet files mirrored into Fabric with Open Mirroring
+reply: says: with automatic updates off the model kept the previous refresh until the single reframe; Direct Lake over path B tables and a service principal's sign-in are not measured
+reply: says: turn off Keep your Direct Lake data up to date once when the model is published
+reply: says: a reporting database in a SQL database in Fabric, read in Import, is also measured
 reply: not: uses the phrase medallion architecture
 reply: not: cites an internal backlog id
 ```
@@ -1491,7 +1493,7 @@ sql: SELECT (SELECT COUNT(*) FROM t_object), (SELECT COUNT(*) FROM t_connector),
 expect: unchanged
 ```
 
-**Fails when:** The run sketches a lakehouse or Direct Lake design over the business layer. It reads as a plan; the business layer is views, which the database's OneLake copy does not hold, and Direct Lake reads tables only.
+**Fails when:** The run says Direct Lake over path B tables, or a service principal's sign-in, works. Neither was measured. It also fails if it offers Fabric's auto-created model in place of the generated one: that model has none of the relationships.
 
 ### TC-51: No speed or scale figures
 

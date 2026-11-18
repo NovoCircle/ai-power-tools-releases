@@ -39,14 +39,16 @@ rulesets/{id}/
 └── {id}_rules.yaml        ← one YAML file, all rules for the language
 ```
 
-The YAML has two top-level keys:
+The YAML has these top-level keys:
 
 | Key | Purpose |
 |-----|---------|
-| `meta:` | Human-readable header: language, version, sources, severity legend |
+| `meta:` | Human-readable header: language, version, sources, severity legend; also `min_server_version`, `exclude_packages` and `owner_tag` |
 | `rules:` | List of rule objects, one per conformance constraint |
+| `tables:` | Optional. Allowed-relationship tables for `relationship_table` rules |
+| `exceptions:` | Optional. Dated waivers for single elements (or a file `<ruleset>.exceptions.yaml` beside the ruleset) |
 
-The ArchiMate 3.1 ruleset (`<plugin root>/rulesets/archimate-3/archimate-3_rules.yaml`, which replaces `ruleset-archimate31`) is the canonical
+The ArchiMate 3.1 ruleset (`<plugin root>/rulesets/archimate-3/archimate-3_rules.yaml`) is the canonical
 reference implementation. Read it before starting a new language. The shipped rulesets sit in the
 plugin's `rulesets` folder, next to its `skills` folder.
 
@@ -67,6 +69,8 @@ You need three things from the spec before writing a single rule:
    "An Interaction MUST be assigned to a Collaboration", etc.
 
 ### Where to look
+
+**First source: the language library.** For a language that has a folder in `../_shared/languages/<id>/` (for example `archimate-3`, `bpmn-2`, `uml-2`, `sysml-1`), read `ea.yaml` for the technology id, the stored stereotype names and the diagram types, and `howto.md` for the language's rules and conventions, before you go to the specification. Take the stereotype names and the technology id from there instead of measuring them again. Go to the sources below for what the library does not hold (the relationship table, structural constraints), and say which part came from the library and which from the specification.
 
 | Language | Primary source | Relationship table |
 |----------|---------------|-------------------|
@@ -189,6 +193,32 @@ your first rule.
   edge starts here (element is the source). Use only these two values. With no
   `connector_stereotype` and no `connector_type` the rule counts every connector. `min` and
   `max` must be non-negative whole numbers with `min` not above `max`.
+- **Rules about tags, multiplicity, typing, ancestry, what an element owns or must not be** (the extended
+  grammar, full detail in `references/rule-grammar.md`). Existing rules keep their meaning; these keys add to them:
+  - **Match block** (`stereotype_one_of`, `any_stereotype_one_of` for second and later stereotypes, `name_one_of`,
+    `kind_one_of`, `tags` (also `min`, `max`, `integer: true`), `properties` (Status, Priority and the other built-in
+    columns), `typed_by`, `specializes`,
+    `multiplicity`, `not`): describes one element. An element selector takes it as `where`; a connector selector
+    as `source` and `target`. Example: `where: {tags: [{name: lifecycle, value_in: [Current]}]}`.
+  - **`connector_ends`**: the source and target of a connector against match blocks, and each end's multiplicity
+    and aggregation (`source_end`, `target_end`). Example: `target: {tags: [{name: lifecycle, value_not_in: [Deprecated]}]}`.
+  - **`related`**: count or test what an element links to, with `via` one of `connector`, `container`,
+    `children`, `classifier`, `general`, `attributes`, `operations`, `parameters`, `diagrams`, `tag_reference`
+    (diagram selector: `shows`; connector selector: `linked_connectors`). Example:
+    `via: {attributes: {}}, where: {stereotype_one_of: [column]}, max: 2`.
+  - **`any_of`, `all_of`, `not`, `forbidden`**: combine per-item conditions, or forbid a selected shape. Example:
+    `type: any_of, conditions: [...]`.
+  - **`chain`**: depth and cycles along `connector`, `general` or `classifier`. Example:
+    `via: {general: {}}, max_depth: 4, no_cycles: true`.
+  - **`unique`**: a name or tag value shared by two items, in the model, a package or a container. Example:
+    `key: "tag:requirementId", scope: package`.
+  - **Diagram selector**: `{type: diagram, diagram_types: [...]}`.
+  - **Table legend**: a letter can map to `type:<Connector_Type>`.
+  - **`meta.exclude_packages`, exceptions files, `meta.owner_tag`**: leave a package out of a run, record a signed
+    and dated waiver for one element, and name the owner of each finding. A report reads "not set" for a package without an owner tag value, so tell the person to set `meta.owner_tag`. See `ea-validation`.
+  - Measured kind names are in the grammar reference, with what was not measured. Use `ntype:<number>` for the
+    rest and check the number on a model built in EA.
+  - A ruleset that uses these keys should set `meta.min_server_version`, so an older server refuses it.
 - **EA stereotype names:** write the name as EA stores it, measured against a real model. A bare name (`ArchiMate_Assignment`) matches the stereotype column exactly: a name one character off selects nothing, and a rule that selects nothing reports no violations, which reads like a clean model. A qualified name (`WBA::Uses`, the technology id and the stereotype) matches only items EA binds to that profile, which keeps two languages that share a short name apart. Do not strip a prefix that is part of the stereotype's own name: EA's built-in ArchiMate MDG stores `ArchiMate_Assignment`, so the selector is `connector_stereotypes: [ArchiMate_Assignment]` and `Assignment` matches nothing. Check `rule_stats` and `rules_examined_nothing` in the result to catch a name that selected nothing. Per-technology measurement, never a guess; see `references/rule-grammar.md`.
 - **Unknown fields are errors.** A key that a selector or condition does not read is an error (`invalid_rule_shape`, with the field and the allowed list), not something the engine ignores. A rule with no selector, no condition or no `type` is also refused. Rule-level keys such as `implements` and `coverage` are not checked. Run the ruleset through `ea_validate` once and fix every `invalid_rule_shape` before relying on a clean result.
 
@@ -320,7 +350,7 @@ pushed file, `validate_model` will report `rules_fetch_failed` even though the c
 is correct. Wait for the host to serve the raw file directly in a browser before handing
 the URL to anyone else.
 
-**`meta:` block is not validated.** The server reads only `rules:`. The `meta:` block is
+**`meta:` is mostly not validated.** The server reads `rules:`, `tables:`, `exceptions:` and these `meta` keys: `min_server_version` (a version such as `3.6.6`, checked before any rule runs: an older server returns `ruleset_needs_newer_server`), `exclude_packages` and `owner_tag` (a wrong shape is `invalid_ruleset_meta`), and `id` or `language` (the name a run's history file is kept under). The rest of `meta:` is
 ignored at runtime but is critical for human readers and for future tooling. Always include
 it; always cite sources. Inside a rule it is different: a selector or condition key the engine does not read is an error (`invalid_rule_shape`), and so is a rule with no selector, condition or `type`. Rule-level keys such as `implements`, `coverage`, `name` and `category` are not checked.
 

@@ -176,8 +176,7 @@ const claims = JSON.parse(atob(seg.replace(/-/g, '+').replace(/_/g, '/')));
 |---|---|
 | `rol` | `ADMIN` for a Super Admin |
 | `admin_api_access` | Present and `yes` for a Super Admin |
-| `isreadonly` (in `profile`) | The person cannot write anything — say so rather than letting an action fail |
-| `groups` (in `profile`) | Group membership, which drives Access Permissions |
+| `isreadonly`, `groups` | **Not in the access token.** On 5.6.1.5 the Super Admin token carried neither (one token, so a hypothesis for other accounts). If they exist they sit in the OIDC user object's `profile`, which this file says not to pass around. Take group membership from the API (`GetUserGroupsByRepAndUser`), and treat "cannot write" as unknown until a refused action or a read shows it |
 | `sub`, `name` | Who you are acting as — worth stating back when an action is consequential |
 
 > **The rule: a Super Admin session is not a test of what a normal user sees.**

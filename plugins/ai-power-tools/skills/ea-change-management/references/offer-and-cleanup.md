@@ -20,6 +20,13 @@ ea_model(operation="list_package_tree", params={
 #        "element_count": 0, "diagrams": []}]}
 ```
 
+The values above are an illustration: `Legacy Integrations` is not in the demo model. The shape was
+re-checked on 2026-11-16 on a copy of the Westbrook Bank demo model, server 3.6.5. A package with
+one level of sub-packages (`01 Document Assets`) returns `depth: 1`, `package_count: 2` and
+`truncated: False`, as above. `truncated` is true only when a package lies below the last level
+walked: the whole bank tree is 10 levels deep and returned `truncated: False` with 71 packages at
+the default depth, `True` with 70 when `max_depth` was 9, and `True` with 7 when `max_depth` was 1.
+
 `delete_package` itself reports no element or diagram counts (`{"ok": true,
 "deleted_package_id": 41}`, plus `baselines_removed` when baselines went with it), so pull the count first; it's also what makes the offer
 concrete instead of vague. `element_count` and `diagrams` are per package, so add them up across
@@ -203,13 +210,19 @@ statement ran, not that the correct row was the one it removed.
 
 ### Whole-model sweep
 
-To review every package rather than one, collect the candidate package IDs first:
+To review every baseline in the model, leave `package_id` out. One call lists them all, each with its
+package, version, date, notes and payload size:
 
 ```python
-ea_model(operation="list_root_packages", params={})
-# then, for each root of interest:
-ea_model(operation="list_package_tree", params={"root_package_id": <id>})
+ea_repository(operation="list_baselines", params={})
+# -> {"scope": "model", "count": 17, "packages_with_baselines": 2, "baselines": [{"guid": "{A}",
+#      "name": "...", "version": "2026-08-01", "notes": "pre-migration", "date": "...",
+#      "package_id": 5, "package_path": "Westbrook Bank Model / Consumer Banking",
+#      "payload_bytes": 48213}, ...]}
 ```
 
-Then run the same `list_baselines` → size → confirm → delete → verify sequence per
-`package_id`. There is no single call that lists baselines across the whole repository at once.
+`payload_bytes` is the size the SQL step above would give, so a whole-model review needs no walk of the
+package tree and no separate size query. It is null on a repository that is not a `.qea`/`.qeax` file; there,
+size the baselines with the `LENGTH`-style query for that database. A baseline whose package is gone has a null
+`package_id`. Then run the confirm, delete and verify steps above per baseline, and verify by listing again
+(the whole model, or the one `package_id`).

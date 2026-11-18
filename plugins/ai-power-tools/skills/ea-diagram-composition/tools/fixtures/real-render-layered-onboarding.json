@@ -1,0 +1,189 @@
+{
+ "name": "VP Layered - Westbrook Onboarding",
+ "note": "Captured from a live EA render (verify_diagram with include_svg). Westbrook content only. Connector stereotypes and guards are drawn as labels but verify_diagram returns name '' for them.",
+ "objects": [
+  {
+   "element_id": 11662,
+   "name": "Westbrook Retail Customer",
+   "left": 78,
+   "top": -375,
+   "right": 123,
+   "bottom": -465,
+   "type": "Actor"
+  },
+  {
+   "element_id": 11663,
+   "name": "Account Applicant",
+   "left": 35,
+   "top": -265,
+   "right": 125,
+   "bottom": -335,
+   "type": "Class"
+  },
+  {
+   "element_id": 11664,
+   "name": "Open Deposit Account",
+   "left": 133,
+   "top": -143,
+   "right": 268,
+   "bottom": -218,
+   "type": "Activity"
+  },
+  {
+   "element_id": 11665,
+   "name": "Account Opening Service",
+   "left": 155,
+   "top": -25,
+   "right": 245,
+   "bottom": -95,
+   "type": "Class"
+  },
+  {
+   "element_id": 11666,
+   "name": "Account Application",
+   "left": 295,
+   "top": -25,
+   "right": 385,
+   "bottom": -95,
+   "type": "Class"
+  },
+  {
+   "element_id": 11669,
+   "name": "Customer Onboarding Service",
+   "left": 175,
+   "top": -265,
+   "right": 265,
+   "bottom": -335,
+   "type": "Class"
+  },
+  {
+   "element_id": 11667,
+   "name": "Origination Platform",
+   "left": 310,
+   "top": -385,
+   "right": 490,
+   "bottom": -455,
+   "type": "Component"
+  },
+  {
+   "element_id": 11671,
+   "name": "Applicant Record",
+   "left": 315,
+   "top": -145,
+   "right": 405,
+   "bottom": -215,
+   "type": "Class"
+  },
+  {
+   "element_id": 11675,
+   "name": "Container Hosting Service",
+   "left": 315,
+   "top": -505,
+   "right": 405,
+   "bottom": -575,
+   "type": "Class"
+  },
+  {
+   "element_id": 11672,
+   "name": "Onboarding Application Cluster",
+   "left": 535,
+   "top": -605,
+   "right": 625,
+   "bottom": -675,
+   "type": "Node"
+  },
+  {
+   "element_id": 11674,
+   "name": "Core Banking Runtime",
+   "left": 525,
+   "top": -30,
+   "right": 635,
+   "bottom": -90,
+   "type": "Component"
+  },
+  {
+   "element_id": 11673,
+   "name": "Regional Data Center Host",
+   "left": 455,
+   "top": -135,
+   "right": 545,
+   "bottom": -225,
+   "type": "Node"
+  }
+ ],
+ "links": [
+  {
+   "connector_id": 1481,
+   "name": "",
+   "source_element_id": 11662,
+   "target_element_id": 11663
+  },
+  {
+   "connector_id": 1482,
+   "name": "",
+   "source_element_id": 11663,
+   "target_element_id": 11664
+  },
+  {
+   "connector_id": 1483,
+   "name": "",
+   "source_element_id": 11664,
+   "target_element_id": 11665
+  },
+  {
+   "connector_id": 1484,
+   "name": "",
+   "source_element_id": 11664,
+   "target_element_id": 11666
+  },
+  {
+   "connector_id": 1485,
+   "name": "",
+   "source_element_id": 11669,
+   "target_element_id": 11664
+  },
+  {
+   "connector_id": 1486,
+   "name": "",
+   "source_element_id": 11667,
+   "target_element_id": 11669
+  },
+  {
+   "connector_id": 1489,
+   "name": "",
+   "source_element_id": 11667,
+   "target_element_id": 11671
+  },
+  {
+   "connector_id": 1490,
+   "name": "",
+   "source_element_id": 11671,
+   "target_element_id": 11666
+  },
+  {
+   "connector_id": 1491,
+   "name": "",
+   "source_element_id": 11672,
+   "target_element_id": 11675
+  },
+  {
+   "connector_id": 1492,
+   "name": "",
+   "source_element_id": 11675,
+   "target_element_id": 11667
+  },
+  {
+   "connector_id": 1493,
+   "name": "",
+   "source_element_id": 11672,
+   "target_element_id": 11674
+  },
+  {
+   "connector_id": 1494,
+   "name": "",
+   "source_element_id": 11673,
+   "target_element_id": 11674
+  }
+ ],
+ "svg_text": "<svg xmlns=\"http://www.w3.org/2000/svg\" xmlns:xlink=\"http://www.w3.org/1999/xlink\" width=\"18.12cm\" height=\"19.13cm\" viewBox=\"0 0 685 723\">\n<title></title>\n<desc>Created with Enterprise Architect (Build: 1716) 2</desc>\n<g style=\"fill:#FFFFFF;fill-opacity:1.00;\">\n\t <rect x=\"0\" y=\"0\" width=\"685\" height=\"723\" shape-rendering=\"auto\"/>\n</g><g style=\"stroke-width:1;stroke-linecap:square;stroke-linejoin:miter; fill:#000000;fill-opacity:0.00; stroke:#000000; stroke-opacity:1.00;\">\n  <path d=\"M 6 6 L 6 717 L 679 717 L 679 6 L 6 6\" shape-rendering=\"auto\"/>\n</g>\n<g style=\"stroke-width:1;stroke-linecap:square;stroke-linejoin:miter; fill:#FFFFFF;fill-opacity:1.00; stroke:#000000; stroke-opacity:1.00;\">\n  <polygon points=\"6 26 197 26 210 12 210 6 6 6 6 26\" shape-rendering=\"auto\"   style=\"fill-rule:evenodd;\"/>\n</g>\n<g style=\"stroke-width:1;stroke-linecap:square;stroke-linejoin:miter; fill:#000000;fill-opacity:1.00; stroke:#000000; stroke-opacity:0.00;\">\n\t<text x=\"11.00\" y=\"19.00\" textLength=\"184\" style=\"font-family:Calibri; font-weight:700; font-style:normal; font-size:10px; fill:#000000;fill-opacity:1.00; stroke:#000000; stroke-opacity:0.00; stroke-width:0; white-space: pre;\" xml:space=\"preserve\" transform=\"rotate(-0.00 11.00 19.00)\">business VP Layered - Westbrook Onboarding</text>\n</g>\n<g style=\"stroke-width:1;stroke-linecap:round;stroke-linejoin:bevel; fill:#FEF2DD;fill-opacity:1.00; stroke:#9A8484; stroke-opacity:1.00;\">\n<ellipse cx=\"100.00\" cy=\"412.00\" rx=\"11.00\" ry=\"11.00\" shape-rendering=\"auto\"  />\n</g>\n<g style=\"stroke-width:1;stroke-linecap:round;stroke-linejoin:bevel; fill:#000000;fill-opacity:0.00; stroke:#9A8484; stroke-opacity:1.00;\">\n  <path d=\"M 100 423 L 100 444 M 85 428 L 100 428 M 115 428 L 100 428 M 100 444 L 112 465 M 100 444 L 88 465\" shape-rendering=\"auto\"/>\n</g>\n<g style=\"stroke-width:1;stroke-linecap:round;stroke-linejoin:bevel; fill:#595959;fill-opacity:1.00; stroke:#000000; stroke-opacity:0.00;\">\n\t<text x=\"45.00\" y=\"475.00\" textLength=\"111\" style=\"font-family:Calibri; font-weight:700; font-style:normal; font-size:10px; fill:#595959;fill-opacity:1.00; stroke:#000000; stroke-opacity:0.00; stroke-width:0; white-space: pre;\" xml:space=\"preserve\" transform=\"rotate(-0.00 45.00 475.00)\">Westbrook Retail Customer</text>\n</g>\n<g style=\"stroke-width:1;stroke-linecap:round;stroke-linejoin:bevel; fill:#FDFAF7;fill-opacity:1.00; stroke:#9A8484; stroke-opacity:1.00;\">\n <rect x=\"35\" y=\"280\" width=\"90\" height=\"70\" rx=\"0.00\" shape-rendering=\"auto\"  />\n</g>\n<g style=\"stroke-width:1;stroke-linecap:round;stroke-linejoin:bevel; fill:#595959;fill-opacity:1.00; stroke:#000000; stroke-opacity:0.00;\">\n\t<text x=\"49.00\" y=\"296.00\" textLength=\"61\" style=\"font-family:Calibri; font-weight:0; font-style:normal; font-size:10px; fill:#595959;fill-opacity:1.00; stroke:#000000; stroke-opacity:0.00; stroke-width:0; white-space: pre;\" xml:space=\"preserve\" transform=\"rotate(-0.00 49.00 296.00)\">«BusinessRole»</text>\n\t<text x=\"44.00\" y=\"309.00\" textLength=\"71\" style=\"font-family:Calibri; font-weight:700; font-style:normal; font-size:10px; fill:#595959;fill-opacity:1.00; stroke:#000000; stroke-opacity:0.00; stroke-width:0; white-space: pre;\" xml:space=\"preserve\" transform=\"rotate(-0.00 44.00 309.00)\">Account Applicant</text>\n</g>\n<g style=\"stroke-width:1;stroke-linecap:round;stroke-linejoin:bevel; fill:#FBF7DB;fill-opacity:1.00; stroke:#9A8484; stroke-opacity:1.00;\">\n <rect x=\"133\" y=\"158\" width=\"135\" height=\"75\" rx=\"15.00\" shape-rendering=\"auto\"  />\n</g>\n<g style=\"stroke-width:1;stroke-linecap:round;stroke-linejoin:bevel; fill:#595959;fill-opacity:1.00; stroke:#000000; stroke-opacity:0.00;\">\n\t<text x=\"163.00\" y=\"179.00\" textLength=\"74\" style=\"font-family:Calibri; font-weight:0; font-style:normal; font-size:10px; fill:#595959;fill-opacity:1.00; stroke:#000000; stroke-opacity:0.00; stroke-width:0; white-space: pre;\" xml:space=\"preserve\" transform=\"rotate(-0.00 163.00 179.00)\">«BusinessProcess»</text>\n\t<text x=\"156.00\" y=\"192.00\" textLength=\"88\" style=\"font-family:Calibri; font-weight:700; font-style:normal; font-size:10px; fill:#595959;fill-opacity:1.00; stroke:#000000; stroke-opacity:0.00; stroke-width:0; white-space: pre;\" xml:space=\"preserve\" transform=\"rotate(-0.00 156.00 192.00)\">Open Deposit Account</text>\n</g>\n<g style=\"stroke-width:1;stroke-linecap:round;stroke-linejoin:bevel; fill:#FDFAF7;fill-opacity:1.00; stroke:#9A8484; stroke-opacity:1.00;\">\n <rect x=\"155\" y=\"40\" width=\"90\" height=\"70\" rx=\"0.00\" shape-rendering=\"auto\"  />\n</g>\n<g style=\"stroke-width:1;stroke-linecap:round;stroke-linejoin:bevel; fill:#595959;fill-opacity:1.00; stroke:#000000; stroke-opacity:0.00;\">\n\t<text x=\"166.00\" y=\"56.00\" textLength=\"68\" style=\"font-family:Calibri; font-weight:0; font-style:normal; font-size:10px; fill:#595959;fill-opacity:1.00; stroke:#000000; stroke-opacity:0.00; stroke-width:0; white-space: pre;\" xml:space=\"preserve\" transform=\"rotate(-0.00 166.00 56.00)\">«BusinessServi...</text>\n\t<text x=\"166.00\" y=\"69.00\" textLength=\"68\" style=\"font-family:Calibri; font-weight:700; font-style:normal; font-size:10px; fill:#595959;fill-opacity:1.00; stroke:#000000; stroke-opacity:0.00; stroke-width:0; white-space: pre;\" xml:space=\"preserve\" transform=\"rotate(-0.00 166.00 69.00)\">Account Opening</text>\n\t<text x=\"185.00\" y=\"82.00\" textLength=\"30\" style=\"font-family:Calibri; font-weight:700; font-style:normal; font-size:10px; fill:#595959;fill-opacity:1.00; stroke:#000000; stroke-opacity:0.00; stroke-width:0; white-space: pre;\" xml:space=\"preserve\" transform=\"rotate(-0.00 185.00 82.00)\">Service</text>\n</g>\n<g style=\"stroke-width:1;stroke-linecap:round;stroke-linejoin:bevel; fill:#FDFAF7;fill-opacity:1.00; stroke:#9A8484; stroke-opacity:1.00;\">\n <rect x=\"295\" y=\"40\" width=\"90\" height=\"70\" rx=\"0.00\" shape-rendering=\"auto\"  />\n</g>\n<g style=\"stroke-width:1;stroke-linecap:round;stroke-linejoin:bevel; fill:#595959;fill-opacity:1.00; stroke:#000000; stroke-opacity:0.00;\">\n\t<text x=\"305.00\" y=\"56.00\" textLength=\"70\" style=\"font-family:Calibri; font-weight:0; font-style:normal; font-size:10px; fill:#595959;fill-opacity:1.00; stroke:#000000; stroke-opacity:0.00; stroke-width:0; white-space: pre;\" xml:space=\"preserve\" transform=\"rotate(-0.00 305.00 56.00)\">«BusinessObject»</text>\n\t<text x=\"301.00\" y=\"69.00\" textLength=\"78\" style=\"font-family:Calibri; font-weight:700; font-style:normal; font-size:10px; fill:#595959;fill-opacity:1.00; stroke:#000000; stroke-opacity:0.00; stroke-width:0; white-space: pre;\" xml:space=\"preserve\" transform=\"rotate(-0.00 301.00 69.00)\">Account Application</text>\n</g>\n<g style=\"stroke-width:1;stroke-linecap:round;stroke-linejoin:bevel; fill:#FDFAF7;fill-opacity:1.00; stroke:#9A8484; stroke-opacity:1.00;\">\n <rect x=\"175\" y=\"280\" width=\"90\" height=\"70\" rx=\"0.00\" shape-rendering=\"auto\"  />\n</g>\n<g style=\"stroke-width:1;stroke-linecap:round;stroke-linejoin:bevel; fill:#595959;fill-opacity:1.00; stroke:#000000; stroke-opacity:0.00;\">\n\t<text x=\"186.00\" y=\"296.00\" textLength=\"68\" style=\"font-family:Calibri; font-weight:0; font-style:normal; font-size:10px; fill:#595959;fill-opacity:1.00; stroke:#000000; stroke-opacity:0.00; stroke-width:0; white-space: pre;\" xml:space=\"preserve\" transform=\"rotate(-0.00 186.00 296.00)\">«ApplicationSe...</text>\n\t<text x=\"200.00\" y=\"309.00\" textLength=\"39\" style=\"font-family:Calibri; font-weight:700; font-style:normal; font-size:10px; fill:#595959;fill-opacity:1.00; stroke:#000000; stroke-opacity:0.00; stroke-width:0; white-space: pre;\" xml:space=\"preserve\" transform=\"rotate(-0.00 200.00 309.00)\">Customer</text>\n\t<text x=\"180.00\" y=\"322.00\" textLength=\"80\" style=\"font-family:Calibri; font-weight:700; font-style:normal; font-size:10px; fill:#595959;fill-opacity:1.00; stroke:#000000; stroke-opacity:0.00; stroke-width:0; white-space: pre;\" xml:space=\"preserve\" transform=\"rotate(-0.00 180.00 322.00)\">Onboarding Service</text>\n</g>\n<g style=\"stroke-width:1;stroke-linecap:round;stroke-linejoin:bevel; fill:#F9EAEA;fill-opacity:1.00; stroke:#9A8484; stroke-opacity:1.00;\">\n <rect x=\"310\" y=\"400\" width=\"180\" height=\"70\" rx=\"0.00\" shape-rendering=\"auto\"  />\n</g>\n<g style=\"stroke-width:1;stroke-linecap:round;stroke-linejoin:bevel; fill:#595959;fill-opacity:1.00; stroke:#000000; stroke-opacity:0.00;\">\n\t<text x=\"340.00\" y=\"416.00\" textLength=\"100\" style=\"font-family:Calibri; font-weight:0; font-style:normal; font-size:10px; fill:#595959;fill-opacity:1.00; stroke:#000000; stroke-opacity:0.00; stroke-width:0; white-space: pre;\" xml:space=\"preserve\" transform=\"rotate(-0.00 340.00 416.00)\">«ApplicationComponent»</text>\n\t<text x=\"349.00\" y=\"429.00\" textLength=\"82\" style=\"font-family:Calibri; font-weight:700; font-style:normal; font-size:10px; fill:#595959;fill-opacity:1.00; stroke:#000000; stroke-opacity:0.00; stroke-width:0; white-space: pre;\" xml:space=\"preserve\" transform=\"rotate(-0.00 349.00 429.00)\">Origination Platform</text>\n</g>\n<g style=\"stroke-width:1;stroke-linecap:round;stroke-linejoin:bevel; fill:#F9EAEA;fill-opacity:1.00; stroke:#9A8484; stroke-opacity:1.00;\">\n <rect x=\"474\" y=\"405\" width=\"11\" height=\"17\" rx=\"0.00\" shape-rendering=\"auto\"  />\n <rect x=\"471\" y=\"407\" width=\"7\" height=\"5\" rx=\"0.00\" shape-rendering=\"auto\"  />\n <rect x=\"471\" y=\"414\" width=\"7\" height=\"5\" rx=\"0.00\" shape-rendering=\"auto\"  />\n</g>\n<g style=\"stroke-width:1;stroke-linecap:round;stroke-linejoin:bevel; fill:#FDFAF7;fill-opacity:1.00; stroke:#9A8484; stroke-opacity:1.00;\">\n <rect x=\"315\" y=\"160\" width=\"90\" height=\"70\" rx=\"0.00\" shape-rendering=\"auto\"  />\n</g>\n<g style=\"stroke-width:1;stroke-linecap:round;stroke-linejoin:bevel; fill:#595959;fill-opacity:1.00; stroke:#000000; stroke-opacity:0.00;\">\n\t<text x=\"332.00\" y=\"176.00\" textLength=\"55\" style=\"font-family:Calibri; font-weight:0; font-style:normal; font-size:10px; fill:#595959;fill-opacity:1.00; stroke:#000000; stroke-opacity:0.00; stroke-width:0; white-space: pre;\" xml:space=\"preserve\" transform=\"rotate(-0.00 332.00 176.00)\">«DataObject»</text>\n\t<text x=\"326.00\" y=\"189.00\" textLength=\"68\" style=\"font-family:Calibri; font-weight:700; font-style:normal; font-size:10px; fill:#595959;fill-opacity:1.00; stroke:#000000; stroke-opacity:0.00; stroke-width:0; white-space: pre;\" xml:space=\"preserve\" transform=\"rotate(-0.00 326.00 189.00)\">Applicant Record</text>\n</g>\n<g style=\"stroke-width:1;stroke-linecap:round;stroke-linejoin:bevel; fill:#FDFAF7;fill-opacity:1.00; stroke:#9A8484; stroke-opacity:1.00;\">\n <rect x=\"315\" y=\"520\" width=\"90\" height=\"70\" rx=\"0.00\" shape-rendering=\"auto\"  />\n</g>\n<g style=\"stroke-width:1;stroke-linecap:round;stroke-linejoin:bevel; fill:#595959;fill-opacity:1.00; stroke:#000000; stroke-opacity:0.00;\">\n\t<text x=\"327.00\" y=\"536.00\" textLength=\"65\" style=\"font-family:Calibri; font-weight:0; font-style:normal; font-size:10px; fill:#595959;fill-opacity:1.00; stroke:#000000; stroke-opacity:0.00; stroke-width:0; white-space: pre;\" xml:space=\"preserve\" transform=\"rotate(-0.00 327.00 536.00)\">«TechnologyS...</text>\n\t<text x=\"324.00\" y=\"549.00\" textLength=\"71\" style=\"font-family:Calibri; font-weight:700; font-style:normal; font-size:10px; fill:#595959;fill-opacity:1.00; stroke:#000000; stroke-opacity:0.00; stroke-width:0; white-space: pre;\" xml:space=\"preserve\" transform=\"rotate(-0.00 324.00 549.00)\">Container Hosting</text>\n\t<text x=\"345.00\" y=\"562.00\" textLength=\"30\" style=\"font-family:Calibri; font-weight:700; font-style:normal; font-size:10px; fill:#595959;fill-opacity:1.00; stroke:#000000; stroke-opacity:0.00; stroke-width:0; white-space: pre;\" xml:space=\"preserve\" transform=\"rotate(-0.00 345.00 562.00)\">Service</text>\n</g>\n<g style=\"stroke-width:1;stroke-linecap:round;stroke-linejoin:bevel; fill:#F0FFFF;fill-opacity:1.00; stroke:#9A8484; stroke-opacity:1.00;\">\n  <polygon points=\"543 620 625 620 617 628 535 628 543 620\" shape-rendering=\"auto\"   style=\"fill-rule:evenodd;\"/>\n</g>\n<g style=\"stroke-width:1;stroke-linecap:round;stroke-linejoin:bevel; fill:#AAC2D2;fill-opacity:1.00; stroke:#9A8484; stroke-opacity:1.00;\">\n  <polygon points=\"625 620 625 682 617 690 617 628 625 620\" shape-rendering=\"auto\"   style=\"fill-rule:evenodd;\"/>\n</g>\n<g style=\"stroke-width:1;stroke-linecap:round;stroke-linejoin:bevel; fill:#CDE5F5;fill-opacity:1.00; stroke:#9A8484; stroke-opacity:1.00;\">\n  <polygon points=\"535 628 617 628 617 690 535 690 535 628\" shape-rendering=\"auto\"   style=\"fill-rule:evenodd;\"/>\n</g>\n<g style=\"stroke-width:1;stroke-linecap:round;stroke-linejoin:bevel; fill:#595959;fill-opacity:1.00; stroke:#000000; stroke-opacity:0.00;\">\n\t<text x=\"560.00\" y=\"644.00\" textLength=\"31\" style=\"font-family:Calibri; font-weight:0; font-style:normal; font-size:10px; fill:#595959;fill-opacity:1.00; stroke:#000000; stroke-opacity:0.00; stroke-width:0; white-space: pre;\" xml:space=\"preserve\" transform=\"rotate(-0.00 560.00 644.00)\">«Node»</text>\n\t<text x=\"552.00\" y=\"657.00\" textLength=\"48\" style=\"font-family:Calibri; font-weight:700; font-style:normal; font-size:10px; fill:#595959;fill-opacity:1.00; stroke:#000000; stroke-opacity:0.00; stroke-width:0; white-space: pre;\" xml:space=\"preserve\" transform=\"rotate(-0.00 552.00 657.00)\">Onboarding</text>\n\t<text x=\"539.00\" y=\"670.00\" textLength=\"74\" style=\"font-family:Calibri; font-weight:700; font-style:normal; font-size:10px; fill:#595959;fill-opacity:1.00; stroke:#000000; stroke-opacity:0.00; stroke-width:0; white-space: pre;\" xml:space=\"preserve\" transform=\"rotate(-0.00 539.00 670.00)\">Application Cluster</text>\n</g>\n<g style=\"stroke-width:1;stroke-linecap:round;stroke-linejoin:bevel; fill:#F9EAEA;fill-opacity:1.00; stroke:#9A8484; stroke-opacity:1.00;\">\n <rect x=\"525\" y=\"45\" width=\"110\" height=\"60\" rx=\"0.00\" shape-rendering=\"auto\"  />\n</g>\n<g style=\"stroke-width:1;stroke-linecap:round;stroke-linejoin:bevel; fill:#595959;fill-opacity:1.00; stroke:#000000; stroke-opacity:0.00;\">\n\t<text x=\"543.00\" y=\"64.00\" textLength=\"54\" style=\"font-family:Calibri; font-weight:700; font-style:normal; font-size:10px; fill:#595959;fill-opacity:1.00; stroke:#000000; stroke-opacity:0.00; stroke-width:0; white-space: pre;\" xml:space=\"preserve\" transform=\"rotate(-0.00 543.00 64.00)\">Core Banking</text>\n\t<text x=\"553.00\" y=\"77.00\" textLength=\"34\" style=\"font-family:Calibri; font-weight:700; font-style:normal; font-size:10px; fill:#595959;fill-opacity:1.00; stroke:#000000; stroke-opacity:0.00; stroke-width:0; white-space: pre;\" xml:space=\"preserve\" transform=\"rotate(-0.00 553.00 77.00)\">Runtime</text>\n</g>\n<g style=\"stroke-width:1;stroke-linecap:round;stroke-linejoin:bevel; fill:#F9EAEA;fill-opacity:1.00; stroke:#9A8484; stroke-opacity:1.00;\">\n <rect x=\"619\" y=\"50\" width=\"11\" height=\"17\" rx=\"0.00\" shape-rendering=\"auto\"  />\n <rect x=\"616\" y=\"52\" width=\"7\" height=\"5\" rx=\"0.00\" shape-rendering=\"auto\"  />\n <rect x=\"616\" y=\"59\" width=\"7\" height=\"5\" rx=\"0.00\" shape-rendering=\"auto\"  />\n</g>\n<g style=\"stroke-width:1;stroke-linecap:round;stroke-linejoin:bevel; fill:#F0FFFF;fill-opacity:1.00; stroke:#9A8484; stroke-opacity:1.00;\">\n  <polygon points=\"463 150 545 150 537 158 455 158 463 150\" shape-rendering=\"auto\"   style=\"fill-rule:evenodd;\"/>\n</g>\n<g style=\"stroke-width:1;stroke-linecap:round;stroke-linejoin:bevel; fill:#AAC2D2;fill-opacity:1.00; stroke:#9A8484; stroke-opacity:1.00;\">\n  <polygon points=\"545 150 545 232 537 240 537 158 545 150\" shape-rendering=\"auto\"   style=\"fill-rule:evenodd;\"/>\n</g>\n<g style=\"stroke-width:1;stroke-linecap:round;stroke-linejoin:bevel; fill:#CDE5F5;fill-opacity:1.00; stroke:#9A8484; stroke-opacity:1.00;\">\n  <polygon points=\"455 158 537 158 537 240 455 240 455 158\" shape-rendering=\"auto\"   style=\"fill-rule:evenodd;\"/>\n</g>\n<g style=\"stroke-width:1;stroke-linecap:round;stroke-linejoin:bevel; fill:#595959;fill-opacity:1.00; stroke:#000000; stroke-opacity:0.00;\">\n\t<text x=\"477.00\" y=\"174.00\" textLength=\"37\" style=\"font-family:Calibri; font-weight:0; font-style:normal; font-size:10px; fill:#595959;fill-opacity:1.00; stroke:#000000; stroke-opacity:0.00; stroke-width:0; white-space: pre;\" xml:space=\"preserve\" transform=\"rotate(-0.00 477.00 174.00)\">«Device»</text>\n\t<text x=\"468.00\" y=\"187.00\" textLength=\"56\" style=\"font-family:Calibri; font-weight:700; font-style:normal; font-size:10px; fill:#595959;fill-opacity:1.00; stroke:#000000; stroke-opacity:0.00; stroke-width:0; white-space: pre;\" xml:space=\"preserve\" transform=\"rotate(-0.00 468.00 187.00)\">Regional Data</text>\n\t<text x=\"472.00\" y=\"200.00\" textLength=\"47\" style=\"font-family:Calibri; font-weight:700; font-style:normal; font-size:10px; fill:#595959;fill-opacity:1.00; stroke:#000000; stroke-opacity:0.00; stroke-width:0; white-space: pre;\" xml:space=\"preserve\" transform=\"rotate(-0.00 472.00 200.00)\">Center Host</text>\n</g>\n<g style=\"stroke-width:1;stroke-linecap:round;stroke-linejoin:bevel; fill:#000000;fill-opacity:0.00; stroke:#69738C; stroke-opacity:1.00;\">\n  <path d=\"M 93 395 L 85 350\" shape-rendering=\"auto\"/>\n  <path d=\"M 115 280 L 162 233\" shape-rendering=\"auto\"/>\n</g>\n<g style=\"stroke-width:1;stroke-linecap:square;stroke-linejoin:round; fill:#000000;fill-opacity:0.00; stroke:#69738C; stroke-opacity:1.00;\" stroke-dasharray=\"6,3\">\n  <path d=\"M 200 110 L 200 158 M 200 110\" shape-rendering=\"auto\"/>\n</g>\n<g style=\"stroke-width:1;stroke-linecap:round;stroke-linejoin:bevel; fill:#FAF1EC;fill-opacity:1.00; stroke:#69738C; stroke-opacity:1.00;\">\n  <polygon points=\"206 125 194 125 200 110\" shape-rendering=\"auto\"   style=\"fill-rule:evenodd;\"/>\n</g>\n<g style=\"stroke-width:1;stroke-linecap:square;stroke-linejoin:round; fill:#000000;fill-opacity:0.00; stroke:#69738C; stroke-opacity:1.00;\" stroke-dasharray=\"6,3\">\n  <path d=\"M 299 110 L 243 158 M 299 110\" shape-rendering=\"auto\"/>\n</g>\n<g style=\"stroke-width:1;stroke-linecap:round;stroke-linejoin:bevel; fill:#000000;fill-opacity:0.00; stroke:#69738C; stroke-opacity:1.00;\">\n  <path d=\"M 291 124 L 299 110 L 284 116\" shape-rendering=\"auto\"/>\n  <path d=\"M 214 280 L 206 233\" shape-rendering=\"auto\"/>\n</g>\n<g style=\"stroke-width:1;stroke-linecap:square;stroke-linejoin:round; fill:#000000;fill-opacity:0.00; stroke:#69738C; stroke-opacity:1.00;\" stroke-dasharray=\"6,3\">\n  <path d=\"M 265 345 L 347 400 M 265 345\" shape-rendering=\"auto\"/>\n</g>\n<g style=\"stroke-width:1;stroke-linecap:round;stroke-linejoin:bevel; fill:#FAF1EC;fill-opacity:1.00; stroke:#69738C; stroke-opacity:1.00;\">\n  <polygon points=\"281 348 274 358 265 345\" shape-rendering=\"auto\"   style=\"fill-rule:evenodd;\"/>\n</g>\n<g style=\"stroke-width:1;stroke-linecap:square;stroke-linejoin:round; fill:#000000;fill-opacity:0.00; stroke:#69738C; stroke-opacity:1.00;\" stroke-dasharray=\"6,3\">\n  <path d=\"M 300 315 L 370 400 M 342 230 L 300 315 M 342 230\" shape-rendering=\"auto\"/>\n</g>\n<g style=\"stroke-width:1;stroke-linecap:round;stroke-linejoin:bevel; fill:#000000;fill-opacity:0.00; stroke:#69738C; stroke-opacity:1.00;\">\n  <path d=\"M 340 246 L 342 230 L 331 241\" shape-rendering=\"auto\"/>\n</g>\n<g style=\"stroke-width:1;stroke-linecap:square;stroke-linejoin:round; fill:#000000;fill-opacity:0.00; stroke:#69738C; stroke-opacity:1.00;\" stroke-dasharray=\"6,3\">\n  <path d=\"M 345 110 L 354 160 M 345 110\" shape-rendering=\"auto\"/>\n</g>\n<g style=\"stroke-width:1;stroke-linecap:round;stroke-linejoin:bevel; fill:#FAF1EC;fill-opacity:1.00; stroke:#69738C; stroke-opacity:1.00;\">\n  <polygon points=\"354 124 342 126 345 110\" shape-rendering=\"auto\"   style=\"fill-rule:evenodd;\"/>\n</g>\n<g style=\"stroke-width:1;stroke-linecap:round;stroke-linejoin:bevel; fill:#000000;fill-opacity:0.00; stroke:#69738C; stroke-opacity:1.00;\">\n  <path d=\"M 371 520 L 388 470\" shape-rendering=\"auto\"/>\n</g>\n<g style=\"stroke-width:1;stroke-linecap:square;stroke-linejoin:round; fill:#000000;fill-opacity:0.00; stroke:#69738C; stroke-opacity:1.00;\" stroke-dasharray=\"6,3\">\n  <path d=\"M 405 575 L 535 634 M 405 575\" shape-rendering=\"auto\"/>\n</g>\n<g style=\"stroke-width:1;stroke-linecap:round;stroke-linejoin:bevel; fill:#FAF1EC;fill-opacity:1.00; stroke:#69738C; stroke-opacity:1.00;\">\n  <polygon points=\"421 576 416 587 405 575\" shape-rendering=\"auto\"   style=\"fill-rule:evenodd;\"/>\n</g>\n<g style=\"stroke-width:1;stroke-linecap:round;stroke-linejoin:bevel; fill:#000000;fill-opacity:0.00; stroke:#69738C; stroke-opacity:1.00;\">\n  <path d=\"M 580 620 L 580 555 L 580 435 L 580 315 L 580 195 L 580 105\" shape-rendering=\"auto\"/>\n</g>\n<g style=\"stroke-width:1;stroke-linecap:round;stroke-linejoin:bevel; fill:#FAF1EC;fill-opacity:1.00; stroke:#69738C; stroke-opacity:1.00;\">\n  <polygon points=\"585 115 580 105 575 115 580 125\" shape-rendering=\"auto\"   style=\"fill-rule:evenodd;\"/>\n</g>\n<g style=\"stroke-width:1;stroke-linecap:round;stroke-linejoin:bevel; fill:#000000;fill-opacity:0.00; stroke:#69738C; stroke-opacity:1.00;\">\n  <path d=\"M 586 605 L 580 620 L 574 605\" shape-rendering=\"auto\"/>\n  <path d=\"M 530 150 L 560 105\" shape-rendering=\"auto\"/>\n</g>\n<g style=\"stroke-width:1;stroke-linecap:round;stroke-linejoin:bevel; fill:#595959;fill-opacity:1.00; stroke:#000000; stroke-opacity:0.00;\">\n\t<text x=\"359.00\" y=\"508.00\" textLength=\"40\" style=\"font-family:Calibri; font-weight:0; font-style:normal; font-size:10px; fill:#595959;fill-opacity:1.00; stroke:#000000; stroke-opacity:0.00; stroke-width:0; white-space: pre;\" xml:space=\"preserve\" transform=\"rotate(-0.00 359.00 508.00)\">«Serving»</text>\n\t<text x=\"281.00\" y=\"385.00\" textLength=\"51\" style=\"font-family:Calibri; font-weight:0; font-style:normal; font-size:10px; fill:#595959;fill-opacity:1.00; stroke:#000000; stroke-opacity:0.00; stroke-width:0; white-space: pre;\" xml:space=\"preserve\" transform=\"rotate(-0.00 281.00 385.00)\">«realization»</text>\n\t<text x=\"517.00\" y=\"140.00\" textLength=\"57\" style=\"font-family:Calibri; font-weight:0; font-style:normal; font-size:10px; fill:#595959;fill-opacity:1.00; stroke:#000000; stroke-opacity:0.00; stroke-width:0; white-space: pre;\" xml:space=\"preserve\" transform=\"rotate(-0.00 517.00 140.00)\">«Assignment»</text>\n\t<text x=\"324.00\" y=\"148.00\" textLength=\"51\" style=\"font-family:Calibri; font-weight:0; font-style:normal; font-size:10px; fill:#595959;fill-opacity:1.00; stroke:#000000; stroke-opacity:0.00; stroke-width:0; white-space: pre;\" xml:space=\"preserve\" transform=\"rotate(-0.00 324.00 148.00)\">«realization»</text>\n\t<text x=\"551.00\" y=\"268.00\" textLength=\"59\" style=\"font-family:Calibri; font-weight:0; font-style:normal; font-size:10px; fill:#595959;fill-opacity:1.00; stroke:#000000; stroke-opacity:0.00; stroke-width:0; white-space: pre;\" xml:space=\"preserve\" transform=\"rotate(-0.00 551.00 268.00)\">«Composition»</text>\n\t<text x=\"253.00\" y=\"147.00\" textLength=\"36\" style=\"font-family:Calibri; font-weight:0; font-style:normal; font-size:10px; fill:#595959;fill-opacity:1.00; stroke:#000000; stroke-opacity:0.00; stroke-width:0; white-space: pre;\" xml:space=\"preserve\" transform=\"rotate(-0.00 253.00 147.00)\">«access»</text>\n\t<text x=\"174.00\" y=\"147.00\" textLength=\"53\" style=\"font-family:Calibri; font-weight:0; font-style:normal; font-size:10px; fill:#595959;fill-opacity:1.00; stroke:#000000; stroke-opacity:0.00; stroke-width:0; white-space: pre;\" xml:space=\"preserve\" transform=\"rotate(-0.00 174.00 147.00)\">«Realization»</text>\n\t<text x=\"190.00\" y=\"269.00\" textLength=\"40\" style=\"font-family:Calibri; font-weight:0; font-style:normal; font-size:10px; fill:#595959;fill-opacity:1.00; stroke:#000000; stroke-opacity:0.00; stroke-width:0; white-space: pre;\" xml:space=\"preserve\" transform=\"rotate(-0.00 190.00 269.00)\">«Serving»</text>\n\t<text x=\"110.00\" y=\"269.00\" textLength=\"57\" style=\"font-family:Calibri; font-weight:0; font-style:normal; font-size:10px; fill:#595959;fill-opacity:1.00; stroke:#000000; stroke-opacity:0.00; stroke-width:0; white-space: pre;\" xml:space=\"preserve\" transform=\"rotate(-0.00 110.00 269.00)\">«Assignment»</text>\n\t<text x=\"445.00\" y=\"617.00\" textLength=\"51\" style=\"font-family:Calibri; font-weight:0; font-style:normal; font-size:10px; fill:#595959;fill-opacity:1.00; stroke:#000000; stroke-opacity:0.00; stroke-width:0; white-space: pre;\" xml:space=\"preserve\" transform=\"rotate(-0.00 445.00 617.00)\">«realization»</text>\n\t<text x=\"61.00\" y=\"385.00\" textLength=\"57\" style=\"font-family:Calibri; font-weight:0; font-style:normal; font-size:10px; fill:#595959;fill-opacity:1.00; stroke:#000000; stroke-opacity:0.00; stroke-width:0; white-space: pre;\" xml:space=\"preserve\" transform=\"rotate(-0.00 61.00 385.00)\">«Assignment»</text>\n\t<text x=\"303.00\" y=\"285.00\" textLength=\"36\" style=\"font-family:Calibri; font-weight:0; font-style:normal; font-size:10px; fill:#595959;fill-opacity:1.00; stroke:#000000; stroke-opacity:0.00; stroke-width:0; white-space: pre;\" xml:space=\"preserve\" transform=\"rotate(-0.00 303.00 285.00)\">«access»</text>\n</g>\n</svg>\n"
+}

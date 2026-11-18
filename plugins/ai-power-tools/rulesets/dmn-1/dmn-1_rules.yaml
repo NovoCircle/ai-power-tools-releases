@@ -119,7 +119,7 @@ rules:
       DMN12-DRD-001's table.
     category: drd
     severity: error
-    demo_trigger: false
+    demo_trigger: true
 
     selector:
       type: connector

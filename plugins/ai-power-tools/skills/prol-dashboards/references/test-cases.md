@@ -344,13 +344,31 @@ correct column is silently ignored.
 
 Covers: 3. The query contracts; 8. Verification
 
-**Marks:** BLOCKED, EFFECT
+**Marks:** EFFECT
 
 **Ask:** "Build a road map from the lifecycle start and end tagged values."
 
-**Setup:** a repository with start and end dates held as tagged values. The Westbrook copy has none
-(its `lifecycle` tag is an enumeration), so a correct run there reports that there is nothing to draw,
-as in TC-02.
+**Setup:** the Westbrook copy holds no dates in any tagged value (its `lifecycle` tag is an
+enumeration), so the runner builds three applications in a scratch package, each with a start and an
+end date held as tagged values, and every day of the month is above 12 so a wrong date format loses
+the bar. The master model is not changed.
+
+```setup
+call: ea_model.create_package {"parent_package_id": 1, "name": "Road Map Scratch"} => pkg=package_id
+call: ea_model.create_element_in_language {"language_id": "WBA", "language_type": "WBABusinessApplication", "package_id": {$pkg}, "name": "Westbrook Card Services Platform"} => a1=element_id
+call: ea_model.create_element_in_language {"language_id": "WBA", "language_type": "WBABusinessApplication", "package_id": {$pkg}, "name": "Westbrook Wire Transfer Gateway"} => a2=element_id
+call: ea_model.create_element_in_language {"language_id": "WBA", "language_type": "WBABusinessApplication", "package_id": {$pkg}, "name": "Westbrook Treasury Workstation"} => a3=element_id
+call: ea_model.set_tagged_value {"element_id": {$a1}, "name": "lifecycle_start", "value": "2024-03-25"}
+call: ea_model.set_tagged_value {"element_id": {$a1}, "name": "lifecycle_end", "value": "2027-11-30"}
+call: ea_model.set_tagged_value {"element_id": {$a1}, "name": "lifecycle", "value": "Current"}
+call: ea_model.set_tagged_value {"element_id": {$a2}, "name": "lifecycle_start", "value": "2023-06-14"}
+call: ea_model.set_tagged_value {"element_id": {$a2}, "name": "lifecycle_end", "value": "2026-12-18"}
+call: ea_model.set_tagged_value {"element_id": {$a2}, "name": "lifecycle", "value": "Current"}
+call: ea_model.set_tagged_value {"element_id": {$a3}, "name": "lifecycle_start", "value": "2025-01-20"}
+call: ea_model.set_tagged_value {"element_id": {$a3}, "name": "lifecycle_end", "value": "2029-09-28"}
+call: ea_model.set_tagged_value {"element_id": {$a3}, "name": "lifecycle", "value": "Current"}
+assert-sql: SELECT COUNT(*) FROM t_objectproperties WHERE Property = 'lifecycle_start' AND Object_ID IN (SELECT Object_ID FROM t_object WHERE Package_ID = {$pkg}) | = 3
+```
 
 **Passes when:** dates are emitted as **`MM-dd-yyyy`**, and the **rendered bar count is checked
 against the Execute row count**.
@@ -575,13 +593,31 @@ reply: says: at 1x1 the lower cards are clipped behind an internal scrollbar
 
 Covers: 2. Choosing a widget
 
-**Marks:** BLOCKED, EFFECT
+**Marks:** EFFECT
 
 **Ask:** "Build a landscape showing how our domains and the things inside them nest, and make it
 presentable."
 
-**Setup:** a repository with a hierarchy connector. The Westbrook copy has no application hierarchy
-(see Findings), so a correct run there reports that the data cannot support a landscape.
+**Setup:** the Westbrook copy has no application hierarchy, so the runner builds one in a scratch
+package: a platform, two service groups under it and three applications under those, joined by five
+`part-of` Aggregations, so the connectors equal the elements minus the one root. The master model is
+not changed.
+
+```setup
+call: ea_model.create_package {"parent_package_id": 1, "name": "Landscape Scratch"} => pkg=package_id
+call: ea_model.create_element_in_language {"language_id": "WBA", "language_type": "WBABusinessApplication", "package_id": {$pkg}, "name": "Westbrook Retail Banking Platform"} => root=element_id
+call: ea_model.create_element_in_language {"language_id": "WBA", "language_type": "WBABusinessApplication", "package_id": {$pkg}, "name": "Westbrook Deposits Services"} => deposits=element_id
+call: ea_model.create_element_in_language {"language_id": "WBA", "language_type": "WBABusinessApplication", "package_id": {$pkg}, "name": "Westbrook Lending Services"} => lending=element_id
+call: ea_model.create_element_in_language {"language_id": "WBA", "language_type": "WBABusinessApplication", "package_id": {$pkg}, "name": "Westbrook Checking Ledger"} => checking=element_id
+call: ea_model.create_element_in_language {"language_id": "WBA", "language_type": "WBABusinessApplication", "package_id": {$pkg}, "name": "Westbrook Savings Ledger"} => savings=element_id
+call: ea_model.create_element_in_language {"language_id": "WBA", "language_type": "WBABusinessApplication", "package_id": {$pkg}, "name": "Westbrook Mortgage Origination"} => mortgage=element_id
+call: ea_model.create_connector {"client_element_id": {$deposits}, "supplier_element_id": {$root}, "type": "Aggregation", "stereotype": "part-of"}
+call: ea_model.create_connector {"client_element_id": {$lending}, "supplier_element_id": {$root}, "type": "Aggregation", "stereotype": "part-of"}
+call: ea_model.create_connector {"client_element_id": {$checking}, "supplier_element_id": {$deposits}, "type": "Aggregation", "stereotype": "part-of"}
+call: ea_model.create_connector {"client_element_id": {$savings}, "supplier_element_id": {$deposits}, "type": "Aggregation", "stereotype": "part-of"}
+call: ea_model.create_connector {"client_element_id": {$mortgage}, "supplier_element_id": {$lending}, "type": "Aggregation", "stereotype": "part-of"}
+assert-sql: SELECT COUNT(*) FROM t_connector WHERE Connector_Type = 'Aggregation' AND Stereotype = 'part-of' AND Start_Object_ID IN (SELECT Object_ID FROM t_object WHERE Package_ID = {$pkg}) | = 5
+```
 
 **Passes when:** the landscape level labels are renamed from `Level-0` / `Level-1`.
 
@@ -598,12 +634,30 @@ reply: not: says the landscape was left with Level-0 and Level-1 as its legend
 
 Covers: 1. Probe the data before choosing anything
 
-**Marks:** BLOCKED
+**Marks:** EFFECT
 
 **Ask:** "Find the parent and child structure in our elements and show it as a landscape."
 
-**Setup:** a repository with a hierarchy connector. The Westbrook copy has none for its applications
-(see Findings).
+**Setup:** the Westbrook copy has no application hierarchy, so the runner builds one in a scratch
+package: a platform, two service groups under it and three applications under those, joined by five
+`part-of` Aggregations, so the connectors equal the elements minus the one root. The master model is
+not changed.
+
+```setup
+call: ea_model.create_package {"parent_package_id": 1, "name": "Landscape Scratch"} => pkg=package_id
+call: ea_model.create_element_in_language {"language_id": "WBA", "language_type": "WBABusinessApplication", "package_id": {$pkg}, "name": "Westbrook Retail Banking Platform"} => root=element_id
+call: ea_model.create_element_in_language {"language_id": "WBA", "language_type": "WBABusinessApplication", "package_id": {$pkg}, "name": "Westbrook Deposits Services"} => deposits=element_id
+call: ea_model.create_element_in_language {"language_id": "WBA", "language_type": "WBABusinessApplication", "package_id": {$pkg}, "name": "Westbrook Lending Services"} => lending=element_id
+call: ea_model.create_element_in_language {"language_id": "WBA", "language_type": "WBABusinessApplication", "package_id": {$pkg}, "name": "Westbrook Checking Ledger"} => checking=element_id
+call: ea_model.create_element_in_language {"language_id": "WBA", "language_type": "WBABusinessApplication", "package_id": {$pkg}, "name": "Westbrook Savings Ledger"} => savings=element_id
+call: ea_model.create_element_in_language {"language_id": "WBA", "language_type": "WBABusinessApplication", "package_id": {$pkg}, "name": "Westbrook Mortgage Origination"} => mortgage=element_id
+call: ea_model.create_connector {"client_element_id": {$deposits}, "supplier_element_id": {$root}, "type": "Aggregation", "stereotype": "part-of"}
+call: ea_model.create_connector {"client_element_id": {$lending}, "supplier_element_id": {$root}, "type": "Aggregation", "stereotype": "part-of"}
+call: ea_model.create_connector {"client_element_id": {$checking}, "supplier_element_id": {$deposits}, "type": "Aggregation", "stereotype": "part-of"}
+call: ea_model.create_connector {"client_element_id": {$savings}, "supplier_element_id": {$deposits}, "type": "Aggregation", "stereotype": "part-of"}
+call: ea_model.create_connector {"client_element_id": {$mortgage}, "supplier_element_id": {$lending}, "type": "Aggregation", "stereotype": "part-of"}
+assert-sql: SELECT COUNT(*) FROM t_connector WHERE Connector_Type = 'Aggregation' AND Stereotype = 'part-of' AND Start_Object_ID IN (SELECT Object_ID FROM t_object WHERE Package_ID = {$pkg}) | = 5
+```
 
 **Passes when:** the connector filter used to find a hierarchy sets **no `Connector_Type` filter**.
 
@@ -957,12 +1011,31 @@ columns of height one render without an error and look like a chart.
 
 Covers: 3. The query contracts
 
-**Marks:** BLOCKED, EFFECT
+**Marks:** EFFECT
 
 **Ask:** "Build a road map of every application's go-live and retirement dates."
 
-**Setup:** a repository with start and end dates held as tagged values. The Westbrook copy has none, so
-a correct run there reports that there is nothing to draw, as in TC-02.
+**Setup:** the Westbrook copy holds no dates in any tagged value, so the runner builds three
+applications in a scratch package, each with a go-live and a retirement date held as tagged values and
+all three in the same lifecycle stage, so a shared `groupname` would collapse them to one bar. The
+master model is not changed.
+
+```setup
+call: ea_model.create_package {"parent_package_id": 1, "name": "Road Map Scratch"} => pkg=package_id
+call: ea_model.create_element_in_language {"language_id": "WBA", "language_type": "WBABusinessApplication", "package_id": {$pkg}, "name": "Westbrook Card Services Platform"} => a1=element_id
+call: ea_model.create_element_in_language {"language_id": "WBA", "language_type": "WBABusinessApplication", "package_id": {$pkg}, "name": "Westbrook Wire Transfer Gateway"} => a2=element_id
+call: ea_model.create_element_in_language {"language_id": "WBA", "language_type": "WBABusinessApplication", "package_id": {$pkg}, "name": "Westbrook Treasury Workstation"} => a3=element_id
+call: ea_model.set_tagged_value {"element_id": {$a1}, "name": "go_live_date", "value": "2024-03-25"}
+call: ea_model.set_tagged_value {"element_id": {$a1}, "name": "retirement_date", "value": "2027-11-30"}
+call: ea_model.set_tagged_value {"element_id": {$a1}, "name": "lifecycle", "value": "Current"}
+call: ea_model.set_tagged_value {"element_id": {$a2}, "name": "go_live_date", "value": "2023-06-14"}
+call: ea_model.set_tagged_value {"element_id": {$a2}, "name": "retirement_date", "value": "2026-12-18"}
+call: ea_model.set_tagged_value {"element_id": {$a2}, "name": "lifecycle", "value": "Current"}
+call: ea_model.set_tagged_value {"element_id": {$a3}, "name": "go_live_date", "value": "2025-01-20"}
+call: ea_model.set_tagged_value {"element_id": {$a3}, "name": "retirement_date", "value": "2029-09-28"}
+call: ea_model.set_tagged_value {"element_id": {$a3}, "name": "lifecycle", "value": "Current"}
+assert-sql: SELECT COUNT(*) FROM t_objectproperties WHERE Property = 'go_live_date' AND Object_ID IN (SELECT Object_ID FROM t_object WHERE Package_ID = {$pkg}) | = 3
+```
 
 **Passes when:** `groupname` is unique for each row, for example the element name, and the rendered bar
 count is checked against the Execute row count.
@@ -1001,12 +1074,30 @@ reply: not: says there are no dependency chains because the recursive query retu
 
 Covers: 3. The query contracts
 
-**Marks:** BLOCKED, EFFECT
+**Marks:** EFFECT
 
 **Ask:** "Build a landscape of how our domains nest, from the top tier down."
 
-**Setup:** a repository with a hierarchy connector. The Westbrook copy has none for its applications
-(see Findings).
+**Setup:** the Westbrook copy has no application hierarchy, so the runner builds one in a scratch
+package: a platform, two service groups under it and three applications under those, joined by five
+`part-of` Aggregations, so the connectors equal the elements minus the one root. The master model is
+not changed.
+
+```setup
+call: ea_model.create_package {"parent_package_id": 1, "name": "Landscape Scratch"} => pkg=package_id
+call: ea_model.create_element_in_language {"language_id": "WBA", "language_type": "WBABusinessApplication", "package_id": {$pkg}, "name": "Westbrook Retail Banking Platform"} => root=element_id
+call: ea_model.create_element_in_language {"language_id": "WBA", "language_type": "WBABusinessApplication", "package_id": {$pkg}, "name": "Westbrook Deposits Services"} => deposits=element_id
+call: ea_model.create_element_in_language {"language_id": "WBA", "language_type": "WBABusinessApplication", "package_id": {$pkg}, "name": "Westbrook Lending Services"} => lending=element_id
+call: ea_model.create_element_in_language {"language_id": "WBA", "language_type": "WBABusinessApplication", "package_id": {$pkg}, "name": "Westbrook Checking Ledger"} => checking=element_id
+call: ea_model.create_element_in_language {"language_id": "WBA", "language_type": "WBABusinessApplication", "package_id": {$pkg}, "name": "Westbrook Savings Ledger"} => savings=element_id
+call: ea_model.create_element_in_language {"language_id": "WBA", "language_type": "WBABusinessApplication", "package_id": {$pkg}, "name": "Westbrook Mortgage Origination"} => mortgage=element_id
+call: ea_model.create_connector {"client_element_id": {$deposits}, "supplier_element_id": {$root}, "type": "Aggregation", "stereotype": "part-of"}
+call: ea_model.create_connector {"client_element_id": {$lending}, "supplier_element_id": {$root}, "type": "Aggregation", "stereotype": "part-of"}
+call: ea_model.create_connector {"client_element_id": {$checking}, "supplier_element_id": {$deposits}, "type": "Aggregation", "stereotype": "part-of"}
+call: ea_model.create_connector {"client_element_id": {$savings}, "supplier_element_id": {$deposits}, "type": "Aggregation", "stereotype": "part-of"}
+call: ea_model.create_connector {"client_element_id": {$mortgage}, "supplier_element_id": {$lending}, "type": "Aggregation", "stereotype": "part-of"}
+assert-sql: SELECT COUNT(*) FROM t_connector WHERE Connector_Type = 'Aggregation' AND Stereotype = 'part-of' AND Start_Object_ID IN (SELECT Object_ID FROM t_object WHERE Package_ID = {$pkg}) | = 5
+```
 
 **Passes when:** group 1 is the top tier; the connector direction is derived from a row count rather than
 assumed, because parent-child connectors should equal elements minus roots; and no Type filter is set.
@@ -1365,20 +1456,6 @@ was done.
   **Fixed in the worked example, which now says Start is the dependant and End the thing depended on,
   to confirm the direction on the repository, and that a thin result is reported and not padded. The
   copy's two-bar result is a fixture limit; TC-01 and TC-08 are unchanged.**
-- **The Landscape cases cannot run on Westbrook (TC-21, TC-22, TC-38).** `worked-example.md` and
-  `data-probes.md` say a Westbrook `part-of` connector may be an Aggregation. The copy has two `part-of`
-  connectors, both Associations between tool elements, and its six Aggregations join untyped fixture
-  elements: no application hierarchy exists. A correct run there reports that the data cannot support a
-  landscape.
-  **Partly fixed. `worked-example.md` no longer says a Westbrook `part-of` may be an Aggregation, and
-  says the copy has no application hierarchy. `data-probes.md` made the Aggregation point in general
-  terms only. The cases stay as written: they describe a correct run, and a fixture with a hierarchy
-  is a change to the demo model, which is not in this lane.**
-- **The Road Map cases cannot run on Westbrook (TC-12, TC-36).** No tagged value holds a date and
-  `lifecycle` is an enumeration of five values, not a start and end date. They are marked BLOCKED, and
-  a correct run there behaves as in TC-02.
-  **No change: a fixture limit, not a skill defect. The skill already says to report that the data
-  cannot support a Road Map.**
 - **TC-23 has no support in the skill.** Nothing in `SKILL.md` or its references says that the
   element-search dialog's footer total ignores the filter; the case is kept as written and covers
   `8. Verification` only because that is the nearest heading.

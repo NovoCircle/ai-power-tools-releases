@@ -80,32 +80,33 @@ ea_model(operation="traverse_element_subgraph", params={"element_id": 79, "depth
     {"element_id": 70, "name": "Westbrook Account Servicing Hub", "type": "Business Application", "raw_stereotype": "WBABusinessApplication"}
   ],
   "edges": [
-    {"src": 79, "tgt": 140, "type": "Association", "stereotype": "Uses", "label": "Uses"},
-    {"src": 79, "tgt": 141, "type": "Association", "stereotype": "Uses", "label": "Uses"},
-    {"src": 79, "tgt": 143, "type": "Realisation", "stereotype": "realizes", "label": "realizes"},
-    {"src": 79, "tgt": 140, "type": "Association", "stereotype": "Uses", "label": "Uses"},
-    {"src": 69, "tgt": 140, "type": "Association", "stereotype": "Uses", "label": "Uses"},
-    {"src": 70, "tgt": 140, "type": "Association", "stereotype": "Uses", "label": "Uses"},
-    {"src": 79, "tgt": 141, "type": "Association", "stereotype": "Uses", "label": "Uses"},
-    {"src": 79, "tgt": 143, "type": "Realisation", "stereotype": "realizes", "label": "realizes"}
+    {"connector_id": 1, "src": 79, "tgt": 140, "type": "Association", "stereotype": "Uses", "label": "Uses"},
+    {"connector_id": 2, "src": 79, "tgt": 141, "type": "Association", "stereotype": "Uses", "label": "Uses"},
+    {"connector_id": 3, "src": 79, "tgt": 143, "type": "Realisation", "stereotype": "realizes", "label": "realizes"},
+    {"connector_id": 6, "src": 69, "tgt": 140, "type": "Association", "stereotype": "Uses", "label": "Uses"},
+    {"connector_id": 7, "src": 70, "tgt": 140, "type": "Association", "stereotype": "Uses", "label": "Uses"}
   ]
 }
 ```
 
-This sample was recorded on a server before 3.6.5, which listed `79 -> 140` and `79 -> 143`
-twice because it walks both directions at once. From 3.6.5 each connector is one edge and carries
-its `connector_id`, so `edges` can be counted. Links between two nodes at the outermost depth
+This sample was measured on 2026-11-16 on server 3.6.5 against the Westbrook Bank demo model: 6
+nodes and 5 edges, each connector once, each with its own `connector_id` (1, 2, 3, 6 and 7), so
+`edges` can be counted. A server before 3.6.5 listed `79 -> 140` and `79 -> 143` twice, because it
+walks both directions at once. Links between two nodes at the outermost depth
 are not read; raise `depth` if you need them.
 
 Also note the connector stereotype here is `realizes`, lower case, `Connector_Type: Realisation`
 -- not the capitalized `Realizes` that `WBA-LFY-001` compares against (the technology declares
 lower-case `realizes`, and EA stores it bare). A repository-wide check
 (`SELECT Stereotype, Connector_Type, COUNT(*) AS n FROM t_connector GROUP BY Stereotype, Connector_Type`)
-confirmed, on 2026-09-23, the live model's connector-stereotype set: `Uses` (16), blank (5), `extends`
-(3), `Requires` (3), `Equivalent` (2), `part-of` (2), `Flows` (1), and `realizes` (1). WBA 1.1.1
-has since declared `Uses`, `Flows` and `realizes` and the model has bound them; the stored strings
-did not change, so this is still casing and vocabulary drift from the four names `WBA-LFY-001`
-matches, on the model's own connectors. This is
+confirmed, on 2026-11-16 on the demo model (all 247 connectors in the repository), the connector-stereotype
+set: blank (153), `Uses` (25), `stereotyped relationship` (15), `PrimaryPath` (13), `Realization` (7), `Assignment` (6), `Flows` (5),
+`realizes` (4), `extends` (3), `Requires` (3), `Serving` (3), `part-of` (2), and a few more with one
+or two connectors each. `Equivalent`, which the 2026-09-23 run found twice, no longer occurs. WBA
+1.1.1 declares `Uses`, `Flows` and `realizes`, and the model has bound them; the stored strings are
+still the bare names, so `extends`, `Requires` and `part-of` remain vocabulary drift from the names
+`WBA-LFY-001` matches, on the model's own connectors. The other names belong to other languages
+that share the repository. This is
 flagged here rather than silently normalized; it is exactly the class of decay Section 3 of the
 main skill teaches you to look for, just on connectors instead of elements -- and
 `ea_analyze("summarize_connector_patterns")` is the operation for running this check (it

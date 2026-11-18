@@ -75,8 +75,13 @@ format or an enumeration, go to the `add-ins___scripting` class page for whateve
 
 ## Pass 2 — the answer is an enumeration in a method note
 
-**Question.** Setting an element's background color through the element's own properties has no
-effect. EA exposes an appearance setter taking three numbers — what are they?
+**Question.** A script handed over by someone else calls `Element.SetAppearance` with three numbers.
+What do they mean?
+
+**First check.** Section 1 of the skill says to look at the MCP operations first. `set_element_appearance`
+sets an element's default colors, so a request to *change* a color goes there. This question is
+different: it asks what the COM method's arguments mean, and no operation documents that. That is why
+the guide is the next place to look.
 
 **Search.** `SetAppearance element appearance`. One result:
 `add-ins___scripting/element2.html`, the Element Class page.

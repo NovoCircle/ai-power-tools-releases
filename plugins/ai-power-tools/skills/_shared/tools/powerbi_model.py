@@ -213,8 +213,12 @@ def _note(text) -> str:
 
 
 def _descriptions(defn: dict) -> dict[str, str]:
+    """Each table's technology note from the Table Directory. A text the build generated
+    (`description_source` "generated") is not a note, so the template applies; an entry with no
+    `description_source`, from an older build, counts as a note."""
     return {e["table_name"]: e["description"]
-            for e in defn["directory"].get("entries", []) if _note(e.get("description"))}
+            for e in defn["directory"].get("entries", [])
+            if _note(e.get("description")) and e.get("description_source", "technology") != "generated"}
 
 
 def _relationships(defn: dict) -> list[Relationship]:
@@ -325,11 +329,24 @@ def is_reporting_database(defn: dict) -> bool:
     return defn["source"].get("kind") == "reporting_database"
 
 
-def model_from_definition(defn: dict, *, descriptions: dict | None = None) -> SemanticModel:
-    """The model. `descriptions` is the parsed descriptions file (layer 1), or
-    None for the technology's notes and the templates only."""
+def has_business_tables(defn: dict) -> bool:
+    """Path B built with `target.output: tables`: every business table is a keyed `dbo`
+    table, which Fabric copies to OneLake (`Tables/dbo/<name>`) and its SQL analytics
+    endpoint exposes. A `views` build has no such tables."""
     src = defn["source"]
-    parquet = is_parquet(defn)
+    return is_reporting_database(defn) and src.get("output") == "tables"
+
+
+def model_from_definition(defn: dict, *, descriptions: dict | None = None,
+                          bare_names: bool = False) -> SemanticModel:
+    """The model. `descriptions` is the parsed descriptions file (layer 1), or
+    None for the technology's notes and the templates only.
+
+    `bare_names` names each table's source by its table name alone, in `dbo`, as a
+    Parquet source does: for path B tables read through Fabric (Direct Lake,
+    SQL analytics endpoint). The business tables then are the `dbo` tables, not the views."""
+    src = defn["source"]
+    parquet = is_parquet(defn) or bare_names
     _check_connector_ends(defn)
     notes = _descriptions(defn)
     tables: list[SemanticTable] = []
@@ -398,7 +415,7 @@ def layout_from_definition(defn: dict, model: SemanticModel) -> dict:
 
 # ------------------------------------------------------------------ project
 
-MODES = ("import", "directQuery")
+MODES = ("import", "directQuery", "directLake")
 _UNSAFE_NAME_CHARS = set('/\\:<>"|?*') | {chr(c) for c in range(32)}
 
 
@@ -414,21 +431,54 @@ def check_project_name(name: str) -> str:
 
 
 def project_files_from_definition(defn: dict, name: str, *, mode: str = "import",
-                                  descriptions: dict | None = None) -> dict[str, str]:
-    """Every text file of the `.pbip` project, keyed by relative path."""
+                                  descriptions: dict | None = None,
+                                  fabric: dict | None = None) -> dict[str, str]:
+    """Every text file of the `.pbip` project, keyed by relative path.
+
+    `fabric` is for a Parquet source whose tables are mirrored into Fabric
+    (Open Mirroring): `{"workspace_id", "item_id"}` for `mode="directLake"`
+    (Direct Lake on OneLake over the mirrored database's Delta tables), and
+    `{"sql_endpoint", "database"}` for `mode="directQuery"` (the mirrored
+    database's SQL analytics endpoint). The tables, relationships and measures
+    are the same model as the Import output; only the partitions and the model
+    expression differ.
+    """
     check_project_name(name)
     if mode not in MODES:
         raise ValueError(f"mode must be one of {MODES}, not {mode!r}")
-    if is_reporting_database(defn) and mode != "import":
-        raise ValueError(
-            f"a reporting-database source (path B) is read in import mode, not {mode!r}: "
-            f"the reporting database is rebuilt in full and swapped in on every refresh. "
-            f"DirectQuery is for path A, SQL views inside the EA database.")
-    model = model_from_definition(defn, descriptions=descriptions)
-    if is_parquet(defn):
-        if mode != "import":
-            raise ValueError(f"a Parquet source is read in import mode, not {mode!r}")
-        source = tmdl.ParquetSource(directory=defn["source"]["folder"], mode="import")
+    path_b = is_reporting_database(defn)
+    if path_b and mode != "import":
+        if not has_business_tables(defn):
+            raise ValueError(
+                f"mode {mode!r} on a reporting database (path B) reads the business tables in "
+                f"OneLake or through the SQL analytics endpoint, and a views build has no such "
+                f"tables (views are not in OneLake): rebuild the layer with target.output "
+                f"'tables'. DirectQuery without Fabric is for path A, SQL views inside the EA database.")
+        if fabric is None:
+            raise ValueError(f"mode {mode!r} on a reporting database (path B) needs the Fabric target: "
+                             "the SQL database in Microsoft Fabric that holds the tables")
+    mirrored = is_parquet(defn) or (path_b and mode != "import" and has_business_tables(defn))
+    model = model_from_definition(defn, descriptions=descriptions, bare_names=mirrored)
+    if fabric is not None and not mirrored:
+        raise ValueError("Fabric targets are for a Parquet source (path C) mirrored into Fabric, "
+                         "or a path B reporting database built with output 'tables'")
+    if mirrored:
+        if mode == "import":
+            if fabric is not None:
+                raise ValueError("a Fabric target needs mode directLake or directQuery, not import")
+            source = tmdl.ParquetSource(directory=defn["source"]["folder"], mode="import")
+        elif mode == "directLake":
+            f = _fabric(fabric, "workspace_id", "item_id")
+            source = tmdl.DirectLakeSource(workspace_id=f["workspace_id"], item_id=f["item_id"],
+                                           name=name)
+        else:
+            f = _fabric(fabric, "sql_endpoint", "database")
+            source = tmdl.SqlSource(server=f["sql_endpoint"], database=f["database"],
+                                    schema="dbo", mode="directQuery")
+    elif mode == "directLake":
+        raise ValueError("Direct Lake reads Delta tables in OneLake: a mirrored Parquet source "
+                         "(path C) or a path B reporting database built with output 'tables'; "
+                         "path A (SQL views in the EA database) uses import or DirectQuery")
     else:
         source = SchemaSqlSource(server=defn["source"]["server"],
                                  database=defn["source"]["database"], mode=mode)
@@ -439,13 +489,20 @@ def project_files_from_definition(defn: dict, name: str, *, mode: str = "import"
     return files
 
 
+def _fabric(fabric: dict | None, *keys: str) -> dict:
+    if not fabric or any(not isinstance(fabric.get(k), str) or not fabric[k].strip() for k in keys):
+        raise ValueError(f"this mode needs the Fabric target {list(keys)}")
+    return fabric
+
+
 def write_project(defn: dict, out_dir, name: str, *, mode: str = "import",
-                  descriptions: dict | None = None) -> Path:
+                  descriptions: dict | None = None, fabric: dict | None = None) -> Path:
     """Write the project under `out_dir`. The semantic model's `definition/`
     folder is replaced, so a table that left the definition leaves the project.
     An existing `<name>.Report` folder is left untouched, so re-applying never
     resets visuals a customer has built; a fresh project gets the Overview report."""
-    files = project_files_from_definition(defn, name, mode=mode, descriptions=descriptions)
+    files = project_files_from_definition(defn, name, mode=mode, descriptions=descriptions,
+                                          fabric=fabric)
     root = Path(out_dir)
     if (root / f"{name}.Report").exists():
         files = {k: v for k, v in files.items() if not k.startswith(f"{name}.Report/")}
@@ -506,10 +563,23 @@ def main(argv=None) -> int:
     ap.add_argument("--descriptions", default=None,
                     help="a user-approved descriptions file (JSON); it wins over the "
                          "technology's notes and the templates")
+    ap.add_argument("--workspace-id", default=None, help="--mode directLake: the Fabric workspace id")
+    ap.add_argument("--item-id", default=None,
+                    help="--mode directLake: the item id of the mirrored database, or of the SQL database in Fabric (path B tables)")
+    ap.add_argument("--sql-endpoint", default=None,
+                    help="--mode directQuery on a mirrored database: its SQL analytics endpoint")
+    ap.add_argument("--database", default=None,
+                    help="--mode directQuery on a mirrored database: the database name")
     a = ap.parse_args(argv)
     defn = json.loads(Path(a.definition).read_text(encoding="utf-8"))
     entries = descriptions_mod.load_file(a.descriptions) if a.descriptions else None
-    write_project(defn, a.out_dir, a.name, mode=a.mode, descriptions=entries)
+    fabric = {k: v for k, v in (("workspace_id", a.workspace_id), ("item_id", a.item_id),
+                                ("sql_endpoint", a.sql_endpoint), ("database", a.database))
+              if v} or None
+    try:
+        write_project(defn, a.out_dir, a.name, mode=a.mode, descriptions=entries, fabric=fabric)
+    except ValueError as e:
+        ap.error(str(e))
     model = model_from_definition(defn, descriptions=entries)
     print(f"{a.name}: {len(model.tables)} tables ({sum(t.is_hidden for t in model.tables)} hidden), "
           f"{len(model.relationships)} relationships ({len(model.inactive)} inactive), "

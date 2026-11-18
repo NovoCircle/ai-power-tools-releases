@@ -37,6 +37,45 @@ in Fabric cannot be created by AI Power Tools. Create it in the Fabric portal, o
 the item id), not the display name alone. Also check that the workspace's Fabric capacity is not
 paused. [`the-cloud-database.md`](the-cloud-database.md).
 
+**`key_not_unique`.** A business table's key had a duplicate or a NULL, so the `tables` or `script`
+build stopped and changed nothing. The message names the table. Report it with the full result: the
+business layer should never produce one.
+
+**`tables_not_written`.** The `tables` or `script` build could not write the business tables, and changed
+nothing. Usual causes: a `dbo` table with a business table's name that the build did not make (it is
+never replaced), or a stereotype alias containing `/` or `\`, which a Fabric SQL analytics endpoint
+refuses in a name. Rename the other table, or the alias, and build again.
+
+**A Fabric mirror of a local SQL Server stopped after a refresh.** Read `last_refresh` in
+`check_business_layer`: `ddl` true means the refresh swapped the tables in, which is a structural change.
+Re-seed the mirror by turning change data capture off and on again on the tables.
+[`the-cloud-database.md`](the-cloud-database.md) §6.
+
+**"Microsoft Entra sign-in" is refused with driver 18.** The driver refuses an interactive sign-in
+without an account named. Add `target.user` to the profile.
+
+**The upload says the Azure CLI is missing or has no token.** `onelake_upload.py` takes its token from
+the Azure CLI. Install it and run `az login`, or have the administrator sign it in as a service
+principal. The tool never asks for a secret.
+
+**The upload result shows a table not applied, or exits with a code other than 0.** `ok` is false when
+any table failed or did not apply within the wait (300 seconds by default; `--timeout`). The reframe is
+then skipped on purpose, so the model keeps the previous refresh. Run the upload again: it resumes and
+sends only what has not landed. Report the table and Fabric's status.
+
+**A table's error says an earlier upload is not confirmed applied.** Nothing more is uploaded to that
+table until Fabric shows the earlier files applied, because Open Mirroring applies a table's files in
+order. Open the mirrored database in Fabric and choose Monitor replication: the table's last completed
+time should be after that upload, and its row count should include those files. Once it has applied, run
+the upload again with `--confirm-applied "<table>"`; that clears the table from the upload record beside
+the landing-zone folder, and the run then uploads its new files and reframes the model. If Fabric shows an
+error for the table, fix that first.
+
+**A Direct Lake report shows tables from two refreshes.** "Keep your Direct Lake data up to date" is on,
+so Fabric reframes table by table. Turn it off in the semantic model's settings, Refresh; the upload tool
+then reframes once, after every table has applied. A reader of the SQL analytics endpoint can still see
+the mix for a few minutes.
+
 **Alignment is not `aligned`.** Read `combinations_without_a_table`,
 `outside_every_allowed_combination` and `connector_count_mismatches` before changing anything. A
 connector outside every allowed combination is a connector the technology does not allow between

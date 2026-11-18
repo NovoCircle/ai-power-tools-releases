@@ -3,7 +3,7 @@
 **Generated — do not edit by hand.** Produced by `tools/gen-operations.py` from the
 server's dispatch tables. Re-run it after any server change rather than editing here.
 
-Server version: `3.6.5` · 149 operations across 6 meta-tools.
+Server version: `3.6.6` · 164 operations across 6 meta-tools.
 
 Every operation is called the same way:
 
@@ -18,11 +18,12 @@ If an operation is not in this list, it does not exist. Do not infer one from a 
 
 ---
 
-## `ea_model` — 50 operations
+## `ea_model` — 53 operations
 
 | Operation | What it does |
 |---|---|
 | `add_parameter` | Add a parameter to an operation. |
+| `audit_element_descriptions` | Say what each element's Notes hold. |
 | `create_attribute` | Add an attribute to an element. |
 | `create_connector` | Create a connector from client (source) to supplier (target). |
 | `create_connectors_bulk` | Create multiple connectors in one call with idempotency built in. |
@@ -61,8 +62,9 @@ If an operation is not in this list, it does not exist. Do not infer one from a 
 | `list_root_packages` | List all root-level packages (top-level models) in the repository. |
 | `list_tagged_values` | List all tagged values on an element. |
 | `move_element` | Move an element to a different package. |
+| `move_package` | Move a package, with everything in it, under another package. |
 | `select_element_in_browser` | Highlight an element in EA's Browser (project tree). |
-| `set_composite_diagram` | Set or clear an element's composite (navigation/drill-down) diagram link, writing both halves of the mechanism together so they can never land out of sync. |
+| `set_composite_diagram` | Set or clear an element's composite (navigation/drill-down) diagram link, writing the three stored parts of the mechanism together so they can never land out of sync. |
 | `set_connector_tagged_value` | Create or update a tagged value on a connector. |
 | `set_element_appearance` | Set an element's DEFAULT appearance -- background color, font color, border color, border width -- through `Element.SetAppearance`. |
 | `set_tagged_value` | Create or update a tagged value on an element. |
@@ -70,6 +72,7 @@ If an operation is not in this list, it does not exist. Do not infer one from a 
 | `update_attribute` | Update an attribute by its GUID. |
 | `update_connector` | Update properties on a connector. |
 | `update_element` | Update properties on an element. |
+| `update_element_descriptions` | Write descriptions into elements' Notes, a batch at a time. |
 | `update_operation` | Update an operation by GUID. |
 | `update_package` | Update properties on an existing package. |
 
@@ -128,10 +131,14 @@ If an operation is not in this list, it does not exist. Do not infer one from a 
 
 ---
 
-## `ea_analyze` — 13 operations
+## `ea_analyze` — 18 operations
 
 | Operation | What it does |
 |---|---|
+| `analyze_impact` | What a change to one or more elements reaches. |
+| `assess_audit_log` | How much of the repository EA's audit log takes up. |
+| `assess_structural_risk` | Where an architecture is fragile. |
+| `compare_states` | Compare an as-is architecture with a to-be one, in one output shape. |
 | `describe_table` | Return canonical column names, types, PK, and gotcha notes for an EA repository table (``t_object``, ``t_taggedvalue``, etc.). |
 | `execute_sql` | Execute a raw SQL query against the EA repository. |
 | `find_paths` | Return every SHORTEST path between two elements, as alternating element/connector hops. |
@@ -140,6 +147,7 @@ If an operation is not in this list, it does not exist. Do not infer one from a 
 | `get_updates_in_range` | Return packages, elements, or diagrams created or modified in a date range. |
 | `get_user_activity` | Per-user modification counts in a date range. |
 | `list_ea_tables` | List every EA repository table known to the MCP server, with PK. |
+| `measure_traceability_coverage` | How far each element of a set is traced along a chain of hops. |
 | `summarize_connector_patterns` | Source-stereotype -> connector-stereotype -> target-stereotype tuples. |
 | `summarize_observed_metaclasses` | For a given stereotype, which EA Object_Types host it. |
 | `summarize_stereotype_usage` | Stereotype + Object_Type frequency table for the whole repository. |
@@ -167,30 +175,35 @@ If an operation is not in this list, it does not exist. Do not infer one from a 
 
 ---
 
-## `ea_validate` — 1 operations
+## `ea_validate` — 2 operations
 
 | Operation | What it does |
 |---|---|
 | `audit` | Run a YAML sidecar conformance ruleset against the current model. |
+| `get_report` | Render an audit as Markdown: a ``monthly`` report or a ``tollgate`` report. |
 
 ---
 
-## `ea_repository` — 27 operations
+## `ea_repository` — 33 operations
 
 | Operation | What it does |
 |---|---|
 | `aggregate_portfolio` | Group elements by tagged value for portfolio reporting. |
 | `apply_baseline` | Roll back a package to a prior baseline (destructive). |
+| `apply_merge_plan` | Apply a decided three-way merge to production. |
 | `build_business_layer` | Build the business layer as SQL Server views, from a reporting profile. |
 | `build_reporting_database` | Build a SQL Server reporting database from the open repository over COM, for a repository with no direct database access. |
 | `check_business_layer` | Check a built business layer without changing it: alignment with the metamodel, and every cell against an independent read of EA. |
 | `check_for_updates` | Report whether a newer version of ea-mcp-server is available. |
 | `close_project` | Close the currently-open project without exiting EA. |
 | `compare_baseline` | Compare a package against one of its baselines and return the diff. |
+| `compare_ea_preferences` | Where this machine's EA appearance preferences drift from a baseline. |
 | `create_baseline` | Create a baseline snapshot of a package. |
 | `create_model` | Create a new EA model file at `path` and open it. |
+| `diff_models_three_way` | Compare a package across three .qea files (the frozen base, the branch, production) by GUID. |
 | `export_xmi` | Export a package as XMI for cross-tool interchange. |
 | `generate_report` | Run an EA-native report template against a package and write a document to `output_path`. |
+| `get_ea_preferences` | Read EA's appearance preferences from this machine's registry. |
 | `get_reporting_refresh` | The status of a refresh started with `start_reporting_refresh`: running, succeeded or failed, and when finished the full result (row counts per table, flags, alignment, timings, or why it stopped). |
 | `get_repository_info` | Return metadata about the currently-open EA project: file path, connection string, EA version, number of root packages. |
 | `get_skill_update_diff` | Return the local and remote content of a skill file that has a conflict. |
@@ -198,12 +211,14 @@ If an operation is not in this list, it does not exist. Do not infer one from a 
 | `install_skills` | Install Claude skills from a skills bundle into the host's skill directory (the legacy channel). |
 | `launch_ea` | Start Enterprise Architect on the local machine, or attach to one that is already running. |
 | `list_available_skills` | List the Claude skills available for installation from a skills bundle (the legacy channel). |
-| `list_baselines` | List baselines registered against a package. |
+| `list_baselines` | List baselines registered against a package, or every baseline in the model. |
 | `open_model` | Open an existing EA model file (.qea, .qeax, .eap, .eapx) in the running EA instance. |
 | `open_project` | Open a .qea, .qeax, .eap, or .eapx project file. |
 | `prune_legacy_skills` | Remove skill directories superseded by a rename or withdrawal. |
+| `refresh_model_view` | Refresh EA's Project Browser so changes made by script or by this server show in EA's open windows. |
 | `remove_business_layer` | Drop the business layer: every view in the profile's schema, then the schema. |
 | `replay_reporting_database` | Rebuild the reporting database from the last run's kept extract, with no EA connection: the same rows, the same technology, the same result. |
 | `resolve_skill_conflict` | Resolve a conflict between a locally-edited skill file and the server version. |
+| `save_all_diagrams` | Save every diagram EA has open, so a person's unsaved edits are on disk before an operation that reloads or reads diagrams. |
 | `start_reporting_refresh` | Start a reporting refresh for a saved profile and return at once with a run id; poll it with `get_reporting_refresh`. |
 

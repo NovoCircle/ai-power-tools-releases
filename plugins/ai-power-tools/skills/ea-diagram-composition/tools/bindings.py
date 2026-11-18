@@ -604,7 +604,8 @@ _NARROW_SPEC_KEYS: dict[str, frozenset[str]] = {
 
 _TOP_LEVEL_KEYS = frozenset({
     "technology", "extends", "stereotype_prefix", "display_name", "notes",
-    "diagram_types", "viewpoints", "presentation_profiles",
+    "diagram_types", "viewpoints", "presentation_profiles", "bare_stereotype",
+    "name_below",
 })
 _DIAGRAM_TYPE_KEYS = frozenset({
     "grammar", "title", "sizing", "spacing", "routing", "channels", "notes",
@@ -759,159 +760,18 @@ class PresentationProfile:
         return out
 
 
-# ---------------------------------------------------------------------------
-# Text fit - the one estimate in this file, and why it is a maximum
-# ---------------------------------------------------------------------------
-# Per-character advance of the header font, in pixels. It exists ONLY to predict
-# a width before anything has been drawn. DETECTION needs no estimate at all:
-# EA's SVG carries `textLength`, its own measured advance, on every rendered run,
-# so the linter compares EA's numbers with EA's rects. A composer has no render
-# to read, which is the whole reason a number is needed here.
-#
-# CALIBRATED AS A MAXIMUM, NOT A MEAN, and that is the point of it. Read off live
-# renders (EA 17.1, the header font at its default size), per character over the
-# SPACE-FREE runs - which is what has to fit on one line, because EA breaks on
-# spaces and never inside a word:
-#
-#      4 chars /  17 px = 4.25
-#      8 chars /  39 px = 4.88
-#     10 chars /  48 px = 4.80
-#     12 chars /  54 px = 4.50
-#     10 chars /  55 px = 5.50   <- the maximum
-#     31 chars / 152 px = 4.90
-#
-# The mean of that population is 4.9 and taking it would UNDER-PREDICT the
-# widest measured string by 6%. Under-prediction is precisely the failure being
-# prevented: a box that is nearly wide enough is a box EA still grows, and the
-# render then disagrees with the geometry every other check reads. So the
-# interval is [5.50, inf) - below 5.5 a measured string is known to be
-# under-predicted, above it the only cost is width - and the bottom of that
-# interval is taken, because a prevention floor should be the smallest figure
-# that is not known to be wrong.
-#
-# Over-prediction is cheap and self-correcting. At 5.5 the 36-character name
-# from the live sweep is predicted at 198 px where EA drew 169, so the box comes
-# out about 30 px wider than it strictly had to be - and the next verify
-# measures the truth exactly rather than inheriting the estimate.
-#
-# NOT VALIDATED FOR: any font other than the one measured (the measurement
-# varied neither the size nor a per-element style override), and non-Latin or
-# full-width glyphs. A run of wide capitals is the case that could still exceed
-# it. The linter stays the backstop for all of those, because it measures
-# instead of predicting.
-#
-# AND A STATED POPULATION WITH NO GUARD IS THE SAME DEFECT ONE LAYER DOWN, so
-# the "not validated for" paragraph above is now enforced rather than merely
-# written: `CALIBRATED_REPERTOIRE` is the character set the measurement covered,
-# `unvalidated_glyphs` names what a caller's name carries outside it, and
-# `SpecFit.extrapolated` reports it wherever `fit_spec` is used. See
-# `width_to_fit` for what the guard does about a full-width glyph, and why that
-# is a derivation rather than a second guess.
-HEADER_ADVANCE_PX = 5.5
+# The text-fit estimate (HEADER_ADVANCE_PX and its guards) lives in compose.py, so the
+# engine that sizes boxes and the binding that fits a spec read one figure.
+from compose import (  # noqa: E402,F401
+    CALIBRATED_REPERTOIRE,
+    FULL_WIDTH_CELLS,
+    HEADER_ADVANCE_PX,
+    _advance,
+    _longest_unbroken_run,
+    unvalidated_glyphs,
+    width_to_fit,
+)
 
-#: The characters `HEADER_ADVANCE_PX` was calibrated on: printable ASCII, which
-#: is what the measured strings contained. Anything else is an EXTRAPOLATION -
-#: possibly a fine one for Latin-1 or Cyrillic, which occupy the same width class,
-#: and definitely not for a full-width glyph.
-CALIBRATED_REPERTOIRE = frozenset(chr(c) for c in range(0x20, 0x7F))
-
-#: What a full-width glyph is charged, as a MULTIPLE of the calibrated advance.
-#: Derived, not measured: Unicode East Asian Width `W` and `F` mean the glyph
-#: occupies two character cells, and 5.5 is the widest advance any single cell in
-#: the calibrated population reached, so two cells cannot be narrower than
-#: `2 * HEADER_ADVANCE_PX`. It is a FLOOR on the prediction and therefore errs
-#: toward a wider box, which this module's own reasoning calls the cheap and
-#: self-correcting direction. A measurement in the target font would replace it.
-FULL_WIDTH_CELLS = 2
-
-
-def _longest_unbroken_run(name: str) -> str:
-    """The longest run in a name that EA cannot break - what must fit one line.
-
-    EA WRAPS ON SPACES ONLY. Measured: a 31-character name with no spaces in a
-    100-wide box was drawn as a single unwrapped line running 52 px past both
-    borders, and the same name with spaces in it came back as one text run per
-    line at a 13 px pitch. So a multi-word name breaks itself and only its
-    longest word has to fit; a name with no spaces has to fit whole.
-
-    Split on the space character alone, not on whitespace generally. A tab or a
-    newline inside an element name was never measured, and treating one as a
-    break would predict a narrower box on no evidence - keeping the run joined
-    predicts a wider one, which is the safe direction.
-    """
-    return max(name.split(" "), key=len, default="")
-
-
-def width_to_fit(name: str) -> int:
-    """The narrowest box width at which this name reads as fitting.
-
-    `longest unbroken run x HEADER_ADVANCE_PX`, plus `LABEL_MARGIN` of clearance
-    on each side. Two thresholds are in play and the wider one is targeted:
-
-    * EA stops growing the drawn box once the text fits the usable inner width,
-      measured at `w - 6` for the narrower of the two shapes probed and `w - 5`
-      for the other, +/-1. Call it `w - 7` to cover both with the tolerance.
-    * The label stops reading as touching the border at `LABEL_MARGIN` px of
-      clearance per side, so `w - 2 * LABEL_MARGIN`.
-
-    `2 * LABEL_MARGIN` is 16, which is wider than 7, so aiming at the clearance
-    satisfies the growth threshold as well. Aiming at 7 instead would trade the
-    error for the warning and call it fixed.
-
-    WHAT THIS DOES NOT PROMISE, because EA's wrap is greedy. It packs as many
-    words onto a line as the break width holds, so a MULTI-WORD name can still
-    come out reading as cramped: at a width that leaves the whole name fitting
-    one line with only 5 px each side, EA puts it on one line rather than
-    breaking it, and nothing here moves that. Guaranteeing clearance for a
-    multi-word name means sizing the box to the WHOLE name - a 58-character
-    title would demand a 335-wide box - which overrides the notation's own
-    measured convention for content that renders perfectly well today. Measured
-    live: multi-word names produced no findings at all, and unbreakable ones
-    produced every one. So this fits the run EA cannot break and leaves the rest
-    to the rule that measures rather than predicts.
-    """
-    run = _longest_unbroken_run(name)
-    if not run:
-        return 0
-    return math.ceil(_advance(run)) + 2 * LABEL_MARGIN
-
-
-def _advance(run: str) -> float:
-    """The predicted pixel advance of one unbreakable run.
-
-    Inside `CALIBRATED_REPERTOIRE` this is `len(run) * HEADER_ADVANCE_PX`, which
-    is the whole of the calibration. Outside it:
-
-    * a FULL-WIDTH glyph is charged `FULL_WIDTH_CELLS * HEADER_ADVANCE_PX`,
-      because it occupies two character cells and no cell in the calibrated
-      population was wider than 5.5. That is a floor derived from a Unicode
-      property and the measured maximum, not a second estimate;
-    * anything else out of repertoire is charged the calibrated advance, because
-      there is nothing better to charge it and no reason to think it is wider.
-      This is the case `unvalidated_glyphs` exists to make visible: the number
-      is an extrapolation and the linter, which measures, is the backstop.
-    """
-    if not run:
-        return 0.0
-    wide = sum(1 for ch in run if unicodedata.east_asian_width(ch) in ("W", "F"))
-    return (len(run) + wide * (FULL_WIDTH_CELLS - 1)) * HEADER_ADVANCE_PX
-
-
-def unvalidated_glyphs(name: str) -> tuple[str, ...]:
-    """The distinct characters of `name` that `HEADER_ADVANCE_PX` never measured.
-
-    Sorted and de-duplicated, empty for a name entirely inside
-    `CALIBRATED_REPERTOIRE`. This is the GUARD on that constant: a width predicted
-    for a name containing any of these is an extrapolation past the population the
-    constant was calibrated on, and a caller that cares must verify by measuring
-    rather than trust the prediction. `fit_spec` surfaces it as
-    `SpecFit.extrapolated` so a caller does not have to remember to ask.
-
-    It reports rather than raising. A model whose element names are in Japanese or
-    Russian is a legitimate model and must still compose; what it must not do is
-    compose against a number that quietly claims a provenance it does not have.
-    """
-    return tuple(sorted({ch for ch in name if ch not in CALIBRATED_REPERTOIRE}))
 
 
 class SpecFit(dict):
@@ -1065,12 +925,15 @@ class DiagramTypeBinding:
     __slots__ = ("technology", "name", "token", "base", "grammar", "title", "sizing",
                  "spacing", "routing", "channels", "notes",
                  "own_sizing", "own_spacing", "substrate",
-                 "own_stereotype_prefix", "stereotype_prefix")
+                 "own_stereotype_prefix", "stereotype_prefix", "name_below_room")
 
     def __init__(self, technology: str, name: str, data: Mapping[str, Any],
-                 technology_prefix: str = ""):
+                 technology_prefix: str = "", name_below_room: int = 0):
         self.technology = technology
         self.name = name
+        #: The technology's `name_below.room`, or 0. `spec()` hands it to a
+        #: layered-bands composer as `name_below_room`.
+        self.name_below_room = int(name_below_room or 0)
         # PRESENCE, not truth: `None` means the document said nothing and the
         # technology's value answers, while `""` is this diagram type's own
         # statement that its stereotypes are stored bare. A technology that
@@ -1358,6 +1221,16 @@ class DiagramTypeBinding:
             spec = {width_key: DEFAULT_TREEMAP_SPEC[width_key]}
         spec.update({key: value for key, value in self.spacing.items()
                      if narrow is None or key in narrow})
+        # What EA is measured to draw around a band, set only where it applies so
+        # an unbound spec keeps the engine's defaults (both off). EA draws a band
+        # title, when this diagram type has one drawn, centered across the band,
+        # where a line between bands runs; and a notation whose shapes carry the
+        # name below them states the room it needs. A caller's override still wins.
+        if self.grammar == "layered-bands":
+            if self.draws_its_own_title:
+                spec["title_clear_of_lines"] = True
+            if self.name_below_room:
+                spec["name_below_room"] = self.name_below_room
         valid_keys = _SPEC_KEYS if self.grammar != "treemap" else narrow
         for key, value in (overrides or {}).items():
             if key not in valid_keys:
@@ -1395,7 +1268,7 @@ class DiagramTypeBinding:
             unvalidated = unvalidated_glyphs(name)
             if unvalidated:
                 extrapolated[name] = unvalidated
-            want = width_to_fit(name)
+            want = _engine.one_line_width(name)
             if want > needed:
                 needed, driver = want, name
 
@@ -1404,7 +1277,7 @@ class DiagramTypeBinding:
             run = _longest_unbroken_run(driver)
             detail = (
                 f"{driver!r} has a {len(run)}-character run with no space in it "
-                f"to break on, which needs {width_to_fit(driver)}px. Under "
+                f"to break on and needs {needed}px to sit on one line. Under "
                 f"{FIT_OVERLAP!r} the stored rect keeps the width asked for and "
                 f"EA draws the name past it, so every check that reads the rect "
                 f"reads a narrower box than the one on screen."
@@ -1506,7 +1379,7 @@ class Binding:
 
     __slots__ = ("technology", "display_name", "extends", "stereotype_prefix",
                  "notes", "source", "diagram_types", "tokens", "viewpoints",
-                 "presentation_profiles")
+                 "presentation_profiles", "bare_stereotype", "name_below")
 
     def __init__(self, data: Mapping[str, Any], source: str = "<memory>"):
         self.source = source
@@ -1514,6 +1387,12 @@ class Binding:
         self.display_name = data.get("display_name", "") or self.technology
         self.extends = data.get("extends") or None
         self.stereotype_prefix = data.get("stereotype_prefix", "") or ""
+        # Whether a bare stored stereotype name (no prefix) counts as this language: {accepted, source}, or None
+        # when the document says nothing.
+        self.bare_stereotype = data.get("bare_stereotype")
+        # Room EA needs under a shape for a name it draws below it: {room, source},
+        # or None. Measured per notation and not inherited; see `spec()`.
+        self.name_below = data.get("name_below")
         self.notes = data.get("notes", "")
         # THE ONE VALIDATION THAT CANNOT LIVE IN `_validate`. Everything else a
         # binding must say, it says in its own document, so `_validate` can ask
@@ -1527,8 +1406,10 @@ class Binding:
         # default and only an unfound one can reach the raise.
         self.diagram_types = {}
         for name, body in data["diagram_types"].items():
-            bound = DiagramTypeBinding(self.technology, name, body,
-                                       technology_prefix=self.stereotype_prefix)
+            bound = DiagramTypeBinding(
+                self.technology, name, body,
+                technology_prefix=self.stereotype_prefix,
+                name_below_room=(self.name_below or {}).get("room", 0))
             if "default" not in bound.sizing:
                 raise BindingError(
                     _no_resolved_default(source, self.extends, bound))
@@ -2038,6 +1919,21 @@ def _validate(doc: Any, source: str) -> dict:
     # whole reason, and a diagram type's own prefix goes through the same helper
     # so the two scopes cannot drift apart.
     out.update(_validate_prefix(data, source))
+    if "bare_stereotype" in data:
+        bare = _mapping(data["bare_stereotype"], f"{source}.bare_stereotype")
+        _reject_unknown(bare, frozenset({"accepted", "source"}), f"{source}.bare_stereotype")
+        if not isinstance(bare.get("accepted"), bool):
+            raise BindingError(f"{source}.bare_stereotype.accepted: must be true or false")
+        out["bare_stereotype"] = {"accepted": bare["accepted"],
+                                  "source": _text(bare.get("source"), f"{source}.bare_stereotype.source")}
+    if "name_below" in data:
+        below = _mapping(data["name_below"], f"{source}.name_below")
+        _reject_unknown(below, frozenset({"room", "source"}), f"{source}.name_below")
+        room = below.get("room")
+        if isinstance(room, bool) or not isinstance(room, int) or room <= 0:
+            raise BindingError(f"{source}.name_below.room: must be a positive whole number of px")
+        out["name_below"] = {"room": room,
+                             "source": _text(below.get("source"), f"{source}.name_below.source")}
     for optional in ("display_name", "notes"):
         if data.get(optional):
             out[optional] = _text(data[optional], f"{source}.{optional}")

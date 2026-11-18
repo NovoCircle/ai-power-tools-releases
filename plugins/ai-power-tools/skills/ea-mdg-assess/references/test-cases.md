@@ -227,16 +227,15 @@ reply: not: calls 95% covered "conforming" or scenario 2
 **Fails when:** The run reads 95% as "over the threshold, so the technology is doing its job" and
 reports scenario 2. The boundary is inclusive on the ad hoc side.
 
-### TC-07: Scenario 4 is not a workflow
+### TC-07: There is no scenario 4
 
 Covers: 2. What the scenarios mean
 
 **Ask:** "I read in the tool documentation that there's a scenario for 'external reference model needed'. What do we do if we land in that one?"
 
-**Passes when:** The run says that scenario 4 is named in the operation's documentation but has
-never been observed in a result, that the underlying logic only produces 1, 2 or 3, and that no
-workflow should be designed around it without first confirming the current server emits it. It
-does not invent steps for it.
+**Passes when:** The run says that the server returns scenario 1, 2 or 3 only and that there is no
+scenario 4 (older documentation mentioned one, and it was never returned), so there is no workflow
+for it. It does not invent steps for it.
 
 **Check:**
 
@@ -246,8 +245,8 @@ expect: unchanged
 ```
 
 ```check
-reply: says: scenario 4 has not been observed in any result
-reply: says: confirm the current server emits it before relying on it
+reply: says: the server returns only scenarios 1, 2 and 3
+reply: says: there is no scenario 4 to build a workflow around
 reply: not: gives a step-by-step procedure for handling scenario 4
 ```
 

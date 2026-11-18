@@ -1,0 +1,161 @@
+# The EA appearance baseline.
+#
+# Enterprise Architect keeps some of its drawing preferences per user and per machine, outside the model.
+# Two people open the same diagram and see it drawn differently when these differ: shadows, rounded corners,
+# gradient fills, default colors, the default font, the theme. This file says what a site wants them to be.
+# `get_ea_preferences` reads what a machine has, and the skills compare the two and report the drift.
+#
+# THIS FILE IS A STARTING POINT, AND PART OF IT IS UNFILLED ON PURPOSE.
+#
+#   * The names below are the preference names EA keeps. They were read from one machine; nothing else
+#     about them has been confirmed.
+#   * `appears_to_set` is a reading of the name, not a fact. A preference is marked `mapped: true` only
+#     after a live run toggled the setting in EA's own dialog and saw this value change.
+#   * `default` is EA's own default for the installed version. It is left empty (`null`) until that live
+#     run fills it. An empty `default` is marked TO FILL below. It is not a claim that the default is empty.
+#   * `expected` is yours. Set it to the value your site wants. Leave it `null` to say "no opinion".
+#
+# HOW THE COMPARISON READS THIS FILE, per preference:
+#   1. `expected` is set       -> the machine must match `expected`.
+#   2. else `default` is set   -> the machine must match EA's default.
+#   3. else                    -> nothing to compare. The report lists the preference as "no baseline value".
+#
+# A value EA has not written (the preference was never changed on that machine) is EA's default. The report
+# says "not set on this machine" and compares the default, where one is known.
+#
+# Setting a preference stays with the person, in EA's own Preferences dialog. Nothing reads or writes the
+# registry for you except `get_ea_preferences`, which reads.
+
+schema: 1
+
+# The EA build the `default` values were mapped on. TO FILL by the live mapping run.
+ea_version: "17.1 build 1716"   # the version the mapped entries were read on
+status: unmapped            # becomes `mapped` when the live run has filled every `default` it can
+
+preferences:
+  - name: SHADOW
+    appears_to_set: Shadow drawn behind elements
+    mapped: false
+    default: null           # TO FILL
+    expected: null
+
+  - name: ROUNDEDGES
+    appears_to_set: Rounded corners on elements
+    mapped: false
+    default: null           # TO FILL
+    expected: null
+
+  - name: PAPER_GRADIENT_FILL
+    appears_to_set: Gradient fill on the diagram background
+    mapped: false
+    default: null           # TO FILL
+    expected: null
+
+  - name: GRADLUM
+    appears_to_set: Gradient brightness
+    mapped: false
+    default: null           # TO FILL
+    expected: null
+
+  - name: GRADSTART
+    appears_to_set: Gradient start position or color
+    mapped: false
+    default: null           # TO FILL
+    expected: null
+
+  - name: SHADE_ALL_OBJECTS2
+    appears_to_set: Shade every element with the gradient
+    mapped: false
+    default: null           # TO FILL
+    expected: null
+
+  - name: FILLCLR
+    appears_to_set: Default element fill color
+    mapped: false
+    default: null           # TO FILL
+    expected: null
+
+  - name: LINECLR
+    appears_to_set: Default element border color
+    mapped: false
+    default: null           # TO FILL
+    expected: null
+
+  - name: TEXTCLR
+    appears_to_set: Default text color
+    mapped: false
+    default: null           # TO FILL
+    expected: null
+
+  - name: SHADOWCLR
+    appears_to_set: Shadow color
+    mapped: false
+    default: null           # TO FILL
+    expected: null
+
+  - name: BORDERWIDTH
+    appears_to_set: Default element border width
+    mapped: false
+    default: null           # TO FILL
+    expected: null
+
+  - name: CONNECTORWIDTH
+    appears_to_set: Default connector line width
+    mapped: false
+    default: null           # TO FILL
+    expected: null
+
+  - name: FONTNAME13
+    appears_to_set: Default diagram font name
+    mapped: false
+    default: null           # TO FILL
+    expected: null
+
+  - name: FONTSIZE13
+    appears_to_set: Default diagram font size
+    mapped: false
+    default: null           # TO FILL
+    expected: null
+
+  - name: USER_THEME_EA17
+    appears_to_set: The application theme
+    mapped: false
+    default: null           # TO FILL
+    expected: null
+
+  - name: HDM
+    appears_to_set: "Preferences > Themes: Hand Drawn (1 when ticked, 0 when clear); written as soon as the box is ticked"
+    mapped: true            # live run, EA 17.1 build 1716
+    default: null           # TO FILL: 0 was seen on one machine, which may not be EA's own default
+    expected: null
+
+  - name: WBM
+    appears_to_set: "Preferences > Themes: Whiteboard (1 when ticked, 0 when clear); written as soon as the box is ticked"
+    mapped: true            # live run, EA 17.1 build 1716
+    default: null           # TO FILL: 0 was seen on one machine, which may not be EA's own default
+    expected: null
+
+  - name: IMG_SCALE_FACTOR3
+    appears_to_set: Scale of exported images
+    mapped: false
+    default: null           # TO FILL
+    expected: null
+
+  - name: DOCUMENT_SCALE_FACTOR
+    appears_to_set: Scale of images placed in generated documents
+    mapped: false
+    default: null           # TO FILL
+    expected: null
+
+  - name: SAVE_IMAGE_FRAME
+    appears_to_set: Whether an exported image includes the diagram frame
+    mapped: false
+    default: null           # TO FILL
+    expected: null
+
+# Settings that change how a diagram is drawn and that no preference name was found for on the machine the
+# list above came from: the default for "fit text to element", and the default connector style. Add them
+# above when the live mapping run finds the name EA keeps them under.
+not_found:
+  - Fit text to element
+  - Default connector style

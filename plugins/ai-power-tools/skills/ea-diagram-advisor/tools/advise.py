@@ -176,6 +176,10 @@ class ScopeProfile:
     # owner, as against none at all. "No recorded owner" and "ambiguous" are
     # different things to tell a user, so they are kept apart.
     ambiguous_stereotypes: Mapping[str, int] = field(default_factory=dict)
+    # Unstereotyped elements by metaclass (the repository's `Object_Type`), when the
+    # caller measured them. Not a vote for any language: it is the only evidence left when
+    # a scope carries no stereotype at all.
+    metaclasses: Mapping[str, int] = field(default_factory=dict)
 
     @property
     def dominant(self) -> Optional[str]:
@@ -344,9 +348,23 @@ def _attribute(stereotype: str, bindings: Sequence[Any],
     return AMBIGUOUS, stereotype
 
 
+def _positive_counts(counts: Optional[Mapping[str, Any]]) -> dict:
+    """`counts` with whole-number, positive values only, and named keys only."""
+    out: dict[str, int] = {}
+    for name, count in (counts or {}).items():
+        try:
+            count = int(count)
+        except (TypeError, ValueError):
+            continue
+        if (name or "").strip() and count > 0:
+            out[name] = out.get(name, 0) + count
+    return out
+
+
 def profile_scope(stereotype_counts: Mapping[str, int],
                   bindings: Sequence[Any],
-                  known_concepts: Optional[Mapping[str, Any]] = None
+                  known_concepts: Optional[Mapping[str, Any]] = None,
+                  metaclass_counts: Optional[Mapping[str, int]] = None
                   ) -> ScopeProfile:
     """Turn a measured stereotype histogram into a technology histogram.
 
@@ -371,6 +389,11 @@ def profile_scope(stereotype_counts: Mapping[str, int],
     Whatever is not attributed is counted under `UNATTRIBUTED` and listed in
     `unattributed_stereotypes`, so the gap is visible rather than silently
     reshaping the answer.
+
+    `metaclass_counts` maps a metaclass (`Object_Type`) to how many unstereotyped
+    elements have it. It never changes the technology histogram. It is kept on the profile
+    so `recommend` can use it when nothing in the scope carries a stereotype, and say that
+    the recommendation then rests on the metaclasses alone.
     """
     technologies: dict[str, int] = {}
     concepts: dict[str, int] = {}
@@ -406,6 +429,7 @@ def profile_scope(stereotype_counts: Mapping[str, int],
         ambiguous_stereotypes=dict(ambiguous_names),
         bound_technologies=frozenset(b.technology for b in bindings),
         total=total,
+        metaclasses=_positive_counts(metaclass_counts),
     )
 
 
@@ -482,6 +506,8 @@ class Recommendation:
     non_conformance: str = ""
     will_be_flagged: tuple = ()
     candidate: Optional[Candidate] = None
+    # True when the evidence is thin: the recommendation rests on metaclasses alone.
+    weak: bool = False
 
     @property
     def conformant(self) -> bool:
@@ -635,13 +661,41 @@ def _binding_for(technology: str, bindings: Sequence[Any]) -> Optional[Any]:
 
 
 def recommend(profile: ScopeProfile, bindings: Sequence[Any],
-              intent: str = "") -> list[Recommendation]:
+              intent: str = "",
+              metaclass_base_types: Optional[Mapping[str, str]] = None
+              ) -> list[Recommendation]:
     """Ranked recommendations for this scope, best first, with reasoning.
 
     Never empty for a non-empty scope: when no conformant view exists the
     answer is a deliberate non-standard one, which is a recommendation with
     obligations attached rather than a refusal.
+
+    When nothing in the scope carries a stereotype but a metaclass histogram was given, the
+    answer is a base diagram type chosen from the commonest metaclass, marked `weak`.
+    `metaclass_base_types` maps a metaclass to the base diagram type that holds it; a
+    metaclass it does not name gets no diagram type, and the reasons say so.
     """
+    if not profile.total and profile.metaclasses:
+        ranked = sorted(profile.metaclasses, key=lambda m: (-profile.metaclasses[m], m))
+        top = ranked[0]
+        diagram_type = (metaclass_base_types or {}).get(top, "")
+        shares = ", ".join(f"{m} {profile.metaclasses[m]}" for m in ranked)
+        reasons = [
+            f"{sum(profile.metaclasses.values())} unstereotyped element(s): {shares}",
+            "WEAK: no element carries a stereotype, so nothing ties this scope to a modeling "
+            "language, and the choice rests on the metaclasses alone",
+        ]
+        if diagram_type:
+            reasons.append(f"the commonest metaclass is {top}, which a {diagram_type} "
+                           f"diagram holds")
+        else:
+            reasons.append(f"the commonest metaclass is {top}; no base diagram type was given "
+                           f"for it, so pick the base type that holds it")
+        return [Recommendation(
+            kind="metaclass", technology="", viewpoint="", diagram_type=diagram_type,
+            reasons=tuple(reasons), weak=True,
+        )]
+
     if not profile.total:
         return [Recommendation(
             kind="none", technology="", viewpoint="", diagram_type="",
@@ -770,6 +824,14 @@ def recommend(profile: ScopeProfile, bindings: Sequence[Any],
             f"is no standard view to recommend for this content; the options "
             f"below are not a ranking of its views"
         )
+    for other in sorted(profile.technologies):
+        if other == profile.dominant or other not in profile.bound_technologies:
+            continue
+        other_binding = _binding_for(other, bindings)
+        if other_binding is not None and not getattr(other_binding, "viewpoints", None):
+            neutral_reasons.append(
+                f"the {other} binding defines no viewpoints, so none of its content has a "
+                f"standard view to recommend")
     if not profile.is_bound and profile.dominant == UNATTRIBUTED:
         unbound = profile.technologies.get(UNATTRIBUTED, 0)
         neutral_reasons.append(

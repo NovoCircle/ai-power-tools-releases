@@ -27,7 +27,7 @@ Two ways exist to produce an MDG. This skill covers the model-driven one. `ea-md
 | Task | Route |
 |---|---|
 | Create stereotype, attribute, constraint | MCP API |
-| Duplicate a package | MCP API: `duplicate_package` (fresh GUIDs; copies diagrams from server 2.3.0; **can lose** connector tag values, attribute-to-enumeration links and literal order, so compare the copy: Phase 1) |
+| Duplicate a package | MCP API: `duplicate_package` (fresh GUIDs; copies diagrams from server 2.3.0; carries connector tag values, attribute-to-enumeration links and literal order; **does not carry** element classifier references, connector end properties, tags on attributes, operations and packages, or element parentage, so compare the copy: Phase 1) |
 | Connector tagged value (Quick Linker constraint) | MCP API — `set_connector_tagged_value` / `get_connector_tags` / `list_connector_tagged_values` / `delete_connector_tagged_value` |
 | Element appearance — background, font, border | MCP API — `set_element_appearance` for the model-wide default; `set_diagram_object` for one placement on one diagram |
 | Export a profile | MCP API — `publish_package_as_profile` (always pass `version`) |
@@ -129,12 +129,12 @@ throughout — the API equivalent of Paste as New. It copies diagrams, their obj
 links (server 2.3.0 or later). XMI export/import is not a substitute: it does not dependably
 strip GUIDs, and two packages claiming the same profile `id` is worse than a manual copy.
 
-⚠ **The copy can be damaged and look complete.** Runs on 3.6.4 lost Quick Linker connector tag
-values, attribute-to-enumeration links and literal order. **Verify the copy immediately:**
-element, attribute, connector and diagram counts against the source, that no connector leaks back
-to the original's metaclasses, and those three things: compare the Quick Linker `stereotype` tag
-values, the attribute classifier links and each Enumeration's literal order, source against copy
-(queries in [references/source-model-mechanics.md](references/source-model-mechanics.md)). If any
+⚠ **The copy can be damaged and look complete.** The server now carries connector tag values,
+attribute-to-enumeration links and literal order, but not element classifier references,
+connector end properties, tags on attributes, operations and packages, or element parentage.
+**Verify the copy immediately:** counts of elements, attributes, connectors and diagrams against
+the source, no connector leaking back to the original's metaclasses, the Quick Linker `stereotype`
+tag values, attribute classifier links and each Enumeration's literal order (queries in [references/source-model-mechanics.md](references/source-model-mechanics.md)). If any
 differ, repair the copy or make it with Paste as New in the UI, which was faithful, and compare
 again.
 
@@ -259,10 +259,10 @@ Two halves, and only the first is scriptable today. The sequence matters and sev
    - **Saved files come out with an empty `version` attribute** (the copy Import stores carries the package `Version`: see the reference), and setting the package
      `Version` beforehand does not carry through. Stamp it afterwards — two unversioned builds are
      indistinguishable in Manage Technologies, which is a mistake that has already been made here.
-   - **EA raises a confirmation dialog every time it generates the technology.** It is expected, no
-     server operation runs this command, and it is driven on screen. Dismiss it (or confirm by
-     screenshot that none is open) before the next COM call: a COM call made while it is open
-     blocks. No step here assumes the generation runs without it.
+   - **A confirmation dialog may come before Save As.** On EA 17.1 (build 1716), in one observed
+     run, EA went straight to Save As and the only dialog was the success message afterward. Other
+     builds may show a blocking confirmation first; if it appears, dismiss it. It is driven on screen
+     (no server operation runs it); before the next COM call, confirm by screenshot no dialog is open.
    - **Read System Output, not just the return, and clear it first.** The panel keeps old lines
      across model switches and EA restarts: before the command, right-click in System Output and
      choose **Clear**, so every line afterwards belongs to this build. If you cannot clear it, treat
@@ -297,7 +297,7 @@ another person's machine. It does not update the version in the written file, so
 
 ⚠ **`Publish Diagram as UML Profile` is greyed out unless the diagram is open.** Selecting it in the Browser is not enough.
 
-⚠ **The wizard's Tagged Value Types page is a selection step, not an inclusion step.** Types not selected here do not ship, however completely they are defined. This is the usual cause of "the type exists but the field is still free text" — and because the omission is invisible in the model, it can persist across many releases. Detect it: `ea-validation`'s `tagged_value_type_shipped` rule condition compares a profile's blank-`Type` tagged-value attributes against a built MDG file's RefData and flags anything defined but not shipped; an attribute whose `Type` names the enumeration is not read by it, so compare those against RefData by hand. On EA 17.1 and later the build has no wizard page, and how a type is selected into the build on that route is not measured; the RefData comparison in Phase 6 is what shows whether it shipped.
+⚠ **The wizard's Tagged Value Types page is a selection step, not an inclusion step.** Types not selected here do not ship, however completely they are defined. This is the usual cause of "the type exists but the field is still free text" — and because the omission is invisible in the model, it can persist across many releases. Detect it: `ea-validation`'s `tagged_value_type_shipped` rule condition compares a profile's blank-`Type` tagged-value attributes against a built MDG file's RefData and flags anything defined but not shipped. It also checks each enumeration tag (an attribute whose `Type` names an enumeration): the built file must carry it on the stereotype as a `<Tag type="enumeration">` with a non-empty `values`, which is where EA writes an enumeration. On EA 17.1 and later the build has no wizard page, and how a type is selected into the build on that route is not measured; the RefData comparison in Phase 6 is what shows whether it shipped.
 
 ⚠ **Match the Contents checkboxes** to the deployed file's shape (parse it and tick to match), and keep the build folder's file names unversioned, as the reference describes.
 
@@ -390,9 +390,9 @@ COM connection rather than as an error you can catch. Neither shows up in a tool
 - **If a call seems to hang, screenshot EA and read the dialog before concluding anything.**
   It names the cause. Dismiss from the front — dialogs stack, and a later call can be queued
   behind one raised by an earlier one. Windows reporting EA as "Responding" means nothing.
-- **After any diagram create or edit, reload the diagram, screenshot it, and look.**
-  `ok: true` means rows were written, not that elements landed where you intended, that
-  styling applied, or that the result is readable.
+- **The profile model holds diagrams, so look at them after you copy or edit them.** After duplicating a
+  package, editing a toolbox or data-types diagram, or making a scratch diagram to try the language, reload
+  it, screenshot it, and check shapes and toolbox pages. `ok: true` means rows were written, not that it reads correctly.
 - **Without computer use**, say so. Ask the user to paste a screenshot of the EA window or
   dialog into the conversation, read the cause from it, and ask the user to dismiss the dialog
   before you retry. Never report a hang you have not diagnosed or a diagram you have not seen.

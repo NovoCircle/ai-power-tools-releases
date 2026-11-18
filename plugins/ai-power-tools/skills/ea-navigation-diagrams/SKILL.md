@@ -27,7 +27,7 @@ It is **not** a hyperlink element, **not** a diagram frame, and **not** a Naviga
 
 All three are required. This is the single most important fact in this skill:
 
-- Without (3) the element shows the marker, but double-click does nothing (shown live on EA 17.1, 11 Nov 2026).
+- Without (3) there is no drill-down marker, and double-click opens the element's Properties dialog instead of the child diagram. With all three the marker shows and double-click opens the child diagram (shown live on EA 17.1, screen check, 16 Nov 2026).
 - Without (2) there is no marker, even though the diagram is owned by the element and appears under it in the Browser.
 - Without (1) there is nothing to open (`NType = 8` alone).
 
@@ -178,11 +178,11 @@ PDATA:    HideRel=0;ShowTags=0;ShowReqs=0;ShowCons=0;ShowIcons=1;ShowShape=1;
 
 One diagram per parent, plus one landing diagram with `ParentID = 0` in the package.
 
-**Default route: `create_diagram`** with `properties` for `Name`, `StyleEx`, `ParentID` and the batch marker (`Author` or `Version`), then check `applied_properties` and `rejected_properties`. It does not list `PDATA`, `Swimlanes` or the show/hide flags, so those still need the follow-up `UPDATE` below. Not yet verified live: that a diagram made this way, with this `StyleEx` and `ParentID`, ends up the same as one inserted by SQL. The raw `INSERT` that follows is the fallback for a server without the call, and what to use if that check fails.
+**Default route: `create_diagram`** with `properties` for `Name`, `StyleEx`, `PDATA` (or `ExtendedStyle`, the same column), `Swimlanes`, `ParentID` and the batch marker (`Author` or `Version`). The type goes in `type` (`diagram_type` is refused). Each of `PDATA`/`ExtendedStyle`, `StyleEx` and `Swimlanes` is read back after the write, so check `applied_properties` and `rejected_properties`: a value EA did not keep is listed as rejected. No follow-up `UPDATE` is needed for these. The show/hide flags that are not in those three columns are not set here. Not yet verified live: that a diagram made this way, with this `StyleEx` and `ParentID`, ends up the same as one inserted by SQL. The raw `INSERT` that follows is the fallback for a server without the call, and what to use if that check fails.
 
 Name each child diagram after its element. Because element-owned diagrams surface under the element rather than in the package list, reusing the element name is unambiguous and is what hand-built examples do.
 
-Insert only the identifying columns, then set the bulky repeated columns (`PDATA`, `StyleEx`, `Swimlanes`, the show/hide flags, dates) in a single follow-up `UPDATE` over the whole batch. Tag the batch — `Author`, or a temporary `Version` marker — so the follow-up update and the later ID lookup can find exactly these rows.
+On the raw `INSERT` fallback, insert only the identifying columns, then set the bulky repeated columns (`PDATA`, `StyleEx`, `Swimlanes`, the show/hide flags, dates) in a single follow-up `UPDATE` over the whole batch. Tag the batch — `Author`, or a temporary `Version` marker — so the follow-up update and the later ID lookup can find exactly these rows.
 
 GUIDs must be the braced upper-case form. Dialects differ:
 

@@ -871,14 +871,14 @@ Covers: Phase 5 — Build
 
 **Ask:** "Build the WBA MDG as version 1.2.0, save it as <build-dir>\WBA_MDG.xml, and tell me when it's ready to deploy."
 
-**Passes when:** The run opens the built file, finds its `version` attribute empty (setting the package `Version` beforehand does not carry through), stamps `1.2.0` afterwards, clears System Output before the build and reads it after for diagnostics such as `WARNING: Duplicate profile name`, and notes that EA's confirmation dialog on generation is expected and was dismissed. It reports the version it verified in the file.
+**Passes when:** The run opens the built file, finds its `version` attribute empty (setting the package `Version` beforehand does not carry through), stamps `1.2.0` afterwards, clears System Output before the build and reads it after for diagnostics such as `WARNING: Duplicate profile name`, and confirms by screenshot that no dialog is open (a confirmation dialog, if this build shows one, and the success message) before the next call. It reports the version it verified in the file.
 
 **Check:**
 
 ```check
 reply: says: the generated file came out with an empty version and was stamped 1.2.0 afterwards
 reply: says: it cleared System Output before the build and read it after
-reply: says: EA's confirmation dialog appeared when the file was generated and was dismissed before the next call
+reply: says: it checked that no EA dialog was left open after the save before the next call
 ```
 
 ```check
@@ -894,7 +894,7 @@ Covers: Phase 5 — Build; Gotchas
 
 **Ask:** "The built WBA file still shows criticality as free text, but the type exists in the repository. Why?"
 
-**Passes when:** The run explains that a defined type does not ship unless it was selected into the build (the wizard's Tagged Value Types page), that the omission is invisible in the model, and that `ea-validation`'s `tagged_value_type_shipped` rule detects it by comparing the profile's blank-`Type` tag attributes with the built file's RefData. It runs the rule or says how to.
+**Passes when:** The run explains that a defined type does not ship unless it was selected into the build (the wizard's Tagged Value Types page), that the omission is invisible in the model, and that `ea-validation`'s `tagged_value_type_shipped` rule detects it by comparing the profile's blank-`Type` tag attributes with the built file's RefData, and checks each enumeration tag by its inline `values` on the stereotype in the built file. It runs the rule or says how to.
 
 **Check:**
 
@@ -1143,14 +1143,14 @@ Covers: Gotchas
 
 **Marks:** WRITE
 
-**Ask:** "Make the Fiserv DNA Core vendor system amber (#FFBF00), in every diagram it appears on."
+**Ask:** "Make the Alderbrook Core vendor system amber (#FFBF00), in every diagram it appears on."
 
 **Passes when:** The run sets the element's default appearance with `set_element_appearance` (not `set_diagram_object`, which restyles one placement), passing `"#RRGGBB"` (`#FFBF00`, as asked) so the byte swap is handled. Stored as EA's COLORREF `0x00BBGGRR`, amber is 49151, not the 16760576 a raw RGB integer would give.
 
 **Check:**
 
 ```check
-sql: SELECT BackColor FROM t_object WHERE Name = 'Fiserv DNA Core' AND Stereotype = 'WBAVendorSystem'
+sql: SELECT BackColor FROM t_object WHERE Name = 'Alderbrook Core' AND Stereotype = 'WBAVendorSystem'
 expect: rows: [[49151]]
 ```
 
@@ -1374,8 +1374,8 @@ None. Every heading of `SKILL.md` has at least one case. Two further notes on co
 
 Each finding was checked against the current skill text and server main (11 Nov 2026).
 
-- **No change: waits on the server.** `duplicate_package` can still lose Quick Linker tag values, attribute-to-enumeration links and literal order; the fix is on an unmerged EA-S01 branch. The skill already warns and compares (Phase 1, "Copying a package"); once that merges, it should name the server version that copies them. TC-14 tests the comparison.
-- **Fixed in the skill.** The Phase 2 tagged-value row now says an enum tag's `Type` is either blank or carries the enumeration's name, and to check which the source uses. The wizard-page note adds that `tagged_value_type_shipped` reads only blank-`Type` attributes (server main), so the other kind is compared against RefData by hand.
+- **Updated.** The server now copies Quick Linker tag values, attribute-to-enumeration links and literal order in `duplicate_package`; it still does not copy element classifier references, connector end properties, tags on attributes, operations and packages, or element parentage. The skill says so (Phase 1, "Copying a package") and still compares. TC-14 tests the comparison.
+- **Fixed in the skill.** The Phase 2 tagged-value row now says an enum tag's `Type` is either blank or carries the enumeration's name, and to check which the source uses. The wizard-page note adds that `tagged_value_type_shipped` checks blank-`Type` attributes against the built file's RefData and enumeration tags by their inline `values` on the stereotype.
 - **Fixed in the skill.** The Phase 6 check says "the profile `id` values (the profile, the diagram profile and one per toolbox profile)", not "four". TC-35 keeps its five.
 - **Fixed in the skill.** Phase 2 says `_strictness` is applied where enforcement is wanted (the Westbrook source sets none) and that `_metatype` `Default` is the display name, with the Westbrook source storing the bare stereotype name, so check an existing stereotype first. TC-17 already checks `_metatype` only.
 - **No change: already `WBA::`.** "Namespace-qualify every constraint value" and its checklist line pass `WBA::`, which server 3.6.5 accepts and translates to the profile name EA stores. The Westbrook source holds no constraint rows, so the checks test the Quick Linker `stereotype` tag only.

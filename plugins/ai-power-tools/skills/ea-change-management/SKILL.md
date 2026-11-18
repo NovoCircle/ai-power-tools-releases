@@ -224,7 +224,7 @@ ea_analyze(operation="get_user_activity", params={
 `get_updates_in_range` returns one row per changed item (`kind`, `id`, `name`, `type`,
 `package_id`, `modified`). `kind="elements"` (the default) includes packages alongside ordinary
 elements, since packages are objects too in EA's terms. `kind="all"` returns elements, packages and
-diagrams in one list, so a package can appear twice (as its object, and as a package).
+diagrams in one list; each changed package appears once.
 `kind="connectors"` is **not** a valid value.
 
 **The audit trail covers elements, packages and diagrams only. Connectors are outside it.**
@@ -340,9 +340,10 @@ ea_analyze(operation="execute_sql", params={"sql":
 version, date (when populated), notes, and size (convert bytes to KB/MB for readability). Sort
 by size descending — the expensive ones are usually the ones worth asking about first.
 
-To review a whole model rather than one package, walk `list_root_packages` /
-`list_package_tree` first to collect every `package_id` in scope, then call `list_baselines`
-once per package — it takes a single `package_id`, not a repository-wide sweep.
+To review a whole model rather than one package, call `list_baselines` with no `package_id`:
+it lists every baseline in the model in one query, each with its `package_id`, `package_path`
+and `payload_bytes` (the stored snapshot's size on a `.qea` or `.qeax` model; null on other
+repositories), so no package walk and no per-package calls are needed.
 
 ### Delete only with explicit confirmation, never in a silent batch
 

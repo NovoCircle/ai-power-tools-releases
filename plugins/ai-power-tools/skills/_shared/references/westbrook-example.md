@@ -214,6 +214,27 @@ Compare that with the table above. **Two of those four can never match:**
 So the rule is effectively checking `Uses` and `Flows` only. It is not wrong in a way that
 produces false positives - it silently under-reports, which is the harder kind to notice.
 
+The same rule in YAML, for the engine's connector grammar. A connector selector filters on the source's tags,
+and `connector_ends` tests the target's. This is an illustration of the shape: a customer writes it with their
+own technology, stereotypes and tag names. The qualified form is `WBA::`.
+
+```yaml
+- id: WBA-LFY-001
+  severity: error
+  selector:
+    type: connector
+    connector_stereotypes: [WBA::Uses, WBA::Flows]
+    source: {tags: [{name: lifecycle, value_in: [Strategic, Current]}]}
+  condition:
+    type: connector_ends
+    target: {tags: [{name: lifecycle, value_not_in: [Deprecated]}]}
+```
+
+It names only the two stereotypes the model has. It does not carry `ConsumesService` or `Realizes`, which the
+SQL lists and nothing matches, and so it does not repeat the defect. A finding is a Strategic or Current
+source with a Deprecated target; a target with no `lifecycle` value does not fire (`value_not_in` holds when
+no value is in the list), which matches the SQL's `= 'Deprecated'`.
+
 Do not "fix" this by editing either side to match. It is recorded as a defect, and the demo
 model's tests assert the current counts, so changing one without the other breaks them.
 
@@ -318,3 +339,25 @@ Still true of the file:
    version: it is the `version=` of the `<Documentation>` element, `1.1.1`.
 
 These are defects in the demo artifact, not in this specification. Fixing them is separate work.
+
+## 12. Deliberate test inputs in the Westbrook model
+
+Two things in the Westbrook model look like mistakes and are kept on purpose, so that the skills
+and their acceptance cases meet them. Do not "fix" either one to make a count come out round.
+
+1. **One element carries two stereotypes.** Core Deposit System of Record carries
+   `WBASystemOfRecord` (its primary stereotype, the one in `t_object.Stereotype`) and
+   `WBABusinessApplication` (a second binding, visible in `t_xref`). It exercises the roll-up: counted by
+   the primary stereotype there are 46 business applications and 11 Mission-Critical; counted by every
+   binding there are 47 and 12. Every case that counts business applications names the reading it
+   expects, and a reply that gives the other number passes only when it says which reading it used and
+   names this element.
+2. **One element has a plain, unqualified `VendorApplication` stereotype** that no technology
+   defines (on the Customer Engagement Landscape). It exercises the unresolved path: the diagram
+   description words it "vendor application" and counts it as one unresolved name, so
+   `names_unresolved` is 1 for that diagram and 0 for a diagram without it. The description cases state
+   that expected count.
+
+A customer's model will not hold either input. The point of each is the behavior a skill must show when
+it meets the same shape in a real model: say which reading it used, and report an unresolved name
+rather than hide it.

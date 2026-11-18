@@ -938,14 +938,14 @@ Covers: Verify in EA's UI
 
 **Marks:** WRITE
 
-**Ask:** "Build a diagram called Core Platforms View in Technology Architecture with Fiserv DNA Core on it, and tell me it came out right."
+**Ask:** "Build a diagram called Core Platforms View in Technology Architecture with Alderbrook Core on it, and tell me it came out right."
 
 **Passes when:** After creating the diagram the agent reloads it, takes a screenshot, looks at it, and reports what it saw (the element is present, readable and in view), not only that the write returned `ok`.
 
 **Check:**
 
 ```check
-sql: SELECT COUNT(*) FROM t_diagramobjects d JOIN t_diagram g ON d.Diagram_ID = g.Diagram_ID JOIN t_package p ON g.Package_ID = p.Package_ID JOIN t_object o ON d.Object_ID = o.Object_ID WHERE g.Name = 'Core Platforms View' AND p.Name = 'Technology Architecture' AND o.Name = 'Fiserv DNA Core'
+sql: SELECT COUNT(*) FROM t_diagramobjects d JOIN t_diagram g ON d.Diagram_ID = g.Diagram_ID JOIN t_package p ON g.Package_ID = p.Package_ID JOIN t_object o ON d.Object_ID = o.Object_ID WHERE g.Name = 'Core Platforms View' AND p.Name = 'Technology Architecture' AND o.Name = 'Alderbrook Core'
 expect: = 1
 ```
 
@@ -997,7 +997,7 @@ reply: not: reports a duplicate profile problem in the model
 Each finding was checked against the current skill text and server main (11 Nov 2026).
 
 - **Fixed in the skill.** The manual APPDATA drop now says to restart EA and that whether EA reads a changed file without a restart is not measured. It also says that Manage Technology, Manage Technologies and Manage MDG Technologies are one dialog.
-- **Fixed on the server (3.6.5).** The `WBA::` form now binds (EA-S01 translates it to the profile name). The skill's `WBA::` wording is what you pass; the fixture's profile-name prefix is what EA stores, which is why TC-26 and TC-30 match on `::<Stereotype>`.
+- **Fixed on the server (3.6.5).** The `WBA::` form now binds (the server translates it to the profile name). The skill's `WBA::` wording is what you pass; the fixture's profile-name prefix is what EA stores, which is why TC-26 and TC-30 match on `::<Stereotype>`.
 - **Fixed in the skill.** The tool table now says `package_id` is the `Package_ID` of the package stereotyped «mdg technology» (the server resolves it with `GetPackageByID`), not the `Object_ID` of the element row.
 - **Fixed in the skill.** The same row now names `ping` (its `version` field) as the way to read the server version.
 - **No change: harness.** `computer-use` targets are not in the call log; the checker marks them "judge from the transcript". Counting screenshots after an import (TC-13, TC-34) is a runner question, not a skill defect.
